@@ -19,12 +19,14 @@ and results. Each operation is an ordinary function in the core. Base32 uses
 `data-encoding`, with a core check that rejects concatenated padded blocks.
 Base58 uses `bs58` with the Bitcoin alphabet and no checksum extension.
 Base64, hex, and SHA-256 also delegate to established crates; no cryptographic
-primitive is implemented from scratch. Repeating-key XOR and ROT13 are small puzzle operations.
+primitive is implemented from scratch. Repeating-key XOR and Caesar are small puzzle
+operations; ROT13 reuses Caesar with shift 13.
 
 Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, and `binary`.
 Binary transformations accept byte slices and return bytes. Encodings and digests
-return strings with specified alphabets. ROT13 accepts UTF-8 text, rotates only
-ASCII letters, and preserves other characters without normalization. Invalid
+return strings with specified alphabets. Classical ciphers accept UTF-8 text, rotate
+only ASCII letters, and preserve other characters without normalization. Caesar
+normalizes signed 32-bit shifts before inversion to avoid overflow. Invalid
 inputs return a core `Error` that retains the underlying decoder cause.
 
 ## Interface boundaries

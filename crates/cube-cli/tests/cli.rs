@@ -41,6 +41,7 @@ fn help_version_and_discovery() {
         vec!["encode", "base58", "--help"],
         vec!["decode", "base58", "--help"],
         vec!["decode", "base64", "--help"],
+        vec!["cipher", "caesar", "--help"],
         vec!["binary", "xor", "--help"],
     ] {
         let output = cube(&args, b"");
@@ -53,7 +54,101 @@ fn help_version_and_discovery() {
         b"",
         format!("cube {}\n", env!("CARGO_PKG_VERSION")).as_bytes(),
     );
-    success(&["ops", "list"], b"", b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor\n");
+    success(&["ops", "list"], b"", b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash sha256\nbinary xor\n");
+}
+
+#[test]
+fn caesar_known_answers_and_inverse() {
+    success(
+        &[
+            "cipher",
+            "caesar",
+            "--shift",
+            "3",
+            "--text",
+            "Attack at dawn!",
+        ],
+        b"ignored stdin",
+        b"Dwwdfn dw gdzq!\n",
+    );
+    success(
+        &[
+            "cipher",
+            "caesar",
+            "--decode",
+            "--shift",
+            "3",
+            "--text",
+            "Dwwdfn dw gdzq!",
+        ],
+        b"ignored stdin",
+        b"Attack at dawn!\n",
+    );
+    success(
+        &["cipher", "caesar", "--shift", "-1", "--text", "AaZz"],
+        b"",
+        b"ZzYy\n",
+    );
+    success(
+        &[
+            "cipher",
+            "caesar",
+            "--decode",
+            "--shift=-1",
+            "--text",
+            "ZzYy",
+        ],
+        b"",
+        b"AaZz\n",
+    );
+}
+
+#[test]
+fn caesar_shift_limits_and_stdin_preserve_text() {
+    for (shift, expected) in [("-2147483648", "CcBb"), ("2147483647", "XxWw")] {
+        success(
+            &["cipher", "caesar", "--shift", shift],
+            b"AaZz",
+            format!("{expected}\n").as_bytes(),
+        );
+        success(
+            &["cipher", "caesar", "--decode", "--shift", shift],
+            expected.as_bytes(),
+            b"AaZz\n",
+        );
+    }
+    for shift in ["0", "26", "-26", "52", "-52"] {
+        success(&["cipher", "caesar", "--shift", shift], b"AaZz", b"AaZz\n");
+        success(
+            &["cipher", "caesar", "--decode", "--shift", shift],
+            b"AaZz",
+            b"AaZz\n",
+        );
+    }
+    let text = "Olá, 世界 🧊 e\u{301}\0\t\r\n";
+    let encoded = "Roá, 世界 🧊 h\u{301}\0\t\r\n";
+    success(
+        &["cipher", "caesar", "--shift", "3"],
+        text.as_bytes(),
+        format!("{encoded}\n").as_bytes(),
+    );
+    success(
+        &["cipher", "caesar", "--decode", "--shift", "3"],
+        encoded.as_bytes(),
+        format!("{text}\n").as_bytes(),
+    );
+    for decode in [false, true] {
+        let mut args = vec!["cipher", "caesar", "--shift", "13"];
+        if decode {
+            args.push("--decode");
+        }
+        let caesar = cube(&args, text.as_bytes());
+        let rot13 = cube(&["cipher", "rot13"], text.as_bytes());
+        assert!(caesar.status.success());
+        assert!(rot13.status.success());
+        assert!(caesar.stderr.is_empty());
+        assert_eq!(caesar.stdout, rot13.stdout);
+    }
 }
 
 #[test]
@@ -227,6 +322,16 @@ fn empty_inputs_are_explicit_and_valid() {
         vec!["encode", "hex", "--text", ""],
         vec!["decode", "base64", "--text", ""],
         vec!["cipher", "rot13", "--text", ""],
+        vec!["cipher", "caesar", "--shift", "3", "--text", ""],
+        vec![
+            "cipher",
+            "caesar",
+            "--decode",
+            "--shift",
+            "-2147483648",
+            "--text",
+            "",
+        ],
         vec!["binary", "xor", "--text", "", "--key", "k"],
     ] {
         success(&args, b"must not read stdin", b"\n");
@@ -326,6 +431,16 @@ fn invalid_operation_input_uses_stderr_and_exit_one() {
             "invalid hexadecimal",
         ),
         (vec!["cipher", "rot13"], &[255][..], "utf-8"),
+        (
+            vec!["cipher", "caesar", "--shift", "3"],
+            &[255][..],
+            "utf-8",
+        ),
+        (
+            vec!["cipher", "caesar", "--decode", "--shift", "3"],
+            &[255][..],
+            "utf-8",
+        ),
         (vec!["decode", "base64"], &[255][..], "utf-8"),
     ] {
         let output = cube(&args, input);
@@ -340,6 +455,12 @@ fn invalid_cli_usage_exits_two() {
     for args in [
         vec![],
         vec!["unknown"],
+        vec!["cipher", "caesar", "--text", "Hello"],
+        vec!["cipher", "caesar", "--shift"],
+        vec!["cipher", "caesar", "--shift", "three"],
+        vec!["cipher", "caesar", "--shift", "1.5"],
+        vec!["cipher", "caesar", "--shift", "-2147483649"],
+        vec!["cipher", "caesar", "--shift", "2147483648"],
         vec!["binary", "xor"],
         vec!["binary", "xor", "--key", "k", "--key-hex", "ff"],
         vec!["decode", "base64", "--output", "text"],

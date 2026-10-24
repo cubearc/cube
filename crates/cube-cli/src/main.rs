@@ -82,6 +82,8 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Rotate ASCII letters by a signed shift (not secure encryption)
+    Caesar(CaesarArgs),
     /// Rotate ASCII letters by 13, leaving non-ASCII characters unchanged
     Rot13(Input),
 }
@@ -128,6 +130,18 @@ struct DecodeArgs {
 }
 
 #[derive(Args)]
+struct CaesarArgs {
+    #[command(flatten)]
+    input: Input,
+    /// Signed shift from -2147483648 to 2147483647, normalized modulo 26
+    #[arg(long, allow_negative_numbers = true)]
+    shift: i32,
+    /// Apply the inverse of --shift to decode; otherwise encode
+    #[arg(long)]
+    decode: bool,
+}
+
+#[derive(Args)]
 #[group(required = true, multiple = false, args = ["key", "key_hex"])]
 struct XorArgs {
     #[command(flatten)]
@@ -166,7 +180,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Ops { command: Ops::List } => {
             write_text(
                 &mut output,
-                "encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor",
+                "encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash sha256\nbinary xor",
             )?;
         }
         Command::Encode { command } => {
@@ -199,13 +213,19 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             };
             write_bytes(&mut output, &bytes, format)?;
         }
-        Command::Cipher {
-            command: Cipher::Rot13(input),
-        } => {
-            write_text(
-                &mut output,
-                &ciphers::rot13(&String::from_utf8(input.read()?)?),
-            )?;
+        Command::Cipher { command } => {
+            let text = match command {
+                Cipher::Caesar(args) => {
+                    let input = String::from_utf8(args.input.read()?)?;
+                    if args.decode {
+                        ciphers::caesar_decode(&input, args.shift)
+                    } else {
+                        ciphers::caesar_encode(&input, args.shift)
+                    }
+                }
+                Cipher::Rot13(input) => ciphers::rot13(&String::from_utf8(input.read()?)?),
+            };
+            write_text(&mut output, &text)?;
         }
         Command::Hash {
             command: Hash::Sha256(input),

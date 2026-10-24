@@ -16,13 +16,14 @@ Python package. All interfaces share the same implementations.
 | Base58 | Case-sensitive Bitcoin alphabet; preserves leading zero bytes |
 | Base64 | Padded RFC 4648 standard encoding and strict decoding |
 | Hex | Lowercase encoding; decoding accepts either case |
+| Caesar | Signed shift of ASCII letters modulo 26; preserves case and non-ASCII characters |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |
 | SHA-256 | Lowercase hexadecimal digest |
 | XOR | Byte-wise XOR with a nonempty repeating key |
 
-ROT13 and repeating-key XOR are classical puzzle tools, not secure encryption.
-Decoders reject whitespace. Base32 and Base64 reject invalid padding and trailing
-bits; Base32 also rejects lowercase letters.
+Caesar, ROT13, and repeating-key XOR are classical puzzle tools, not secure encryption.
+Encoding decoders reject whitespace. Base32 and Base64 reject invalid padding and
+trailing bits; Base32 also rejects lowercase letters.
 Base58 maps each leading zero byte to `1` and uses no padding or Base58Check checksum.
 
 ## Build and install
@@ -56,6 +57,9 @@ cube decode base64 --text "SGVsbG8="               # 48656c6c6f
 cube decode base64 --text "SGVsbG8=" --output raw   # Hello (no added newline)
 cube encode hex --text "Hello"                    # 48656c6c6f
 cube decode hex --text "48656c6c6f" --output raw   # Hello
+cube cipher caesar --shift 3 --text "Attack at dawn!" # Dwwdfn dw gdzq!
+cube cipher caesar --decode --shift 3 --text "Dwwdfn dw gdzq!" # Attack at dawn!
+cube cipher caesar --shift -1 --text "AaZz"        # ZzYy
 cube cipher rot13 --text "Hello"                  # Uryyb
 cube hash sha256 --text "Hello"
 cube binary xor --text "Hello" --key "key"        # 230015070a
@@ -71,11 +75,18 @@ printf 'AP8=' | cube decode base64 --output raw > bytes.bin
 cube binary xor --key-hex ff --output raw < bytes.bin > transformed.bin
 ```
 
-Decoding and XOR default to **hexadecimal plus a newline** so arbitrary bytes
-have a predictable representation. `--output raw` writes exact bytes without a
-newline. Other operations write text followed by a newline. ROT13 requires UTF-8;
-encoding, hashing, and XOR accept arbitrary stdin bytes. `--text` and `--key`
+Commands under `cube decode` and XOR default to **hexadecimal plus a newline**
+so arbitrary bytes have a predictable representation. `--output raw` writes exact bytes without a
+newline. Other operations write text followed by a newline. Text ciphers require
+UTF-8; encoding, hashing, and XOR accept arbitrary stdin bytes. `--text` and `--key`
 use UTF-8. Specify exactly one of `--key` or `--key-hex` for XOR.
+
+Caesar requires `--shift` in the signed 32-bit range `-2147483648` to `2147483647`.
+Positive shifts advance ASCII letters; negative shifts move backward. Shifts are
+normalized modulo 26, so zero and multiples of 26 preserve the text. Use `--decode`
+with the original shift to reverse it, including the minimum shift. Non-ASCII
+characters, punctuation, whitespace, and combining characters remain unchanged;
+no Unicode normalization is performed. Shift 13 agrees with ROT13.
 
 Results go to stdout and errors to stderr. Exit codes are `0` for success
 (including help/version), `1` for invalid operation input or I/O failure, and
@@ -106,6 +117,10 @@ assert cube.base64_encode(b"Hello") == "SGVsbG8="
 assert cube.base64_decode("SGVsbG8=") == b"Hello"
 assert cube.hex_encode(b"\x00\xff") == "00ff"
 assert cube.hex_decode("00FF") == b"\x00\xff"
+assert cube.caesar_encode("Attack at dawn!", 3) == "Dwwdfn dw gdzq!"
+assert cube.caesar_decode("Dwwdfn dw gdzq!", 3) == "Attack at dawn!"
+encoded = cube.caesar_encode("AaZz 世界", -2147483648)
+assert cube.caesar_decode(encoded, -2147483648) == "AaZz 世界"
 assert cube.rot13("Hello, 世界") == "Uryyb, 世界"
 assert cube.sha256(b"Hello") == (
     "185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969"
@@ -113,12 +128,13 @@ assert cube.sha256(b"Hello") == (
 assert cube.xor(b"Hello", b"key") == b"\x23\x00\x15\x07\x0a"
 ```
 
-Binary inputs and outputs use `bytes`; encoded text and ROT13 use `str`.
+Binary inputs and outputs use `bytes`; encoded text and classical ciphers use `str`.
 Encode Unicode explicitly, for example `cube.sha256("Olá".encode("utf-8"))`.
 Invalid encoded input and empty XOR keys raise `ValueError`; incorrect argument
-types raise `TypeError`. Type stubs are included. The local distribution name is
-`cubearc-cube`; the import name is `cube`. Package registry availability has not
-been established.
+types raise `TypeError`. Caesar's `shift` uses the same signed 32-bit range as the
+CLI; out-of-range integers raise `OverflowError`. Type stubs are included.
+The local distribution name is `cubearc-cube`; the import name is `cube`.
+Package registry availability has not been established.
 
 ## Tests and development
 

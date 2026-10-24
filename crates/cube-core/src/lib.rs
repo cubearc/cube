@@ -1,7 +1,7 @@
 //! Small, deterministic operations shared by Cube's CLI and SDKs.
 //!
 //! Binary operations accept and return bytes. Text conversion belongs to the caller.
-//! ROT13 and repeating-key XOR are puzzle tools, not secure encryption.
+//! Classical ciphers and repeating-key XOR are puzzle tools, not secure encryption.
 
 pub mod binary;
 pub mod ciphers;

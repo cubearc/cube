@@ -1,4 +1,4 @@
-"""Encoding, classical ciphers, hashing, and binary tools backed by Rust."""
+"""Encoding, ciphers, hashing, binary tools, and file forensics backed by Rust."""
 
 from ._native import (
     appended_data,

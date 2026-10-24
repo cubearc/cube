@@ -11,7 +11,7 @@ mod filecmd;
 #[command(
     name = "cube",
     version,
-    about = "Encoding, classical ciphers, hashing, and binary tools"
+    about = "Encoding, ciphers, hashing, binary tools, and file forensics"
 )]
 struct Cli {
     /// Emit failures as schema-versioned JSON on stderr (including usage errors)

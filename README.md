@@ -5,7 +5,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Cube is an open-source Rust toolkit for encoding, classical ciphers, hashing,
-and binary transformations. Use the Rust library, `cube` CLI, or Rust-backed
+binary transformations, and file forensics. Use the Rust library, `cube` CLI, or Rust-backed
 Python package. All interfaces share the same implementations.
 
 ## Capabilities
@@ -21,6 +21,7 @@ Python package. All interfaces share the same implementations.
 | CRC32 | CRC-32/ISO-HDLC (IEEE), exactly eight lowercase hexadecimal digits |
 | SHA-256 | Lowercase hexadecimal digest |
 | XOR | Byte-wise XOR with a nonempty repeating key |
+| File forensics | Bounded signatures, metadata/EXIF, hex, ASCII strings, binary comparison, PNG trailers, and safe extraction |
 
 Caesar, ROT13, and repeating-key XOR are classical puzzle tools, not secure encryption.
 Encoding decoders reject whitespace. Base32 and Base64 reject invalid padding and
@@ -183,8 +184,8 @@ features are not implemented here. Recipes will live separately in
 Track bugs and feature requests in [GitHub Issues](https://github.com/cubearc/cube/issues).
 Planning lives in [CubeArc Roadmap](https://github.com/orgs/cubearc/projects/1),
 with release scope defined by [milestones](https://github.com/cubearc/cube/milestones).
-The [operations catalog issue](https://github.com/cubearc/cube/issues/1) links the
-next planned operations; it does not describe additional implemented features.
+Use `cube ops list` to discover implemented commands and `--json` for their
+shared operation descriptors.
 
 Contributions are welcome through [CONTRIBUTING.md](CONTRIBUTING.md). Community
 participation follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report security
@@ -192,7 +193,9 @@ issues using [SECURITY.md](SECURITY.md).
 
 ## License
 
-Cube is licensed under the [Apache License 2.0](LICENSE).
+Cube is licensed under the [Apache License 2.0](LICENSE). Additional notices for
+the EXIF parser and its dependency are in [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES)
+and included in Python distributions.
 
 ## Operation discovery
 

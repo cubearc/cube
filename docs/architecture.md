@@ -57,7 +57,10 @@ and translate their own language's types and errors. Introduce a shared FFI only
 when another implemented binding demonstrates a concrete need.
 
 Future pipelines can compose these functions and handle transport or orchestration
-outside the operations. There is no execution engine, operation registry, plugin
-system, or persistence layer. Add an abstraction only when an implemented feature
+outside the operations. Static operation descriptors live beside their Rust implementations and are
+assembled by `operations::catalog`. Stable IDs and explicit byte/text/structured
+type names support discovery and later composition without changing direct APIs.
+Parameter preflight validation does not dispatch or execute operations. There is
+no execution engine, plugin system, or persistence layer. Add an abstraction only when an implemented feature
 needs it. Recipes will live in `cubearc/recipes` and may later describe compositions
 against a versioned Cube interface; this repository does not parse recipes yet.

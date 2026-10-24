@@ -7,6 +7,7 @@ pub mod binary;
 pub mod ciphers;
 pub mod encoding;
 pub mod hashing;
+pub mod operations;
 
 use std::fmt;
 

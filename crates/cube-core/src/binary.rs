@@ -27,6 +27,27 @@ pub fn xor(input: &[u8], key: &[u8]) -> Result<Vec<u8>, Error> {
         .collect())
 }
 
+const XOR_PARAMETERS: &[crate::operations::Parameter] = &[crate::operations::Parameter {
+    name: "key",
+    description: "Nonempty repeating binary key.",
+    required: true,
+    default: None,
+    constraints: crate::operations::ParameterType::Bytes { min_length: 1 },
+}];
+/// Static metadata for operations implemented in this module.
+pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::Descriptor {
+    id: "binary.xor",
+    category: "binary",
+    description: "XOR exact bytes with a nonempty repeating key; not secure encryption.",
+    input_type: "bytes",
+    output_type: "bytes",
+    parameters: XOR_PARAMETERS,
+    deterministic: true,
+    reversible: Some(true),
+    command: "binary xor",
+    example: "cube binary xor --key-hex ff --text Hello",
+}];
+
 #[cfg(test)]
 mod tests {
     use super::*;

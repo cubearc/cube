@@ -35,6 +35,34 @@ pub fn sha256(input: &[u8]) -> String {
     hex::encode(Sha256::digest(input))
 }
 
+/// Static metadata for operations implemented in this module.
+pub const OPERATIONS: &[crate::operations::Descriptor] = &[
+    crate::operations::Descriptor {
+        id: "hash.crc32",
+        category: "hashing",
+        description: "CRC-32/ISO-HDLC checksum, not a cryptographic hash.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash crc32",
+        example: "cube hash crc32 --text Hello",
+    },
+    crate::operations::Descriptor {
+        id: "hash.sha256",
+        category: "hashing",
+        description: "SHA-256 digest of exact bytes, not password hashing.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash sha256",
+        example: "cube hash sha256 --text Hello",
+    },
+];
+
 #[cfg(test)]
 mod tests {
     use super::*;

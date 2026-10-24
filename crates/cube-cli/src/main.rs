@@ -3,7 +3,7 @@ use std::io::{self, Read, Write};
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand, ValueEnum};
-use cube_core::{binary, ciphers, encoding, hashing};
+use cube_core::{binary, ciphers, encoding, hashing, operations};
 
 #[derive(Parser)]
 #[command(
@@ -53,7 +53,21 @@ enum Command {
 #[derive(Subcommand)]
 enum Ops {
     /// List supported commands, one per line
-    List,
+    List {
+        /// Select an exact operation category
+        #[arg(long)]
+        category: Option<String>,
+        /// Emit schema-versioned JSON sorted by stable operation ID
+        #[arg(long)]
+        json: bool,
+    },
+    /// Describe an exact stable operation ID
+    Describe {
+        id: String,
+        /// Emit a schema-versioned JSON description
+        #[arg(long)]
+        json: bool,
+    },
 }
 
 #[derive(Subcommand)]
@@ -179,12 +193,84 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
-        Command::Ops { command: Ops::List } => {
-            write_text(
-                &mut output,
-                "encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nbinary xor",
-            )?;
-        }
+        Command::Ops { command } => match command {
+            Ops::List { category, json } => {
+                let catalog = operations::catalog();
+                if let Some(category) = &category
+                    && !catalog.iter().any(|d| d.category == category)
+                {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "unknown operation category; use cube ops list --json",
+                    )
+                    .into());
+                }
+                let mut selected: Vec<_> = catalog
+                    .into_iter()
+                    .filter(|d| category.as_ref().is_none_or(|c| d.category == c))
+                    .collect();
+                if json {
+                    selected.sort_by_key(|d| d.id);
+                    write_text(
+                        &mut output,
+                        &serde_json::to_string_pretty(
+                            &serde_json::json!({"schema_version": 1, "operations": selected}),
+                        )?,
+                    )?;
+                } else {
+                    let mut seen = std::collections::HashSet::new();
+                    for descriptor in selected {
+                        if seen.insert(descriptor.command) {
+                            write_text(&mut output, descriptor.command)?;
+                        }
+                    }
+                }
+            }
+            Ops::Describe { id, json } => {
+                let descriptor = operations::describe(&id).ok_or_else(|| {
+                    io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "unknown operation ID; use cube ops list --json",
+                    )
+                })?;
+                if json {
+                    write_text(
+                        &mut output,
+                        &serde_json::to_string_pretty(
+                            &serde_json::json!({"schema_version": 1, "operation": descriptor}),
+                        )?,
+                    )?;
+                } else {
+                    write_text(
+                        &mut output,
+                        &format!(
+                            "{} — {}\nCategory: {}\nInput: {}\nOutput: {}\nDeterministic: {}\nReversible: {:?}\nExample: {}",
+                            descriptor.id,
+                            descriptor.description,
+                            descriptor.category,
+                            descriptor.input_type,
+                            descriptor.output_type,
+                            descriptor.deterministic,
+                            descriptor.reversible,
+                            descriptor.example
+                        ),
+                    )?;
+                    for parameter in descriptor.parameters {
+                        write_text(
+                            &mut output,
+                            &format!(
+                                "{}: {} (required: {}, constraints: {:?}, default: {:?})",
+                                parameter.name,
+                                parameter.description,
+                                parameter.required,
+                                parameter.constraints,
+                                parameter.default
+                            ),
+                        )?;
+                    }
+                }
+            }
+        },
         Command::Encode { command } => {
             let text = match command {
                 Encode::Base32(input) => encoding::base32_encode(&input.read()?),

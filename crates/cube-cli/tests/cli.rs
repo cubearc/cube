@@ -500,3 +500,45 @@ fn invalid_cli_usage_exits_two() {
         assert!(!output.stderr.is_empty());
     }
 }
+
+#[test]
+fn structured_discovery_and_descriptions() {
+    let result = cube(&["ops", "list", "--json"], b"");
+    assert!(result.status.success());
+    let value: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(value["schema_version"], 1);
+    let descriptors = value["operations"].as_array().unwrap();
+    assert_eq!(descriptors.len(), cube_core::operations::catalog().len());
+    let ids: Vec<_> = descriptors
+        .iter()
+        .map(|d| d["id"].as_str().unwrap())
+        .collect();
+    assert!(ids.windows(2).all(|pair| pair[0] < pair[1]));
+    for id in ids {
+        let result = cube(&["ops", "describe", id, "--json"], b"");
+        assert!(result.status.success());
+        let value: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+        assert_eq!(value["operation"]["id"], id);
+        assert_eq!(
+            value["operation"]["input_type"],
+            cube_core::operations::describe(id).unwrap().input_type
+        );
+    }
+    success(
+        &["ops", "list", "--category", "binary"],
+        b"",
+        b"binary xor\n",
+    );
+    for args in [
+        vec!["ops", "list", "--category", "missing"],
+        vec!["ops", "describe", "missing"],
+    ] {
+        let result = cube(&args, b"");
+        assert_eq!(result.status.code(), Some(1));
+        assert!(result.stdout.is_empty());
+        assert!(String::from_utf8_lossy(&result.stderr).contains("unknown"));
+    }
+    let result = cube(&["ops", "describe", "cipher.caesar.encode"], b"");
+    assert!(result.status.success());
+    assert!(String::from_utf8_lossy(&result.stdout).contains("shift"));
+}

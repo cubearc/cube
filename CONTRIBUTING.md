@@ -61,6 +61,16 @@ Choose an existing core module by responsibility. Implement and document one
 byte-oriented function, or a text function when text semantics are inherent.
 Use typed errors and maintained crates for cryptographic primitives.
 
+Add a static descriptor to the owning module's `OPERATIONS` slice. Use a unique
+stable namespaced ID (for example, `encoding.hex.encode`), explicit semantic
+input/output type names, parameter constraints, a concise example, determinism
+and reversibility where meaningful. IDs are compatibility contracts: do not reuse
+an ID for different behavior. Add a new module to `operations::catalog` only once;
+consumers reuse its descriptors instead of maintaining parallel catalogs.
+Descriptors describe direct functions; they do not execute them. For example, an
+ASCII-only case operation would declare text input/output, document preservation
+of other Unicode, and keep its descriptor beside the function.
+
 Add known-answer and edge-case unit tests, public API tests when needed, then
 expose the operation through the relevant CLI and Python APIs. Update command
 discovery, Python exports and type stubs, interface tests, and affected user

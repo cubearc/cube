@@ -1,12 +1,49 @@
 //! Python boundary only: all algorithms and input validation live in cube-core.
 
-use cube_core::{binary, ciphers, encoding, hashing};
+use cube_core::{binary, ciphers, encoding, hashing, operations as catalog};
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     PyValueError::new_err(error.to_string())
+}
+
+// Only structured metadata crosses this JSON boundary. Algorithm byte results
+// continue to use PyBytes directly; no Python algorithm implementation exists.
+fn structured(py: Python<'_>, value: &serde_json::Value) -> PyResult<Py<PyAny>> {
+    Ok(py
+        .import("json")?
+        .call_method1("loads", (value.to_string(),))?
+        .unbind())
+}
+
+/// List operation descriptors sorted by stable ID, optionally filtering a category.
+#[pyfunction]
+#[pyo3(signature = (category=None))]
+fn operations(py: Python<'_>, category: Option<&str>) -> PyResult<Py<PyAny>> {
+    let catalog = catalog::catalog();
+    if let Some(category) = category
+        && !catalog.iter().any(|d| d.category == category)
+    {
+        return Err(PyValueError::new_err(
+            "unknown operation category; call operations()",
+        ));
+    }
+    let mut descriptors: Vec<_> = catalog
+        .into_iter()
+        .filter(|d| category.is_none_or(|c| d.category == c))
+        .collect();
+    descriptors.sort_by_key(|d| d.id);
+    structured(py, &serde_json::json!(descriptors))
+}
+
+/// Describe an exact stable ID. Unknown IDs raise ValueError.
+#[pyfunction]
+fn describe_operation(py: Python<'_>, id: &str) -> PyResult<Py<PyAny>> {
+    let descriptor = catalog::describe(id)
+        .ok_or_else(|| PyValueError::new_err("unknown operation ID; call operations()"))?;
+    structured(py, &serde_json::json!(descriptor))
 }
 
 /// Encode bytes as padded standard Base32 using uppercase letters.
@@ -111,6 +148,8 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(operations, module)?)?;
+    module.add_function(wrap_pyfunction!(describe_operation, module)?)?;
     module.add_function(wrap_pyfunction!(base32_encode, module)?)?;
     module.add_function(wrap_pyfunction!(base32_decode, module)?)?;
     module.add_function(wrap_pyfunction!(base58_encode, module)?)?;

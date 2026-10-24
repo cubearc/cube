@@ -285,3 +285,26 @@ def test_empty_xor_key(data):
 def test_text_and_bytes_are_not_silently_coerced(operation, args):
     with pytest.raises(TypeError):
         operation(*args)
+
+
+def test_operation_discovery_uses_core_metadata():
+    descriptors = cube.operations()
+    ids = [d["id"] for d in descriptors]
+    assert ids == sorted(set(ids))
+    assert len(ids) == 14
+    assert cube.operations("binary") == [cube.describe_operation("binary.xor")]
+    assert cube.describe_operation("encoding.base32.decode")["output_type"] == "bytes"
+    assert cube.describe_operation("hash.crc32")["reversible"] is False
+    shift = cube.describe_operation("cipher.caesar.encode")["parameters"][0]
+    assert shift["constraints"] == {
+        "type": "integer",
+        "min": -2147483648,
+        "max": 2147483647,
+    }
+    with pytest.raises(ValueError, match="unknown"):
+        cube.operations("missing")
+    with pytest.raises(ValueError, match="unknown"):
+        cube.describe_operation("missing")
+    with pytest.raises(TypeError):
+        cube.describe_operation(b"binary.xor")
+    assert cube.operations is _native.operations

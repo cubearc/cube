@@ -193,3 +193,27 @@ issues using [SECURITY.md](SECURITY.md).
 ## License
 
 Cube is licensed under the [Apache License 2.0](LICENSE).
+
+## Operation discovery
+
+Operation metadata comes from static Rust descriptors beside each implementation.
+Existing direct Rust and Python functions remain the execution API.
+
+```sh
+cube ops list --category encoding
+cube ops list --json
+cube ops describe cipher.caesar.encode
+cube ops describe binary.xor --json
+```
+
+JSON discovery uses `schema_version: 1` and stable namespaced operation IDs.
+Descriptions declare semantic input/output types, parameter constraints/defaults,
+determinism, reversibility and examples. JSON lists sort by ID; the default human
+list retains its existing command order. Unknown IDs/categories fail explicitly.
+Consumers should tolerate added fields and operations; IDs are never reused for
+incompatible behavior. Metadata does not imply a generic operation executor.
+
+```python
+assert cube.describe_operation("binary.xor")["input_type"] == "bytes"
+assert cube.operations("binary")[0]["id"] == "binary.xor"
+```

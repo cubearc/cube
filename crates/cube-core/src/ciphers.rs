@@ -59,6 +59,56 @@ pub fn rot13(input: &str) -> String {
     caesar_encode(input, 13)
 }
 
+const CAESAR_PARAMETERS: &[crate::operations::Parameter] = &[crate::operations::Parameter {
+    name: "shift",
+    description: "Signed 32-bit ASCII letter shift, normalized modulo 26.",
+    required: true,
+    default: None,
+    constraints: crate::operations::ParameterType::Integer {
+        min: i32::MIN as i64,
+        max: i32::MAX as i64,
+    },
+}];
+/// Static metadata for operations implemented in this module.
+pub const OPERATIONS: &[crate::operations::Descriptor] = &[
+    crate::operations::Descriptor {
+        id: "cipher.caesar.encode",
+        category: "ciphers",
+        description: "Encode ASCII letters with a signed Caesar shift; preserve other Unicode.",
+        input_type: "text",
+        output_type: "text",
+        parameters: CAESAR_PARAMETERS,
+        deterministic: true,
+        reversible: Some(true),
+        command: "cipher caesar",
+        example: "cube cipher caesar --shift 3 --text Hello",
+    },
+    crate::operations::Descriptor {
+        id: "cipher.caesar.decode",
+        category: "ciphers",
+        description: "Decode ASCII letters with a signed Caesar shift; preserve other Unicode.",
+        input_type: "text",
+        output_type: "text",
+        parameters: CAESAR_PARAMETERS,
+        deterministic: true,
+        reversible: Some(true),
+        command: "cipher caesar",
+        example: "cube cipher caesar --shift 3 --decode --text Hello",
+    },
+    crate::operations::Descriptor {
+        id: "cipher.rot13",
+        category: "ciphers",
+        description: "Rotate ASCII letters by 13; preserve other Unicode.",
+        input_type: "text",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(true),
+        command: "cipher rot13",
+        example: "cube cipher rot13 --text Hello",
+    },
+];
+
 #[cfg(test)]
 mod tests {
     use super::*;

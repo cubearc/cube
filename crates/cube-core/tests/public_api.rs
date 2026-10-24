@@ -6,6 +6,10 @@ use cube_core::{Error, binary, ciphers, encoding, hashing};
 fn arbitrary_bytes_round_trip() -> Result<(), Error> {
     let bytes: Vec<u8> = (0..=255).collect();
     assert_eq!(
+        encoding::base32_decode(&encoding::base32_encode(&bytes))?,
+        bytes
+    );
+    assert_eq!(
         encoding::base64_decode(&encoding::base64_encode(&bytes))?,
         bytes
     );
@@ -15,6 +19,10 @@ fn arbitrary_bytes_round_trip() -> Result<(), Error> {
         assert_eq!(binary::xor(&encrypted, key)?, bytes);
         assert_eq!(binary::xor(&bytes, key)?, encrypted);
     }
+    assert_eq!(
+        encoding::base32_encode(&bytes),
+        encoding::base32_encode(&bytes)
+    );
     assert_eq!(
         encoding::base64_encode(&bytes),
         encoding::base64_encode(&bytes)
@@ -27,6 +35,10 @@ fn arbitrary_bytes_round_trip() -> Result<(), Error> {
 #[test]
 fn unicode_is_only_text_at_the_boundary() -> Result<(), Error> {
     let text = "Olá, 世界 🧊";
+    assert_eq!(
+        encoding::base32_decode(&encoding::base32_encode(text.as_bytes()))?,
+        text.as_bytes()
+    );
     assert_eq!(
         encoding::base64_decode(&encoding::base64_encode(text.as_bytes()))?,
         text.as_bytes()
@@ -42,7 +54,11 @@ fn unicode_is_only_text_at_the_boundary() -> Result<(), Error> {
 
 #[test]
 fn errors_keep_their_causes_and_context() {
-    for result in [encoding::base64_decode("!"), encoding::hex_decode("zz")] {
+    for result in [
+        encoding::base32_decode("!"),
+        encoding::base64_decode("!"),
+        encoding::hex_decode("zz"),
+    ] {
         let error = result.unwrap_err();
         assert!(error.source().is_some());
         assert!(error.to_string().starts_with("invalid "));

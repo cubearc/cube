@@ -9,6 +9,19 @@ fn invalid_input(error: cube_core::Error) -> PyErr {
     PyValueError::new_err(error.to_string())
 }
 
+/// Encode bytes as padded standard Base32 using uppercase letters.
+#[pyfunction]
+fn base32_encode(data: &[u8]) -> String {
+    encoding::base32_encode(data)
+}
+
+/// Decode strict uppercase Base32 with canonical padding. Invalid input raises ValueError.
+#[pyfunction]
+fn base32_decode<'py>(py: Python<'py>, text: &str) -> PyResult<Bound<'py, PyBytes>> {
+    let bytes = encoding::base32_decode(text).map_err(invalid_input)?;
+    Ok(PyBytes::new(py, &bytes))
+}
+
 /// Encode bytes as padded standard Base64.
 #[pyfunction]
 fn base64_encode(data: &[u8]) -> String {
@@ -56,6 +69,8 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(base32_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(base32_decode, module)?)?;
     module.add_function(wrap_pyfunction!(base64_encode, module)?)?;
     module.add_function(wrap_pyfunction!(base64_decode, module)?)?;
     module.add_function(wrap_pyfunction!(hex_encode, module)?)?;

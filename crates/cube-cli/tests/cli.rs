@@ -36,6 +36,8 @@ fn success(args: &[&str], stdin: &[u8], expected: &[u8]) {
 fn help_version_and_discovery() {
     for args in [
         vec!["--help"],
+        vec!["encode", "base32", "--help"],
+        vec!["decode", "base32", "--help"],
         vec!["decode", "base64", "--help"],
         vec!["binary", "xor", "--help"],
     ] {
@@ -49,7 +51,48 @@ fn help_version_and_discovery() {
         b"",
         format!("cube {}\n", env!("CARGO_PKG_VERSION")).as_bytes(),
     );
-    success(&["ops", "list"], b"", b"encode base64\nencode hex\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor\n");
+    success(&["ops", "list"], b"", b"encode base32\nencode base64\nencode hex\ndecode base32\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor\n");
+}
+
+#[test]
+fn base32_commands_and_binary_round_trip() {
+    success(
+        &["encode", "base32", "--text", "foo"],
+        b"ignored",
+        b"MZXW6===\n",
+    );
+    success(
+        &["decode", "base32", "--text", "MZXW6==="],
+        b"",
+        b"666f6f\n",
+    );
+    success(&["encode", "base32"], &[0, 255], b"AD7Q====\n");
+    success(&["decode", "base32"], b"AD7Q====", b"00ff\n");
+    success(
+        &["decode", "base32", "--output", "raw"],
+        b"AD7Q====",
+        &[0, 255],
+    );
+    success(&["encode", "base32"], b"foo\n", b"MZXW6CQ=\n");
+    success(
+        &["decode", "base32", "--text", "MZXW6CQ=", "--output", "raw"],
+        b"",
+        b"foo\n",
+    );
+
+    let bytes: Vec<u8> = (0..=255).collect();
+    let encoded = cube(&["encode", "base32"], &bytes);
+    assert!(encoded.status.success());
+    assert!(encoded.stderr.is_empty());
+    let encoded_input = encoded
+        .stdout
+        .strip_suffix(b"\n")
+        .expect("encoded output newline");
+    success(
+        &["decode", "base32", "--output", "raw"],
+        encoded_input,
+        &bytes,
+    );
 }
 
 #[test]
@@ -127,6 +170,8 @@ fn stdin_binary_and_newlines_are_preserved() {
 #[test]
 fn empty_inputs_are_explicit_and_valid() {
     for args in [
+        vec!["encode", "base32", "--text", ""],
+        vec!["decode", "base32", "--text", ""],
         vec!["encode", "base64", "--text", ""],
         vec!["encode", "hex", "--text", ""],
         vec!["decode", "base64", "--text", ""],
@@ -135,6 +180,11 @@ fn empty_inputs_are_explicit_and_valid() {
     ] {
         success(&args, b"must not read stdin", b"\n");
     }
+    success(
+        &["decode", "base32", "--text", "", "--output", "raw"],
+        b"must not read stdin",
+        b"",
+    );
     success(
         &["decode", "hex", "--text", "", "--output", "raw"],
         b"",
@@ -145,6 +195,37 @@ fn empty_inputs_are_explicit_and_valid() {
 #[test]
 fn invalid_operation_input_uses_stderr_and_exit_one() {
     for (args, input, message) in [
+        (
+            vec!["decode", "base32", "--text", "mzxw6==="],
+            &b""[..],
+            "invalid Base32",
+        ),
+        (
+            vec!["decode", "base32", "--text", "MZXW6"],
+            &b""[..],
+            "invalid Base32",
+        ),
+        (
+            vec!["decode", "base32", "--text", "MZXW7==="],
+            &b""[..],
+            "invalid Base32",
+        ),
+        (
+            vec!["decode", "base32", "--text", "MY======MY======"],
+            &b""[..],
+            "invalid Base32",
+        ),
+        (
+            vec!["decode", "base32", "--text", "0A======"],
+            &b""[..],
+            "invalid Base32",
+        ),
+        (
+            vec!["decode", "base32"],
+            &b"MZXW6===\n"[..],
+            "invalid Base32",
+        ),
+        (vec!["decode", "base32"], &[255][..], "utf-8"),
         (
             vec!["decode", "base64", "--text", "!"],
             &b""[..],

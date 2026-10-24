@@ -15,9 +15,10 @@ the shared Cargo.lock and use the repository README and license directly.
 ## One implementation
 
 Rust is the source of truth so the CLI and SDK agree on validation, byte handling,
-and results. Each operation is an ordinary function in the core. Base64, hex,
-and SHA-256 delegate to established crates; no cryptographic primitive is
-implemented from scratch. Repeating-key XOR and ROT13 are small puzzle operations.
+and results. Each operation is an ordinary function in the core. Base32 uses
+`data-encoding`, with a core check that rejects concatenated padded blocks.
+Base64, hex, and SHA-256 also delegate to established crates; no cryptographic
+primitive is implemented from scratch. Repeating-key XOR and ROT13 are small puzzle operations.
 
 Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, and `binary`.
 Binary transformations accept byte slices and return bytes. Encodings and digests

@@ -14,6 +14,7 @@ def test_native_extension_is_loaded():
     assert cube.base32_decode is _native.base32_decode
     assert cube.base58_encode is _native.base58_encode
     assert cube.base58_decode is _native.base58_decode
+    assert cube.crc32 is _native.crc32
 
 
 @pytest.mark.parametrize(
@@ -56,6 +57,29 @@ def test_base58_is_case_sensitive():
     assert cube.base58_decode("a") == b"\x21"
 
 
+@pytest.mark.parametrize(
+    ("data", "expected"),
+    [
+        (b"123456789", "cbf43926"),
+        (b"", "00000000"),
+        (b"Hello", "f7d18982"),
+        (b"Hello\n", "31963516"),
+        (b'"', "0762ae69"),
+        (b"\x00", "d202ef8d"),
+        (b"\x00\xff\x80", "81dda740"),
+        (bytes(range(256)), "29058c73"),
+        ("Olá, 世界 🧊".encode(), "08b240b4"),
+    ],
+)
+def test_crc32_known_answers_and_binary_data(data, expected):
+    checksum = cube.crc32(data)
+    assert checksum == expected
+    assert cube.crc32(data) == checksum
+    assert type(checksum) is str
+    assert len(checksum) == 8
+    assert set(checksum) <= set("0123456789abcdef")
+
+
 def test_known_answers():
     assert cube.base64_encode(b"Hello") == "SGVsbG8="
     assert cube.base64_decode("SGVsbG8=") == b"Hello"
@@ -83,6 +107,7 @@ def test_binary_round_trips_and_determinism(data):
     assert type(cube.xor(data, b"key")) is bytes
     assert cube.xor(data, b"key") == cube.xor(data, b"key")
     assert cube.sha256(data) == cube.sha256(data)
+    assert cube.crc32(data) == cube.crc32(data)
 
 
 def test_unicode_and_empty_text():
@@ -190,6 +215,7 @@ def test_empty_xor_key(data):
         (cube.hex_encode, ("Hello",)),
         (cube.hex_decode, (b"00",)),
         (cube.sha256, ("Hello",)),
+        (cube.crc32, ("Hello",)),
         (cube.rot13, (b"Hello",)),
         (cube.xor, (b"Hello", "key")),
     ],

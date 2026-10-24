@@ -67,6 +67,15 @@ fn rot13(text: &str) -> String {
     ciphers::rot13(text)
 }
 
+/// Compute CRC-32/ISO-HDLC (IEEE) as eight lowercase hexadecimal digits.
+///
+/// Accepts arbitrary bytes, preserves leading zeroes, and returns 00000000 for
+/// empty input. This is a checksum, not a cryptographic hash.
+#[pyfunction]
+fn crc32(data: &[u8]) -> String {
+    hashing::crc32(data)
+}
+
 /// Compute SHA-256 as 64 lowercase hexadecimal digits.
 #[pyfunction]
 fn sha256(data: &[u8]) -> String {
@@ -91,6 +100,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(hex_encode, module)?)?;
     module.add_function(wrap_pyfunction!(hex_decode, module)?)?;
     module.add_function(wrap_pyfunction!(rot13, module)?)?;
+    module.add_function(wrap_pyfunction!(crc32, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
     module.add_function(wrap_pyfunction!(xor, module)?)?;
     Ok(())

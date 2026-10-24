@@ -41,6 +41,7 @@ fn help_version_and_discovery() {
         vec!["encode", "base58", "--help"],
         vec!["decode", "base58", "--help"],
         vec!["decode", "base64", "--help"],
+        vec!["hash", "crc32", "--help"],
         vec!["binary", "xor", "--help"],
     ] {
         let output = cube(&args, b"");
@@ -53,7 +54,34 @@ fn help_version_and_discovery() {
         b"",
         format!("cube {}\n", env!("CARGO_PKG_VERSION")).as_bytes(),
     );
-    success(&["ops", "list"], b"", b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor\n");
+    success(&["ops", "list"], b"", b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher rot13\nhash crc32\nhash sha256\nbinary xor\n");
+}
+
+#[test]
+fn crc32_known_answers_and_binary_stdin() {
+    success(
+        &["hash", "crc32", "--text", "123456789"],
+        b"ignored stdin",
+        b"cbf43926\n",
+    );
+    success(&["hash", "crc32"], b"123456789", b"cbf43926\n");
+    success(
+        &["hash", "crc32", "--text", ""],
+        b"ignored stdin",
+        b"00000000\n",
+    );
+    success(&["hash", "crc32"], b"", b"00000000\n");
+    success(&["hash", "crc32"], &[0, 255, 128], b"81dda740\n");
+    success(&["hash", "crc32"], b"\0", b"d202ef8d\n");
+    success(&["hash", "crc32", "--text", "\""], b"", b"0762ae69\n");
+    success(&["hash", "crc32"], b"Hello\n", b"31963516\n");
+    success(
+        &["hash", "crc32", "--text", "Olá, 世界 🧊"],
+        b"",
+        b"08b240b4\n",
+    );
+    let bytes: Vec<u8> = (0..=255).collect();
+    success(&["hash", "crc32"], &bytes, b"29058c73\n");
 }
 
 #[test]
@@ -343,6 +371,7 @@ fn invalid_cli_usage_exits_two() {
         vec!["binary", "xor"],
         vec!["binary", "xor", "--key", "k", "--key-hex", "ff"],
         vec!["decode", "base64", "--output", "text"],
+        vec!["hash", "crc32", "--output", "raw"],
     ] {
         let output = cube(&args, b"");
         assert_eq!(output.status.code(), Some(2));

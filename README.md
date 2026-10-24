@@ -382,3 +382,22 @@ is capped; `complete` identifies that condition. Optional masks use exactly 0/25
 Use Python `image.pixel`, `.pixels`, `.channel`, `.histogram` and `.compare` with
 matching keyword parameters. Pixel/channel results contain original `data: bytes`
 and shape/channel metadata; comparisons can return a native `mask: Image`.
+
+Image geometry uses exact sample rearrangement: `image rotate --degrees 0|90|180|270`
+rotates clockwise (90/270 swap dimensions); `image mirror --axis horizontal|vertical`
+reverses x/y respectively. `image crop --region x,y,width,height` uses a checked
+half-open rectangle and discards unselected pixels. All require `--output new.png`.
+Indices, palettes, transparency and alpha survive geometry unchanged.
+
+`image invert` applies `255-value` to color channels, preserving alpha unless
+explicitly selected with `--channels`. `image reorder --channels blue,green,red,alpha`
+requires a full permutation and keeps the output model fixed; moving alpha is explicit.
+Both are sample-reversible. `image grayscale` loses color using
+`(77R+150G+29B+128)>>8` on stored samples, without gamma/profile correction.
+Alpha is retained; color-key transparency becomes per-pixel alpha to avoid collisions.
+Color transforms reject indexed data unless `--expand-palette` is explicit.
+Every encoded/derived image drops other source metadata (including EXIF/profile/text);
+lossless PNG samples do not imply byte-identical files. Existing destinations are rejected.
+Python exposes immutable `Image.rotate(90)`, `.mirror("horizontal")`,
+`.crop((x,y,width,height))`, `.invert()`, `.reorder([...])` and `.grayscale()`;
+each returns a new `Image` with reusable samples.

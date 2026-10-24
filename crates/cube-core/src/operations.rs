@@ -48,6 +48,8 @@ pub enum ParameterType {
     Integer { min: i64, max: i64 },
     /// Inclusive unsigned range for byte offsets/counts.
     Unsigned { min: u64, max: u64 },
+    /// Finite unsigned choices, such as exact quarter-turn angles.
+    UnsignedChoices { choices: &'static [u64] },
     /// Boolean flag.
     Boolean,
     /// UTF-8 text; an empty list permits any text.
@@ -76,6 +78,7 @@ impl std::fmt::Display for ParameterType {
         match self {
             Self::Integer { min, max } => write!(f, "integer in [{min}, {max}]"),
             Self::Unsigned { min, max } => write!(f, "unsigned integer in [{min}, {max}]"),
+            Self::UnsignedChoices { choices } => write!(f, "unsigned integer, one of: {choices:?}"),
             Self::Boolean => f.write_str("boolean"),
             Self::Text { choices: [] } => f.write_str("UTF-8 text"),
             Self::Text { choices } => write!(f, "one of: {}", choices.join(", ")),
@@ -107,6 +110,12 @@ impl std::fmt::Display for ParameterType {
 impl ParameterType {
     fn accepts(self, value: ParameterValue<'_>) -> bool {
         match (self, value) {
+            (Self::UnsignedChoices { choices }, ParameterValue::Unsigned(n)) => {
+                choices.contains(&n)
+            }
+            (Self::UnsignedChoices { choices }, ParameterValue::Integer(n)) => {
+                u64::try_from(n).is_ok_and(|n| choices.contains(&n))
+            }
             (Self::Integer { min, max }, ParameterValue::Integer(n)) => (min..=max).contains(&n),
             (Self::Unsigned { min, max }, ParameterValue::Unsigned(n)) => (min..=max).contains(&n),
             (Self::Unsigned { min, max }, ParameterValue::Integer(n)) => {
@@ -254,6 +263,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::forensics::exif::OPERATIONS)
         .chain(crate::image::OPERATIONS)
         .chain(crate::image::analyze::OPERATIONS)
+        .chain(crate::image::transform::OPERATIONS)
         .collect()
 }
 

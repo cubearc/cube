@@ -348,3 +348,192 @@ fn image_comparison_has_exact_counts_coordinates_and_binary_mask() {
             .is_err()
     );
 }
+
+#[test]
+fn geometric_transforms_preserve_exact_non_square_samples_and_palette() {
+    use cube_core::image::Region;
+    let image = Image::from_samples(
+        2,
+        3,
+        ColorModel::Gray,
+        vec![1, 2, 3, 4, 5, 6],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    for (angle, expected, w, h) in [
+        (0, vec![1, 2, 3, 4, 5, 6], 2, 3),
+        (90, vec![5, 3, 1, 6, 4, 2], 3, 2),
+        (180, vec![6, 5, 4, 3, 2, 1], 2, 3),
+        (270, vec![2, 4, 6, 1, 3, 5], 3, 2),
+    ] {
+        let result = image.rotate(angle).unwrap();
+        assert_eq!(result.samples(), expected);
+        assert_eq!((result.width(), result.height()), (w, h));
+        assert_eq!(
+            result.rotate((360 - angle) % 360).unwrap().samples(),
+            image.samples()
+        );
+        assert_eq!(
+            Image::decode(&result.encode_png().unwrap())
+                .unwrap()
+                .samples(),
+            expected
+        );
+    }
+    let mut rotated = image.clone();
+    for _ in 0..4 {
+        rotated = rotated.rotate(90).unwrap();
+    }
+    assert_eq!(rotated.samples(), image.samples());
+    assert_eq!(
+        image.mirror("horizontal").unwrap().samples(),
+        [2, 1, 4, 3, 6, 5]
+    );
+    assert_eq!(
+        image.mirror("vertical").unwrap().samples(),
+        [5, 6, 3, 4, 1, 2]
+    );
+    for axis in ["horizontal", "vertical"] {
+        assert_eq!(
+            image.mirror(axis).unwrap().mirror(axis).unwrap().samples(),
+            image.samples()
+        );
+    }
+    assert_eq!(
+        image
+            .crop(Region {
+                x: 1,
+                y: 1,
+                width: 1,
+                height: 2
+            })
+            .unwrap()
+            .samples(),
+        [4, 6]
+    );
+    assert!(
+        image
+            .crop(Region {
+                x: u32::MAX,
+                y: 0,
+                width: 1,
+                height: 1
+            })
+            .is_err()
+    );
+    assert!(
+        image
+            .crop(Region {
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 1
+            })
+            .is_err()
+    );
+    assert!(image.rotate(45).is_err());
+    assert!(image.mirror("diagonal").is_err());
+    for model in [ColorModel::Indexed, ColorModel::Rgba] {
+        let source = sample(model);
+        let transformed = source.rotate(90).unwrap().mirror("vertical").unwrap();
+        assert_eq!(transformed.palette(), source.palette());
+        assert_eq!(transformed.transparency(), source.transparency());
+        assert_eq!(
+            transformed
+                .mirror("vertical")
+                .unwrap()
+                .rotate(270)
+                .unwrap()
+                .samples(),
+            source.samples()
+        );
+    }
+    let single = Image::from_samples(1, 1, ColorModel::Gray, vec![255], vec![], vec![]).unwrap();
+    assert_eq!(single.rotate(90).unwrap().samples(), [255]);
+}
+
+#[test]
+fn color_transforms_are_reversible_or_explicitly_lossy_and_keep_alpha() {
+    use cube_core::image::Channel::{Alpha, Blue, Green, Red};
+    let rgb = Image::from_samples(
+        3,
+        1,
+        ColorModel::Rgb,
+        vec![255, 0, 0, 0, 255, 0, 0, 0, 255],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    assert_eq!(rgb.grayscale().unwrap().samples(), [77, 149, 29]);
+    assert_eq!(
+        rgb.invert(None).unwrap().invert(None).unwrap().samples(),
+        rgb.samples()
+    );
+    assert_eq!(
+        rgb.reorder(&[Blue, Red, Green])
+            .unwrap()
+            .reorder(&[Green, Blue, Red])
+            .unwrap()
+            .samples(),
+        rgb.samples()
+    );
+    for channels in [
+        &[Red, Red, Blue][..],
+        &[Red, Green][..],
+        &[Red, Green, Alpha][..],
+    ] {
+        assert!(rgb.reorder(channels).is_err());
+    }
+    let rgba =
+        Image::from_samples(1, 1, ColorModel::Rgba, vec![255, 0, 0, 7], vec![], vec![]).unwrap();
+    assert_eq!(rgba.invert(None).unwrap().samples(), [0, 255, 255, 7]);
+    assert_eq!(
+        rgba.invert(Some(&[Alpha])).unwrap().samples(),
+        [255, 0, 0, 248]
+    );
+    assert_eq!(rgba.grayscale().unwrap().samples(), [77, 7]);
+    assert_eq!(
+        rgba.reorder(&[Alpha, Red, Green, Blue]).unwrap().samples(),
+        [7, 255, 0, 0]
+    );
+    for model in [ColorModel::Gray, ColorModel::GrayAlpha] {
+        let source = sample(model);
+        assert_eq!(source.grayscale().unwrap().samples(), source.samples());
+    }
+    let indexed = sample(ColorModel::Indexed);
+    assert!(indexed.invert(None).is_err());
+    assert!(indexed.reorder(&[Red]).is_err());
+    assert!(indexed.grayscale().is_err());
+    assert!(indexed.expand_palette().unwrap().grayscale().is_ok());
+    // Two colors sharing luma must not gain transparency through conversion.
+    let key = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgb,
+        vec![0, 0, 0, 0, 0, 1],
+        vec![],
+        vec![0; 6],
+    )
+    .unwrap();
+    assert_eq!(key.grayscale().unwrap().samples(), [0, 0, 0, 255]);
+    assert_eq!(
+        key.invert(None).unwrap().transparency(),
+        [0, 255, 0, 255, 0, 255]
+    );
+    let key = Image::from_samples(
+        1,
+        1,
+        ColorModel::Rgb,
+        vec![1, 2, 3],
+        vec![],
+        vec![0, 1, 0, 2, 0, 3],
+    )
+    .unwrap();
+    assert_eq!(
+        key.reorder(&[Blue, Red, Green]).unwrap().transparency(),
+        [0, 3, 0, 1, 0, 2]
+    );
+    let gray = Image::from_samples(2, 1, ColorModel::Gray, vec![7, 8], vec![], vec![0, 7]).unwrap();
+    assert_eq!(gray.grayscale().unwrap().samples(), [7, 0, 8, 255]);
+}

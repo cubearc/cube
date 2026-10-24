@@ -166,3 +166,35 @@ def test_comparison_preserves_alpha_and_bounded_differences():
     assert first.compare(first)["mask"] is None
     with pytest.raises(ValueError):
         first.compare(rgba_image())
+
+
+def test_exact_geometry_color_transforms_and_immutable_sources(tmp_path):
+    image = cube.Image.from_samples(2, 3, "gray", bytes([1, 2, 3, 4, 5, 6]))
+    assert image.rotate(90).samples == bytes([5, 3, 1, 6, 4, 2])
+    assert (image.rotate(90).width, image.rotate(90).height) == (3, 2)
+    assert image.rotate(90).rotate(270).samples == image.samples
+    assert image.mirror("horizontal").samples == bytes([2, 1, 4, 3, 6, 5])
+    assert image.mirror("vertical").samples == bytes([5, 6, 3, 4, 1, 2])
+    assert image.crop((1, 1, 1, 2)).samples == bytes([4, 6])
+    for action in [
+        lambda: image.rotate(45),
+        lambda: image.mirror("other"),
+        lambda: image.crop((1, 0, 2, 1)),
+    ]:
+        with pytest.raises(ValueError):
+            action()
+    image = cube.Image.from_samples(1, 1, "rgba", bytes([255, 0, 0, 7]))
+    assert image.invert().samples == bytes([0, 255, 255, 7])
+    assert image.invert().invert().samples == image.samples
+    assert image.invert(channels=["alpha"]).samples[-1] == 248
+    assert image.reorder(["blue", "green", "red", "alpha"]).samples == bytes(
+        [0, 0, 255, 7]
+    )
+    assert image.grayscale().samples == bytes([77, 7])
+    with pytest.raises(ValueError):
+        image.reorder(["red", "red", "blue", "alpha"])
+    path = tmp_path / "result.png"
+    image.rotate(90).save_png(path)
+    assert cube.Image.open(path).samples == image.samples
+    with pytest.raises(OSError):
+        image.invert().save_png(path)

@@ -76,6 +76,58 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Exact clockwise quarter-turn rotation; write a new lossless PNG
+    Rotate {
+        path: PathBuf,
+        #[arg(long)]
+        degrees: u32,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Mirror left/right (horizontal) or top/bottom (vertical)
+    Mirror {
+        path: PathBuf,
+        #[arg(long)]
+        axis: String,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Extract an exact x,y,width,height region; discard unselected pixels
+    Crop {
+        path: PathBuf,
+        #[arg(long)]
+        region: Region,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Invert 8-bit color samples; alpha is unchanged unless explicitly selected
+    Invert {
+        path: PathBuf,
+        #[arg(long, value_delimiter = ',')]
+        channels: Option<Vec<String>>,
+        #[arg(long)]
+        expand_palette: bool,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Apply a full channel permutation; alpha movement must be explicit
+    Reorder {
+        path: PathBuf,
+        #[arg(long, value_delimiter = ',', required = true)]
+        channels: Vec<String>,
+        #[arg(long)]
+        expand_palette: bool,
+        #[arg(long)]
+        output: PathBuf,
+    },
+    /// Reduce color using (77R+150G+29B+128)>>8; preserve alpha, drop color information
+    Grayscale {
+        path: PathBuf,
+        #[arg(long)]
+        expand_palette: bool,
+        #[arg(long)]
+        output: PathBuf,
+    },
     /// Read native pixel samples at a zero-based coordinate
     Pixel {
         path: PathBuf,
@@ -167,6 +219,53 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Rotate {
+            path,
+            degrees,
+            output,
+        } => Image::open(&path)?.rotate(degrees)?.save_png(&output)?,
+        ImageCommand::Mirror { path, axis, output } => {
+            Image::open(&path)?.mirror(&axis)?.save_png(&output)?
+        }
+        ImageCommand::Crop {
+            path,
+            region,
+            output,
+        } => Image::open(&path)?.crop(region)?.save_png(&output)?,
+        ImageCommand::Invert {
+            path,
+            channels,
+            expand_palette,
+            output,
+        } => {
+            let image = Image::open(&path)?;
+            let selected = selected(channels)?;
+            image
+                .view(expand_palette)?
+                .invert(selected.as_deref())?
+                .save_png(&output)?;
+        }
+        ImageCommand::Reorder {
+            path,
+            channels,
+            expand_palette,
+            output,
+        } => {
+            let image = Image::open(&path)?;
+            let selected = selected(Some(channels))?.expect("present channels");
+            image
+                .view(expand_palette)?
+                .reorder(&selected)?
+                .save_png(&output)?;
+        }
+        ImageCommand::Grayscale {
+            path,
+            expand_palette,
+            output,
+        } => {
+            let image = Image::open(&path)?;
+            image.view(expand_palette)?.grayscale()?.save_png(&output)?;
+        }
         ImageCommand::Pixel {
             path,
             x,

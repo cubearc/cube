@@ -144,6 +144,59 @@ impl PyImage {
         )?;
         Ok(output)
     }
+    fn rotate(&self, degrees: u32) -> PyResult<Self> {
+        Ok(Self {
+            inner: self.inner.rotate(degrees).map_err(super::file_error)?,
+        })
+    }
+    fn mirror(&self, axis: &str) -> PyResult<Self> {
+        Ok(Self {
+            inner: self.inner.mirror(axis).map_err(super::file_error)?,
+        })
+    }
+    fn crop(&self, region: (u32, u32, u32, u32)) -> PyResult<Self> {
+        Ok(Self {
+            inner: self
+                .inner
+                .crop(crate::image::region(Some(region)).expect("present region"))
+                .map_err(super::file_error)?,
+        })
+    }
+    #[pyo3(signature=(*, channels=None, expand_palette=false))]
+    fn invert(&self, channels: Option<Vec<String>>, expand_palette: bool) -> PyResult<Self> {
+        let selected = crate::image::channels(channels)?;
+        Ok(Self {
+            inner: self
+                .inner
+                .view(expand_palette)
+                .map_err(super::file_error)?
+                .invert(selected.as_deref())
+                .map_err(super::file_error)?,
+        })
+    }
+    #[pyo3(signature=(channels, *, expand_palette=false))]
+    fn reorder(&self, channels: Vec<String>, expand_palette: bool) -> PyResult<Self> {
+        let selected = crate::image::channels(Some(channels))?.expect("present channels");
+        Ok(Self {
+            inner: self
+                .inner
+                .view(expand_palette)
+                .map_err(super::file_error)?
+                .reorder(&selected)
+                .map_err(super::file_error)?,
+        })
+    }
+    #[pyo3(signature=(*, expand_palette=false))]
+    fn grayscale(&self, expand_palette: bool) -> PyResult<Self> {
+        Ok(Self {
+            inner: self
+                .inner
+                .view(expand_palette)
+                .map_err(super::file_error)?
+                .grayscale()
+                .map_err(super::file_error)?,
+        })
+    }
     #[staticmethod]
     fn decode(data: &[u8]) -> PyResult<Self> {
         Ok(Self {

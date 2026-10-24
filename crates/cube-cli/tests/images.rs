@@ -146,3 +146,86 @@ fn pixel_channel_histogram_and_comparison_commands_preserve_exact_data() {
     assert!(output.status.success());
     assert_eq!(std::fs::read(bytes).unwrap(), [3, 1, 6, 4]);
 }
+
+#[test]
+fn transforms_write_exact_new_pngs_and_reject_overwrites() {
+    let files = Files::new("transforms");
+    let input = files.path("input.png");
+    let image = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgba,
+        vec![255, 0, 0, 7, 0, 0, 255, 8],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    image.save_png(&input).unwrap();
+    for (name, flags, expected) in [
+        ("rotate", vec!["--degrees", "90"], image.rotate(90).unwrap()),
+        (
+            "mirror",
+            vec!["--axis", "horizontal"],
+            image.mirror("horizontal").unwrap(),
+        ),
+        (
+            "crop",
+            vec!["--region", "1,0,1,1"],
+            image
+                .crop(cube_core::image::Region {
+                    x: 1,
+                    y: 0,
+                    width: 1,
+                    height: 1,
+                })
+                .unwrap(),
+        ),
+        ("invert", vec![], image.invert(None).unwrap()),
+        (
+            "reorder",
+            vec!["--channels", "blue,green,red,alpha"],
+            image
+                .reorder(&[
+                    cube_core::image::Channel::Blue,
+                    cube_core::image::Channel::Green,
+                    cube_core::image::Channel::Red,
+                    cube_core::image::Channel::Alpha,
+                ])
+                .unwrap(),
+        ),
+        ("grayscale", vec![], image.grayscale().unwrap()),
+    ] {
+        let output = files.path(&format!("{name}.png"));
+        let mut args = vec!["image", name, input.to_str().unwrap()];
+        args.extend(flags);
+        args.extend(["--output", output.to_str().unwrap()]);
+        let result = run(&args);
+        assert!(
+            result.status.success(),
+            "{}",
+            String::from_utf8_lossy(&result.stderr)
+        );
+        let actual = Image::open(&output).unwrap();
+        assert_eq!(actual.samples(), expected.samples());
+        assert_eq!(
+            (actual.width(), actual.height()),
+            (expected.width(), expected.height())
+        );
+        assert_eq!(run(&args).status.code(), Some(1));
+    }
+    assert_eq!(
+        run(&[
+            "image",
+            "rotate",
+            input.to_str().unwrap(),
+            "--degrees",
+            "45",
+            "--output",
+            input.to_str().unwrap()
+        ])
+        .status
+        .code(),
+        Some(1)
+    );
+    assert_eq!(Image::open(&input).unwrap().samples(), image.samples());
+}

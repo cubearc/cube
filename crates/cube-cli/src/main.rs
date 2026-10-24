@@ -58,6 +58,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Encode as padded RFC 4648 standard Base32 with uppercase letters
+    Base32(Input),
     /// Encode as padded RFC 4648 standard Base64
     Base64(Input),
     /// Encode as lowercase hexadecimal
@@ -66,6 +68,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Decode strict uppercase standard Base32; padding is required when needed
+    Base32(DecodeArgs),
     /// Decode strict, padded standard Base64; whitespace is rejected
     Base64(DecodeArgs),
     /// Decode hexadecimal digits; prefixes and whitespace are rejected
@@ -158,11 +162,12 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Ops { command: Ops::List } => {
             write_text(
                 &mut output,
-                "encode base64\nencode hex\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor",
+                "encode base32\nencode base64\nencode hex\ndecode base32\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor",
             )?;
         }
         Command::Encode { command } => {
             let text = match command {
+                Encode::Base32(input) => encoding::base32_encode(&input.read()?),
                 Encode::Base64(input) => encoding::base64_encode(&input.read()?),
                 Encode::Hex(input) => encoding::hex_encode(&input.read()?),
             };
@@ -170,6 +175,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Decode { command } => {
             let (bytes, format) = match command {
+                Decode::Base32(args) => (
+                    encoding::base32_decode(&String::from_utf8(args.input.read()?)?)?,
+                    args.output,
+                ),
                 Decode::Base64(args) => (
                     encoding::base64_decode(&String::from_utf8(args.input.read()?)?)?,
                     args.output,

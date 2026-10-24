@@ -10,6 +10,25 @@ from cube import _native
 def test_native_extension_is_loaded():
     assert any(_native.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
     assert cube.base64_encode is _native.base64_encode
+    assert cube.base32_encode is _native.base32_encode
+    assert cube.base32_decode is _native.base32_decode
+
+
+@pytest.mark.parametrize(
+    ("data", "encoded"),
+    [
+        (b"", ""),
+        (b"f", "MY======"),
+        (b"fo", "MZXQ===="),
+        (b"foo", "MZXW6==="),
+        (b"foob", "MZXW6YQ="),
+        (b"fooba", "MZXW6YTB"),
+        (b"foobar", "MZXW6YTBOI======"),
+    ],
+)
+def test_base32_rfc4648_vectors(data, encoded):
+    assert cube.base32_encode(data) == encoded
+    assert cube.base32_decode(encoded) == data
 
 
 def test_known_answers():
@@ -27,6 +46,7 @@ def test_known_answers():
 @pytest.mark.parametrize("data", [b"", b"\x00\xff\x80", bytes(range(256))])
 def test_binary_round_trips_and_determinism(data):
     for encode, decode in [
+        (cube.base32_encode, cube.base32_decode),
         (cube.base64_encode, cube.base64_decode),
         (cube.hex_encode, cube.hex_decode),
     ]:
@@ -45,11 +65,14 @@ def test_unicode_and_empty_text():
     assert cube.rot13(cube.rot13(text)) == text
     assert cube.rot13("") == ""
     data = text.encode("utf-8")
+    assert cube.base32_decode(cube.base32_encode(data)) == data
     assert cube.base64_decode(cube.base64_encode(data)) == data
     assert cube.hex_decode(cube.hex_encode(data)) == data
 
 
 def test_empty_inputs():
+    assert cube.base32_encode(b"") == ""
+    assert cube.base32_decode("") == b""
     assert cube.base64_encode(b"") == ""
     assert cube.base64_decode("") == b""
     assert cube.hex_encode(b"") == ""
@@ -58,6 +81,30 @@ def test_empty_inputs():
     assert cube.sha256(b"") == (
         "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     )
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "mzxw6===",
+        "MZxW6===",
+        "0A======",
+        "é",
+        " MY======",
+        "MY======\n",
+        "MY",
+        "MY=======",
+        "MY=====A",
+        "MY======MY======",
+        "MZ======",
+        "MZXR====",
+        "MZXW7===",
+        "MZXW6YR=",
+    ],
+)
+def test_invalid_base32(text):
+    with pytest.raises(ValueError, match="invalid Base32"):
+        cube.base32_decode(text)
 
 
 @pytest.mark.parametrize("text", ["!", "Zg", "Zh==", "Zg==\n", "-_8=", "é"])
@@ -81,6 +128,8 @@ def test_empty_xor_key(data):
 @pytest.mark.parametrize(
     ("operation", "args"),
     [
+        (cube.base32_encode, ("Hello",)),
+        (cube.base32_decode, (b"MZXW6===",)),
         (cube.base64_encode, ("Hello",)),
         (cube.base64_decode, (b"SGVsbG8=",)),
         (cube.hex_encode, ("Hello",)),

@@ -12,6 +12,7 @@ Python package. All interfaces share the same implementations.
 
 | Operation | Behavior |
 | --- | --- |
+| Base32 | Uppercase, padded RFC 4648 standard encoding and strict decoding |
 | Base64 | Padded RFC 4648 standard encoding and strict decoding |
 | Hex | Lowercase encoding; decoding accepts either case |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |
@@ -19,7 +20,8 @@ Python package. All interfaces share the same implementations.
 | XOR | Byte-wise XOR with a nonempty repeating key |
 
 ROT13 and repeating-key XOR are classical puzzle tools, not secure encryption.
-Decoders reject whitespace; Base64 also rejects invalid padding and trailing bits.
+Decoders reject whitespace. Base32 and Base64 reject invalid padding and trailing
+bits; Base32 also rejects lowercase letters.
 
 ## Build and install
 
@@ -42,6 +44,9 @@ For an uninstalled development build, use `cargo run -p cube-cli --` in place of
 ```sh
 cube --help
 cube ops list
+cube encode base32 --text "foo"                   # MZXW6===
+cube decode base32 --text "MZXW6==="               # 666f6f
+cube decode base32 --text "MZXW6===" --output raw  # foo (no added newline)
 cube encode base64 --text "Hello"                 # SGVsbG8=
 cube decode base64 --text "SGVsbG8="               # 48656c6c6f
 cube decode base64 --text "SGVsbG8=" --output raw   # Hello (no added newline)
@@ -89,6 +94,8 @@ On Windows, create the environment with `py -m venv .venv` and activate it with
 ```python
 import cube
 
+assert cube.base32_encode(b"foo") == "MZXW6==="
+assert cube.base32_decode("MZXW6===") == b"foo"
 assert cube.base64_encode(b"Hello") == "SGVsbG8="
 assert cube.base64_decode("SGVsbG8=") == b"Hello"
 assert cube.hex_encode(b"\x00\xff") == "00ff"

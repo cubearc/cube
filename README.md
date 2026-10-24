@@ -612,3 +612,34 @@ frame-aligned chunks of at most 64 KiB and cover only the selected frame range;
 metadata scanning still skips other chunks. Typed Rust values allocate at most
 8 MiB in addition to the raw result; structured CLI/Python output has the separate
 10000-sample cap. Choose smaller intervals for larger recordings.
+
+### Waveform envelope data
+
+```sh
+cube audio waveform sample.wav --channels 0 --bucket-frames 1024 --json
+cube audio waveform sample.wav --start-frame 100 --frames 5000 --bucket-frames 1000
+```
+
+This returns **data**, not a plot: exact minimum/maximum signed amplitude values
+per selected channel, ordered by absolute `start_frame`, with each bucket's
+actual `frames`. The final partial bucket is included without padding, and zero
+frames produce an empty series. `sample_rate` is the frame/sec time base; divide
+absolute frame positions by it for exact time. Integer units match PCM extraction;
+there is no normalization, decimation, resampling, FFT or signal detection.
+
+`bucket_frames` defaults to 1024 and accepts 1..1048576; buckets larger than the
+selection still produce one partial bucket. `max_buckets` defaults to 1000,
+accepts 1..10000, and the total number of channel/bucket pairs is also capped at
+10000. Exceeding a budget fails before reading audio, rather than returning an
+incomplete series. Shared frame/duration/64 MiB source budgets apply; streaming
+uses at most 64 KiB each for source/selected PCM blocks and retains only bounded
+extrema/results. Output is independent of how those blocks are divided.
+
+Rust `media::envelope::from_reader` / `from_file` stream selected data;
+`from_samples(&Samples, bucket_frames, max_buckets)` consumes the PCM contract.
+`Builder::new(&first, bucket_frames, max_buckets)` initializes metadata without
+consuming the first block: call `.push(&first)` and then push contiguous matching
+blocks before `.finish()`. Format, channel mapping and continuity errors fail
+before consuming a block. Python `wave_envelope(bytes, bucket_frames=1024, ...)`
+and `wave_file_envelope(path, ...)` expose the same selections and structured
+results over the shared Rust streaming implementation.

@@ -39,6 +39,17 @@ pub(crate) struct SampleOutput {
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Exact per-channel min/max buckets with absolute frame positions; no plot/FFT
+    Waveform {
+        #[command(flatten)]
+        range: RangeArgs,
+        #[arg(long, default_value_t = 1024)]
+        bucket_frames: u64,
+        #[arg(long, default_value_t = 1000)]
+        max_buckets: usize,
+        #[arg(long)]
+        json: bool,
+    },
     /// Extract exact PCM channels/frame ranges without resampling or normalization
     Samples {
         #[command(flatten)]
@@ -55,6 +66,35 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Waveform {
+            range,
+            bucket_frames,
+            max_buckets,
+            json,
+        } => {
+            let result = cube_core::media::envelope::from_file(
+                &range.path,
+                &range.selection(),
+                bucket_frames,
+                max_buckets,
+            )?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "Frames: {}; sample rate: {} frames/sec; channels: {:?}; bucket frames: {}",
+                    result.frames, result.sample_rate, result.channels, result.bucket_frames
+                )?;
+                for bucket in result.buckets {
+                    writeln!(
+                        output,
+                        "start_frame={} frames={} min={:?} max={:?}",
+                        bucket.start_frame, bucket.frames, bucket.minimum, bucket.maximum
+                    )?;
+                }
+            }
+        }
         AudioCommand::Samples { range, destination } => {
             let samples = cube_core::media::pcm::extract_file(&range.path, &range.selection())?;
             if destination.stdout {

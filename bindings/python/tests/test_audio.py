@@ -99,3 +99,44 @@ def test_sample_validation_and_raw_structured_budgets():
     with pytest.raises(ValueError) as error:
         cube.wave_samples(many, include_values=True)
     assert error.value.code == "resource_limit"
+
+
+def test_waveform_buckets_are_exact_partial_and_channel_aware(tmp_path):
+    values = [0, 4, 32767, -4, -32768, 20, 5, -20, -1, 7, 10, 8, 0, -9]
+    data = pcm_wave(struct.pack("<14h", *values), channels=2, width=2)
+    result = cube.wave_envelope(data, bucket_frames=3)
+    assert result["frames"] == 7
+    assert result["buckets"] == [
+        dict(start_frame=0, frames=3, minimum=[-32768, -4], maximum=[32767, 20]),
+        dict(start_frame=3, frames=3, minimum=[-1, -20], maximum=[10, 8]),
+        dict(start_frame=6, frames=1, minimum=[0, -9], maximum=[0, -9]),
+    ]
+    selected = cube.wave_envelope(
+        data, start_frame=1, frames=5, channels=[1, 0], bucket_frames=3
+    )
+    assert selected["buckets"][0]["start_frame"] == 1
+    assert selected["buckets"][1]["frames"] == 2
+    path = tmp_path / "sample.wav"
+    path.write_bytes(data)
+    assert cube.wave_file_envelope(path, bucket_frames=3) == result
+    assert path.read_bytes() == data
+    assert cube.wave_envelope(pcm_wave(), bucket_frames=10)["buckets"] == []
+
+
+def test_waveform_streaming_and_budget_errors():
+    data = pcm_wave(struct.pack("<4h", 1, -2, -1, 2) * 20000, channels=2, width=2)
+    result = cube.wave_envelope(data, bucket_frames=30000)
+    assert result["frames"] == 40000
+    assert [b["frames"] for b in result["buckets"]] == [30000, 10000]
+    assert result["buckets"][0]["minimum"] == [-1, -2]
+    assert result["buckets"][0]["maximum"] == [1, 2]
+    for options in [
+        dict(bucket_frames=0),
+        dict(bucket_frames=2**64 - 1),
+        dict(max_buckets=0),
+        dict(max_buckets=10001),
+        dict(bucket_frames=1, max_buckets=10000),
+    ]:
+        with pytest.raises(ValueError) as error:
+            cube.wave_envelope(data, **options)
+        assert error.value.operation == "audio.waveform.envelope"

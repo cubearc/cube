@@ -118,3 +118,55 @@ fn sample_outputs_are_explicit_exact_and_never_overwrite() {
     assert_eq!(run(&["audio", "samples", input]).status.code(), Some(2));
     assert_eq!(std::fs::read(&path).unwrap(), original);
 }
+
+#[test]
+fn waveform_reports_integer_extrema_and_frame_time_base_without_modifying_input() {
+    let workspace = Workspace::new("waveform");
+    let path = workspace.path("input.wav");
+    let original = wav();
+    std::fs::write(&path, &original).unwrap();
+    let input = path.to_str().unwrap();
+    let result = run(&[
+        "audio",
+        "waveform",
+        input,
+        "--bucket-frames",
+        "10",
+        "--json",
+    ]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["sample_rate"], 8000);
+    assert_eq!(
+        report["buckets"],
+        serde_json::json!([{"start_frame":0,"frames":1,"minimum":[-32768,32767],"maximum":[-32768,32767]}])
+    );
+    let result = run(&[
+        "audio",
+        "waveform",
+        input,
+        "--channels",
+        "1",
+        "--bucket-frames",
+        "1",
+    ]);
+    assert!(result.status.success());
+    assert!(String::from_utf8_lossy(&result.stdout).contains("min=[32767] max=[32767]"));
+    let result = run(&[
+        "--json-errors",
+        "audio",
+        "waveform",
+        input,
+        "--bucket-frames",
+        "0",
+    ]);
+    assert_eq!(result.status.code(), Some(1));
+    assert!(result.stdout.is_empty());
+    let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+    assert_eq!(error["error"]["operation"], "audio.waveform.envelope");
+    assert_eq!(std::fs::read(&path).unwrap(), original);
+}

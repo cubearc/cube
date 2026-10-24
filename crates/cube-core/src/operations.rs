@@ -271,6 +271,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::numbers::OPERATIONS)
         .chain(crate::media::wave::OPERATIONS)
         .chain(crate::media::pcm::OPERATIONS)
+        .chain(crate::media::envelope::OPERATIONS)
         .collect()
 }
 

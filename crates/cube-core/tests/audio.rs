@@ -386,3 +386,238 @@ fn pcm_ranges_are_validated_before_reading_or_large_allocation() {
         ErrorCode::ResourceLimit
     );
 }
+
+#[test]
+fn waveform_extrema_have_absolute_frames_and_keep_final_partial_buckets() {
+    use cube_core::media::{
+        envelope,
+        pcm::{self, Selection},
+    };
+    let values = [0, 4, 32767, -4, -32768, 20, 5, -20, -1, 7, 10, 8, 0, -9];
+    let input = wav(2, 16, &encode_values(&values, 16));
+    let samples = pcm::extract(&mut Cursor::new(&input), &Selection::default()).unwrap();
+    let all = envelope::from_samples(&samples, 3, 100).unwrap();
+    let stream =
+        envelope::from_reader(&mut Cursor::new(&input), &Selection::default(), 3, 100).unwrap();
+    assert_eq!(all.buckets, stream.buckets);
+    assert_eq!(all.frames, 7);
+    assert_eq!(all.buckets.len(), 3);
+    assert_eq!(all.buckets[0].minimum, [-32768, -4]);
+    assert_eq!(all.buckets[0].maximum, [32767, 20]);
+    assert_eq!(all.buckets[1].minimum, [-1, -20]);
+    assert_eq!(all.buckets[1].maximum, [10, 8]);
+    assert_eq!(all.buckets[2].start_frame, 6);
+    assert_eq!(all.buckets[2].frames, 1);
+    assert_eq!(all.buckets[2].minimum, [0, -9]);
+    let selection = Selection {
+        start_frame: 1,
+        frames: Some(5),
+        channels: Some(vec![1, 0]),
+    };
+    let selected = pcm::extract(&mut Cursor::new(&input), &selection).unwrap();
+    let expected = envelope::from_samples(&selected, 3, 100).unwrap();
+    assert_eq!(expected.buckets[0].start_frame, 1);
+    assert_eq!(expected.buckets[0].minimum, [-20, -32768]);
+    assert_eq!(expected.buckets[1].start_frame, 4);
+    assert_eq!(expected.buckets[1].frames, 2);
+    let first = pcm::extract(
+        &mut Cursor::new(&input),
+        &Selection {
+            frames: Some(1),
+            ..selection.clone()
+        },
+    )
+    .unwrap();
+    let mut builder = envelope::Builder::new(&first, 3, 100).unwrap();
+    builder.push(&first).unwrap();
+    for (start, frames) in [(2, 3), (5, 1)] {
+        let block = pcm::extract(
+            &mut Cursor::new(&input),
+            &Selection {
+                start_frame: start,
+                frames: Some(frames),
+                channels: Some(vec![1, 0]),
+            },
+        )
+        .unwrap();
+        builder.push(&block).unwrap();
+    }
+    assert_eq!(builder.finish().buckets, expected.buckets);
+    for (values, bucket, minimum, maximum) in [
+        (vec![5; 5], 2, vec![5, 5, 5], vec![5, 5, 5]),
+        (vec![0, 0, 127, 0, 0], 2, vec![0, 0, 0], vec![0, 127, 0]),
+        (
+            vec![0, 70, 100, 70, 0, -70, -100, -70],
+            4,
+            vec![0, -100],
+            vec![100, 0],
+        ),
+        (vec![-128, 127], 1, vec![-128, 127], vec![-128, 127]),
+    ] {
+        let input = wav(1, 8, &encode_values(&values, 8));
+        let report =
+            envelope::from_reader(&mut Cursor::new(input), &Selection::default(), bucket, 100)
+                .unwrap();
+        assert_eq!(
+            report
+                .buckets
+                .iter()
+                .map(|b| b.minimum[0])
+                .collect::<Vec<_>>(),
+            minimum
+        );
+        assert_eq!(
+            report
+                .buckets
+                .iter()
+                .map(|b| b.maximum[0])
+                .collect::<Vec<_>>(),
+            maximum
+        );
+    }
+    assert!(
+        envelope::from_reader(
+            &mut Cursor::new(wav(1, 8, &[])),
+            &Selection::default(),
+            1024,
+            100
+        )
+        .unwrap()
+        .buckets
+        .is_empty()
+    );
+    let report =
+        envelope::from_reader(&mut Cursor::new(&input), &Selection::default(), 100, 100).unwrap();
+    assert_eq!(report.buckets.len(), 1);
+    assert_eq!(report.buckets[0].frames, 7);
+}
+#[test]
+fn waveform_streaming_crosses_io_boundaries_without_changing_buckets() {
+    use cube_core::media::{
+        envelope,
+        pcm::{self, Selection},
+    };
+    let data = encode_values(&[1, -2, -1, 2].repeat(20000), 16);
+    let input = wav(2, 16, &data);
+    let expected =
+        envelope::from_reader(&mut Cursor::new(&input), &Selection::default(), 30000, 100).unwrap();
+    assert_eq!(expected.frames, 40000);
+    assert_eq!(expected.buckets[1].frames, 10000);
+    assert_eq!(expected.buckets[0].minimum, [-1, -2]);
+    assert_eq!(expected.buckets[0].maximum, [1, 2]);
+    let initial = pcm::extract(
+        &mut Cursor::new(&input),
+        &Selection {
+            frames: Some(0),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    let mut builder = envelope::Builder::new(&initial, 30000, 100).unwrap();
+    let mut start = 0;
+    for frames in [100, 16284, 1, 10000, 13615] {
+        let block = pcm::extract(
+            &mut Cursor::new(&input),
+            &Selection {
+                start_frame: start,
+                frames: Some(frames),
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        builder.push(&block).unwrap();
+        start += frames;
+    }
+    assert_eq!(builder.finish().buckets, expected.buckets);
+    let workspace = common::Workspace::new();
+    let path = workspace.path("waveform.wav");
+    std::fs::write(&path, &input).unwrap();
+    assert_eq!(
+        envelope::from_file(&path, &Selection::default(), 30000, 100)
+            .unwrap()
+            .buckets,
+        expected.buckets
+    );
+    assert_eq!(std::fs::read(&path).unwrap(), input);
+}
+#[test]
+fn waveform_validates_metadata_continuity_and_budgets_before_reading() {
+    use cube_core::media::{
+        envelope,
+        pcm::{self, Selection},
+    };
+    let input = wav(1, 8, &[128; 10]);
+    let samples = pcm::extract(
+        &mut Cursor::new(&input),
+        &Selection {
+            frames: Some(2),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    for (bucket, max) in [(0, 1), (u64::MAX, 1), (1, 0), (1, 10001)] {
+        assert_eq!(
+            envelope::Builder::new(&samples, bucket, max)
+                .err()
+                .unwrap()
+                .code,
+            ErrorCode::InvalidParameter
+        );
+    }
+    let mut builder = envelope::Builder::new(&samples, 3, 100).unwrap();
+    builder.push(&samples).unwrap();
+    assert!(builder.push(&samples).is_err());
+    let different = pcm::extract(
+        &mut Cursor::new(wav(2, 8, &[128; 20])),
+        &Selection {
+            start_frame: 2,
+            frames: Some(1),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    assert!(builder.push(&different).is_err());
+    assert_eq!(builder.finish().frames, 2);
+    let input = wav(2, 16, &vec![0; 4 * 6000]);
+    let mut counted = Counted {
+        inner: Cursor::new(input),
+        read_bytes: 0,
+    };
+    assert_eq!(
+        envelope::from_reader(&mut counted, &Selection::default(), 1, 10000)
+            .unwrap_err()
+            .code,
+        ErrorCode::ResourceLimit
+    );
+    assert_eq!(counted.read_bytes, 44);
+    let many = wav(1, 8, &vec![128; (pcm::MAX_FRAMES + 1) as usize]);
+    let first = pcm::extract(
+        &mut Cursor::new(&many),
+        &Selection {
+            frames: Some(pcm::MAX_FRAMES),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    let next = pcm::extract(
+        &mut Cursor::new(&many),
+        &Selection {
+            start_frame: pcm::MAX_FRAMES,
+            frames: Some(1),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    let mut builder = envelope::Builder::new(&first, pcm::MAX_FRAMES, 100).unwrap();
+    builder.push(&first).unwrap();
+    assert_eq!(
+        builder.push(&next).unwrap_err().code,
+        ErrorCode::ResourceLimit
+    );
+    assert_eq!(
+        envelope::from_reader(&mut Cursor::new(b"bad"), &Selection::default(), 1, 100)
+            .unwrap_err()
+            .operation,
+        Some("audio.waveform.envelope")
+    );
+}

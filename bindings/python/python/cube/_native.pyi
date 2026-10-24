@@ -206,3 +206,21 @@ def wave_file_samples(
     frames: int | None = None,
     include_values: bool = False,
 ) -> dict[str, Any]: ...
+def wave_envelope(
+    data: bytes,
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    bucket_frames: int = 1024,
+    max_buckets: int = 1000,
+) -> dict[str, Any]: ...
+def wave_file_envelope(
+    path: str | PathLike[str],
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    bucket_frames: int = 1024,
+    max_buckets: int = 1000,
+) -> dict[str, Any]: ...

@@ -1,6 +1,6 @@
 [package]
 name = "cube-cli"
-description = "Command-line encoding, classical ciphers, hashing, binary tools, and file forensics"
+description = "Command-line encoding, classical ciphers, hashing, binary tools, file forensics, and image analysis"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

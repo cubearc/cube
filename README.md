@@ -5,7 +5,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Cube is an open-source Rust toolkit for encoding, classical ciphers, hashing,
-binary transformations, and file forensics. Use the Rust library, `cube` CLI, or Rust-backed
+binary transformations, file forensics, and image analysis. Use the Rust library, `cube` CLI, or Rust-backed
 Python package. All interfaces share the same implementations.
 
 ## Capabilities
@@ -22,6 +22,7 @@ Python package. All interfaces share the same implementations.
 | SHA-256 | Lowercase hexadecimal digest |
 | XOR | Byte-wise XOR with a nonempty repeating key |
 | File forensics | Bounded signatures, metadata/EXIF, hex, ASCII strings, binary comparison, PNG trailers, and safe extraction |
+| PNG8 images | Exact samples/palettes, chunk CRCs, channels, histograms, pixel exports, transforms, comparisons, bit planes and configurable LSB extraction |
 
 Caesar, ROT13, and repeating-key XOR are classical puzzle tools, not secure encryption.
 Encoding decoders reject whitespace. Base32 and Base64 reject invalid padding and

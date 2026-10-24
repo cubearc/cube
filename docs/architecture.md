@@ -24,7 +24,7 @@ operations; ROT13 reuses Caesar with shift 13.
 CRC-32/ISO-HDLC uses `crc32fast` and returns eight lowercase hexadecimal digits;
 it is a checksum rather than a cryptographic hash.
 
-Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, and `forensics`.
+Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, `forensics`, and `image`.
 Binary transformations accept byte slices and return bytes. Encodings and digests
 return strings with specified alphabets. Classical ciphers accept UTF-8 text, rotate
 only ASCII letters, and preserve other characters without normalization. Caesar
@@ -69,6 +69,17 @@ regular files; outputs use exclusive creation. Limits and unsupported formats ar
 explicit. `OperationError` adds stable categories/context and retains causes;
 legacy decoder errors and public signatures remain compatible. Structured Python
 results use a JSON transport boundary; algorithm bytes use native Python bytes.
+
+The `image` module owns an immutable, validated PNG8 sample representation and
+cohesive analysis, geometry/color, and bit-extraction modules. The maintained
+pure-Rust `png` decoder/encoder uses explicit limits and identity transformations;
+framing/CRC inspection reuses `forensics::png`. Indexed samples/palette/tRNS stay
+separate until explicit expansion. No graphical library or native image framework
+is required. Core methods return typed samples, structured facts or exact bytes;
+CLI/Python only translate arguments/results. Derived image exports preserve
+samples and relevant transparency but drop unrelated metadata. Histograms,
+coordinate listings and extraction use documented bounds, without approximations
+or implicit UTF-8. Static descriptors remain beside their owning implementations.
 
 Future pipelines may compose these functions with typed intermediate values.
 There is no execution engine, plugin runtime, generic dispatcher or persistence

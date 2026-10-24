@@ -5,7 +5,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Cube is an open-source Rust toolkit for encoding, classical ciphers, hashing,
-binary transformations, file forensics, and image analysis. Use the Rust library, `cube` CLI, or Rust-backed
+binary transformations, file/image forensics, Unicode text, and symbolic encodings. Use the Rust library, `cube` CLI, or Rust-backed
 Python package. All interfaces share the same implementations.
 
 ## Capabilities
@@ -17,6 +17,10 @@ Python package. All interfaces share the same implementations.
 | Base64 | Padded RFC 4648 standard encoding and strict decoding |
 | Hex | Lowercase encoding; decoding accepts either case |
 | Caesar | Signed shift of ASCII letters modulo 26; preserves case and non-ASCII characters |
+| Atbash / Vigenère / Beaufort / Affine | Explicit ASCII alphabets and keys; classical puzzle ciphers |
+| Unicode text | Explicit normalization, scalar reversal and positional/alternating selection |
+| Morse / Braille | Canonical International Morse text; exact Unicode Braille dot-mask cells |
+| Integer bases | Exact signed integer text conversion between radices 2..36 |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |
 | CRC32 | CRC-32/ISO-HDLC (IEEE), exactly eight lowercase hexadecimal digits |
 | SHA-256 | Lowercase hexadecimal digest |

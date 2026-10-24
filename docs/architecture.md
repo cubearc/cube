@@ -24,7 +24,7 @@ operations; ROT13 reuses Caesar with shift 13.
 CRC-32/ISO-HDLC uses `crc32fast` and returns eight lowercase hexadecimal digits;
 it is a checksum rather than a cryptographic hash.
 
-Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, `forensics`, and `image`.
+Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, `forensics`, `image`, `text`, `symbols`, and `numbers`.
 Binary transformations accept byte slices and return bytes. Encodings and digests
 return strings with specified alphabets. Classical ciphers accept UTF-8 text, rotate
 only ASCII letters, and preserve other characters without normalization. Caesar
@@ -80,6 +80,17 @@ CLI/Python only translate arguments/results. Derived image exports preserve
 samples and relevant transparency but drop unrelated metadata. Histograms,
 coordinate listings and extraction use documented bounds, without approximations
 or implicit UTF-8. Static descriptors remain beside their owning implementations.
+
+The `ciphers::classical` functions preserve ASCII case and other Unicode; keys
+and modular arithmetic rules are explicit. `text` owns deliberate normalization
+and Unicode-scalar transformations, with shared input/output bounds. Normalization
+uses pinned `unicode-normalization` data (published as `text::UNICODE_VERSION` and
+`cube.UNICODE_VERSION`); data changes require compatibility review. `symbols`
+separates canonicalized Morse text from reversible Braille cell-mask bytes.
+`numbers` converts integer representations with checked 128-bit magnitude
+arithmetic, independently of byte encodings. CLI/Python adapters share these
+functions and typed errors; new CLI stdin paths enforce bounds before buffering.
+Legacy public APIs retain their original behavior and discovery command order.
 
 Future pipelines may compose these functions with typed intermediate values.
 There is no execution engine, plugin runtime, generic dispatcher or persistence

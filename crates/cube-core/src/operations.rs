@@ -189,6 +189,23 @@ pub struct Descriptor {
     pub example: &'static str,
 }
 
+/// Pipeline execution availability derived from the executor's actual allowlist.
+/// The version identifies the adapter contract, independently of package version.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub struct PipelineSupport {
+    pub version: u32,
+}
+
+/// An additive discovery view; the descriptor and its public layout stay intact.
+/// JSON retains every descriptor field and adds `pipeline`: a version object for
+/// a bounded adapter, or null when no adapter exists. This is not a dispatcher.
+#[derive(Clone, Copy, Debug, Serialize)]
+pub struct Discovery<'a> {
+    #[serde(flatten)]
+    pub descriptor: &'a Descriptor,
+    pub pipeline: Option<PipelineSupport>,
+}
+
 /// A precise parameter validation failure, without including its input value.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ParameterError {
@@ -210,6 +227,17 @@ impl std::fmt::Display for ParameterError {
 impl std::error::Error for ParameterError {}
 
 impl Descriptor {
+    /// Describe execution availability without copying metadata or executing code.
+    /// Direct Rust APIs and the declared CLI command remain independent of the
+    /// pipeline allowlist. SDK entry points are documented in their native stubs.
+    pub fn discovery(&self) -> Discovery<'_> {
+        Discovery {
+            descriptor: self,
+            pipeline: crate::pipeline::adapter_version(self.id)
+                .map(|version| PipelineSupport { version }),
+        }
+    }
+
     /// Validate supplied values without executing an operation or allocating defaults.
     /// Unknown and duplicate names, missing required values and invalid types/ranges
     /// are errors. Optional defaults remain visible in the descriptor.

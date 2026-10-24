@@ -504,6 +504,23 @@ fn invalid_cli_usage_exits_two() {
 }
 
 #[test]
+fn every_catalog_command_resolves_to_cli_help() {
+    let commands: std::collections::BTreeSet<_> = cube_core::operations::catalog()
+        .into_iter()
+        .map(|descriptor| descriptor.command)
+        .collect();
+    for command in commands {
+        let mut args: Vec<_> = command.split_whitespace().collect();
+        assert!(!args.is_empty());
+        args.push("--help");
+        let result = cube(&args, b"");
+        assert!(result.status.success(), "missing CLI command: {command}");
+        assert!(String::from_utf8_lossy(&result.stdout).contains("Usage:"));
+        assert!(result.stderr.is_empty());
+    }
+}
+
+#[test]
 fn structured_discovery_and_descriptions() {
     let result = cube(&["ops", "list", "--json"], b"");
     assert!(result.status.success());
@@ -521,6 +538,14 @@ fn structured_discovery_and_descriptions() {
         assert!(result.status.success());
         let value: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
         assert_eq!(value["operation"]["id"], id);
+        assert_eq!(
+            value["operation"],
+            *descriptors.iter().find(|d| d["id"] == id).unwrap()
+        );
+        assert_eq!(
+            value["operation"],
+            serde_json::to_value(cube_core::operations::describe(id).unwrap().discovery()).unwrap()
+        );
         assert_eq!(
             value["operation"]["input_type"],
             cube_core::operations::describe(id).unwrap().input_type
@@ -543,6 +568,13 @@ fn structured_discovery_and_descriptions() {
     let result = cube(&["ops", "describe", "cipher.caesar.encode"], b"");
     assert!(result.status.success());
     assert!(String::from_utf8_lossy(&result.stdout).contains("shift"));
+    assert!(String::from_utf8_lossy(&result.stdout).contains("Pipeline: adapter version 1"));
+    let result = cube(&["ops", "describe", "file.signature.detect"], b"");
+    assert!(result.status.success());
+    assert!(
+        String::from_utf8_lossy(&result.stdout)
+            .contains("Pipeline: unavailable (no bounded adapter)")
+    );
 }
 
 #[test]

@@ -260,20 +260,28 @@ fn structured(py: Python<'_>, value: &serde_json::Value) -> PyResult<Py<PyAny>> 
         .unbind())
 }
 
-/// List operation descriptors sorted by stable ID, optionally filtering a category.
+/// List descriptors with pipeline availability, sorted by ID; optionally filter a category.
 #[pyfunction]
 #[pyo3(signature = (category=None))]
 fn operations(py: Python<'_>, category: Option<&str>) -> PyResult<Py<PyAny>> {
     let mut descriptors = catalog::filtered(category).map_err(file_error)?;
     descriptors.sort_by_key(|d| d.id);
-    structured(py, &serde_json::json!(descriptors))
+    structured(
+        py,
+        &serde_json::json!(
+            descriptors
+                .iter()
+                .map(|d| d.discovery())
+                .collect::<Vec<_>>()
+        ),
+    )
 }
 
-/// Describe an exact stable ID. Unknown IDs raise ValueError.
+/// Describe an exact stable ID with pipeline availability. Unknown IDs raise ValueError.
 #[pyfunction]
 fn describe_operation(py: Python<'_>, id: &str) -> PyResult<Py<PyAny>> {
     let descriptor = catalog::require(id).map_err(file_error)?;
-    structured(py, &serde_json::json!(descriptor))
+    structured(py, &serde_json::json!(descriptor.discovery()))
 }
 
 /// Encode bytes as padded standard Base32 using uppercase letters.

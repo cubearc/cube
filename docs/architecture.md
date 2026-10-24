@@ -58,6 +58,13 @@ compatibly; never reuse an identifier for different behavior. Preserve public
 functions and existing binary/text semantics. CLI help, Rustdoc and Python stubs
 remain the argument/API references; Markdown guides explain workflows.
 
+`Descriptor::discovery()` adds pipeline availability by querying the executor's
+actual allowlist. Its flattened JSON view preserves descriptor fields and adds
+`pipeline: {"version": 1}` for an adapter or `pipeline: null` otherwise; the public
+descriptor layout and ordinary catalog APIs remain unchanged. There is no second
+adapter registry. Tests audit unique/known typed adapter references, catalog CLI
+routes, and native Python exports/stubs, including class methods.
+
 ## Interface and error boundaries
 
 The CLI reads exact bytes unless an operation explicitly needs UTF-8. It controls

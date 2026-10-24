@@ -31,8 +31,12 @@ cube ops describe file.signature.detect --json
 Descriptors provide stable operation identifiers, categories, semantic input/output
 types, parameters, constraints, defaults, determinism, reversibility and examples.
 The JSON listing is sorted by identifier and uses `schema_version: 1`. Consumers
-should tolerate added fields and operation identifiers. Unknown categories or identifiers are errors. Treat the catalog and Clap help
-as the references; a catalog entry does not imply a pipeline adapter exists.
+should tolerate added fields and operation identifiers. Each JSON descriptor adds
+`pipeline: {"version": 1}` when a bounded adapter exists, or `pipeline: null` when
+it does not. Human `ops describe` also reports this availability. The version is
+the adapter contract required by a step, independent of the package version.
+Unknown categories or identifiers are errors. `pipeline adapters` lists the same
+executable subset; parameter, type and resource validation still applies.
 
 ## Supply text or bytes
 

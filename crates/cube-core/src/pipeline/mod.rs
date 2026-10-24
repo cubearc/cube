@@ -247,6 +247,16 @@ pub struct AdapterInfo {
     pub version: u32,
     pub descriptor: &'static crate::operations::Descriptor,
 }
+/// Exact contract version for an allowed bounded adapter, or `None` for a
+/// catalog-only/unknown operation. Discovery does not grant execution capability;
+/// callers must still preflight the version, parameters and adjacent types.
+pub fn adapter_version(operation: &str) -> Option<u32> {
+    adapters::ADAPTERS
+        .iter()
+        .find(|adapter| adapter.id == operation)
+        .map(|adapter| adapter.version)
+}
+
 pub fn supported_adapters() -> Vec<AdapterInfo> {
     adapters::ADAPTERS
         .iter()

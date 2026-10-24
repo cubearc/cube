@@ -162,12 +162,17 @@ assert any(item["id"] == "encoding.base64.decode" for item in encodings)
 xor = cube.describe_operation("binary.xor")
 assert xor["input_type"] == "bytes"
 assert xor["output_type"] == "bytes"
+assert xor["pipeline"] == {"version": 1}
+assert cube.describe_operation("file.signature.detect")["pipeline"] is None
 ```
 
 `operations()` returns descriptors sorted by identifier; the optional category is
 an exact filter. Descriptors describe supported inputs, outputs and parameters.
-They are not a generic callable SDK. Use the ordinary library functions, and
-`pipeline_adapters()` to discover the subset supported by composition.
+`pipeline` is a version object for an executable bounded adapter, or `None` when
+no adapter exists. Use that exact version in a step; normal preflight and resource
+limits still apply. Use ordinary functions or `Image`/`InvestigationSession`
+methods for direct SDK calls; their signatures are in the shipped stubs.
+`pipeline_adapters()` lists the same executable subset with its descriptors.
 
 ## Handle invalid input
 

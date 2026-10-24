@@ -268,6 +268,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::ciphers::classical::OPERATIONS)
         .chain(crate::text::OPERATIONS)
         .chain(crate::symbols::OPERATIONS)
+        .chain(crate::numbers::OPERATIONS)
         .collect()
 }
 

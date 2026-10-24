@@ -208,3 +208,61 @@ fn symbolic_commands_distinguish_canonical_text_and_raw_bytes() {
     }
     assert_eq!(run(&["decode", "braille"], &[255]).status.code(), Some(1));
 }
+
+#[test]
+fn integer_base_command_keeps_large_values_and_canonical_errors() {
+    success(
+        &[
+            "number",
+            "base",
+            "--from-base",
+            "16",
+            "--to-base",
+            "2",
+            "--text",
+            "+00ff",
+        ],
+        b"",
+        b"11111111\n",
+    );
+    success(
+        &["number", "base", "--from-base", "10", "--to-base", "16"],
+        b"18446744073709551617",
+        b"10000000000000001\n",
+    );
+    success(
+        &[
+            "number",
+            "base",
+            "--from-base",
+            "10",
+            "--to-base",
+            "2",
+            "--text=-0",
+        ],
+        b"",
+        b"0\n",
+    );
+    for input in [
+        &b"1\n"[..],
+        &b"340282366920938463463374607431768211456"[..],
+        &[255][..],
+    ] {
+        let result = run(
+            &[
+                "--json-errors",
+                "number",
+                "base",
+                "--from-base",
+                "10",
+                "--to-base",
+                "2",
+            ],
+            input,
+        );
+        assert_eq!(result.status.code(), Some(1));
+        assert!(result.stdout.is_empty());
+        let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+        assert_eq!(error["error"]["operation"], "number.base.convert");
+    }
+}

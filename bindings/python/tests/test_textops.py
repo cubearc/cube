@@ -105,3 +105,24 @@ def test_braille_cells_are_bytes_and_not_language_transcription():
     assert error.value.operation == "symbol.braille.decode"
     with pytest.raises(TypeError):
         cube.braille_encode("ordinary text")
+
+
+def test_integer_base_conversion_is_exact_and_canonical():
+    assert cube.convert_base("+00ff", 16, 2) == "11111111"
+    assert cube.convert_base("-z", 36, 10) == "-35"
+    assert cube.convert_base("-000", 10, 36) == "0"
+    assert cube.convert_base("18446744073709551617", 10, 16) == "10000000000000001"
+    maximum = str(2**128 - 1)
+    assert cube.convert_base(maximum, 10, 2) == "1" * 128
+    for radix in range(2, 37):
+        encoded = cube.convert_base(maximum, 10, radix)
+        assert cube.convert_base(encoded, radix, 10) == maximum
+    for text in ["", "-", "1 ", "1_0", "0x10", "é"]:
+        with pytest.raises(ValueError):
+            cube.convert_base(text, 16, 10)
+    for text in [str(2**128), "0" * 4097]:
+        with pytest.raises(ValueError) as error:
+            cube.convert_base(text, 10, 2)
+        assert error.value.code == "resource_limit"
+    with pytest.raises(ValueError):
+        cube.convert_base("1", 1, 10)

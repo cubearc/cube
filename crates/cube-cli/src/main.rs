@@ -25,6 +25,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Exact integer representations, separate from byte encodings
+    Number {
+        #[command(subcommand)]
+        command: Number,
+    },
     /// Explicit Unicode scalar transformations and normalization (bounded input)
     Text {
         #[command(subcommand)]
@@ -75,6 +80,19 @@ enum Command {
     Binary {
         #[command(subcommand)]
         command: Binary,
+    },
+}
+
+#[derive(Subcommand)]
+enum Number {
+    /// Convert signed ASCII integers; 2..36 radices, <=4096 digits and 128-bit magnitude; no prefixes/floats
+    Base {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long)]
+        from_base: u32,
+        #[arg(long)]
+        to_base: u32,
     },
 }
 
@@ -199,7 +217,14 @@ impl Input {
         self,
         operation: &'static str,
     ) -> Result<String, cube_core::errors::OperationError> {
-        let bytes = self.read_bounded(cube_core::text::MAX_INPUT, operation)?;
+        self.read_text_limit(cube_core::text::MAX_INPUT, operation)
+    }
+    fn read_text_limit(
+        self,
+        limit: usize,
+        operation: &'static str,
+    ) -> Result<String, cube_core::errors::OperationError> {
+        let bytes = self.read_bounded(limit, operation)?;
         String::from_utf8(bytes).map_err(|e| {
             cube_core::errors::OperationError::new(
                 cube_core::errors::ErrorCode::InvalidInput,
@@ -309,6 +334,22 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Number {
+            command:
+                Number::Base {
+                    input,
+                    from_base,
+                    to_base,
+                },
+        } => write_text(
+            &mut output,
+            &cube_core::numbers::convert_base(
+                &input
+                    .read_text_limit(cube_core::numbers::MAX_DIGITS + 1, "number.base.convert")?,
+                from_base,
+                to_base,
+            )?,
+        )?,
         Command::Text { command } => textcmd::run(command, &mut output)?,
         Command::Image { command } => imagecmd::run(command, &mut output)?,
         Command::Inspect { path, json } => filecmd::info(path, json, &mut output)?,

@@ -19,6 +19,7 @@ from ._native import (
     caesar_decode,
     caesar_encode,
     compare_files,
+    convert_base,
     copy_file_range,
     crc32,
     describe_operation,
@@ -48,6 +49,7 @@ from ._native import (
 )
 
 __all__ = [
+    "convert_base",
     "morse_encode",
     "morse_decode",
     "braille_encode",

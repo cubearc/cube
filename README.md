@@ -525,3 +525,23 @@ explicitly. Errors identify original UTF-8 byte positions without dumping inputs
 These operations accept at most 1 MiB input; Morse output is bounded at 8 MiB,
 Braille output at 3 MiB. Python exposes `morse_encode(str)`, `morse_decode(str)`,
 `braille_encode(bytes)` and `braille_decode(str) -> bytes` over the Rust core.
+
+## Integer radix conversion
+
+```sh
+cube number base --from-base 16 --to-base 2 --text FF
+# 11111111
+cube number base --from-base 36 --to-base 10 --text=-Z
+# -35
+```
+
+`numbers::convert_base` / Python `convert_base(text, from_base, to_base)` convert
+integer **representations**, separately from byte encodings. Bases are explicit
+2..36, using ASCII 0–9/A–Z; input letter case is ignored and output is uppercase.
+One leading ASCII `+`/`-` is accepted; leading zeros and negative zero are
+canonicalized. No whitespace, radix-prefix syntax, separators, fractions, floats
+or implicit byte-order conversion is supported. Magnitudes up to **2^128−1**
+are handled exactly with checked Rust integer arithmetic, for either sign.
+Input has at most 4096 digits (excluding the sign); output at most 128 digits plus
+a negative sign. Invalid digits/radices and over-budget values fail explicitly.
+Values round trip; original sign/zero padding/case spelling does not.

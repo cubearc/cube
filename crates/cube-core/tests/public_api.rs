@@ -115,3 +115,73 @@ fn legacy_errors_keep_stable_categories_and_operation_context() {
         assert_eq!(error.operation_id(), id);
     }
 }
+
+#[test]
+fn file_parameter_descriptors_cover_exact_types_defaults_and_limits() {
+    use cube_core::operations::{self, ParameterValue as V};
+    assert_eq!(operations::catalog().len(), 23);
+    assert_eq!(operations::filtered(Some("file")).unwrap().len(), 9);
+    assert!(operations::filtered(None).is_ok());
+    assert!(operations::filtered(Some("missing")).is_err());
+    assert!(operations::require("missing").is_err());
+    let scan = operations::require("file.signature.scan").unwrap();
+    assert!(
+        scan.validate(&[
+            ("offset", V::Unsigned(u64::MAX)),
+            ("max_results", V::Unsigned(1)),
+            ("format", V::Text("png"))
+        ])
+        .is_ok()
+    );
+    assert!(scan.validate(&[("offset", V::Integer(-1))]).is_err());
+    assert!(scan.validate(&[("format", V::Text("missing"))]).is_err());
+    assert!(
+        scan.validate(&[("max_results", V::Unsigned(10001))])
+            .is_err()
+    );
+    assert!(
+        operations::require("file.hex.inspect")
+            .unwrap()
+            .validate(&[("width", V::Unsigned(0))])
+            .is_err()
+    );
+    assert!(
+        operations::require("file.strings.extract")
+            .unwrap()
+            .validate(&[("min_length", V::Unsigned(0))])
+            .is_err()
+    );
+    let extraction = operations::require("file.range.extract").unwrap();
+    assert!(extraction.validate(&[]).is_err());
+    assert!(
+        extraction
+            .validate(&[("offset", V::Integer(0)), ("length", V::Unsigned(0))])
+            .is_ok()
+    );
+}
+
+#[test]
+fn metadata_is_readable_without_rust_debug_syntax() {
+    use cube_core::operations::{ParameterType as T, ParameterValue as V};
+    for (value, expected) in [
+        (V::Integer(-1), "-1"),
+        (V::Unsigned(u64::MAX), "18446744073709551615"),
+        (V::Boolean(true), "true"),
+        (V::Text("hello"), "\"hello\""),
+        (V::Bytes(b"\0\xff"), "hex:00ff"),
+    ] {
+        assert_eq!(value.to_string(), expected);
+    }
+    for kind in [
+        T::Integer { min: -1, max: 1 },
+        T::Unsigned { min: 0, max: 1 },
+        T::Boolean,
+        T::Text { choices: &[] },
+        T::Text {
+            choices: &["raw", "hex"],
+        },
+        T::Bytes { min_length: 1 },
+    ] {
+        assert!(!kind.to_string().is_empty());
+    }
+}

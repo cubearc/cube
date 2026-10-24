@@ -202,25 +202,26 @@ pub fn scan(
     result.map_err(|e: OperationError| e.operation("file.signature.scan"))
 }
 
-const RANGE_PARAMETERS: &[crate::operations::Parameter] = &[
+const SCAN_PARAMETERS: &[crate::operations::Parameter] = &[
+    super::OFFSET_PARAMETER,
+    super::LENGTH_PARAMETER,
+    super::RESULT_PARAMETER,
     crate::operations::Parameter {
-        name: "offset",
-        description: "Absolute zero-based byte offset.",
-        required: false,
-        default: Some(crate::operations::ParameterValue::Integer(0)),
-        constraints: crate::operations::ParameterType::Integer {
-            min: 0,
-            max: i64::MAX,
-        },
-    },
-    crate::operations::Parameter {
-        name: "length",
-        description: "Byte count; omitted means through EOF.",
+        name: "format",
+        description: "Exact signature format filter; omitted selects all supported rules.",
         required: false,
         default: None,
-        constraints: crate::operations::ParameterType::Integer {
-            min: 0,
-            max: i64::MAX,
+        constraints: crate::operations::ParameterType::Text {
+            choices: &[
+                RULES[0].format,
+                RULES[1].format,
+                RULES[2].format,
+                RULES[4].format,
+                RULES[5].format,
+                RULES[7].format,
+                RULES[8].format,
+                RULES[9].format,
+            ],
         },
     },
 ];
@@ -246,7 +247,7 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         output_type: "file.signature_scan",
         command: "file embedded",
         example: "cube file embedded sample.bin",
-        parameters: RANGE_PARAMETERS,
+        parameters: SCAN_PARAMETERS,
         deterministic: true,
         reversible: None,
     },

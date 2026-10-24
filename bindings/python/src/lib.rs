@@ -120,10 +120,15 @@ fn file_hex(
     width: usize,
 ) -> PyResult<Py<PyAny>> {
     let mut file = forensics::open_regular(&path).map_err(file_error)?;
-    let length = length.or_else(|| {
-        file.metadata()
-            .ok()
-            .map(|m| m.len().saturating_sub(offset).min(256))
+    let length = Some(match length {
+        Some(length) => length,
+        None => file
+            .metadata()
+            .map_err(cube_core::errors::OperationError::io)
+            .map_err(file_error)?
+            .len()
+            .saturating_sub(offset)
+            .min(256),
     });
     let rows =
         forensics::ranges::hex_rows(&mut file, forensics::ByteRange { offset, length }, width)
@@ -252,18 +257,7 @@ fn structured(py: Python<'_>, value: &serde_json::Value) -> PyResult<Py<PyAny>> 
 #[pyfunction]
 #[pyo3(signature = (category=None))]
 fn operations(py: Python<'_>, category: Option<&str>) -> PyResult<Py<PyAny>> {
-    let catalog = catalog::catalog();
-    if let Some(category) = category
-        && !catalog.iter().any(|d| d.category == category)
-    {
-        return Err(PyValueError::new_err(
-            "unknown operation category; call operations()",
-        ));
-    }
-    let mut descriptors: Vec<_> = catalog
-        .into_iter()
-        .filter(|d| category.is_none_or(|c| d.category == c))
-        .collect();
+    let mut descriptors = catalog::filtered(category).map_err(file_error)?;
     descriptors.sort_by_key(|d| d.id);
     structured(py, &serde_json::json!(descriptors))
 }
@@ -271,8 +265,7 @@ fn operations(py: Python<'_>, category: Option<&str>) -> PyResult<Py<PyAny>> {
 /// Describe an exact stable ID. Unknown IDs raise ValueError.
 #[pyfunction]
 fn describe_operation(py: Python<'_>, id: &str) -> PyResult<Py<PyAny>> {
-    let descriptor = catalog::describe(id)
-        .ok_or_else(|| PyValueError::new_err("unknown operation ID; call operations()"))?;
+    let descriptor = catalog::require(id).map_err(file_error)?;
     structured(py, &serde_json::json!(descriptor))
 }
 

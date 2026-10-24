@@ -8,7 +8,6 @@ pub mod exif;
 pub mod inspect;
 pub mod png;
 pub mod ranges;
-
 pub mod signatures;
 
 use crate::errors::{ErrorCode, OperationError};
@@ -160,26 +159,50 @@ pub fn extract_range(
     result.map_err(|e: OperationError| e.operation("file.range.extract"))
 }
 
+pub(super) const OFFSET_PARAMETER: crate::operations::Parameter = crate::operations::Parameter {
+    name: "offset",
+    description: "Absolute zero-based byte offset.",
+    required: false,
+    default: Some(crate::operations::ParameterValue::Unsigned(0)),
+    constraints: crate::operations::ParameterType::Unsigned {
+        min: 0,
+        max: u64::MAX,
+    },
+};
+pub(super) const LENGTH_PARAMETER: crate::operations::Parameter = crate::operations::Parameter {
+    name: "length",
+    description: "Selected byte count; omitted means through EOF (hex interface defaults to 256 bytes).",
+    required: false,
+    default: None,
+    constraints: crate::operations::ParameterType::Unsigned {
+        min: 0,
+        max: u64::MAX,
+    },
+};
+pub(super) const RESULT_PARAMETER: crate::operations::Parameter = crate::operations::Parameter {
+    name: "max_results",
+    description: "Maximum returned records; incomplete listings are explicit.",
+    required: false,
+    default: Some(crate::operations::ParameterValue::Unsigned(1000)),
+    constraints: crate::operations::ParameterType::Unsigned {
+        min: 1,
+        max: MAX_RESULTS as u64,
+    },
+};
 const EXTRACTION_PARAMETERS: &[crate::operations::Parameter] = &[
     crate::operations::Parameter {
-        name: "offset",
-        description: "Absolute source byte offset.",
         required: true,
         default: None,
-        constraints: crate::operations::ParameterType::Integer {
-            min: 0,
-            max: i64::MAX,
-        },
+        ..OFFSET_PARAMETER
     },
     crate::operations::Parameter {
-        name: "length",
-        description: "Exact byte count, at most 1 GiB for streaming destinations.",
         required: true,
-        default: None,
-        constraints: crate::operations::ParameterType::Integer {
+        description: "Exact byte count; streaming supports at most 1 GiB and byte-returning APIs 16 MiB.",
+        constraints: crate::operations::ParameterType::Unsigned {
             min: 0,
             max: 1073741824,
         },
+        ..LENGTH_PARAMETER
     },
 ];
 /// Operation descriptors maintained beside the implementation.

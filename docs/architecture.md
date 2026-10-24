@@ -24,7 +24,7 @@ operations; ROT13 reuses Caesar with shift 13.
 CRC-32/ISO-HDLC uses `crc32fast` and returns eight lowercase hexadecimal digits;
 it is a checksum rather than a cryptographic hash.
 
-Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, and `binary`.
+Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, and `forensics`.
 Binary transformations accept byte slices and return bytes. Encodings and digests
 return strings with specified alphabets. Classical ciphers accept UTF-8 text, rotate
 only ASCII letters, and preserve other characters without normalization. Caesar
@@ -56,11 +56,21 @@ Future Java, JavaScript, Go, Kotlin, or Swift bindings should call the Rust core
 and translate their own language's types and errors. Introduce a shared FFI only
 when another implemented binding demonstrates a concrete need.
 
-Future pipelines can compose these functions and handle transport or orchestration
-outside the operations. Static operation descriptors live beside their Rust implementations and are
-assembled by `operations::catalog`. Stable IDs and explicit byte/text/structured
-type names support discovery and later composition without changing direct APIs.
-Parameter preflight validation does not dispatch or execute operations. There is
-no execution engine, plugin system, or persistence layer. Add an abstraction only when an implemented feature
-needs it. Recipes will live in `cubearc/recipes` and may later describe compositions
-against a versioned Cube interface; this repository does not parse recipes yet.
+Static operation descriptors live beside their Rust implementations and are
+assembled by `operations::catalog`. Stable IDs, semantic type names, parameter
+constraints, determinism and reversibility describe operations without dispatching
+them. Core lookup/filter errors are shared by CLI and Python. JSON discovery is
+versioned; direct functions do not adopt a universal runtime value type.
+
+The `forensics` module separates range-safe I/O, basic facts, signature evidence,
+byte inspection, PNG framing and bounded EXIF parsing. Reader/writer APIs support
+streaming without tying algorithms to paths or CLI processes. File paths must be
+regular files; outputs use exclusive creation. Limits and unsupported formats are
+explicit. `OperationError` adds stable categories/context and retains causes;
+legacy decoder errors and public signatures remain compatible. Structured Python
+results use a JSON transport boundary; algorithm bytes use native Python bytes.
+
+Future pipelines may compose these functions with typed intermediate values.
+There is no execution engine, plugin runtime, generic dispatcher or persistence
+layer. Introduce abstractions only for a concrete implemented need. Recipes belong
+in `cubearc/recipes`; this repository does not parse or execute recipes yet.

@@ -327,3 +327,20 @@ def test_operation_errors_preserve_exception_types_and_add_context(call, operati
     assert captured.value.operation == operation
     assert captured.value.parameter is None
     assert captured.value.offset is None
+
+
+def test_discovery_errors_and_file_parameters_share_core_contracts():
+    assert len(cube.operations()) == 23
+    assert len(cube.operations("file")) == 9
+    for call, operation, parameter in [
+        (lambda: cube.operations("missing"), "ops.list", "category"),
+        (lambda: cube.describe_operation("missing"), "ops.describe", "id"),
+    ]:
+        with pytest.raises(ValueError) as error:
+            call()
+        assert error.value.code == "invalid_parameter"
+        assert error.value.operation == operation
+        assert error.value.parameter == parameter
+    params = cube.describe_operation("file.signature.scan")["parameters"]
+    assert {p["name"] for p in params} == {"offset", "length", "format", "max_results"}
+    assert params[0]["constraints"]["max"] == 18446744073709551615

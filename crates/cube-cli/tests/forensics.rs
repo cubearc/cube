@@ -160,3 +160,16 @@ fn exif_and_png_boundaries_have_safe_errors_and_json() {
     let output = run(&["file", "appended", name]);
     assert!(String::from_utf8_lossy(&output.stdout).contains("Trailing bytes: 7"));
 }
+
+#[test]
+fn human_file_information_names_timestamp_units() {
+    let files = Files::new("timestamp");
+    let source = files.path("input");
+    std::fs::write(&source, b"data").unwrap();
+    let output = run(&["inspect", source.to_str().unwrap()]);
+    assert!(output.status.success());
+    let text = String::from_utf8(output.stdout).unwrap();
+    assert!(text.contains("Size: 4 bytes"));
+    assert!(text.contains("Unix epoch") || text.contains("unavailable"));
+    assert!(!text.contains("Some("));
+}

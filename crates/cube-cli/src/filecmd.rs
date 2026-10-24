@@ -136,10 +136,15 @@ pub(crate) fn info(
         writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
     } else {
         writeln!(output, "Size: {} bytes\nType: regular file", result.size)?;
+        let show_time = |time: Option<inspect::Timestamp>| {
+            time.map(|time| time.to_string())
+                .unwrap_or_else(|| "unavailable".into())
+        };
         writeln!(
             output,
-            "Modified: {:?}\nCreated: {:?}",
-            result.modified, result.created
+            "Modified: {}\nCreated: {}",
+            show_time(result.modified),
+            show_time(result.created)
         )?;
         show_signatures(output, &result.signatures)?;
     }
@@ -177,13 +182,17 @@ pub(crate) fn run(command: FileCommand, output: &mut impl Write) -> Result<(), B
         }
         FileCommand::Hex { selection, width } => {
             let mut file = forensics::open_regular(&selection.path)?;
+            let length = match selection.length {
+                Some(length) => length,
+                None => file
+                    .metadata()?
+                    .len()
+                    .saturating_sub(selection.offset)
+                    .min(256),
+            };
             let range = ByteRange {
                 offset: selection.offset,
-                length: Some(selection.length.unwrap_or_else(|| {
-                    file.metadata()
-                        .map(|m| m.len().saturating_sub(selection.offset).min(256))
-                        .unwrap_or(256)
-                })),
+                length: Some(length),
             };
             let rows = ranges::hex_rows(&mut file, range, width)?;
             if selection.json {

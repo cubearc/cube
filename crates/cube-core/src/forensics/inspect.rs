@@ -16,6 +16,22 @@ pub struct Timestamp {
     pub nanoseconds: u32,
     pub before_unix_epoch: bool,
 }
+
+impl std::fmt::Display for Timestamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}.{:09} seconds {} Unix epoch (UTC)",
+            self.seconds,
+            self.nanoseconds,
+            if self.before_unix_epoch {
+                "before"
+            } else {
+                "after"
+            }
+        )
+    }
+}
 fn timestamp(time: std::io::Result<SystemTime>) -> Option<Timestamp> {
     time.ok().map(|time| {
         let (duration, before_unix_epoch) = match time.duration_since(UNIX_EPOCH) {

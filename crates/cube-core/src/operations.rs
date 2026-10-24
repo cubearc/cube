@@ -12,6 +12,8 @@ use serde::Serialize;
 pub enum ParameterValue<'a> {
     /// Signed integer.
     Integer(i64),
+    /// Unsigned integer, including full-width byte offsets.
+    Unsigned(u64),
     /// Boolean flag.
     Boolean(bool),
     /// UTF-8 text.
@@ -20,12 +22,26 @@ pub enum ParameterValue<'a> {
     Bytes(&'a [u8]),
 }
 
+impl std::fmt::Display for ParameterValue<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Integer(value) => value.fmt(f),
+            Self::Unsigned(value) => value.fmt(f),
+            Self::Boolean(value) => value.fmt(f),
+            Self::Text(value) => write!(f, "{value:?}"),
+            Self::Bytes(value) => write!(f, "hex:{}", hex::encode(value)),
+        }
+    }
+}
+
 /// Parameter constraints, shared by discovery and explicit preflight validation.
 #[derive(Clone, Copy, Debug, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ParameterType {
     /// Inclusive integer range.
     Integer { min: i64, max: i64 },
+    /// Inclusive unsigned range for byte offsets/counts.
+    Unsigned { min: u64, max: u64 },
     /// Boolean flag.
     Boolean,
     /// UTF-8 text; an empty list permits any text.
@@ -34,10 +50,27 @@ pub enum ParameterType {
     Bytes { min_length: usize },
 }
 
+impl std::fmt::Display for ParameterType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Integer { min, max } => write!(f, "integer in [{min}, {max}]"),
+            Self::Unsigned { min, max } => write!(f, "unsigned integer in [{min}, {max}]"),
+            Self::Boolean => f.write_str("boolean"),
+            Self::Text { choices: [] } => f.write_str("UTF-8 text"),
+            Self::Text { choices } => write!(f, "one of: {}", choices.join(", ")),
+            Self::Bytes { min_length } => write!(f, "bytes, minimum length {min_length}"),
+        }
+    }
+}
+
 impl ParameterType {
     fn accepts(self, value: ParameterValue<'_>) -> bool {
         match (self, value) {
             (Self::Integer { min, max }, ParameterValue::Integer(n)) => (min..=max).contains(&n),
+            (Self::Unsigned { min, max }, ParameterValue::Unsigned(n)) => (min..=max).contains(&n),
+            (Self::Unsigned { min, max }, ParameterValue::Integer(n)) => {
+                u64::try_from(n).is_ok_and(|n| (min..=max).contains(&n))
+            }
             (Self::Boolean, ParameterValue::Boolean(_)) => true,
             (Self::Text { choices }, ParameterValue::Text(text)) => {
                 choices.is_empty() || choices.contains(&text)
@@ -154,6 +187,37 @@ pub fn catalog() -> Vec<&'static Descriptor> {
 /// Look up an exact stable ID; no aliases or heuristic matching are performed.
 pub fn describe(id: &str) -> Option<&'static Descriptor> {
     catalog().into_iter().find(|descriptor| descriptor.id == id)
+}
+
+/// Filter the maintained catalog in legacy command order, with shared category errors.
+pub fn filtered(
+    category: Option<&str>,
+) -> Result<Vec<&'static Descriptor>, crate::errors::OperationError> {
+    let catalog = catalog();
+    if category.is_some_and(|category| !catalog.iter().any(|d| d.category == category)) {
+        return Err(crate::errors::OperationError::new(
+            crate::errors::ErrorCode::InvalidParameter,
+            "unknown operation category; list available operations",
+        )
+        .operation("ops.list")
+        .parameter("category"));
+    }
+    Ok(catalog
+        .into_iter()
+        .filter(|d| category.is_none_or(|c| d.category == c))
+        .collect())
+}
+
+/// Resolve a stable ID with consistent error context for CLI and SDK callers.
+pub fn require(id: &str) -> Result<&'static Descriptor, crate::errors::OperationError> {
+    describe(id).ok_or_else(|| {
+        crate::errors::OperationError::new(
+            crate::errors::ErrorCode::InvalidParameter,
+            "unknown operation ID; list available operations",
+        )
+        .operation("ops.describe")
+        .parameter("id")
+    })
 }
 
 #[cfg(test)]

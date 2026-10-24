@@ -213,20 +213,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::File { command } => filecmd::run(command, &mut output)?,
         Command::Ops { command } => match command {
             Ops::List { category, json } => {
-                let catalog = operations::catalog();
-                if let Some(category) = &category
-                    && !catalog.iter().any(|d| d.category == category)
-                {
-                    return Err(io::Error::new(
-                        io::ErrorKind::InvalidInput,
-                        "unknown operation category; use cube ops list --json",
-                    )
-                    .into());
-                }
-                let mut selected: Vec<_> = catalog
-                    .into_iter()
-                    .filter(|d| category.as_ref().is_none_or(|c| d.category == c))
-                    .collect();
+                let mut selected = operations::filtered(category.as_deref())?;
                 if json {
                     selected.sort_by_key(|d| d.id);
                     write_text(
@@ -245,12 +232,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 }
             }
             Ops::Describe { id, json } => {
-                let descriptor = operations::describe(&id).ok_or_else(|| {
-                    io::Error::new(
-                        io::ErrorKind::InvalidInput,
-                        "unknown operation ID; use cube ops list --json",
-                    )
-                })?;
+                let descriptor = operations::require(&id)?;
                 if json {
                     write_text(
                         &mut output,
@@ -262,14 +244,16 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     write_text(
                         &mut output,
                         &format!(
-                            "{} — {}\nCategory: {}\nInput: {}\nOutput: {}\nDeterministic: {}\nReversible: {:?}\nExample: {}",
+                            "{} — {}\nCategory: {}\nInput: {}\nOutput: {}\nDeterministic: {}\nReversible: {}\nExample: {}",
                             descriptor.id,
                             descriptor.description,
                             descriptor.category,
                             descriptor.input_type,
                             descriptor.output_type,
                             descriptor.deterministic,
-                            descriptor.reversible,
+                            descriptor
+                                .reversible
+                                .map_or("not applicable", |value| if value { "yes" } else { "no" }),
                             descriptor.example
                         ),
                     )?;
@@ -277,12 +261,15 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                         write_text(
                             &mut output,
                             &format!(
-                                "{}: {} (required: {}, constraints: {:?}, default: {:?})",
+                                "{}: {} (required: {}, constraints: {}, default: {})",
                                 parameter.name,
                                 parameter.description,
                                 parameter.required,
                                 parameter.constraints,
-                                parameter.default
+                                parameter
+                                    .default
+                                    .map(|value| value.to_string())
+                                    .unwrap_or_else(|| "none".into())
                             ),
                         )?;
                     }

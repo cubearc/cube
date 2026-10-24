@@ -231,27 +231,36 @@ pub fn compare(
     result.map_err(|e: OperationError| e.operation("file.binary.compare"))
 }
 
-const RANGE_PARAMETERS: &[crate::operations::Parameter] = &[
+const HEX_PARAMETERS: &[crate::operations::Parameter] = &[
+    super::OFFSET_PARAMETER,
+    super::LENGTH_PARAMETER,
     crate::operations::Parameter {
-        name: "offset",
-        description: "Absolute zero-based byte offset.",
+        name: "width",
+        description: "Bytes per hexadecimal row.",
         required: false,
-        default: Some(crate::operations::ParameterValue::Integer(0)),
-        constraints: crate::operations::ParameterType::Integer {
-            min: 0,
-            max: i64::MAX,
+        default: Some(crate::operations::ParameterValue::Unsigned(16)),
+        constraints: crate::operations::ParameterType::Unsigned { min: 1, max: 256 },
+    },
+];
+const STRING_PARAMETERS: &[crate::operations::Parameter] = &[
+    super::OFFSET_PARAMETER,
+    super::LENGTH_PARAMETER,
+    super::RESULT_PARAMETER,
+    crate::operations::Parameter {
+        name: "min_length",
+        description: "Minimum number of consecutive ASCII printable bytes.",
+        required: false,
+        default: Some(crate::operations::ParameterValue::Unsigned(4)),
+        constraints: crate::operations::ParameterType::Unsigned {
+            min: 1,
+            max: 1048576,
         },
     },
-    crate::operations::Parameter {
-        name: "length",
-        description: "Byte count; omitted means through EOF.",
-        required: false,
-        default: None,
-        constraints: crate::operations::ParameterType::Integer {
-            min: 0,
-            max: i64::MAX,
-        },
-    },
+];
+const COMPARE_PARAMETERS: &[crate::operations::Parameter] = &[
+    super::OFFSET_PARAMETER,
+    super::LENGTH_PARAMETER,
+    super::RESULT_PARAMETER,
 ];
 /// Operation descriptors maintained beside the implementation.
 pub const OPERATIONS: &[crate::operations::Descriptor] = &[
@@ -263,7 +272,7 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         output_type: "file.hex_rows",
         command: "file hex",
         example: "cube file hex sample.bin --length 256",
-        parameters: RANGE_PARAMETERS,
+        parameters: HEX_PARAMETERS,
         deterministic: true,
         reversible: None,
     },
@@ -275,7 +284,7 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         output_type: "file.strings",
         command: "file strings",
         example: "cube file strings sample.bin",
-        parameters: RANGE_PARAMETERS,
+        parameters: STRING_PARAMETERS,
         deterministic: true,
         reversible: None,
     },
@@ -287,7 +296,7 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         output_type: "file.comparison",
         command: "file compare",
         example: "cube file compare first.bin second.bin",
-        parameters: RANGE_PARAMETERS,
+        parameters: COMPARE_PARAMETERS,
         deterministic: true,
         reversible: None,
     },

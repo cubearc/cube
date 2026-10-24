@@ -541,3 +541,68 @@ fn exif_rejects_malformed_and_excessive_metadata() {
     let absent = b"II\x2a\0\0\0\0\0";
     assert!(!inspect(absent).unwrap().present);
 }
+
+#[test]
+fn large_sparse_inputs_fail_before_unbounded_reads_or_allocations() {
+    let dir = Workspace::new();
+    let path = dir.path("large");
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .read(true)
+        .create_new(true)
+        .open(&path)
+        .unwrap();
+    file.set_len(forensics::MAX_SCAN_BYTES + 128).unwrap();
+    assert_eq!(
+        forensics::read_range(&mut file, ByteRange::default())
+            .unwrap_err()
+            .code,
+        ErrorCode::ResourceLimit
+    );
+    assert_eq!(
+        forensics::ranges::hex_rows(&mut file, ByteRange::default(), 16)
+            .unwrap_err()
+            .code,
+        ErrorCode::ResourceLimit
+    );
+    assert_eq!(
+        forensics::ranges::compare(&mut file, &mut Cursor::new(b""), ByteRange::default(), 1)
+            .unwrap_err()
+            .code,
+        ErrorCode::ResourceLimit
+    );
+    let header = png_fixture(b"");
+    file.seek(SeekFrom::Start(0)).unwrap();
+    file.write_all(&header[..33]).unwrap();
+    file.write_all(&(forensics::MAX_SCAN_BYTES as u32).to_be_bytes())
+        .unwrap();
+    file.write_all(b"IDAT").unwrap();
+    assert_eq!(
+        forensics::png::appended(&mut file).unwrap_err().code,
+        ErrorCode::ResourceLimit
+    );
+}
+
+#[test]
+fn png_palette_rules_reject_invalid_color_models_and_index_depths() {
+    let base = png_fixture(b"");
+    for (depth, color, palette) in [
+        (8, 0, b"\0\0\0".as_slice()),
+        (1, 3, b"123456789".as_slice()),
+    ] {
+        let mut header = base[16..29].to_vec();
+        header[8] = depth;
+        header[9] = color;
+        let mut data = b"\x89PNG\r\n\x1a\n".to_vec();
+        data.extend(png_chunk(b"IHDR", &header));
+        data.extend(png_chunk(b"PLTE", palette));
+        data.extend(png_chunk(b"IDAT", b""));
+        data.extend(png_chunk(b"IEND", b""));
+        assert_eq!(
+            forensics::png::appended(&mut Cursor::new(data))
+                .unwrap_err()
+                .code,
+            ErrorCode::InvalidInput
+        );
+    }
+}

@@ -48,6 +48,8 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
         let mut idat = false;
         let mut idat_ended = false;
         let mut indexed = false;
+        let mut color_model = 0;
+        let mut sample_depth = 0;
         loop {
             chunks += 1;
             if chunks > 10_000 {
@@ -82,7 +84,13 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
                 return Err(malformed("duplicate PNG IHDR").offset(offset));
             }
             if kind == b"PLTE"
-                && (palette || idat || length == 0 || length > 768 || !length.is_multiple_of(3))
+                && (palette
+                    || idat
+                    || length == 0
+                    || length > 768
+                    || !length.is_multiple_of(3)
+                    || matches!(color_model, 0 | 4)
+                    || (indexed && length / 3 > (1u64 << sample_depth)))
             {
                 return Err(malformed("invalid PNG palette or order").offset(offset));
             }
@@ -115,6 +123,8 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
                     let height = u32::from_be_bytes(buffer[4..8].try_into().expect("IHDR height"));
                     let depth = buffer[8];
                     let color = buffer[9];
+                    color_model = color;
+                    sample_depth = depth;
                     indexed = color == 3;
                     let valid_depth = match color {
                         0 => [1, 2, 4, 8, 16].contains(&depth),

@@ -1,4 +1,4 @@
-//! Standard Base32, Base64, and hexadecimal encodings without implicit text conversion.
+//! Base32, Bitcoin Base58, Base64, and hexadecimal without implicit text conversion.
 //!
 //! These encodings are reversible. Decoding restores the original bytes:
 //! ```
@@ -55,6 +55,44 @@ pub fn base32_decode(input: &str) -> Result<Vec<u8>, Error> {
         .map_err(Error::InvalidBase32)
 }
 
+/// Encode bytes using the case-sensitive Bitcoin Base58 alphabet:
+/// `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
+///
+/// Each leading zero byte becomes a leading `1`; empty input produces empty text.
+/// Decoding restores the original bytes. No padding or Base58Check checksum is added.
+///
+/// ```
+/// assert_eq!(cube_core::encoding::base58_encode(b"Hello World"), "JxF12TrwUP45BMd");
+/// assert_eq!(cube_core::encoding::base58_encode(&[0, 0, 1]), "112");
+/// ```
+pub fn base58_encode(input: &[u8]) -> String {
+    bs58::encode(input)
+        .with_alphabet(bs58::Alphabet::BITCOIN)
+        .into_string()
+}
+
+/// Decode case-sensitive Bitcoin Base58 into the original bytes.
+///
+/// Every leading `1` restores one leading zero byte; empty text produces empty
+/// bytes. Input is not trimmed or normalized. No Base58Check checksum is verified.
+///
+/// # Errors
+/// Returns [`Error::InvalidBase58`] for whitespace, non-ASCII input, or characters
+/// outside the Bitcoin alphabet, including `0`, `O`, `I`, and `l`.
+///
+/// ```
+/// # fn main() -> Result<(), cube_core::Error> {
+/// assert_eq!(cube_core::encoding::base58_decode("15Q")?, [0, 255]);
+/// # Ok(())
+/// # }
+/// ```
+pub fn base58_decode(input: &str) -> Result<Vec<u8>, Error> {
+    bs58::decode(input)
+        .with_alphabet(bs58::Alphabet::BITCOIN)
+        .into_vec()
+        .map_err(Error::InvalidBase58)
+}
+
 /// Encode bytes as padded RFC 4648 standard Base64.
 ///
 /// ```
@@ -97,6 +135,62 @@ pub fn hex_decode(input: &str) -> Result<Vec<u8>, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn base58_known_answers() -> Result<(), Error> {
+        for (plain, encoded) in [("", ""), ("a", "2g"), ("Hello World", "JxF12TrwUP45BMd")] {
+            assert_eq!(base58_encode(plain.as_bytes()), encoded);
+            assert_eq!(base58_decode(encoded)?, plain.as_bytes());
+        }
+        assert_eq!(base58_decode("A")?, [9]);
+        assert_eq!(base58_decode("a")?, [33]);
+        Ok(())
+    }
+
+    #[test]
+    fn base58_preserves_leading_zero_bytes() -> Result<(), Error> {
+        for (bytes, encoded) in [
+            (&[0][..], "1"),
+            (&[0, 0, 0, 0][..], "1111"),
+            (&[0, 0, 1][..], "112"),
+            (&[0, 255][..], "15Q"),
+            (&[255][..], "5Q"),
+        ] {
+            assert_eq!(base58_encode(bytes), encoded);
+            assert_eq!(base58_decode(encoded)?, bytes);
+        }
+        Ok(())
+    }
+
+    #[test]
+    fn rejects_invalid_base58_without_trimming() {
+        for input in [
+            "0",
+            "O",
+            "I",
+            "l",
+            "!",
+            "2g=",
+            "+",
+            "/",
+            "é",
+            "世界",
+            "🧊",
+            " 2g",
+            "2g ",
+            "2 g",
+            "2g\n",
+            "\r2g",
+            "2\tg",
+            "\0",
+            "2g\u{00a0}",
+        ] {
+            assert!(
+                matches!(base58_decode(input), Err(Error::InvalidBase58(_))),
+                "accepted {input:?}"
+            );
+        }
+    }
 
     #[test]
     fn base32_rfc4648_vectors() -> Result<(), Error> {

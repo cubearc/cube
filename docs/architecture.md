@@ -17,6 +17,7 @@ the shared Cargo.lock and use the repository README and license directly.
 Rust is the source of truth so the CLI and SDK agree on validation, byte handling,
 and results. Each operation is an ordinary function in the core. Base32 uses
 `data-encoding`, with a core check that rejects concatenated padded blocks.
+Base58 uses `bs58` with the Bitcoin alphabet and no checksum extension.
 Base64, hex, and SHA-256 also delegate to established crates; no cryptographic
 primitive is implemented from scratch. Repeating-key XOR and ROT13 are small puzzle operations.
 

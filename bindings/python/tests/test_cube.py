@@ -12,6 +12,8 @@ def test_native_extension_is_loaded():
     assert cube.base64_encode is _native.base64_encode
     assert cube.base32_encode is _native.base32_encode
     assert cube.base32_decode is _native.base32_decode
+    assert cube.base58_encode is _native.base58_encode
+    assert cube.base58_decode is _native.base58_decode
 
 
 @pytest.mark.parametrize(
@@ -31,6 +33,29 @@ def test_base32_rfc4648_vectors(data, encoded):
     assert cube.base32_decode(encoded) == data
 
 
+@pytest.mark.parametrize(
+    ("data", "encoded"),
+    [
+        (b"", ""),
+        (b"a", "2g"),
+        (b"Hello World", "JxF12TrwUP45BMd"),
+        (b"\x00", "1"),
+        (b"\x00\x00\x00\x00", "1111"),
+        (b"\x00\x00\x01", "112"),
+        (b"\x00\xff", "15Q"),
+        (b"\xff", "5Q"),
+    ],
+)
+def test_base58_known_answers_and_leading_zeroes(data, encoded):
+    assert cube.base58_encode(data) == encoded
+    assert cube.base58_decode(encoded) == data
+
+
+def test_base58_is_case_sensitive():
+    assert cube.base58_decode("A") == b"\x09"
+    assert cube.base58_decode("a") == b"\x21"
+
+
 def test_known_answers():
     assert cube.base64_encode(b"Hello") == "SGVsbG8="
     assert cube.base64_decode("SGVsbG8=") == b"Hello"
@@ -47,6 +72,7 @@ def test_known_answers():
 def test_binary_round_trips_and_determinism(data):
     for encode, decode in [
         (cube.base32_encode, cube.base32_decode),
+        (cube.base58_encode, cube.base58_decode),
         (cube.base64_encode, cube.base64_decode),
         (cube.hex_encode, cube.hex_decode),
     ]:
@@ -66,11 +92,14 @@ def test_unicode_and_empty_text():
     assert cube.rot13("") == ""
     data = text.encode("utf-8")
     assert cube.base32_decode(cube.base32_encode(data)) == data
+    assert cube.base58_decode(cube.base58_encode(data)) == data
     assert cube.base64_decode(cube.base64_encode(data)) == data
     assert cube.hex_decode(cube.hex_encode(data)) == data
 
 
 def test_empty_inputs():
+    assert cube.base58_encode(b"") == ""
+    assert cube.base58_decode("") == b""
     assert cube.base32_encode(b"") == ""
     assert cube.base32_decode("") == b""
     assert cube.base64_encode(b"") == ""
@@ -107,6 +136,30 @@ def test_invalid_base32(text):
         cube.base32_decode(text)
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        "0",
+        "O",
+        "I",
+        "l",
+        "2g=",
+        "!",
+        "é",
+        "世界",
+        "2g ",
+        " 2g",
+        "2 g",
+        "2g\n",
+        "2\tg",
+        "\x00",
+    ],
+)
+def test_invalid_base58(text):
+    with pytest.raises(ValueError, match="invalid Base58"):
+        cube.base58_decode(text)
+
+
 @pytest.mark.parametrize("text", ["!", "Zg", "Zh==", "Zg==\n", "-_8=", "é"])
 def test_invalid_base64(text):
     with pytest.raises(ValueError, match="invalid Base64"):
@@ -130,6 +183,8 @@ def test_empty_xor_key(data):
     [
         (cube.base32_encode, ("Hello",)),
         (cube.base32_decode, (b"MZXW6===",)),
+        (cube.base58_encode, ("Hello",)),
+        (cube.base58_decode, (b"2g",)),
         (cube.base64_encode, ("Hello",)),
         (cube.base64_decode, (b"SGVsbG8=",)),
         (cube.hex_encode, ("Hello",)),

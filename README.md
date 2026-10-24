@@ -13,6 +13,7 @@ Python package. All interfaces share the same implementations.
 | Operation | Behavior |
 | --- | --- |
 | Base32 | Uppercase, padded RFC 4648 standard encoding and strict decoding |
+| Base58 | Case-sensitive Bitcoin alphabet; preserves leading zero bytes |
 | Base64 | Padded RFC 4648 standard encoding and strict decoding |
 | Hex | Lowercase encoding; decoding accepts either case |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |
@@ -22,6 +23,7 @@ Python package. All interfaces share the same implementations.
 ROT13 and repeating-key XOR are classical puzzle tools, not secure encryption.
 Decoders reject whitespace. Base32 and Base64 reject invalid padding and trailing
 bits; Base32 also rejects lowercase letters.
+Base58 maps each leading zero byte to `1` and uses no padding or Base58Check checksum.
 
 ## Build and install
 
@@ -47,6 +49,8 @@ cube ops list
 cube encode base32 --text "foo"                   # MZXW6===
 cube decode base32 --text "MZXW6==="               # 666f6f
 cube decode base32 --text "MZXW6===" --output raw  # foo (no added newline)
+cube encode base58 --text "Hello World"           # JxF12TrwUP45BMd
+cube decode base58 --text "JxF12TrwUP45BMd" --output raw # Hello World
 cube encode base64 --text "Hello"                 # SGVsbG8=
 cube decode base64 --text "SGVsbG8="               # 48656c6c6f
 cube decode base64 --text "SGVsbG8=" --output raw   # Hello (no added newline)
@@ -96,6 +100,8 @@ import cube
 
 assert cube.base32_encode(b"foo") == "MZXW6==="
 assert cube.base32_decode("MZXW6===") == b"foo"
+assert cube.base58_encode(b"Hello World") == "JxF12TrwUP45BMd"
+assert cube.base58_decode("112") == b"\x00\x00\x01"
 assert cube.base64_encode(b"Hello") == "SGVsbG8="
 assert cube.base64_decode("SGVsbG8=") == b"Hello"
 assert cube.hex_encode(b"\x00\xff") == "00ff"

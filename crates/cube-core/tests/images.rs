@@ -166,3 +166,185 @@ fn chunk_inspector_reuses_strict_parser_and_exports_payloads_only_explicitly() {
     assert!(png::inspect(&mut Cursor::new(&input), false, 1).is_err());
     assert!(png::inspect(&mut Cursor::new(&input), false, 1048577).is_err());
 }
+
+#[test]
+fn exact_pixel_exports_channels_and_histograms_preserve_alpha_and_indices() {
+    use cube_core::image::{Channel as C, Region};
+    let image = Image::from_samples(
+        2,
+        2,
+        ColorModel::Rgba,
+        vec![
+            10, 20, 30, 0, 40, 50, 60, 255, 10, 20, 30, 255, 40, 50, 60, 128,
+        ],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    assert_eq!(image.pixel(1, 0).unwrap(), [40, 50, 60, 255]);
+    assert!(image.pixel(2, 0).is_err());
+    assert_eq!(
+        image.channel(C::Alpha, None).unwrap().data,
+        [0, 255, 255, 128]
+    );
+    let region = Region {
+        x: 1,
+        y: 0,
+        width: 1,
+        height: 2,
+    };
+    let data = image
+        .pixels(Some(region), Some(&[C::Blue, C::Red]))
+        .unwrap();
+    assert_eq!(data.data, [60, 40, 60, 40]);
+    let records = data.records().unwrap();
+    assert_eq!((records[1].x, records[1].y), (1, 1));
+    assert_eq!(records[1].values, [60, 40]);
+    assert!(data.grayscale_image().is_err());
+    assert_eq!(
+        image
+            .channel(C::Red, None)
+            .unwrap()
+            .grayscale_image()
+            .unwrap()
+            .samples(),
+        [10, 40, 10, 40]
+    );
+    assert_eq!(image.histogram(None, None, 10).unwrap().colors.len(), 4);
+    let rgb = image
+        .histogram(None, Some(&[C::Red, C::Green, C::Blue]), 10)
+        .unwrap();
+    assert_eq!(rgb.pixels, 4);
+    assert_eq!(rgb.colors.len(), 2);
+    assert_eq!(rgb.colors[0].values, [10, 20, 30]);
+    assert_eq!(rgb.colors[0].count, 2);
+    assert!(image.histogram(None, None, 1).is_err());
+    assert!(image.histogram(None, None, 0).is_err());
+    assert!(image.pixels(None, Some(&[])).is_err());
+    assert!(image.pixels(None, Some(&[C::Red, C::Red])).is_err());
+    assert!(image.channel(C::Index, None).is_err());
+    for region in [
+        Region {
+            x: u32::MAX,
+            y: 0,
+            width: 2,
+            height: 1,
+        },
+        Region {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 1,
+        },
+        Region {
+            x: 0,
+            y: 2,
+            width: 1,
+            height: 1,
+        },
+    ] {
+        assert!(image.pixels(Some(region), None).is_err());
+    }
+    let indexed = Image::from_samples(
+        2,
+        1,
+        ColorModel::Indexed,
+        vec![0, 1],
+        vec![[1, 2, 3], [1, 2, 3]],
+        vec![],
+    )
+    .unwrap();
+    assert_eq!(indexed.channel(C::Index, None).unwrap().data, [0, 1]);
+    assert!(indexed.channel(C::Red, None).is_err());
+    assert_eq!(indexed.histogram(None, None, 10).unwrap().colors.len(), 2);
+    assert_eq!(
+        indexed
+            .view(true)
+            .unwrap()
+            .histogram(None, None, 10)
+            .unwrap()
+            .colors[0]
+            .count,
+        2
+    );
+    let large =
+        Image::from_samples(10001, 1, ColorModel::Gray, vec![0; 10001], vec![], vec![]).unwrap();
+    assert!(large.pixels(None, None).unwrap().records().is_err());
+    assert!(C::parse("unknown").is_err());
+    for name in ["red", "green", "blue", "alpha", "gray", "index"] {
+        assert!(C::parse(name).is_ok());
+    }
+}
+#[test]
+fn image_comparison_has_exact_counts_coordinates_and_binary_mask() {
+    use cube_core::image::{Channel as C, Region};
+    let a = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgba,
+        vec![1, 2, 3, 0, 4, 5, 6, 255],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    let b = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgba,
+        vec![1, 2, 3, 255, 4, 50, 6, 255],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    let result = a.compare(&b, None, None, 1, true).unwrap();
+    assert_eq!(result.differing_pixels, 2);
+    assert!(!result.complete);
+    assert_eq!((result.differences[0].x, result.differences[0].y), (0, 0));
+    assert_eq!(result.mask.unwrap().samples(), [255, 255]);
+    assert!(a.compare(&a, None, None, 10, false).unwrap().equal);
+    assert_eq!(
+        a.compare(&b, None, Some(&[C::Red, C::Blue]), 10, false)
+            .unwrap()
+            .differing_pixels,
+        0
+    );
+    assert_eq!(
+        a.compare(
+            &b,
+            Some(Region {
+                x: 1,
+                y: 0,
+                width: 1,
+                height: 1
+            }),
+            None,
+            10,
+            false
+        )
+        .unwrap()
+        .differences[0]
+            .x,
+        1
+    );
+    let rgb = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgb,
+        vec![1, 2, 3, 4, 5, 6],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    assert!(a.compare(&rgb, None, None, 10, false).is_err());
+    assert!(
+        a.compare(&rgb, None, Some(&[C::Red, C::Blue]), 10, false)
+            .unwrap()
+            .equal
+    );
+    assert!(a.compare(&rgb, None, Some(&[C::Alpha]), 10, false).is_err());
+    assert!(a.compare(&b, None, None, 0, false).is_err());
+    assert!(
+        a.compare(&sample(ColorModel::Rgba), None, None, 10, false)
+            .is_err()
+    );
+}

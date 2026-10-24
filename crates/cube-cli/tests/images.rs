@@ -68,3 +68,81 @@ fn inspect_chunks_and_conversion_use_core_samples_and_safe_destinations() {
     assert_eq!(result.status.code(), Some(1));
     assert_eq!(Image::open(&path).unwrap().samples(), [0, 1]);
 }
+
+#[test]
+fn pixel_channel_histogram_and_comparison_commands_preserve_exact_data() {
+    let files = Files::new("analysis");
+    let first = files.path("first.png");
+    let second = files.path("second.png");
+    let mask = files.path("mask.png");
+    let bytes = files.path("pixels.bin");
+    let source = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgba,
+        vec![1, 2, 3, 0, 4, 5, 6, 255],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    source.save_png(&first).unwrap();
+    Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgba,
+        vec![1, 2, 3, 255, 4, 50, 6, 255],
+        vec![],
+        vec![],
+    )
+    .unwrap()
+    .save_png(&second)
+    .unwrap();
+    let a = first.to_str().unwrap();
+    let b = second.to_str().unwrap();
+    for args in [
+        vec!["image", "pixel", a, "--x", "1", "--y", "0", "--json"],
+        vec![
+            "image",
+            "pixels",
+            a,
+            "--region",
+            "1,0,1,1",
+            "--channels",
+            "blue,red",
+            "--json",
+        ],
+        vec!["image", "histogram", a, "--json"],
+        vec![
+            "image",
+            "compare",
+            a,
+            b,
+            "--json",
+            "--mask-output",
+            mask.to_str().unwrap(),
+        ],
+    ] {
+        let output = run(&args);
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let _: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    }
+    assert_eq!(Image::open(&mask).unwrap().samples(), [255, 255]);
+    let output = run(&["image", "channel", a, "--channel", "alpha", "--stdout"]);
+    assert!(output.status.success());
+    assert_eq!(output.stdout, [0, 255]);
+    let output = run(&[
+        "image",
+        "pixels",
+        a,
+        "--channels",
+        "blue,red",
+        "--output",
+        bytes.to_str().unwrap(),
+    ]);
+    assert!(output.status.success());
+    assert_eq!(std::fs::read(bytes).unwrap(), [3, 1, 6, 4]);
+}

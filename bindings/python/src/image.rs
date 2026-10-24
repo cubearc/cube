@@ -6,6 +6,32 @@ use cube_core::{
 use pyo3::{prelude::*, types::PyBytes};
 use std::{io::Cursor, path::PathBuf};
 
+fn region(value: Option<(u32, u32, u32, u32)>) -> Option<cube_core::image::Region> {
+    value.map(|(x, y, width, height)| cube_core::image::Region {
+        x,
+        y,
+        width,
+        height,
+    })
+}
+fn channels(names: Option<Vec<String>>) -> PyResult<Option<Vec<cube_core::image::Channel>>> {
+    names
+        .map(|names| {
+            names
+                .iter()
+                .map(|name| cube_core::image::Channel::parse(name).map_err(super::file_error))
+                .collect()
+        })
+        .transpose()
+}
+fn pixel_data(py: Python<'_>, data: &cube_core::image::PixelData) -> PyResult<Py<PyAny>> {
+    let result = super::structured(py, &serde_json::json!(data))?;
+    result
+        .bind(py)
+        .set_item("data", PyBytes::new(py, &data.data))?;
+    Ok(result)
+}
+
 /// Immutable PNG8 samples. Transformations return another Image.
 #[pyclass(name = "Image", module = "cube._native", frozen)]
 pub struct PyImage {
@@ -14,6 +40,110 @@ pub struct PyImage {
 
 #[pymethods]
 impl PyImage {
+    #[pyo3(signature = (x, y, *, expand_palette=false))]
+    fn pixel<'py>(
+        &self,
+        py: Python<'py>,
+        x: u32,
+        y: u32,
+        expand_palette: bool,
+    ) -> PyResult<Bound<'py, pyo3::types::PyList>> {
+        let values = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .pixel(x, y)
+            .map_err(super::file_error)?;
+        pyo3::types::PyList::new(py, values)
+    }
+    #[pyo3(signature = (*, region=None, channels=None, expand_palette=false))]
+    fn pixels(
+        &self,
+        py: Python<'_>,
+        region: Option<(u32, u32, u32, u32)>,
+        channels: Option<Vec<String>>,
+        expand_palette: bool,
+    ) -> PyResult<Py<PyAny>> {
+        let selected = crate::image::channels(channels)?;
+        let selected_region = crate::image::region(region);
+        let data = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .pixels(selected_region, selected.as_deref())
+            .map_err(super::file_error)?;
+        pixel_data(py, &data)
+    }
+    #[pyo3(signature = (channel, *, region=None, expand_palette=false))]
+    fn channel(
+        &self,
+        py: Python<'_>,
+        channel: &str,
+        region: Option<(u32, u32, u32, u32)>,
+        expand_palette: bool,
+    ) -> PyResult<Py<PyAny>> {
+        let name = cube_core::image::Channel::parse(channel).map_err(super::file_error)?;
+        let data = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .channel(name, crate::image::region(region))
+            .map_err(super::file_error)?;
+        pixel_data(py, &data)
+    }
+    #[pyo3(signature = (*, region=None, channels=None, max_colors=1000, expand_palette=false))]
+    fn histogram(
+        &self,
+        py: Python<'_>,
+        region: Option<(u32, u32, u32, u32)>,
+        channels: Option<Vec<String>>,
+        max_colors: usize,
+        expand_palette: bool,
+    ) -> PyResult<Py<PyAny>> {
+        let selected = crate::image::channels(channels)?;
+        let result = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .histogram(
+                crate::image::region(region),
+                selected.as_deref(),
+                max_colors,
+            )
+            .map_err(super::file_error)?;
+        super::structured(py, &serde_json::json!(result))
+    }
+    #[pyo3(signature = (other, *, region=None, channels=None, max_results=1000, mask=false))]
+    fn compare(
+        &self,
+        py: Python<'_>,
+        other: &Self,
+        region: Option<(u32, u32, u32, u32)>,
+        channels: Option<Vec<String>>,
+        max_results: usize,
+        mask: bool,
+    ) -> PyResult<Py<PyAny>> {
+        let selected = crate::image::channels(channels)?;
+        let result = self
+            .inner
+            .compare(
+                &other.inner,
+                crate::image::region(region),
+                selected.as_deref(),
+                max_results,
+                mask,
+            )
+            .map_err(super::file_error)?;
+        let output = super::structured(py, &serde_json::json!(result))?;
+        output.bind(py).set_item(
+            "mask",
+            result
+                .mask
+                .map(|inner| Py::new(py, Self { inner }))
+                .transpose()?,
+        )?;
+        Ok(output)
+    }
     #[staticmethod]
     fn decode(data: &[u8]) -> PyResult<Self> {
         Ok(Self {

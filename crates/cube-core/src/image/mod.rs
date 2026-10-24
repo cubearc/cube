@@ -4,6 +4,9 @@
 //! unpremultiplied values. No gamma/profile conversion, compositing or normalization
 //! occurs. Indexed images retain indices, palette and tRNS independently.
 
+pub mod analyze;
+pub use analyze::{Channel, Comparison, Histogram, PixelData, Region};
+
 use crate::{
     errors::{ErrorCode, OperationError},
     forensics,

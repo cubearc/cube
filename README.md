@@ -351,3 +351,34 @@ image.save_png("new-output.png")  # exclusive creation
 Indexed expansion is explicit through `--expand-palette` or
 `image.expand_palette()` and produces unpremultiplied RGBA, supplying alpha 255
 for palette entries without tRNS. Images and existing outputs are never overwritten.
+
+Image pixels use zero-based `(x,y)` coordinates. Regions are `[x,y,width,height]`,
+positive and entirely inside the image; no clipping occurs. Native channel names
+are `red`, `green`, `blue`, `alpha`, `gray`, and `index` as available. Selections
+preserve user order and reject duplicates/missing channels. Indexed native data
+remains indices; request palette expansion explicitly for decoded RGBA values.
+
+```sh
+cube image pixel sample.png --x 0 --y 0 --json
+cube image pixels sample.png --region 0,0,2,2 --channels blue,red --json
+cube image channel sample.png --channel red --output red.bin
+cube image channel sample.png --channel alpha --png-output alpha.png
+cube image histogram sample.png --channels red,green,blue --json
+cube image compare first.png second.png --mask-output differences.png --json
+```
+
+Raw exports require `--output` (new file plus shape/channel metadata on stdout)
+or explicit `--stdout` (bytes only, no newline). `--json` exports coordinate records
+under a 10000-pixel cap. One-channel exports can use `--png-output` without scaling.
+Histograms count exact selected tuples in lexicographic order; alpha is included
+when selected, including hidden RGB under transparent pixels. Native indexed
+histograms count indices; expanded palette aliases count as the same RGBA color.
+More than `--max-colors` distinct tuples fails rather than approximating counts.
+
+Comparison requires equal dimensions and compatible native models/palette/tRNS,
+or an explicit compatible channel subset or palette conversion. No resizing,
+blending or quantization occurs. Difference counts remain exact when the listing
+is capped; `complete` identifies that condition. Optional masks use exactly 0/255.
+Use Python `image.pixel`, `.pixels`, `.channel`, `.histogram` and `.compare` with
+matching keyword parameters. Pixel/channel results contain original `data: bytes`
+and shape/channel metadata; comparisons can return a native `mask: Image`.

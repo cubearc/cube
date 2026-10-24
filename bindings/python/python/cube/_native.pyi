@@ -100,3 +100,35 @@ class Image:
     def expand_palette(self) -> Image: ...
     def encode_png(self) -> bytes: ...
     def save_png(self, path: str | PathLike[str]) -> None: ...
+    def pixel(self, x: int, y: int, *, expand_palette: bool = False) -> list[int]: ...
+    def pixels(
+        self,
+        *,
+        region: tuple[int, int, int, int] | None = None,
+        channels: list[str] | None = None,
+        expand_palette: bool = False,
+    ) -> dict[str, Any]: ...
+    def channel(
+        self,
+        channel: str,
+        *,
+        region: tuple[int, int, int, int] | None = None,
+        expand_palette: bool = False,
+    ) -> dict[str, Any]: ...
+    def histogram(
+        self,
+        *,
+        region: tuple[int, int, int, int] | None = None,
+        channels: list[str] | None = None,
+        max_colors: int = 1000,
+        expand_palette: bool = False,
+    ) -> dict[str, Any]: ...
+    def compare(
+        self,
+        other: Image,
+        *,
+        region: tuple[int, int, int, int] | None = None,
+        channels: list[str] | None = None,
+        max_results: int = 1000,
+        mask: bool = False,
+    ) -> dict[str, Any]: ...

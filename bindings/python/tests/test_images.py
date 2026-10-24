@@ -93,3 +93,76 @@ def test_chunk_crc_evidence_and_unsupported_depth():
     with pytest.raises(ValueError) as error:
         cube.Image.decode(png_bytes(1, 1, 0, b"\x00\x01", depth=16))
     assert error.value.code == "unsupported_format"
+
+
+def rgba_image():
+    return cube.Image.from_samples(
+        2,
+        2,
+        "rgba",
+        bytes(
+            [
+                10,
+                20,
+                30,
+                0,
+                40,
+                50,
+                60,
+                255,
+                10,
+                20,
+                30,
+                255,
+                40,
+                50,
+                60,
+                128,
+            ]
+        ),
+    )
+
+
+def test_pixels_channels_histograms_and_explicit_palette_views():
+    image = rgba_image()
+    assert image.pixel(1, 0) == [40, 50, 60, 255]
+    assert image.channel("alpha")["data"] == bytes([0, 255, 255, 128])
+    pixels = image.pixels(region=(1, 0, 1, 2), channels=["blue", "red"])
+    assert pixels["data"] == bytes([60, 40, 60, 40])
+    assert pixels["region"] == {"x": 1, "y": 0, "width": 1, "height": 2}
+    assert len(image.histogram()["colors"]) == 4
+    colors = image.histogram(channels=["red", "green", "blue"])["colors"]
+    assert colors == [
+        {"values": [10, 20, 30], "count": 2},
+        {"values": [40, 50, 60], "count": 2},
+    ]
+    indexed = cube.Image.from_samples(
+        2, 1, "indexed", b"\x00\x01", [[1, 2, 3], [1, 2, 3]]
+    )
+    assert indexed.channel("index")["data"] == b"\x00\x01"
+    assert indexed.histogram(expand_palette=True)["colors"] == [
+        {"values": [1, 2, 3, 255], "count": 2},
+    ]
+    for call in [
+        lambda: image.pixel(2, 0),
+        lambda: image.channel("index"),
+        lambda: image.pixels(channels=["red", "red"]),
+        lambda: image.pixels(region=(0, 0, 0, 1)),
+        lambda: image.histogram(max_colors=1),
+        lambda: indexed.channel("red"),
+    ]:
+        with pytest.raises(ValueError):
+            call()
+
+
+def test_comparison_preserves_alpha_and_bounded_differences():
+    first = cube.Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 4, 5, 6, 255]))
+    second = cube.Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 255, 4, 50, 6, 255]))
+    result = first.compare(second, max_results=1, mask=True)
+    assert result["differing_pixels"] == 2
+    assert result["complete"] is False
+    assert result["mask"].samples == b"\xff\xff"
+    assert first.compare(second, channels=["red", "blue"])["equal"] is True
+    assert first.compare(first)["mask"] is None
+    with pytest.raises(ValueError):
+        first.compare(rgba_image())

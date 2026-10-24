@@ -20,6 +20,10 @@ pub enum ParameterValue<'a> {
     Text(&'a str),
     /// Exact bytes; JSON represents these as an integer array.
     Bytes(&'a [u8]),
+    /// Ordered text choices, such as image channels.
+    TextList(&'a [&'a str]),
+    /// Ordered integer choices or a fixed coordinate tuple.
+    UnsignedList(&'a [u64]),
 }
 
 impl std::fmt::Display for ParameterValue<'_> {
@@ -30,6 +34,8 @@ impl std::fmt::Display for ParameterValue<'_> {
             Self::Boolean(value) => value.fmt(f),
             Self::Text(value) => write!(f, "{value:?}"),
             Self::Bytes(value) => write!(f, "hex:{}", hex::encode(value)),
+            Self::TextList(value) => write!(f, "{}", value.join(", ")),
+            Self::UnsignedList(value) => write!(f, "{value:?}"),
         }
     }
 }
@@ -48,6 +54,21 @@ pub enum ParameterType {
     Text { choices: &'static [&'static str] },
     /// Exact bytes with a minimum length.
     Bytes { min_length: usize },
+    /// Ordered text values with explicit length and uniqueness constraints.
+    TextList {
+        choices: &'static [&'static str],
+        min_length: usize,
+        max_length: usize,
+        unique: bool,
+    },
+    /// Ordered unsigned values with explicit length, range and uniqueness rules.
+    UnsignedList {
+        min: u64,
+        max: u64,
+        min_length: usize,
+        max_length: usize,
+        unique: bool,
+    },
 }
 
 impl std::fmt::Display for ParameterType {
@@ -59,6 +80,26 @@ impl std::fmt::Display for ParameterType {
             Self::Text { choices: [] } => f.write_str("UTF-8 text"),
             Self::Text { choices } => write!(f, "one of: {}", choices.join(", ")),
             Self::Bytes { min_length } => write!(f, "bytes, minimum length {min_length}"),
+            Self::TextList {
+                choices,
+                min_length,
+                max_length,
+                unique,
+            } => write!(
+                f,
+                "ordered text list, length [{min_length}, {max_length}], unique={unique}, choices: {}",
+                choices.join(", ")
+            ),
+            Self::UnsignedList {
+                min,
+                max,
+                min_length,
+                max_length,
+                unique,
+            } => write!(
+                f,
+                "ordered unsigned list in [{min}, {max}], length [{min_length}, {max_length}], unique={unique}"
+            ),
         }
     }
 }
@@ -76,6 +117,36 @@ impl ParameterType {
                 choices.is_empty() || choices.contains(&text)
             }
             (Self::Bytes { min_length }, ParameterValue::Bytes(bytes)) => bytes.len() >= min_length,
+            (
+                Self::TextList {
+                    choices,
+                    min_length,
+                    max_length,
+                    unique,
+                },
+                ParameterValue::TextList(values),
+            ) => {
+                (min_length..=max_length).contains(&values.len())
+                    && values.iter().enumerate().all(|(i, v)| {
+                        (choices.is_empty() || choices.contains(v))
+                            && (!unique || !values[..i].contains(v))
+                    })
+            }
+            (
+                Self::UnsignedList {
+                    min,
+                    max,
+                    min_length,
+                    max_length,
+                    unique,
+                },
+                ParameterValue::UnsignedList(values),
+            ) => {
+                (min_length..=max_length).contains(&values.len())
+                    && values.iter().enumerate().all(|(i, v)| {
+                        (min..=max).contains(v) && (!unique || !values[..i].contains(v))
+                    })
+            }
             _ => false,
         }
     }
@@ -182,6 +253,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::forensics::png::OPERATIONS)
         .chain(crate::forensics::exif::OPERATIONS)
         .chain(crate::image::OPERATIONS)
+        .chain(crate::image::analyze::OPERATIONS)
         .collect()
 }
 

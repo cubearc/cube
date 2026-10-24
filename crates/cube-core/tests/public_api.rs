@@ -119,7 +119,7 @@ fn legacy_errors_keep_stable_categories_and_operation_context() {
 #[test]
 fn file_parameter_descriptors_cover_exact_types_defaults_and_limits() {
     use cube_core::operations::{self, ParameterValue as V};
-    assert_eq!(operations::catalog().len(), 27);
+    assert_eq!(operations::catalog().len(), 32);
     assert_eq!(operations::filtered(Some("file")).unwrap().len(), 9);
     assert!(operations::filtered(None).is_ok());
     assert!(operations::filtered(Some("missing")).is_err());
@@ -183,5 +183,41 @@ fn metadata_is_readable_without_rust_debug_syntax() {
         T::Bytes { min_length: 1 },
     ] {
         assert!(!kind.to_string().is_empty());
+    }
+}
+
+#[test]
+fn ordered_parameter_lists_validate_choices_ranges_lengths_and_uniqueness() {
+    use cube_core::operations::{ParameterValue as V, require};
+    let histogram = require("image.histogram").unwrap();
+    assert!(
+        histogram
+            .validate(&[
+                ("channels", V::TextList(&["red", "blue"])),
+                ("region", V::UnsignedList(&[0, 0, 1, 1]))
+            ])
+            .is_ok()
+    );
+    for values in [&["red", "red"][..], &["unknown"][..], &[][..]] {
+        assert!(
+            histogram
+                .validate(&[("channels", V::TextList(values))])
+                .is_err()
+        );
+    }
+    assert!(
+        histogram
+            .validate(&[("region", V::UnsignedList(&[0, 0, 1]))])
+            .is_err()
+    );
+    assert!(
+        histogram
+            .validate(&[("region", V::UnsignedList(&[0, 0, 1, u64::MAX]))])
+            .is_err()
+    );
+    assert_eq!(V::TextList(&["red", "blue"]).to_string(), "red, blue");
+    assert_eq!(V::UnsignedList(&[0, 7]).to_string(), "[0, 7]");
+    for parameter in histogram.parameters {
+        assert!(!parameter.constraints.to_string().is_empty());
     }
 }

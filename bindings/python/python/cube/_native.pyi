@@ -299,3 +299,13 @@ class InvestigationSession:
     def replay(
         self, data: bytes, *, cancellation: CancellationToken | None = None
     ) -> InvestigationSession: ...
+
+def plan_investigation(
+    input_size: int, profile_json: str | None = None
+) -> dict[str, Any]: ...
+def investigate(
+    data: bytes,
+    profile_json: str | None = None,
+    *,
+    cancellation: CancellationToken | None = None,
+) -> dict[str, Any]: ...

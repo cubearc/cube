@@ -11,12 +11,14 @@ fn triage_input(py: Python<'_>, data: &[u8], max_read_bytes: usize) -> PyResult<
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(triage_input, module)?)?;
     module.add_class::<NativeSession>()?;
+    module.add_function(wrap_pyfunction!(plan_investigation, module)?)?;
+    module.add_function(wrap_pyfunction!(investigate, module)?)?;
     Ok(())
 }
 
 use crate::pipeline::{self as binding, CancellationToken};
 use cube_core::investigation::session::{Capture, Export, RunSpec, Session, SessionLimits};
-use pyo3::types::PyList;
+use pyo3::types::{PyDict, PyList};
 fn export(results: Option<Vec<u32>>, parameters: Option<Vec<u32>>, hypotheses: bool) -> Export {
     Export {
         include_results: results.unwrap_or_default(),
@@ -159,4 +161,55 @@ impl NativeSession {
                 .map_err(|e| binding::error(py, e))?,
         })
     }
+}
+
+use cube_core::investigation::profile::Profile;
+fn profile(py: Python<'_>, document: Option<&str>) -> PyResult<Profile> {
+    document
+        .map(Profile::parse)
+        .transpose()
+        .map(Option::unwrap_or_default)
+        .map_err(|e| binding::error(py, e))
+}
+#[pyfunction]
+#[pyo3(signature=(input_size, profile_json=None))]
+fn plan_investigation(
+    py: Python<'_>,
+    input_size: u64,
+    profile_json: Option<&str>,
+) -> PyResult<Py<PyAny>> {
+    let plan = profile(py, profile_json)?
+        .dry_run(input_size)
+        .map_err(|e| binding::error(py, e))?;
+    super::structured(py, &serde_json::json!(plan))
+}
+#[pyfunction]
+#[pyo3(signature=(data, profile_json=None, *, cancellation=None))]
+fn investigate(
+    py: Python<'_>,
+    data: &[u8],
+    profile_json: Option<&str>,
+    cancellation: Option<&CancellationToken>,
+) -> PyResult<Py<PyAny>> {
+    let profile = profile(py, profile_json)?;
+    let token = cancellation.map(|c| &c.flag);
+    let result = py
+        .detach(|| profile.run_bytes(data, token))
+        .map_err(|e| binding::error(py, e))?;
+    let output = PyDict::new(py);
+    output.set_item(
+        "plan",
+        super::structured(py, &serde_json::json!(result.plan))?,
+    )?;
+    output.set_item("metrics",super::structured(py,&serde_json::json!({"input_read_bytes":result.input_read_bytes,"inspected_bytes":result.inspected_bytes,"operation_units":result.operation_units,"elapsed_ms":result.elapsed_ms}))?)?;
+    output.set_item(
+        "session",
+        Py::new(
+            py,
+            NativeSession {
+                inner: result.session,
+            },
+        )?,
+    )?;
+    Ok(output.into_any().unbind())
 }

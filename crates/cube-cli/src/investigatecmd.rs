@@ -4,6 +4,7 @@ use clap::{Args, Subcommand};
 use cube_core::{
     forensics,
     investigation::{
+        profile::{Depth, Profile},
         session::{
             Capture, Export, MAX_INPUT_BYTES, MAX_RECORD_BYTES, RunSpec, Session, SessionLimits,
         },
@@ -59,8 +60,74 @@ impl ReportOptions {
         Ok(())
     }
 }
+#[derive(Args)]
+pub(crate) struct ProfileOptions {
+    /// Explicit local versioned JSON profile; definitions cannot grant file access
+    #[arg(long)]
+    profile: Option<PathBuf>,
+    #[arg(long,value_parser=["metadata","preview"])]
+    depth: Option<String>,
+    #[arg(long)]
+    identify: bool,
+    /// Explicit JSON budget overrides; unspecified fields preserve loaded limits
+    #[arg(long)]
+    budgets: Option<String>,
+}
+impl ProfileOptions {
+    fn load(&self) -> Result<Profile, Box<dyn Error>> {
+        let mut profile = if let Some(path) = &self.profile {
+            let data = read_file(path, pipeline::json::MAX_DOCUMENT_BYTES)?;
+            Profile::parse(std::str::from_utf8(&data)?)?
+        } else {
+            Profile::default()
+        };
+        if let Some(depth) = &self.depth {
+            profile.depth = if depth == "metadata" {
+                Depth::Metadata
+            } else {
+                Depth::Preview
+            };
+        }
+        if self.identify {
+            profile.identify = true;
+        }
+        if let Some(budgets) = &self.budgets {
+            let overrides = pipeline::json::parse(budgets)?;
+            let overrides = overrides
+                .as_object()
+                .ok_or("budget overrides require a JSON object")?;
+            let mut value = serde_json::to_value(&profile.budgets)?;
+            for (key, item) in overrides {
+                value
+                    .as_object_mut()
+                    .expect("budgets object")
+                    .insert(key.clone(), item.clone());
+            }
+            profile.budgets =
+                serde_json::from_value(value).map_err(|_| "invalid budget names or types")?;
+        }
+        profile.validate()?;
+        Ok(profile)
+    }
+}
 #[derive(Subcommand)]
 pub(crate) enum InvestigateCommand {
+    /// Inspect effective budgets and byte ranges without reading source contents
+    Plan {
+        path: PathBuf,
+        #[command(flatten)]
+        profile: ProfileOptions,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Run a bounded local profile; optional saving and selected content are explicit
+    Run {
+        path: PathBuf,
+        #[command(flatten)]
+        profile: ProfileOptions,
+        #[command(flatten)]
+        report: ReportOptions,
+    },
     /// Suggest available inspections from up to 12 header bytes; never execute suggestions
     Triage {
         path: PathBuf,
@@ -99,6 +166,78 @@ fn load_record(path: &Path) -> Result<Session, Box<dyn Error>> {
 }
 pub(crate) fn run(command: InvestigateCommand, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        InvestigateCommand::Plan {
+            path,
+            profile,
+            json,
+        } => {
+            let profile = profile.load()?;
+            let file = forensics::open_regular(&path)?;
+            let plan = profile.dry_run(file.metadata()?.len())?;
+            if json {
+                writeln!(out, "{}", serde_json::to_string_pretty(&plan)?)?;
+            } else {
+                writeln!(
+                    out,
+                    "Profile v1 {:?}: input {} bytes; read at most {} bytes; inspect at most {} bytes; {} operation units",
+                    plan.depth,
+                    plan.input_size,
+                    plan.input_read_bytes,
+                    plan.inspected_bytes,
+                    plan.operation_units
+                )?;
+                writeln!(out, "Budgets: {}", serde_json::to_string(&plan.budgets)?)?;
+                for run in &plan.runs {
+                    writeln!(
+                        out,
+                        "Run #{} {} v{}: offset {}, length {}, execute {}, reason {:?}",
+                        run.id,
+                        run.operation,
+                        run.version,
+                        run.offset,
+                        run.length,
+                        run.execute,
+                        run.reason
+                    )?;
+                }
+            }
+        }
+        InvestigateCommand::Run {
+            path,
+            profile,
+            report,
+        } => {
+            let mut profile = profile.load()?;
+            for id in &report.include_result {
+                if !profile.retain_results.contains(id) {
+                    profile.retain_results.push(*id);
+                }
+            }
+            let pipeline_id = 1
+                + u32::from(profile.identify)
+                + if profile.depth == Depth::Preview {
+                    2
+                } else {
+                    0
+                }
+                + u32::from(profile.pipeline.is_some());
+            if profile.pipeline.is_some() && report.include_parameters.contains(&pipeline_id) {
+                profile.record_parameters = true;
+            }
+            let mut file = forensics::open_regular(&path)?;
+            let result = profile.run_reader(&mut file, None)?;
+            if !report.json {
+                writeln!(
+                    out,
+                    "Profile: read {} bytes; charged {} inspected bytes; {} operation units; {} ms (diagnostic)",
+                    result.input_read_bytes,
+                    result.inspected_bytes,
+                    result.operation_units,
+                    result.elapsed_ms
+                )?;
+            }
+            report.write(result.session, out)?;
+        }
         InvestigateCommand::Triage {
             path,
             max_read_bytes,

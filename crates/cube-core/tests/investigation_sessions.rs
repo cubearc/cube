@@ -338,6 +338,12 @@ fn record_loading_rejects_duplicate_ids_versions_forged_results_and_references()
             Session::from_json(&invalid.to_string()).is_err(),
             "{pointer}"
         );
+        if pointer.starts_with("/session/") {
+            assert!(
+                serde_json::from_value::<Session>(invalid["session"].clone()).is_err(),
+                "{pointer}"
+            );
+        }
     }
     assert!(Session::from_json(r#"{"schema_version":1,"schema_version":1}"#).is_err());
     let mut invalid = original.clone();

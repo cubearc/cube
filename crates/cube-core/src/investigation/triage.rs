@@ -96,7 +96,16 @@ pub fn from_file_info(
         info.size,
         0,
         "caller_file_info",
-        info.signatures.clone(),
+        info.signatures
+            .iter()
+            .map(|s| signatures::Signature {
+                format: s.format,
+                mime: s.mime,
+                offset: s.offset,
+                evidence_hex: String::new(),
+                rule: "caller evidence",
+            })
+            .collect(),
         available,
     ))
 }

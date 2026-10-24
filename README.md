@@ -916,3 +916,96 @@ lowered limits. `execute_pipeline` is a convenience using default pipeline limit
 export. `redact_parameters(id)` permanently removes recorded key values in memory.
 Rust uses `investigation::session::{Session, RunSpec, Capture, Export}`. CLI and
 native Python share these APIs; cancellation uses the existing optional token.
+
+## Bounded investigation profiles
+
+```sh
+cube investigate plan sample.bin --depth preview --json
+cube investigate run sample.bin --depth metadata
+cube investigate run sample.bin --depth preview --identify --save session.json --json
+cube investigate run sample.bin --depth preview --budgets '{"max_operations":1}' --json
+```
+
+The metadata depth performs header triage only (at most 12 source bytes). Preview
+adds a 256-byte hex view and ASCII string analysis of the first 4096 bytes, with
+minimum run length 4 and at most 32 results. Conditional recommendations reuse
+triage's observed signature rules; suggested image/EXIF/audio inspections are not
+automatically executed. No profile recursively scans, carves files or decodes media.
+`--identify` adds a complete-input SHA-256 operation before analysis. Inputs larger
+than its allowed byte budget produce explicit skipped/partial outcomes; without
+identity, even large regular files need only the small admitted prefix.
+
+`plan` reads regular-file metadata for size but no source contents. Its dry-run
+lists stable run IDs/versions, ranges, effective budgets, operation units,
+conservative capture bounds, and admitted/skipped reasons before execution.
+`run` uses the same plan and records succeeded/failed/skipped provenance, including
+conditional suggestions and uncertainty. Analysis with failures or budget skips
+returns a valid partial record; malformed definitions/I/O fail on stderr. A
+complete status means selected checks completed, not that the entire file was
+exhaustively investigated. Saved records include safe profile version/depth,
+effective budgets and execution counters alongside ordinary run provenance.
+
+A reusable profile is a caller-selected local JSON file passed as `--profile path`:
+
+```json
+{
+  "format_version": 1,
+  "depth": "preview",
+  "identify": true,
+  "budgets": {
+    "max_input_bytes": 1048576,
+    "max_inspected_bytes": 4194304,
+    "max_operations": 16,
+    "max_retained_bytes": 65536,
+    "max_elapsed_ms": 5000
+  }
+}
+```
+
+All fields after `format_version` are optional. Defaults above apply to budgets;
+depth defaults to metadata and identity to false. Limits can be lowered; hard
+ceilings are 1 MiB source buffering, 4 MiB charged inspected ranges, 64 operation
+units, 64 KiB retained result JSON and 60000 ms cooperative time. CLI `--budgets`
+overrides only explicitly named fields, preserving other loaded limits. Source
+bytes are buffered once, only up to the admitted prefix. Inspected-byte charges
+sum requested operation ranges, including repeated use; they conservatively bound
+analysis access rather than measuring CPU instructions. An optional pipeline's
+wrapper and each internal step count as operation units; its own value/work/step
+limits still apply. Metadata retention keeps the independent session limits.
+
+Cancellation/deadlines are checked around fixed-size reads and bounded operations.
+Already running operations are not preempted, so `max_elapsed_ms` is not a hard
+wall-clock timeout. Exhaustion suppresses further steps with reasons. Elapsed time
+is diagnostic, excluded from deterministic records; checks and run ordering repeat
+for identical inputs, contracts and budgets when no interruption occurs. A full
+identity is computed once as an explicit charged profile run, without secretly
+rehashing the source for every preview.
+
+Optional `pipeline` contains `steps` and lowered `limits` from the v0.7 execution
+contract; all its IDs, versions, types and parameters validate before reading
+source content. It accepts the complete byte input, so it must fit the profile's
+input budget. Optional `retain_results:[2]` opts into selected in-memory results;
+`record_parameters:true` retains the pipeline's parameters. Export still uses the
+separate per-run inclusion controls. Capture bounds are conservative and may skip
+a result that happens to be small; lower pipeline `max_value_bytes` to declare a
+small output bound before selecting it. Profiles cannot include shell commands,
+paths, environment lookups, executable code or network capabilities.
+
+```python
+import json
+import cube
+
+profile = json.dumps({"format_version": 1, "depth": "preview", "identify": True})
+data = b"\x00original synthetic text\x00\xff"
+plan = cube.plan_investigation(len(data), profile)  # no source bytes supplied
+result = cube.investigate(data, profile)
+print(result["metrics"])  # input reads, charged inspections, units, diagnostic elapsed_ms
+session = result["session"]  # native InvestigationSession, no automatic saving
+record = session.to_json()
+assert cube.InvestigationSession.from_json(record).replay(data)
+```
+
+Rust uses `investigation::profile::Profile::{parse, dry_run, run_bytes, run_reader}`.
+Python execution detaches from the interpreter and accepts `cancellation=token`.
+Definitions and records use the shared bounded strict JSON parser. There are no
+new dependencies, remote services, telemetry, device permissions or storage backend.

@@ -90,3 +90,46 @@ def test_native_session_redactions_and_failures_are_explicit():
     assert value["session"]["runs"][1]["state"] == "failed"
     with pytest.raises(ValueError):
         cube.InvestigationSession.from_json('{"schema_version":1,"schema_version":1}')
+
+
+def test_profiles_expose_dry_runs_budgets_and_reproducible_private_sessions():
+    import json
+
+    data = b"\x00original printable text\x00\xff"
+    profile = json.dumps({"format_version": 1, "depth": "preview", "identify": True})
+    plan = cube.plan_investigation(len(data), profile)
+    assert plan["input_read_bytes"] == len(data)
+    assert [r["operation"] for r in plan["runs"]] == [
+        "hash.sha256",
+        "investigation.triage",
+        "file.hex.inspect",
+        "file.strings.extract",
+    ]
+    result = cube.investigate(data, profile)
+    assert result["metrics"]["input_read_bytes"] == len(data)
+    assert result["metrics"]["operation_units"] == 4
+    record = result["session"].to_json()
+    assert "original printable text" not in record
+    assert json.loads(record)["status"] == "complete"
+    assert record == cube.investigate(data, profile)["session"].to_json()
+    assert cube.InvestigationSession.from_json(record).replay(data)
+    assert (
+        cube.investigate(b"x" * (1024 * 1024 + 1))["metrics"]["input_read_bytes"] == 12
+    )
+    token = cube.CancellationToken()
+    token.cancel()
+    result = cube.investigate(data, profile, cancellation=token)
+    assert result["metrics"]["input_read_bytes"] == 0
+    assert json.loads(result["session"].to_json())["status"] == "partial"
+    zero = json.dumps({"format_version": 1, "budgets": {"max_elapsed_ms": 0}})
+    assert cube.investigate(data, zero)["metrics"]["input_read_bytes"] == 0
+    with pytest.raises(ValueError):
+        cube.investigate(data, '{"format_version":1,"network":true}')
+    selected = json.dumps(
+        {"format_version": 1, "depth": "preview", "retain_results": [2]}
+    )
+    result = cube.investigate(b"abcdef", selected)
+    record = result["session"].to_json(include_results=[2])
+    assert (
+        json.loads(record)["session"]["runs"][1]["retained"][0]["hex"] == "616263646566"
+    )

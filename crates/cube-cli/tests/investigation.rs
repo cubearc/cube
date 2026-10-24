@@ -148,3 +148,99 @@ fn session_cli_has_explicit_private_saving_safe_reports_and_input_verified_repla
     assert!(result.stdout.is_empty());
     assert!(String::from_utf8_lossy(&result.stderr).contains("identity changed"));
 }
+
+#[test]
+fn profile_cli_dry_run_limits_and_saved_provenance_agree() {
+    let workspace = Workspace::new("profile");
+    let input = workspace.path("input.bin");
+    let profile = workspace.path("profile.json");
+    let record = workspace.path("session.json");
+    std::fs::write(&input, b"abcdef").unwrap();
+    let path = input.to_str().unwrap();
+    let result = run(&["investigate", "plan", path, "--depth", "preview", "--json"]);
+    assert!(result.status.success());
+    let plan: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(plan["input_read_bytes"], 6);
+    assert_eq!(plan["runs"].as_array().unwrap().len(), 3);
+    let result = run(&[
+        "investigate",
+        "run",
+        path,
+        "--depth",
+        "preview",
+        "--identify",
+        "--save",
+        record.to_str().unwrap(),
+        "--json",
+    ]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let session: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(session["status"], "complete");
+    assert_eq!(session["session"]["profile"]["operation_units"], 4);
+    assert_eq!(session["session"]["profile"]["input_read_bytes"], 6);
+    let result = run(&["investigate", "replay", record.to_str().unwrap(), path]);
+    assert!(result.status.success());
+    let result = run(&[
+        "investigate",
+        "run",
+        path,
+        "--depth",
+        "preview",
+        "--budgets",
+        r#"{"max_operations":1}"#,
+        "--json",
+    ]);
+    assert!(result.status.success());
+    let session: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(session["status"], "partial");
+    assert_eq!(session["session"]["runs"][1]["state"], "skipped");
+    std::fs::write(&profile,r#"{"format_version":1,"depth":"preview","budgets":{"max_input_bytes":5,"max_operations":2}}"#).unwrap();
+    let result = run(&[
+        "investigate",
+        "plan",
+        path,
+        "--profile",
+        profile.to_str().unwrap(),
+        "--budgets",
+        r#"{"max_operations":1}"#,
+        "--json",
+    ]);
+    assert!(result.status.success());
+    let plan: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(plan["budgets"]["max_input_bytes"], 5);
+    assert_eq!(plan["budgets"]["max_operations"], 1);
+    assert_eq!(plan["input_read_bytes"], 0);
+    let result = run(&[
+        "investigate",
+        "run",
+        path,
+        "--depth",
+        "preview",
+        "--include-result",
+        "2",
+        "--json",
+    ]);
+    assert!(result.status.success());
+    let session: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(
+        session["session"]["runs"][1]["retained"][0]["hex"],
+        "616263646566"
+    );
+    std::fs::write(&profile,r#"{"format_version":1,"pipeline":{"steps":[{"operation":"encoding.hex.encode","version":1},{"operation":"shell.exec","version":1}]}}"#).unwrap();
+    let result = run(&[
+        "investigate",
+        "run",
+        path,
+        "--profile",
+        profile.to_str().unwrap(),
+        "--save",
+        workspace.path("never.json").to_str().unwrap(),
+    ]);
+    assert_eq!(result.status.code(), Some(1));
+    assert!(!workspace.path("never.json").exists());
+    assert_eq!(std::fs::read(&input).unwrap(), b"abcdef");
+}

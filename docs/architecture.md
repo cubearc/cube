@@ -136,3 +136,14 @@ replay rejects identity/redaction gaps before executing. Human reports escape
 untrusted strings, and JSON export independently selects results and parameters.
 Only interface code opens caller-selected files or explicitly saves a new record;
 there is no storage backend, implicit network capability or automatic persistence.
+
+Versioned investigation profiles preflight a concrete metadata/preview allowlist
+and an optional validated pipeline. Planning exposes ranges and conservative
+retention/operation charges before content reads. One immutable bounded prefix
+feeds the same session execution functions; optional full-input identity is
+computed once. Budgets and fixed-size reads prevent hidden whole-file buffering.
+Cooperative cancellation/deadlines suppress later work rather than promising
+preemption. Safe profile context and counters are saved with provenance; elapsed
+time remains a diagnostic outside deterministic records. Session model, execution
+and record/replay code remain separate cohesive modules, without traits, plugins,
+dynamic capability grants or a second workflow engine.

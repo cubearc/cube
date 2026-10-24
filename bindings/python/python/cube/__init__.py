@@ -34,6 +34,8 @@ from ._native import (
     hex_encode,
     inspect_exif,
     inspect_file,
+    inspect_wave,
+    inspect_wave_file,
     morse_decode,
     morse_encode,
     normalize_text,
@@ -49,6 +51,8 @@ from ._native import (
 )
 
 __all__ = [
+    "inspect_wave",
+    "inspect_wave_file",
     "convert_base",
     "morse_encode",
     "morse_decode",

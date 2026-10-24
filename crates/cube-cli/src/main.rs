@@ -5,6 +5,7 @@ use std::process::ExitCode;
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use cube_core::{binary, ciphers, encoding, hashing, operations};
 
+mod audiocmd;
 mod filecmd;
 mod imagecmd;
 mod textcmd;
@@ -25,6 +26,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Inspect local bounded PCM WAVE audio without a multimedia backend
+    Audio {
+        #[command(subcommand)]
+        command: audiocmd::AudioCommand,
+    },
     /// Exact integer representations, separate from byte encodings
     Number {
         #[command(subcommand)]
@@ -334,6 +340,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Audio { command } => audiocmd::run(command, &mut output)?,
         Command::Number {
             command:
                 Number::Base {

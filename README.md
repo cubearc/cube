@@ -549,3 +549,31 @@ are handled exactly with checked Rust integer arithmetic, for either sign.
 Input has at most 4096 digits (excluding the sign); output at most 128 digits plus
 a negative sign. Invalid digits/radices and over-budget values fail explicitly.
 Values round trip; original sign/zero padding/case spelling does not.
+
+## PCM WAVE inspection
+
+```sh
+cube audio inspect sample.wav
+cube audio inspect sample.wav --json
+```
+
+Initial audio support is little-endian **RIFF/WAVE integer PCM (format tag 1)**,
+with 8/16/24/32-bit storage, 1–32 indexed channels and 1–384000 frames/sec.
+This deliberately supports packed 24/32-bit tag-1 files encountered in analysis;
+RF64, big-endian RIFX, floating-point, compressed and extensible WAVE, `wavl`
+lists and multiple data chunks are explicit unsupported-format errors.
+`fmt ` must precede `data`; PCM fmt length is 16, or 18 with an empty `cbSize`.
+Unknown top-level chunks are retained as ID/offset/size facts without reading
+payloads. Chunk sizes exclude their 8-byte headers and even-boundary padding.
+Container bounds, mandatory padding presence, frame alignment and byte rates
+validate strictly. Trailing bytes after RIFF are reported separately.
+
+Rust `media::wave::inspect(&mut reader)` and `inspect_file(path)` return typed
+metadata; Python `inspect_wave(bytes)` / `inspect_wave_file(path)` return the same
+structured facts. Metadata inspection seeks past audio payloads without decoding
+or buffering them. Physical files are capped at 1 GiB, framing at 10000 chunks;
+paths must be regular files and are opened read-only. Frame counts are exact;
+`duration_seconds = {numerator: frames, denominator: sample_rate}` is a rational
+number of seconds, without rounding. A frame contains one sample per channel.
+No device/recording/playback access or native multimedia library is required;
+this works with the same Rust implementation on Linux, macOS and Windows.

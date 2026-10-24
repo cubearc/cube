@@ -190,3 +190,19 @@ def braille_decode(text: str) -> bytes: ...
 def convert_base(text: str, from_base: int, to_base: int) -> str: ...
 def inspect_wave(data: bytes) -> dict[str, Any]: ...
 def inspect_wave_file(path: str | PathLike[str]) -> dict[str, Any]: ...
+def wave_samples(
+    data: bytes,
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    include_values: bool = False,
+) -> dict[str, Any]: ...
+def wave_file_samples(
+    path: str | PathLike[str],
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    include_values: bool = False,
+) -> dict[str, Any]: ...

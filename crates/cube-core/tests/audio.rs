@@ -205,3 +205,184 @@ fn wave_rejects_bad_framing_formats_alignment_and_limits() {
         ErrorCode::ResourceLimit
     );
 }
+
+fn encode_values(values: &[i32], bits: u16) -> Vec<u8> {
+    values
+        .iter()
+        .flat_map(|v| {
+            if bits == 8 {
+                vec![(v + 128) as u8]
+            } else {
+                v.to_le_bytes()[..usize::from(bits / 8)].to_vec()
+            }
+        })
+        .collect()
+}
+#[test]
+fn pcm_extraction_preserves_all_widths_channel_order_and_signed_amplitudes() {
+    use cube_core::media::pcm::{self, Selection};
+    for bits in [8, 16, 24, 32] {
+        let min = if bits == 32 {
+            i32::MIN
+        } else {
+            -(1i32 << (bits - 1))
+        };
+        let max = if bits == 32 {
+            i32::MAX
+        } else {
+            (1i32 << (bits - 1)) - 1
+        };
+        let source = [min, max, 0, -1, max, min];
+        let raw = encode_values(&source, bits);
+        let input = wav(2, bits, &raw);
+        let block = pcm::extract(&mut Cursor::new(&input), &Selection::default()).unwrap();
+        assert_eq!(block.raw(), raw);
+        assert_eq!(block.values(), source);
+        assert_eq!(block.frames(), 3);
+        assert_eq!(block.info().sample_rate, 8000);
+        let selected = pcm::extract(
+            &mut Cursor::new(&input),
+            &Selection {
+                start_frame: 1,
+                frames: Some(2),
+                channels: Some(vec![1, 0]),
+            },
+        )
+        .unwrap();
+        assert_eq!(selected.values(), [-1, 0, min, max]);
+        assert_eq!(selected.raw(), encode_values(&[-1, 0, min, max], bits));
+        assert_eq!(selected.channels(), [1, 0]);
+        assert_eq!(selected.start_frame(), 1);
+        assert_eq!(selected.info().frame_bytes, usize::from(bits / 8) * 2);
+        let empty = pcm::extract(
+            &mut Cursor::new(&input),
+            &Selection {
+                start_frame: 3,
+                frames: Some(0),
+                channels: Some(vec![1]),
+            },
+        )
+        .unwrap();
+        assert!(empty.raw().is_empty());
+        assert!(empty.values().is_empty());
+    }
+    let source = encode_values(&[1, -2].repeat(12000), 24);
+    let input = wav(2, 24, &source);
+    let block = pcm::extract(
+        &mut Cursor::new(input),
+        &Selection {
+            channels: Some(vec![1]),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    assert_eq!(block.raw(), encode_values(&[-2; 12000], 24));
+    let workspace = common::Workspace::new();
+    let input = workspace.path("input.wav");
+    let output = workspace.path("samples.pcm");
+    let original = wav(1, 8, &[0, 128, 255]);
+    std::fs::write(&input, &original).unwrap();
+    let block = pcm::extract_file(&input, &Selection::default()).unwrap();
+    block.save(&output).unwrap();
+    assert_eq!(std::fs::read(&output).unwrap(), [0, 128, 255]);
+    assert!(block.save(&output).is_err());
+    assert!(block.save(&input).is_err());
+    assert_eq!(std::fs::read(&input).unwrap(), original);
+}
+#[test]
+fn pcm_ranges_are_validated_before_reading_or_large_allocation() {
+    use cube_core::media::pcm::{self, Selection};
+    let input = wav(2, 16, &[0; 12]);
+    for selection in [
+        Selection {
+            channels: Some(vec![]),
+            ..Default::default()
+        },
+        Selection {
+            channels: Some(vec![0, 0]),
+            ..Default::default()
+        },
+        Selection {
+            channels: Some(vec![2]),
+            ..Default::default()
+        },
+        Selection {
+            start_frame: 4,
+            ..Default::default()
+        },
+        Selection {
+            start_frame: u64::MAX,
+            frames: Some(1),
+            ..Default::default()
+        },
+        Selection {
+            start_frame: 1,
+            frames: Some(3),
+            ..Default::default()
+        },
+    ] {
+        assert_eq!(
+            pcm::extract(&mut Cursor::new(&input), &selection)
+                .unwrap_err()
+                .code,
+            ErrorCode::InvalidParameter
+        );
+    }
+    let input = wav(1, 16, &vec![0; 200000]);
+    let mut reader = Counted {
+        inner: Cursor::new(input),
+        read_bytes: 0,
+    };
+    let block = pcm::extract(
+        &mut reader,
+        &Selection {
+            start_frame: 99998,
+            frames: Some(2),
+            ..Default::default()
+        },
+    )
+    .unwrap();
+    assert_eq!(block.raw(), [0; 4]);
+    assert_eq!(reader.read_bytes, 48);
+    let input = wav(1, 8, &[128; 10001]);
+    let block = pcm::extract(&mut Cursor::new(input), &Selection::default()).unwrap();
+    assert_eq!(
+        block.bounded_values().unwrap_err().code,
+        ErrorCode::ResourceLimit
+    );
+    let workspace = common::Workspace::new();
+    for (name, channels, bits, frames) in [
+        ("frames", 1u16, 8u16, pcm::MAX_FRAMES + 1),
+        ("output", 3, 32, pcm::MAX_FRAMES),
+        ("samples", 3, 8, pcm::MAX_FRAMES),
+        ("source", 32, 32, pcm::MAX_FRAMES),
+    ] {
+        let path = workspace.path(name);
+        let bytes = frames * u64::from(channels) * u64::from(bits / 8);
+        let mut header = wav(channels, bits, &[]);
+        header[4..8].copy_from_slice(&((36 + bytes + bytes % 2) as u32).to_le_bytes());
+        header[40..44].copy_from_slice(&(bytes as u32).to_le_bytes());
+        std::fs::write(&path, header).unwrap();
+        std::fs::OpenOptions::new()
+            .write(true)
+            .open(&path)
+            .unwrap()
+            .set_len(44 + bytes + bytes % 2)
+            .unwrap();
+        assert_eq!(
+            pcm::extract_file(&path, &Selection::default())
+                .unwrap_err()
+                .code,
+            ErrorCode::ResourceLimit
+        );
+    }
+    let mut slow = wav(1, 8, &[128; 301]);
+    slow[24..28].copy_from_slice(&1u32.to_le_bytes());
+    slow[28..32].copy_from_slice(&1u32.to_le_bytes());
+    assert_eq!(
+        pcm::extract(&mut Cursor::new(slow), &Selection::default())
+            .unwrap_err()
+            .code,
+        ErrorCode::ResourceLimit
+    );
+}

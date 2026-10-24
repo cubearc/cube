@@ -47,10 +47,14 @@ from ._native import (
     sha256,
     vigenere_decode,
     vigenere_encode,
+    wave_file_samples,
+    wave_samples,
     xor,
 )
 
 __all__ = [
+    "wave_samples",
+    "wave_file_samples",
     "inspect_wave",
     "inspect_wave_file",
     "convert_base",

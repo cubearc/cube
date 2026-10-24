@@ -63,3 +63,58 @@ fn wave_inspection_has_human_json_and_contextual_error_outputs() {
     let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
     assert_eq!(error["error"]["operation"], "audio.wave.inspect");
 }
+
+#[test]
+fn sample_outputs_are_explicit_exact_and_never_overwrite() {
+    let workspace = Workspace::new("samples");
+    let path = workspace.path("input.wav");
+    let output = workspace.path("output.pcm");
+    let original = wav();
+    std::fs::write(&path, &original).unwrap();
+    let input = path.to_str().unwrap();
+    let result = run(&["audio", "samples", input, "--channels", "1", "--stdout"]);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, [255, 127]);
+    let result = run(&["audio", "samples", input, "--channels", "1,0", "--json"]);
+    assert!(result.status.success());
+    let info: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(info["values"], serde_json::json!([32767, -32768]));
+    assert_eq!(info["data_hex"], "ff7f0080");
+    let result = run(&[
+        "audio",
+        "samples",
+        input,
+        "--channels",
+        "0",
+        "--output",
+        output.to_str().unwrap(),
+    ]);
+    assert!(result.status.success());
+    assert_eq!(std::fs::read(&output).unwrap(), [0, 128]);
+    assert_eq!(
+        run(&[
+            "audio",
+            "samples",
+            input,
+            "--output",
+            output.to_str().unwrap()
+        ])
+        .status
+        .code(),
+        Some(1)
+    );
+    assert_eq!(
+        run(&["audio", "samples", input, "--output", input])
+            .status
+            .code(),
+        Some(1)
+    );
+    assert_eq!(
+        run(&["audio", "samples", input, "--channels", "0,0", "--stdout"])
+            .status
+            .code(),
+        Some(1)
+    );
+    assert_eq!(run(&["audio", "samples", input]).status.code(), Some(2));
+    assert_eq!(std::fs::read(&path).unwrap(), original);
+}

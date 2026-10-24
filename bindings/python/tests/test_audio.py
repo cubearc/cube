@@ -47,3 +47,55 @@ def test_wave_malformed_and_unsupported_inputs_have_context():
         with pytest.raises(ValueError) as error:
             cube.inspect_wave(data)
         assert error.value.operation == "audio.wave.inspect"
+
+
+@pytest.mark.parametrize("width", [1, 2, 3, 4])
+def test_sample_ranges_keep_exact_bytes_signed_values_and_channels(width, tmp_path):
+    bits = width * 8
+    minimum, maximum = -(2 ** (bits - 1)), 2 ** (bits - 1) - 1
+    values = [minimum, maximum, 0, -1, maximum, minimum]
+
+    def encode(numbers):
+        return b"".join(
+            (n + 128).to_bytes(1, "little")
+            if width == 1
+            else n.to_bytes(width, "little", signed=True)
+            for n in numbers
+        )
+
+    data = pcm_wave(encode(values), channels=2, width=width)
+    result = cube.wave_samples(
+        data, channels=[1, 0], start_frame=1, frames=2, include_values=True
+    )
+    assert result["values"] == [-1, 0, minimum, maximum]
+    assert result["data"] == encode([-1, 0, minimum, maximum])
+    assert result["channels"] == [1, 0]
+    assert result["start_frame"] == 1
+    path = tmp_path / "input.wav"
+    path.write_bytes(data)
+    assert (
+        cube.wave_file_samples(
+            path, channels=[1, 0], start_frame=1, frames=2, include_values=True
+        )
+        == result
+    )
+    assert cube.wave_samples(data, start_frame=3, frames=0)["data"] == b""
+
+
+def test_sample_validation_and_raw_structured_budgets():
+    data = pcm_wave(bytes(4), channels=2, width=2)
+    for selection in [
+        dict(channels=[]),
+        dict(channels=[0, 0]),
+        dict(channels=[2]),
+        dict(start_frame=2),
+        dict(start_frame=1, frames=1),
+    ]:
+        with pytest.raises(ValueError) as error:
+            cube.wave_samples(data, **selection)
+        assert error.value.operation == "audio.pcm.extract"
+    many = pcm_wave(bytes(10002))
+    assert len(cube.wave_samples(many)["data"]) == 10002
+    with pytest.raises(ValueError) as error:
+        cube.wave_samples(many, include_values=True)
+    assert error.value.code == "resource_limit"

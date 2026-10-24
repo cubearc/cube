@@ -577,3 +577,38 @@ paths must be regular files and are opened read-only. Frame counts are exact;
 number of seconds, without rounding. A frame contains one sample per channel.
 No device/recording/playback access or native multimedia library is required;
 this works with the same Rust implementation on Linux, macOS and Windows.
+
+### Exact PCM channel/range extraction
+
+```sh
+cube audio samples sample.wav --channels 1,0 --start-frame 0 --frames 100 --json
+cube audio samples sample.wav --channels 0 --start-frame 100 --frames 1000 --output channel.pcm
+cube audio samples sample.wav --channels 1 --frames 1000 --stdout > channel.pcm
+```
+
+Selections use absolute zero-based **frames**, with an exclusive end determined
+by `--frames`; omission selects to end, zero selects empty data. Channel indexes
+are ordered, unique and zero-based; omission preserves all source channels.
+Outputs retain interleaved little-endian source bytes in requested channel order.
+8-bit storage is unsigned 0..255; interpreted signed amplitude subtracts 128.
+Packed 16/24/32-bit samples use two's-complement sign extension into i32.
+No normalization, clipping, resampling, downmix or channel-label guessing occurs.
+
+`--json` includes exact integer `values`, metadata and `data_hex`, capped at 10000
+samples. `--stdout` writes only raw PCM bytes without a newline; `--output`
+creates a new raw PCM file and prints interpretation metadata. Raw PCM is not a
+WAVE container: retain its sample rate, width, channel mapping and frame size.
+Existing destinations and source aliases are rejected. Rust
+`media::pcm::extract(reader, selection)` / `extract_file(path, selection)` return
+immutable `Samples` with `.raw()`, `.values()`, `.info()` and exclusive `.save()`.
+Python `wave_samples(bytes, channels=[1,0], start_frame=0, frames=100)` and
+`wave_file_samples(path, ...)` return metadata and exact `data: bytes`;
+`include_values=True` explicitly adds the bounded signed integer listing.
+
+Each request is capped at 1048576 frames, 300 seconds and 64 MiB of selected
+source bytes. Extraction additionally caps output at 8 MiB / 2097152 selected
+samples. Parameters and budgets validate before allocation. Source reads are
+frame-aligned chunks of at most 64 KiB and cover only the selected frame range;
+metadata scanning still skips other chunks. Typed Rust values allocate at most
+8 MiB in addition to the raw result; structured CLI/Python output has the separate
+10000-sample cap. Choose smaller intervals for larger recordings.

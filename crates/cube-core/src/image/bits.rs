@@ -58,7 +58,7 @@ impl Incomplete {
 }
 
 /// Explicit extraction parameters. Default channels mean native sample order,
-/// including alpha or raw palette indices; bits default to [0].
+/// including alpha or raw palette indices; bits default to `[0]`.
 #[derive(Clone, Debug)]
 pub struct LsbOptions {
     pub region: Option<Region>,

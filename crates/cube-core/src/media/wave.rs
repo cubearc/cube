@@ -1,5 +1,5 @@
 //! Seek-based RIFF/WAVE framing and integer PCM metadata, without sample decoding.
-//! RIFF layout: https://learn.microsoft.com/en-us/windows/win32/xaudio2/resource-interchange-file-format--riff-
+//! RIFF layout: <https://learn.microsoft.com/en-us/windows/win32/xaudio2/resource-interchange-file-format--riff->
 use crate::{
     errors::{ErrorCode, OperationError},
     forensics,

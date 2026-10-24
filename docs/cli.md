@@ -1,0 +1,269 @@
+# CLI Guide
+
+For installation and a first operation, follow [Getting Started](getting-started.md).
+Examples below use a POSIX shell. Run file-producing examples in a scratch
+directory; Cube's destination options refuse existing files.
+
+## Find the right command
+
+Commands generally follow `cube <group> <operation> [arguments]`.
+Use the groups for the task at hand:
+
+- `encode`, `decode`, `cipher`, `hash`, `binary`, `text`, `number`: transform data.
+- `inspect`, `file`, `image`, `audio`: inspect files or export selected data.
+- `pipeline`, `recipe`: compose operations into repeatable linear workflows.
+- `investigate`: suggest inspections, record evidence and replay local analysis.
+- `ops`: discover operations and their descriptions.
+
+`cube inspect path` is a top-level shortcut for basic file information.
+Use `cube --help`, then progressively narrower help such as
+`cube image --help` and `cube image lsb --help`.
+
+## Discover operations
+
+```sh
+cube ops list
+cube ops list --category file
+cube ops list --json
+cube ops describe file.signature.detect --json
+```
+
+Descriptors provide stable operation identifiers, categories, semantic input/output
+types, parameters, constraints, defaults, determinism, reversibility and examples.
+The JSON listing is sorted by identifier and uses `schema_version: 1`. Consumers
+should tolerate added fields and operation identifiers. Unknown categories or identifiers are errors. Treat the catalog and Clap help
+as the references; a catalog entry does not imply a pipeline adapter exists.
+
+## Supply text or bytes
+
+For transformation commands, use `--text` for inline UTF-8 text or omit it to
+read stdin until EOF. Quote text containing spaces or shell metacharacters.
+Use `printf` when you do not want an extra newline:
+
+```sh
+cube encode base64 --text 'Hello'
+printf 'Hello' | cube hash sha256
+printf 'Cube' > sample.bin
+cube encode hex < sample.bin
+```
+
+Encoding, hashing and XOR accept arbitrary bytes. Text operations and classical
+ciphers require valid UTF-8. A filename passed to `--text` is treated as literal
+text; it does not open that file. File/image/audio commands take explicit paths.
+Paths must identify regular files; symbolic links, directories and devices fail.
+
+Pipelines also accept `--input path`, `--hex value`, or `--value` tagged JSON.
+Choose one input selector. Their default input is raw stdin.
+Recipes instead require explicit named bindings; see [recipe files](operations.md#recipe-files).
+
+## Choose an output format
+
+- Ordinary text results have a final newline.
+- Decoding, XOR and `text to-bytes` default to hexadecimal plus a newline;
+  `--output raw` writes exact bytes without a newline.
+- Inspection commands offer human-readable output and, where listed in help,
+  `--json`. Some export commands require a destination choice.
+- Pipeline/recipe runs use `--format raw|hex|json`. The default displays bytes as
+  hex and text as text; JSON preserves type tags and captured intermediate results.
+
+```sh
+cube decode base64 --text 'SGVsbG8='
+# 48656c6c6f
+cube decode base64 --text 'AP8=' --output raw > decoded.bin
+cube inspect decoded.bin --json
+```
+
+Do not convert arbitrary raw output through a text filter or text-mode file API.
+If your shell's binary redirection behavior is uncertain, use the Python SDK's
+`bytes` results and `Path.write_bytes` instead.
+
+## Write results to files
+
+`--output` has command-specific meanings: for a decoder it selects representation;
+for extraction/transform commands it names a destination. Help is authoritative.
+
+```sh
+cube file extract sample.bin --offset 0 --length 4 --output selected.bin
+cube file extract sample.bin --offset 0 --length 4 --stdout > selected-stdout.bin
+```
+
+File, image and audio exports use `--output path` or explicit raw `--stdout` where
+supported. A file destination usually leaves metadata/status on stdout; `--stdout`
+emits bytes only. Image transforms require a new PNG destination. Investigation
+records use `--save path`. These destination options never overwrite existing
+files, including aliases of the source.
+
+Shell `>` redirection is controlled by your shell and can overwrite an existing
+file before Cube runs. Use a new path or Cube's exclusive destination option.
+
+## Transform encoded data and ciphers
+
+```sh
+cube encode base32 --text 'foo'
+# MZXW6===
+cube decode base58 --text 'JxF12TrwUP45BMd' --output raw
+# Hello World (no added newline)
+cube cipher caesar --shift 3 --text 'Attack at dawn!'
+# Dwwdfn dw gdzq!
+cube cipher vigenere --decode --key LEMON --text LXFOPVEFRNHR
+# ATTACKATDAWN
+cube cipher affine --a 5 --b 8 --text AFFINECIPHER
+# IHHWVCSWFRCP
+```
+
+Use `--decode` with the original key/parameters to reverse supported ciphers.
+Classical ciphers are for puzzles and education, not modern confidentiality.
+
+## Compute a hash or checksum
+
+```sh
+cube hash sha256 --text 'Hello'
+# 185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969
+cube hash crc32 --text '123456789'
+# cbf43926
+```
+
+A piped newline changes the input and therefore the result. SHA-256 is one-way;
+CRC32 detects accidental corruption and is not a cryptographic hash.
+
+## Inspect binary files
+
+```sh
+cube file signature sample.bin --json
+cube file hex sample.bin --offset 0 --length 4
+cube file strings sample.bin --min-length 4 --json
+cube file compare sample.bin selected.bin --json
+```
+
+Offsets count bytes from zero. `offset` plus `length` is an exclusive end; ranges
+beyond EOF fail rather than clip. Hex defaults to at most 256 bytes. Differences
+are successful comparison results, not exit-code failures. Check `complete` on
+bounded scans/listings. See [file forensics](operations.md#file-forensics) for
+signatures, EXIF, embedded candidates and appended-data limits.
+
+## Create small image and audio fixtures
+
+These original fixtures need only Python's standard library. The PNG has eight
+RGB pixels whose red-channel low bits spell the byte `A`. The WAVE file contains
+four mono 16-bit PCM samples at 8000 frames/second.
+
+```sh
+python3 - <<'PY'
+import base64
+import wave
+from pathlib import Path
+
+png = (
+    "iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAIAAADwyuo0AAAAGElEQVR4nGNh"
+    "YmBgZGD4zwACLAwwFlAIABzlAguTT+b/AAAAAElFTkSuQmCC"
+)
+Path("sample.png").write_bytes(base64.b64decode(png))
+with wave.open("sample.wav", "wb") as output:
+    output.setnchannels(1)
+    output.setsampwidth(2)
+    output.setframerate(8000)
+    output.writeframes(b"\x00\x00\x00\x40\x00\x00\x00\xc0")
+PY
+```
+
+## Analyze an image
+
+```sh
+cube image inspect sample.png --json
+cube image histogram sample.png --channels red,green,blue --json
+cube image channel sample.png --channel red --output red.bin
+cube image rotate sample.png --degrees 90 --output rotated.png
+cube image lsb sample.png --channels red --bits 0 --stdout > extracted.bin
+```
+
+The histogram reports six `[2,0,0]` pixels and two `[3,0,0]` pixels; the LSB result
+is one byte, `41` in hex (`A`). These known bits were deliberately placed in a
+synthetic image; an extraction from another image does not prove hidden content.
+Images are currently limited to 8-bit PNG. Pixel coordinates start at `(0,0)`
+at the top left; palette expansion and lossy transforms are explicit.
+See [image analysis](operations.md#image-analysis-and-steganography).
+
+## Inspect audio samples
+
+```sh
+cube audio inspect sample.wav --json
+cube audio samples sample.wav --channels 0 --frames 4 --json
+cube audio samples sample.wav --channels 0 --frames 4 --output channel.pcm
+cube audio waveform sample.wav --channels 0 --bucket-frames 2 --json
+```
+
+Sample values are `[0,16384,0,-16384]`. A frame contains one sample per channel;
+selections count frames, not bytes. Raw PCM exports need their sample rate, sample
+width and channel mapping to be interpreted. Waveform output is min/max data,
+not a plot or FFT. Only integer PCM RIFF/WAVE is supported; see
+[audio analysis](operations.md#audio-analysis).
+
+## Run a pipeline or recipe
+
+```sh
+cube pipeline adapters
+cube pipeline validate --input-type bytes --steps '[{"operation":"encoding.hex.encode","version":1}]'
+cube pipeline run --hex 00ff --steps '[{"operation":"encoding.hex.encode","version":1}]'
+# 00ff
+```
+
+`--capture 0 --format json` retains the first step output; indexes start at zero.
+`--limits` lowers pipeline budgets. Use `--format raw --output new-file` for exact
+saved output. Types must match between steps; convert UTF-8 explicitly when needed.
+[Composition contracts](operations.md#compose-operations) explain versions and limits.
+
+After saving the [recipe example](operations.md#recipe-files) as `roundtrip.json`:
+
+```sh
+cube recipe validate roundtrip.json
+cube recipe run roundtrip.json --hex payload=00ff --format raw --output result.bin
+cube recipe check roundtrip.json --hex payload=00ff --expect '{"type":"bytes","base64":"AP8="}'
+```
+
+Recipe bindings are explicit `name=value` arguments: `--text`, `--hex`, `--input`
+(raw file) or `--value` (tagged JSON). Validation does not execute steps. `check`
+compares exact typed output and returns a nonzero status on a mismatch.
+
+## Record an investigation
+
+```sh
+cube investigate triage sample.bin --json
+cube investigate plan sample.bin --depth preview --json
+cube investigate run sample.bin --depth preview --identify --save session.json --json
+cube investigate report session.json
+cube investigate replay session.json sample.bin --json
+```
+
+Triage suggests operations from evidence; it does not execute suggestions.
+`plan` exposes ranges/budgets without reading source content. Preview adds bounded
+hex/string analysis; image/EXIF/audio decoding is not automatic.
+`--identify` records the complete input's SHA-256 identity for replay.
+
+Default saved records omit raw inputs, paths, result contents, nonempty pipeline
+parameters and user hypotheses. Per-run inclusion is explicit with `--include-result`
+and `--include-parameters`; notes use `--hypothesis` and `--include-hypotheses`.
+Use `--profile path` for a reusable profile or `--budgets '{"max_operations":1}'`
+to override selected budgets. Read `status` and `replay_gaps`: partial analysis
+can be a successful CLI result, and redacted records may be impossible to replay.
+See [profiles and records](operations.md#investigation-profiles-and-records).
+
+## Handle errors and exit codes
+
+Results go to stdout; failures go to stderr. Exit codes are:
+
+- `0`: successful operation, help/version, a comparison finding differences,
+  or a valid investigation record (which may say `partial`).
+- `1`: invalid operation input, resource/format failure, recipe mismatch or I/O failure.
+- `2`: invalid command usage, such as missing arguments or an unknown flag.
+
+A downstream closed pipe exits successfully. To request machine-readable errors:
+
+```sh
+cube --json-errors decode hex --text zz
+```
+
+This intentionally exits `1` with a `schema_version: 1` JSON error on stderr.
+Fields include `code`, `message`, `operation`, `parameter` and byte `offset`;
+unavailable context is `null`. Pipeline errors also identify the zero-based
+`step`. Codes include `invalid_input`, `invalid_parameter`, `unsupported_format`,
+`resource_limit`, `cancelled`, `io`, and CLI-only `invalid_usage`.

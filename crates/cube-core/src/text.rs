@@ -38,7 +38,7 @@ pub(crate) fn collect_bounded(
     Ok(output)
 }
 /// Apply explicit NFC/NFD/NFKC/NFKD using the published Unicode data version.
-/// UAX #15: https://www.unicode.org/reports/tr15/ . Canonical forms compose or
+/// UAX #15: <https://www.unicode.org/reports/tr15/>. Canonical forms compose or
 /// decompose; compatibility forms additionally lose distinctions. No form is
 /// generally reversible. Input <=1 MiB, output <=8 MiB; unknown forms are errors.
 pub fn normalize(input: &str, form: &str) -> Result<String, OperationError> {

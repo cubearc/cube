@@ -2,7 +2,7 @@
 
 ## Setup
 
-Complete the [README Python setup](README.md#python-quick-start) to create and
+Complete [Python installation](docs/python.md#installation) to create and
 activate a virtual environment.
 `rust-toolchain.toml` requests Rustfmt, Clippy, and LLVM tools. Run these commands
 from the repository root:
@@ -52,8 +52,13 @@ The first command that runs coverage prints a human-readable summary and fails
 below 80% core line coverage. The report command exports the same run as LCOV.
 Only cube-core is instrumented; integration test files and build artifacts are
 excluded from reports. Do not commit `lcov.info` or `target/` output. Improve tests
-when coverage fails; do not lower the threshold. External Codecov setup is described
-in the README and does not control this local threshold.
+when coverage fails; do not lower the threshold. External Codecov uploads do not
+control this local threshold. The
+[CI workflow](.github/workflows/ci.yml) attempts an optional upload using
+`CODECOV_TOKEN`; upload failures do not fail the local coverage gate. Maintainers
+must configure the repository in Codecov before the badge can show received
+reports. See [Codecov token documentation](https://docs.codecov.com/docs/codecov-tokens)
+for upload authentication; keep tokens in GitHub Actions secrets.
 
 ## Add an operation
 
@@ -89,6 +94,32 @@ types and limit boundaries across Rust, CLI and native Python. A breaking adapte
 or engine contract needs a new corresponding version; package versions alone do
 not establish recipe compatibility. Community definitions and their compatibility
 fixtures belong in `cubearc/recipes`, using the public recipe check interface.
+
+## Documentation
+
+Keep the [README](README.md) as a short entry point. Put the first-use tutorial in
+[Getting Started](docs/getting-started.md), interface workflows in the
+[CLI](docs/cli.md) and [Python](docs/python.md) guides, capability choices/limits in
+[Operations](docs/operations.md), and implementation boundaries in
+[Architecture](docs/architecture.md). Update the relevant guide when behavior changes;
+add README content only when it helps someone choose or start using Cube.
+
+The operation catalog owns operation metadata, Clap owns command arguments,
+Rustdoc owns the Rust API reference, and the Python stubs own SDK signatures.
+Do not copy full catalogs/signature lists into Markdown. Validate changed examples
+against the CLI and real Python extension, use original local fixtures, and check
+relative links/anchors. Documentation-only work should not change application APIs.
+
+### Rust API reference
+
+From the repository root:
+
+```sh
+cargo doc -p cube-core --no-deps --open
+```
+
+The source Rustdoc describes public functions, types and constraints. Keep examples
+close to implementation and run doctests when changing them.
 
 ## Git and Commit Conventions
 

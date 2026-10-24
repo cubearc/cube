@@ -5,7 +5,7 @@ use crate::{
     text::{MAX_INPUT, MAX_OUTPUT, check_input},
 };
 /// International Morse letters/digits from ITU-R M.1677-1:
-/// https://www.itu.int/rec/R-REC-M.1677-1-200910-I/ . No punctuation extensions.
+/// <https://www.itu.int/rec/R-REC-M.1677-1-200910-I/>. No punctuation extensions.
 pub const MORSE_ALPHABET: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 const CODES: [&str; 36] = [
     ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--",
@@ -135,7 +135,7 @@ pub fn braille_encode(masks: &[u8]) -> Result<String, OperationError> {
 }
 /// Decode only Unicode Braille cells into exact bytes. Unsupported characters
 /// (including spaces) fail at the original UTF-8 byte offset; input <=1 MiB.
-/// https://www.unicode.org/charts/PDF/U2800.pdf defines the dot assignments.
+/// <https://www.unicode.org/charts/PDF/U2800.pdf> defines the dot assignments.
 pub fn braille_decode(input: &str) -> Result<Vec<u8>, OperationError> {
     const OP: &str = "symbol.braille.decode";
     check_input(input, OP)?;

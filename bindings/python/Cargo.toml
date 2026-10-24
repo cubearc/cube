@@ -16,7 +16,7 @@ doctest = false
 
 [dependencies]
 cube-core.workspace = true
-pyo3 = "0.29"
+pyo3 = "0.30"
 
 [lints]
 workspace = true

@@ -5,8 +5,9 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 Cube is an open-source Rust toolkit for encoding, classical ciphers, hashing,
-binary transformations, file/image forensics, Unicode text, symbolic encodings, and PCM WAVE analysis. Use the Rust library, `cube` CLI, or Rust-backed
-Python package. All interfaces share the same implementations.
+binary transformations, file/image forensics, Unicode text, symbolic encodings,
+PCM WAVE analysis, and typed pipelines/recipes. Use the Rust library, `cube` CLI,
+or Rust-backed Python package. All interfaces share the same implementations.
 
 ## Capabilities
 

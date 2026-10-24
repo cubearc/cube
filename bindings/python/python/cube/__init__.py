@@ -1,4 +1,4 @@
-"""Rust-backed encodings, ciphers, Unicode text, symbols and forensic operations."""
+"""Rust-backed transformations, forensic operations and typed pipelines/recipes."""
 
 from ._native import (
     UNICODE_VERSION,

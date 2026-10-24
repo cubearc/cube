@@ -11,6 +11,8 @@ pub enum ErrorCode {
     InvalidParameter,
     UnsupportedFormat,
     ResourceLimit,
+    /// Cooperative pipeline cancellation at a bounded operation boundary.
+    Cancelled,
     Io,
 }
 
@@ -22,6 +24,7 @@ impl ErrorCode {
             Self::InvalidParameter => "invalid_parameter",
             Self::UnsupportedFormat => "unsupported_format",
             Self::ResourceLimit => "resource_limit",
+            Self::Cancelled => "cancelled",
             Self::Io => "io",
         }
     }

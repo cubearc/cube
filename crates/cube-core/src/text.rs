@@ -127,9 +127,58 @@ pub fn extract(
     }
 }
 
+/// Explicitly encode text as UTF-8 bytes, preserving NUL/newlines and every scalar.
+/// Input/output <=1 MiB. This does not normalize or add a newline.
+pub fn to_utf8(input: &str) -> Result<Vec<u8>, OperationError> {
+    check_input(input, "text.utf8.encode")?;
+    Ok(input.as_bytes().to_vec())
+}
+/// Decode exact bytes as UTF-8 without replacement or normalization; <=1 MiB.
+pub fn from_utf8(input: &[u8]) -> Result<String, OperationError> {
+    if input.len() > MAX_INPUT {
+        return Err(
+            OperationError::new(ErrorCode::ResourceLimit, "UTF-8 input exceeds 1 MiB")
+                .operation("text.utf8.decode"),
+        );
+    }
+    std::str::from_utf8(input).map(str::to_owned).map_err(|e| {
+        OperationError::new(
+            ErrorCode::InvalidInput,
+            "bytes are not valid UTF-8; use a byte operation or choose an explicit encoding",
+        )
+        .operation("text.utf8.decode")
+        .offset(e.valid_up_to() as u64)
+        .caused_by(e)
+    })
+}
+
 use crate::operations::{Descriptor, Parameter, ParameterType};
 /// Static metadata is adjacent to the text implementation.
 pub const OPERATIONS: &[Descriptor] = &[
+    Descriptor {
+        id: "text.utf8.encode",
+        category: "text",
+        description: "Explicit text-to-UTF-8 bytes, no normalization/newline; <=1 MiB.",
+        input_type: "text",
+        output_type: "bytes",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(true),
+        command: "text to-bytes",
+        example: "cube text to-bytes --text Hello --output hex",
+    },
+    Descriptor {
+        id: "text.utf8.decode",
+        category: "text",
+        description: "Explicit UTF-8 decoding, reject invalid bytes without replacement; <=1 MiB.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(true),
+        command: "text from-bytes",
+        example: "printf Hello | cube text from-bytes",
+    },
     Descriptor {
         id: "text.normalize",
         category: "text",

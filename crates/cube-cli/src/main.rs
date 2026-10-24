@@ -8,6 +8,7 @@ use cube_core::{binary, ciphers, encoding, hashing, operations};
 mod audiocmd;
 mod filecmd;
 mod imagecmd;
+mod pipelinecmd;
 mod textcmd;
 
 #[derive(Parser)]
@@ -26,6 +27,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Validate or execute bounded typed linear pipelines
+    Pipeline {
+        #[command(subcommand)]
+        command: pipelinecmd::PipelineCommand,
+    },
     /// Inspect local bounded PCM WAVE audio without a multimedia backend
     Audio {
         #[command(subcommand)]
@@ -340,6 +346,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Pipeline { command } => pipelinecmd::run(command, &mut output)?,
         Command::Audio { command } => audiocmd::run(command, &mut output)?,
         Command::Number {
             command:
@@ -583,6 +590,10 @@ fn main() -> ExitCode {
             }
             if json_errors {
                 let diagnostic = if let Some(error) =
+                    error.downcast_ref::<cube_core::pipeline::Error>()
+                {
+                    error.diagnostic()
+                } else if let Some(error) =
                     error.downcast_ref::<cube_core::errors::OperationError>()
                 {
                     serde_json::json!(error)

@@ -104,7 +104,13 @@ no new dependency, native library, ffmpeg subprocess or graphical/media runtime
 is introduced. Linux/macOS/Windows use the same implementation and packaging.
 Video, other codecs and spectral/detection policy remain outside current support.
 
-Future pipelines may compose these functions with typed intermediate values.
-There is no execution engine, plugin runtime, generic dispatcher or persistence
-layer. Introduce abstractions only for a concrete implemented need. Recipes belong
-in `cubearc/recipes`; this repository does not parse or execute recipes yet.
+The `pipeline` module composes an explicit allowlist of bounded operations through
+immutable prevalidated plans. Static operation descriptors remain the metadata
+source of truth, while small adapters reuse direct Rust algorithms and validators.
+Bytes, text and an inert structured byte range cross this boundary; direct APIs
+keep their ordinary types. Whole-plan type, version, parameter and conservative
+size/work/capture checks precede execution. Captures are opt-in; cancellation is
+cooperative between bounded steps. CLI and Python share this engine and grant
+local I/O only through caller-selected paths. No plugin runtime, shell, network,
+arbitrary dispatcher or persistence layer is involved. Recipes belong in
+`cubearc/recipes`; recipe parsing and execution are not exposed yet.

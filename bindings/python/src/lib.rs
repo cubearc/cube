@@ -7,6 +7,7 @@ use pyo3::types::PyBytes;
 
 mod audio;
 mod image;
+mod pipeline;
 mod textops;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
@@ -375,6 +376,7 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    pipeline::register(module)?;
     audio::register(module)?;
     textops::register(module)?;
     module.add_class::<image::PyImage>()?;

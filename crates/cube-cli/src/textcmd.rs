@@ -23,6 +23,15 @@ pub(crate) struct ExtractArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Explicit UTF-8 text to bytes (no normalization/newline); <=1 MiB
+    ToBytes {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long,value_enum,default_value_t=crate::Output::Hex)]
+        output: crate::Output,
+    },
+    /// Explicit bytes to UTF-8 text; invalid bytes fail rather than being replaced
+    FromBytes(Input),
     /// Reverse scalar values (not graphemes or UTF-8 bytes), including CRLF/combining marks; <=1 MiB
     Reverse(Input),
     /// Explicit Unicode NFC/NFD/NFKC/NFKD; <=1 MiB input, <=8 MiB output
@@ -37,6 +46,17 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::ToBytes {
+            input,
+            output: format,
+        } => {
+            let data = text::to_utf8(&input.read_text("text.utf8.encode")?)?;
+            crate::write_bytes(output, &data, format)?;
+            return Ok(());
+        }
+        TextCommand::FromBytes(input) => {
+            text::from_utf8(&input.read_bounded(text::MAX_INPUT, "text.utf8.decode")?)?
+        }
         TextCommand::Reverse(input) => text::reverse(&input.read_text("text.reverse")?)?,
         TextCommand::Normalize { input, form } => {
             text::normalize(&input.read_text("text.normalize")?, &form)?

@@ -2,6 +2,7 @@
 
 from ._native import (
     UNICODE_VERSION,
+    CancellationToken,
     Image,
     affine_decode,
     affine_encode,
@@ -23,6 +24,7 @@ from ._native import (
     copy_file_range,
     crc32,
     describe_operation,
+    execute_pipeline,
     extract_bytes,
     extract_characters,
     extract_file_range,
@@ -40,11 +42,15 @@ from ._native import (
     morse_encode,
     normalize_text,
     operations,
+    pipeline_adapters,
     png_chunks,
     reverse_text,
     rot13,
     scan_file,
     sha256,
+    utf8_decode,
+    utf8_encode,
+    validate_pipeline,
     vigenere_decode,
     vigenere_encode,
     wave_envelope,
@@ -55,6 +61,12 @@ from ._native import (
 )
 
 __all__ = [
+    "CancellationToken",
+    "pipeline_adapters",
+    "validate_pipeline",
+    "execute_pipeline",
+    "utf8_encode",
+    "utf8_decode",
     "wave_envelope",
     "wave_file_envelope",
     "wave_samples",

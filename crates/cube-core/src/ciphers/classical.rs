@@ -10,7 +10,7 @@ fn invalid(message: &str, op: &'static str, parameter: &'static str) -> Operatio
         .operation(op)
         .parameter(parameter)
 }
-fn key(input: &str, op: &'static str) -> Result<(), OperationError> {
+pub(crate) fn validate_key(input: &str, op: &'static str) -> Result<(), OperationError> {
     if input.len() > MAX_KEY {
         return Err(
             OperationError::new(ErrorCode::ResourceLimit, "key exceeds 64 KiB")
@@ -50,7 +50,7 @@ fn polyalphabetic(
     decode: bool,
     beaufort: bool,
 ) -> Result<String, OperationError> {
-    key(key_text, op)?;
+    validate_key(key_text, op)?;
     check_input(input, op)?;
     let mut position = 0;
     Ok(input
@@ -88,12 +88,11 @@ pub fn vigenere_decode(input: &str, key: &str) -> Result<String, OperationError>
 pub fn beaufort(input: &str, key: &str) -> Result<String, OperationError> {
     polyalphabetic(input, key, "cipher.beaufort", false, true)
 }
-fn affine(input: &str, a: i32, b: i32, decode: bool) -> Result<String, OperationError> {
-    let op = if decode {
-        "cipher.affine.decode"
-    } else {
-        "cipher.affine.encode"
-    };
+pub(crate) fn validate_affine_keys(
+    a: i32,
+    b: i32,
+    op: &'static str,
+) -> Result<i32, OperationError> {
     if !(0..26).contains(&a) {
         return Err(invalid("a must be in 0..25 and coprime to 26", op, "a"));
     }
@@ -103,6 +102,15 @@ fn affine(input: &str, a: i32, b: i32, decode: bool) -> Result<String, Operation
     let inverse = (1..26)
         .find(|n| (a * n) % 26 == 1)
         .ok_or_else(|| invalid("a must be coprime to 26", op, "a"))?;
+    Ok(inverse)
+}
+fn affine(input: &str, a: i32, b: i32, decode: bool) -> Result<String, OperationError> {
+    let op = if decode {
+        "cipher.affine.decode"
+    } else {
+        "cipher.affine.encode"
+    };
+    let inverse = validate_affine_keys(a, b, op)?;
     check_input(input, op)?;
     Ok(input
         .chars()

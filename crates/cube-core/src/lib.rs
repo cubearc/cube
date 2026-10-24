@@ -13,6 +13,7 @@ pub mod image;
 pub mod media;
 pub mod numbers;
 pub mod operations;
+pub mod pipeline;
 pub mod symbols;
 pub mod text;
 

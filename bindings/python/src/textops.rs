@@ -68,7 +68,20 @@ fn braille_decode<'py>(py: Python<'py>, text: &str) -> PyResult<Bound<'py, pyo3:
 fn convert_base(text: &str, from_base: u32, to_base: u32) -> PyResult<String> {
     cube_core::numbers::convert_base(text, from_base, to_base).map_err(super::file_error)
 }
+#[pyfunction]
+fn utf8_encode<'py>(py: Python<'py>, text: &str) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
+    Ok(pyo3::types::PyBytes::new(
+        py,
+        &cube_core::text::to_utf8(text).map_err(super::file_error)?,
+    ))
+}
+#[pyfunction]
+fn utf8_decode(data: &[u8]) -> PyResult<String> {
+    cube_core::text::from_utf8(data).map_err(super::file_error)
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(utf8_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(utf8_decode, module)?)?;
     module.add_function(wrap_pyfunction!(convert_base, module)?)?;
     module.add_function(wrap_pyfunction!(morse_encode, module)?)?;
     module.add_function(wrap_pyfunction!(morse_decode, module)?)?;

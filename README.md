@@ -183,8 +183,8 @@ binary transformations. `crates/cube-cli` and `bindings/python` adapt those APIs
 to their respective interfaces. See [the architecture overview](docs/architecture.md).
 Open the Rust API reference with `cargo doc -p cube-core --no-deps --open`.
 
-Future work may add puzzle-solving operations and composable pipelines. Those
-features are not implemented here. Recipes will live separately in
+Bounded typed pipelines compose supported operations without implicit text
+conversion. Community recipes belong separately in
 [`cubearc/recipes`](https://github.com/cubearc/recipes).
 
 Track bugs and feature requests in [GitHub Issues](https://github.com/cubearc/cube/issues).
@@ -644,3 +644,66 @@ blocks before `.finish()`. Format, channel mapping and continuity errors fail
 before consuming a block. Python `wave_envelope(bytes, bucket_frames=1024, ...)`
 and `wave_file_envelope(path, ...)` expose the same selections and structured
 results over the shared Rust streaming implementation.
+
+## Typed linear pipelines
+
+The pipeline engine has an explicit allowlist of bounded adapters for current
+Base32/58/64/hex, classical ciphers, CRC32/SHA-256, XOR and UTF-8 conversion.
+`cube pipeline adapters` reports each descriptor and its operation-contract
+version. Discovery alone never grants execution: file/image/audio, shell,
+network and plugin operations are not adapters in this initial engine.
+All algorithms still live in their ordinary Rust functions.
+
+```sh
+cube pipeline validate --input-type bytes --steps '[{"operation":"encoding.hex.encode","version":1},{"operation":"encoding.hex.decode","version":1}]'
+cube pipeline run --hex 00ff --steps '[{"operation":"encoding.hex.encode","version":1},{"operation":"encoding.hex.decode","version":1}]' --format raw > result.bin
+```
+
+Steps require `operation`, explicit contract `version: 1`, and optional
+`parameters`. Parameters retain JSON scalar types; XOR's binary key is explicitly
+`{"key":{"base64":"/w=="}}`. Unknown fields/IDs/versions/parameters and
+incompatible adjacent types fail before any transform. Key validation reuses
+core validation without running an empty transform. Empty pipelines are identity.
+Direct APIs remain unchanged. `text.utf8.encode` / `text.utf8.decode` are explicit
+text/byte conversions, not automatic glue: Rust `text::to_utf8` / `from_utf8`,
+CLI `text to-bytes --output raw|hex` / `text from-bytes`, and Python
+`utf8_encode(str)` / `utf8_decode(bytes)` preserve NUL/newlines and reject invalid
+UTF-8 without replacement or normalization (1 MiB limit).
+
+Pipeline values distinguish `bytes`, UTF-8 `text`, and the initial inert structured
+`byte_range`. Wire JSON uses `{"type":"bytes","base64":"AP8="}`,
+`{"type":"text","data":"Hello"}`, or
+`{"type":"byte_range","offset":3,"length":4}`; a missing/null range length
+means unspecified, and checked ranges grant no file permissions. Only identity
+currently accepts structured ranges; transform adapters consume bytes or text.
+
+Hard limits are 64 steps, 1 MiB per value, 256 KiB parameter data per plan,
+16 MiB conservative work bytes and 4 MiB retained intermediates. `--limits`
+accepts a JSON object lowering `max_steps`, `max_value_bytes`, `max_work_bytes`
+and `max_capture_bytes`. JSON transport is capped at 256 KiB, 16 levels and 4096
+nodes, rejecting duplicate keys. Base58 adapters additionally cap each step's
+input at 4096 bytes because its conversion cost is not linear. Before execution,
+size/work bounds are calculated conservatively for the entire plan; these can
+reject a plan whose data-specific decoded results would have been smaller.
+Work counts initial input plus each step's input/output upper bounds. Range
+values count as 16 logical bytes; byte/text values count their exact lengths.
+
+`--capture 0,2 --format json` explicitly retains selected zero-based step outputs;
+otherwise no intermediates are copied or persisted. Capture indexes are unique
+and retention has an independent budget. CLI input is explicit `--text`, `--hex`,
+`--input regular-file` or `--value tagged-JSON`; no selector reads exact raw stdin.
+Byte output defaults to hex plus newline, text to UTF-8 plus newline;
+`--format raw` adds nothing, and `--format json` preserves types/captures.
+`--output new-file` uses exclusive creation, rejecting existing paths and aliases.
+
+Rust `pipeline::Plan::validate` creates an immutable plan and `.execute` returns a
+typed final value plus optional captures. An optional `AtomicBool` is checked at
+entry and before/after each bounded operation; running steps are not preempted,
+and no hard wall-clock timeout is claimed. Failures stop execution and retain
+zero-based step/ID/parameter context and original causes, without dumping inputs.
+Python `validate_pipeline(steps, "bytes")` and
+`execute_pipeline(steps, b"\x00\xff", capture=[0])` use the Rust engine;
+results contain native `bytes`/`str`, `output_type` and native-valued
+`intermediates`. Optional `limits` lower budgets. A sticky `CancellationToken`
+can be cancelled from another Python thread while the GIL is released; use a
+new token per run. No filesystem/environment/network capability is granted.

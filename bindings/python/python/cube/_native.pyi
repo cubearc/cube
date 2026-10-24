@@ -142,3 +142,24 @@ class Image:
         self, channels: list[str], *, expand_palette: bool = False
     ) -> Image: ...
     def grayscale(self, *, expand_palette: bool = False) -> Image: ...
+    def bit_plane(
+        self,
+        channel: str,
+        bit: int,
+        *,
+        region: tuple[int, int, int, int] | None = None,
+        expand_palette: bool = False,
+        visualization: bool = False,
+    ) -> dict[str, Any]: ...
+    def lsb(
+        self,
+        *,
+        region: tuple[int, int, int, int] | None = None,
+        channels: list[str] | None = None,
+        bits: list[int] = ...,
+        traversal: str = "row",
+        reverse: bool = False,
+        bit_order: str = "msb",
+        incomplete: str = "reject",
+        expand_palette: bool = False,
+    ) -> dict[str, Any]: ...

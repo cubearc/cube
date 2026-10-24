@@ -74,8 +74,94 @@ impl PixelOutput {
     }
 }
 
+#[derive(Args)]
+#[group(required=true,multiple=false,args=["output","stdout"])]
+pub(crate) struct ByteOutput {
+    /// Write exact bytes to a new file; effective extraction parameters go to stdout
+    #[arg(long)]
+    output: Option<PathBuf>,
+    /// Write exact bytes without a newline or metadata
+    #[arg(long)]
+    stdout: bool,
+}
+impl PixelOutput {
+    fn write_plane(
+        self,
+        plane: image::BitPlane,
+        packed: bool,
+        output: &mut impl Write,
+    ) -> Result<(), Box<dyn Error>> {
+        let bytes = if packed {
+            &plane.packed
+        } else {
+            &plane.pixels.data
+        };
+        if self.stdout {
+            output.write_all(bytes)?;
+            return Ok(());
+        }
+        let visual = self.png_output.is_some();
+        if let Some(path) = self.output {
+            image::save_new(&path, bytes)?;
+        } else if let Some(path) = self.png_output {
+            plane.visualization()?.save_png(&path)?;
+        }
+        let mut metadata = serde_json::json!(plane);
+        metadata["representation"] = serde_json::json!(if visual {
+            "visualization_gray_0_255"
+        } else if packed {
+            "packed_msb_zero_pad"
+        } else {
+            "bit_values"
+        });
+        if self.json {
+            metadata["records"] = serde_json::json!(plane.pixels.records()?);
+            metadata["packed_hex"] =
+                serde_json::json!(cube_core::encoding::hex_encode(&plane.packed));
+        }
+        writeln!(output, "{}", serde_json::to_string_pretty(&metadata)?)?;
+        Ok(())
+    }
+}
+
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Extract row-major 0/1 bits; optional MSB packing or explicit 0/255 PNG
+    BitPlane {
+        path: PathBuf,
+        #[command(flatten)]
+        view: ViewOptions,
+        #[arg(long)]
+        channel: String,
+        #[arg(long)]
+        bit: u8,
+        #[arg(long,conflicts_with_all=["json","png_output"])]
+        packed: bool,
+        #[command(flatten)]
+        destination: PixelOutput,
+    },
+    /// Extract raw bytes in pixel/channel/bit order, without text conversion
+    Lsb {
+        path: PathBuf,
+        #[command(flatten)]
+        view: ViewOptions,
+        #[arg(long, value_delimiter = ',')]
+        channels: Option<Vec<String>>,
+        /// Ordered distinct positions, zero=LSB
+        #[arg(long, value_delimiter = ',', default_value = "0")]
+        bits: Vec<u8>,
+        #[arg(long, default_value = "row")]
+        traversal: String,
+        /// Reverse pixel order only
+        #[arg(long)]
+        reverse: bool,
+        #[arg(long, default_value = "msb")]
+        bit_order: String,
+        #[arg(long, default_value = "reject")]
+        incomplete: String,
+        #[command(flatten)]
+        destination: ByteOutput,
+    },
     /// Exact clockwise quarter-turn rotation; write a new lossless PNG
     Rotate {
         path: PathBuf,
@@ -219,6 +305,46 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::BitPlane {
+            path,
+            view,
+            channel,
+            bit,
+            packed,
+            destination,
+        } => {
+            let image = view.open(&path)?;
+            let result = image.bit_plane(Channel::parse(&channel)?, bit, view.region())?;
+            destination.write_plane(result, packed, output)?;
+        }
+        ImageCommand::Lsb {
+            path,
+            view,
+            channels,
+            bits,
+            traversal,
+            reverse,
+            bit_order,
+            incomplete,
+            destination,
+        } => {
+            let options = image::LsbOptions {
+                region: view.region(),
+                channels: selected(channels)?,
+                bits,
+                traversal: image::Traversal::parse(&traversal)?,
+                reverse,
+                bit_order: image::BitOrder::parse(&bit_order)?,
+                incomplete: image::Incomplete::parse(&incomplete)?,
+            };
+            let result = view.open(&path)?.lsb(&options)?;
+            if destination.stdout {
+                output.write_all(&result.data)?;
+            } else if let Some(path) = destination.output {
+                image::save_new(&path, &result.data)?;
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            }
+        }
         ImageCommand::Rotate {
             path,
             degrees,

@@ -198,3 +198,66 @@ def test_exact_geometry_color_transforms_and_immutable_sources(tmp_path):
     assert cube.Image.open(path).samples == image.samples
     with pytest.raises(OSError):
         image.invert().save_png(path)
+
+
+def test_bit_planes_have_exact_values_packing_and_visualization():
+    image = cube.Image.from_samples(3, 1, "gray", bytes([2, 0, 2]))
+    plane = image.bit_plane("gray", 1, visualization=True)
+    assert plane["pixels"]["data"] == b"\x01\x00\x01"
+    assert plane["packed"] == b"\xa0"
+    assert plane["valid_bits"] == 3
+    assert plane["image"].samples == b"\xff\x00\xff"
+    assert image.bit_plane("gray", 0)["image"] is None
+    for channel, bit in [("alpha", 0), ("gray", 8)]:
+        with pytest.raises(ValueError):
+            image.bit_plane(channel, bit)
+
+
+@pytest.mark.parametrize(
+    "traversal,reverse,msb,lsb",
+    [
+        ("row", False, 0xA6, 0x65),
+        ("row", True, 0x65, 0xA6),
+        ("column", False, 0x9C, 0x39),
+        ("column", True, 0x39, 0x9C),
+    ],
+)
+def test_lsb_traversal_and_packing(traversal, reverse, msb, lsb):
+    image = cube.Image.from_samples(4, 2, "gray", bytes([1, 0, 1, 0, 0, 1, 1, 0]))
+    for bit_order, expected in [("msb", msb), ("lsb", lsb)]:
+        result = image.lsb(traversal=traversal, reverse=reverse, bit_order=bit_order)
+        assert result["data"] == bytes([expected])
+        assert result["valid_bits"] == 8
+    with pytest.raises(TypeError):
+        image.lsb(unknown=True)
+
+
+def test_lsb_binary_payload_selection_and_partial_byte_policies():
+    payload = b"\x00\xff\x80"
+    samples = bytes(
+        0xF0 | ((byte >> bit) & 1) for byte in payload for bit in reversed(range(8))
+    )
+    image = cube.Image.from_samples(8, 3, "gray", samples)
+    assert image.lsb()["data"] == payload
+    assert cube.Image.decode(image.encode_png()).lsb()["data"] == payload
+    partial = image.lsb(region=(0, 0, 1, 1), incomplete="pad")
+    assert partial["valid_bits"] == 1
+    assert partial["data"] == b"\x00"
+    assert image.lsb(region=(0, 0, 1, 1), incomplete="drop")["data"] == b""
+    for options in [
+        dict(bits=[]),
+        dict(bits=[0, 0]),
+        dict(bits=[8]),
+        dict(channels=[]),
+        dict(channels=["alpha"]),
+        dict(traversal="spiral"),
+        dict(region=(0, 0, 1, 1)),
+        dict(bit_order="other"),
+        dict(incomplete="other"),
+    ]:
+        with pytest.raises(ValueError):
+            image.lsb(**options)
+    rgba = cube.Image.from_samples(1, 1, "rgba", bytes([0, 0, 0, 1]))
+    assert (
+        rgba.lsb(channels=["alpha"], bits=list(reversed(range(8))))["data"] == b"\x01"
+    )

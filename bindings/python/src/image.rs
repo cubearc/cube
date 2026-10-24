@@ -197,6 +197,135 @@ impl PyImage {
                 .map_err(super::file_error)?,
         })
     }
+    #[pyo3(signature=(channel, bit, *, region=None, expand_palette=false, visualization=false))]
+    fn bit_plane(
+        &self,
+        py: Python<'_>,
+        channel: &str,
+        bit: u8,
+        region: Option<(u32, u32, u32, u32)>,
+        expand_palette: bool,
+        visualization: bool,
+    ) -> PyResult<Py<PyAny>> {
+        let channel = cube_core::image::Channel::parse(channel).map_err(super::file_error)?;
+        let result = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .bit_plane(channel, bit, crate::image::region(region))
+            .map_err(super::file_error)?;
+        let output = super::structured(py, &serde_json::json!(result))?;
+        output
+            .bind(py)
+            .get_item("pixels")?
+            .set_item("data", PyBytes::new(py, &result.pixels.data))?;
+        output
+            .bind(py)
+            .set_item("packed", PyBytes::new(py, &result.packed))?;
+        output.bind(py).set_item(
+            "image",
+            if visualization {
+                Some(Py::new(
+                    py,
+                    Self {
+                        inner: result.visualization().map_err(super::file_error)?,
+                    },
+                )?)
+            } else {
+                None
+            },
+        )?;
+        Ok(output)
+    }
+    #[pyo3(signature=(**kwargs))]
+    fn lsb(
+        &self,
+        py: Python<'_>,
+        kwargs: Option<&Bound<'_, pyo3::types::PyDict>>,
+    ) -> PyResult<Py<PyAny>> {
+        use cube_core::image::{BitOrder, Incomplete, LsbOptions, Traversal};
+        let empty = pyo3::types::PyDict::new(py);
+        let kwargs = kwargs.unwrap_or(&empty);
+        for key in kwargs.keys() {
+            let name: String = key.extract()?;
+            if ![
+                "region",
+                "channels",
+                "bits",
+                "traversal",
+                "reverse",
+                "bit_order",
+                "incomplete",
+                "expand_palette",
+            ]
+            .contains(&name.as_str())
+            {
+                return Err(pyo3::exceptions::PyTypeError::new_err(format!(
+                    "unknown LSB option '{name}'"
+                )));
+            }
+        }
+        let region = kwargs
+            .get_item("region")?
+            .map(|v| v.extract::<Option<(u32, u32, u32, u32)>>())
+            .transpose()?
+            .flatten();
+        let names = kwargs
+            .get_item("channels")?
+            .map(|v| v.extract::<Option<Vec<String>>>())
+            .transpose()?
+            .flatten();
+        let bits = kwargs
+            .get_item("bits")?
+            .map(|v| v.extract::<Vec<u8>>())
+            .transpose()?
+            .unwrap_or_else(|| vec![0]);
+        let traversal = kwargs
+            .get_item("traversal")?
+            .map(|v| v.extract::<String>())
+            .transpose()?
+            .unwrap_or_else(|| "row".into());
+        let order = kwargs
+            .get_item("bit_order")?
+            .map(|v| v.extract::<String>())
+            .transpose()?
+            .unwrap_or_else(|| "msb".into());
+        let incomplete = kwargs
+            .get_item("incomplete")?
+            .map(|v| v.extract::<String>())
+            .transpose()?
+            .unwrap_or_else(|| "reject".into());
+        let reverse = kwargs
+            .get_item("reverse")?
+            .map(|v| v.extract::<bool>())
+            .transpose()?
+            .unwrap_or(false);
+        let expand = kwargs
+            .get_item("expand_palette")?
+            .map(|v| v.extract::<bool>())
+            .transpose()?
+            .unwrap_or(false);
+        let options = LsbOptions {
+            region: crate::image::region(region),
+            channels: crate::image::channels(names)?,
+            bits,
+            traversal: Traversal::parse(&traversal).map_err(super::file_error)?,
+            reverse,
+            bit_order: BitOrder::parse(&order).map_err(super::file_error)?,
+            incomplete: Incomplete::parse(&incomplete).map_err(super::file_error)?,
+        };
+        let result = self
+            .inner
+            .view(expand)
+            .map_err(super::file_error)?
+            .lsb(&options)
+            .map_err(super::file_error)?;
+        let output = super::structured(py, &serde_json::json!(result))?;
+        output
+            .bind(py)
+            .set_item("data", PyBytes::new(py, &result.data))?;
+        Ok(output)
+    }
     #[staticmethod]
     fn decode(data: &[u8]) -> PyResult<Self> {
         Ok(Self {

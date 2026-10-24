@@ -5,6 +5,8 @@
 //! occurs. Indexed images retain indices, palette and tRNS independently.
 
 pub mod analyze;
+pub mod bits;
+pub use bits::{BitOrder, BitPlane, Incomplete, LsbOptions, LsbResult, Traversal};
 pub mod transform;
 pub use analyze::{Channel, Comparison, Histogram, PixelData, Region};
 

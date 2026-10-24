@@ -229,3 +229,127 @@ fn transforms_write_exact_new_pngs_and_reject_overwrites() {
     );
     assert_eq!(Image::open(&input).unwrap().samples(), image.samples());
 }
+
+#[test]
+fn bit_extraction_preserves_raw_stdout_and_explicit_representation() {
+    let files = Files::new("bits");
+    let input = files.path("input.png");
+    let packed = files.path("packed.bin");
+    let display = files.path("plane.png");
+    let source = Image::from_samples(
+        4,
+        2,
+        ColorModel::Gray,
+        vec![1, 0, 1, 0, 0, 1, 1, 0],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    source.save_png(&input).unwrap();
+    let input = input.to_str().unwrap();
+    let result = run(&["image", "lsb", input, "--stdout"]);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, [0xa6]);
+    let result = run(&[
+        "image",
+        "lsb",
+        input,
+        "--traversal",
+        "column",
+        "--reverse",
+        "--bit-order",
+        "lsb",
+        "--stdout",
+    ]);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, [0x9c]);
+    let result = run(&[
+        "image",
+        "lsb",
+        input,
+        "--region",
+        "0,0,1,1",
+        "--incomplete",
+        "pad",
+        "--output",
+        packed.to_str().unwrap(),
+    ]);
+    assert!(result.status.success());
+    let metadata: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(metadata["valid_bits"], 1);
+    assert_eq!(std::fs::read(&packed).unwrap(), [128]);
+    assert_eq!(
+        run(&["image", "lsb", input, "--output", packed.to_str().unwrap()])
+            .status
+            .code(),
+        Some(1)
+    );
+    assert_eq!(
+        run(&["image", "lsb", input, "--bits", "0,0", "--stdout"])
+            .status
+            .code(),
+        Some(1)
+    );
+    assert_eq!(
+        run(&["image", "lsb", input, "--region", "0,0,1,1", "--stdout"])
+            .status
+            .code(),
+        Some(1)
+    );
+    let result = run(&[
+        "image",
+        "bit-plane",
+        input,
+        "--channel",
+        "gray",
+        "--bit",
+        "0",
+        "--stdout",
+    ]);
+    assert_eq!(result.stdout, source.samples());
+    let result = run(&[
+        "image",
+        "bit-plane",
+        input,
+        "--channel",
+        "gray",
+        "--bit",
+        "0",
+        "--packed",
+        "--stdout",
+    ]);
+    assert_eq!(result.stdout, [0xa6]);
+    let result = run(&[
+        "image",
+        "bit-plane",
+        input,
+        "--channel",
+        "gray",
+        "--bit",
+        "0",
+        "--png-output",
+        display.to_str().unwrap(),
+    ]);
+    assert!(result.status.success());
+    assert_eq!(
+        Image::open(&display).unwrap().samples(),
+        [255, 0, 255, 0, 0, 255, 255, 0]
+    );
+    let result = run(&[
+        "image",
+        "bit-plane",
+        input,
+        "--channel",
+        "gray",
+        "--bit",
+        "0",
+        "--json",
+    ]);
+    assert!(result.status.success());
+    let data: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(data["packed_hex"], "a6");
+    assert_eq!(
+        Image::open(std::path::Path::new(input)).unwrap().samples(),
+        source.samples()
+    );
+}

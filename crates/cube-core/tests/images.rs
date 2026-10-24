@@ -537,3 +537,189 @@ fn color_transforms_are_reversible_or_explicitly_lossy_and_keep_alpha() {
     let gray = Image::from_samples(2, 1, ColorModel::Gray, vec![7, 8], vec![], vec![0, 7]).unwrap();
     assert_eq!(gray.grayscale().unwrap().samples(), [7, 0, 8, 255]);
 }
+
+#[test]
+fn bit_planes_preserve_exact_values_packing_and_explicit_visualization() {
+    use cube_core::image::{Channel, Region};
+    let image = Image::from_samples(
+        8,
+        1,
+        ColorModel::Gray,
+        (0..8).map(|i| 1 << i).collect(),
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    for bit in 0..8 {
+        let plane = image.bit_plane(Channel::Gray, bit, None).unwrap();
+        let expected: Vec<u8> = (0..8).map(|i| u8::from(i == bit)).collect();
+        assert_eq!(plane.pixels.data, expected);
+        assert_eq!(plane.packed, [1 << (7 - bit)]);
+        assert_eq!(plane.valid_bits, 8);
+        assert_eq!(
+            plane.visualization().unwrap().samples(),
+            expected.iter().map(|v| v * 255).collect::<Vec<_>>()
+        );
+    }
+    let plane = image
+        .bit_plane(
+            Channel::Gray,
+            1,
+            Some(Region {
+                x: 1,
+                y: 0,
+                width: 3,
+                height: 1,
+            }),
+        )
+        .unwrap();
+    assert_eq!(plane.pixels.data, [1, 0, 0]);
+    assert_eq!(plane.packed, [128]);
+    assert_eq!(plane.valid_bits, 3);
+    assert!(image.bit_plane(Channel::Gray, 8, None).is_err());
+    assert!(image.bit_plane(Channel::Alpha, 0, None).is_err());
+    let indexed = sample(ColorModel::Indexed);
+    assert_eq!(
+        indexed
+            .bit_plane(Channel::Index, 0, None)
+            .unwrap()
+            .pixels
+            .data,
+        indexed.samples()
+    );
+    assert!(indexed.bit_plane(Channel::Red, 0, None).is_err());
+    assert!(
+        indexed
+            .expand_palette()
+            .unwrap()
+            .bit_plane(Channel::Alpha, 7, None)
+            .is_ok()
+    );
+}
+
+#[test]
+fn lsb_orders_pixels_channels_bits_and_packs_without_text_conversion() {
+    use cube_core::image::{BitOrder, Channel, Incomplete, LsbOptions, Region, Traversal};
+    let image = Image::from_samples(
+        4,
+        2,
+        ColorModel::Gray,
+        vec![1, 0, 1, 0, 0, 1, 1, 0],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    for (traversal, reverse, msb, lsb) in [
+        (Traversal::Row, false, 0xa6, 0x65),
+        (Traversal::Row, true, 0x65, 0xa6),
+        (Traversal::Column, false, 0x9c, 0x39),
+        (Traversal::Column, true, 0x39, 0x9c),
+    ] {
+        for (bit_order, expected) in [(BitOrder::Msb, msb), (BitOrder::Lsb, lsb)] {
+            let result = image
+                .lsb(&LsbOptions {
+                    traversal,
+                    reverse,
+                    bit_order,
+                    ..Default::default()
+                })
+                .unwrap();
+            assert_eq!(result.data, [expected]);
+            assert_eq!(result.valid_bits, 8);
+            assert_eq!(result.dropped_bits, 0);
+        }
+    }
+    let rgb = Image::from_samples(
+        2,
+        1,
+        ColorModel::Rgb,
+        vec![1, 2, 3, 0, 3, 2],
+        vec![],
+        vec![],
+    )
+    .unwrap();
+    for (channels, bits, expected) in [
+        (vec![Channel::Green, Channel::Red], vec![1, 0], 0x9c),
+        (vec![Channel::Green, Channel::Red], vec![0, 1], 0x6c),
+        (vec![Channel::Red, Channel::Green], vec![1, 0], 0x63),
+    ] {
+        assert_eq!(
+            rgb.lsb(&LsbOptions {
+                channels: Some(channels),
+                bits,
+                ..Default::default()
+            })
+            .unwrap()
+            .data,
+            [expected]
+        );
+    }
+    let payload = [0, 255, 128];
+    let values = payload
+        .iter()
+        .flat_map(|byte| (0..8).rev().map(move |bit| 0xf0 | ((byte >> bit) & 1)))
+        .collect();
+    let embedded = Image::from_samples(8, 3, ColorModel::Gray, values, vec![], vec![]).unwrap();
+    assert_eq!(embedded.lsb(&LsbOptions::default()).unwrap().data, payload);
+    let result = image
+        .lsb(&LsbOptions {
+            region: Some(Region {
+                x: 1,
+                y: 0,
+                width: 2,
+                height: 2,
+            }),
+            incomplete: Incomplete::Pad,
+            ..Default::default()
+        })
+        .unwrap();
+    assert_eq!(result.data, [0x70]);
+    assert_eq!(result.valid_bits, 4);
+    let image = Image::from_samples(9, 1, ColorModel::Gray, vec![1; 9], vec![], vec![]).unwrap();
+    assert!(image.lsb(&LsbOptions::default()).is_err());
+    let pad = image
+        .lsb(&LsbOptions {
+            incomplete: Incomplete::Pad,
+            ..Default::default()
+        })
+        .unwrap();
+    assert_eq!(pad.data, [255, 128]);
+    assert_eq!(pad.valid_bits, 9);
+    let drop = image
+        .lsb(&LsbOptions {
+            incomplete: Incomplete::Drop,
+            ..Default::default()
+        })
+        .unwrap();
+    assert_eq!(drop.data, [255]);
+    assert_eq!(drop.available_bits, 9);
+    assert_eq!(drop.valid_bits, 8);
+    assert_eq!(drop.dropped_bits, 1);
+    for bits in [vec![], vec![0, 0], vec![8], vec![0; 9]] {
+        assert!(
+            image
+                .lsb(&LsbOptions {
+                    bits,
+                    ..Default::default()
+                })
+                .is_err()
+        );
+    }
+    for channels in [
+        vec![],
+        vec![Channel::Gray, Channel::Gray],
+        vec![Channel::Alpha],
+    ] {
+        assert!(
+            image
+                .lsb(&LsbOptions {
+                    channels: Some(channels),
+                    ..Default::default()
+                })
+                .is_err()
+        );
+    }
+    assert!(Traversal::parse("spiral").is_err());
+    assert!(BitOrder::parse("other").is_err());
+    assert!(Incomplete::parse("other").is_err());
+}

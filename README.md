@@ -401,3 +401,31 @@ lossless PNG samples do not imply byte-identical files. Existing destinations ar
 Python exposes immutable `Image.rotate(90)`, `.mirror("horizontal")`,
 `.crop((x,y,width,height))`, `.invert()`, `.reorder([...])` and `.grayscale()`;
 each returns a new `Image` with reusable samples.
+
+`image bit-plane sample.png --channel red --bit 0 --stdout` returns one byte per
+bit, each exactly 0 or 1, in row-major order. Bit zero is the sample LSB; bits 0–7
+are supported. `--packed` emits MSB-first packed bytes with zero padding; file
+metadata includes the valid-bit count. `--png-output plane.png` explicitly maps
+0/1 to 0/255 for display. `--json` returns bounded coordinate records and packed hex.
+`Image.bit_plane("red", 0, visualization=True)` returns raw bytes under
+`pixels["data"]`, `packed`, `valid_bits` and an optional display `image`.
+
+```sh
+cube image lsb sample.png --channels red,green --bits 0,1 --traversal row --bit-order msb --incomplete reject --output extracted.bin
+cube image lsb sample.png --channels alpha --bits 7,6,5,4,3,2,1,0 --traversal column --reverse --stdout > extracted.bin
+```
+
+LSB extraction nests pixel coordinates, requested channels, then requested bit
+positions. Channels and bits must be nonempty and distinct. Defaults are native
+channel order (including alpha or palette indices), bits `[0]`, row-major, forward,
+MSB packing and rejection of incomplete bytes. `--traversal column` visits y before
+advancing x; `--reverse` reverses coordinates only. `--bit-order lsb` puts the first
+bit at output bit 0 instead of bit 7. `--incomplete drop|pad` explicitly discards
+trailing bits or zero-pads unused positions; effective parameters and available,
+valid and dropped-bit counts accompany file output. `--region x,y,width,height`
+and explicit `--expand-palette` work as in other analysis commands. Extraction
+is bounded by the shared image limits and emits at most 16 MiB. Raw stdout never
+adds a newline or metadata. No extraction implies that a hidden message exists.
+Python `image.lsb(channels=["red"], bits=[0], traversal="row", reverse=False,
+bit_order="msb", incomplete="reject")` returns the same metadata and exact `data`
+as `bytes`, ready for other Cube operations; unknown keyword options fail.

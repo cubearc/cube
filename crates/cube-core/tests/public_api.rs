@@ -37,6 +37,8 @@ fn arbitrary_bytes_round_trip() -> Result<(), Error> {
     );
     assert_eq!(encoding::hex_encode(&bytes), encoding::hex_encode(&bytes));
     assert_eq!(hashing::sha256(&bytes), hashing::sha256(&bytes));
+    assert_eq!(hashing::crc32(&bytes), "29058c73");
+    assert_eq!(hashing::crc32(&bytes), hashing::crc32(&bytes));
     Ok(())
 }
 
@@ -60,6 +62,7 @@ fn unicode_is_only_text_at_the_boundary() -> Result<(), Error> {
         text.as_bytes()
     );
     assert_eq!(ciphers::rot13(&ciphers::rot13(text)), text);
+    assert_eq!(hashing::crc32(text.as_bytes()), "08b240b4");
     assert_ne!(hashing::sha256(text.as_bytes()), hashing::sha256(b"Ola"));
     Ok(())
 }

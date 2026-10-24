@@ -1,6 +1,24 @@
-//! Hashing through maintained cryptographic implementations.
+//! Cryptographic hashes and non-cryptographic checksums through maintained crates.
 
 use sha2::{Digest, Sha256};
+
+/// Compute CRC-32/ISO-HDLC (IEEE CRC32) as eight lowercase hexadecimal digits.
+///
+/// This is the variant used by ZIP and PNG: width 32, polynomial `0x04C11DB7`,
+/// reflected input and output, initial value `0xFFFFFFFF`, and final XOR
+/// `0xFFFFFFFF`. Leading zeroes are preserved; empty input returns `00000000`.
+/// Arbitrary bytes are accepted without UTF-8 conversion.
+///
+/// CRC32 is a checksum for accidental corruption, not a cryptographic hash or
+/// authentication mechanism. The original bytes cannot be recovered from it.
+///
+/// ```
+/// assert_eq!(cube_core::hashing::crc32(b"123456789"), "cbf43926");
+/// assert_eq!(cube_core::hashing::crc32(b""), "00000000");
+/// ```
+pub fn crc32(input: &[u8]) -> String {
+    format!("{:08x}", crc32fast::hash(input))
+}
 
 /// Compute SHA-256 and return its 64 lowercase hexadecimal digits.
 ///
@@ -20,6 +38,36 @@ pub fn sha256(input: &[u8]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn crc32_known_answers_include_empty_and_leading_zeroes() {
+        for (input, expected) in [
+            (&b"123456789"[..], "cbf43926"),
+            (&b""[..], "00000000"),
+            (&b"Hello"[..], "f7d18982"),
+            (&b"Hello\n"[..], "31963516"),
+            (&b"\""[..], "0762ae69"),
+            (&b"\0"[..], "d202ef8d"),
+            (&[0, 255, 128][..], "81dda740"),
+        ] {
+            let checksum = crc32(input);
+            assert_eq!(checksum, expected);
+            assert_eq!(crc32(input), checksum);
+            assert_eq!(checksum.len(), 8);
+            assert!(
+                checksum
+                    .bytes()
+                    .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+            );
+        }
+    }
+
+    #[test]
+    fn crc32_accepts_every_byte_and_explicit_utf8() {
+        let bytes: Vec<u8> = (0..=255).collect();
+        assert_eq!(crc32(&bytes), "29058c73");
+        assert_eq!(crc32("Olá, 世界 🧊".as_bytes()), "08b240b4");
+    }
 
     #[test]
     fn known_answers() {

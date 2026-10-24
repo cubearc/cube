@@ -18,6 +18,7 @@ Python package. All interfaces share the same implementations.
 | Hex | Lowercase encoding; decoding accepts either case |
 | Caesar | Signed shift of ASCII letters modulo 26; preserves case and non-ASCII characters |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |
+| CRC32 | CRC-32/ISO-HDLC (IEEE), exactly eight lowercase hexadecimal digits |
 | SHA-256 | Lowercase hexadecimal digest |
 | XOR | Byte-wise XOR with a nonempty repeating key |
 
@@ -25,6 +26,9 @@ Caesar, ROT13, and repeating-key XOR are classical puzzle tools, not secure encr
 Encoding decoders reject whitespace. Base32 and Base64 reject invalid padding and
 trailing bits; Base32 also rejects lowercase letters.
 Base58 maps each leading zero byte to `1` and uses no padding or Base58Check checksum.
+CRC32 is a checksum for accidental corruption, not a cryptographic hash.
+It uses width 32, polynomial `0x04C11DB7`, reflected input/output, initial value
+`0xFFFFFFFF`, and final XOR `0xFFFFFFFF`. Empty input returns `00000000`.
 
 ## Build and install
 
@@ -61,6 +65,8 @@ cube cipher caesar --shift 3 --text "Attack at dawn!" # Dwwdfn dw gdzq!
 cube cipher caesar --decode --shift 3 --text "Dwwdfn dw gdzq!" # Attack at dawn!
 cube cipher caesar --shift -1 --text "AaZz"        # ZzYy
 cube cipher rot13 --text "Hello"                  # Uryyb
+cube hash crc32 --text "123456789"                # cbf43926
+cube hash crc32 --text ""                         # 00000000
 cube hash sha256 --text "Hello"
 cube binary xor --text "Hello" --key "key"        # 230015070a
 cube binary xor --text "Hello" --key-hex 6b6579    # 230015070a
@@ -71,6 +77,7 @@ preserved. Use `printf`, rather than `echo`, when a trailing newline is unwanted
 
 ```sh
 printf 'Hello' | cube encode base64
+printf '123456789' | cube hash crc32               # cbf43926
 printf 'AP8=' | cube decode base64 --output raw > bytes.bin
 cube binary xor --key-hex ff --output raw < bytes.bin > transformed.bin
 ```
@@ -122,6 +129,9 @@ assert cube.caesar_decode("Dwwdfn dw gdzq!", 3) == "Attack at dawn!"
 encoded = cube.caesar_encode("AaZz 世界", -2147483648)
 assert cube.caesar_decode(encoded, -2147483648) == "AaZz 世界"
 assert cube.rot13("Hello, 世界") == "Uryyb, 世界"
+assert cube.crc32(b"123456789") == "cbf43926"
+assert cube.crc32(b"\x00\xff\x80") == "81dda740"
+assert cube.crc32(b"") == "00000000"
 assert cube.sha256(b"Hello") == (
     "185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969"
 )

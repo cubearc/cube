@@ -21,6 +21,8 @@ Base58 uses `bs58` with the Bitcoin alphabet and no checksum extension.
 Base64, hex, and SHA-256 also delegate to established crates; no cryptographic
 primitive is implemented from scratch. Repeating-key XOR and Caesar are small puzzle
 operations; ROT13 reuses Caesar with shift 13.
+CRC-32/ISO-HDLC uses `crc32fast` and returns eight lowercase hexadecimal digits;
+it is a checksum rather than a cryptographic hash.
 
 Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, and `binary`.
 Binary transformations accept byte slices and return bytes. Encodings and digests

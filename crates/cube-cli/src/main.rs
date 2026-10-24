@@ -38,7 +38,7 @@ enum Command {
         #[command(subcommand)]
         command: Cipher,
     },
-    /// Compute a digest of bytes
+    /// Compute a cryptographic digest or non-cryptographic checksum of bytes
     Hash {
         #[command(subcommand)]
         command: Hash,
@@ -90,6 +90,8 @@ enum Cipher {
 
 #[derive(Subcommand)]
 enum Hash {
+    /// Compute CRC-32/ISO-HDLC (IEEE) as eight lowercase hex digits; not cryptographic
+    Crc32(Input),
     /// Compute SHA-256 as lowercase hexadecimal
     Sha256(Input),
 }
@@ -180,7 +182,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Ops { command: Ops::List } => {
             write_text(
                 &mut output,
-                "encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash sha256\nbinary xor",
+                "encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nbinary xor",
             )?;
         }
         Command::Encode { command } => {
@@ -227,10 +229,12 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             };
             write_text(&mut output, &text)?;
         }
-        Command::Hash {
-            command: Hash::Sha256(input),
-        } => {
-            write_text(&mut output, &hashing::sha256(&input.read()?))?;
+        Command::Hash { command } => {
+            let digest = match command {
+                Hash::Crc32(input) => hashing::crc32(&input.read()?),
+                Hash::Sha256(input) => hashing::sha256(&input.read()?),
+            };
+            write_text(&mut output, &digest)?;
         }
         Command::Binary {
             command: Binary::Xor(args),

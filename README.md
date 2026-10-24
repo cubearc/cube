@@ -226,3 +226,40 @@ include `invalid_input`, `invalid_parameter`, `unsupported_format`,
 Native Python operation `ValueError` exceptions retain their class and expose the
 same context as attributes. Python argument type/range errors remain the native
 `TypeError`/`OverflowError`. No failed input contents are stored or uploaded.
+
+## File inspection and extraction
+
+```sh
+cube inspect sample.bin
+cube file signature sample.bin --json
+cube file embedded sample.bin --format png --max-results 100
+cube file extract sample.bin --offset 8 --length 16 --output selected.bin
+cube file extract sample.bin --offset 8 --length 16 --stdout > selected.bin
+```
+
+Inspection is read-only. Paths must identify regular files; directories, devices
+and symbolic links are rejected. Header rules recognize PNG, JPEG, GIF87a/89a,
+PDF, ZIP local/empty headers, gzip/deflate, RIFF/WAVE and classic TIFF. Matches
+provide exact byte evidence, not proof of a valid file or hidden data. Unknown
+headers return no candidates. Embedded scanning preserves overlapping matches and
+absolute offsets; it reads at most 64 MiB and returns `complete: false` when the
+scan or result budget is exhausted. Result limits range from 1 to 10000.
+
+`inspect` reads filesystem size/timestamps and 12 header bytes. Unavailable times
+are null. Timestamps carry seconds/nanoseconds relative to the Unix epoch and an
+explicit `before_unix_epoch` flag. No EXIF fields are disclosed automatically.
+
+Extraction requires explicit offset, length and destination or raw stdout. Ranges
+are half-open; zero-length extraction at EOF succeeds. Overflow and ranges beyond
+EOF fail. Destinations are created exclusively: existing files, same-path aliases,
+hard links and symlinks cannot be overwritten. A newly created partial output is
+removed on copy failure. Streaming copies use a 64 KiB buffer and permit up to
+1 GiB; byte-returning APIs allocate at most 16 MiB. Input files must remain stable
+during analysis; short reads fail instead of returning a complete result.
+
+```python
+info = cube.inspect_file("sample.bin")
+candidates = cube.scan_file("sample.bin", format="png", max_results=100)
+assert cube.extract_bytes(b"\x00\xff\x80", 1, 2) == b"\xff\x80"
+# For larger results, use extract_file_range or copy_file_range with a binary writer.
+```

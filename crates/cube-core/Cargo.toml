@@ -12,6 +12,7 @@ bs58 = "0.5"
 crc32fast = "1.5"
 data-encoding = "2.11"
 hex = "0.4"
+kamadak-exif = "0.6"
 serde = { version = "1.0.229", features = ["derive"] }
 sha2 = "0.11"
 

@@ -14,6 +14,19 @@ pub enum ErrorCode {
     Io,
 }
 
+impl ErrorCode {
+    /// Stable spelling used by SDK exception attributes and JSON results.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::InvalidInput => "invalid_input",
+            Self::InvalidParameter => "invalid_parameter",
+            Self::UnsupportedFormat => "unsupported_format",
+            Self::ResourceLimit => "resource_limit",
+            Self::Io => "io",
+        }
+    }
+}
+
 /// Operation failure with safe context and an optional original cause.
 #[derive(Debug, Serialize)]
 pub struct OperationError {

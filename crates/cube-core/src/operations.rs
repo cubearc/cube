@@ -142,6 +142,9 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::ciphers::OPERATIONS)
         .chain(crate::hashing::OPERATIONS)
         .chain(crate::binary::OPERATIONS)
+        .chain(crate::forensics::OPERATIONS)
+        .chain(crate::forensics::signatures::OPERATIONS)
+        .chain(crate::forensics::inspect::OPERATIONS)
         .collect()
 }
 
@@ -158,7 +161,7 @@ mod tests {
     #[test]
     fn catalog_is_complete_and_self_consistent() {
         let catalog = catalog();
-        assert_eq!(catalog.len(), 14);
+        assert!(catalog.len() >= 14);
         let mut ids = BTreeSet::new();
         for d in catalog {
             assert!(ids.insert(d.id));

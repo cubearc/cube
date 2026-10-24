@@ -1,17 +1,14 @@
 //! Python boundary only: all algorithms and input validation live in cube-core.
 
-use cube_core::{binary, ciphers, encoding, hashing, operations as catalog};
-use pyo3::exceptions::PyValueError;
+use cube_core::{binary, ciphers, encoding, forensics, hashing, operations as catalog};
+use pyo3::exceptions::{PyOSError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
         let exception = PyValueError::new_err(error.to_string());
-        let code = match error.code() {
-            cube_core::errors::ErrorCode::InvalidInput => "invalid_input",
-            _ => unreachable!(),
-        };
+        let code = error.code().as_str();
         for (name, value) in [("code", code), ("operation", error.operation_id())] {
             if let Err(error) = exception.value(py).setattr(name, value) {
                 return error;
@@ -24,6 +21,128 @@ fn invalid_input(error: cube_core::Error) -> PyErr {
         }
         exception
     })
+}
+
+fn file_error(error: cube_core::errors::OperationError) -> PyErr {
+    Python::attach(|py| {
+        let exception = if error.code == cube_core::errors::ErrorCode::Io {
+            PyOSError::new_err(error.to_string())
+        } else {
+            PyValueError::new_err(error.to_string())
+        };
+        let value = exception.value(py);
+        if let Err(error) = (|| -> PyResult<()> {
+            value.setattr("code", error.code.as_str())?;
+            value.setattr("operation", error.operation)?;
+            value.setattr("parameter", error.parameter)?;
+            value.setattr("offset", error.offset)?;
+            Ok(())
+        })() {
+            return error;
+        }
+        exception
+    })
+}
+
+/// Identify signature candidates from exact header bytes; no format validation.
+#[pyfunction]
+fn file_signatures(py: Python<'_>, data: &[u8]) -> PyResult<Py<PyAny>> {
+    structured(py, &serde_json::json!(forensics::signatures::detect(data)))
+}
+
+/// Inspect a regular file without EXIF disclosure; symlinks/devices are rejected.
+#[pyfunction]
+fn inspect_file(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
+    let info = forensics::inspect::file_info(&path).map_err(file_error)?;
+    structured(py, &serde_json::json!(info))
+}
+
+/// Scan bounded embedded signature candidates, retaining offsets and completeness.
+#[pyfunction]
+#[pyo3(signature = (path, *, offset=0, length=None, format=None, max_results=1000))]
+fn scan_file(
+    py: Python<'_>,
+    path: std::path::PathBuf,
+    offset: u64,
+    length: Option<u64>,
+    format: Option<&str>,
+    max_results: usize,
+) -> PyResult<Py<PyAny>> {
+    let mut file = forensics::open_regular(&path).map_err(file_error)?;
+    let result = forensics::signatures::scan(
+        &mut file,
+        forensics::ByteRange { offset, length },
+        format,
+        max_results,
+    )
+    .map_err(file_error)?;
+    structured(py, &serde_json::json!(result))
+}
+
+/// Return exactly one selected range as bytes, subject to the 16 MiB allocation cap.
+#[pyfunction]
+fn extract_bytes<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    offset: u64,
+    length: u64,
+) -> PyResult<Bound<'py, PyBytes>> {
+    let result = forensics::read_range(
+        &mut std::io::Cursor::new(data),
+        forensics::ByteRange {
+            offset,
+            length: Some(length),
+        },
+    )
+    .map_err(|e| file_error(e.operation("file.range.extract")))?;
+    Ok(PyBytes::new(py, &result))
+}
+
+/// Stream selected bytes to a new file; existing files and all aliases are rejected.
+#[pyfunction]
+fn extract_file_range(
+    source: std::path::PathBuf,
+    destination: std::path::PathBuf,
+    offset: u64,
+    length: u64,
+) -> PyResult<u64> {
+    forensics::extract_range(&source, &destination, offset, length).map_err(file_error)
+}
+
+struct PythonWriter<'py>(Bound<'py, PyAny>);
+impl std::io::Write for PythonWriter<'_> {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let result = self
+            .0
+            .call_method1("write", (PyBytes::new(self.0.py(), bytes),))
+            .and_then(|r| r.extract::<usize>())
+            .map_err(std::io::Error::other)?;
+        if result > bytes.len() {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "writer returned an invalid byte count",
+            ));
+        }
+        Ok(result)
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.0
+            .call_method0("flush")
+            .map(|_| ())
+            .map_err(std::io::Error::other)
+    }
+}
+
+/// Stream up to 1 GiB to a caller-selected binary writer implementing write/flush.
+#[pyfunction]
+fn copy_file_range(
+    source: std::path::PathBuf,
+    writer: Bound<'_, PyAny>,
+    offset: u64,
+    length: u64,
+) -> PyResult<u64> {
+    let mut file = forensics::open_regular(&source).map_err(file_error)?;
+    forensics::copy_range(&mut file, &mut PythonWriter(writer), offset, length).map_err(file_error)
 }
 
 // Only structured metadata crosses this JSON boundary. Algorithm byte results
@@ -165,6 +284,12 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(file_signatures, module)?)?;
+    module.add_function(wrap_pyfunction!(inspect_file, module)?)?;
+    module.add_function(wrap_pyfunction!(scan_file, module)?)?;
+    module.add_function(wrap_pyfunction!(extract_bytes, module)?)?;
+    module.add_function(wrap_pyfunction!(extract_file_range, module)?)?;
+    module.add_function(wrap_pyfunction!(copy_file_range, module)?)?;
     module.add_function(wrap_pyfunction!(operations, module)?)?;
     module.add_function(wrap_pyfunction!(describe_operation, module)?)?;
     module.add_function(wrap_pyfunction!(base32_encode, module)?)?;

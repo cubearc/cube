@@ -5,6 +5,8 @@ use std::process::ExitCode;
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use cube_core::{binary, ciphers, encoding, hashing, operations};
 
+mod filecmd;
+
 #[derive(Parser)]
 #[command(
     name = "cube",
@@ -21,6 +23,17 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Inspect basic file facts and signature evidence (read-only)
+    Inspect {
+        path: std::path::PathBuf,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Inspect files or explicitly extract selected bytes
+    File {
+        #[command(subcommand)]
+        command: filecmd::FileCommand,
+    },
     /// Discover available operations
     Ops {
         #[command(subcommand)]
@@ -196,6 +209,8 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Inspect { path, json } => filecmd::info(path, json, &mut output)?,
+        Command::File { command } => filecmd::run(command, &mut output)?,
         Command::Ops { command } => match command {
             Ops::List { category, json } => {
                 let catalog = operations::catalog();
@@ -370,10 +385,15 @@ fn main() -> ExitCode {
     match run(cli) {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
-            if error
-                .downcast_ref::<io::Error>()
-                .is_some_and(|error| error.kind() == io::ErrorKind::BrokenPipe)
-            {
+            let mut cause: Option<&(dyn Error + 'static)> = Some(error.as_ref());
+            let mut broken_pipe = false;
+            while let Some(error) = cause {
+                broken_pipe |= error
+                    .downcast_ref::<io::Error>()
+                    .is_some_and(|e| e.kind() == io::ErrorKind::BrokenPipe);
+                cause = error.source();
+            }
+            if broken_pipe {
                 return ExitCode::SUCCESS;
             }
             if json_errors {

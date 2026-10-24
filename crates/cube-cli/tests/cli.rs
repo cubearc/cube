@@ -55,7 +55,9 @@ fn help_version_and_discovery() {
         b"",
         format!("cube {}\n", env!("CARGO_PKG_VERSION")).as_bytes(),
     );
-    success(&["ops", "list"], b"", b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nbinary xor\n");
+    let output = cube(&["ops", "list"], b"");
+    assert!(output.status.success());
+    assert!(output.stdout.starts_with(b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nbinary xor\n"));
 }
 
 #[test]

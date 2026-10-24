@@ -71,10 +71,10 @@ pub(crate) struct Output {
     output: Option<PathBuf>,
     /// Zero-based step outputs to retain; requires --format json
     #[arg(long, value_delimiter = ',')]
-    capture: Vec<usize>,
+    pub(super) capture: Vec<usize>,
 }
 impl Output {
-    fn check(&self) -> Result<(), Box<dyn Error>> {
+    pub(super) fn check(&self) -> Result<(), Box<dyn Error>> {
         if !self.capture.is_empty() && !matches!(self.format, Format::Json) {
             return Err("capture requires --format json".into());
         }

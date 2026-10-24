@@ -2,6 +2,7 @@
 mod adapters;
 mod execute;
 pub mod json;
+pub mod recipe;
 mod value;
 use crate::errors::{ErrorCode, OperationError};
 pub use execute::Execution;

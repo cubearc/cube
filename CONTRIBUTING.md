@@ -77,6 +77,19 @@ discovery, Python exports and type stubs, interface tests, and affected user
 examples. SDKs must call Rust rather than reimplement algorithms. The concise
 [add-operation skill](.agents/skills/add-operation/SKILL.md) records this workflow.
 
+### Add a bounded pipeline adapter
+
+An operation descriptor does not automatically permit pipeline execution. Add a
+small explicit entry/action in `pipeline/adapters.rs` only for a concrete need,
+reuse the descriptor types and validators, and call the existing core function.
+Declare its exact adapter-contract version and conservative output/work bounds
+in `pipeline/execute.rs` before enabling it. Keep file/network capabilities out
+of adapters. Test descriptor agreement, exact output, invalid parameters, adjacent
+types and limit boundaries across Rust, CLI and native Python. A breaking adapter
+or engine contract needs a new corresponding version; package versions alone do
+not establish recipe compatibility. Community definitions and their compatibility
+fixtures belong in `cubearc/recipes`, using the public recipe check interface.
+
 ## Git and Commit Conventions
 
 Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).

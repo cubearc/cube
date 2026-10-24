@@ -113,4 +113,14 @@ size/work/capture checks precede execution. Captures are opt-in; cancellation is
 cooperative between bounded steps. CLI and Python share this engine and grant
 local I/O only through caller-selected paths. No plugin runtime, shell, network,
 arbitrary dispatcher or persistence layer is involved. Recipes belong in
-`cubearc/recipes`; recipe parsing and execution are not exposed yet.
+`cubearc/recipes`; the engine owns strict JSON parsing, validation and execution.
+
+Recipe format 1 has exactly one symbolic input slot or a tagged inline value,
+explicit output type, engine API and operation-contract versions. The same
+bounded unique-key JSON parser serves all transports. Unknown fields, versions,
+capability requests and adjacent type mismatches fail before algorithms execute.
+The validated recipe owns only an immutable plan and optional inline memory.
+Caller-provided bindings never resolve paths, environment values or expressions.
+Validation reports redact data and parameters. Exact typed output checks expose
+an independent compatibility-test boundary for community definitions without
+copying algorithms or recipe collections into this repository.

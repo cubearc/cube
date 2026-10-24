@@ -9,6 +9,7 @@ mod audiocmd;
 mod filecmd;
 mod imagecmd;
 mod pipelinecmd;
+mod recipecmd;
 mod textcmd;
 
 #[derive(Parser)]
@@ -27,6 +28,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Validate, execute or independently test versioned JSON recipes
+    Recipe {
+        #[command(subcommand)]
+        command: recipecmd::RecipeCommand,
+    },
     /// Validate or execute bounded typed linear pipelines
     Pipeline {
         #[command(subcommand)]
@@ -347,6 +353,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
         Command::Pipeline { command } => pipelinecmd::run(command, &mut output)?,
+        Command::Recipe { command } => recipecmd::run(command, &mut output)?,
         Command::Audio { command } => audiocmd::run(command, &mut output)?,
         Command::Number {
             command:

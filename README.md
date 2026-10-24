@@ -21,6 +21,7 @@ Python package. All interfaces share the same implementations.
 | Unicode text | Explicit normalization, scalar reversal and positional/alternating selection |
 | Morse / Braille | Canonical International Morse text; exact Unicode Braille dot-mask cells |
 | Integer bases | Exact signed integer text conversion between radices 2..36 |
+| Pipelines / recipes | Bounded linear typed execution, strict versioned JSON and independent exact-output contract checks |
 | PCM WAVE audio | Bounded metadata/chunk inspection, exact channels/frame ranges and integer waveform envelopes |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |
 | CRC32 | CRC-32/ISO-HDLC (IEEE), exactly eight lowercase hexadecimal digits |
@@ -707,3 +708,107 @@ results contain native `bytes`/`str`, `output_type` and native-valued
 `intermediates`. Optional `limits` lower budgets. A sticky `CancellationToken`
 can be cancelled from another Python thread while the GIL is released; use a
 new token per run. No filesystem/environment/network capability is granted.
+
+## Versioned JSON recipes
+
+Cube owns recipe parsing, validation and execution; community definitions belong
+in [`cubearc/recipes`](https://github.com/cubearc/recipes). Recipes contain data,
+not executable scripts. Format 1 uses JSON for established tooling, strict scalar
+types and explicit base64 without YAML tags or a custom language. This original
+round-trip example can be saved to a caller-selected `roundtrip.json`:
+
+```json
+{
+  "format_version": 1,
+  "engine_api": 1,
+  "input": {"source": "slot", "name": "payload", "type": "bytes"},
+  "output": {"type": "bytes"},
+  "steps": [
+    {"operation": "encoding.hex.encode", "version": 1},
+    {"operation": "encoding.hex.decode", "version": 1}
+  ]
+}
+```
+
+```sh
+cube recipe validate roundtrip.json
+cube recipe run roundtrip.json --hex payload=00ff --format raw > result.bin
+cube recipe run roundtrip.json --input payload=sample.bin --format json --capture 0
+cube recipe check roundtrip.json --hex payload=00ff --expect '{"type":"bytes","base64":"AP8="}'
+```
+
+`validate` reads only the explicitly selected recipe, checks every contract and
+reports types/limits without executing algorithms or requiring a slot binding.
+`run` requires exactly the declared input slot; missing, extra and duplicate
+bindings fail. Bindings use `--text name=value`, `--hex name=hex`,
+`--input name=path` (regular raw-byte file) or `--value 'name={...}'` (tagged JSON).
+Format 1 permits one slot, named with 1..64 ASCII letters, digits, `_` or `-`.
+Alternatively use `"input":{"source":"inline","value":{"type":"bytes","base64":"AP8="}}`;
+inline recipes accept no bindings. Bytes require canonical padded base64; text
+uses `{"type":"text","data":"..."}` and inert structured ranges use
+`{"type":"byte_range","offset":0,"length":2}` (`length:null` means unspecified).
+No slot is automatically read from stdin or resolved as a path or environment variable.
+
+Optional `limits` has the same lowered step/value/work/capture bounds as pipelines.
+The complete UTF-8 recipe is limited to 256 KiB, depth 16 and 4096 JSON value nodes;
+inline/parameter representations count toward these limits, so they can be smaller
+than the 1 MiB runtime value maximum. Duplicate keys, unknown fields (including
+`includes`, `shell` and `network`), invalid tags, floating-point contract versions
+and unsupported format/engine/adapter versions are errors. Step errors include a
+zero-based index and operation ID. Validation reports omit inline data, bindings
+and parameter values. Errors do not print these values.
+
+`format_version:1` and `engine_api:1` are exact compatibility contracts, independent
+of the reported package version. Every step must specify its adapter `version`;
+`cube pipeline adapters` reports supported IDs, versions and parameter metadata.
+An ID alone is insufficient. Breaking engine or adapter changes require a new
+corresponding contract version. Existing versions must keep their behavior or be
+rejected explicitly. There is no automatic migration or fallback.
+
+Execution uses the pipeline engine and its exact binary, deterministic, bounded
+behavior. Captures are opt-in, `--format raw` emits exact bytes/text without an
+added newline, and `--output path` creates an exclusive new file. Existing files
+are never overwritten by this option. Definitions cannot execute shell commands,
+read unrelated files or secrets, request network access, load native code or
+persist results. All I/O comes from explicit CLI arguments or the SDK caller.
+Recipes require no multimedia, graphical or additional native dependency.
+
+### Independent recipe compatibility tests
+
+`cube recipe check` is a stable public contract-test entry point that returns JSON
+with `passed:true`, format/engine API and package version, or a nonzero exit status
+with a safe diagnostic. It compares exact typed output; it does not write files.
+A community repository can test its own definitions against any installed Cube:
+
+```sh
+cube recipe check roundtrip.json --hex payload=00ff --expect '{"type":"bytes","base64":"AP8="}'
+# Negative fixture: different expected bytes must fail, without exposing input data.
+if cube recipe check roundtrip.json --hex payload=00ff --expect '{"type":"bytes","base64":"/wA="}'; then
+  exit 1
+fi
+```
+
+Additional negative fixtures should assert `recipe validate` fails for unsupported
+versions, unknown operations/parameters, type mismatches and duplicate JSON keys.
+Tests and expected results belong beside community definitions in `cubearc/recipes`;
+they invoke the engine, never copy operation algorithms. Cube's own synthetic
+integration tests exercise the same public boundary with success and failure cases.
+
+```python
+from pathlib import Path
+import cube
+
+document = Path("roundtrip.json").read_text(encoding="utf-8")
+info = cube.validate_recipe(document)
+result = cube.execute_recipe(document, {"payload": b"\x00\xff"}, capture=[0])
+assert result["output"] == b"\x00\xff"
+assert result["intermediates"] == {0: "00ff"}
+assert cube.check_recipe(document, {"payload": b"\x00\xff"}, b"\x00\xff")["passed"]
+```
+
+The Python functions bind native `bytes`, `str` or tagged value dictionaries;
+execution detaches from Python and accepts the same optional `CancellationToken`
+as pipelines. Rust uses `pipeline::recipe::Recipe::parse`, `.info`, `.execute` and
+`.check`. All interfaces share the Rust engine; none use CLI subprocesses as their
+SDK implementation. Pipelines remain linear: branching, scripts, privileged
+capabilities, plugins and graphical editing are outside this contract.

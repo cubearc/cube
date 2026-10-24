@@ -248,3 +248,16 @@ def execute_pipeline(
     capture: list[int] | None = None,
     cancellation: CancellationToken | None = None,
 ) -> dict[str, Any]: ...
+def validate_recipe(document: str) -> dict[str, Any]: ...
+def execute_recipe(
+    document: str,
+    inputs: dict[str, bytes | str | dict[str, Any]],
+    *,
+    capture: list[int] | None = None,
+    cancellation: CancellationToken | None = None,
+) -> dict[str, Any]: ...
+def check_recipe(
+    document: str,
+    inputs: dict[str, bytes | str | dict[str, Any]],
+    expected: bytes | str | dict[str, Any],
+) -> dict[str, Any]: ...

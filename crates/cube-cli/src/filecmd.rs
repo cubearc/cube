@@ -31,6 +31,18 @@ impl Selection {
 
 #[derive(Subcommand)]
 pub(crate) enum FileCommand {
+    /// Explicitly inspect JPEG/TIFF EXIF; this may display sensitive metadata
+    Exif {
+        path: PathBuf,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Detect trailing bytes after validated PNG framing (no pixel decoding)
+    Appended {
+        path: PathBuf,
+        #[arg(long)]
+        json: bool,
+    },
     /// Inspect hexadecimal rows (first 256 bytes by default; source remains unchanged)
     Hex {
         #[command(flatten)]
@@ -136,6 +148,33 @@ pub(crate) fn info(
 
 pub(crate) fn run(command: FileCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        FileCommand::Exif { path, json } => {
+            let result = forensics::exif::read(&mut forensics::open_regular(&path)?)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(output, "EXIF present: {}", result.present)?;
+                for tag in result.tags {
+                    writeln!(
+                        output,
+                        "IFD {} {} {}: {}",
+                        tag.ifd, tag.context, tag.name, tag.display
+                    )?;
+                }
+            }
+        }
+        FileCommand::Appended { path, json } => {
+            let result = forensics::png::appended(&mut forensics::open_regular(&path)?)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "Logical end: {}\nTrailing bytes: {}\nEvidence: {}",
+                    result.logical_end, result.trailing_bytes, result.evidence
+                )?;
+            }
+        }
         FileCommand::Hex { selection, width } => {
             let mut file = forensics::open_regular(&selection.path)?;
             let range = ByteRange {

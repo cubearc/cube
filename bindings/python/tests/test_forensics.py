@@ -101,3 +101,81 @@ def test_hex_strings_and_comparison_preserve_exact_values(tmp_path):
     ]:
         with pytest.raises(ValueError):
             call()
+
+
+def synthetic_png(trailer=b""):
+    import struct
+    import zlib
+
+    def chunk(kind, payload):
+        return (
+            struct.pack(">I", len(payload))
+            + kind
+            + payload
+            + struct.pack(">I", zlib.crc32(kind + payload))
+        )
+
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", 1, 1, 8, 2, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(b"\x00\x00\x00\x00"))
+        + chunk(b"IEND", b"")
+        + trailer
+    )
+
+
+def synthetic_tiff():
+    import struct
+
+    return (
+        b"II\x2a\x00"
+        + struct.pack("<I", 8)
+        + struct.pack("<H", 1)
+        + struct.pack("<HHI", 0x010F, 2, 4)
+        + b"Cube"
+        + struct.pack("<I", 0)
+    )
+
+
+def test_exif_is_explicit_and_preserves_typed_values(tmp_path):
+    data = synthetic_tiff()
+    path = tmp_path / "input.tiff"
+    path.write_bytes(data)
+    assert "tags" not in cube.inspect_file(path)
+    metadata = cube.file_exif(path)
+    assert metadata == cube.inspect_exif(data)
+    assert metadata["present"] is True
+    assert metadata["tags"][0]["tag"] == 0x010F
+    assert metadata["tags"][0]["value"] == {
+        "type": "ascii",
+        "values": [[67, 117, 98, 101]],
+    }
+    assert cube.inspect_exif(b"\xff\xd8\xff\xd9")["present"] is False
+    with pytest.raises(ValueError) as error:
+        cube.inspect_exif(b"unknown")
+    assert error.value.code == "unsupported_format"
+    with pytest.raises(ValueError) as error:
+        cube.inspect_exif(b"II\x2a\x00\xff\xff\xff\x7f")
+    assert error.value.code == "invalid_input"
+    assert path.read_bytes() == data
+
+
+def test_appended_data_requires_valid_png_boundaries(tmp_path):
+    path = tmp_path / "input.png"
+    image = synthetic_png()
+    path.write_bytes(image + b"\x00\xffhidden")
+    result = cube.appended_data(path)
+    assert result["logical_end"] == len(image)
+    assert result["trailing_bytes"] == 8
+    assert result["trailing_offset"] == len(image)
+    corrupted = bytearray(image)
+    corrupted[29] ^= 1
+    path.write_bytes(corrupted)
+    with pytest.raises(ValueError) as error:
+        cube.appended_data(path)
+    assert error.value.code == "invalid_input"
+    assert error.value.operation == "file.appended.detect"
+    path.write_bytes(b"not a png file")
+    with pytest.raises(ValueError) as error:
+        cube.appended_data(path)
+    assert error.value.code == "unsupported_format"

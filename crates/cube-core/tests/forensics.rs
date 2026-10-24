@@ -332,3 +332,212 @@ fn binary_comparison_counts_all_differences_with_bounded_listing() {
     .unwrap();
     assert_eq!(result.differences[0].offset, 65536);
 }
+
+fn png_chunk(kind: &[u8; 4], data: &[u8]) -> Vec<u8> {
+    let mut result = (data.len() as u32).to_be_bytes().to_vec();
+    result.extend(kind);
+    result.extend(data);
+    let mut hasher = crc32fast::Hasher::new();
+    hasher.update(kind);
+    hasher.update(data);
+    result.extend(hasher.finalize().to_be_bytes());
+    result
+}
+fn png_fixture(trailer: &[u8]) -> Vec<u8> {
+    let mut result = b"\x89PNG\r\n\x1a\n".to_vec();
+    let mut header = vec![];
+    header.extend(1u32.to_be_bytes());
+    header.extend(1u32.to_be_bytes());
+    header.extend([8, 2, 0, 0, 0]);
+    result.extend(png_chunk(b"IHDR", &header));
+    result.extend(png_chunk(
+        b"IDAT",
+        &[0x78, 0x9c, 0x63, 0x60, 0x60, 0x60, 0, 0, 4, 0, 1],
+    ));
+    result.extend(png_chunk(b"IEND", b""));
+    result.extend(trailer);
+    result
+}
+#[test]
+fn png_boundaries_require_framing_crc_and_order_evidence() {
+    use forensics::png::appended;
+    for trailer in [b"".as_slice(), b"\0\xff", b"IENDmore"] {
+        let data = png_fixture(trailer);
+        let result = appended(&mut Cursor::new(&data)).unwrap();
+        assert_eq!(result.logical_end, (data.len() - trailer.len()) as u64);
+        assert_eq!(result.trailing_bytes, trailer.len() as u64);
+        assert_eq!(result.validated_chunks, 3);
+    }
+    let data = png_fixture(b"");
+    for length in [0, 1, 7, 8, 12, 32, data.len() - 1] {
+        assert!(appended(&mut Cursor::new(&data[..length])).is_err());
+    }
+    let mut bad = data.clone();
+    bad[29] ^= 1;
+    assert_eq!(
+        appended(&mut Cursor::new(&bad)).unwrap_err().code,
+        ErrorCode::InvalidInput
+    );
+    let mut bad = data.clone();
+    bad[8..12].copy_from_slice(&u32::MAX.to_be_bytes());
+    assert!(appended(&mut Cursor::new(bad)).is_err());
+    assert_eq!(
+        appended(&mut Cursor::new(b"not png!!!")).unwrap_err().code,
+        ErrorCode::UnsupportedFormat
+    );
+    let header = &data[..33];
+    for chunks in [
+        [png_chunk(b"IEND", b"")].concat(),
+        [
+            png_chunk(b"IDAT", b""),
+            png_chunk(b"tEXt", b"IEND"),
+            png_chunk(b"IDAT", b""),
+            png_chunk(b"IEND", b""),
+        ]
+        .concat(),
+        [
+            png_chunk(b"ABCD", b""),
+            png_chunk(b"IDAT", b""),
+            png_chunk(b"IEND", b""),
+        ]
+        .concat(),
+        [
+            png_chunk(b"acTL", b"12345678"),
+            png_chunk(b"IDAT", b""),
+            png_chunk(b"IEND", b""),
+        ]
+        .concat(),
+    ] {
+        let mut bad = header.to_vec();
+        bad.extend(chunks);
+        assert!(appended(&mut Cursor::new(bad)).is_err());
+    }
+    let mut palette = header.to_vec();
+    palette.extend(png_chunk(b"PLTE", b"\0\0\0"));
+    palette.extend(png_chunk(b"IDAT", b""));
+    palette.extend(png_chunk(b"IEND", b""));
+    assert!(appended(&mut Cursor::new(palette)).is_ok());
+}
+
+fn tiff_fixture(little: bool) -> Vec<u8> {
+    let u16_bytes = |n: u16| {
+        if little {
+            n.to_le_bytes()
+        } else {
+            n.to_be_bytes()
+        }
+    };
+    let u32_bytes = |n: u32| {
+        if little {
+            n.to_le_bytes()
+        } else {
+            n.to_be_bytes()
+        }
+    };
+    let fields: Vec<(u16, u16, u32, Vec<u8>)> = vec![
+        (0x010f, 2, 5, b"Cube\0".to_vec()),
+        (0x011a, 5, 1, [u32_bytes(72), u32_bytes(1)].concat()),
+        (0x0128, 3, 1, u16_bytes(2).to_vec()),
+        (0xc000, 1, 3, vec![0, 128, 255]),
+        (0xc000, 6, 1, vec![255]),
+        (0xc001, 7, 3, vec![1, 2, 3]),
+        (0xc002, 8, 1, u16_bytes(u16::MAX).to_vec()),
+        (0xc003, 9, 1, u32_bytes(u32::MAX).to_vec()),
+        (0xc004, 10, 1, [u32_bytes(u32::MAX), u32_bytes(2)].concat()),
+        (0xc005, 11, 1, u32_bytes(f32::NAN.to_bits()).to_vec()),
+        (
+            0xc006,
+            12,
+            1,
+            if little {
+                f64::INFINITY.to_bits().to_le_bytes().to_vec()
+            } else {
+                f64::INFINITY.to_bits().to_be_bytes().to_vec()
+            },
+        ),
+        (0xc007, 4, 1, u32_bytes(123).to_vec()),
+        (0xc008, 99, 1, vec![0]),
+    ];
+    let base = 8 + 2 + fields.len() * 12 + 4;
+    let mut result = if little {
+        b"II\x2a\0".to_vec()
+    } else {
+        b"MM\0\x2a".to_vec()
+    };
+    result.extend(u32_bytes(8));
+    result.extend(u16_bytes(fields.len() as u16));
+    let mut payload = Vec::new();
+    for (tag, kind, count, mut data) in fields {
+        result.extend(u16_bytes(tag));
+        result.extend(u16_bytes(kind));
+        result.extend(u32_bytes(count));
+        if data.len() <= 4 {
+            data.resize(4, 0);
+            result.extend(data);
+        } else {
+            result.extend(u32_bytes((base + payload.len()) as u32));
+            payload.extend(data);
+        }
+    }
+    result.extend(u32_bytes(0));
+    result.extend(payload);
+    result
+}
+#[test]
+fn exif_preserves_types_duplicates_endianness_and_units() {
+    use forensics::exif::{TagValue, inspect, read};
+    for little in [false, true] {
+        let tiff = tiff_fixture(little);
+        let result = inspect(&tiff).unwrap();
+        assert!(result.present);
+        assert_eq!(result.little_endian, Some(little));
+        assert_eq!(result.tags.len(), 13);
+        assert!(matches!(&result.tags[0].value,TagValue::Ascii(v) if v[0]==b"Cube"));
+        assert!(matches!(&result.tags[1].value,TagValue::Rational(v) if v[0]==(72,1)));
+        assert!(result.tags[1].display.contains("72"));
+        assert_eq!(result.tags.iter().filter(|t| t.tag == 0xc000).count(), 2);
+        let mut jpeg = b"\xff\xd8\xff\xe1".to_vec();
+        jpeg.extend(((tiff.len() + 8) as u16).to_be_bytes());
+        jpeg.extend(b"Exif\0\0");
+        jpeg.extend(tiff);
+        jpeg.extend(b"\xff\xd9");
+        assert_eq!(read(&mut Cursor::new(jpeg)).unwrap().tags.len(), 13);
+    }
+    assert!(!inspect(b"\xff\xd8\xff\xd9").unwrap().present);
+    assert_eq!(
+        inspect(b"unknown").unwrap_err().code,
+        ErrorCode::UnsupportedFormat
+    );
+}
+#[test]
+fn exif_rejects_malformed_and_excessive_metadata() {
+    use forensics::exif::{MAX_METADATA_BYTES, inspect};
+    for bytes in [
+        b"II".as_slice(),
+        b"MMxx0000",
+        b"\xff\xd8",
+        b"\xff\xd8\xff\xe1\0\x01",
+        b"\xff\xd8\0",
+        b"\xff\xd8\xff\xe1\0\x20",
+        b"II\x2a\0\xff\xff\xff\x7f",
+    ] {
+        assert!(inspect(bytes).is_err());
+    }
+    let mut cyclic = b"II\x2a\0\x08\0\0\0\0\0\x08\0\0\0".to_vec();
+    assert!(inspect(&cyclic).is_err());
+    cyclic.resize(MAX_METADATA_BYTES + 1, 0);
+    assert_eq!(inspect(&cyclic).unwrap_err().code, ErrorCode::ResourceLimit);
+    let excessive = b"II\x2a\0\x08\0\0\0\x01\x10";
+    assert_eq!(
+        inspect(excessive).unwrap_err().code,
+        ErrorCode::ResourceLimit
+    );
+    let mut bad = tiff_fixture(true);
+    bad[14..18].copy_from_slice(&u32::MAX.to_le_bytes());
+    assert_eq!(inspect(&bad).unwrap_err().code, ErrorCode::ResourceLimit);
+    let mut bad = tiff_fixture(true);
+    bad[18..22].copy_from_slice(&u32::MAX.to_le_bytes());
+    assert_eq!(inspect(&bad).unwrap_err().code, ErrorCode::InvalidInput);
+    let absent = b"II\x2a\0\0\0\0\0";
+    assert!(!inspect(absent).unwrap().present);
+}

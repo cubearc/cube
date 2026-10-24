@@ -1,6 +1,7 @@
 """Encoding, classical ciphers, hashing, and binary tools backed by Rust."""
 
 from ._native import (
+    appended_data,
     base32_decode,
     base32_encode,
     base58_decode,
@@ -15,11 +16,13 @@ from ._native import (
     describe_operation,
     extract_bytes,
     extract_file_range,
+    file_exif,
     file_hex,
     file_signatures,
     file_strings,
     hex_decode,
     hex_encode,
+    inspect_exif,
     inspect_file,
     operations,
     rot13,
@@ -29,6 +32,9 @@ from ._native import (
 )
 
 __all__ = [
+    "inspect_exif",
+    "file_exif",
+    "appended_data",
     "file_hex",
     "file_strings",
     "compare_files",

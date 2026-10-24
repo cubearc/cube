@@ -114,3 +114,49 @@ fn hex_strings_and_compare_have_structured_and_human_output() {
     assert!(output.status.success());
     assert!(String::from_utf8_lossy(&output.stdout).contains("EOF"));
 }
+
+#[test]
+fn exif_and_png_boundaries_have_safe_errors_and_json() {
+    let files = Files::new("formats");
+    let path = files.path("input.tiff");
+    let tiff = b"II\x2a\0\x08\0\0\0\x01\0\x0f\x01\x02\0\x04\0\0\0Cube\0\0\0\0";
+    std::fs::write(&path, tiff).unwrap();
+    let name = path.to_str().unwrap();
+    let output = run(&["file", "exif", name, "--json"]);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let json: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(json["tags"][0]["name"], "Make");
+    let output = run(&["file", "exif", name]);
+    assert!(output.status.success());
+    assert!(String::from_utf8_lossy(&output.stdout).contains("Cube"));
+    let output = run(&["--json-errors", "file", "appended", name]);
+    assert_eq!(output.status.code(), Some(1));
+    let json: serde_json::Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(json["error"]["code"], "unsupported_format");
+    let mut png = b"\x89PNG\r\n\x1a\n".to_vec();
+    for (kind, payload) in [
+        (&b"IHDR"[..], &[0, 0, 0, 1, 0, 0, 0, 1, 8, 2, 0, 0, 0][..]),
+        (b"IDAT", &[][..]),
+        (b"IEND", &[][..]),
+    ] {
+        png.extend((payload.len() as u32).to_be_bytes());
+        png.extend(kind);
+        png.extend(payload);
+        let mut crcdata = kind.to_vec();
+        crcdata.extend(payload);
+        let crc = u32::from_str_radix(&cube_core::hashing::crc32(&crcdata), 16).unwrap();
+        png.extend(crc.to_be_bytes());
+    }
+    png.extend(b"trailer");
+    std::fs::write(&path, png).unwrap();
+    let output = run(&["file", "appended", name, "--json"]);
+    assert!(output.status.success());
+    let json: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(json["trailing_bytes"], 7);
+    let output = run(&["file", "appended", name]);
+    assert!(String::from_utf8_lossy(&output.stdout).contains("Trailing bytes: 7"));
+}

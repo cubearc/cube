@@ -4,7 +4,9 @@
 //! absolute and zero-based. No operation executes extracted content or uses the
 //! network. Reader APIs let callers control transport without a CLI subprocess.
 
+pub mod exif;
 pub mod inspect;
+pub mod png;
 pub mod ranges;
 
 pub mod signatures;
@@ -55,6 +57,9 @@ impl ByteRange {
 
 pub(super) fn invalid(message: &str) -> OperationError {
     OperationError::new(ErrorCode::InvalidParameter, message)
+}
+pub(super) fn malformed(message: &str) -> OperationError {
+    OperationError::new(ErrorCode::InvalidInput, message)
 }
 pub(super) fn limit(message: &str) -> OperationError {
     OperationError::new(ErrorCode::ResourceLimit, message)

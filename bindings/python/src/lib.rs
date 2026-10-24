@@ -180,6 +180,29 @@ fn compare_files(
     structured(py, &serde_json::json!(result))
 }
 
+/// Explicit EXIF metadata from JPEG/TIFF bytes; no pixel decoding or network access.
+#[pyfunction]
+fn inspect_exif(py: Python<'_>, data: &[u8]) -> PyResult<Py<PyAny>> {
+    let result = forensics::exif::inspect(data).map_err(file_error)?;
+    structured(py, &serde_json::json!(result))
+}
+
+/// Explicit bounded EXIF inspection of a regular JPEG/TIFF file.
+#[pyfunction]
+fn file_exif(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
+    let result = forensics::exif::read(&mut forensics::open_regular(&path).map_err(file_error)?)
+        .map_err(file_error)?;
+    structured(py, &serde_json::json!(result))
+}
+
+/// Detect trailing bytes after PNG framing and CRC validation; no pixel decoding.
+#[pyfunction]
+fn appended_data(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
+    let result = forensics::png::appended(&mut forensics::open_regular(&path).map_err(file_error)?)
+        .map_err(file_error)?;
+    structured(py, &serde_json::json!(result))
+}
+
 struct PythonWriter<'py>(Bound<'py, PyAny>);
 impl std::io::Write for PythonWriter<'_> {
     fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
@@ -355,6 +378,9 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(inspect_exif, module)?)?;
+    module.add_function(wrap_pyfunction!(file_exif, module)?)?;
+    module.add_function(wrap_pyfunction!(appended_data, module)?)?;
     module.add_function(wrap_pyfunction!(file_hex, module)?)?;
     module.add_function(wrap_pyfunction!(file_strings, module)?)?;
     module.add_function(wrap_pyfunction!(compare_files, module)?)?;

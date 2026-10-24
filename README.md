@@ -288,3 +288,32 @@ listing is capped; `complete` describes the listing. Comparison processes at mos
 
 Python provides `file_hex`, `file_strings` and `compare_files` with equivalent
 keyword parameters and structured results. File algorithms remain solely in Rust.
+
+```sh
+cube file exif sample.jpg --json
+cube file appended sample.png --json
+```
+
+EXIF is an **explicit** JPEG/classic-TIFF operation backed by the pure-Rust,
+BSD-2-Clause `kamadak-exif` parser. Inputs are limited to a 1 MiB metadata prefix;
+TIFF beyond that size is unsupported by this bounded interface. Safety preflight
+limits directory traversal to 32 unique directories, 4096 entries and 2 MiB of
+original decoded value payloads. Cyclic/shared directories and invalid offsets
+fail. The parser additionally limits primary IFDs to eight. No image pixels are
+decoded, external references followed, or metadata saved. Explicit EXIF output may
+contain location or other sensitive tags already present in the input.
+
+EXIF results retain IFD/context/tag IDs, repeated and unknown tags, original typed
+values and a separate human display with units. ASCII values remain byte arrays,
+rationals retain numerator/denominator pairs, and nonstandard floating-point
+values retain exact IEEE bits. Absent EXIF is a successful `present: false` result;
+malformed and unsupported input use distinct errors. Python provides
+`inspect_exif(data)` and `file_exif(path)` with matching structured results.
+
+Appended-data detection currently supports basic PNG framing. It checks the PNG
+signature, IHDR parameters, chunk lengths/order and CRCs through a valid IEND,
+then reports exact logical-end/trailing offsets and counts. It does **not** decode
+or validate compressed pixels and does not assert that trailing bytes hide data.
+Unknown critical chunks and APNG are unsupported. The scan is limited to 64 MiB
+before IEND and 10000 chunks; trailing content is not loaded. Python exposes
+`appended_data(path)`. See the [PNG specification](https://www.w3.org/TR/png-3/).

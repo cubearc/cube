@@ -79,6 +79,12 @@ impl OperationError {
         result.source = Some(Box::new(error));
         result
     }
+
+    /// Retain a parser or transport cause without displaying its potentially sensitive text.
+    pub fn caused_by(mut self, error: impl Error + Send + Sync + 'static) -> Self {
+        self.source = Some(Box::new(error));
+        self
+    }
 }
 
 impl fmt::Display for OperationError {

@@ -542,3 +542,44 @@ fn structured_discovery_and_descriptions() {
     assert!(result.status.success());
     assert!(String::from_utf8_lossy(&result.stdout).contains("shift"));
 }
+
+#[test]
+fn structured_errors_keep_exit_codes_and_stdout_clean() {
+    for (args, input, code, status) in [
+        (
+            vec!["--json-errors", "decode", "hex"],
+            b"zz".as_slice(),
+            "invalid_input",
+            1,
+        ),
+        (
+            vec!["cipher", "rot13", "--json-errors"],
+            &[255][..],
+            "invalid_input",
+            1,
+        ),
+        (
+            vec!["--json-errors", "ops", "describe", "missing"],
+            b"".as_slice(),
+            "invalid_parameter",
+            1,
+        ),
+        (
+            vec!["--json-errors", "cipher", "caesar"],
+            b"".as_slice(),
+            "invalid_usage",
+            2,
+        ),
+    ] {
+        let output = cube(&args, input);
+        assert_eq!(output.status.code(), Some(status));
+        assert!(output.stdout.is_empty());
+        let error: serde_json::Value = serde_json::from_slice(&output.stderr).unwrap();
+        assert_eq!(error["schema_version"], 1);
+        assert_eq!(error["error"]["code"], code);
+    }
+    let output = cube(&["--json-errors", "--help"], b"");
+    assert!(output.status.success());
+    assert!(output.stderr.is_empty());
+    assert!(String::from_utf8_lossy(&output.stdout).contains("Usage:"));
+}

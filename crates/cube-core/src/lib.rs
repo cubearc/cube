@@ -6,6 +6,7 @@
 pub mod binary;
 pub mod ciphers;
 pub mod encoding;
+pub mod errors;
 pub mod hashing;
 pub mod operations;
 
@@ -46,6 +47,24 @@ impl std::error::Error for Error {
             Self::InvalidBase64(error) => Some(error),
             Self::InvalidHex(error) => Some(error),
             Self::EmptyKey => None,
+        }
+    }
+}
+
+impl Error {
+    /// Stable category for legacy failures; existing variants and causes are retained.
+    pub fn code(&self) -> errors::ErrorCode {
+        errors::ErrorCode::InvalidInput
+    }
+
+    /// Operation that rejected the input, without copying the rejected value.
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            Self::InvalidBase32(_) => "encoding.base32.decode",
+            Self::InvalidBase58(_) => "encoding.base58.decode",
+            Self::InvalidBase64(_) => "encoding.base64.decode",
+            Self::InvalidHex(_) => "encoding.hex.decode",
+            Self::EmptyKey => "binary.xor",
         }
     }
 }

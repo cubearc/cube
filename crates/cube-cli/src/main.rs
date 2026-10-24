@@ -12,6 +12,9 @@ use cube_core::{binary, ciphers, encoding, hashing, operations};
     about = "Encoding, classical ciphers, hashing, and binary tools"
 )]
 struct Cli {
+    /// Emit failures as schema-versioned JSON on stderr (including usage errors)
+    #[arg(long, global = true)]
+    json_errors: bool,
     #[command(subcommand)]
     command: Command,
 }
@@ -345,7 +348,26 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
 }
 
 fn main() -> ExitCode {
-    match run(Cli::parse()) {
+    let json_errors = std::env::args_os().any(|argument| argument == "--json-errors");
+    let cli = match Cli::try_parse() {
+        Ok(cli) => cli,
+        Err(error) => {
+            if json_errors && error.use_stderr() {
+                eprintln!(
+                    "{}",
+                    serde_json::json!({"schema_version": 1, "error": {"code": "invalid_usage", "message": "invalid command usage; use --help", "operation": null, "parameter": null, "offset": null}})
+                );
+            } else if let Err(write_error) = error.print() {
+                return if write_error.kind() == io::ErrorKind::BrokenPipe {
+                    ExitCode::SUCCESS
+                } else {
+                    ExitCode::FAILURE
+                };
+            }
+            return ExitCode::from(error.exit_code() as u8);
+        }
+    };
+    match run(cli) {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
             if error
@@ -354,7 +376,32 @@ fn main() -> ExitCode {
             {
                 return ExitCode::SUCCESS;
             }
-            eprintln!("error: {error}");
+            if json_errors {
+                let diagnostic = if let Some(error) =
+                    error.downcast_ref::<cube_core::errors::OperationError>()
+                {
+                    serde_json::json!(error)
+                } else if let Some(error) = error.downcast_ref::<cube_core::Error>() {
+                    serde_json::json!({"code": error.code(), "message": error.to_string(), "operation": error.operation_id(), "parameter": null, "offset": null})
+                } else {
+                    let code = if let Some(error) = error.downcast_ref::<io::Error>() {
+                        if error.kind() == io::ErrorKind::InvalidInput {
+                            "invalid_parameter"
+                        } else {
+                            "io"
+                        }
+                    } else {
+                        "invalid_input"
+                    };
+                    serde_json::json!({"code": code, "message": error.to_string(), "operation": null, "parameter": null, "offset": null})
+                };
+                eprintln!(
+                    "{}",
+                    serde_json::json!({"schema_version": 1, "error": diagnostic})
+                );
+            } else {
+                eprintln!("error: {error}");
+            }
             ExitCode::FAILURE
         }
     }

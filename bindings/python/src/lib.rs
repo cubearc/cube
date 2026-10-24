@@ -6,7 +6,24 @@ use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
-    PyValueError::new_err(error.to_string())
+    Python::attach(|py| {
+        let exception = PyValueError::new_err(error.to_string());
+        let code = match error.code() {
+            cube_core::errors::ErrorCode::InvalidInput => "invalid_input",
+            _ => unreachable!(),
+        };
+        for (name, value) in [("code", code), ("operation", error.operation_id())] {
+            if let Err(error) = exception.value(py).setattr(name, value) {
+                return error;
+            }
+        }
+        for name in ["parameter", "offset"] {
+            if let Err(error) = exception.value(py).setattr(name, py.None()) {
+                return error;
+            }
+        }
+        exception
+    })
 }
 
 // Only structured metadata crosses this JSON boundary. Algorithm byte results

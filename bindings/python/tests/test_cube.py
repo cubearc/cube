@@ -308,3 +308,22 @@ def test_operation_discovery_uses_core_metadata():
     with pytest.raises(TypeError):
         cube.describe_operation(b"binary.xor")
     assert cube.operations is _native.operations
+
+
+@pytest.mark.parametrize(
+    ("call", "operation"),
+    [
+        (lambda: cube.base32_decode("bad"), "encoding.base32.decode"),
+        (lambda: cube.base58_decode("0"), "encoding.base58.decode"),
+        (lambda: cube.base64_decode("!"), "encoding.base64.decode"),
+        (lambda: cube.hex_decode("!"), "encoding.hex.decode"),
+        (lambda: cube.xor(b"data", b""), "binary.xor"),
+    ],
+)
+def test_operation_errors_preserve_exception_types_and_add_context(call, operation):
+    with pytest.raises(ValueError) as captured:
+        call()
+    assert captured.value.code == "invalid_input"
+    assert captured.value.operation == operation
+    assert captured.value.parameter is None
+    assert captured.value.offset is None

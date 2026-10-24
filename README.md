@@ -217,3 +217,12 @@ incompatible behavior. Metadata does not imply a generic operation executor.
 assert cube.describe_operation("binary.xor")["input_type"] == "bytes"
 assert cube.operations("binary")[0]["id"] == "binary.xor"
 ```
+
+Use `--json-errors` for a single schema-versioned error object on stderr. Success
+output is unchanged. The error fields are `code`, `message`, `operation`,
+`parameter`, and absolute byte `offset`; unavailable context is `null`. Codes
+include `invalid_input`, `invalid_parameter`, `unsupported_format`,
+`resource_limit`, `io` and CLI-only `invalid_usage`. Exit codes remain 0/1/2.
+Native Python operation `ValueError` exceptions retain their class and expose the
+same context as attributes. Python argument type/range errors remain the native
+`TypeError`/`OverflowError`. No failed input contents are stored or uploaded.

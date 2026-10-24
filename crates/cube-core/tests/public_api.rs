@@ -94,3 +94,24 @@ fn errors_keep_their_causes_and_context() {
     assert_eq!(Error::EmptyKey.to_string(), "XOR key must not be empty");
     assert!(Error::EmptyKey.source().is_none());
 }
+
+#[test]
+fn legacy_errors_keep_stable_categories_and_operation_context() {
+    let failures = [
+        cube_core::encoding::base32_decode("!").unwrap_err(),
+        cube_core::encoding::base58_decode("0").unwrap_err(),
+        cube_core::encoding::base64_decode("!").unwrap_err(),
+        cube_core::encoding::hex_decode("!").unwrap_err(),
+        cube_core::binary::xor(b"", b"").unwrap_err(),
+    ];
+    for (error, id) in failures.into_iter().zip([
+        "encoding.base32.decode",
+        "encoding.base58.decode",
+        "encoding.base64.decode",
+        "encoding.hex.decode",
+        "binary.xor",
+    ]) {
+        assert_eq!(error.code(), cube_core::errors::ErrorCode::InvalidInput);
+        assert_eq!(error.operation_id(), id);
+    }
+}

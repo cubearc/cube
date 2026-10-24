@@ -835,3 +835,84 @@ stream metadata, and unknown input suggests bounded hex/ASCII string inspection.
 Signature candidates do not prove structural validity or concealed content. Triage
 never executes suggestions, decodes pixels, extracts data or consults filenames,
 network services or AI. Header contents, EXIF values and paths are not included.
+
+## Investigation records and verified replay
+
+```sh
+cube investigate pipeline sample.bin --identify --steps '[{"operation":"encoding.hex.encode","version":1}]'
+cube investigate pipeline sample.bin --identify --steps '[]' --save session.json --json
+cube investigate report session.json
+cube investigate replay session.json sample.bin --json
+```
+
+Investigation sessions are caller-owned memory. Each run has a stable session-local
+ID, input ID, operation/version, explicit parameters or redactions, result kind,
+SHA-256 digest of compact typed result JSON, and succeeded/failed/skipped state.
+Findings reference their input/run and offsets; signature candidates and user
+hypotheses remain separately labeled. Runtime failures are recorded with contextual
+errors. Invalid contracts fail before execution. `--identify` records SHA-256 of the
+complete input as its content identity, not a claim of trust. Without that identity,
+reports explain why size alone cannot verify replay.
+
+The CLI prints an escaped human report or a versioned JSON record with
+`schema_version:1`, explicit `status`, `replay_gaps`, `uncertainty`, and `session`.
+The nested session contains `format_version:1`, engine API/package version,
+`input`, `limits`, `runs`, `findings` and `hypotheses`. Paths, filenames, filesystem
+timestamps and raw inputs are never stored. Default export excludes result
+contents, nonempty pipeline parameters and user hypotheses. `--save path` is the
+only saving action; it creates a new local JSON file and refuses overwrites,
+including source aliases. Nothing is automatically uploaded or persisted.
+
+Explicit `--include-result 2` retains/exports only that run's result. Pipeline
+binary results use tagged canonical base64, text remains explicitly typed, and
+structured inspection results retain their JSON types. `--include-parameters 2`
+retains/exports that run's original parameters; they may contain keys.
+`--hypothesis '...'` adds a user interpretation; saving it requires
+`--include-hypotheses`. Omitted data cannot be recovered from a record. To remove
+saved data, delete the explicitly chosen JSON file with normal filesystem tools;
+there are no hidden session copies, database or cache. The SDK can discard a
+selected in-memory result or redact parameters before export.
+
+Records are limited to 128 KiB, retained result JSON to 64 KiB, runs to 64,
+findings to 128 and hypotheses to 32 (1024 UTF-8 bytes each). Rust `SessionLimits`
+may lower those bounds. Preview contracts accept at most 4096 bytes per range.
+Direct session execution/replay buffers are capped at 1 MiB. Insufficient count,
+record or retention budgets fail before execution or explicitly omit selected
+results/findings with a partial-status warning; no omission is silently complete.
+The shared strict JSON parser also rejects duplicate/unknown fields, excessive
+nesting/nodes, invalid IDs, broken references, inconsistent states and versions.
+
+Replay first validates all recorded contracts and required parameters, then
+compares the caller-supplied complete input's size/SHA-256 identity. Only afterward
+does it execute the same bounded Rust operations/pipeline engine and compare typed
+result digests/states. Skipped runs stay skipped; user hypotheses are not replayed
+as machine evidence. Redacted parameters, absent identities, unsupported versions,
+changed inputs and differing results are explicit failures. Compatibility uses
+engine API/operation-contract versions, not package-version equality. Reports are
+observations, not signed attestations or proof that hidden content exists.
+
+```python
+import cube
+
+data = b"\x00\xff"
+session = cube.InvestigationSession(data, identify=True)
+run_id = session.execute_pipeline(data, [
+    {"operation": "encoding.hex.encode", "version": 1}
+], retain_result=True)
+session.add_hypothesis("A candidate worth inspecting", [2])
+print(session.report())
+record = session.to_json()  # private defaults; no automatic file I/O
+replayed = cube.InvestigationSession.from_json(record).replay(data)
+selected = session.to_json(include_results=[run_id], include_hypotheses=True)
+session.discard_result(run_id)
+```
+
+The SDK's `run(data, definition)` accepts a strict JSON run contract: `identity`,
+`triage` with `max_read_bytes`, `hex` with `offset/length/width`, `strings` with
+`offset/length/min_length/max_results`, or `pipeline` with versioned steps and
+lowered limits. `execute_pipeline` is a convenience using default pipeline limits.
+`record_parameters=True` and `retain_result=True` opt into memory retention;
+`to_json(include_parameters=[id], include_results=[id])` independently controls
+export. `redact_parameters(id)` permanently removes recorded key values in memory.
+Rust uses `investigation::session::{Session, RunSpec, Capture, Export}`. CLI and
+native Python share these APIs; cancellation uses the existing optional token.

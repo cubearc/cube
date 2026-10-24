@@ -275,6 +275,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::pipeline::OPERATIONS)
         .chain(crate::pipeline::recipe::OPERATIONS)
         .chain(crate::investigation::triage::OPERATIONS)
+        .chain(crate::investigation::session::OPERATIONS)
         .collect()
 }
 

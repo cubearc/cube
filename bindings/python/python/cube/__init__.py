@@ -4,6 +4,7 @@ from ._native import (
     UNICODE_VERSION,
     CancellationToken,
     Image,
+    InvestigationSession,
     affine_decode,
     affine_encode,
     appended_data,
@@ -66,6 +67,7 @@ from ._native import (
 
 __all__ = [
     "CancellationToken",
+    "InvestigationSession",
     "pipeline_adapters",
     "validate_pipeline",
     "execute_pipeline",

@@ -51,3 +51,100 @@ fn triage_cli_preserves_inputs_and_reports_only_evidence_based_suggestions() {
     assert_eq!(error["error"]["code"], "resource_limit");
     assert_eq!(std::fs::read(path).unwrap(), bytes);
 }
+
+#[test]
+fn session_cli_has_explicit_private_saving_safe_reports_and_input_verified_replay() {
+    let workspace = Workspace::new("session");
+    let source = workspace.path("source.bin");
+    let record = workspace.path("record.json");
+    let secret = b"\x00\xffPRIVATE\n";
+    std::fs::write(&source, secret).unwrap();
+    let path = source.to_str().unwrap();
+    let saved = record.to_str().unwrap();
+    let steps = r#"[{"operation":"encoding.hex.encode","version":1},{"operation":"encoding.hex.decode","version":1}]"#;
+    let result = run(&[
+        "investigate",
+        "pipeline",
+        path,
+        "--steps",
+        steps,
+        "--identify",
+        "--save",
+        saved,
+        "--json",
+        "--hypothesis",
+        "Maybe \x1b[31mhidden",
+    ]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let info: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(info["status"], "complete");
+    assert!(info["session"]["runs"][1]["retained"].is_null());
+    assert_eq!(info["session"]["hypotheses"], serde_json::json!([]));
+    assert!(!String::from_utf8_lossy(&std::fs::read(&record).unwrap()).contains("PRIVATE"));
+    let original = std::fs::read(&record).unwrap();
+    let result = run(&[
+        "investigate",
+        "pipeline",
+        path,
+        "--steps",
+        steps,
+        "--identify",
+        "--save",
+        saved,
+    ]);
+    assert_eq!(result.status.code(), Some(1));
+    assert_eq!(std::fs::read(&record).unwrap(), original);
+    let result = run(&["investigate", "replay", saved, path, "--json"]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let result = run(&[
+        "investigate",
+        "report",
+        saved,
+        "--hypothesis",
+        "Maybe \x1b[31mhidden",
+    ]);
+    assert!(result.status.success());
+    assert!(!result.stdout.contains(&27));
+    assert!(String::from_utf8_lossy(&result.stdout).contains("User hypothesis"));
+    let result = run(&[
+        "investigate",
+        "pipeline",
+        path,
+        "--steps",
+        steps,
+        "--identify",
+        "--include-result",
+        "2",
+        "--json",
+    ]);
+    assert!(result.status.success());
+    let selected: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(
+        selected["session"]["runs"][1]["retained"]["base64"],
+        "AP9QUklWQVRFCg=="
+    );
+    let result = run(&[
+        "investigate",
+        "pipeline",
+        path,
+        "--steps",
+        steps,
+        "--save",
+        path,
+    ]);
+    assert_eq!(result.status.code(), Some(1));
+    assert_eq!(std::fs::read(path).unwrap(), secret);
+    std::fs::write(&source, b"\x01\xffPRIVATE\n").unwrap();
+    let result = run(&["--json-errors", "investigate", "replay", saved, path]);
+    assert_eq!(result.status.code(), Some(1));
+    assert!(result.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&result.stderr).contains("identity changed"));
+}

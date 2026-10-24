@@ -262,3 +262,40 @@ def check_recipe(
     expected: bytes | str | dict[str, Any],
 ) -> dict[str, Any]: ...
 def triage_input(data: bytes, *, max_read_bytes: int = 12) -> dict[str, Any]: ...
+
+class InvestigationSession:
+    def __init__(self, data: bytes, *, identify: bool = False) -> None: ...
+    @staticmethod
+    def from_json(document: str) -> InvestigationSession: ...
+    def run(
+        self,
+        data: bytes,
+        definition: str,
+        *,
+        record_parameters: bool = False,
+        retain_result: bool = False,
+        cancellation: CancellationToken | None = None,
+    ) -> int: ...
+    def execute_pipeline(
+        self,
+        data: bytes,
+        steps: list[dict[str, Any]],
+        *,
+        record_parameters: bool = False,
+        retain_result: bool = False,
+        cancellation: CancellationToken | None = None,
+    ) -> int: ...
+    def add_hypothesis(self, text: str, findings: list[int] | None = None) -> int: ...
+    def redact_parameters(self, run_id: int) -> None: ...
+    def discard_result(self, run_id: int) -> None: ...
+    def to_json(
+        self,
+        *,
+        include_results: list[int] | None = None,
+        include_parameters: list[int] | None = None,
+        include_hypotheses: bool = False,
+    ) -> str: ...
+    def report(self) -> str: ...
+    def replay(
+        self, data: bytes, *, cancellation: CancellationToken | None = None
+    ) -> InvestigationSession: ...

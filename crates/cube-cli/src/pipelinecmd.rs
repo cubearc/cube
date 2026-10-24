@@ -120,7 +120,7 @@ pub(super) fn read_file(path: &Path, limit: usize) -> Result<Vec<u8>, Box<dyn Er
     }
     Ok(bytes)
 }
-fn write_new(path: &Path, data: &[u8]) -> Result<(), Box<dyn Error>> {
+pub(super) fn write_new(path: &Path, data: &[u8]) -> Result<(), Box<dyn Error>> {
     let mut file = std::fs::OpenOptions::new()
         .write(true)
         .create_new(true)

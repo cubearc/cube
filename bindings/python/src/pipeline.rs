@@ -27,7 +27,7 @@ fn json_text(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<String> {
         .call_method("dumps", (value,), Some(&kwargs))?
         .extract()
 }
-fn limits(py: Python<'_>, value: Option<&Bound<'_, PyDict>>) -> PyResult<Limits> {
+pub(super) fn limits(py: Python<'_>, value: Option<&Bound<'_, PyDict>>) -> PyResult<Limits> {
     value
         .map(|v| {
             json_text(py, v).and_then(|s| pipeline::json::limits(&s).map_err(|e| error(py, e)))
@@ -35,7 +35,7 @@ fn limits(py: Python<'_>, value: Option<&Bound<'_, PyDict>>) -> PyResult<Limits>
         .transpose()
         .map(Option::unwrap_or_default)
 }
-fn steps(py: Python<'_>, value: &Bound<'_, PyList>) -> PyResult<Vec<pipeline::Step>> {
+pub(super) fn steps(py: Python<'_>, value: &Bound<'_, PyList>) -> PyResult<Vec<pipeline::Step>> {
     if value.len() > pipeline::MAX_STEPS {
         return Err(error(
             py,

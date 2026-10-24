@@ -124,3 +124,15 @@ Caller-provided bindings never resolve paths, environment values or expressions.
 Validation reports redact data and parameters. Exact typed output checks expose
 an independent compatibility-test boundary for community definitions without
 copying algorithms or recipe collections into this repository.
+
+The `investigation` module uses explicit rules/contracts rather than a second
+algorithm engine. Triage reuses signature evidence and the available descriptor
+catalog. Private session fields preserve session-local run/finding IDs, typed
+provenance, input/result digests, separately linked user hypotheses and bounded
+opt-in retention. A small run enum reuses existing hex/string functions and
+validated pipeline plans. Direct operation APIs stay unchanged. JSON loading
+shares the bounded unique-key parser and validates references/versions/states;
+replay rejects identity/redaction gaps before executing. Human reports escape
+untrusted strings, and JSON export independently selects results and parameters.
+Only interface code opens caller-selected files or explicitly saves a new record;
+there is no storage backend, implicit network capability or automatic persistence.

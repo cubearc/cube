@@ -15,6 +15,8 @@ use std::fmt;
 pub enum Error {
     /// Input is not canonical, padded RFC 4648 standard Base32.
     InvalidBase32(data_encoding::DecodeError),
+    /// Input contains a character outside the Bitcoin Base58 alphabet.
+    InvalidBase58(bs58::decode::Error),
     /// Input is not canonical, padded RFC 4648 standard Base64.
     InvalidBase64(base64::DecodeError),
     /// Input is not an even number of hexadecimal digits.
@@ -27,6 +29,7 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::InvalidBase32(error) => write!(f, "invalid Base32: {error}"),
+            Self::InvalidBase58(error) => write!(f, "invalid Base58: {error}"),
             Self::InvalidBase64(error) => write!(f, "invalid Base64: {error}"),
             Self::InvalidHex(error) => write!(f, "invalid hexadecimal input: {error}"),
             Self::EmptyKey => f.write_str("XOR key must not be empty"),
@@ -38,6 +41,7 @@ impl std::error::Error for Error {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Self::InvalidBase32(error) => Some(error),
+            Self::InvalidBase58(error) => Some(error),
             Self::InvalidBase64(error) => Some(error),
             Self::InvalidHex(error) => Some(error),
             Self::EmptyKey => None,

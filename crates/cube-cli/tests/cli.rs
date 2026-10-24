@@ -38,6 +38,8 @@ fn help_version_and_discovery() {
         vec!["--help"],
         vec!["encode", "base32", "--help"],
         vec!["decode", "base32", "--help"],
+        vec!["encode", "base58", "--help"],
+        vec!["decode", "base58", "--help"],
         vec!["decode", "base64", "--help"],
         vec!["binary", "xor", "--help"],
     ] {
@@ -51,7 +53,7 @@ fn help_version_and_discovery() {
         b"",
         format!("cube {}\n", env!("CARGO_PKG_VERSION")).as_bytes(),
     );
-    success(&["ops", "list"], b"", b"encode base32\nencode base64\nencode hex\ndecode base32\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor\n");
+    success(&["ops", "list"], b"", b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher rot13\nhash sha256\nbinary xor\n");
 }
 
 #[test]
@@ -90,6 +92,53 @@ fn base32_commands_and_binary_round_trip() {
         .expect("encoded output newline");
     success(
         &["decode", "base32", "--output", "raw"],
+        encoded_input,
+        &bytes,
+    );
+}
+
+#[test]
+fn base58_commands_preserve_bytes_and_leading_zeroes() {
+    success(
+        &["encode", "base58", "--text", "Hello World"],
+        b"ignored",
+        b"JxF12TrwUP45BMd\n",
+    );
+    success(
+        &["decode", "base58", "--text", "JxF12TrwUP45BMd"],
+        b"",
+        b"48656c6c6f20576f726c64\n",
+    );
+    success(
+        &[
+            "decode",
+            "base58",
+            "--text",
+            "JxF12TrwUP45BMd",
+            "--output",
+            "raw",
+        ],
+        b"",
+        b"Hello World",
+    );
+    success(&["encode", "base58"], &[0, 255], b"15Q\n");
+    success(&["decode", "base58"], b"15Q", b"00ff\n");
+    success(&["decode", "base58", "--output", "raw"], b"15Q", &[0, 255]);
+    success(&["encode", "base58"], &[0, 0, 1], b"112\n");
+    success(&["decode", "base58", "--output", "raw"], b"112", &[0, 0, 1]);
+    success(&["encode", "base58"], &[0; 4], b"1111\n");
+    success(&["decode", "base58", "--output", "raw"], b"1111", &[0; 4]);
+
+    let bytes: Vec<u8> = (0..=255).collect();
+    let encoded = cube(&["encode", "base58"], &bytes);
+    assert!(encoded.status.success());
+    assert!(encoded.stderr.is_empty());
+    let encoded_input = encoded
+        .stdout
+        .strip_suffix(b"\n")
+        .expect("encoded output newline");
+    success(
+        &["decode", "base58", "--output", "raw"],
         encoded_input,
         &bytes,
     );
@@ -170,6 +219,8 @@ fn stdin_binary_and_newlines_are_preserved() {
 #[test]
 fn empty_inputs_are_explicit_and_valid() {
     for args in [
+        vec!["encode", "base58", "--text", ""],
+        vec!["decode", "base58", "--text", ""],
         vec!["encode", "base32", "--text", ""],
         vec!["decode", "base32", "--text", ""],
         vec!["encode", "base64", "--text", ""],
@@ -180,6 +231,11 @@ fn empty_inputs_are_explicit_and_valid() {
     ] {
         success(&args, b"must not read stdin", b"\n");
     }
+    success(
+        &["decode", "base58", "--text", "", "--output", "raw"],
+        b"ignored",
+        b"",
+    );
     success(
         &["decode", "base32", "--text", "", "--output", "raw"],
         b"must not read stdin",
@@ -195,6 +251,23 @@ fn empty_inputs_are_explicit_and_valid() {
 #[test]
 fn invalid_operation_input_uses_stderr_and_exit_one() {
     for (args, input, message) in [
+        (
+            vec!["decode", "base58", "--text", "0OIl"],
+            &b""[..],
+            "invalid Base58",
+        ),
+        (
+            vec!["decode", "base58", "--text", "é"],
+            &b""[..],
+            "invalid Base58",
+        ),
+        (
+            vec!["decode", "base58", "--text", "2g="],
+            &b""[..],
+            "invalid Base58",
+        ),
+        (vec!["decode", "base58"], &b"2g\n"[..], "invalid Base58"),
+        (vec!["decode", "base58"], &[255][..], "utf-8"),
         (
             vec!["decode", "base32", "--text", "mzxw6==="],
             &b""[..],

@@ -10,6 +10,10 @@ fn arbitrary_bytes_round_trip() -> Result<(), Error> {
         bytes
     );
     assert_eq!(
+        encoding::base58_decode(&encoding::base58_encode(&bytes))?,
+        bytes
+    );
+    assert_eq!(
         encoding::base64_decode(&encoding::base64_encode(&bytes))?,
         bytes
     );
@@ -22,6 +26,10 @@ fn arbitrary_bytes_round_trip() -> Result<(), Error> {
     assert_eq!(
         encoding::base32_encode(&bytes),
         encoding::base32_encode(&bytes)
+    );
+    assert_eq!(
+        encoding::base58_encode(&bytes),
+        encoding::base58_encode(&bytes)
     );
     assert_eq!(
         encoding::base64_encode(&bytes),
@@ -37,6 +45,10 @@ fn unicode_is_only_text_at_the_boundary() -> Result<(), Error> {
     let text = "Olá, 世界 🧊";
     assert_eq!(
         encoding::base32_decode(&encoding::base32_encode(text.as_bytes()))?,
+        text.as_bytes()
+    );
+    assert_eq!(
+        encoding::base58_decode(&encoding::base58_encode(text.as_bytes()))?,
         text.as_bytes()
     );
     assert_eq!(
@@ -56,6 +68,7 @@ fn unicode_is_only_text_at_the_boundary() -> Result<(), Error> {
 fn errors_keep_their_causes_and_context() {
     for result in [
         encoding::base32_decode("!"),
+        encoding::base58_decode("0"),
         encoding::base64_decode("!"),
         encoding::hex_decode("zz"),
     ] {

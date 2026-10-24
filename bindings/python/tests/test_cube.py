@@ -14,6 +14,8 @@ def test_native_extension_is_loaded():
     assert cube.base32_decode is _native.base32_decode
     assert cube.base58_encode is _native.base58_encode
     assert cube.base58_decode is _native.base58_decode
+    assert cube.caesar_encode is _native.caesar_encode
+    assert cube.caesar_decode is _native.caesar_decode
     assert cube.crc32 is _native.crc32
 
 
@@ -55,6 +57,64 @@ def test_base58_known_answers_and_leading_zeroes(data, encoded):
 def test_base58_is_case_sensitive():
     assert cube.base58_decode("A") == b"\x09"
     assert cube.base58_decode("a") == b"\x21"
+
+
+@pytest.mark.parametrize(
+    ("text", "shift", "encoded"),
+    [
+        ("Attack at dawn!", 3, "Dwwdfn dw gdzq!"),
+        (
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            3,
+            "defghijklmnopqrstuvwxyzabcDEFGHIJKLMNOPQRSTUVWXYZABC",
+        ),
+        ("AaZz", -1, "ZzYy"),
+        ("AaZz", 27, "BbAa"),
+        ("AaZz", -2147483648, "CcBb"),
+        ("AaZz", 2147483647, "XxWw"),
+        ("", -2147483648, ""),
+        (
+            "Olá, 世界 🧊 e\u0301 K Ａ ﬀ 123\x00\t\r\n",
+            3,
+            "Roá, 世界 🧊 h\u0301 K Ａ ﬀ 123\x00\t\r\n",
+        ),
+    ],
+)
+def test_caesar_known_answers_and_round_trips(text, shift, encoded):
+    assert cube.caesar_encode(text, shift) == encoded
+    assert cube.caesar_decode(encoded, shift) == text
+    assert cube.caesar_encode(cube.caesar_decode(text, shift), shift) == text
+    assert cube.caesar_encode(text, shift) == cube.caesar_encode(text, shift)
+    assert type(cube.caesar_encode(text, shift)) is str
+    assert type(cube.caesar_decode(encoded, shift)) is str
+
+
+@pytest.mark.parametrize("shift", [0, 26, -26, 52, -52])
+def test_caesar_zero_and_full_rotations(shift):
+    text = "AaZz 世界 e\u0301"
+    assert cube.caesar_encode(text, shift) == text
+    assert cube.caesar_decode(text, shift) == text
+
+
+def test_caesar_shift_13_agrees_with_rot13():
+    text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ Olá, 世界 🧊"
+    assert cube.caesar_encode(text, 13) == cube.rot13(text)
+    assert cube.caesar_decode(text, 13) == cube.rot13(text)
+    assert cube.caesar_decode(cube.caesar_encode(text, shift=3), shift=3) == text
+
+
+@pytest.mark.parametrize("operation", [cube.caesar_encode, cube.caesar_decode])
+@pytest.mark.parametrize("shift", [-2147483649, 2147483648, 2**100])
+def test_caesar_rejects_out_of_range_shifts(operation, shift):
+    with pytest.raises(OverflowError):
+        operation("Hello", shift)
+
+
+@pytest.mark.parametrize("operation", [cube.caesar_encode, cube.caesar_decode])
+@pytest.mark.parametrize("shift", ["3", 3.0, None])
+def test_caesar_rejects_non_integer_shifts(operation, shift):
+    with pytest.raises(TypeError):
+        operation("Hello", shift)
 
 
 @pytest.mark.parametrize(
@@ -217,6 +277,8 @@ def test_empty_xor_key(data):
         (cube.sha256, ("Hello",)),
         (cube.crc32, ("Hello",)),
         (cube.rot13, (b"Hello",)),
+        (cube.caesar_encode, (b"Hello", 3)),
+        (cube.caesar_decode, (b"Hello", 3)),
         (cube.xor, (b"Hello", "key")),
     ],
 )

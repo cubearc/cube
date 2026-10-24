@@ -68,6 +68,18 @@ fn unicode_is_only_text_at_the_boundary() -> Result<(), Error> {
 }
 
 #[test]
+fn caesar_preserves_unicode_across_inverse_shifts() {
+    let text = "Attack at dawn! Olá, 世界 🧊 e\u{301}\0\r\n";
+    for shift in [i32::MIN, -27, -13, -1, 0, 3, 13, 26, 27, i32::MAX] {
+        let encoded = ciphers::caesar_encode(text, shift);
+        assert_eq!(ciphers::caesar_decode(&encoded, shift), text);
+        assert_eq!(ciphers::caesar_encode(text, shift), encoded);
+    }
+    assert_eq!(ciphers::caesar_encode(text, 13), ciphers::rot13(text));
+    assert_eq!(ciphers::caesar_decode(text, 13), ciphers::rot13(text));
+}
+
+#[test]
 fn errors_keep_their_causes_and_context() {
     for result in [
         encoding::base32_decode("!"),

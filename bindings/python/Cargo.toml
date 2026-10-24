@@ -1,0 +1,22 @@
+[package]
+name = "cube-python"
+description = "Native Python bindings for cube-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[lib]
+name = "_native"
+crate-type = ["cdylib"]
+# The extension is exercised by pytest through Python, not by a Rust test harness.
+test = false
+doctest = false
+
+[dependencies]
+cube-core.workspace = true
+pyo3 = "0.29"
+
+[lints]
+workspace = true

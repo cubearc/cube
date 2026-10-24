@@ -1,0 +1,42 @@
+//! Small, deterministic operations shared by Cube's CLI and SDKs.
+//!
+//! Binary operations accept and return bytes. Text conversion belongs to the caller.
+//! ROT13 and repeating-key XOR are puzzle tools, not secure encryption.
+
+pub mod binary;
+pub mod ciphers;
+pub mod encoding;
+pub mod hashing;
+
+use std::fmt;
+
+/// Invalid input to a core operation.
+#[derive(Debug, PartialEq)]
+pub enum Error {
+    /// Input is not canonical, padded RFC 4648 standard Base64.
+    InvalidBase64(base64::DecodeError),
+    /// Input is not an even number of hexadecimal digits.
+    InvalidHex(hex::FromHexError),
+    /// Repeating-key XOR requires at least one key byte.
+    EmptyKey,
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::InvalidBase64(error) => write!(f, "invalid Base64: {error}"),
+            Self::InvalidHex(error) => write!(f, "invalid hexadecimal input: {error}"),
+            Self::EmptyKey => f.write_str("XOR key must not be empty"),
+        }
+    }
+}
+
+impl std::error::Error for Error {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Self::InvalidBase64(error) => Some(error),
+            Self::InvalidHex(error) => Some(error),
+            Self::EmptyKey => None,
+        }
+    }
+}

@@ -1,0 +1,15 @@
+[package]
+name = "cube-core"
+description = "Byte-oriented encoding, classical ciphers, hashing, and binary transformations"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+base64 = "0.22"
+hex = "0.4"
+sha2 = "0.10"
+
+[lints]
+workspace = true

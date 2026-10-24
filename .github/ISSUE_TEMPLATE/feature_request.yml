@@ -1,0 +1,19 @@
+name: Feature request
+description: Propose an operation or improvement to Cube.
+labels: ["type:feature"]
+body:
+  - type: markdown
+    attributes:
+      value: Search existing issues before submitting. Use a descriptive title without category or priority prefixes.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What would this help you accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+      description: For an operation, describe input, output, and important edge cases. Use only public or synthetic examples.

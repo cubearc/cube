@@ -7,6 +7,7 @@ use pyo3::types::PyBytes;
 
 mod audio;
 mod image;
+mod investigation;
 mod pipeline;
 mod recipe;
 mod textops;
@@ -378,6 +379,7 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     pipeline::register(module)?;
+    investigation::register(module)?;
     recipe::register(module)?;
     audio::register(module)?;
     textops::register(module)?;

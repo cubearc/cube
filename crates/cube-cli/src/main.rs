@@ -8,6 +8,7 @@ use cube_core::{binary, ciphers, encoding, hashing, operations};
 mod audiocmd;
 mod filecmd;
 mod imagecmd;
+mod investigatecmd;
 mod pipelinecmd;
 mod recipecmd;
 mod textcmd;
@@ -28,6 +29,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Local explainable triage and bounded investigations
+    Investigate {
+        #[command(subcommand)]
+        command: investigatecmd::InvestigateCommand,
+    },
     /// Validate, execute or independently test versioned JSON recipes
     Recipe {
         #[command(subcommand)]
@@ -352,6 +358,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Investigate { command } => investigatecmd::run(command, &mut output)?,
         Command::Pipeline { command } => pipelinecmd::run(command, &mut output)?,
         Command::Recipe { command } => recipecmd::run(command, &mut output)?,
         Command::Audio { command } => audiocmd::run(command, &mut output)?,

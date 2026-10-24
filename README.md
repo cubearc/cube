@@ -813,3 +813,25 @@ as pipelines. Rust uses `pipeline::recipe::Recipe::parse`, `.info`, `.execute` a
 `.check`. All interfaces share the Rust engine; none use CLI subprocesses as their
 SDK implementation. Pipelines remain linear: branching, scripts, privileged
 capabilities, plugins and graphical editing are outside this contract.
+
+## Explainable input triage
+
+```sh
+cube investigate triage sample.bin
+cube investigate triage sample.bin --json
+```
+
+`investigate triage` reads at most 12 header bytes from an explicitly selected
+regular file. `--max-read-bytes` may lower that bound; insufficient budgets fail
+before reading. Rust `investigation::triage::{bytes, reader}` and native Python
+`cube.triage_input(data, max_read_bytes=12)` share the same rules. Rust callers can
+also supply an existing `FileInfo` through `from_file_info`; its source is labeled
+as caller evidence and no additional bytes are read.
+
+Results contain stable rule IDs, supporting fact IDs/offsets, suggested available
+operation IDs and explicit limitations in deterministic order. PNG candidates
+suggest chunk inspection, JPEG/TIFF candidates suggest EXIF, WAVE candidates suggest
+stream metadata, and unknown input suggests bounded hex/ASCII string inspection.
+Signature candidates do not prove structural validity or concealed content. Triage
+never executes suggestions, decodes pixels, extracts data or consults filenames,
+network services or AI. Header contents, EXIF values and paths are not included.

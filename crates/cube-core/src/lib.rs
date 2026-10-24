@@ -10,6 +10,7 @@ pub mod errors;
 pub mod forensics;
 pub mod hashing;
 pub mod image;
+pub mod investigation;
 pub mod media;
 pub mod numbers;
 pub mod operations;

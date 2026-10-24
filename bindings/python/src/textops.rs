@@ -45,7 +45,30 @@ fn extract_characters(
     cube_core::text::extract(text, indices.as_deref(), start, stride, stop)
         .map_err(super::file_error)
 }
+#[pyfunction]
+fn morse_encode(text: &str) -> PyResult<String> {
+    cube_core::symbols::morse_encode(text).map_err(super::file_error)
+}
+#[pyfunction]
+fn morse_decode(text: &str) -> PyResult<String> {
+    cube_core::symbols::morse_decode(text).map_err(super::file_error)
+}
+#[pyfunction]
+fn braille_encode(data: &[u8]) -> PyResult<String> {
+    cube_core::symbols::braille_encode(data).map_err(super::file_error)
+}
+#[pyfunction]
+fn braille_decode<'py>(py: Python<'py>, text: &str) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
+    Ok(pyo3::types::PyBytes::new(
+        py,
+        &cube_core::symbols::braille_decode(text).map_err(super::file_error)?,
+    ))
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(morse_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(morse_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(braille_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(braille_decode, module)?)?;
     module.add("UNICODE_VERSION", cube_core::text::UNICODE_VERSION)?;
     module.add_function(wrap_pyfunction!(normalize_text, module)?)?;
     module.add_function(wrap_pyfunction!(reverse_text, module)?)?;

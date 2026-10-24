@@ -77,3 +77,31 @@ def test_positional_selection_keeps_duplicates_and_validates_modes():
     with pytest.raises(ValueError) as error:
         cube.extract_characters("🧊", indices=[0] * 65537)
     assert error.value.code == "resource_limit"
+
+
+def test_morse_canonical_grammar_and_normalized_round_trips():
+    assert cube.morse_encode("SOS 2") == "... --- ... / ..---"
+    assert cube.morse_decode("... --- ... / ..---") == "SOS 2"
+    assert cube.morse_decode(cube.morse_encode("  sos   2  ")) == "SOS 2"
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    assert cube.morse_decode(cube.morse_encode(alphabet)) == alphabet
+    assert cube.morse_decode("") == ""
+    for invalid in [" .", ". ", ".  .", "/ .", ". /", ". / / .", "......", "...\n"]:
+        with pytest.raises(ValueError):
+            cube.morse_decode(invalid)
+    for invalid in ["é", "!", "a\tb", "a\nb"]:
+        with pytest.raises(ValueError):
+            cube.morse_encode(invalid)
+
+
+def test_braille_cells_are_bytes_and_not_language_transcription():
+    data = bytes(range(256))
+    assert cube.braille_decode(cube.braille_encode(data)) == data
+    assert cube.braille_encode(b"\x00\x01\xff") == "⠀⠁⣿"
+    assert cube.braille_decode("") == b""
+    with pytest.raises(ValueError) as error:
+        cube.braille_decode("⠁x")
+    assert error.value.offset == 3
+    assert error.value.operation == "symbol.braille.decode"
+    with pytest.raises(TypeError):
+        cube.braille_encode("ordinary text")

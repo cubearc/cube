@@ -170,3 +170,41 @@ fn unicode_text_commands_are_explicit_and_bounded() {
     );
     assert_eq!(run(&["text", "extract"], b"a").status.code(), Some(2));
 }
+
+#[test]
+fn symbolic_commands_distinguish_canonical_text_and_raw_bytes() {
+    success(
+        &["encode", "morse", "--text", "SOS 2"],
+        b"",
+        b"... --- ... / ..---\n",
+    );
+    success(
+        &["decode", "morse", "--text", "... --- ... / ..---"],
+        b"",
+        b"SOS 2\n",
+    );
+    success(&["encode", "braille"], &[0, 1, 255], "⠀⠁⣿\n".as_bytes());
+    success(&["decode", "braille", "--text", "⠀⠁⣿"], b"", b"0001ff\n");
+    success(
+        &["decode", "braille", "--text", "⠀⠁⣿", "--output", "raw"],
+        b"",
+        &[0, 1, 255],
+    );
+    let bytes: Vec<u8> = (0..=255).collect();
+    let encoded = cube_core::symbols::braille_encode(&bytes).unwrap();
+    success(
+        &["decode", "braille", "--text", &encoded, "--output", "raw"],
+        b"",
+        &bytes,
+    );
+    for args in [
+        vec!["encode", "morse", "--text", "é"],
+        vec!["decode", "morse", "--text", ".  ."],
+        vec!["decode", "braille", "--text", "A"],
+    ] {
+        let result = run(&args, b"");
+        assert_eq!(result.status.code(), Some(1));
+        assert!(result.stdout.is_empty());
+    }
+    assert_eq!(run(&["decode", "braille"], &[255]).status.code(), Some(1));
+}

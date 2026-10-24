@@ -100,6 +100,10 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// International Morse A-Z/0-9; collapse ASCII spaces; <=1 MiB input
+    Morse(Input),
+    /// Raw dot-mask bytes to Unicode Braille cells (not language transcription); <=1 MiB
+    Braille(Input),
     /// Encode as padded RFC 4648 standard Base32 with uppercase letters
     Base32(Input),
     /// Encode as Bitcoin Base58, preserving leading zero bytes as 1
@@ -112,6 +116,10 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Canonical Morse tokens (single spaces, / between words) to uppercase text
+    Morse(Input),
+    /// Unicode Braille cells to exact dot-mask bytes; hex by default, --output raw for binary
+    Braille(DecodeArgs),
     /// Decode strict uppercase standard Base32; padding is required when needed
     Base32(DecodeArgs),
     /// Decode case-sensitive Bitcoin Base58; whitespace and padding are rejected
@@ -372,6 +380,12 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Encode { command } => {
             let text = match command {
+                Encode::Morse(input) => {
+                    cube_core::symbols::morse_encode(&input.read_text("symbol.morse.encode")?)?
+                }
+                Encode::Braille(input) => cube_core::symbols::braille_encode(
+                    &input.read_bounded(cube_core::text::MAX_INPUT, "symbol.braille.encode")?,
+                )?,
                 Encode::Base32(input) => encoding::base32_encode(&input.read()?),
                 Encode::Base58(input) => encoding::base58_encode(&input.read()?),
                 Encode::Base64(input) => encoding::base64_encode(&input.read()?),
@@ -379,27 +393,39 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             };
             write_text(&mut output, &text)?;
         }
-        Command::Decode { command } => {
-            let (bytes, format) = match command {
-                Decode::Base32(args) => (
-                    encoding::base32_decode(&String::from_utf8(args.input.read()?)?)?,
-                    args.output,
-                ),
-                Decode::Base58(args) => (
-                    encoding::base58_decode(&String::from_utf8(args.input.read()?)?)?,
-                    args.output,
-                ),
-                Decode::Base64(args) => (
-                    encoding::base64_decode(&String::from_utf8(args.input.read()?)?)?,
-                    args.output,
-                ),
-                Decode::Hex(args) => (
-                    encoding::hex_decode(&String::from_utf8(args.input.read()?)?)?,
-                    args.output,
-                ),
-            };
-            write_bytes(&mut output, &bytes, format)?;
-        }
+        Command::Decode { command } => match command {
+            Decode::Morse(input) => write_text(
+                &mut output,
+                &cube_core::symbols::morse_decode(&input.read_text("symbol.morse.decode")?)?,
+            )?,
+            Decode::Braille(args) => write_bytes(
+                &mut output,
+                &cube_core::symbols::braille_decode(
+                    &args.input.read_text("symbol.braille.decode")?,
+                )?,
+                args.output,
+            )?,
+            Decode::Base32(args) => write_bytes(
+                &mut output,
+                &encoding::base32_decode(&String::from_utf8(args.input.read()?)?)?,
+                args.output,
+            )?,
+            Decode::Base58(args) => write_bytes(
+                &mut output,
+                &encoding::base58_decode(&String::from_utf8(args.input.read()?)?)?,
+                args.output,
+            )?,
+            Decode::Base64(args) => write_bytes(
+                &mut output,
+                &encoding::base64_decode(&String::from_utf8(args.input.read()?)?)?,
+                args.output,
+            )?,
+            Decode::Hex(args) => write_bytes(
+                &mut output,
+                &encoding::hex_decode(&String::from_utf8(args.input.read()?)?)?,
+                args.output,
+            )?,
+        },
         Command::Cipher { command } => {
             let text = match command {
                 Cipher::Atbash(input) => ciphers::atbash(&input.read_text("cipher.atbash")?)?,

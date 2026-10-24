@@ -14,6 +14,8 @@ from ._native import (
     base64_decode,
     base64_encode,
     beaufort,
+    braille_decode,
+    braille_encode,
     caesar_decode,
     caesar_encode,
     compare_files,
@@ -31,6 +33,8 @@ from ._native import (
     hex_encode,
     inspect_exif,
     inspect_file,
+    morse_decode,
+    morse_encode,
     normalize_text,
     operations,
     png_chunks,
@@ -44,6 +48,10 @@ from ._native import (
 )
 
 __all__ = [
+    "morse_encode",
+    "morse_decode",
+    "braille_encode",
+    "braille_decode",
     "UNICODE_VERSION",
     "normalize_text",
     "reverse_text",

@@ -487,3 +487,41 @@ Python: `normalize_text(text, "NFC")`, `reverse_text(text)` and
 `cube.UNICODE_VERSION` publishes the normalization data version tuple.
 CLI text results retain the existing final-newline convention; invalid UTF-8
 stdin fails without partial stdout.
+
+## Morse and Braille cells
+
+Morse supports International Morse **A–Z and 0–9** as defined by
+[ITU-R M.1677-1](https://www.itu.int/rec/R-REC-M.1677-1-200910-I/).
+Encode accepts lowercase, collapses runs of ASCII spaces and removes edge spaces.
+Decode returns uppercase text; exact original case/spacing cannot be recovered.
+The canonical grammar uses `.`/`-`, one ASCII space between symbols and ` / `
+between nonempty words. Decode rejects edge/doubled spaces, unknown tokens,
+unsupported punctuation/Unicode and newlines; no audio or timing inference occurs.
+
+```sh
+cube encode morse --text 'SOS 2'
+# ... --- ... / ..---
+cube decode morse --text '... --- ... / ..---'
+# SOS 2
+cube decode braille --text '⠀⠁⣿' --output hex
+# 0001ff
+```
+
+Braille encodes **raw dot masks**, not ordinary text or natural-language Braille.
+Byte bit `n−1` represents dot `n`; add the mask to U+2800 for the Unicode cell:
+
+```text
+1 4
+2 5
+3 6
+7 8
+```
+
+Blank mask 0 → U+2800; mask 1 → ⠁; mask 255 → ⣿. Every byte round trips.
+Encode consumes exact stdin bytes (or explicit UTF-8 bytes via `--text`);
+decode accepts only U+2800..U+28FF and returns hex by default or exact binary with
+`--output raw`. It does not strip a piped trailing newline: pass canonical text
+explicitly. Errors identify original UTF-8 byte positions without dumping inputs.
+These operations accept at most 1 MiB input; Morse output is bounded at 8 MiB,
+Braille output at 3 MiB. Python exposes `morse_encode(str)`, `morse_decode(str)`,
+`braille_encode(bytes)` and `braille_decode(str) -> bytes` over the Rust core.

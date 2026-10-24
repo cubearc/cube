@@ -1,4 +1,4 @@
-"""Encoding, ciphers, Unicode text, symbols and forensics backed by Rust."""
+"""Rust-backed encodings, ciphers, Unicode text, symbols and forensic operations."""
 
 from ._native import (
     UNICODE_VERSION,

@@ -24,7 +24,7 @@ operations; ROT13 reuses Caesar with shift 13.
 CRC-32/ISO-HDLC uses `crc32fast` and returns eight lowercase hexadecimal digits;
 it is a checksum rather than a cryptographic hash.
 
-Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, `forensics`, `image`, `text`, `symbols`, and `numbers`.
+Core modules follow responsibility: `encoding`, `ciphers`, `hashing`, `binary`, `forensics`, `image`, `text`, `symbols`, `numbers`, and `media`.
 Binary transformations accept byte slices and return bytes. Encodings and digests
 return strings with specified alphabets. Classical ciphers accept UTF-8 text, rotate
 only ASCII letters, and preserve other characters without normalization. Caesar
@@ -91,6 +91,18 @@ separates canonicalized Morse text from reversible Braille cell-mask bytes.
 arithmetic, independently of byte encodings. CLI/Python adapters share these
 functions and typed errors; new CLI stdin paths enforce bounds before buffering.
 Legacy public APIs retain their original behavior and discovery command order.
+
+The `media` module separates WAVE framing (`wave`), immutable selected PCM blocks
+(`pcm`) and incremental exact waveform aggregation (`envelope`). Metadata skips
+payloads with `Read + Seek`; extraction/envelopes share a concrete frame-aligned
+streaming callback with fixed-size I/O buffers. Private PCM block fields preserve
+format/channel/range invariants. Explicit signed amplitude interpretation is
+separate from original bytes. Whole-request and per-block budget validation
+precedes allocation/consumption, and result caps fail instead of truncating.
+The small RIFF subset needs only existing serde and Rust standard-library I/O;
+no new dependency, native library, ffmpeg subprocess or graphical/media runtime
+is introduced. Linux/macOS/Windows use the same implementation and packaging.
+Video, other codecs and spectral/detection policy remain outside current support.
 
 Future pipelines may compose these functions with typed intermediate values.
 There is no execution engine, plugin runtime, generic dispatcher or persistence

@@ -14,7 +14,7 @@ mod textcmd;
 #[command(
     name = "cube",
     version,
-    about = "Encoding, ciphers, text, symbols, hashing, binary tools, and file/image forensics"
+    about = "Encoding, ciphers, text, symbols, hashing, binary tools, and file/image/audio forensics"
 )]
 struct Cli {
     /// Emit failures as schema-versioned JSON on stderr (including usage errors)

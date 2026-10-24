@@ -9,12 +9,15 @@ from ._native import (
     base64_encode,
     caesar_decode,
     caesar_encode,
+    compare_files,
     copy_file_range,
     crc32,
     describe_operation,
     extract_bytes,
     extract_file_range,
+    file_hex,
     file_signatures,
+    file_strings,
     hex_decode,
     hex_encode,
     inspect_file,
@@ -26,6 +29,9 @@ from ._native import (
 )
 
 __all__ = [
+    "file_hex",
+    "file_strings",
+    "compare_files",
     "file_signatures",
     "inspect_file",
     "scan_file",

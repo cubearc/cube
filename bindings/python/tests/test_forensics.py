@@ -69,3 +69,35 @@ def test_stream_writer_failure_is_explicit(tmp_path):
     path.write_bytes(b"data")
     with pytest.raises(OSError):
         cube.copy_file_range(path, InvalidWriter(), 0, 4)
+
+
+def test_hex_strings_and_comparison_preserve_exact_values(tmp_path):
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    first.write_bytes(b"\x00hello world\xfftail")
+    second.write_bytes(b"\x00hello World\xff")
+    rows = cube.file_hex(first, offset=1, length=12, width=5)
+    assert rows[0]["offset"] == 1
+    assert rows[0]["bytes"] == b"hello"
+    assert rows[0]["hex"] == "68656c6c6f"
+    assert b"".join(r["bytes"] for r in rows) == b"hello world\xff"
+    result = cube.file_strings(first)
+    assert result["complete"] is True
+    assert result["strings"] == [
+        {"offset": 1, "length": 11, "text": "hello world"},
+        {"offset": 13, "length": 4, "text": "tail"},
+    ]
+    diff = cube.compare_files(first, second, max_results=1)
+    assert diff["equal"] is False
+    assert diff["differing_bytes"] == 5
+    assert diff["complete"] is False
+    assert diff["differences"][0] == {"offset": 7, "left": 119, "right": 87}
+    tail = cube.compare_files(first, second, offset=13)
+    assert tail["differences"][0]["right"] is None
+    for call in [
+        lambda: cube.file_hex(first, width=0),
+        lambda: cube.file_strings(first, min_length=0),
+        lambda: cube.compare_files(first, second, max_results=0),
+    ]:
+        with pytest.raises(ValueError):
+            call()

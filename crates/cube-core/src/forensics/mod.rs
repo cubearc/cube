@@ -5,6 +5,7 @@
 //! network. Reader APIs let callers control transport without a CLI subprocess.
 
 pub mod inspect;
+pub mod ranges;
 
 pub mod signatures;
 

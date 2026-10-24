@@ -109,6 +109,77 @@ fn extract_file_range(
     forensics::extract_range(&source, &destination, offset, length).map_err(file_error)
 }
 
+/// Return bounded hexadecimal rows with original bytes, offsets and ASCII previews.
+#[pyfunction]
+#[pyo3(signature = (path, *, offset=0, length=None, width=16))]
+fn file_hex(
+    py: Python<'_>,
+    path: std::path::PathBuf,
+    offset: u64,
+    length: Option<u64>,
+    width: usize,
+) -> PyResult<Py<PyAny>> {
+    let mut file = forensics::open_regular(&path).map_err(file_error)?;
+    let length = length.or_else(|| {
+        file.metadata()
+            .ok()
+            .map(|m| m.len().saturating_sub(offset).min(256))
+    });
+    let rows =
+        forensics::ranges::hex_rows(&mut file, forensics::ByteRange { offset, length }, width)
+            .map_err(file_error)?;
+    let result = structured(py, &serde_json::json!(rows))?;
+    for (item, row) in result.bind(py).try_iter()?.zip(&rows) {
+        item?.set_item("bytes", PyBytes::new(py, &row.bytes))?;
+    }
+    Ok(result)
+}
+
+/// Extract ASCII runs; incomplete budget-limited results are flagged explicitly.
+#[pyfunction]
+#[pyo3(signature = (path, *, offset=0, length=None, min_length=4, max_results=1000))]
+fn file_strings(
+    py: Python<'_>,
+    path: std::path::PathBuf,
+    offset: u64,
+    length: Option<u64>,
+    min_length: usize,
+    max_results: usize,
+) -> PyResult<Py<PyAny>> {
+    let mut file = forensics::open_regular(&path).map_err(file_error)?;
+    let result = forensics::ranges::strings(
+        &mut file,
+        forensics::ByteRange { offset, length },
+        min_length,
+        max_results,
+    )
+    .map_err(file_error)?;
+    structured(py, &serde_json::json!(result))
+}
+
+/// Compare exact byte offsets; missing tail bytes are None rather than zero.
+#[pyfunction]
+#[pyo3(signature = (first, second, *, offset=0, length=None, max_results=1000))]
+fn compare_files(
+    py: Python<'_>,
+    first: std::path::PathBuf,
+    second: std::path::PathBuf,
+    offset: u64,
+    length: Option<u64>,
+    max_results: usize,
+) -> PyResult<Py<PyAny>> {
+    let mut first = forensics::open_regular(&first).map_err(file_error)?;
+    let mut second = forensics::open_regular(&second).map_err(file_error)?;
+    let result = forensics::ranges::compare(
+        &mut first,
+        &mut second,
+        forensics::ByteRange { offset, length },
+        max_results,
+    )
+    .map_err(file_error)?;
+    structured(py, &serde_json::json!(result))
+}
+
 struct PythonWriter<'py>(Bound<'py, PyAny>);
 impl std::io::Write for PythonWriter<'_> {
     fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
@@ -284,6 +355,9 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(file_hex, module)?)?;
+    module.add_function(wrap_pyfunction!(file_strings, module)?)?;
+    module.add_function(wrap_pyfunction!(compare_files, module)?)?;
     module.add_function(wrap_pyfunction!(file_signatures, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_file, module)?)?;
     module.add_function(wrap_pyfunction!(scan_file, module)?)?;

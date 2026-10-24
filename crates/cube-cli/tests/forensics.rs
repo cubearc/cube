@@ -80,3 +80,37 @@ fn file_inspection_and_safe_raw_extraction() {
     let output = run(&["file", "extract", path, "--offset", "0", "--length", "1"]);
     assert_eq!(output.status.code(), Some(2));
 }
+
+#[test]
+fn hex_strings_and_compare_have_structured_and_human_output() {
+    let files = Files::new("ranges");
+    let first = files.path("first");
+    let second = files.path("second");
+    std::fs::write(&first, b"\0hello\xfftail").unwrap();
+    std::fs::write(&second, b"\0Hello").unwrap();
+    let a = first.to_str().unwrap();
+    let b = second.to_str().unwrap();
+    for args in [
+        vec!["file", "hex", a, "--json"],
+        vec!["file", "strings", a, "--json"],
+        vec!["file", "compare", a, b, "--json"],
+    ] {
+        let output = run(&args);
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let _: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    }
+    let output = run(&[
+        "file", "hex", a, "--offset", "5", "--length", "2", "--width", "2",
+    ]);
+    assert!(output.status.success());
+    assert_eq!(output.stdout, b"00000005  6f ff  |o.|\n");
+    let output = run(&["file", "strings", a]);
+    assert!(String::from_utf8_lossy(&output.stdout).contains("00000001  5  hello"));
+    let output = run(&["file", "compare", a, b]);
+    assert!(output.status.success());
+    assert!(String::from_utf8_lossy(&output.stdout).contains("EOF"));
+}

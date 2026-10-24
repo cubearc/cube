@@ -1,6 +1,6 @@
 //! File command adapters. All inspection and copying logic lives in cube-core.
 use clap::{Args, Subcommand};
-use cube_core::forensics::{self, ByteRange, inspect, signatures};
+use cube_core::forensics::{self, ByteRange, inspect, ranges, signatures};
 use std::{
     error::Error,
     io::{Read, Write},
@@ -31,6 +31,36 @@ impl Selection {
 
 #[derive(Subcommand)]
 pub(crate) enum FileCommand {
+    /// Inspect hexadecimal rows (first 256 bytes by default; source remains unchanged)
+    Hex {
+        #[command(flatten)]
+        selection: Selection,
+        /// Bytes per row, from 1 to 256
+        #[arg(long, default_value_t = 16)]
+        width: usize,
+    },
+    /// Extract printable ASCII runs with exact byte offsets
+    Strings {
+        #[command(flatten)]
+        selection: Selection,
+        #[arg(long, default_value_t = 4)]
+        min_length: usize,
+        #[arg(long, default_value_t = 1000)]
+        max_results: usize,
+    },
+    /// Compare exact byte offsets; differing contents still exit successfully
+    Compare {
+        first: PathBuf,
+        second: PathBuf,
+        #[arg(long, default_value_t = 0)]
+        offset: u64,
+        #[arg(long)]
+        length: Option<u64>,
+        #[arg(long, default_value_t = 1000)]
+        max_results: usize,
+        #[arg(long)]
+        json: bool,
+    },
     /// Identify header signature candidates; this does not validate file contents
     Signature {
         path: PathBuf,
@@ -106,6 +136,99 @@ pub(crate) fn info(
 
 pub(crate) fn run(command: FileCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        FileCommand::Hex { selection, width } => {
+            let mut file = forensics::open_regular(&selection.path)?;
+            let range = ByteRange {
+                offset: selection.offset,
+                length: Some(selection.length.unwrap_or_else(|| {
+                    file.metadata()
+                        .map(|m| m.len().saturating_sub(selection.offset).min(256))
+                        .unwrap_or(256)
+                })),
+            };
+            let rows = ranges::hex_rows(&mut file, range, width)?;
+            if selection.json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&rows)?)?;
+            } else {
+                for row in rows {
+                    let hex = row
+                        .bytes
+                        .iter()
+                        .map(|b| format!("{b:02x}"))
+                        .collect::<Vec<_>>()
+                        .join(" ");
+                    writeln!(
+                        output,
+                        "{:08x}  {:<width$}  |{}|",
+                        row.offset,
+                        hex,
+                        row.ascii,
+                        width = width * 3 - 1
+                    )?;
+                }
+            }
+        }
+        FileCommand::Strings {
+            selection,
+            min_length,
+            max_results,
+        } => {
+            let mut file = forensics::open_regular(&selection.path)?;
+            let result = ranges::strings(&mut file, selection.range(), min_length, max_results)?;
+            if selection.json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                for run in &result.strings {
+                    writeln!(output, "{:08x}  {}  {}", run.offset, run.length, run.text)?;
+                }
+                writeln!(
+                    output,
+                    "Scanned: {} bytes; complete: {}",
+                    result.scanned_bytes, result.complete
+                )?;
+            }
+        }
+        FileCommand::Compare {
+            first,
+            second,
+            offset,
+            length,
+            max_results,
+            json,
+        } => {
+            let mut first = forensics::open_regular(&first)?;
+            let mut second = forensics::open_regular(&second)?;
+            let result = ranges::compare(
+                &mut first,
+                &mut second,
+                ByteRange { offset, length },
+                max_results,
+            )?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "Equal: {}; differing bytes: {}; listing complete: {}",
+                    result.equal, result.differing_bytes, result.complete
+                )?;
+                for difference in result.differences {
+                    writeln!(
+                        output,
+                        "{:08x}  {} -> {}",
+                        difference.offset,
+                        difference
+                            .left
+                            .map(|b| format!("{b:02x}"))
+                            .unwrap_or_else(|| "EOF".into()),
+                        difference
+                            .right
+                            .map(|b| format!("{b:02x}"))
+                            .unwrap_or_else(|| "EOF".into())
+                    )?;
+                }
+            }
+        }
         FileCommand::Signature { path, json } => {
             let mut file = forensics::open_regular(&path)?;
             let mut header = Vec::new();

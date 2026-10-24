@@ -145,6 +145,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::forensics::OPERATIONS)
         .chain(crate::forensics::signatures::OPERATIONS)
         .chain(crate::forensics::inspect::OPERATIONS)
+        .chain(crate::forensics::ranges::OPERATIONS)
         .collect()
 }
 

@@ -45,3 +45,26 @@ def extract_file_range(
 def copy_file_range(
     source: str | PathLike[str], writer: BinaryIO, offset: int, length: int
 ) -> int: ...
+def file_hex(
+    path: str | PathLike[str],
+    *,
+    offset: int = 0,
+    length: int | None = None,
+    width: int = 16,
+) -> list[dict[str, Any]]: ...
+def file_strings(
+    path: str | PathLike[str],
+    *,
+    offset: int = 0,
+    length: int | None = None,
+    min_length: int = 4,
+    max_results: int = 1000,
+) -> dict[str, Any]: ...
+def compare_files(
+    first: str | PathLike[str],
+    second: str | PathLike[str],
+    *,
+    offset: int = 0,
+    length: int | None = None,
+    max_results: int = 1000,
+) -> dict[str, Any]: ...

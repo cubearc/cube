@@ -263,3 +263,28 @@ candidates = cube.scan_file("sample.bin", format="png", max_results=100)
 assert cube.extract_bytes(b"\x00\xff\x80", 1, 2) == b"\xff\x80"
 # For larger results, use extract_file_range or copy_file_range with a binary writer.
 ```
+
+```sh
+cube file hex sample.bin --offset 16 --length 64 --width 16
+cube file strings sample.bin --min-length 4 --json
+cube file compare first.bin second.bin --max-results 100 --json
+```
+
+Hex inspection defaults to the first 256 bytes, with widths from 1 to 256. JSON
+rows carry explicit hex; Python rows additionally expose original `bytes`. ASCII
+previews replace nonprintable bytes with `.`. Hex allocations, including row
+and rendered-data overhead, are bounded by a conservative 16 MiB budget.
+
+String extraction recognizes exactly ASCII bytes 0x20–0x7e, including spaces.
+Minimum length counts bytes, not Unicode characters; no encoding is guessed.
+Runs cross buffer boundaries and include EOF. A run cannot exceed 1 MiB, total
+text is bounded to 16 MiB, and the scan/result caps are explicit in `complete`.
+
+Binary comparison reports one-byte differing ranges at corresponding offsets,
+including unequal tails (`null`/`None` means absent, not zero). The selected range
+is validated against the larger file. Counts remain exact when the difference
+listing is capped; `complete` describes the listing. Comparison processes at most
+64 MiB per request and differences are successful results (CLI exit 0).
+
+Python provides `file_hex`, `file_strings` and `compare_files` with equivalent
+keyword parameters and structured results. File algorithms remain solely in Rust.

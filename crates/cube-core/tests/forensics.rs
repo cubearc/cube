@@ -205,3 +205,130 @@ fn copying_detects_short_reads_and_writer_failures() {
     let error = OperationError::new(ErrorCode::UnsupportedFormat, "unsupported");
     assert_eq!(error.code.as_str(), "unsupported_format");
 }
+
+#[test]
+fn hex_rows_preserve_raw_bytes_offsets_and_ascii() {
+    use forensics::ranges::hex_rows;
+    let rows = hex_rows(
+        &mut Cursor::new(b"\0 A\xffB"),
+        ByteRange {
+            offset: 1,
+            length: Some(4),
+        },
+        3,
+    )
+    .unwrap();
+    assert_eq!(rows.len(), 2);
+    assert_eq!(rows[0].offset, 1);
+    assert_eq!(rows[0].hex, "2041ff");
+    assert_eq!(rows[0].ascii, " A.");
+    assert_eq!(rows[0].bytes, b" A\xff");
+    assert_eq!(rows[1].offset, 4);
+    assert_eq!(rows[1].bytes, b"B");
+    for width in [0, 257] {
+        assert!(hex_rows(&mut Cursor::new(b""), ByteRange::default(), width).is_err());
+    }
+    assert!(
+        hex_rows(&mut Cursor::new(b""), ByteRange::default(), 16)
+            .unwrap()
+            .is_empty()
+    );
+}
+
+#[test]
+fn printable_runs_include_eof_and_join_buffer_boundaries() {
+    use forensics::ranges::strings;
+    let mut data = vec![0; 65534];
+    data.extend_from_slice(b"hello world\0short\xfftail");
+    let result = strings(&mut Cursor::new(&data), ByteRange::default(), 4, 10).unwrap();
+    assert!(result.complete);
+    assert_eq!(
+        result
+            .strings
+            .iter()
+            .map(|s| (s.offset, s.length, s.text.as_str()))
+            .collect::<Vec<_>>(),
+        [
+            (65534, 11, "hello world"),
+            (65546, 5, "short"),
+            (65552, 4, "tail")
+        ]
+    );
+    let result = strings(&mut Cursor::new(b"a\0bb\0ccc"), ByteRange::default(), 2, 1).unwrap();
+    assert!(!result.complete);
+    assert_eq!(result.strings[0].text, "bb");
+    assert!(
+        strings(&mut Cursor::new(b""), ByteRange::default(), 1, 1)
+            .unwrap()
+            .complete
+    );
+    assert!(
+        strings(&mut Cursor::new(b"\xff\0"), ByteRange::default(), 1, 1)
+            .unwrap()
+            .strings
+            .is_empty()
+    );
+    assert!(strings(&mut Cursor::new(b""), ByteRange::default(), 0, 1).is_err());
+    assert_eq!(
+        strings(
+            &mut Cursor::new(vec![b'a'; 1024 * 1024 + 1]),
+            ByteRange::default(),
+            1,
+            1
+        )
+        .unwrap_err()
+        .code,
+        ErrorCode::ResourceLimit
+    );
+}
+
+#[test]
+fn binary_comparison_counts_all_differences_with_bounded_listing() {
+    use forensics::ranges::compare;
+    let result = compare(
+        &mut Cursor::new([0, 255, 128]),
+        &mut Cursor::new([0, 0]),
+        ByteRange::default(),
+        1,
+    )
+    .unwrap();
+    assert!(!result.equal);
+    assert_eq!(result.differing_bytes, 2);
+    assert!(!result.complete);
+    assert_eq!(result.differences[0].offset, 1);
+    assert_eq!(result.differences[0].left, Some(255));
+    assert_eq!(result.differences[0].right, Some(0));
+    let result = compare(
+        &mut Cursor::new([0, 255, 128]),
+        &mut Cursor::new([0, 0]),
+        ByteRange {
+            offset: 2,
+            length: Some(1),
+        },
+        10,
+    )
+    .unwrap();
+    assert_eq!(result.differences[0].right, None);
+    assert!(result.complete);
+    assert!(
+        compare(
+            &mut Cursor::new(b""),
+            &mut Cursor::new(b""),
+            ByteRange::default(),
+            10
+        )
+        .unwrap()
+        .equal
+    );
+    let mut first = vec![0; 65537];
+    let second = first.clone();
+    first[65536] = 255;
+    let result = compare(
+        &mut Cursor::new(first),
+        &mut Cursor::new(second),
+        ByteRange::default(),
+        10,
+    )
+    .unwrap();
+    assert_eq!(result.differences[0].offset, 65536);
+}

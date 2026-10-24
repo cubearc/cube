@@ -9,6 +9,7 @@ pub mod encoding;
 pub mod errors;
 pub mod forensics;
 pub mod hashing;
+pub mod image;
 pub mod operations;
 
 use std::fmt;

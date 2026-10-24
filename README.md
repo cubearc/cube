@@ -320,3 +320,34 @@ or validate compressed pixels and does not assert that trailing bytes hide data.
 Unknown critical chunks and APNG are unsupported. The scan is limited to 64 MiB
 before IEND and 10000 chunks; trailing content is not loaded. Python exposes
 `appended_data(path)`. See the [PNG specification](https://www.w3.org/TR/png-3/).
+
+## PNG8 image foundation
+
+`cube image inspect sample.png --json` reports exact dimensions, source color
+model, palette, transparency and raw chunk metadata. `cube image chunks sample.png
+--json` inspects framing/CRCs through the shared file-forensics parser. Strict
+inspection rejects CRC mismatches; `--allow-bad-crc` explicitly reports them while
+still rejecting unsafe framing. Payloads are absent by default; `--payload-budget`
+opts into at most 1 MiB of total raw chunk payload export.
+
+Image decoding supports 8-bit grayscale, grayscale+alpha, RGB, RGBA and indexed
+PNG, preserving row-major interleaved samples with a top-left origin. Other
+formats/depths fail explicitly. Limits: 32 MiB encoded, 16384 pixels per side,
+4 Mi pixels, 16 MiB of decoded samples and a 32 MiB decoder-internal budget.
+No gamma/profile conversion, premultiplication or compositing occurs; text/ICC
+metadata is not decompressed. eXIf inspection is explicit and reuses bounded TIFF
+parsing. Encoding preserves sample values, palette and tRNS, and drops all other
+metadata to avoid stale attributes. Source bytes need not round-trip identically.
+
+```python
+image = cube.Image.open("sample.png")
+info = image.info()
+samples = image.samples  # exact bytes, including original indices for indexed PNG
+png = image.encode_png()
+image.save_png("new-output.png")  # exclusive creation
+```
+
+`cube image convert sample.png --output new.png` re-encodes exact samples.
+Indexed expansion is explicit through `--expand-palette` or
+`image.expand_palette()` and produces unpremultiplied RGBA, supplying alpha 255
+for palette entries without tRNS. Images and existing outputs are never overwritten.

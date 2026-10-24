@@ -16,7 +16,7 @@ fn read(reader: &mut impl Read, bytes: &mut [u8]) -> Result<(), OperationError> 
 }
 
 /// A validated PNG framing boundary, not proof that compressed pixels decode.
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct Boundary {
     pub format: &'static str,
     pub logical_end: u64,
@@ -26,12 +26,42 @@ pub struct Boundary {
     pub evidence: &'static str,
 }
 
-/// Locate IEND after bounded framing/CRC/order validation. Supports basic PNG
-/// (IHDR, optional PLTE, consecutive IDAT, IEND and ancillary chunks). Unknown
-/// critical chunks and APNG are unsupported. Pixel decompression is intentionally
-/// excluded. At most 64 MiB before IEND and 10000 chunks are processed.
-pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationError> {
+/// Exact chunk framing and CRC evidence. Payload hex is opt-in and budgeted.
+#[derive(Clone, Debug, Serialize)]
+pub struct Chunk {
+    pub kind: String,
+    pub offset: u64,
+    pub length: u32,
+    pub stored_crc: u32,
+    pub calculated_crc: u32,
+    pub valid: bool,
+    pub payload_hex: Option<String>,
+}
+/// PNG framing report; valid CRCs do not prove that compressed pixels decode.
+#[derive(Clone, Debug, Serialize)]
+pub struct Report {
+    pub boundary: Boundary,
+    pub chunks: Vec<Chunk>,
+    pub crc_valid: bool,
+}
+
+/// Inspect basic PNG framing without pixel decoding. Strict mode rejects any CRC
+/// mismatch; inspection mode reports it and continues only within checked lengths.
+/// Structural errors, unknown critical chunks and APNG fail in either mode.
+/// Processing is capped at 64 MiB before IEND and 10000 chunks. Payload export is
+/// disabled by zero; a positive total payload budget must not exceed 1 MiB.
+pub fn inspect(
+    reader: &mut (impl Read + Seek),
+    strict: bool,
+    payload_budget: usize,
+) -> Result<Report, OperationError> {
     let result = (|| {
+        if payload_budget > 1024 * 1024 {
+            return Err(limit("PNG payload export budget exceeds 1 MiB"));
+        }
+        let mut exported = 0usize;
+        let mut records = Vec::new();
+        let mut crc_valid = true;
         let total = size(reader)?;
         reader.seek(SeekFrom::Start(0))?;
         let mut signature = [0; 8];
@@ -39,7 +69,7 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
         if &signature != b"\x89PNG\r\n\x1a\n" {
             return Err(OperationError::new(
                 ErrorCode::UnsupportedFormat,
-                "appended-data boundaries currently support PNG only",
+                "PNG framing inspection supports PNG only",
             ));
         }
         let mut offset = 8u64;
@@ -110,6 +140,15 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
                 )
                 .offset(offset));
             }
+            let mut payload = Vec::new();
+            if payload_budget > 0 {
+                exported = exported
+                    .checked_add(length as usize)
+                    .ok_or_else(|| limit("PNG payload export overflow"))?;
+                if exported > payload_budget {
+                    return Err(limit("PNG payload export exceeds requested total budget"));
+                }
+            }
             let mut hasher = crc32fast::Hasher::new();
             hasher.update(kind);
             let mut remaining = length;
@@ -118,6 +157,9 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
                 let count = remaining.min(buffer.len() as u64) as usize;
                 read(reader, &mut buffer[..count])?;
                 hasher.update(&buffer[..count]);
+                if payload_budget > 0 {
+                    payload.extend_from_slice(&buffer[..count]);
+                }
                 if kind == b"IHDR" {
                     let width = u32::from_be_bytes(buffer[..4].try_into().expect("IHDR width"));
                     let height = u32::from_be_bytes(buffer[4..8].try_into().expect("IHDR height"));
@@ -149,9 +191,22 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
             }
             let mut crc = [0; 4];
             read(reader, &mut crc)?;
-            if u32::from_be_bytes(crc) != hasher.finalize() {
+            let stored_crc = u32::from_be_bytes(crc);
+            let calculated_crc = hasher.finalize();
+            let valid = stored_crc == calculated_crc;
+            if !valid && strict {
                 return Err(malformed("PNG chunk CRC mismatch").offset(offset));
             }
+            crc_valid &= valid;
+            records.push(Chunk {
+                kind: String::from_utf8(kind.to_vec()).expect("validated ASCII chunk type"),
+                offset,
+                length: length as u32,
+                stored_crc,
+                calculated_crc,
+                valid,
+                payload_hex: (payload_budget > 0).then(|| hex::encode(payload)),
+            });
             if kind == b"PLTE" {
                 palette = true;
             }
@@ -162,30 +217,78 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
             }
             offset = end;
             if kind == b"IEND" {
-                return Ok(Boundary {
-                    format: "png",
-                    logical_end: end,
-                    trailing_offset: end,
-                    trailing_bytes: total - end,
-                    validated_chunks: chunks,
-                    evidence: "PNG framing, IHDR/order and all chunk CRCs validated; pixel stream not decoded",
+                return Ok(Report {
+                    boundary: Boundary {
+                        format: "png",
+                        logical_end: end,
+                        trailing_offset: end,
+                        trailing_bytes: total - end,
+                        validated_chunks: chunks,
+                        evidence: if crc_valid {
+                            "PNG framing, IHDR/order and all chunk CRCs validated; pixel stream not decoded"
+                        } else {
+                            "PNG framing inspected with CRC mismatches; not a validated boundary"
+                        },
+                    },
+                    chunks: records,
+                    crc_valid,
                 });
             }
         }
     })();
-    result.map_err(|e: OperationError| e.operation("file.appended.detect"))
+    result.map_err(|e: OperationError| e.operation("image.png.inspect"))
+}
+
+/// Locate a validated IEND boundary using the same strict chunk inspector.
+/// The existing boundary API and error operation ID remain compatible.
+pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationError> {
+    inspect(reader, true, 0)
+        .map(|report| report.boundary)
+        .map_err(|e| e.operation("file.appended.detect"))
 }
 
 /// Operation descriptors maintained beside the implementation.
-pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::Descriptor {
-    id: "file.appended.detect",
-    category: "file",
-    description: "Find trailing bytes after validated PNG framing and CRCs; no pixel decoding.",
-    input_type: "byte_reader",
-    output_type: "file.png_boundary",
-    command: "file appended",
-    example: "cube file appended sample.png",
-    parameters: &[],
-    deterministic: true,
-    reversible: None,
-}];
+pub const OPERATIONS: &[crate::operations::Descriptor] = &[
+    crate::operations::Descriptor {
+        id: "file.appended.detect",
+        category: "file",
+        description: "Find trailing bytes after validated PNG framing and CRCs; no pixel decoding.",
+        input_type: "byte_reader",
+        output_type: "file.png_boundary",
+        command: "file appended",
+        example: "cube file appended sample.png",
+        parameters: &[],
+        deterministic: true,
+        reversible: None,
+    },
+    crate::operations::Descriptor {
+        id: "image.png.inspect",
+        category: "image",
+        description: "Inspect PNG chunks, exact offsets and CRC evidence without pixel decoding.",
+        input_type: "byte_reader",
+        output_type: "image.png_report",
+        command: "image chunks",
+        example: "cube image chunks sample.png --json",
+        deterministic: true,
+        reversible: None,
+        parameters: &[
+            crate::operations::Parameter {
+                name: "strict",
+                description: "Reject CRC errors; false reports mismatches but still rejects unsafe framing.",
+                required: false,
+                default: Some(crate::operations::ParameterValue::Boolean(true)),
+                constraints: crate::operations::ParameterType::Boolean,
+            },
+            crate::operations::Parameter {
+                name: "payload_budget",
+                description: "Total optional raw payload export budget; zero disables payload export.",
+                required: false,
+                default: Some(crate::operations::ParameterValue::Unsigned(0)),
+                constraints: crate::operations::ParameterType::Unsigned {
+                    min: 0,
+                    max: 1048576,
+                },
+            },
+        ],
+    },
+];

@@ -5,6 +5,8 @@ use pyo3::exceptions::{PyOSError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
+mod image;
+
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
         let exception = PyValueError::new_err(error.to_string());
@@ -371,6 +373,8 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_class::<image::PyImage>()?;
+    module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_exif, module)?)?;
     module.add_function(wrap_pyfunction!(file_exif, module)?)?;
     module.add_function(wrap_pyfunction!(appended_data, module)?)?;

@@ -1,6 +1,7 @@
 """Encoding, ciphers, hashing, binary tools, and file forensics backed by Rust."""
 
 from ._native import (
+    Image,
     appended_data,
     base32_decode,
     base32_encode,
@@ -25,6 +26,7 @@ from ._native import (
     inspect_exif,
     inspect_file,
     operations,
+    png_chunks,
     rot13,
     scan_file,
     sha256,
@@ -32,6 +34,8 @@ from ._native import (
 )
 
 __all__ = [
+    "Image",
+    "png_chunks",
     "inspect_exif",
     "file_exif",
     "appended_data",

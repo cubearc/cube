@@ -25,7 +25,31 @@ fn affine_encode(text: &str, a: i32, b: i32) -> PyResult<String> {
 fn affine_decode(text: &str, a: i32, b: i32) -> PyResult<String> {
     ciphers::affine_decode(text, a, b).map_err(super::file_error)
 }
+#[pyfunction]
+fn normalize_text(text: &str, form: &str) -> PyResult<String> {
+    cube_core::text::normalize(text, form).map_err(super::file_error)
+}
+#[pyfunction]
+fn reverse_text(text: &str) -> PyResult<String> {
+    cube_core::text::reverse(text).map_err(super::file_error)
+}
+#[pyfunction]
+#[pyo3(signature=(text, *, indices=None, start=None, stride=None, stop=None))]
+fn extract_characters(
+    text: &str,
+    indices: Option<Vec<usize>>,
+    start: Option<usize>,
+    stride: Option<usize>,
+    stop: Option<usize>,
+) -> PyResult<String> {
+    cube_core::text::extract(text, indices.as_deref(), start, stride, stop)
+        .map_err(super::file_error)
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add("UNICODE_VERSION", cube_core::text::UNICODE_VERSION)?;
+    module.add_function(wrap_pyfunction!(normalize_text, module)?)?;
+    module.add_function(wrap_pyfunction!(reverse_text, module)?)?;
+    module.add_function(wrap_pyfunction!(extract_characters, module)?)?;
     module.add_function(wrap_pyfunction!(atbash, module)?)?;
     module.add_function(wrap_pyfunction!(vigenere_encode, module)?)?;
     module.add_function(wrap_pyfunction!(vigenere_decode, module)?)?;

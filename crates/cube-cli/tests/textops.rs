@@ -103,3 +103,70 @@ fn classical_commands_use_shared_rules_and_errors() {
         assert_eq!(error["error"]["code"], code);
     }
 }
+
+#[test]
+fn unicode_text_commands_are_explicit_and_bounded() {
+    success(
+        &["text", "normalize", "--form", "NFC", "--text", "e\u{301}"],
+        b"",
+        "é\n".as_bytes(),
+    );
+    success(
+        &["text", "reverse"],
+        "e\u{301}\r\n".as_bytes(),
+        "\n\r\u{301}e\n".as_bytes(),
+    );
+    success(
+        &[
+            "text",
+            "extract",
+            "--indices",
+            "5,1,1,2",
+            "--text",
+            "Aé🧊e\u{301}Z",
+        ],
+        b"",
+        "Zéé🧊\n".as_bytes(),
+    );
+    success(
+        &["text", "extract", "--indices", "", "--text", ""],
+        b"",
+        b"\n",
+    );
+    success(
+        &[
+            "text", "extract", "--start", "1", "--stride", "2", "--text", "abcdef",
+        ],
+        b"",
+        b"bdf\n",
+    );
+    for args in [
+        vec!["text", "normalize", "--form", "other"],
+        vec!["text", "extract", "--indices", "-1"],
+        vec!["text", "extract", "--stride", "0"],
+        vec!["text", "extract", "--indices", "2", "--text", "é"],
+    ] {
+        let result = run(&args, b"");
+        assert!(!result.status.success());
+        assert!(result.stdout.is_empty());
+    }
+    for args in [
+        vec!["text", "normalize", "--form", "NFC"],
+        vec!["text", "reverse"],
+        vec!["text", "extract", "--stride", "1"],
+    ] {
+        let result = run(&args, &[255]);
+        assert_eq!(result.status.code(), Some(1));
+        assert!(result.stdout.is_empty());
+    }
+    assert_eq!(
+        run(
+            &["text", "extract", "--indices", "0", "--stride", "1"],
+            b"a"
+        )
+        .status
+        .code(),
+        Some(2)
+    );
+    assert_eq!(run(&["text", "extract"], b"a").status.code(), Some(2));
+}

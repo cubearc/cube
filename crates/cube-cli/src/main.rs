@@ -7,6 +7,7 @@ use cube_core::{binary, ciphers, encoding, hashing, operations};
 
 mod filecmd;
 mod imagecmd;
+mod textcmd;
 
 #[derive(Parser)]
 #[command(
@@ -24,6 +25,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Explicit Unicode scalar transformations and normalization (bounded input)
+    Text {
+        #[command(subcommand)]
+        command: textcmd::TextCommand,
+    },
     /// Inspect and transform bounded images without a graphical dependency
     Image {
         #[command(subcommand)]
@@ -295,6 +301,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Text { command } => textcmd::run(command, &mut output)?,
         Command::Image { command } => imagecmd::run(command, &mut output)?,
         Command::Inspect { path, json } => filecmd::info(path, json, &mut output)?,
         Command::File { command } => filecmd::run(command, &mut output)?,

@@ -1,6 +1,7 @@
 """Encoding, ciphers, hashing, binary tools, and file forensics backed by Rust."""
 
 from ._native import (
+    UNICODE_VERSION,
     Image,
     affine_decode,
     affine_encode,
@@ -20,6 +21,7 @@ from ._native import (
     crc32,
     describe_operation,
     extract_bytes,
+    extract_characters,
     extract_file_range,
     file_exif,
     file_hex,
@@ -29,8 +31,10 @@ from ._native import (
     hex_encode,
     inspect_exif,
     inspect_file,
+    normalize_text,
     operations,
     png_chunks,
+    reverse_text,
     rot13,
     scan_file,
     sha256,
@@ -40,6 +44,10 @@ from ._native import (
 )
 
 __all__ = [
+    "UNICODE_VERSION",
+    "normalize_text",
+    "reverse_text",
+    "extract_characters",
     "atbash",
     "vigenere_encode",
     "vigenere_decode",

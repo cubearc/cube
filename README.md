@@ -455,3 +455,35 @@ Python exposes `atbash(text)`, `vigenere_encode(text,key)`,
 `vigenere_decode(text,key)`, `beaufort(text,key)`, `affine_encode(text,a,b)`
 and `affine_decode(text,a,b)`, calling the same Rust functions. New operations
 raise contextual `ValueError` on invalid parameters or resource limits.
+
+## Explicit Unicode text operations
+
+`text normalize --form NFC|NFD|NFKC|NFKD` uses
+[UAX #15](https://www.unicode.org/reports/tr15/) with Unicode **18.0.0** data from
+pinned `unicode-normalization` 0.1.26. NFC/NFD canonically compose/decompose;
+NFKC/NFKD also fold compatibility distinctions. Normalization is not reversible
+and never happens implicitly in another operation. Dependency/data-version updates
+require compatibility review; outputs are deterministic for the published version.
+Input is limited to 1 MiB UTF-8 and expanding output to 8 MiB.
+
+`text reverse` reverses Unicode **scalar values**, including combining marks,
+emoji joiners and CRLF pairs; visual graphemes may split. Reversing twice recovers
+exact input. `text extract --indices 3,0,3` selects ordered zero-based scalar
+positions, preserving duplicates; `--indices ''` returns empty text.
+Alternatively, `--start 1 --stride 2 --stop 6` selects alternate positions before
+an exclusive stop (start defaults to 0, stop to scalar length). Choose exactly one
+mode; stride must be positive, all bounds must fit, and lists have at most 65536
+indexes. No clipping, byte indexing, trimming or normalization occurs.
+
+```sh
+cube text normalize --form NFC --text 'café'
+cube text reverse --text 'Cube 🧊'
+cube text extract --start 1 --stride 2 --text abcdef
+```
+
+Python: `normalize_text(text, "NFC")`, `reverse_text(text)` and
+`extract_characters(text, indices=[3,0,3])` or
+`extract_characters(text, start=1, stride=2, stop=6)` call Rust directly.
+`cube.UNICODE_VERSION` publishes the normalization data version tuple.
+CLI text results retain the existing final-newline convention; invalid UTF-8
+stdin fails without partial stdout.

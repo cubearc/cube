@@ -14,3 +14,208 @@ pub(crate) fn check_input(input: &str, operation: &'static str) -> Result<(), Op
         Ok(())
     }
 }
+
+use unicode_normalization::UnicodeNormalization;
+/// Unicode data used by normalization. Changes require an intentional dependency
+/// update and compatibility review; other text operations do not normalize.
+pub const UNICODE_VERSION: (u8, u8, u8) = unicode_normalization::UNICODE_VERSION;
+/// Maximum explicit positional indexes; repeated indexes are permitted.
+pub const MAX_INDICES: usize = 65536;
+pub(crate) fn collect_bounded(
+    chars: impl Iterator<Item = char>,
+    operation: &'static str,
+) -> Result<String, OperationError> {
+    let mut output = String::new();
+    for c in chars {
+        if output.len() + c.len_utf8() > MAX_OUTPUT {
+            return Err(
+                OperationError::new(ErrorCode::ResourceLimit, "text output exceeds 8 MiB")
+                    .operation(operation),
+            );
+        }
+        output.push(c);
+    }
+    Ok(output)
+}
+/// Apply explicit NFC/NFD/NFKC/NFKD using the published Unicode data version.
+/// UAX #15: https://www.unicode.org/reports/tr15/ . Canonical forms compose or
+/// decompose; compatibility forms additionally lose distinctions. No form is
+/// generally reversible. Input <=1 MiB, output <=8 MiB; unknown forms are errors.
+pub fn normalize(input: &str, form: &str) -> Result<String, OperationError> {
+    const OP: &str = "text.normalize";
+    check_input(input, OP)?;
+    match form {
+        "NFC" => collect_bounded(input.nfc(), OP),
+        "NFD" => collect_bounded(input.nfd(), OP),
+        "NFKC" => collect_bounded(input.nfkc(), OP),
+        "NFKD" => collect_bounded(input.nfkd(), OP),
+        _ => Err(OperationError::new(
+            ErrorCode::InvalidParameter,
+            "form must be NFC, NFD, NFKC or NFKD",
+        )
+        .operation(OP)
+        .parameter("form")),
+    }
+}
+/// Reverse Unicode scalar values without normalization or trimming. This can
+/// split grapheme clusters, reverse combining sequences and change CRLF to LFCR.
+/// Applying twice restores the exact input; input/output <=1 MiB.
+pub fn reverse(input: &str) -> Result<String, OperationError> {
+    check_input(input, "text.reverse")?;
+    Ok(input.chars().rev().collect())
+}
+/// Select exactly one mode: an ordered list of zero-based Unicode-scalar indexes
+/// (duplicates kept), or an explicit positive stride with optional start/stop.
+/// Default start=0, stop=scalar length; stop is exclusive. Empty ranges are valid.
+/// No grapheme segmentation or normalization. Input <=1 MiB; list <=65536 indexes.
+/// All indexes/ranges validate before output; negative values cannot enter usize.
+pub fn extract(
+    input: &str,
+    indices: Option<&[usize]>,
+    start: Option<usize>,
+    stride: Option<usize>,
+    stop: Option<usize>,
+) -> Result<String, OperationError> {
+    const OP: &str = "text.extract";
+    check_input(input, OP)?;
+    let invalid = |name, message| {
+        OperationError::new(ErrorCode::InvalidParameter, message)
+            .operation(OP)
+            .parameter(name)
+    };
+    if let Some(indices) = indices {
+        if start.is_some() || stride.is_some() || stop.is_some() {
+            return Err(invalid(
+                "indices",
+                "indices cannot be combined with start/stride/stop",
+            ));
+        }
+        if indices.len() > MAX_INDICES {
+            return Err(OperationError::new(
+                ErrorCode::ResourceLimit,
+                "selection exceeds 65536 indexes",
+            )
+            .operation(OP)
+            .parameter("indices"));
+        }
+        let chars: Vec<_> = input.chars().collect();
+        for (position, index) in indices.iter().enumerate() {
+            if *index >= chars.len() {
+                return Err(invalid(
+                    "indices",
+                    &format!("scalar index at list position {position} is out of range"),
+                ));
+            }
+        }
+        collect_bounded(indices.iter().map(|i| chars[*i]), OP)
+    } else {
+        let stride = stride
+            .ok_or_else(|| invalid("stride", "provide indices or an explicit positive stride"))?;
+        if stride == 0 {
+            return Err(invalid("stride", "stride must be positive"));
+        }
+        let length = input.chars().count();
+        let start = start.unwrap_or(0);
+        let stop = stop.unwrap_or(length);
+        if start > length {
+            return Err(invalid("start", "start exceeds scalar length"));
+        }
+        if stop > length {
+            return Err(invalid("stop", "stop exceeds scalar length"));
+        }
+        collect_bounded(input.chars().take(stop).skip(start).step_by(stride), OP)
+    }
+}
+
+use crate::operations::{Descriptor, Parameter, ParameterType};
+/// Static metadata is adjacent to the text implementation.
+pub const OPERATIONS: &[Descriptor] = &[
+    Descriptor {
+        id: "text.normalize",
+        category: "text",
+        description: "Explicit UAX #15 normalization; Unicode data version exposed by UNICODE_VERSION; <=1 MiB input/8 MiB output.",
+        input_type: "text",
+        output_type: "text",
+        parameters: &[Parameter {
+            name: "form",
+            description: "Canonical compose/decompose (NFC/NFD) or compatibility forms (NFKC/NFKD); no implicit normalization.",
+            required: true,
+            default: None,
+            constraints: ParameterType::Text {
+                choices: &["NFC", "NFD", "NFKC", "NFKD"],
+            },
+        }],
+        deterministic: true,
+        reversible: Some(false),
+        command: "text normalize",
+        example: "cube text normalize --form NFC --text café",
+    },
+    Descriptor {
+        id: "text.reverse",
+        category: "text",
+        description: "Reverse Unicode scalar values, including combining marks/CRLF; not grapheme or byte reversal; <=1 MiB.",
+        input_type: "text",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(true),
+        command: "text reverse",
+        example: "cube text reverse --text 'Cube 🧊'",
+    },
+    Descriptor {
+        id: "text.extract",
+        category: "text",
+        description: "Select Unicode scalar positions (not UTF-8 bytes); preserve list order/duplicates, no normalization; <=1 MiB.",
+        input_type: "text",
+        output_type: "text",
+        parameters: &[
+            Parameter {
+                name: "indices",
+                description: "Zero-based list, <=65536 items; mutually exclusive with start/stride/stop. An empty list is valid.",
+                required: false,
+                default: None,
+                constraints: ParameterType::UnsignedList {
+                    min: 0,
+                    max: usize::MAX as u64,
+                    min_length: 0,
+                    max_length: MAX_INDICES,
+                    unique: false,
+                },
+            },
+            Parameter {
+                name: "start",
+                description: "Start scalar index for stride mode; default 0 only in stride mode.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Unsigned {
+                    min: 0,
+                    max: usize::MAX as u64,
+                },
+            },
+            Parameter {
+                name: "stride",
+                description: "Explicit positive stride, required unless indices are provided.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Unsigned {
+                    min: 1,
+                    max: usize::MAX as u64,
+                },
+            },
+            Parameter {
+                name: "stop",
+                description: "Exclusive scalar stop in stride mode; omitted means scalar length.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Unsigned {
+                    min: 0,
+                    max: usize::MAX as u64,
+                },
+            },
+        ],
+        deterministic: true,
+        reversible: Some(false),
+        command: "text extract",
+        example: "cube text extract --start 1 --stride 2 --text abcdef",
+    },
+];

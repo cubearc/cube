@@ -67,6 +67,53 @@ discovery, Python exports and type stubs, interface tests, and affected user
 examples. SDKs must call Rust rather than reimplement algorithms. The concise
 [add-operation skill](.agents/skills/add-operation/SKILL.md) records this workflow.
 
+## Git and Commit Conventions
+
+Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
+Use `type(scope): description`, omitting `(scope)` when it adds no useful context.
+Write concise, imperative descriptions in English, such as "add" or "fix".
+
+| Type | Use for |
+| --- | --- |
+| `feat` | New functionality |
+| `fix` | Bug fixes |
+| `refactor` | Internal restructuring without changing behavior |
+| `test` | Test additions or improvements |
+| `docs` | Documentation changes |
+| `ci` | CI workflow changes |
+| `build` | Build configuration or dependency changes |
+| `chore` | Repository maintenance |
+| `perf` | Performance improvements |
+
+```text
+build: initialize Rust workspace
+feat(core): add base64 encoding
+feat(cli): implement decoding commands
+feat(python): expose core operations
+test(core): cover invalid hexadecimal input
+ci: add code coverage checks
+docs: improve contribution guidelines
+```
+
+Mark breaking changes with `!` before the colon or a `BREAKING CHANGE:` footer,
+and explain the impact.
+
+Keep commits small and atomic: each should represent one logical, working change.
+Include its implementation, matching tests, and affected documentation together
+when appropriate. Always document new or updated functionality in the relevant
+API reference, examples, setup instructions, or architecture notes. For internal-only
+changes, explain the purpose and validation in the commit or PR description.
+Separate unrelated work into different commits. Run the relevant
+[quality checks](#quality-checks) before committing, and exclude secrets, generated
+artifacts, temporary files, and known broken code. When commits are authorized
+and Git write access is available, commit completed logical units incrementally.
+
+Maintain a clean, reviewable history by making commit boundaries and messages
+clear. Preserve existing commits; force-pushing, amending, squashing, or otherwise
+rewriting history requires explicit authorization. At merge time, maintainers may
+choose a squash merge for a focused pull request when repository settings allow
+it. That merge choice does not authorize rewriting existing branch history.
+
 ## Issues and pull requests
 
 Search [existing issues](https://github.com/cubearc/cube/issues) before opening a
@@ -82,6 +129,19 @@ when the change fully resolves it.
 
 Keep each pull request focused on one logical change and explain the problem and
 observable behavior. Include the checks you ran and any limitations. Keep
-dependency additions justified, the lockfile updated, and documentation accurate.
+dependency additions justified and the lockfile updated.
 Write comments, documentation, errors, and contributor templates in English.
 Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+### Complete and deliver the work
+
+Before an authorized push, finish the scoped implementation, tests, documentation,
+and relevant quality checks. After pushing, verify that the commits reached the
+intended remote branch and check the CI results. Address failures before declaring
+the work complete.
+
+Update related GitHub Issues and CubeArc Roadmap with the delivery status and
+links to the commit or PR and validation results. Close an issue and mark its
+Project item Done only when its acceptance criteria are validated and the work
+has reached the target branch. A push to a feature branch alone does not complete
+an issue. Keep unfinished tasks open and describe any remaining work or blockers.

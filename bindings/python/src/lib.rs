@@ -61,6 +61,26 @@ fn hex_decode<'py>(py: Python<'py>, text: &str) -> PyResult<Bound<'py, PyBytes>>
     Ok(PyBytes::new(py, &bytes))
 }
 
+/// Encode text by an ASCII Caesar shift from -2147483648 to 2147483647.
+///
+/// Shifts are normalized modulo 26; case and non-ASCII characters are preserved
+/// without normalization. This is an educational cipher, not secure encryption.
+/// Out-of-range integers raise OverflowError; incorrect types raise TypeError.
+#[pyfunction]
+fn caesar_encode(text: &str, shift: i32) -> String {
+    ciphers::caesar_encode(text, shift)
+}
+
+/// Decode text with the same signed 32-bit shift used for Caesar encoding.
+///
+/// Only ASCII letters rotate. All other characters are preserved unchanged.
+/// The inverse is safe for every shift, including -2147483648.
+/// Out-of-range integers raise OverflowError; incorrect types raise TypeError.
+#[pyfunction]
+fn caesar_decode(text: &str, shift: i32) -> String {
+    ciphers::caesar_decode(text, shift)
+}
+
 /// Rotate ASCII letters by 13, preserving all other characters.
 #[pyfunction]
 fn rot13(text: &str) -> String {
@@ -90,6 +110,8 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(base64_decode, module)?)?;
     module.add_function(wrap_pyfunction!(hex_encode, module)?)?;
     module.add_function(wrap_pyfunction!(hex_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(caesar_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(caesar_decode, module)?)?;
     module.add_function(wrap_pyfunction!(rot13, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
     module.add_function(wrap_pyfunction!(xor, module)?)?;

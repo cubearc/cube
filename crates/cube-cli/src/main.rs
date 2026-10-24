@@ -118,6 +118,14 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Reverse ASCII alphabets, preserving other Unicode; <=1 MiB, not secure encryption
+    Atbash(Input),
+    /// Vigenère; repeat ASCII key on ASCII letters only, preserve other Unicode; <=1 MiB
+    Vigenere(KeyCipherArgs),
+    /// Standard reciprocal Beaufort C=(K-P) mod 26; <=1 MiB, not secure encryption
+    Beaufort(BeaufortArgs),
+    /// Affine C=(aP+b) mod 26; preserve other Unicode; <=1 MiB, not secure encryption
+    Affine(AffineArgs),
     /// Rotate ASCII letters by a signed shift (not secure encryption)
     Caesar(CaesarArgs),
     /// Rotate ASCII letters by 13, leaving non-ASCII characters unchanged
@@ -146,6 +154,48 @@ struct Input {
 }
 
 impl Input {
+    fn read_bounded(
+        self,
+        limit: usize,
+        operation: &'static str,
+    ) -> Result<Vec<u8>, cube_core::errors::OperationError> {
+        use cube_core::errors::{ErrorCode, OperationError};
+        let bytes = match self.text {
+            Some(text) => text.into_bytes(),
+            None => {
+                let mut bytes = Vec::new();
+                io::stdin()
+                    .lock()
+                    .take(limit as u64 + 1)
+                    .read_to_end(&mut bytes)
+                    .map_err(|e| OperationError::io(e).operation(operation))?;
+                bytes
+            }
+        };
+        if bytes.len() > limit {
+            return Err(OperationError::new(
+                ErrorCode::ResourceLimit,
+                "input exceeds documented operation byte limit",
+            )
+            .operation(operation));
+        }
+        Ok(bytes)
+    }
+    fn read_text(
+        self,
+        operation: &'static str,
+    ) -> Result<String, cube_core::errors::OperationError> {
+        let bytes = self.read_bounded(cube_core::text::MAX_INPUT, operation)?;
+        String::from_utf8(bytes).map_err(|e| {
+            cube_core::errors::OperationError::new(
+                cube_core::errors::ErrorCode::InvalidInput,
+                "input must be valid UTF-8",
+            )
+            .operation(operation)
+            .offset(e.utf8_error().valid_up_to() as u64)
+            .caused_by(e)
+        })
+    }
     fn read(self) -> io::Result<Vec<u8>> {
         match self.text {
             Some(text) => Ok(text.into_bytes()),
@@ -165,6 +215,36 @@ struct DecodeArgs {
     /// Binary output representation: hex adds a newline; raw writes exact bytes
     #[arg(long, value_enum, default_value_t = Output::Hex)]
     output: Output,
+}
+
+#[derive(Args)]
+struct KeyCipherArgs {
+    #[command(flatten)]
+    input: Input,
+    /// Nonempty ASCII-letter key, at most 64 KiB
+    #[arg(long)]
+    key: String,
+    #[arg(long)]
+    decode: bool,
+}
+#[derive(Args)]
+struct BeaufortArgs {
+    #[command(flatten)]
+    input: Input,
+    /// Nonempty ASCII-letter key, at most 64 KiB; apply twice to decode
+    #[arg(long)]
+    key: String,
+}
+#[derive(Args)]
+struct AffineArgs {
+    #[command(flatten)]
+    input: Input,
+    #[arg(long, allow_negative_numbers = true)]
+    a: i32,
+    #[arg(long, allow_negative_numbers = true)]
+    b: i32,
+    #[arg(long)]
+    decode: bool,
 }
 
 #[derive(Args)]
@@ -315,6 +395,36 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Cipher { command } => {
             let text = match command {
+                Cipher::Atbash(input) => ciphers::atbash(&input.read_text("cipher.atbash")?)?,
+                Cipher::Vigenere(args) => {
+                    let op = if args.decode {
+                        "cipher.vigenere.decode"
+                    } else {
+                        "cipher.vigenere.encode"
+                    };
+                    let input = args.input.read_text(op)?;
+                    if args.decode {
+                        ciphers::vigenere_decode(&input, &args.key)?
+                    } else {
+                        ciphers::vigenere_encode(&input, &args.key)?
+                    }
+                }
+                Cipher::Beaufort(args) => {
+                    ciphers::beaufort(&args.input.read_text("cipher.beaufort")?, &args.key)?
+                }
+                Cipher::Affine(args) => {
+                    let op = if args.decode {
+                        "cipher.affine.decode"
+                    } else {
+                        "cipher.affine.encode"
+                    };
+                    let input = args.input.read_text(op)?;
+                    if args.decode {
+                        ciphers::affine_decode(&input, args.a, args.b)?
+                    } else {
+                        ciphers::affine_encode(&input, args.a, args.b)?
+                    }
+                }
                 Cipher::Caesar(args) => {
                     let input = String::from_utf8(args.input.read()?)?;
                     if args.decode {

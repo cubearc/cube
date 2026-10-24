@@ -1,5 +1,10 @@
 //! Classical ciphers for text puzzles. These do not provide secure encryption.
 
+pub mod classical;
+pub use classical::{
+    affine_decode, affine_encode, atbash, beaufort, vigenere_decode, vigenere_encode,
+};
+
 /// Encode text by rotating ASCII letters by a signed Caesar shift.
 ///
 /// Positive shifts move toward `Z` or `z`, wrapping within each case. Every other

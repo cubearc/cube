@@ -430,3 +430,28 @@ adds a newline or metadata. No extraction implies that a hidden message exists.
 Python `image.lsb(channels=["red"], bits=[0], traversal="row", reverse=False,
 bit_order="msb", incomplete="reject")` returns the same metadata and exact `data`
 as `bytes`, ready for other Cube operations; unknown keyword options fail.
+
+## Classical cipher additions
+
+Atbash reverses ASCII alphabets (`ABC xyz` → `ZYX cba`). Vigenère uses A=0,
+`C=(P+K) mod 26`, with inverse `P=(C-K) mod 26`. Standard Beaufort uses
+`C=(K-P) mod 26` and is self-inverse (not Variant Beaufort). Vigenère/Beaufort
+accept a nonempty ASCII-letter key, ignoring key case and advancing only for
+ASCII input letters. Affine uses `C=(aP+b) mod 26`; a,b must be 0..25 and a must
+be coprime to 26. Decoding uses a's modular inverse. All preserve ASCII case and
+other Unicode/whitespace without normalization. These are classical puzzle
+ciphers, not secure encryption. New cipher operations accept at most 1 MiB of
+UTF-8 input and 64 KiB of key; invalid keys are errors even for empty input.
+
+```sh
+cube cipher atbash --text 'ABC xyz'
+cube cipher vigenere --key LEMON --text ATTACKATDAWN
+cube cipher vigenere --decode --key LEMON --text LXFOPVEFRNHR
+cube cipher beaufort --key B --text A
+cube cipher affine --a 5 --b 8 --text AFFINECIPHER
+```
+
+Python exposes `atbash(text)`, `vigenere_encode(text,key)`,
+`vigenere_decode(text,key)`, `beaufort(text,key)`, `affine_encode(text,a,b)`
+and `affine_decode(text,a,b)`, calling the same Rust functions. New operations
+raise contextual `ValueError` on invalid parameters or resource limits.

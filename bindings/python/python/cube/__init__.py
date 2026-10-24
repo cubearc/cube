@@ -2,13 +2,17 @@
 
 from ._native import (
     Image,
+    affine_decode,
+    affine_encode,
     appended_data,
+    atbash,
     base32_decode,
     base32_encode,
     base58_decode,
     base58_encode,
     base64_decode,
     base64_encode,
+    beaufort,
     caesar_decode,
     caesar_encode,
     compare_files,
@@ -30,10 +34,18 @@ from ._native import (
     rot13,
     scan_file,
     sha256,
+    vigenere_decode,
+    vigenere_encode,
     xor,
 )
 
 __all__ = [
+    "atbash",
+    "vigenere_encode",
+    "vigenere_decode",
+    "beaufort",
+    "affine_encode",
+    "affine_decode",
     "Image",
     "png_chunks",
     "inspect_exif",

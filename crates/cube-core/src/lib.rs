@@ -11,6 +11,7 @@ pub mod forensics;
 pub mod hashing;
 pub mod image;
 pub mod operations;
+pub mod text;
 
 use std::fmt;
 

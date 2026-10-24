@@ -6,6 +6,7 @@ use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 mod image;
+mod textops;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
@@ -373,6 +374,7 @@ fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyB
 
 #[pymodule]
 fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    textops::register(module)?;
     module.add_class::<image::PyImage>()?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_exif, module)?)?;

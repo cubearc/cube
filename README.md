@@ -6,7 +6,8 @@
 
 Cube is an open-source Rust toolkit for encoding, classical ciphers, hashing,
 binary transformations, file/image forensics, Unicode text, symbolic encodings,
-PCM WAVE analysis, and typed pipelines/recipes. Use the Rust library, `cube` CLI,
+PCM WAVE analysis, typed pipelines/recipes, and local investigation. Use the Rust
+library, `cube` CLI,
 or Rust-backed Python package. All interfaces share the same implementations.
 
 ## Capabilities
@@ -22,6 +23,7 @@ or Rust-backed Python package. All interfaces share the same implementations.
 | Unicode text | Explicit normalization, scalar reversal and positional/alternating selection |
 | Morse / Braille | Canonical International Morse text; exact Unicode Braille dot-mask cells |
 | Integer bases | Exact signed integer text conversion between radices 2..36 |
+| Local investigation | Explainable triage, bounded profiles, private provenance, reports and identity-verified replay |
 | Pipelines / recipes | Bounded linear typed execution, strict versioned JSON and independent exact-output contract checks |
 | PCM WAVE audio | Bounded metadata/chunk inspection, exact channels/frame ranges and integer waveform envelopes |
 | ROT13 | Rotates ASCII letters; preserves case and non-ASCII characters |

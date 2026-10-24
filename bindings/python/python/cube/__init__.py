@@ -1,4 +1,4 @@
-"""Rust-backed transformations, forensic operations and typed pipelines/recipes."""
+"""Rust-backed transformations, forensics, typed pipelines and local investigations."""
 
 from ._native import (
     UNICODE_VERSION,

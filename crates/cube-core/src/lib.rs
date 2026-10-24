@@ -1,4 +1,4 @@
-//! Small, deterministic operations shared by Cube's CLI and SDKs.
+//! Reusable operations and bounded investigations shared by Cube's CLI and SDKs.
 //!
 //! Binary operations accept and return bytes. Text conversion belongs to the caller.
 //! Classical ciphers and repeating-key XOR are puzzle tools, not secure encryption.

@@ -1,0 +1,147 @@
+//! Native validation reports do not serialize or retain private input material.
+use cube_core::blockchain::{self, Network, PrivateInput};
+use pyo3::{
+    exceptions::PyTypeError,
+    prelude::*,
+    types::{PyBytes, PyString},
+};
+fn material<'a>(
+    value: &'a Bound<'_, PyAny>,
+    format: &str,
+    operation: &'static str,
+) -> PyResult<PrivateInput<'a>> {
+    let data = if format == "raw" {
+        value
+            .cast::<PyBytes>()
+            .map_err(|_| PyTypeError::new_err("raw private material must be bytes"))?
+            .as_bytes()
+    } else {
+        value
+            .cast::<PyString>()
+            .map_err(|_| PyTypeError::new_err("hex/WIF private material must be str"))?
+            .to_str()
+            .map_err(|_| {
+                super::file_error(
+                    cube_core::errors::OperationError::new(
+                        cube_core::errors::ErrorCode::InvalidInput,
+                        "key material must be valid UTF-8",
+                    )
+                    .operation(operation)
+                    .parameter("material"),
+                )
+            })?
+            .as_bytes()
+    };
+    PrivateInput::parse(format, data).map_err(|e| super::file_error(e.operation(operation)))
+}
+#[pyfunction]
+#[pyo3(signature=(text, *, expected_network=None))]
+fn validate_wif(
+    py: Python<'_>,
+    text: &Bound<'_, PyAny>,
+    expected_network: Option<&str>,
+) -> PyResult<Py<PyAny>> {
+    let network = expected_network
+        .map(Network::parse)
+        .transpose()
+        .map_err(super::file_error)?;
+    let PrivateInput::Wif(text) = material(text, "wif", "blockchain.wif.validate")? else {
+        unreachable!("WIF transport selects WIF input");
+    };
+    let info = blockchain::wif::validate(text, network).map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(info))
+}
+#[pyfunction]
+#[pyo3(signature=(data, *, format="raw"))]
+fn validate_private_scalar(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    format: &str,
+) -> PyResult<Py<PyAny>> {
+    let info = blockchain::validate_scalar(material(data, format, "blockchain.scalar.validate")?)
+        .map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(info))
+}
+#[pyfunction]
+#[pyo3(signature=(data, *, network, compressed, format="raw"))]
+fn derive_bitcoin_address(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    network: &str,
+    compressed: bool,
+    format: &str,
+) -> PyResult<Py<PyAny>> {
+    let result = blockchain::bitcoin::derive(
+        material(data, format, "blockchain.bitcoin.derive")?,
+        Network::parse(network).map_err(super::file_error)?,
+        compressed,
+    )
+    .map_err(super::file_error)?;
+    let output = super::structured(py, &serde_json::json!(result))?;
+    output
+        .bind(py)
+        .set_item("public_key", PyBytes::new(py, &result.public_key))?;
+    output
+        .bind(py)
+        .set_item("hash160", PyBytes::new(py, &result.hash160))?;
+    Ok(output)
+}
+#[pyfunction]
+#[pyo3(signature=(data, *, output, format="raw", network=None, compressed=None))]
+fn export_private_key(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    output: &str,
+    format: &str,
+    network: Option<&str>,
+    compressed: Option<bool>,
+) -> PyResult<Py<PyAny>> {
+    use blockchain::private::{ExportedPrivate, OutputFormat};
+    let network = network
+        .map(Network::parse)
+        .transpose()
+        .map_err(super::file_error)?;
+    let result = blockchain::private::export(
+        material(data, format, "blockchain.private.export")?,
+        OutputFormat::parse(output).map_err(super::file_error)?,
+        network,
+        compressed,
+    )
+    .map_err(super::file_error)?;
+    Ok(match result {
+        ExportedPrivate::Raw(bytes) => PyBytes::new(py, &bytes).into_any().unbind(),
+        ExportedPrivate::Hex(text) | ExportedPrivate::Wif(text) => {
+            PyString::new(py, &text).into_any().unbind()
+        }
+    })
+}
+#[pyfunction]
+#[pyo3(signature=(data, *, format="raw", checksum="eip55"))]
+fn derive_ethereum_address(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    format: &str,
+    checksum: &str,
+) -> PyResult<Py<PyAny>> {
+    let result = blockchain::ethereum::derive(
+        material(data, format, "blockchain.ethereum.derive")?,
+        blockchain::ethereum::Checksum::parse(checksum).map_err(super::file_error)?,
+    )
+    .map_err(super::file_error)?;
+    let output = super::structured(py, &serde_json::json!(result))?;
+    output
+        .bind(py)
+        .set_item("public_key_xy", PyBytes::new(py, &result.public_key_xy))?;
+    output
+        .bind(py)
+        .set_item("address_bytes", PyBytes::new(py, &result.address_bytes))?;
+    Ok(output)
+}
+pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(validate_wif, module)?)?;
+    module.add_function(wrap_pyfunction!(derive_ethereum_address, module)?)?;
+    module.add_function(wrap_pyfunction!(export_private_key, module)?)?;
+    module.add_function(wrap_pyfunction!(derive_bitcoin_address, module)?)?;
+    module.add_function(wrap_pyfunction!(validate_private_scalar, module)?)?;
+    Ok(())
+}

@@ -35,6 +35,16 @@ The root `pyproject.toml` builds the PyO3 extension with Maturin. Source
 distributions retain the workspace members, shared Cargo.lock, README and licenses.
 SDKs call Rust functions; they do not duplicate algorithms or use CLI subprocesses.
 
+## Offline key formats
+
+`blockchain` owns exact scalar/WIF validation, explicit private exports, public
+Bitcoin/Ethereum derivation and bounded caller-supplied candidate iterators.
+Maintained `k256` supplies shared secp256k1 validation/SEC1 derivation; protocol
+digests reuse `hashing` and Base58Check reuses `encoding`. There is no wallet,
+network client, key generator or signing layer. Private-input operations have no
+pipeline/capture adapter. Only generic Base58Check encoding and protocol digests
+have explicit bounded v1 adapters; CLI/SDK handling never adds an algorithm.
+
 ## Core functions and data
 
 Operations remain ordinary public Rust functions or cohesive concrete types.
@@ -56,6 +66,21 @@ transformations stay in their owning modules. Responsibilities include:
   Byte transforms use fixed unsigned units and do not change repeating-key XOR.
   RustCrypto supplies SHA digests/legacy MD5; named CRC constants stay distinct
   from cryptographic hashes. New hash adapters retain explicit output bounds.
+- `numbers::constants`: explicit prefix/selection budgets surround maintained
+  `num-bigint` integer arithmetic. Fixed-point series/root intervals certify exact
+  truncation, with independent known-answer tests. Runtime generation supports an
+  explicit prefix override without a generated reference dataset, native backend,
+  floating approximation or new pipeline value. Other integer conversions keep
+  their existing fixed-width semantics.
+- `blockchain`: offline structural key validation with bounded exact transports.
+  K256's validated secret type owns scalar/range checks with only arithmetic
+  enabled; no signing, random generation or native backend is required. Opaque
+  private inputs/keys have redacted debug and no serialization. Public SEC1/P2PKH
+  derivation reuses the same key parser, K256 arithmetic, raw SHA-256, reusable
+  bounded RIPEMD-160 and Base58Check; no custom curve or wallet layer is added. Safe validation
+  metadata stays separate from deliberate private export, and secret-bearing
+  operations have no pipeline/capture adapter. Caller/interface copies prevent a
+  general memory-zeroization promise.
 - `forensics`: checked ranges, signature evidence, file facts, bounded EXIF, byte
   inspection and bounded PNG/JPEG/GIF framing. Reader/writer APIs support bounded or streaming work
   without requiring paths. Signatures are candidates, not validity proofs.
@@ -127,6 +152,11 @@ ranges/evidence/digest without automatically persisting source paths or content 
 sessions. Filesystem I/O stays outside recipes; caller-selected raw ranges never
 acquire a format-validation claim. Metadata changes trigger new-output cleanup;
 source stability remains a caller responsibility rather than a snapshot guarantee.
+
+`encoding::base58check` reuses plain Base58 and one internal raw SHA-256 helper.
+Bounds precede the quadratic conversion; its structured decoded result stays a
+direct API. The version-1 encoder adapter uses existing byte/text values and adds
+an explicit quadratic work charge without changing older adapter contracts.
 
 Position-aware text transformation keeps reusable bounded position sets in
 `text::positions` and masked cipher composition/auditable overrides in

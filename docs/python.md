@@ -150,6 +150,99 @@ left/right, directions viewed facing the sender. Use version-1
 `symbol.semaphore.encode` / `symbol.semaphore.decode` pipeline steps for bounded
 text composition. Case canonicalizes to uppercase; no numeric/control mode exists.
 
+## Select mathematical constant digits
+
+The native SDK reuses the same bounded Rust calculation and indexing rules:
+
+```python
+from cube import constant_digits
+
+assert constant_digits("pi", count=8)["digits"] == "14159265"
+more = constant_digits("pi", start=256, count=16, max_digits=512)
+assert more["integer_part"] == "3"
+assert len(more["digits"]) == 16
+assert constant_digits("sqrt2", indices=[2, 0, 2])["digits"] == "444"
+```
+
+`max_digits` defaults to 256 and explicitly selects a complete certified prefix
+of 1..4096 fractional digits. A selection beyond that budget raises `ValueError`;
+there is no automatic expansion. Ranges and index lists are exclusive; lists
+preserve repeats/order and contain at most 1024 indexes. Structured results carry
+exact digit strings and the SHA-256 of the entire chosen prefix. No network or
+Python numerical fallback is used.
+
+## Work with versioned Base58Check
+
+```python
+import cube
+
+payload = cube.hex_decode("a31c06bd463e3923bc1aadbde48b16976c080717")
+encoded = cube.base58check_encode(payload, version=0)
+assert encoded == "1FsSia9rv4NeEwvJ2GvXrX7LyxYspbN2mo"
+decoded = cube.base58check_decode(encoded)
+assert decoded["version"] == 0
+assert decoded["payload"] == payload
+assert decoded["checksum_verified"] is True
+```
+
+The generic codec accepts empty payloads, preserves zeros, validates checksums and
+has no network/wallet policy. Payloads are capped at 1024 bytes and encoded text
+at 1421 bytes. Plain Base58 remains unchanged. Only the encoding operation has a
+bounded pipeline adapter; a checksum is not authentication or permission to
+capture private inputs. See [Base58Check semantics](operations.md#versioned-base58check).
+
+## Validate offline key material
+
+```python
+import cube
+
+# Public Bitcoin Core test vector; validation returns no private material.
+info = cube.validate_wif("L5nJeqKmpHp4P7F8ZYyjwc5a7P4d8EabuGAzfGJk7yC1BJyzNaEd", expected_network="mainnet")
+assert info["valid"] and info["compressed"]
+assert info["network_family"] == "mainnet"
+assert cube.validate_private_scalar(bytes(31) + b"\x01")["valid"]
+```
+
+Use `format="hex"` with exactly 64 ASCII hex digits instead of raw32 bytes.
+Validation output/errors never contain the supplied material or a derived
+fingerprint. The core rejects zero/out-of-range secp256k1 scalars; inputs and
+Python strings remain caller-owned. Calls neither access networks nor save data,
+and do not promise Python memory zeroization. WIF test-family ambiguity and
+[resource/representation rules](operations.md#wif-and-scalar-validation) are explicit.
+
+### Derive public Bitcoin data
+
+```python
+import cube
+
+# Synthetic public scalar-1 vector.
+public = cube.derive_bitcoin_address(bytes(31) + b"\x01", network="mainnet", compressed=True)
+assert public["address"] == "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"
+assert isinstance(public["public_key"], bytes) and len(public["public_key"]) == 33
+assert cube.ripemd160(b"Hello world!") == "7f772647d88750add82d8e1a7a3e5c0902a346a3"
+```
+
+`format="hex"` or `format="wif"` requires text; the default raw format requires
+bytes. Network and compression are explicit and must match WIF intent. Results
+contain public bytes and exact hex fields, never supplied private material.
+
+### Explicit private return values
+
+```python
+import cube
+
+# Public synthetic test vector. This call deliberately returns plaintext private data.
+key = bytes(31) + b"\x01"
+private_text = cube.export_private_key(key, output="wif", network="mainnet", compressed=True)
+assert cube.export_private_key(private_text, format="wif", output="raw") == key
+assert cube.export_private_key(private_text, format="wif", output="hex") == key.hex()
+```
+
+Raw output is `bytes`; hex/WIF output is `str`. WIF output always requires explicit
+network/compression and rejects source-WIF conflicts. Validation calls do not
+export. The SDK writes no files: returned plaintext, its use and any persistence
+belong to the caller, with no Python memory-zeroization guarantee.
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:
@@ -674,3 +767,50 @@ provenance distinguishes base64-decoded bytes from UTF-8 of logical JSON text;
 neither selection downloads or decompresses content. Inline HTML selection uses
 the default `selector="inline"` and requires an explicitly terminated script/style.
 Read the [selection rules and budgets](operations.md#offline-web-artifacts).
+
+### Ethereum public derivation
+
+```python
+import cube
+
+eth = cube.derive_ethereum_address(bytes(31) + b"\x01")  # public test scalar
+assert eth["address"] == "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"
+assert len(eth["public_key_xy"]) == 64
+assert len(eth["address_bytes"]) == 20
+assert cube.keccak256(b"abc") == "4e03657aea45a94fc7d47ba826c8d667c0d1e6e33a64a036ec44f58fa12d6c45"
+```
+
+Use `format="hex"` for exact hex64 input and `checksum="lowercase"` for lowercase
+text; the default is EIP-55. Byte fields have corresponding exact hex fields.
+Keccak-256 is distinct from SHA3-256. This call returns public data only and
+performs no network access, logging or persistence.
+
+### Validate supplied key candidates incrementally
+
+```python
+import cube
+
+batch = cube.validate_key_candidates([
+    {"format": "hex", "value": f"{1:064x}"},  # public test scalar
+    {"format": "wif", "value": "invalid"},
+])
+assert batch.plan()["entries"] == 2
+first = next(batch)
+assert first["index"] == 0 and first["valid"]
+assert not batch.progress()["complete"]
+assert [entry["valid"] for entry in batch] == [False]
+assert batch.progress()["complete"]
+```
+
+Results contain safe facts/errors and stable indexes. No original/private values
+or addresses are returned by default. Explicit `derive="bitcoin"` requires
+`network` and `compressed`; `derive="ethereum"` accepts hex scalars and optional
+`checksum` (default EIP-55). The batch's public-address fields use exact hex strings,
+matching CLI JSON; single-address APIs additionally offer raw byte fields.
+
+`len(batch)` is the unconsumed count. Stopping early leaves `complete=False`;
+remaining candidates are not processed. Transport/schema/resource errors reject
+the factory call, including unpaired Unicode surrogates without retaining the
+original value in exception attributes. Invalid candidate content yields isolated
+entry errors. All [core limits](operations.md#bounded-key-candidates) also apply to
+native Python; the iterator never generates candidates or accesses the network.

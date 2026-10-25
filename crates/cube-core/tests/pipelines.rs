@@ -30,7 +30,7 @@ fn run(input: Value, steps: Vec<Step>) -> Value {
 }
 #[test]
 fn typed_values_round_trip_without_implicit_text_and_all_adapters_match_descriptors() {
-    assert_eq!(pipeline::supported_adapters().len(), 44);
+    assert_eq!(pipeline::supported_adapters().len(), 47);
     for (encode, decode, known) in [
         (
             "encoding.base32.encode",

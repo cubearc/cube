@@ -161,6 +161,22 @@ cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 Use `--decode` with the original key/parameters to reverse supported ciphers.
 Classical ciphers are for challenges and education, not modern confidentiality.
 
+### Versioned Base58Check
+
+Use an explicit decimal version byte (0..255); payloads are limited to 1024 bytes.
+This public Bitcoin Core vector is independent of wallet/private-key policy:
+
+```sh
+printf '%s' a31c06bd463e3923bc1aadbde48b16976c080717 | cube decode hex --output raw | cube encode base58check --version-byte 0
+cube decode base58check --text 1FsSia9rv4NeEwvJ2GvXrX7LyxYspbN2mo --json
+```
+
+The decoded JSON retains the version and exact payload hex. Text is strict,
+including stdin: a trailing newline is rejected. Empty payloads are supported,
+but empty encoded text is invalid. The encoder also composes safely with typed
+bytes under its smaller input and quadratic-work budgets; the structured decoder
+has no pipeline adapter. [Limits and semantics](operations.md#versioned-base58check).
+
 ## Interpret directional symbols
 
 Interpret an exact 12-hour clock reading or signed integer millidegrees:
@@ -243,6 +259,24 @@ cube binary swap-endian --unit-bytes 2 --text ABCD
 Use `--output raw` for exact stdout bytes. AND/OR operands must have equal length;
 shifts use independent unsigned big-endian units, with explicit zero-fill rules.
 
+## Select mathematical constant digits
+
+`max-digits` controls the complete certified fractional prefix: default 256,
+explicitly adjustable to 1..4096. Positions never increase that budget implicitly.
+Index 0 is the first digit after the decimal point; plain output is the selected
+fractional digits plus one newline:
+
+```sh
+cube number digits pi --count 8
+cube number digits pi --start 256 --count 16 --max-digits 512 --json
+cube number digits sqrt2 --indices 2,0,2 --json
+```
+
+Choose a range (`--start` default 0, `--count` default 16) or `--indices`, never both.
+JSON includes the separate integer part, selected digits, prefix budget/hash and
+certification method. Empty selections are valid. The hard cap, work and integer
+bounds remain enforced with an override; see [numeric limits](operations.md#numeric-conversions).
+
 ## Compute a hash or checksum
 
 SHA-512 is available alongside SHA-256. MD5 and SHA-1 are legacy and unsuitable
@@ -267,6 +301,55 @@ cube hash crc32 --text '123456789'
 
 A piped newline changes the input and therefore the result. SHA-256 is one-way;
 CRC32 detects accidental corruption and is not a cryptographic hash.
+
+## Validate offline key material
+
+These examples use public Bitcoin Core/synthetic test material. Cube reads exact
+stdin and reports only safe validation facts:
+
+```sh
+printf '%s' L5nJeqKmpHp4P7F8ZYyjwc5a7P4d8EabuGAzfGJk7yC1BJyzNaEd | cube blockchain wif --expected-network mainnet --json
+printf '%s' 0000000000000000000000000000000000000000000000000000000000000001 | cube blockchain scalar --format hex --json
+```
+
+For supplied files, redirect stdin (`cube blockchain wif --json < supplied.wif`).
+Text is strict: no trailing newline, prefix or whitespace is normalized. `--text`
+is available under existing conventions but exposes its value in process arguments.
+The default human report and optional JSON contain no private bytes, WIF or
+fingerprints. The `testnet` expectation means the shared testnet/signet/regtest
+version family, not independent chain identification. [Contracts and limits](operations.md#wif-and-scalar-validation).
+
+### Derive a public Bitcoin address
+
+Use explicit network/SEC1 flags with supplied exact input. This synthetic public
+scalar-1 vector returns `1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH`:
+
+```sh
+printf '%s' 0000000000000000000000000000000000000000000000000000000000000001 | cube blockchain bitcoin --format hex --network mainnet --compressed --json
+cube hash ripemd160 --text 'Hello world!'
+```
+
+Default derivation output is just the public address plus a newline. `--json`
+adds public SEC1/HASH160 hex and parameter facts. `--format wif` reuses validation
+and rejects conflicts with `--network`/encoding. The command exports no private
+material, accesses no network and creates no file.
+
+### Deliberately convert private formats
+
+This public scalar-1 example permits exact WIF stdout explicitly:
+
+```sh
+printf '%s' 0000000000000000000000000000000000000000000000000000000000000001 | cube blockchain export --format hex --to wif --network mainnet --compressed --private-output --stdout
+```
+
+Use `--output new-key.wif` instead of `--stdout` for an exclusive new file. On Unix,
+private files are created with mode 0600; other systems use platform ACLs.
+Existing files are rejected and partial new files are removed on write failure.
+No newline/metadata is added to private stdout or file content, so an explicitly
+chosen consumer can read exact bytes. For WIF input, `--to raw`/`--to hex` return
+only the scalar; re-exporting WIF requires matching explicit network/encoding.
+Missing intent/destination/required WIF parameters fails without private output.
+Validation commands remain safe reports. Caller-owned buffers may retain copies.
 
 ## Inspect binary files
 
@@ -684,3 +767,38 @@ The output file must not exist. HTML uses `cube web asset html saved.html --inde
 or remote reference is followed. Both asset operations also compose directly as
 version-1 text-to-bytes steps; select an index and use explicit UTF-8 conversion
 only if a later text operation needs it.
+
+### Ethereum public derivation
+
+Use exact raw32 (default) or hex64 scalar input. This public scalar-1 example
+returns the default EIP-55 text; `--checksum lowercase` selects lowercase output:
+
+```sh
+printf '%064x' 1 | cube blockchain ethereum --format hex
+cube hash keccak256 --text abc
+```
+
+`--json` includes only public coordinates/address and checksum choice. Keccak-256
+is not SHA3-256; derivation never queries a chain. WIF is not an Ethereum scalar
+transport. Prefer exact stdin over private material in command-line arguments.
+
+### Validate supplied key candidates
+
+Provide an explicit JSON array of WIF/hex64 entries. This synthetic public test
+input demonstrates one valid scalar and one isolated invalid candidate:
+
+```sh
+printf '[{"format":"hex","value":"%064x"},{"format":"wif","value":"invalid"}]' 1 |
+  cube blockchain candidates --json
+```
+
+The report has stable zero-based indexes, safe structural facts/errors and complete
+counts. Default output omits all input and derived addresses. Add
+`--derive bitcoin --network mainnet --compressed` (or `--uncompressed`) for public
+Bitcoin output; add `--derive ethereum [--checksum eip55|lowercase]` for Ethereum
+from hex scalars. Conflicting WIF intent produces a separate address error while
+preserving its valid classification. Unused context flags are rejected.
+
+The input must fit the [candidate limits](operations.md#bounded-key-candidates).
+No candidate generation, file writes or network access occurs. Prefer stdin;
+command-line text may remain in shell history/process listings.

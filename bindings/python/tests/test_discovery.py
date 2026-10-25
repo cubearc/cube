@@ -10,6 +10,16 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "blockchain.private.export": "export_private_key",
+    "hash.ripemd160": "ripemd160",
+    "hash.keccak256": "keccak256",
+    "blockchain.candidates.validate": "validate_key_candidates",
+    "blockchain.ethereum.derive": "derive_ethereum_address",
+    "blockchain.bitcoin.derive": "derive_bitcoin_address",
+    "blockchain.wif.validate": "validate_wif",
+    "blockchain.scalar.validate": "validate_private_scalar",
+    "encoding.base58check.encode": "base58check_encode",
+    "encoding.base58check.decode": "base58check_decode",
     **{
         f"encoding.{name}.{direction}": f"{name}_{direction}"
         for name in ("base32", "base58", "base64", "hex")
@@ -98,6 +108,7 @@ SDK_BINDINGS = {
     "text.reverse": "reverse_text",
     "text.utf8.decode": "utf8_decode",
     "text.utf8.encode": "utf8_encode",
+    "number.constant_digits": "constant_digits",
     "number.base.convert": "convert_base",
     "audio.spectrogram": "wave_spectrogram",
     "audio.bits.extract": "wave_bits",

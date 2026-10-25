@@ -30,6 +30,8 @@ is explicit.
   and compare exact decoded frame samples with source provenance.
 - Inspect saved HTML/HAR and pass explicitly selected embedded assets into
   existing transformations without executing content or following references.
+- Validate supplied Base58Check/WIF/scalar formats and derive Bitcoin/Ethereum
+  public addresses offline, with explicit private export and bounded candidate checks.
 - Compose typed linear pipelines and versioned JSON recipes.
 - Run bounded local investigations with evidence, reports and verified replay.
 

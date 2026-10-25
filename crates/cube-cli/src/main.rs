@@ -7,6 +7,8 @@ use cube_core::{ciphers, encoding, hashing, operations};
 
 mod audiocmd;
 mod binarycmd;
+mod blockchaincmd;
+mod constantcmd;
 mod filecmd;
 mod imagecmd;
 mod investigatecmd;
@@ -32,6 +34,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Bounded offline key formats; secret validation is separate from export
+    Blockchain {
+        #[command(subcommand)]
+        command: blockchaincmd::Command,
+    },
     /// Inspect caller-supplied offline web artifacts without network access
     Web {
         #[command(subcommand)]
@@ -122,6 +129,8 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Select certified fractional digits with an explicit bounded prefix budget
+    Digits(constantcmd::DigitsArgs),
     /// Map one exact clock reading to directions; optional caller-convention Semaphore
     #[command(group(clap::ArgGroup::new("clock_input").required(true).multiple(false).args(["time","hour_millidegrees"])))]
     Clock {
@@ -173,6 +182,14 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Bounded single-byte-version Base58Check; <=1024 payload bytes, empty allowed
+    Base58check {
+        #[command(flatten)]
+        input: Input,
+        /// Decimal data-prefix byte 0..255, independent of network policy
+        #[arg(long)]
+        version_byte: u8,
+    },
     /// Letter-only flag Semaphore; anatomical sender LH,RH, viewed facing sender
     Semaphore(Input),
     /// ASCII letters to 1..26 hyphen tokens, preserving ASCII whitespace
@@ -193,6 +210,13 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Verify Base58Check and report its version plus exact payload hex; <=1421 text bytes
+    Base58check {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long)]
+        json: bool,
+    },
     /// Exact LH,RH direction pairs or / spaces; no numeral/control state
     Semaphore(Input),
     /// Strict 1..26 hyphen tokens to uppercase text; preserve ASCII whitespace
@@ -242,6 +266,10 @@ enum Cipher {
 
 #[derive(Subcommand)]
 enum Hash {
+    /// RIPEMD-160 for protocol compatibility; exact bytes, <=16 MiB
+    Ripemd160(Input),
+    /// Ethereum Keccak-256, distinct from SHA3-256; exact bytes, <=16 MiB
+    Keccak256(Input),
     /// Compute SHA-512 as 128 lowercase hex digits; input <=16 MiB
     Sha512(Input),
     /// Legacy SHA-1; unsuitable for collision-resistant security; input <=16 MiB
@@ -398,6 +426,10 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Blockchain { command } => blockchaincmd::run(command, &mut output)?,
+        Command::Number {
+            command: Number::Digits(args),
+        } => constantcmd::run(args, &mut output)?,
         Command::Number {
             command:
                 Number::Clock {
@@ -539,6 +571,16 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Encode { command } => {
             let text = match command {
+                Encode::Base58check {
+                    input,
+                    version_byte,
+                } => encoding::base58check::encode(
+                    version_byte,
+                    &input.read_bounded(
+                        encoding::base58check::MAX_PAYLOAD,
+                        "encoding.base58check.encode",
+                    )?,
+                )?,
                 Encode::Semaphore(input) => cube_core::symbols::semaphore::encode(
                     &input.read_text("symbol.semaphore.encode")?,
                 )?,
@@ -559,6 +601,22 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             write_text(&mut output, &text)?;
         }
         Command::Decode { command } => match command {
+            Decode::Base58check { input, json } => {
+                let decoded = encoding::base58check::decode(&input.read_text_limit(
+                    encoding::base58check::MAX_ENCODED,
+                    "encoding.base58check.decode",
+                )?)?;
+                if json {
+                    writeln!(output, "{}", serde_json::to_string_pretty(&decoded)?)?;
+                } else {
+                    writeln!(
+                        output,
+                        "Version: 0x{:02x}\nPayload (hex): {}\nChecksum verified: true",
+                        decoded.version,
+                        encoding::hex_encode(&decoded.payload)
+                    )?;
+                }
+            }
             Decode::Semaphore(input) => write_text(
                 &mut output,
                 &cube_core::symbols::semaphore::decode(
@@ -672,6 +730,13 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Hash { command } => {
             let digest = match command {
+                Hash::Keccak256(input) => hashing::keccak256(
+                    &input.read_bounded(hashing::protocol::MAX_INPUT, "hash.keccak256")?,
+                )?,
+                Hash::Ripemd160(input) => hashing::ripemd160(
+                    &input
+                        .read_bounded(cube_core::hashing::protocol::MAX_INPUT, "hash.ripemd160")?,
+                )?,
                 Hash::Sha512(input) => hashing::sha512(
                     &input.read_bounded(cube_core::binary::transform::MAX_INPUT, "hash.sha512")?,
                 ),

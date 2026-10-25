@@ -6,8 +6,12 @@ use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 mod audio;
+mod base58check;
 mod binaryops;
+mod blockchain;
+mod candidates;
 mod combinations;
+mod constants;
 mod image;
 mod investigation;
 mod pipeline;
@@ -428,6 +432,16 @@ fn crc32(data: &[u8]) -> String {
     hashing::crc32(data)
 }
 
+/// Compute RIPEMD-160 as 40 lowercase hexadecimal digits; input <=16 MiB.
+#[pyfunction]
+fn keccak256(data: &[u8]) -> PyResult<String> {
+    hashing::keccak256(data).map_err(file_error)
+}
+#[pyfunction]
+fn ripemd160(data: &[u8]) -> PyResult<String> {
+    hashing::ripemd160(data).map_err(file_error)
+}
+
 /// Compute SHA-256 as 64 lowercase hexadecimal digits.
 #[pyfunction]
 fn sha256(data: &[u8]) -> String {
@@ -478,6 +492,10 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     binaryops::register(module)?;
     textops::register(module)?;
     combinations::register(module)?;
+    constants::register(module)?;
+    base58check::register(module)?;
+    blockchain::register(module)?;
+    candidates::register(module)?;
     module.add_class::<image::PyImage>()?;
     module.add_function(wrap_pyfunction!(image::image_pairs, module)?)?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;
@@ -512,6 +530,8 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(book_decode, module)?)?;
     module.add_function(wrap_pyfunction!(crc32, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
+    module.add_function(wrap_pyfunction!(ripemd160, module)?)?;
+    module.add_function(wrap_pyfunction!(keccak256, module)?)?;
     module.add_function(wrap_pyfunction!(sha512, module)?)?;
     module.add_function(wrap_pyfunction!(sha1, module)?)?;
     module.add_function(wrap_pyfunction!(md5, module)?)?;

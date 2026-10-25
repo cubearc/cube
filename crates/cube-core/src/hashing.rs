@@ -1,6 +1,8 @@
 //! Cryptographic hashes and non-cryptographic checksums through maintained crates.
 
 use sha2::{Digest, Sha256, Sha512};
+pub mod protocol;
+pub use protocol::{keccak256, ripemd160};
 
 /// Compute CRC-32/ISO-HDLC (IEEE CRC32) as eight lowercase hexadecimal digits.
 ///
@@ -32,7 +34,11 @@ pub fn crc32(input: &[u8]) -> String {
 /// );
 /// ```
 pub fn sha256(input: &[u8]) -> String {
-    hex::encode(Sha256::digest(input))
+    hex::encode(sha256_bytes(input))
+}
+
+pub(crate) fn sha256_bytes(input: &[u8]) -> [u8; 32] {
+    Sha256::digest(input).into()
 }
 
 /// Compute SHA-512 as 128 lowercase hex digits of exact bytes.

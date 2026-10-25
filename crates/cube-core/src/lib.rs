@@ -6,6 +6,7 @@
 //! but do not provide secure encryption.
 
 pub mod binary;
+pub mod blockchain;
 pub mod ciphers;
 pub mod encoding;
 pub mod errors;

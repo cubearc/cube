@@ -27,6 +27,10 @@ sha2 = "0.11"
 sha1 = "0.11"
 unicode-normalization = "=0.1.26"
 csv-core = "0.1.13"
+num-bigint = { version = "0.5.1", default-features = false }
+k256 = { version = "0.14.0", default-features = false, features = ["arithmetic"] }
+sha3 = { version = "0.12.0", default-features = false }
+ripemd = { version = "0.2.0", default-features = false }
 
 [lints]
 workspace = true

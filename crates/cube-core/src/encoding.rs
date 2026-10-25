@@ -14,6 +14,14 @@ use base64::{Engine as _, engine::general_purpose::STANDARD};
 use data_encoding::BASE32;
 
 use crate::Error;
+pub mod base58check;
+
+pub(crate) fn serialize_hex<S: serde::Serializer>(
+    data: &[u8],
+    serializer: S,
+) -> Result<S::Ok, S::Error> {
+    serializer.serialize_str(&hex_encode(data))
+}
 
 /// Encode bytes as RFC 4648 standard Base32 using uppercase A–Z and digits 2–7.
 ///

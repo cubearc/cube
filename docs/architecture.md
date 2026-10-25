@@ -128,6 +128,14 @@ sessions. Filesystem I/O stays outside recipes; caller-selected raw ranges never
 acquire a format-validation claim. Metadata changes trigger new-output cleanup;
 source stability remains a caller responsibility rather than a snapshot guarantee.
 
+Position-aware text transformation keeps reusable bounded position sets in
+`text::positions` and masked cipher composition/auditable overrides in
+`text::transform`. The latter calls existing Rust ciphers; CLI and PyO3 only
+adapt parameters and reports. Every Unicode scalar counts and text is never
+implicitly normalized. Pipeline API 1 cannot represent the required typed lists,
+so this operation is discoverable through direct interfaces with no adapter;
+see [its contract](operations.md#position-aware-transformations).
+
 ## Metadata and discovery
 
 Static descriptors live beside operations and are assembled by

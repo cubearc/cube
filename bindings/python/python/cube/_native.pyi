@@ -2,7 +2,7 @@
 
 from collections.abc import Iterator
 from os import PathLike
-from typing import Any, BinaryIO
+from typing import Any, BinaryIO, Literal, TypedDict
 
 class StringCombinations(Iterator[str]):
     def __iter__(self) -> StringCombinations: ...
@@ -543,3 +543,52 @@ def compare_video_frames(
     max_results: int = 1000,
 ) -> dict[str, Any]: ...
 def extract_video_audio(data: bytes, track_id: int) -> dict[str, Any]: ...
+
+class MaskedSelector(TypedDict, total=False):
+    kind: Literal["indices", "every_nth", "fibonacci"]
+    indices: list[int]
+    n: int
+    exclude: list[int]
+
+class MaskedTransformation(TypedDict, total=False):
+    kind: Literal["atbash", "caesar", "rot13", "identity"]
+    shift: int
+
+class MaskedOverride(TypedDict):
+    position: int
+    replacement: str
+
+class AppliedMaskedOverride(MaskedOverride):
+    previous: str
+
+class MaskedConfig(TypedDict):
+    index_base: int
+    selector: MaskedSelector
+    selected: MaskedTransformation
+    otherwise: MaskedTransformation
+    overrides: list[MaskedOverride]
+
+class MaskedReport(TypedDict):
+    original_input: str
+    config: MaskedConfig
+    selected_positions: list[int]
+    deterministic_text: str
+    overrides: list[AppliedMaskedOverride]
+    final_text: str
+
+def transform_masked(
+    text: str,
+    *,
+    selector: Literal["indices", "every_nth", "fibonacci"],
+    selected: Literal["atbash", "caesar", "rot13", "identity"],
+    indices: list[int] | None = None,
+    nth: int | None = None,
+    exclude: list[int] | None = None,
+    index_base: int = 0,
+    selected_shift: int | None = None,
+    otherwise: Literal["atbash", "caesar", "rot13", "identity"] = "identity",
+    otherwise_shift: int | None = None,
+    overrides: list[tuple[int, str]] | None = None,
+) -> MaskedReport:
+    """Every scalar counts; return deterministic text and explicit override audit."""
+    ...

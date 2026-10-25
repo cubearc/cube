@@ -121,6 +121,94 @@ fn text_statistics(
     super::structured(py, &serde_json::json!(report))
 }
 #[pyfunction]
+#[pyo3(signature=(text, *, selector, selected, **options))]
+fn transform_masked(
+    py: Python<'_>,
+    text: &str,
+    selector: &str,
+    selected: &str,
+    options: Option<&Bound<'_, pyo3::types::PyDict>>,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::text::{
+        positions::{IndexBase, Selector},
+        transform::{self, Config, Override, Transformation},
+    };
+    let empty = pyo3::types::PyDict::new(py);
+    let options = options.unwrap_or(&empty);
+    for key in options.keys() {
+        if !matches!(
+            key.extract::<&str>()?,
+            "indices"
+                | "nth"
+                | "exclude"
+                | "index_base"
+                | "selected_shift"
+                | "otherwise"
+                | "otherwise_shift"
+                | "overrides"
+        ) {
+            return Err(pyo3::exceptions::PyTypeError::new_err(
+                "unexpected masked transformation keyword",
+            ));
+        }
+    }
+    let indices = options
+        .get_item("indices")?
+        .map(|v| v.extract::<Option<Vec<usize>>>())
+        .transpose()?
+        .flatten();
+    let nth = options
+        .get_item("nth")?
+        .map(|v| v.extract::<Option<usize>>())
+        .transpose()?
+        .flatten();
+    let exclude = options
+        .get_item("exclude")?
+        .map(|v| v.extract::<Option<Vec<usize>>>())
+        .transpose()?
+        .flatten();
+    let index_base = options
+        .get_item("index_base")?
+        .map(|v| v.extract::<u8>())
+        .transpose()?
+        .unwrap_or(0);
+    let selected_shift = options
+        .get_item("selected_shift")?
+        .map(|v| v.extract::<Option<i32>>())
+        .transpose()?
+        .flatten();
+    let otherwise = options
+        .get_item("otherwise")?
+        .map(|v| v.extract::<String>())
+        .transpose()?
+        .unwrap_or_else(|| "identity".into());
+    let otherwise_shift = options
+        .get_item("otherwise_shift")?
+        .map(|v| v.extract::<Option<i32>>())
+        .transpose()?
+        .flatten();
+    let overrides = options
+        .get_item("overrides")?
+        .map(|v| v.extract::<Option<Vec<(usize, String)>>>())
+        .transpose()?
+        .flatten();
+    let config = Config {
+        index_base: IndexBase::try_from(index_base).map_err(super::file_error)?,
+        selector: Selector::from_options(selector, indices, nth, exclude)
+            .map_err(super::file_error)?,
+        selected: Transformation::parse(selected, selected_shift).map_err(super::file_error)?,
+        otherwise: Transformation::parse(&otherwise, otherwise_shift).map_err(super::file_error)?,
+        overrides: overrides
+            .unwrap_or_default()
+            .iter()
+            .map(|(position, value)| Override::new(*position, value))
+            .collect::<Result<_, _>>()
+            .map_err(super::file_error)?,
+    };
+    let report = transform::masked(text, &config).map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(report))
+}
+#[pyfunction]
 fn select_text(text: &str, selector: &str) -> PyResult<String> {
     cube_core::text::selection::select(
         text,
@@ -222,6 +310,7 @@ pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(text_grid, module)?)?;
     module.add_function(wrap_pyfunction!(text_statistics, module)?)?;
     module.add_function(wrap_pyfunction!(select_text, module)?)?;
+    module.add_function(wrap_pyfunction!(transform_masked, module)?)?;
     module.add(
         "WORD_UNICODE_VERSION",
         cube_core::text::selection::WORD_UNICODE_VERSION,

@@ -85,6 +85,7 @@ from ._native import (
     wave_file_envelope,
     wave_file_samples,
     wave_samples,
+    wave_spectrum,
     xor,
 )
 
@@ -120,6 +121,7 @@ __all__ = [
     "wave_envelope",
     "wave_file_envelope",
     "wave_samples",
+    "wave_spectrum",
     "wave_file_samples",
     "inspect_wave",
     "inspect_wave_file",

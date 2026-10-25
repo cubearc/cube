@@ -39,6 +39,17 @@ pub(crate) struct SampleOutput {
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Numerical one-sided FFT; exact N frames, periodic window, no plot
+    Spectrum {
+        #[command(flatten)]
+        range: RangeArgs,
+        #[arg(long, default_value_t = 1024)]
+        fft_size: usize,
+        #[arg(long, default_value = "hann")]
+        window: String,
+        #[arg(long)]
+        json: bool,
+    },
     /// Exact per-channel min/max buckets with absolute frame positions; no plot/FFT
     Waveform {
         #[command(flatten)]
@@ -66,6 +77,41 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Spectrum {
+            mut range,
+            fft_size,
+            window,
+            json,
+        } => {
+            use cube_core::media::{
+                pcm,
+                spectrum::{self, Options, Window},
+            };
+            range.frames = range.frames.or(Some(fft_size as u64));
+            let options = Options {
+                fft_size,
+                window: Window::parse(&window)?,
+            };
+            options.validate()?;
+            let samples = pcm::extract_file(&range.path, &range.selection())?;
+            let result = spectrum::analyze(&samples, options)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "{} Hz; N={}; {:?}; one-sided peak full-scale amplitudes",
+                    result.sample_rate, result.fft_size, result.channels
+                )?;
+                for (k, hz) in result.frequencies_hz.iter().enumerate() {
+                    writeln!(
+                        output,
+                        "{k} {hz:.6} {:?}",
+                        result.amplitudes.iter().map(|c| c[k]).collect::<Vec<_>>()
+                    )?;
+                }
+            }
+        }
         AudioCommand::Waveform {
             range,
             bucket_frames,

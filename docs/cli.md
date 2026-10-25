@@ -325,6 +325,25 @@ width and channel mapping to be interpreted. Waveform output is min/max data,
 not a plot or FFT. Only integer PCM RIFF/WAVE is supported; see
 [audio analysis](operations.md#audio-analysis).
 
+For an explicit frequency window, select a channel and N frames:
+
+```sh
+python - <<'PYTHON'
+import wave
+with wave.open("spectrum.wav", "wb") as output:
+    output.setnchannels(1)
+    output.setsampwidth(2)
+    output.setframerate(8000)
+    output.writeframes(b"\x00\x00\x00\x40\x00\x00\x00\xc0" * 2)
+PYTHON
+cube audio spectrum spectrum.wav --channels 0 --fft-size 8 --json
+```
+
+The command defaults to 1,024 frames at `--start-frame` and the periodic Hann
+window. Set `--window rectangular` or `hamming` explicitly when needed. If
+`--frames` is provided it must equal `--fft-size`; short inputs fail. See
+[spectrum units and bounds](operations.md#audio-analysis).
+
 ## Run a pipeline or recipe
 
 ```sh

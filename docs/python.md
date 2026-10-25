@@ -380,3 +380,26 @@ The included [type stubs](../bindings/python/python/cube/_native.pyi) are the Py
 API signature reference. Use the [Operations Guide](operations.md) for behavior
 and constraints, or [Contributing](../CONTRIBUTING.md) for rebuilding, tests and
 the Rust API reference.
+
+### Numerical spectrum
+
+```python
+import struct
+import cube
+from io import BytesIO
+import wave
+
+buffer = BytesIO()
+with wave.open(buffer, "wb") as writer:
+    writer.setnchannels(1)
+    writer.setsampwidth(2)
+    writer.setframerate(8000)
+    writer.writeframes(struct.pack("<8h", *([0] * 8)))
+spectrum = cube.wave_spectrum(buffer.getvalue(), fft_size=8, channels=[0])
+assert spectrum["frequencies_hz"] == [0, 1000, 2000, 3000, 4000]
+assert spectrum["amplitudes"] == [[0.0] * 5]
+```
+
+Selections use the existing WAVE/PCM rules. The result retains channels, absolute
+start frame, window, units and the actual sample rate. See the
+[audio analysis contract](operations.md#audio-analysis) for normalization and limits.

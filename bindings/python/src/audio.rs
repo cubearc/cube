@@ -110,7 +110,36 @@ fn wave_file_envelope(
     .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(result))
 }
+/// Bounded exact-N spectrum of selected integer PCM, peak full-scale amplitudes.
+#[pyfunction]
+#[pyo3(signature=(data,*,channels=None,start_frame=0,fft_size=1024,window="hann"))]
+fn wave_spectrum(
+    py: Python<'_>,
+    data: &[u8],
+    channels: Option<Vec<u16>>,
+    start_frame: u64,
+    fft_size: usize,
+    window: &str,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::media::{
+        pcm,
+        spectrum::{self, Options, Window},
+    };
+    let options = Options {
+        fft_size,
+        window: Window::parse(window).map_err(super::file_error)?,
+    };
+    options.validate().map_err(super::file_error)?;
+    let samples = pcm::extract(
+        &mut Cursor::new(data),
+        &selection(channels, start_frame, Some(fft_size as u64)),
+    )
+    .map_err(super::file_error)?;
+    let result = spectrum::analyze(&samples, options).map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(result))
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(wave_spectrum, module)?)?;
     module.add_function(wrap_pyfunction!(wave_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_file_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_samples, module)?)?;

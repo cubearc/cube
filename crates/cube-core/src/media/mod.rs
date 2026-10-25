@@ -3,3 +3,5 @@ pub mod pcm;
 pub mod wave;
 
 pub mod envelope;
+
+pub mod spectrum;

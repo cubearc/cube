@@ -434,6 +434,23 @@ through discovery.
 
 ## Audio analysis
 
+`audio.spectrum` analyzes exactly N selected integer PCM frames with a power-of-two
+FFT in 8..16,384. It never truncates or pads implicitly. Each selected channel is
+independent, in caller order; frequencies are `k*sample_rate/N`, including DC and
+Nyquist. Samples use existing signed/centered PCM decoding divided by `2^(bits-1)`.
+Rectangular, periodic Hann (default) and periodic Hamming windows are available.
+Magnitudes divide by the window sum and double interior bins, giving one-sided
+peak full-scale amplitude, not power density or dB. Silence gives zero, and empty
+or short selections fail. Numeric results agree within floating-point tolerance;
+they are not guaranteed bit-identical across platforms.
+
+At most 65,536 channel/bin cells and 4 Mi `channels*N*log2(N)` work units are
+allowed. Existing PCM input/range/sample limits apply first. RustFFT is used without
+optional SIMD features or a native backend. Results are structured Rust/Python
+numeric arrays and CLI JSON. No pipeline adapter or new pipeline value is added
+for sample blocks; existing audio APIs and recipes remain unchanged.
+
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

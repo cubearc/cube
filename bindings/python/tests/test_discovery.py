@@ -87,6 +87,7 @@ SDK_BINDINGS = {
     "text.utf8.decode": "utf8_decode",
     "text.utf8.encode": "utf8_encode",
     "number.base.convert": "convert_base",
+    "audio.spectrum": "wave_spectrum",
     "audio.wave.inspect": "inspect_wave",
     "audio.pcm.extract": "wave_samples",
     "audio.waveform.envelope": "wave_envelope",

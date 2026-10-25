@@ -42,6 +42,18 @@ The description explains the operation's input/output types and gives an example
 Help describes the exact command arguments. Category names are case-sensitive;
 `cube ops list --json` shows the categories available in your build.
 
+For saved web artifacts or media, inspect a small local input first and use the
+operation description to check supported formats and limits. In a scratch directory:
+
+```sh
+printf '<a href="assets/puzzle.png">Saved link</a>' > saved.html
+cube web html saved.html --json
+```
+
+The reference remains data; Cube does not open the path or make a request. The
+[CLI guide](cli.md#inspect-video-containers) covers bounded video metadata and the
+supported MOV/JPEG and PCM8 extraction workflows.
+
 ## Encode and decode
 
 ```sh

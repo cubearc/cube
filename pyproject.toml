@@ -5,7 +5,7 @@ build-backend = "maturin"
 [project]
 name = "cubearc-cube"
 dynamic = ["version"]
-description = "Rust-backed encoding, classical ciphers, hashing, binary tools, file/image forensics, Unicode text, symbols, bounded audio analysis/FLAC metadata, typed pipelines/recipes, and local investigation"
+description = "Rust-backed data transformations, ciphers, file/media and offline web forensics, pipelines, recipes, and local investigations"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"

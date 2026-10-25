@@ -220,7 +220,7 @@ dependencies = [
 
 [[package]]
 name = "cube-cli"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "clap",
  "cube-core",
@@ -229,7 +229,7 @@ dependencies = [
 
 [[package]]
 name = "cube-core"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "base64",
  "bs58",
@@ -254,7 +254,7 @@ dependencies = [
 
 [[package]]
 name = "cube-python"
-version = "0.12.0"
+version = "0.13.0"
 dependencies = [
  "cube-core",
  "pyo3",

@@ -20,7 +20,7 @@ mod webcmd;
 #[command(
     name = "cube",
     version,
-    about = "Transformations, file/image/audio forensics, pipelines, and bounded local investigations"
+    about = "Data transformations, bounded file/media and offline web forensics, pipelines, and local investigations"
 )]
 struct Cli {
     /// Emit failures as schema-versioned JSON on stderr (including usage errors)
@@ -37,7 +37,7 @@ enum Command {
         #[command(subcommand)]
         command: webcmd::WebCommand,
     },
-    /// Inspect bounded local video metadata without decoding or playback
+    /// Inspect video containers and extract/compare supported JPEG frames or PCM8 tracks
     Video {
         #[command(subcommand)]
         command: videocmd::VideoCommand,

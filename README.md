@@ -23,6 +23,10 @@ is explicit.
   exact colors, ordered pixel/bit streams or binary QR payloads.
 - Analyze bounded PCM spectra/spectrograms, extract sample bits, reverse WAV frames,
   inspect FLAC metadata and review DTMF/Morse candidates with explicit assumptions.
+- Inspect MP4/MOV/WebM metadata; extract MOV/JPEG frames and raw PCM8 tracks,
+  and compare exact decoded frame samples with source provenance.
+- Inspect saved HTML/HAR and pass explicitly selected embedded assets into
+  existing transformations without executing content or following references.
 - Compose typed linear pipelines and versioned JSON recipes.
 - Run bounded local investigations with evidence, reports and verified replay.
 

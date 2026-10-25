@@ -6,6 +6,7 @@ use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 mod audio;
+mod binaryops;
 mod image;
 mod investigation;
 mod pipeline;
@@ -430,6 +431,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     investigation::register(module)?;
     recipe::register(module)?;
     audio::register(module)?;
+    binaryops::register(module)?;
     textops::register(module)?;
     module.add_class::<image::PyImage>()?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;

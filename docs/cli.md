@@ -136,6 +136,19 @@ cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 Use `--decode` with the original key/parameters to reverse supported ciphers.
 Classical ciphers are for puzzles and education, not modern confidentiality.
 
+## Transform binary bytes
+
+Byte transforms preserve binary output conventions:
+
+```sh
+cube binary and --key-hex ff0f --text AB
+cube binary shift-left --bits 1 --unit-bytes 2 --text AB
+cube binary swap-endian --unit-bytes 2 --text ABCD
+```
+
+Use `--output raw` for exact stdout bytes. AND/OR operands must have equal length;
+shifts use independent unsigned big-endian units, with explicit zero-fill rules.
+
 ## Compute a hash or checksum
 
 ```sh

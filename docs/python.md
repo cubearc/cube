@@ -43,6 +43,9 @@ assert cube.extract_characters("abcdef", start=1, stride=2) == "bdf"
 stats = cube.text_statistics("ABAB", ngram_size=2)
 assert stats["frequencies"] == [{"ngram": "AB", "count": 2}, {"ngram": "BA", "count": 1}]
 assert stats["shannon_entropy_bits"] == 1.0
+assert cube.and_bytes(b"\x00\xff", b"\xff\x0f") == b"\x00\x0f"
+assert cube.shift_left(b"\x01\xff", 1, unit_bytes=2) == b"\x03\xfe"
+assert cube.swap_endian(b"ABCD", unit_bytes=2) == b"BADC"
 ```
 
 ```python

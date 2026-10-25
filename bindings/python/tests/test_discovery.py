@@ -28,6 +28,13 @@ SDK_BINDINGS = {
         for direction in ("encode", "decode")
     },
     "binary.xor": "xor",
+    "binary.and": "and_bytes",
+    "binary.or": "or_bytes",
+    "binary.not": "not_bytes",
+    "binary.reverse": "reverse_bytes",
+    "binary.shift_left": "shift_left",
+    "binary.shift_right": "shift_right",
+    "binary.swap_endian": "swap_endian",
     "file.appended.detect": "appended_data",
     "file.binary.compare": "compare_files",
     "file.exif.inspect": "inspect_exif",

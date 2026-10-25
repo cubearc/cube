@@ -3,9 +3,10 @@ use std::io::{self, Read, Write};
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand, ValueEnum};
-use cube_core::{binary, ciphers, encoding, hashing, operations};
+use cube_core::{ciphers, encoding, hashing, operations};
 
 mod audiocmd;
+mod binarycmd;
 mod filecmd;
 mod imagecmd;
 mod investigatecmd;
@@ -103,7 +104,7 @@ enum Command {
     /// Transform arbitrary bytes
     Binary {
         #[command(subcommand)]
-        command: Binary,
+        command: binarycmd::BinaryCommand,
     },
 }
 
@@ -198,12 +199,6 @@ enum Hash {
     Crc32(Input),
     /// Compute SHA-256 as lowercase hexadecimal
     Sha256(Input),
-}
-
-#[derive(Subcommand)]
-enum Binary {
-    /// XOR bytes with a repeating key (not secure encryption)
-    Xor(XorArgs),
 }
 
 #[derive(Args)]
@@ -324,22 +319,6 @@ struct CaesarArgs {
     /// Apply the inverse of --shift to decode; otherwise encode
     #[arg(long)]
     decode: bool,
-}
-
-#[derive(Args)]
-#[group(required = true, multiple = false, args = ["key", "key_hex"])]
-struct XorArgs {
-    #[command(flatten)]
-    input: Input,
-    /// Nonempty UTF-8 key
-    #[arg(long)]
-    key: Option<String>,
-    /// Nonempty key as hexadecimal digits
-    #[arg(long, value_name = "HEX")]
-    key_hex: Option<String>,
-    /// Binary output representation: hex adds a newline; raw writes exact bytes
-    #[arg(long, value_enum, default_value_t = Output::Hex)]
-    output: Output,
 }
 
 #[derive(Clone, Copy, ValueEnum)]
@@ -564,23 +543,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             };
             write_text(&mut output, &digest)?;
         }
-        Command::Binary {
-            command: Binary::Xor(args),
-        } => {
-            let key = match (args.key, args.key_hex) {
-                (Some(key), None) => key.into_bytes(),
-                (None, Some(key)) => encoding::hex_decode(&key)?,
-                _ => {
-                    return Err(io::Error::new(
-                        io::ErrorKind::InvalidInput,
-                        "provide exactly one of --key or --key-hex",
-                    )
-                    .into());
-                }
-            };
-            let bytes = binary::xor(&args.input.read()?, &key)?;
-            write_bytes(&mut output, &bytes, args.output)?;
-        }
+        Command::Binary { command } => binarycmd::run(command, &mut output)?,
     }
     output.flush()?;
     Ok(())

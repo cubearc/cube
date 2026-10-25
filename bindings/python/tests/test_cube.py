@@ -292,7 +292,19 @@ def test_operation_discovery_uses_core_metadata():
     ids = [d["id"] for d in descriptors]
     assert ids == sorted(set(ids))
     assert len(ids) >= 14
-    assert cube.operations("binary") == [cube.describe_operation("binary.xor")]
+    binary_ids = [
+        "binary.and",
+        "binary.not",
+        "binary.or",
+        "binary.reverse",
+        "binary.shift_left",
+        "binary.shift_right",
+        "binary.swap_endian",
+        "binary.xor",
+    ]
+    assert cube.operations("binary") == [
+        cube.describe_operation(id) for id in binary_ids
+    ]
     assert cube.describe_operation("encoding.base32.decode")["output_type"] == "bytes"
     assert cube.describe_operation("hash.crc32")["reversible"] is False
     shift = cube.describe_operation("cipher.caesar.encode")["parameters"][0]

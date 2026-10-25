@@ -3,6 +3,13 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    And,
+    Or,
+    Not,
+    ReverseBytes,
+    ShiftLeft,
+    ShiftRight,
+    SwapEndian,
     TextSelect,
     A1z26Encode,
     A1z26Decode,
@@ -39,6 +46,41 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "binary.and",
+        version: 1,
+        action: Action::And,
+    },
+    Adapter {
+        id: "binary.or",
+        version: 1,
+        action: Action::Or,
+    },
+    Adapter {
+        id: "binary.not",
+        version: 1,
+        action: Action::Not,
+    },
+    Adapter {
+        id: "binary.reverse",
+        version: 1,
+        action: Action::ReverseBytes,
+    },
+    Adapter {
+        id: "binary.shift_left",
+        version: 1,
+        action: Action::ShiftLeft,
+    },
+    Adapter {
+        id: "binary.shift_right",
+        version: 1,
+        action: Action::ShiftRight,
+    },
+    Adapter {
+        id: "binary.swap_endian",
+        version: 1,
+        action: Action::SwapEndian,
+    },
     Adapter {
         id: "text.select",
         version: 1,
@@ -182,6 +224,10 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    Units {
+        bits: u8,
+        unit_bytes: usize,
+    },
     Selector(crate::text::selection::Selector),
     None,
     Shift(i32),
@@ -250,6 +296,22 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::ShiftLeft | Action::ShiftRight | Action::SwapEndian => {
+            let unit_bytes = match step.parameters.get("unit_bytes") {
+                Some(Parameter::Integer(n)) => usize::try_from(*n)
+                    .map_err(|_| invalid("invalid unit width").parameter("unit_bytes"))?,
+                None => 1,
+                _ => return Err(invalid("expected integer unit width").parameter("unit_bytes")),
+            };
+            let bits = if matches!(adapter.action, Action::SwapEndian) {
+                0
+            } else {
+                integer("bits")? as u8
+            };
+            crate::binary::transform::validate_shift(bits, unit_bytes, adapter.id)
+                .map_err(Error::from_operation)?;
+            Arguments::Units { bits, unit_bytes }
+        }
         Action::TextSelect => {
             let Some(Parameter::Text(selector)) = step.parameters.get("selector") else {
                 return Err(invalid("selector is required").parameter("selector"));
@@ -307,14 +369,14 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
                 .map_err(Error::from_operation)?;
             Arguments::Affine(a, b)
         }
-        Action::Xor => {
+        Action::Xor | Action::And | Action::Or => {
             let Some(Parameter::Bytes { data }) = step.parameters.get("key") else {
                 return Err(invalid("explicit binary key required").parameter("key"));
             };
             if data.len() > 65536 {
                 return Err(Error::new(
                     ErrorCode::ResourceLimit,
-                    "XOR key exceeds pipeline's 64 KiB key limit",
+                    "binary operand exceeds pipeline's 64 KiB parameter limit",
                 )
                 .parameter("key"));
             }

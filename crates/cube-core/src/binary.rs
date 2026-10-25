@@ -1,4 +1,5 @@
 //! Transform arbitrary bytes without UTF-8 conversion.
+pub mod transform;
 
 use crate::Error;
 

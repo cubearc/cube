@@ -91,6 +91,25 @@ impl Prepared {
         let bytes = |data| Value::Bytes { data };
         let text = |data| Value::Text { data };
         Ok(match (self.adapter.action, value, &self.arguments) {
+            (Action::And, Value::Bytes { data }, Arguments::Bytes(key)) => {
+                bytes(binary::transform::and(&data, key)?)
+            }
+            (Action::Or, Value::Bytes { data }, Arguments::Bytes(key)) => {
+                bytes(binary::transform::or(&data, key)?)
+            }
+            (Action::Not, Value::Bytes { data }, _) => bytes(binary::transform::not(&data)?),
+            (Action::ReverseBytes, Value::Bytes { data }, _) => {
+                bytes(binary::transform::reverse(&data)?)
+            }
+            (Action::ShiftLeft, Value::Bytes { data }, Arguments::Units { bits, unit_bytes }) => {
+                bytes(binary::transform::shift_left(&data, *bits, *unit_bytes)?)
+            }
+            (Action::ShiftRight, Value::Bytes { data }, Arguments::Units { bits, unit_bytes }) => {
+                bytes(binary::transform::shift_right(&data, *bits, *unit_bytes)?)
+            }
+            (Action::SwapEndian, Value::Bytes { data }, Arguments::Units { unit_bytes, .. }) => {
+                bytes(binary::transform::swap_endian(&data, *unit_bytes)?)
+            }
             (Action::TextSelect, Value::Text { data }, Arguments::Selector(selector)) => {
                 text(crate::text::selection::select(&data, *selector)?)
             }

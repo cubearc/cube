@@ -283,6 +283,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::ciphers::OPERATIONS)
         .chain(crate::hashing::OPERATIONS)
         .chain(crate::binary::OPERATIONS)
+        .chain(crate::binary::transform::OPERATIONS)
         .chain(crate::forensics::OPERATIONS)
         .chain(crate::forensics::signatures::OPERATIONS)
         .chain(crate::forensics::inspect::OPERATIONS)

@@ -65,6 +65,21 @@ operations under `hashing`; include/exclude newlines deliberately.
 
 ## Binary transformations
 
+New byte transforms accept at most 16 MiB and never interpret text. AND/OR require
+equally long operands (empty/empty is valid); no repetition or padding occurs.
+NOT flips eight bits per byte. Byte reversal reverses the whole buffer; endian
+swapping reverses bytes inside each complete 1/2/4/8-byte unit, keeping unit order.
+Both reversals round trip.
+
+Shifts use independent unsigned big-endian 8/16/32/64-bit units (one byte by
+default), with no carry across unit boundaries. They zero-fill and discard bits
+outside the width. Shift zero is identity, exactly the width yields zero, and
+larger shifts or partial units fail. These are fixed-width unit operations, not
+signed arithmetic or one unbounded integer over the entire buffer. The existing
+XOR remains unchanged. New byte adapters reuse these functions; binary operand
+parameters are capped at 64 KiB in pipelines and value-dependent lengths are
+checked at execution, while types/parameters/budgets are preflighted.
+
 Use byte-wise repeating-key XOR to inspect a known mask or reverse a puzzle
 transformation. Applying the same nonempty key twice restores the original bytes.
 It is not secure encryption.

@@ -10,6 +10,7 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "number.alphabet.convert": "convert_alphabet",
     **{
         f"cipher.{name}.{direction}": f"{name}_{direction}"
         for name in ("bacon", "polybius")

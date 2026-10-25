@@ -736,3 +736,6 @@ def map_character_classes(
     unmapped: str = "error",
     definition: dict | None = None,
 ) -> dict: ...
+def convert_alphabet(
+    text: str, source_alphabet: str, target_alphabet: str, from_base: int, to_base: int
+) -> str: ...

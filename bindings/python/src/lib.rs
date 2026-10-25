@@ -5,6 +5,7 @@ use pyo3::exceptions::{PyOSError, PyValueError};
 use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
+mod alphabet;
 mod audio;
 mod base58check;
 mod binaryops;
@@ -495,6 +496,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     puzzles::register(module)?;
     combinations::register(module)?;
     constants::register(module)?;
+    alphabet::register(module)?;
     base58check::register(module)?;
     blockchain::register(module)?;
     candidates::register(module)?;

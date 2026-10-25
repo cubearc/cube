@@ -5,6 +5,7 @@ use std::process::ExitCode;
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use cube_core::{ciphers, encoding, hashing, operations};
 
+mod alphabetcmd;
 mod audiocmd;
 mod binarycmd;
 mod blockchaincmd;
@@ -130,6 +131,8 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Exact integers over explicit ordered Unicode scalar alphabets
+    Alphabet(alphabetcmd::Args),
     /// Select certified fractional digits with an explicit bounded prefix budget
     Digits(constantcmd::DigitsArgs),
     /// Map one exact clock reading to directions; optional caller-convention Semaphore
@@ -436,6 +439,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
         Command::Blockchain { command } => blockchaincmd::run(command, &mut output)?,
+        Command::Number {
+            command: Number::Alphabet(args),
+        } => alphabetcmd::run(args, &mut output)?,
         Command::Number {
             command: Number::Digits(args),
         } => constantcmd::run(args, &mut output)?,

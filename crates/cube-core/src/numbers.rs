@@ -1,4 +1,5 @@
 //! Checked integer representations, distinct from byte encodings and floating point.
+pub mod alphabet;
 pub mod constants;
 use crate::errors::{ErrorCode, OperationError};
 /// Maximum ASCII digits, excluding one optional sign; leading zeros still count.
@@ -57,34 +58,54 @@ pub fn convert_base(input: &str, from_base: u32, to_base: u32) -> Result<String,
             .offset((i + offset) as u64));
         }
     }
+    let value = magnitude(digits.bytes().map(digit), from_base, OP)?;
+    let mut result = String::with_capacity(MAX_BITS as usize + 1);
+    if negative && value != 0 {
+        result.push('-');
+    }
+    result.extend(radix_digits(value, to_base).into_iter().map(|n| {
+        if n < 10 {
+            char::from(b'0' + n as u8)
+        } else {
+            char::from(b'A' + (n - 10) as u8)
+        }
+    }));
+    Ok(result)
+}
+// Shared fixed-width arithmetic; callers validate their distinct digit grammars first.
+fn magnitude(
+    digits: impl Iterator<Item = u32>,
+    base: u32,
+    op: &'static str,
+) -> Result<u128, OperationError> {
     let mut value = 0u128;
-    for b in digits.bytes() {
+    for digit in digits {
         value = value
-            .checked_mul(u128::from(from_base))
-            .and_then(|v| v.checked_add(u128::from(digit(b))))
+            .checked_mul(u128::from(base))
+            .and_then(|v| v.checked_add(u128::from(digit)))
             .ok_or_else(|| {
                 OperationError::new(
                     ErrorCode::ResourceLimit,
                     "integer magnitude exceeds 128 bits",
                 )
-                .operation(OP)
+                .operation(op)
             })?;
     }
-    if value == 0 {
-        return Ok("0".into());
-    }
-    let mut result = Vec::with_capacity(MAX_BITS as usize + 1);
-    while value != 0 {
-        let n = (value % u128::from(to_base)) as u8;
-        result.push(if n < 10 { b'0' + n } else { b'A' + n - 10 });
-        value /= u128::from(to_base);
-    }
-    if negative {
-        result.push(b'-');
-    }
-    result.reverse();
-    Ok(String::from_utf8(result).expect("ASCII radix digits"))
+    Ok(value)
 }
+fn radix_digits(mut value: u128, base: u32) -> Vec<u32> {
+    let mut digits = Vec::with_capacity(MAX_BITS as usize);
+    loop {
+        digits.push((value % u128::from(base)) as u32);
+        value /= u128::from(base);
+        if value == 0 {
+            break;
+        }
+    }
+    digits.reverse();
+    digits
+}
+
 use crate::operations::{Descriptor, Parameter, ParameterType};
 /// This is integer text conversion, not a byte codec.
 pub const OPERATIONS: &[Descriptor] = &[Descriptor {

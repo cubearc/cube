@@ -865,3 +865,14 @@ cube encode keypad --mode multi_tap --text '0 ' \
 cube text class --text 'αβ' \
   --definition '{"ascii_fold":false,"classes":[{"name":"greek","characters":"αβ","symbol":"!"}]}'
 ```
+
+## Custom positional digits
+
+```sh
+cube number alphabet --source-alphabet 01 --target-alphabet abcdefghij \
+  --from-base 2 --to-base 10 --text 1010
+# ba
+```
+
+Alphabets and active bases are always explicit; custom digits are exact Unicode
+scalars. See [numeric alphabet limits](operations.md#custom-numeric-alphabets).

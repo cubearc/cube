@@ -891,3 +891,14 @@ Preset class mapping requires `y="vowel"`, `"consonant"` or `"unmapped"` when
 Y occurs; it defaults to errors for other unmapped scalars. Choose `preserve` or
 `filter` explicitly and inspect `preserved`/`filtered` records. Custom definitions
 conflict with preset Y options. No operation infers a language or normalizes text.
+
+## Custom positional digits
+
+```python
+assert cube.convert_alphabet("1010", "01", "abcdefghij", 2, 10) == "ba"
+assert cube.convert_alphabet("-٠٠١٠", "٠١٢٣٤٥٦٧٨٩", "01", 10, 2) == "-1010"
+```
+
+This native integer converter preserves exact 128-bit magnitudes. Custom digits
+are case-sensitive scalars, with explicit source/target bases; see
+[numeric alphabet limits](operations.md#custom-numeric-alphabets).

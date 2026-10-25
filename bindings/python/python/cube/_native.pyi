@@ -239,7 +239,10 @@ class CancellationToken:
     @property
     def is_cancelled(self) -> bool: ...
 
-def pipeline_adapters() -> dict[str, Any]: ...
+def pipeline_adapters() -> dict[str, Any]:
+    """Adapters declare pipeline kinds, version and the direct descriptor."""
+    ...
+
 def validate_pipeline(
     steps: list[dict[str, Any]],
     input_type: str,

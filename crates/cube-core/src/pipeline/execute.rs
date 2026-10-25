@@ -1,6 +1,6 @@
 //! Deterministic bounded sequential execution with cooperative cancellation boundaries.
 use super::{
-    Error, Plan, Value,
+    Error, ForensicReport, HexEvidence, Plan, SignatureEvidence, StringEvidence, Value,
     adapters::{Action, Arguments, Prepared},
     invalid,
 };
@@ -23,6 +23,25 @@ pub struct Execution {
 impl Prepared {
     /// Conservative output-size upper bounds guard allocation before algorithms.
     fn ceiling(&self, size: usize) -> Result<usize, Error> {
+        if let Arguments::Forensic {
+            range,
+            width,
+            min_length,
+            max_results,
+        } = self.arguments
+        {
+            let (_, selected) = range
+                .resolve(size as u64, super::MAX_VALUE_BYTES as u64)
+                .map_err(Error::from_operation)?;
+            let selected = selected as usize;
+            return Ok(match self.adapter.action {
+                Action::HexInspect => 64 + selected * 8 + selected.div_ceil(width) * 160,
+                Action::Strings => {
+                    64 + selected + selected.div_ceil(min_length + 1).min(max_results) * 128
+                }
+                _ => return Err(invalid("inconsistent forensic adapter")),
+            });
+        }
         if matches!(
             self.adapter.action,
             Action::Base58Encode | Action::Base58Decode
@@ -43,6 +62,7 @@ impl Prepared {
             Action::Base58Encode => size * 2,
             Action::Crc32 => 8,
             Action::Sha256 => 64,
+            Action::Signatures => 8192,
             _ => size,
         })
     }
@@ -55,6 +75,76 @@ impl Prepared {
         let bytes = |data| Value::Bytes { data };
         let text = |data| Value::Text { data };
         Ok(match (self.adapter.action, value, &self.arguments) {
+            (Action::Signatures, Value::Bytes { data }, _) => Value::ForensicReport {
+                data: ForensicReport::Signatures {
+                    matches: crate::forensics::signatures::detect(&data)
+                        .into_iter()
+                        .map(|r| SignatureEvidence {
+                            format: r.format.into(),
+                            mime: r.mime.into(),
+                            offset: r.offset,
+                            evidence_hex: r.evidence_hex,
+                            rule: r.rule.into(),
+                        })
+                        .collect(),
+                },
+            },
+            (
+                Action::HexInspect,
+                Value::Bytes { data },
+                Arguments::Forensic { range, width, .. },
+            ) => {
+                let rows = crate::forensics::ranges::hex_rows(
+                    &mut std::io::Cursor::new(data),
+                    *range,
+                    *width,
+                )?;
+                Value::ForensicReport {
+                    data: ForensicReport::Hex {
+                        rows: rows
+                            .into_iter()
+                            .map(|r| HexEvidence {
+                                offset: r.offset,
+                                bytes: r.bytes,
+                                hex: r.hex,
+                                ascii: r.ascii,
+                            })
+                            .collect(),
+                    },
+                }
+            }
+            (
+                Action::Strings,
+                Value::Bytes { data },
+                Arguments::Forensic {
+                    range,
+                    min_length,
+                    max_results,
+                    ..
+                },
+            ) => {
+                let result = crate::forensics::ranges::strings(
+                    &mut std::io::Cursor::new(data),
+                    *range,
+                    *min_length,
+                    *max_results,
+                )?;
+                Value::ForensicReport {
+                    data: ForensicReport::Strings {
+                        strings: result
+                            .strings
+                            .into_iter()
+                            .map(|r| StringEvidence {
+                                offset: r.offset,
+                                length: r.length,
+                                text: r.text,
+                            })
+                            .collect(),
+                        scanned_bytes: result.scanned_bytes,
+                        complete: result.complete,
+                    },
+                }
+            }
             (Action::Base32Encode, Value::Bytes { data }, _) => {
                 text(encoding::base32_encode(&data))
             }

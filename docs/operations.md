@@ -247,7 +247,22 @@ report `pipeline`: an adapter contract version object when supported, or null
 (`None` in Python) otherwise. `cube pipeline adapters` /
 `cube.pipeline_adapters()` lists the same executable subset. Current adapters cover
 bounded encodings, classical ciphers, hashes/checksums, XOR and UTF-8 conversion.
-File/image/audio operations are not pipeline adapters.
+Selected in-memory file inspections also have adapters: `file.signature.detect`,
+`file.hex.inspect` and `file.strings.extract`. They accept bytes and return a
+`forensic_report` with a concrete `signatures`, `hex` or `strings` result. Adapter
+listings declare their pipeline input/output types separately from the direct
+reader API's descriptor. Hex and strings reuse checked offsets/lengths; omitted
+length selects through the end of the buffer (unlike the CLI file hex preview).
+Other file operations and image/audio APIs require direct calls.
+
+Reports preserve numeric offsets, signature evidence, completeness and exact
+bytes. JSON hex rows encode their `bytes` field as canonical base64; native Python
+uses `bytes`. They are inert observations, not file-validation proofs. No transform
+currently consumes reports; compatible byte transformations can precede them and
+captures can retain any selected step. Report input supports identity; JSON inputs
+retain the existing document-size limit. Use JSON output for reports; raw output
+is rejected. Conservative budgets include record overhead and may reject a result
+that would be smaller for particular data.
 
 The current catalog's operations are available through direct Rust functions or
 methods, CLI commands, and native Python functions or methods. The descriptor's
@@ -255,9 +270,8 @@ methods, CLI commands, and native Python functions or methods. The descriptor's
 This includes orchestration such as recipe execution and investigation sessions,
 which is available directly but cannot itself be nested as a pipeline adapter.
 Read-only file APIs still require caller-selected I/O; discovery grants no file
-permission. Signature detection, hex rows and printable strings currently require
-direct APIs; their typed pipeline composition is tracked in
-[issue #58](https://github.com/cubearc/cube/issues/58).
+permission. Signature detection, hex rows and printable strings can also inspect caller-supplied
+buffers in a pipeline without acquiring file access.
 
 Every step declares an operation identifier, exact contract `version`, and optional
 parameters. The entire plan validates before transformation. Adjacent types must

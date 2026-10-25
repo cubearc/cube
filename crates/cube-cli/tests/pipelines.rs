@@ -75,3 +75,37 @@ fn pipeline_cli_preserves_binary_stdout_validates_and_reports_steps() {
     let output = run(&["text", "from-bytes"], &[255]);
     assert_eq!(output.status.code(), Some(1));
 }
+
+#[test]
+fn forensic_pipeline_json_keeps_structured_binary_results() {
+    let steps = r#"[{"operation":"encoding.hex.decode","version":1},{"operation":"file.hex.inspect","version":1,"parameters":{"width":1}}]"#;
+    let r = run(
+        &[
+            "pipeline",
+            "run",
+            "--steps",
+            steps,
+            "--text",
+            "00ff",
+            "--format",
+            "json",
+            "--capture",
+            "0,1",
+        ],
+        b"",
+    );
+    assert!(r.status.success(), "{}", String::from_utf8_lossy(&r.stderr));
+    let json: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(json["output"]["type"], "forensic_report");
+    assert_eq!(json["output"]["data"]["rows"][1]["bytes"], "/w==");
+    assert_eq!(json["output"]["data"]["rows"][1]["offset"], 1);
+    assert_eq!(json["intermediates"]["0"]["base64"], "AP8=");
+    let r = run(
+        &[
+            "pipeline", "run", "--steps", steps, "--text", "00ff", "--format", "raw",
+        ],
+        b"",
+    );
+    assert!(!r.status.success());
+    assert!(r.stdout.is_empty());
+}

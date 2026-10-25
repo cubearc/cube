@@ -15,7 +15,7 @@ def test_binary_pipeline_capture_and_explicit_utf8():
     assert result["intermediates"] == {0: "00ff"}
     assert cube.execute_pipeline(steps, b"\x00\xff")["intermediates"] == {}
     assert cube.validate_pipeline(steps, "bytes")["output_type"] == "bytes"
-    assert len(cube.pipeline_adapters()["adapters"]) == 22
+    assert len(cube.pipeline_adapters()["adapters"]) == 25
     text = "é 世界🧊\x00\r\n"
     assert cube.utf8_decode(cube.utf8_encode(text)) == text
     assert (
@@ -78,3 +78,37 @@ def test_native_limits_cancellation_and_parameter_bytes():
                 [step("encoding.hex.encode")], b"ab", capture=[0], limits=limits
             )
         assert error.value.code == "resource_limit"
+
+
+def test_forensic_reports_compose_and_keep_native_bytes():
+    steps = [step("encoding.hex.decode"), step("file.hex.inspect", {"width": 1})]
+    result = cube.execute_pipeline(steps, "00ff", capture=[0, 1])
+    assert result["output_type"] == "forensic_report"
+    report = result["output"]
+    assert report["data"]["rows"][1] == {
+        "offset": 1,
+        "bytes": b"\xff",
+        "hex": "ff",
+        "ascii": ".",
+    }
+    assert result["intermediates"][0] == b"\0\xff"
+    assert result["intermediates"][1] == report
+    assert cube.execute_pipeline([], report)["output"] == report
+    signatures = cube.execute_pipeline([step("file.signature.detect")], b"PK\x03\x04")
+    assert signatures["output"]["data"]["matches"][0]["format"] == "zip"
+    strings = cube.execute_pipeline(
+        [step("file.strings.extract", {"max_results": 1})], b"\0hello\0world\0"
+    )["output"]["data"]
+    assert strings["strings"][0] == {"offset": 1, "length": 5, "text": "hello"}
+    assert strings["complete"] is False
+    for bad in [
+        [step("file.hex.inspect"), step("hash.sha256")],
+        [step("file.hex.inspect", {"width": 0})],
+    ]:
+        with pytest.raises(ValueError):
+            cube.validate_pipeline(bad, "bytes")
+    with pytest.raises(ValueError) as error:
+        cube.execute_pipeline([step("file.hex.inspect", {"width": 1})], b"\0" * 10000)
+    assert error.value.code == "resource_limit"
+    with pytest.raises(TypeError):
+        cube.execute_pipeline([], {"type": "text", "data": b"text"})

@@ -163,7 +163,7 @@ xor = cube.describe_operation("binary.xor")
 assert xor["input_type"] == "bytes"
 assert xor["output_type"] == "bytes"
 assert xor["pipeline"] == {"version": 1}
-assert cube.describe_operation("file.signature.detect")["pipeline"] is None
+assert cube.describe_operation("file.info.inspect")["pipeline"] is None
 ```
 
 `operations()` returns descriptors sorted by identifier; the optional category is
@@ -281,3 +281,23 @@ The included [type stubs](../bindings/python/python/cube/_native.pyi) are the Py
 API signature reference. Use the [Operations Guide](operations.md) for behavior
 and constraints, or [Contributing](../CONTRIBUTING.md) for rebuilding, tests and
 the Rust API reference.
+
+### Inspect bytes in a pipeline
+
+```python
+import cube
+
+result = cube.execute_pipeline(
+    [{"operation": "encoding.hex.decode", "version": 1},
+     {"operation": "file.hex.inspect", "version": 1, "parameters": {"width": 1}}],
+    "00ff", capture=[0],
+)
+assert result["intermediates"][0] == b"\x00\xff"
+assert result["output_type"] == "forensic_report"
+assert result["output"]["data"]["rows"][1]["bytes"] == b"\xff"
+```
+
+Signature and printable-string adapters return the other concrete report variants.
+Reports retain offsets and completeness; they do not validate embedded files or
+permit filesystem access. `pipeline_adapters()` declares each adapter's input and
+output types; direct reader-based APIs retain their own descriptor types.

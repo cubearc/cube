@@ -92,9 +92,11 @@ impl Output {
             }
             (Value::Bytes { data }, Format::Raw) => data.clone(),
             (Value::Text { data }, _) => data.as_bytes().to_vec(),
-            (Value::ByteRange { .. }, Format::Hex) => serde_json::to_vec(&result.output)?,
-            (Value::ByteRange { .. }, Format::Raw) => {
-                return Err("byte_range requires JSON output".into());
+            (Value::ByteRange { .. } | Value::ForensicReport { .. }, Format::Hex) => {
+                serde_json::to_vec(&result.output)?
+            }
+            (Value::ByteRange { .. } | Value::ForensicReport { .. }, Format::Raw) => {
+                return Err("structured values require JSON output".into());
             }
         };
         if !matches!(self.format, Format::Raw) {

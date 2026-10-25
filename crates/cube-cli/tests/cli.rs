@@ -569,7 +569,7 @@ fn structured_discovery_and_descriptions() {
     assert!(result.status.success());
     assert!(String::from_utf8_lossy(&result.stdout).contains("shift"));
     assert!(String::from_utf8_lossy(&result.stdout).contains("Pipeline: adapter version 1"));
-    let result = cube(&["ops", "describe", "file.signature.detect"], b"");
+    let result = cube(&["ops", "describe", "file.info.inspect"], b"");
     assert!(result.status.success());
     assert!(
         String::from_utf8_lossy(&result.stdout)

@@ -30,7 +30,7 @@ fn run(input: Value, steps: Vec<Step>) -> Value {
 }
 #[test]
 fn typed_values_round_trip_without_implicit_text_and_all_adapters_match_descriptors() {
-    assert_eq!(pipeline::supported_adapters().len(), 22);
+    assert_eq!(pipeline::supported_adapters().len(), 25);
     for (encode, decode, known) in [
         (
             "encoding.base32.encode",
@@ -122,7 +122,10 @@ fn typed_values_round_trip_without_implicit_text_and_all_adapters_match_descript
         assert_eq!(adapter.operation, adapter.descriptor.id);
         assert_eq!(adapter.version, 1);
         assert!(adapter.descriptor.deterministic);
-        assert!(matches!(adapter.descriptor.input_type, "text" | "bytes"));
+        assert!(matches!(
+            adapter.kinds().unwrap().0,
+            Kind::Text | Kind::Bytes
+        ));
     }
 }
 #[test]

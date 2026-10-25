@@ -25,6 +25,9 @@ pub(super) enum Action {
     Xor,
     Utf8Encode,
     Utf8Decode,
+    Signatures,
+    HexInspect,
+    Strings,
 }
 #[derive(Clone, Copy, Debug)]
 pub(super) struct Adapter {
@@ -33,6 +36,21 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "file.signature.detect",
+        version: 1,
+        action: Action::Signatures,
+    },
+    Adapter {
+        id: "file.hex.inspect",
+        version: 1,
+        action: Action::HexInspect,
+    },
+    Adapter {
+        id: "file.strings.extract",
+        version: 1,
+        action: Action::Strings,
+    },
     Adapter {
         id: "encoding.base32.encode",
         version: 1,
@@ -151,6 +169,12 @@ pub(super) enum Arguments {
     Key(String),
     Bytes(Vec<u8>),
     Affine(i32, i32),
+    Forensic {
+        range: crate::forensics::ByteRange,
+        width: usize,
+        min_length: usize,
+        max_results: usize,
+    },
 }
 #[derive(Clone, Debug)]
 pub(super) struct Prepared {
@@ -159,8 +183,19 @@ pub(super) struct Prepared {
 }
 impl Prepared {
     pub fn kinds(&self) -> Result<(Kind, Kind), Error> {
-        let d = operations::describe(self.adapter.id)
+        self.adapter.kinds()
+    }
+}
+impl Adapter {
+    pub fn kinds(&self) -> Result<(Kind, Kind), Error> {
+        let d = operations::describe(self.id)
             .ok_or_else(|| invalid("adapter descriptor is unavailable"))?;
+        if matches!(
+            self.action,
+            Action::Signatures | Action::HexInspect | Action::Strings
+        ) {
+            return Ok((Kind::Bytes, Kind::ForensicReport));
+        }
         Ok((d.input_type.parse()?, d.output_type.parse()?))
     }
 }
@@ -196,6 +231,40 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::HexInspect | Action::Strings => {
+            let number = |name: &str, default: u64| -> Result<u64, Error> {
+                match step.parameters.get(name) {
+                    Some(Parameter::Integer(n)) => u64::try_from(*n)
+                        .map_err(|_| invalid("expected nonnegative integer").parameter(name)),
+                    None => Ok(default),
+                    _ => Err(invalid("expected integer").parameter(name)),
+                }
+            };
+            let range = crate::forensics::ByteRange {
+                offset: number("offset", 0)?,
+                length: step
+                    .parameters
+                    .contains_key("length")
+                    .then(|| number("length", 0))
+                    .transpose()?,
+            };
+            if let Some(length) = range.length {
+                range
+                    .offset
+                    .checked_add(length)
+                    .ok_or_else(|| invalid("offset + length overflows"))?;
+            }
+            let narrow = |name, default| {
+                usize::try_from(number(name, default)?)
+                    .map_err(|_| invalid("parameter exceeds platform bounds").parameter(name))
+            };
+            Arguments::Forensic {
+                range,
+                width: narrow("width", 16)?,
+                min_length: narrow("min_length", 4)?,
+                max_results: narrow("max_results", 1000)?,
+            }
+        }
         Action::CaesarEncode | Action::CaesarDecode => Arguments::Shift(integer("shift")?),
         Action::VigenereEncode | Action::VigenereDecode | Action::Beaufort => {
             let Some(Parameter::Text(key)) = step.parameters.get("key") else {
@@ -241,8 +310,14 @@ mod tests {
             assert!(ids.insert(adapter.id), "duplicate adapter: {}", adapter.id);
             let descriptor = operations::require(adapter.id).expect("known adapter operation");
             assert!(adapter.version > 0);
-            descriptor.input_type.parse::<Kind>().expect("input kind");
-            descriptor.output_type.parse::<Kind>().expect("output kind");
+            let (input, output) = adapter.kinds().expect("typed adapter");
+            assert!(descriptor.deterministic);
+            if output == Kind::ForensicReport {
+                assert_eq!(input, Kind::Bytes);
+            } else {
+                assert_eq!(input, descriptor.input_type.parse().unwrap());
+                assert_eq!(output, descriptor.output_type.parse().unwrap());
+            }
         }
     }
 }

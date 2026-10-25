@@ -481,3 +481,11 @@ def extract_har_asset(document: str, index: int) -> dict[str, Any]: ...
 def extract_video_frames(
     data: bytes, track_id: int, indexes: list[int]
 ) -> list[dict[str, Any]]: ...
+def compare_video_frames(
+    data: bytes,
+    track_id: int,
+    pairs: list[tuple[int, int]],
+    *,
+    channels: list[str] | None = None,
+    max_results: int = 1000,
+) -> dict[str, Any]: ...

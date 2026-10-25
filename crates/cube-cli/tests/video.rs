@@ -69,3 +69,37 @@ fn selected_frame_pngs_preserve_source_and_existing_outputs_with_batch_cleanup()
     assert_eq!(std::fs::read(&source).unwrap(), input);
     std::fs::remove_dir_all(directory).unwrap();
 }
+
+#[test]
+fn frame_pair_cli_reports_exact_existing_comparison_and_source_provenance() {
+    let input = mov::movie(&[mov::jpeg(0), mov::jpeg(1), mov::jpeg(0)], true, true);
+    let path = std::env::temp_dir().join(format!("cube-video-pairs-{}.mov", std::process::id()));
+    std::fs::write(&path, &input).unwrap();
+    let out = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args([
+            "video",
+            "compare",
+            path.to_str().unwrap(),
+            "--track-id",
+            "1",
+            "--pairs",
+            "0:1,0:2",
+            "--max-results",
+            "1",
+        ])
+        .output()
+        .unwrap();
+    assert!(out.status.success(), "{:?}", out.stderr);
+    let actual: serde_json::Value = serde_json::from_slice(&out.stdout).unwrap();
+    let expected = cube_core::media::video::comparison::compare(
+        &mut std::io::Cursor::new(&input),
+        1,
+        &[(0, 1), (0, 2)],
+        None,
+        1,
+    )
+    .unwrap();
+    assert_eq!(actual, serde_json::to_value(expected).unwrap());
+    assert_eq!(std::fs::read(&path).unwrap(), input);
+    std::fs::remove_file(path).unwrap();
+}

@@ -771,6 +771,19 @@ CLI batches reserve all new names exclusively, cap PNG output at 96 MiB and remo
 only files created by a failed batch. SDK extraction performs no writes. Images
 and reader I/O remain outside the current pipeline value/adapter contract.
 
+`video.frames.compare` selects up to eight explicit frame pairs from that same
+MOV/JPEG subset. It extracts their union once (at most eight images), then reuses
+`Image::compare` for exact native samples or explicit channels. Pair reports retain
+both frames' exact extraction/time/hash provenance. Different dimensions fail;
+there is no implicit resizing, display transform, fuzzy metric or perceptual claim.
+The global difference-list budget is 1..=10000 records (default 1000); exact counts
+remain available and each listing declares completeness. Work is capped at 8 Mi
+compared pixel pairs, with no mask allocations. Existing image APIs compare
+previously extracted PNGs without a decoder; retain their extraction manifest.
+Rust `comparison::compare_selected` accepts supplied Frame records and labels their
+provenance as caller data rather than authenticating it. Reader/image operations
+remain direct APIs, with no pipeline adapter or changed recipe contract.
+
 ## Offline web artifacts
 
 `web.html.inspect` accepts UTF-8 HTML as inert data. A maintained tokenizer reports

@@ -488,6 +488,25 @@ applied. Provenance retains exact sample offsets, lengths, encoded hashes and
 decode-time ticks. Use ordinary image methods to inspect or export the result.
 Unsupported codecs, edits and external references fail explicitly.
 
+Compare source frame pairs with extraction provenance, or reuse ordinary image
+comparison when images are already available:
+
+```python
+from pathlib import Path
+import cube
+
+source = Path("clip.mov").read_bytes()
+report = cube.compare_video_frames(source, 1, [(0, 1), (0, 2)], max_results=100)
+assert report["pairs"][0]["left"]["frame_index"] == 0
+frames = cube.extract_video_frames(source, 1, [0, 2])
+comparison = frames[0]["image"].compare(frames[1]["image"], max_results=100)
+assert comparison["equal"] == report["pairs"][1]["comparison"]["equal"]
+```
+
+Counts compare exact decoded samples. JPEG-source comparison does not establish
+encoded-byte equality or perceptual similarity. Dimensions must match; channels
+can be selected explicitly. Read the [pair/result/work limits](operations.md#video-container-metadata).
+
 ## Inspect offline HTML and HAR
 
 ```python

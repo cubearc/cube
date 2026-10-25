@@ -3,6 +3,18 @@ use clap::Subcommand;
 use std::{error::Error, io::Write, path::PathBuf};
 #[derive(Subcommand)]
 pub(crate) enum VideoCommand {
+    /// Compare selected MOV/JPEG pairs with exact frame/time/range provenance
+    Compare {
+        path: PathBuf,
+        #[arg(long)]
+        track_id: u64,
+        #[arg(long,value_delimiter=',',num_args=1..=8)]
+        pairs: Vec<String>,
+        #[arg(long, value_delimiter = ',')]
+        channels: Option<Vec<String>>,
+        #[arg(long, default_value_t = 1000)]
+        max_results: usize,
+    },
     /// Export explicitly indexed independent MOV/JPEG frames as new PNG files
     Frames {
         path: PathBuf,
@@ -22,6 +34,39 @@ pub(crate) enum VideoCommand {
 }
 pub(crate) fn run(command: VideoCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        VideoCommand::Compare {
+            path,
+            track_id,
+            pairs,
+            channels,
+            max_results,
+        } => {
+            let pairs = pairs
+                .iter()
+                .map(|s| {
+                    let (a, b) = s
+                        .split_once(':')
+                        .ok_or("pair must use left:right frame indexes")?;
+                    Ok::<_, Box<dyn Error>>((a.parse::<usize>()?, b.parse::<usize>()?))
+                })
+                .collect::<Result<Vec<_>, _>>()?;
+            let channels = channels
+                .map(|names| {
+                    names
+                        .iter()
+                        .map(|s| cube_core::image::Channel::parse(s))
+                        .collect::<Result<Vec<_>, _>>()
+                })
+                .transpose()?;
+            let report = cube_core::media::video::comparison::compare_file(
+                &path,
+                track_id,
+                &pairs,
+                channels.as_deref(),
+                max_results,
+            )?;
+            writeln!(output, "{}", serde_json::to_string_pretty(&report)?)?;
+        }
         VideoCommand::Frames {
             path,
             track_id,

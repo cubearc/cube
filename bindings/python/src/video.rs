@@ -1,6 +1,40 @@
 //! Native wrappers for bounded video metadata; no decoder or network backend.
 use pyo3::prelude::*;
 #[pyfunction]
+#[pyo3(signature=(data,track_id,pairs,*,channels=None,max_results=1000))]
+fn compare_video_frames(
+    py: Python<'_>,
+    data: &[u8],
+    track_id: u64,
+    pairs: &Bound<'_, pyo3::types::PyList>,
+    channels: Option<Vec<String>>,
+    max_results: usize,
+) -> PyResult<Py<PyAny>> {
+    if pairs.is_empty() || pairs.len() > 8 {
+        return Err(pyo3::exceptions::PyValueError::new_err(
+            "select 1..=8 frame pairs",
+        ));
+    }
+    let pairs = pairs.extract::<Vec<(usize, usize)>>()?;
+    let channels = channels
+        .map(|names| {
+            names
+                .iter()
+                .map(|s| cube_core::image::Channel::parse(s).map_err(super::file_error))
+                .collect::<PyResult<Vec<_>>>()
+        })
+        .transpose()?;
+    let result = cube_core::media::video::comparison::compare(
+        &mut std::io::Cursor::new(data),
+        track_id,
+        &pairs,
+        channels.as_deref(),
+        max_results,
+    )
+    .map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(result))
+}
+#[pyfunction]
 fn extract_video_frames(
     py: Python<'_>,
     data: &[u8],
@@ -38,6 +72,7 @@ fn inspect_video(py: Python<'_>, data: &[u8]) -> PyResult<Py<PyAny>> {
     super::structured(py, &serde_json::json!(info))
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(compare_video_frames, module)?)?;
     module.add_function(wrap_pyfunction!(extract_video_frames, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_video, module)?)?;
     Ok(())

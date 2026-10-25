@@ -1,4 +1,5 @@
 //! Bounded declared container metadata, not decoding or complete media validation.
+pub mod comparison;
 pub mod frames;
 mod mp4;
 mod webm;

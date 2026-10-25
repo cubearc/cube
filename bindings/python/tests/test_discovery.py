@@ -100,6 +100,7 @@ SDK_BINDINGS = {
     "web.har.inspect": "inspect_har",
     "video.container.inspect": "inspect_video",
     "video.frames.extract": "extract_video_frames",
+    "video.frames.compare": "compare_video_frames",
     "audio.spectrum": "wave_spectrum",
     "audio.wave.inspect": "inspect_wave",
     "audio.pcm.extract": "wave_samples",

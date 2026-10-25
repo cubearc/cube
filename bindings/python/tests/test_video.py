@@ -148,3 +148,29 @@ def test_mov_extraction_validates_tables_and_never_decodes_unselected_samples():
     with pytest.raises(ValueError) as error:
         cube.extract_video_frames(bytes(bad), 1, [0])
     assert error.value.operation == "video.frames.extract"
+
+
+def test_video_comparison_reuses_exact_images_and_retains_extraction_provenance():
+    data = mov_frames()
+    frames = cube.extract_video_frames(data, 1, [0, 1, 2])
+    report = cube.compare_video_frames(data, 1, [(0, 1), (0, 2)], max_results=1)
+    assert report["retained_differences"] == 1
+    first, second = report["pairs"]
+    assert (
+        first["comparison"]["differing_pixels"]
+        == frames[0]["image"].compare(frames[1]["image"])["differing_pixels"]
+    )
+    assert not first["comparison"]["complete"]
+    assert second["comparison"]["equal"]
+    assert first["left"] == frames[0]["provenance"]
+    assert first["right"] == frames[1]["provenance"]
+    assert (
+        report["provenance_origin"]
+        == "validated_selected_sample_ranges_and_encoded_hashes"
+    )
+    assert cube.describe_operation("video.frames.compare")["pipeline"] is None
+    for pairs in [[], [(0, 0)] * 9, [(0, 3)]]:
+        with pytest.raises(ValueError):
+            cube.compare_video_frames(data, 1, pairs)
+    with pytest.raises(ValueError):
+        cube.compare_video_frames(data, 1, [(0, 1)], channels=["alpha"])

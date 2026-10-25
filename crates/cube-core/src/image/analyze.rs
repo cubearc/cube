@@ -405,7 +405,7 @@ impl Image {
     }
 }
 
-pub(super) const CHANNEL_NAMES: &[&str] = &["red", "green", "blue", "alpha", "gray", "index"];
+pub(crate) const CHANNEL_NAMES: &[&str] = &["red", "green", "blue", "alpha", "gray", "index"];
 pub(super) const REGION_PARAMETER: crate::operations::Parameter = crate::operations::Parameter {
     name: "region",
     description: "Optional [x,y,width,height] rectangle; width/height must be positive and bounds checked against the image.",

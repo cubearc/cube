@@ -487,6 +487,18 @@ Names are `track-1-frame-0.png` and `track-1-frame-2.png`. Existing destinations
 cause an error; failed batches clean up only newly created files. Read the
 [JPEG extraction scope and budgets](operations.md#video-container-metadata).
 
+Compare explicit pairs directly from the supported MOV, preserving source
+provenance in JSON, or reuse the existing command for previously exported PNGs:
+
+```sh
+cube video compare clip.mov --track-id 1 --pairs 0:1,0:2 --max-results 100
+cube image compare frames/track-1-frame-0.png frames/track-1-frame-2.png --json
+```
+
+The difference-list budget applies to the whole video batch; exact differing-pixel
+counts and per-pair completeness remain available. Optional `--channels` selects
+existing sample channels; mismatched dimensions fail without resizing.
+
 ## Inspect saved HTML and HAR
 
 ```sh

@@ -273,7 +273,7 @@ pub(crate) enum ImageCommand {
         #[arg(long)]
         json: bool,
     },
-    /// Write exact PNG8 samples to a new PNG, optionally expanding indexed pixels
+    /// Write decoded 8-bit samples to a new PNG, optionally expanding indexed pixels
     Convert {
         path: PathBuf,
         #[arg(long)]
@@ -281,7 +281,7 @@ pub(crate) enum ImageCommand {
         #[arg(long)]
         expand_palette: bool,
     },
-    /// Inspect exact PNG8 shape, source model and palette without dumping samples
+    /// Inspect supported raster shape, model and decoding provenance
     Inspect {
         path: PathBuf,
         #[arg(long)]
@@ -518,6 +518,7 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             let image = Image::open(&path)?;
             if json {
                 let mut info = serde_json::json!(image.info());
+                info["provenance"] = serde_json::json!(image.provenance());
                 if exif {
                     info["exif"] = serde_json::json!(image.exif()?);
                 }
@@ -525,7 +526,12 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             } else {
                 writeln!(
                     output,
-                    "PNG8 {} x {}\nModel: {:?}\nChannels: {}\nSample bytes: {}\nPalette entries: {}",
+                    "{} {} x {}\nModel: {:?}\nChannels: {}\nSample bytes: {}\nPalette entries: {}",
+                    if image.info().format == "png" {
+                        "PNG8"
+                    } else {
+                        image.info().format
+                    },
                     image.width(),
                     image.height(),
                     image.model(),

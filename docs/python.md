@@ -156,8 +156,10 @@ assert cube.Image.open("two-pixels.png").samples == image.samples
 ```
 
 Images are immutable; transforms return a new `Image`. `Image.open(path)` loads a
-supported PNG, and `Image.decode(data)` accepts encoded PNG bytes. `samples` exposes
-exact native samples; indexed images keep palette indexes until explicit expansion.
+supported raster, and `Image.decode(data)` accepts its encoded bytes. PNG8 `samples`
+retain exact native values and palette indexes until explicit expansion. JPEG,
+single-frame GIF, BMP and static WebP expose decoded 8-bit samples; inspect
+`image.provenance()` to distinguish codec output from native PNG8 samples.
 Use `pixel`, `channel`, `histogram`, `bit_plane` or `lsb` to inspect selected data.
 See [image semantics and limits](operations.md#image-analysis-and-steganography).
 

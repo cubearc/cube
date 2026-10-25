@@ -6,6 +6,7 @@
 
 pub mod analyze;
 pub mod bits;
+pub mod decode;
 pub use bits::{BitOrder, BitPlane, Incomplete, LsbOptions, LsbResult, Traversal};
 pub mod transform;
 pub use analyze::{Channel, Comparison, Histogram, PixelData, Region};
@@ -98,6 +99,7 @@ pub struct Image {
     transparency: Vec<u8>,
     source_chunks: Vec<forensics::png::Chunk>,
     exif: Option<Vec<u8>>,
+    source_format: &'static str,
 }
 
 /// Image facts separate from sample bytes. Metadata is explicit and never decoded
@@ -225,13 +227,25 @@ impl Image {
             transparency,
             source_chunks: vec![],
             exif: None,
+            source_format: "png",
         })
     }
 
-    /// Decode only PNG8, with identity transformations and bounded library memory.
-    /// Framing/CRCs are validated using the same parser as file trailer inspection.
-    /// Text and ICC decompression are disabled; raw chunk metadata remains inspectable.
+    /// Decode supported bounded rasters. PNG8 uses identity transformations and
+    /// shared strict framing/CRC validation; text/ICC decompression stays disabled.
+    /// Additional codecs expose decoded pixels, explicitly labeled by provenance.
     pub fn decode(encoded: &[u8]) -> Result<Self, OperationError> {
+        if encoded.len() > MAX_ENCODED {
+            return Err(limit("encoded image exceeds 32 MiB").operation("image.decode"));
+        }
+        if encoded.starts_with(b"\x89PNG\r\n\x1a\n") {
+            Self::decode_png(encoded)
+        } else {
+            decode::raster(encoded).map_err(|e| e.operation("image.decode"))
+        }
+    }
+
+    fn decode_png(encoded: &[u8]) -> Result<Self, OperationError> {
         let result = (|| {
             if encoded.len() > MAX_ENCODED {
                 return Err(limit("encoded PNG exceeds 32 MiB"));
@@ -310,7 +324,7 @@ impl Image {
     pub fn open(path: &Path) -> Result<Self, OperationError> {
         let mut file = forensics::open_regular(path).map_err(|e| e.operation("image.decode"))?;
         if file.metadata()?.len() > MAX_ENCODED as u64 {
-            return Err(limit("encoded PNG exceeds 32 MiB").operation("image.decode"));
+            return Err(limit("encoded image exceeds 32 MiB").operation("image.decode"));
         }
         let mut bytes = Vec::new();
         (&mut file)
@@ -341,7 +355,7 @@ impl Image {
     /// Inspect source model/palette/transparency and chunk metadata, not pixel bytes.
     pub fn info(&self) -> ImageInfo<'_> {
         ImageInfo {
-            format: "png",
+            format: self.source_format,
             width: self.width,
             height: self.height,
             color_model: self.model,
@@ -451,7 +465,7 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
     crate::operations::Descriptor {
         id: "image.decode",
         category: "image",
-        description: "Decode bounded PNG8 while preserving source samples, palettes and transparency.",
+        description: "Decode bounded PNG8, baseline JPEG, single-frame GIF, BMP or static WebP; preserve PNG8 source samples and report decoded raster provenance.",
         input_type: "bytes",
         output_type: "image.samples",
         parameters: &[],

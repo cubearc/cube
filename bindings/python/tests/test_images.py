@@ -17,6 +17,31 @@ def chunk(kind, data):
     )
 
 
+def bmp_bytes():
+    """Original 2x1 uncompressed BGR bitmap with two row-padding bytes."""
+    pixels = bytes([3, 2, 1, 6, 5, 4, 0, 0])
+    header = struct.pack("<2sIHHI", b"BM", 62, 0, 0, 54)
+    dib = struct.pack("<IiiHHIIiiII", 40, 2, 1, 1, 24, 0, 8, 0, 0, 0, 0)
+    return header + dib + pixels
+
+
+def test_bmp_decoding_provenance_and_lossless_export(tmp_path):
+    source = bmp_bytes()
+    path = tmp_path / "original.bmp"
+    path.write_bytes(source)
+    image = cube.Image.open(path)
+    assert image.samples == bytes([1, 2, 3, 4, 5, 6])
+    assert image.info()["format"] == "bmp"
+    assert image.provenance()["source_samples_preserved"] is False
+    assert image.provenance()["color_management"] == "none"
+    output = tmp_path / "decoded.png"
+    image.save_png(output)
+    assert cube.Image.open(output).samples == image.samples
+    assert path.read_bytes() == source
+    with pytest.raises(ValueError):
+        cube.Image.decode(source[:-3])
+
+
 def png_bytes(width, height, color, samples, palette=None, transparency=None, depth=8):
     channels = {0: 1, 2: 3, 3: 1, 4: 2, 6: 4}[color]
     stride = width * channels * (2 if depth == 16 else 1)

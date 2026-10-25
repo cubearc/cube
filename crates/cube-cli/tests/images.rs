@@ -23,6 +23,34 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn bmp_inspection_reports_decoded_provenance_and_binary_pixels() {
+    let files = Files::new("bmp");
+    let path = files.path("original.bmp");
+    let mut bytes = vec![0; 62];
+    bytes[..2].copy_from_slice(b"BM");
+    for (offset, value) in [(2, 62u32), (10, 54), (14, 40), (18, 2), (22, 1), (34, 8)] {
+        bytes[offset..offset + 4].copy_from_slice(&value.to_le_bytes());
+    }
+    bytes[26] = 1;
+    bytes[28] = 24;
+    bytes[54..60].copy_from_slice(&[3, 2, 1, 6, 5, 4]);
+    std::fs::write(&path, &bytes).unwrap();
+    let input = path.to_str().unwrap();
+    let result = run(&["image", "inspect", input, "--json"]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let info: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(info["format"], "bmp");
+    assert_eq!(info["provenance"]["source_samples_preserved"], false);
+    let result = run(&["image", "pixels", input, "--stdout"]);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, [1, 2, 3, 4, 5, 6]);
+    assert_eq!(std::fs::read(path).unwrap(), bytes);
+}
+#[test]
 fn inspect_chunks_and_conversion_use_core_samples_and_safe_destinations() {
     let files = Files::new("foundation");
     let path = files.path("input.png");

@@ -194,10 +194,19 @@ cube image histogram sample.png --channels red,green,blue --json
 cube image bit-plane sample.png --channel red --bit 0 --stdout > plane.bin
 ```
 
-Decoding supports 8-bit grayscale, grayscale+alpha, RGB, RGBA and indexed PNG.
+PNG decoding preserves 8-bit grayscale, grayscale+alpha, RGB, RGBA and indexed samples.
+Additional inputs are baseline Huffman JPEG (gray/RGB output), single-frame GIF
+(RGBA canvas, transparent background), BMP (decoded RGB/RGBA), and static WebP
+(RGB/RGBA). JPEG color-space conversion and lossy artifacts are decoder results,
+not exact encoded/source samples. GIF/BMP palettes are expanded by their codecs.
+`Image.provenance()` and `image inspect --json` label these representations.
 Limits include 32 MiB encoded data, 16384 pixels per side, 4 Mi pixels and 16 MiB
-of decoded samples. Other formats/depths fail explicitly; no gamma/profile
-conversion, premultiplication or compositing occurs. PNG chunk inspection checks
+of decoded samples. Decoder allocation requests are capped at 64 MiB where the
+codec supports them; dimensions/output and encoded-input limits always apply.
+GIF decoding examines at most two bounded frames to reject animation; animated
+WebP is rejected from its header. Other formats/depths fail explicitly. No
+ICC/gamma correction, EXIF orientation transform or premultiplication occurs.
+GIF's first frame is placed on its transparent canvas. PNG chunk inspection checks
 framing/CRCs without decoding pixels; bad-CRC reporting and payload export are opt-in.
 
 Coordinates use a top-left origin; regions are `x,y,width,height`, entirely inside

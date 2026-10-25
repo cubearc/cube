@@ -36,6 +36,9 @@ transformations stay in their owning modules. Responsibilities include:
 - `image`: an immutable validated PNG8 sample model, with separate analysis,
   geometry/color and bit-extraction modules. Indexed samples, palette and tRNS
   remain separate until explicit expansion. PNG framing reuses `forensics`.
+  A separate codec module uses `image` with only JPEG/GIF/BMP/WebP enabled (no
+  default formats, parallel runtime or native media backend). It validates shape
+  before sample allocation and reports decoded-raster provenance separately.
 - `media`: WAVE framing, immutable selected PCM blocks and incremental min/max
   envelopes. Metadata skips payloads with `Read + Seek`; extraction/envelopes share
   frame-aligned bounded streaming. Block format/channel/continuity checks precede

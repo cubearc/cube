@@ -221,7 +221,9 @@ cube image lsb sample.png --channels red --bits 0 --stdout > extracted.bin
 The histogram reports six `[2,0,0]` pixels and two `[3,0,0]` pixels; the LSB result
 is one byte, `41` in hex (`A`). These known bits were deliberately placed in a
 synthetic image; an extraction from another image does not prove hidden content.
-Images are currently limited to 8-bit PNG. Pixel coordinates start at `(0,0)`
+Images accept PNG8, baseline JPEG, single-frame GIF, BMP and static WebP.
+Use `cube image inspect input.jpg --json` to inspect decoded-pixel provenance.
+Pixel coordinates start at `(0,0)`
 at the top left; palette expansion and lossy transforms are explicit.
 See [image analysis](operations.md#image-analysis-and-steganography).
 

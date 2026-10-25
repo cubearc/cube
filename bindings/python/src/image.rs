@@ -32,7 +32,7 @@ fn pixel_data(py: Python<'_>, data: &cube_core::image::PixelData) -> PyResult<Py
     Ok(result)
 }
 
-/// Immutable PNG8 samples. Transformations return another Image.
+/// Immutable 8-bit samples. Transformations return another Image.
 #[pyclass(name = "Image", module = "cube._native", frozen)]
 pub struct PyImage {
     pub(super) inner: Image,
@@ -352,6 +352,9 @@ impl PyImage {
     }
     fn info(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
         super::structured(py, &serde_json::json!(self.inner.info()))
+    }
+    fn provenance(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
+        super::structured(py, &serde_json::json!(self.inner.provenance()))
     }
     fn exif(&self, py: Python<'_>) -> PyResult<Py<PyAny>> {
         super::structured(

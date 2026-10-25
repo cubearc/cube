@@ -142,6 +142,26 @@ preserve repeats/order and contain at most 1024 indexes. Structured results carr
 exact digit strings and the SHA-256 of the entire chosen prefix. No network or
 Python numerical fallback is used.
 
+## Work with versioned Base58Check
+
+```python
+import cube
+
+payload = cube.hex_decode("a31c06bd463e3923bc1aadbde48b16976c080717")
+encoded = cube.base58check_encode(payload, version=0)
+assert encoded == "1FsSia9rv4NeEwvJ2GvXrX7LyxYspbN2mo"
+decoded = cube.base58check_decode(encoded)
+assert decoded["version"] == 0
+assert decoded["payload"] == payload
+assert decoded["checksum_verified"] is True
+```
+
+The generic codec accepts empty payloads, preserves zeros, validates checksums and
+has no network/wallet policy. Payloads are capped at 1024 bytes and encoded text
+at 1421 bytes. Plain Base58 remains unchanged. Only the encoding operation has a
+bounded pipeline adapter; a checksum is not authentication or permission to
+capture private inputs. See [Base58Check semantics](operations.md#versioned-base58check).
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:

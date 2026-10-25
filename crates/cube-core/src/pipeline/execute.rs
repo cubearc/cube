@@ -23,6 +23,14 @@ pub struct Execution {
 impl Prepared {
     /// Conservative output-size upper bounds guard allocation before algorithms.
     fn ceiling(&self, size: usize) -> Result<usize, Error> {
+        if matches!(self.adapter.action, Action::Base58CheckEncode)
+            && size > encoding::base58check::MAX_PAYLOAD
+        {
+            return Err(Error::new(
+                ErrorCode::ResourceLimit,
+                "Base58Check payload exceeds 1024 bytes",
+            ));
+        }
         if (matches!(self.adapter.action, Action::SemaphoreEncode)
             && size > crate::symbols::semaphore::MAX_SYMBOLS)
             || (matches!(self.adapter.action, Action::SemaphoreDecode)
@@ -69,6 +77,7 @@ impl Prepared {
                 .map_err(Error::from_operation)?;
             let selected = selected as usize;
             return Ok(match self.adapter.action {
+                Action::Base58CheckEncode => (size + 5) * 138 / 100 + 1,
                 Action::HexInspect => 64 + selected * 8 + selected.div_ceil(width) * 160,
                 Action::Strings => {
                     64 + selected + selected.div_ceil(min_length + 1).min(max_results) * 128
@@ -227,6 +236,9 @@ impl Prepared {
                     },
                 }
             }
+            (Action::Base58CheckEncode, Value::Bytes { data }, Arguments::Version(version)) => {
+                text(encoding::base58check::encode(*version, &data)?)
+            }
             (Action::Base32Encode, Value::Bytes { data }, _) => {
                 text(encoding::base32_encode(&data))
             }
@@ -341,6 +353,10 @@ impl Plan {
                     ));
                 }
                 work += size as u64 + output as u64;
+                if matches!(step.adapter.action, Action::Base58CheckEncode) {
+                    // The codec cap precedes this checked, conservative quadratic charge.
+                    work += (size as u64 + 5).pow(2);
+                }
                 if work > self.limits.max_work_bytes {
                     return Err(Error::new(
                         ErrorCode::ResourceLimit,

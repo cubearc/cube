@@ -3,6 +3,7 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    Base58CheckEncode,
     SemaphoreEncode,
     SemaphoreDecode,
     HtmlAsset,
@@ -55,6 +56,11 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "encoding.base58check.encode",
+        version: 1,
+        action: Action::Base58CheckEncode,
+    },
     Adapter {
         id: "symbol.semaphore.encode",
         version: 1,
@@ -278,6 +284,7 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    Version(u8),
     WebAsset {
         index: usize,
         selector: crate::web::assets::HtmlSelector,
@@ -354,6 +361,7 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::Base58CheckEncode => Arguments::Version(integer("version")? as u8),
         Action::HtmlAsset | Action::HarAsset => {
             let index = usize::try_from(integer("index")?)
                 .map_err(|_| invalid("invalid asset index").parameter("index"))?;

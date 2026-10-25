@@ -10,6 +10,8 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "encoding.base58check.encode": "base58check_encode",
+    "encoding.base58check.decode": "base58check_decode",
     **{
         f"encoding.{name}.{direction}": f"{name}_{direction}"
         for name in ("base32", "base58", "base64", "hex")

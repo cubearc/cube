@@ -137,6 +137,22 @@ cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 Use `--decode` with the original key/parameters to reverse supported ciphers.
 Classical ciphers are for challenges and education, not modern confidentiality.
 
+### Versioned Base58Check
+
+Use an explicit decimal version byte (0..255); payloads are limited to 1024 bytes.
+This public Bitcoin Core vector is independent of wallet/private-key policy:
+
+```sh
+printf '%s' a31c06bd463e3923bc1aadbde48b16976c080717 | cube decode hex --output raw | cube encode base58check --version-byte 0
+cube decode base58check --text 1FsSia9rv4NeEwvJ2GvXrX7LyxYspbN2mo --json
+```
+
+The decoded JSON retains the version and exact payload hex. Text is strict,
+including stdin: a trailing newline is rejected. Empty payloads are supported,
+but empty encoded text is invalid. The encoder also composes safely with typed
+bytes under its smaller input and quadratic-work budgets; the structured decoder
+has no pipeline adapter. [Limits and semantics](operations.md#versioned-base58check).
+
 ## Interpret directional symbols
 
 Interpret an exact 12-hour clock reading or signed integer millidegrees:

@@ -32,7 +32,11 @@ pub fn crc32(input: &[u8]) -> String {
 /// );
 /// ```
 pub fn sha256(input: &[u8]) -> String {
-    hex::encode(Sha256::digest(input))
+    hex::encode(sha256_bytes(input))
+}
+
+pub(crate) fn sha256_bytes(input: &[u8]) -> [u8; 32] {
+    Sha256::digest(input).into()
 }
 
 /// Compute SHA-512 as 128 lowercase hex digits of exact bytes.

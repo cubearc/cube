@@ -134,6 +134,11 @@ sessions. Filesystem I/O stays outside recipes; caller-selected raw ranges never
 acquire a format-validation claim. Metadata changes trigger new-output cleanup;
 source stability remains a caller responsibility rather than a snapshot guarantee.
 
+`encoding::base58check` reuses plain Base58 and one internal raw SHA-256 helper.
+Bounds precede the quadratic conversion; its structured decoded result stays a
+direct API. The version-1 encoder adapter uses existing byte/text values and adds
+an explicit quadratic work charge without changing older adapter contracts.
+
 ## Metadata and discovery
 
 Static descriptors live beside operations and are assembled by

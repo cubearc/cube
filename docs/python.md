@@ -94,6 +94,33 @@ assert Path("decoded.bin").read_bytes() == b"\x00\xff"
 Use a new destination. Cube's own extraction/image save methods create files
 exclusively and reject existing destinations.
 
+## Work with grids, combinations and directional symbols
+
+`cube.grid_factors("ABCDEF")` reports ordered exact scalar-length factors.
+`cube.text_grid("ABCDEF", 3)` returns rows plus quoted-cell text; optional
+`colors={"0": [0,0,0,255], "1": [255,255,255,255]}` returns PNG bytes for a binary
+grid. Filtering is explicit (`drop_whitespace=True`); layouts use existing image
+traversals. Scalar units include combining marks separately.
+
+`cube.string_combinations([["a", "b"], ["1", "2"]], separator="-")` returns a
+native iterator yielding `a-1`, `a-2`, `b-1`, `b-2`. `iterator.plan()` reports exact
+counts/byte bounds and remaining results; `len(iterator)` reports remaining count.
+Zero groups yield one empty string, any empty group yields no strings, and
+duplicates are preserved. Rejecting an excessive plan happens before iteration;
+stopping early does not generate the unused candidates.
+
+`cube.clock_directions("12:45")` reports an ambiguous hour sector.
+`cube.clock_directions("3:00", decode=True)["decoded"] == "J"` explicitly maps
+hour to sender LH and minute to RH. Alternative inputs use exact integer
+`hour_millidegrees` and `minute_millidegrees`; floats/NaN are unsupported.
+`zero_axis` and `clockwise` configure the caller's convention; no clock image is read.
+
+`cube.semaphore_encode("A B") == "S,SW / S,W"` and
+`cube.semaphore_decode("S,SW / S,W") == "A B"`. Arm order is anatomical sender
+left/right, directions viewed facing the sender. Use version-1
+`symbol.semaphore.encode` / `symbol.semaphore.decode` pipeline steps for bounded
+text composition. Case canonicalizes to uppercase; no numeric/control mode exists.
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:
@@ -159,58 +186,6 @@ boundaries. JPEG/GIF compressed pixels are not decoded. These direct file APIs
 perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
-
-Exchange small complete physical sample grids without filesystem access:
-
-```python
-from cube import Image
-
-source = Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 4, 5, 6, 255]))
-csv_text = source.to_csv()
-restored = Image.from_csv(csv_text)
-assert restored.samples == source.samples
-```
-
-[CSV v1](operations.md#pixel-csv-v1) preserves shape, native channel order and all
-8-bit samples. It rejects palettes/tRNS, incomplete grids and more than 10000
-pixels. It carries no original encoded bytes or ancillary metadata.
-
-`cube.string_combinations([["a", "b"], ["1", "2"]], separator="-")` returns a
-native iterator yielding `a-1`, `a-2`, `b-1`, `b-2`. `iterator.plan()` reports exact
-counts/byte bounds and remaining results; `len(iterator)` reports remaining count.
-Zero groups yield one empty string, any empty group yields no strings, and
-duplicates are preserved. Rejecting an excessive plan happens before iteration;
-stopping early does not generate the unused candidates.
-
-`cube.clock_directions("12:45")` reports an ambiguous hour sector.
-`cube.clock_directions("3:00", decode=True)["decoded"] == "J"` explicitly maps
-hour to sender LH and minute to RH. Alternative inputs use exact integer
-`hour_millidegrees` and `minute_millidegrees`; floats/NaN are unsupported.
-`zero_axis` and `clockwise` configure the caller's convention; no clock image is read.
-
-`cube.semaphore_encode("A B") == "S,SW / S,W"` and
-`cube.semaphore_decode("S,SW / S,W") == "A B"`. Arm order is anatomical sender
-left/right, directions viewed facing the sender. Use version-1
-`symbol.semaphore.encode` / `symbol.semaphore.decode` pipeline steps for bounded
-text composition. Case canonicalizes to uppercase; no numeric/control mode exists.
-
-`cube.image_pairs([first, second, third], "xor", plan_only=True)` returns budgets
-without pair execution. Omit `plan_only` for results with PNG bytes or, for
-`"compare"`, existing structured comparison reports. Repeated image objects fail;
-distinct images with identical bytes are valid. Per-pair errors remain in results,
-and no files are written. `max_differences` applies across the entire collection.
-
-`cube.grid_factors("ABCDEF")` reports ordered exact scalar-length factors.
-`cube.text_grid("ABCDEF", 3)` returns rows plus quoted-cell text; optional
-`colors={"0": [0,0,0,255], "1": [255,255,255,255]}` returns PNG bytes for a binary
-grid. Filtering is explicit (`drop_whitespace=True`); layouts use existing image
-traversals. Scalar units include combining marks separately.
-
-`image.color_layers()` returns a sorted manifest with PNG `bytes` in each
-`outputs[i]["png"]`; it never writes files. Decode those bytes with `Image.decode`
-to inspect each mask. `representation="layer"` preserves selected RGBA, including
-hidden RGB under zero alpha. Explicit `expand_palette=True` matches RGBA instead
-of indices and merges duplicate palette colors.
 
 This example constructs an original two-pixel image without an external asset:
 
@@ -282,6 +257,37 @@ assert raw.qr()["status"] == "no_detection"
 Structured results can contain native `bytes` or `Image` objects, so they are not
 necessarily directly JSON-serializable. Convert those fields explicitly when
 serializing; do not replace binary values with guessed UTF-8 text.
+
+### Exchange pixel grids through CSV
+
+Exchange small complete physical sample grids without filesystem access:
+
+```python
+from cube import Image
+
+source = Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 4, 5, 6, 255]))
+csv_text = source.to_csv()
+restored = Image.from_csv(csv_text)
+assert restored.samples == source.samples
+```
+
+[CSV v1](operations.md#pixel-csv-v1) preserves shape, native channel order and all
+8-bit samples. It rejects palettes/tRNS, incomplete grids and more than 10000
+pixels. It carries no original encoded bytes or ancillary metadata.
+
+### Analyze image collections
+
+`cube.image_pairs([first, second, third], "xor", plan_only=True)` returns budgets
+without pair execution. Omit `plan_only` for results with PNG bytes or, for
+`"compare"`, existing structured comparison reports. Repeated image objects fail;
+distinct images with identical bytes are valid. Per-pair errors remain in results,
+and no files are written. `max_differences` applies across the entire collection.
+
+`image.color_layers()` returns a sorted manifest with PNG `bytes` in each
+`outputs[i]["png"]`; it never writes files. Decode those bytes with `Image.decode`
+to inspect each mask. `representation="layer"` preserves selected RGBA, including
+hidden RGB under zero alpha. Explicit `expand_palette=True` matches RGBA instead
+of indices and merges duplicate palette colors.
 
 ## Work with PCM WAVE data
 

@@ -150,36 +150,6 @@ CLI streams unambiguous JSONL. Existing text/byte transforms accept each result
 through explicit caller conversion; no candidate engine or pipeline iterator type
 is introduced. JSON transport retains its existing depth/node/byte limits.
 
-`symbol.clock.directions` is a separate caller-selected convention, not official
-Semaphore or clock recognition. Select H:MM (ASCII hour 0..12, 0=12, minute 0..59;
-no seconds/fractional minutes) or two signed i64 millidegree angles, never both.
-Hours move 500 millidegrees/minute, minutes 6000. Bearings normalize modulo 360000
-before arithmetic, so signed extremes are safe. Zero axis defaults N, positive
-angles clockwise; E/S/W and reversed sense are explicit. Eight sector centers are
-45000 apart; within +/-1 millidegree of a 22500-offset boundary, return both
-directions as ambiguous rather than breaking a tie. Integer arithmetic makes
-these boundaries reproducible. Each call is one reading with fixed work/storage
-and output below 1 KiB. Optional decoding uses the separate Semaphore decoder with
-hour=sender LH and minute=sender RH, rejecting ambiguity/unsupported pairs. This
-structured result has no pipeline adapter.
-
-Letter-only flag Semaphore follows the anatomical LH/RH positions in the
-[Marine Corps Museum chart](https://www.usmcmuseum.com/uploads/6/0/3/6/60364049/nmmc_semaphore_flag_booklet_final_1.pdf)
-and [Scout Association chart](https://prod-cms.scouts.org.uk/media/5508/generic-resources-semaphore-signals.pdf).
-The [ANBG text](https://www.cpbr.gov.au/flags/semaphore.html) differs for I (RH up);
-both charts show RH high, so I is `SW,NW`, distinct from K `N,SW`.
-No artwork is bundled. Coordinates are receiver-facing: sender LH points toward
-screen-right when extended outward. `N,NE,E,SE,S,SW,W,NW` denote eight directions.
-Tokens are `LH,RH`, separated by exactly one ASCII space; `/` represents each
-literal ASCII space. A-Z letters canonicalize case; digits, other whitespace and
-procedural/numeric modes are excluded. J is literal J; D encodes canonically as
-`S,N` and also decodes `N,S`. Reversed arms are otherwise not inferred.
-Empty input is empty output. Limits are 1 MiB transport and 16384 symbols/tokens;
-encoding expands to less than 96 KiB. Two version-1 text pipeline adapters preflight
-16384 input bytes for encoding, 98304 for decoding and a 6x/1x output bound.
-Existing engine/adapter versions retain their behavior. Clock interpretation is
-a separate operation, not part of this alphabet.
-
 Grid factors and rendering retain Unicode scalars, not grapheme clusters. Input
 is capped at 1 MiB and 65536 retained scalars; optional Rust White_Space removal
 reports removed/retained counts using `WORD_UNICODE_VERSION`. Factors are ascending
@@ -476,6 +446,39 @@ exactly one decoded symbol. No payload URL is followed or content executed.
 Selections must be nonempty and distinct; output is capped at 16 MiB.
 An extracted bit stream is a deterministic candidate, not proof of a hidden message.
 
+### Pixel CSV v1
+
+`image.csv.export` / `image.csv.import` exchange complete, small exact sample grids.
+The first record is `cube_pixels,1,width,height,model,8`; the second fixes channel
+order: `x,y,gray`, `x,y,gray,alpha`, `x,y,red,green,blue` or
+`x,y,red,green,blue,alpha` for `gray`, `gray_alpha`, `rgb` or `rgba` respectively.
+Coordinates are zero-based from the top left. Export is row-major; import allows
+reordered rows but requires every declared coordinate exactly once.
+
+```csv
+cube_pixels,1,2,1,rgba,8
+x,y,red,green,blue,alpha
+0,0,1,2,3,0
+1,0,4,5,6,255
+```
+
+LF/CRLF and an optional final newline are accepted. Every field may optionally be
+wholly double-quoted. Embedded quotes, commas/newlines, blank records, BOM and
+numeric whitespace/signs/prefixes/fractions are unsupported. Integers are decimal;
+samples must be 0..255. Dimensions must be positive and fit normal image limits.
+The additional limits are 10000 pixel records, 2 MiB input/output, 128 bytes per
+physical row (excluding its line ending), 16 unquoted bytes per field and six
+fields per record. Bounds precede allocation and incomplete images are never
+returned. Errors identify the row/field where applicable.
+
+The contract preserves dimensions/model/samples, including hidden RGB beneath
+zero alpha; it does not preserve original encoding, EXIF, profiles or other
+ancillary metadata. Indexed palettes and tRNS are explicitly rejected, rather
+than silently expanded/dropped. Explicitly expanded indexed RGBA samples may be
+exported as a new representation. Import constructs new 8-bit sample provenance.
+Both operations are direct Rust/CLI/native Python APIs; neither is a pipeline
+adapter because the engine has no image sample value.
+
 ## Symbolic encodings
 
 Use `symbols` for textual International Morse or reversible Unicode Braille cells.
@@ -504,6 +507,38 @@ hyphen tokens and numbers outside 1–26 fail at their byte offset. Encoding acc
 inputs round trip; lowercase case is deliberately lost. Both have bounded text
 pipeline adapters, subject to the existing smaller pipeline value/work budgets.
 
+### Semaphore and directional clocks
+
+`symbol.clock.directions` is a separate caller-selected convention, not official
+Semaphore or clock recognition. Select H:MM (ASCII hour 0..12, 0=12, minute 0..59;
+no seconds/fractional minutes) or two signed i64 millidegree angles, never both.
+Hours move 500 millidegrees/minute, minutes 6000. Bearings normalize modulo 360000
+before arithmetic, so signed extremes are safe. Zero axis defaults N, positive
+angles clockwise; E/S/W and reversed sense are explicit. Eight sector centers are
+45000 apart; within +/-1 millidegree of a 22500-offset boundary, return both
+directions as ambiguous rather than breaking a tie. Integer arithmetic makes
+these boundaries reproducible. Each call is one reading with fixed work/storage
+and output below 1 KiB. Optional decoding uses the separate Semaphore decoder with
+hour=sender LH and minute=sender RH, rejecting ambiguity/unsupported pairs. This
+structured result has no pipeline adapter.
+
+Letter-only flag Semaphore follows the anatomical LH/RH positions in the
+[Marine Corps Museum chart](https://www.usmcmuseum.com/uploads/6/0/3/6/60364049/nmmc_semaphore_flag_booklet_final_1.pdf)
+and [Scout Association chart](https://prod-cms.scouts.org.uk/media/5508/generic-resources-semaphore-signals.pdf).
+The [ANBG text](https://www.cpbr.gov.au/flags/semaphore.html) differs for I (RH up);
+both charts show RH high, so I is `SW,NW`, distinct from K `N,SW`.
+No artwork is bundled. Coordinates are receiver-facing: sender LH points toward
+screen-right when extended outward. `N,NE,E,SE,S,SW,W,NW` denote eight directions.
+Tokens are `LH,RH`, separated by exactly one ASCII space; `/` represents each
+literal ASCII space. A-Z letters canonicalize case; digits, other whitespace and
+procedural/numeric modes are excluded. J is literal J; D encodes canonically as
+`S,N` and also decodes `N,S`. Reversed arms are otherwise not inferred.
+Empty input is empty output. Limits are 1 MiB transport and 16384 symbols/tokens;
+encoding expands to less than 96 KiB. Two version-1 text pipeline adapters preflight
+16384 input bytes for encoding, 98304 for decoding and a 6x/1x output bound.
+Existing engine/adapter versions retain their behavior. Clock interpretation is
+a separate operation, not part of this alphabet.
+
 ## Numeric conversions
 
 Use `numbers` to change an integer's textual base, separately from byte encodings
@@ -525,6 +560,11 @@ The v0.11.0 numeric evaluation is recorded in [issue #77](https://github.com/cub
 Prime tests, bounded Fibonacci and modular arithmetic remain deferred; base
 conversion is the implemented numeric API. No proposed operation is advertised
 through discovery.
+
+Indexed digits of pi, e, sqrt(2) and the golden ratio remain unimplemented.
+The [v0.14 research decision](https://github.com/cubearc/cube/issues/107#issuecomment-6398938938)
+records certified offline-reference feasibility, indexing, bounds and proposed
+tests; it defers a production operation until that contract is agreed.
 
 ## Audio analysis
 
@@ -948,37 +988,3 @@ pipeline engine, value kinds, preflight, captures and lowered budgets. Adapter
 output is bytes; use direct extraction first when provenance must be retained.
 Caller-selected local files can enter the ordinary byte pipeline separately;
 artifact references never authorize opening them. Existing recipes remain valid.
-
-
-### Pixel CSV v1
-
-`image.csv.export` / `image.csv.import` exchange complete, small exact sample grids.
-The first record is `cube_pixels,1,width,height,model,8`; the second fixes channel
-order: `x,y,gray`, `x,y,gray,alpha`, `x,y,red,green,blue` or
-`x,y,red,green,blue,alpha` for `gray`, `gray_alpha`, `rgb` or `rgba` respectively.
-Coordinates are zero-based from the top left. Export is row-major; import allows
-reordered rows but requires every declared coordinate exactly once.
-
-```csv
-cube_pixels,1,2,1,rgba,8
-x,y,red,green,blue,alpha
-0,0,1,2,3,0
-1,0,4,5,6,255
-```
-
-LF/CRLF and an optional final newline are accepted. Every field may optionally be
-wholly double-quoted. Embedded quotes, commas/newlines, blank records, BOM and
-numeric whitespace/signs/prefixes/fractions are unsupported. Integers are decimal;
-samples must be 0..255. Dimensions must be positive and fit normal image limits.
-The additional limits are 10000 pixel records, 2 MiB input/output, 128 bytes per
-physical row (excluding its line ending), 16 unquoted bytes per field and six
-fields per record. Bounds precede allocation and incomplete images are never
-returned. Errors identify the row/field where applicable.
-
-The contract preserves dimensions/model/samples, including hidden RGB beneath
-zero alpha; it does not preserve original encoding, EXIF, profiles or other
-ancillary metadata. Indexed palettes and tRNS are explicitly rejected, rather
-than silently expanded/dropped. Explicitly expanded indexed RGBA samples may be
-exported as a new representation. Import constructs new 8-bit sample provenance.
-Both operations are direct Rust/CLI/native Python APIs; neither is a pipeline
-adapter because the engine has no image sample value.

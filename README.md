@@ -17,11 +17,13 @@ is explicit.
 
 - Encode/decode data, compare exact hashes/checksums and transform binary units.
 - Work with classical/book ciphers, Unicode selectors/statistics, A1Z26, Morse,
-  Braille dot masks and integer base conversion.
+  Braille dot masks, flag Semaphore, directional clocks and integer base conversion.
+- Arrange Unicode scalars in exact grids and iterate bounded string combinations.
 - Inspect file signatures, EXIF, hex, strings and binary differences; validate
   supported embedded ZIP structures and recover selected bytes safely.
 - Analyze bounded PNG8/JPEG/GIF/BMP/WebP images, reconstruct raw rasters, and extract
-  exact colors, ordered pixel/bit streams or binary QR payloads.
+  exact color layers, ordered pixel/bit streams or binary QR payloads. Combine
+  compatible image pairs and exchange small exact sample grids through CSV.
 - Analyze bounded PCM spectra/spectrograms, extract sample bits, reverse WAV frames,
   inspect FLAC metadata and review DTMF/Morse candidates with explicit assumptions.
 - Inspect MP4/MOV/WebM metadata; extract MOV/JPEG frames and raw PCM8 tracks,

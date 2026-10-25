@@ -137,7 +137,7 @@ cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 Use `--decode` with the original key/parameters to reverse supported ciphers.
 Classical ciphers are for challenges and education, not modern confidentiality.
 
-## Extract from a caller-supplied book
+## Interpret directional symbols
 
 Interpret an exact 12-hour clock reading or signed integer millidegrees:
 
@@ -164,6 +164,8 @@ Tokens are `LH,RH`, separated by one ASCII space; `/` encodes each literal space
 ASCII letters canonicalize to uppercase; digits, other whitespace and control
 signals are rejected. D uses `S,N` and also accepts alternate `N,S` on decode.
 
+## Extract from a caller-supplied book
+
 ```sh
 printf 'Cube Uses Binary Evidence' > /tmp/cube-book-source.txt
 cube cipher book --source /tmp/cube-book-source.txt --text '1:1,2:1,3:1,4:1'
@@ -176,7 +178,21 @@ Use `--index-base 0` for zero-based coordinates. The local source is read with a
 1 MiB limit and remains unchanged; errors never substitute guessed characters.
 See [coordinate semantics and limits](operations.md#classical-ciphers).
 
-## Transform binary bytes
+## Arrange text in scalar grids
+
+Inspect scalar factor pairs or select exact geometry; grids use tab-separated,
+JSON-quoted cells and LF rows so control characters remain unambiguous:
+
+```sh
+cube text grid --text ABCDEF --json
+cube text grid --text ABCDEF --width 3
+cube text grid --text 0101 --width 2 --colors '[["0","000000ff"],["1","ffffffff"]]' --output grid.png
+```
+
+`--drop-whitespace` is explicit; no normalization occurs. `--traversal` reuses image
+coordinate order with a top-left start. PNG mappings are complete explicit RGBA.
+
+## Generate string combinations
 
 Generate bounded ordered string candidates as JSON Lines (one quoted string per
 record, preserving embedded newlines and controls); `--plan` only reports bounds:
@@ -189,6 +205,8 @@ cube text combinations --text '[["a","b"],["1","2"]]' --separator -
 The rightmost group varies fastest. Duplicate strings remain separate results.
 Plans exceeding `--max-results` (default 1000, hard cap 10000) fail before output;
 there is no silent prefix. CLI group JSON uses the existing 256 KiB/4096-node parser.
+
+## Transform binary bytes
 
 Byte transforms preserve binary output conventions:
 
@@ -306,58 +324,6 @@ PY
 
 ## Analyze an image
 
-Exchange small exact sample grids through versioned CSV (gray, gray-alpha, RGB or
-RGBA, 8-bit, at most 10000 pixels). File outputs are exclusive; stdout contains
-only CSV bytes. Import accepts `--input`, `--text` or stdin and validates every
-coordinate before writing a new PNG:
-
-```sh
-cube image csv export sample.png --output pixels.csv
-cube image csv import --input pixels.csv --output restored.png --json
-cube image csv export sample.png --stdout | cube image csv import --output copied.png
-```
-
-Palette/tRNS inputs are rejected. See [CSV v1](operations.md#pixel-csv-v1) for the
-schema and limits; encoded bytes and ancillary metadata are outside this contract.
-
-Plan exact pair counts before exporting a bounded collection:
-
-```sh
-cube image pairs first.png second.png third.png --operation xor --plan
-mkdir pairs
-cube image pairs first.png second.png third.png --operation xor --output-dir pairs --json
-```
-
-The allowlist is `xor`, `and`, `or`, `compare`; paths are explicit and duplicate
-canonical paths fail. Pairs follow input indexes `(0,1),(0,2),(1,2)`. PNG names use
-`pair-00-01.png`; the manifest includes per-pair errors. A compatibility failure
-retains successful outputs and exits 1; output collisions/write failures roll back
-this invocation's new files. Default output is a concise count summary.
-
-Inspect scalar factor pairs or select exact geometry; grids use tab-separated,
-JSON-quoted cells and LF rows so control characters remain unambiguous:
-
-```sh
-cube text grid --text ABCDEF --json
-cube text grid --text ABCDEF --width 3
-cube text grid --text 0101 --width 2 --colors '[["0","000000ff"],["1","ffffffff"]]' --output grid.png
-```
-
-`--drop-whitespace` is explicit; no normalization occurs. `--traversal` reuses image
-coordinate order with a top-left start. PNG mappings are complete explicit RGBA.
-
-Export one exact-color mask per distinct native tuple to an existing directory:
-
-```sh
-mkdir layers
-cube image color-layers sample.png --output-dir layers
-```
-
-The new `manifest.json` and canonical `color-<hex>.png` files are reserved together.
-Collisions fail without overwriting; failed writes remove only this invocation's
-new files. Use `--representation layer` for RGBA or an explicit `--colors` subset.
-`--max-colors` and `--max-outputs` default to 16 and may be lowered or raised to 64.
-
 ```sh
 cube image inspect sample.png --json
 cube image histogram sample.png --channels red,green,blue --json
@@ -412,6 +378,52 @@ For an already obtained QR image, use `cube image qr code.png --json`.
 `--stdout` emits one decoded payload as exact bytes; `--output payload.bin`
 creates a new destination. No detection is a normal JSON result, while ambiguous
 or undecoded raw output fails explicitly.
+
+### Exchange pixel grids through CSV
+
+Exchange small exact sample grids through versioned CSV (gray, gray-alpha, RGB or
+RGBA, 8-bit, at most 10000 pixels). File outputs are exclusive; stdout contains
+only CSV bytes. Import accepts `--input`, `--text` or stdin and validates every
+coordinate before writing a new PNG:
+
+```sh
+cube image csv export sample.png --output pixels.csv
+cube image csv import --input pixels.csv --output restored.png --json
+cube image csv export sample.png --stdout | cube image csv import --output copied.png
+```
+
+Palette/tRNS inputs are rejected. See [CSV v1](operations.md#pixel-csv-v1) for the
+schema and limits; encoded bytes and ancillary metadata are outside this contract.
+
+### Process explicit image collections
+
+Plan exact pair counts before exporting a bounded collection:
+
+```sh
+cube image pairs first.png second.png third.png --operation xor --plan
+mkdir pairs
+cube image pairs first.png second.png third.png --operation xor --output-dir pairs --json
+```
+
+The allowlist is `xor`, `and`, `or`, `compare`; paths are explicit and duplicate
+canonical paths fail. Pairs follow input indexes `(0,1),(0,2),(1,2)`. PNG names use
+`pair-00-01.png`; the manifest includes per-pair errors. A compatibility failure
+retains successful outputs and exits 1; output collisions/write failures roll back
+this invocation's new files. Default output is a concise count summary.
+
+### Export exact-color collections
+
+Export one exact-color mask per distinct native tuple to an existing directory:
+
+```sh
+mkdir layers
+cube image color-layers sample.png --output-dir layers
+```
+
+The new `manifest.json` and canonical `color-<hex>.png` files are reserved together.
+Collisions fail without overwriting; failed writes remove only this invocation's
+new files. Use `--representation layer` for RGBA or an explicit `--colors` subset.
+`--max-colors` and `--max-outputs` default to 16 and may be lowered or raised to 64.
 
 ## Inspect audio samples
 

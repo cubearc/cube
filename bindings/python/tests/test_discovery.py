@@ -24,7 +24,7 @@ SDK_BINDINGS = {
     **{f"hash.{name}": name for name in ("crc32", "sha256")},
     **{
         f"symbol.{name}.{direction}": f"{name}_{direction}"
-        for name in ("morse", "braille")
+        for name in ("morse", "braille", "a1z26")
         for direction in ("encode", "decode")
     },
     "binary.xor": "xor",

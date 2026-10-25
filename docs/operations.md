@@ -318,6 +318,15 @@ Braille represents raw eight-dot masks, not natural-language Braille transcripti
 bit `n-1` is dot `n`, and a byte maps to U+2800 plus its mask. Every byte round trips.
 Both accept at most 1 MiB input; canonicalized Morse case/spacing does not round-trip.
 
+A1Z26 maps ASCII A–Z to canonical decimal 1–26 tokens joined by hyphens within
+each word: `Hi Cube` becomes `8-9 3-21-2-5`. Space and ASCII control whitespace
+TAB/LF/VT/FF/CR are preserved exactly, including repeated or boundary whitespace.
+Decoding returns uppercase. Punctuation, non-ASCII, signs, leading zeros, empty
+hyphen tokens and numbers outside 1–26 fail at their byte offset. Encoding accepts
+1 MiB and produces at most 3 MiB; decoding accepts 3 MiB. Uppercase supported
+inputs round trip; lowercase case is deliberately lost. Both have bounded text
+pipeline adapters, subject to the existing smaller pipeline value/work budgets.
+
 ## Numeric conversions
 
 Use `numbers` to change an integer's textual base, separately from byte encodings

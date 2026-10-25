@@ -103,6 +103,14 @@ file before Cube runs. Use a new path or Cube's exclusive destination option.
 ## Transform encoded data and ciphers
 
 ```sh
+cube encode a1z26 --text 'Hi Cube'
+cube decode a1z26 --text '8-9 3-21-2-5'
+```
+
+A1Z26 preserves ASCII whitespace and decodes to uppercase. Text commands append
+their usual output newline; punctuation and malformed numeric tokens fail.
+
+```sh
 cube encode base32 --text 'foo'
 # MZXW6===
 cube decode base58 --text 'JxF12TrwUP45BMd' --output raw

@@ -3,6 +3,8 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    A1z26Encode,
+    A1z26Decode,
     Base32Encode,
     Base32Decode,
     Base58Encode,
@@ -36,6 +38,16 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "symbol.a1z26.encode",
+        version: 1,
+        action: Action::A1z26Encode,
+    },
+    Adapter {
+        id: "symbol.a1z26.decode",
+        version: 1,
+        action: Action::A1z26Decode,
+    },
     Adapter {
         id: "file.signature.detect",
         version: 1,

@@ -2,6 +2,14 @@
 use cube_core::ciphers;
 use pyo3::prelude::*;
 #[pyfunction]
+fn a1z26_encode(text: &str) -> PyResult<String> {
+    cube_core::symbols::a1z26::encode(text).map_err(super::file_error)
+}
+#[pyfunction]
+fn a1z26_decode(text: &str) -> PyResult<String> {
+    cube_core::symbols::a1z26::decode(text).map_err(super::file_error)
+}
+#[pyfunction]
 fn atbash(text: &str) -> PyResult<String> {
     ciphers::atbash(text).map_err(super::file_error)
 }
@@ -80,6 +88,8 @@ fn utf8_decode(data: &[u8]) -> PyResult<String> {
     cube_core::text::from_utf8(data).map_err(super::file_error)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(a1z26_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(a1z26_decode, module)?)?;
     module.add_function(wrap_pyfunction!(utf8_encode, module)?)?;
     module.add_function(wrap_pyfunction!(utf8_decode, module)?)?;
     module.add_function(wrap_pyfunction!(convert_base, module)?)?;

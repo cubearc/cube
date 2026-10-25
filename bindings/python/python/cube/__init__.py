@@ -5,6 +5,8 @@ from ._native import (
     CancellationToken,
     Image,
     InvestigationSession,
+    a1z26_decode,
+    a1z26_encode,
     affine_decode,
     affine_encode,
     appended_data,
@@ -71,6 +73,8 @@ from ._native import (
 )
 
 __all__ = [
+    "a1z26_encode",
+    "a1z26_decode",
     "carve_file",
     "validate_zip",
     "validate_zip_file",

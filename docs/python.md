@@ -36,6 +36,13 @@ after Rust changes, follow [Contributing](../CONTRIBUTING.md#setup).
 ```python
 import cube
 
+assert cube.a1z26_encode("Hi Cube") == "8-9 3-21-2-5"
+assert cube.a1z26_decode("8-9 3-21-2-5") == "HI CUBE"
+```
+
+```python
+import cube
+
 encoded = cube.base64_encode(b"Hello")
 assert encoded == "SGVsbG8="
 assert cube.base64_decode(encoded) == b"Hello"

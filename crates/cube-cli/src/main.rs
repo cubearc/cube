@@ -142,6 +142,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// ASCII letters to 1..26 hyphen tokens, preserving ASCII whitespace
+    A1z26(Input),
     /// International Morse A-Z/0-9; collapse ASCII spaces; <=1 MiB input
     Morse(Input),
     /// Raw dot-mask bytes to Unicode Braille cells (not language transcription); <=1 MiB
@@ -158,6 +160,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Strict 1..26 hyphen tokens to uppercase text; preserve ASCII whitespace
+    A1z26(Input),
     /// Canonical Morse tokens (single spaces, / between words) to uppercase text
     Morse(Input),
     /// Unicode Braille cells to exact dot-mask bytes; hex by default, --output raw for binary
@@ -453,6 +457,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Encode { command } => {
             let text = match command {
+                Encode::A1z26(input) => {
+                    cube_core::symbols::a1z26::encode(&input.read_text("symbol.a1z26.encode")?)?
+                }
                 Encode::Morse(input) => {
                     cube_core::symbols::morse_encode(&input.read_text("symbol.morse.encode")?)?
                 }
@@ -467,6 +474,13 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             write_text(&mut output, &text)?;
         }
         Command::Decode { command } => match command {
+            Decode::A1z26(input) => write_text(
+                &mut output,
+                &cube_core::symbols::a1z26::decode(&input.read_text_limit(
+                    cube_core::symbols::a1z26::MAX_ENCODED,
+                    "symbol.a1z26.decode",
+                )?)?,
+            )?,
             Decode::Morse(input) => write_text(
                 &mut output,
                 &cube_core::symbols::morse_decode(&input.read_text("symbol.morse.decode")?)?,

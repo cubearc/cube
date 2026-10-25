@@ -302,6 +302,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::ciphers::classical::OPERATIONS)
         .chain(crate::text::OPERATIONS)
         .chain(crate::symbols::OPERATIONS)
+        .chain(crate::symbols::a1z26::OPERATIONS)
         .chain(crate::numbers::OPERATIONS)
         .chain(crate::media::wave::OPERATIONS)
         .chain(crate::media::pcm::OPERATIONS)

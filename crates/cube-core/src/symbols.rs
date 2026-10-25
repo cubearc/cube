@@ -1,5 +1,6 @@
 //! Explicit International Morse text and Unicode Braille cell encodings.
 //! No audio interpretation, natural-language transcription or hidden normalization.
+pub mod a1z26;
 use crate::{
     errors::{ErrorCode, OperationError},
     text::{MAX_INPUT, MAX_OUTPUT, check_input},

@@ -23,6 +23,15 @@ pub struct Execution {
 impl Prepared {
     /// Conservative output-size upper bounds guard allocation before algorithms.
     fn ceiling(&self, size: usize) -> Result<usize, Error> {
+        if (matches!(self.adapter.action, Action::A1z26Encode) && size > text::MAX_INPUT)
+            || (matches!(self.adapter.action, Action::A1z26Decode)
+                && size > crate::symbols::a1z26::MAX_ENCODED)
+        {
+            return Err(Error::new(
+                ErrorCode::ResourceLimit,
+                "A1Z26 pipeline input exceeds its text budget",
+            ));
+        }
         if let Arguments::Forensic {
             range,
             width,
@@ -53,6 +62,7 @@ impl Prepared {
             ));
         }
         Ok(match self.adapter.action {
+            Action::A1z26Encode => size * 3,
             Action::Base32Encode => size.div_ceil(5) * 8,
             Action::Base32Decode => size / 8 * 5,
             Action::Base64Encode => size.div_ceil(3) * 4,
@@ -75,6 +85,12 @@ impl Prepared {
         let bytes = |data| Value::Bytes { data };
         let text = |data| Value::Text { data };
         Ok(match (self.adapter.action, value, &self.arguments) {
+            (Action::A1z26Encode, Value::Text { data }, _) => {
+                text(crate::symbols::a1z26::encode(&data)?)
+            }
+            (Action::A1z26Decode, Value::Text { data }, _) => {
+                text(crate::symbols::a1z26::decode(&data)?)
+            }
             (Action::Signatures, Value::Bytes { data }, _) => Value::ForensicReport {
                 data: ForensicReport::Signatures {
                     matches: crate::forensics::signatures::detect(&data)

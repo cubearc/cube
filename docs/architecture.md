@@ -39,6 +39,10 @@ transformations stay in their owning modules. Responsibilities include:
   A separate codec module uses `image` with only JPEG/GIF/BMP/WebP enabled (no
   default formats, parallel runtime or native media backend). It validates shape
   before sample allocation and reports decoded-raster provenance separately.
+  Coordinate traversal is independent of channel/bit selection and uses constant
+  memory. Existing row/column and LsbOptions/LsbResult layouts remain compatible;
+  explicit-corner results wrap LsbResult. Rust exhaustive matches on Traversal
+  must account for its additional diagonal/zigzag/spiral variants.
 - `media`: WAVE framing, immutable selected PCM blocks and incremental min/max
   envelopes. Metadata skips payloads with `Read + Seek`; extraction/envelopes share
   frame-aligned bounded streaming. Block format/channel/continuity checks precede

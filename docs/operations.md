@@ -244,6 +244,16 @@ significant bit (LSB). Configurable LSB extraction visits pixels, then requested
 channels, then requested bit positions. It defaults to bit 0,
 row-major/forward traversal, native channel order and MSB-first packing. Reversal
 changes pixel order only. Incomplete bytes fail unless explicit drop/pad is chosen.
+
+Traversal also supports `diagonal`, `zigzag`, `spiral_cw` and `spiral_ccw`.
+Diagonals visit increasing `x+y`, from bottom-left to top-right within each
+anti-diagonal; zigzag reverses odd anti-diagonals. For a 3×3 image, zigzag visits
+row-major indices `0,1,3,6,4,2,5,7,8`. Spirals proceed inward clockwise or
+counterclockwise, starting rightward or downward respectively from the top left.
+`start_corner` defaults to `top_left`; other corners reflect axes for linear/
+diagonal traversal, or rotate the starting edge while preserving a spiral's named
+direction. Regions retain absolute coordinates. Reverse reverses the final pixel
+sequence only. Coordinates are generated with constant memory under image limits.
 Selections must be nonempty and distinct; output is capped at 16 MiB.
 An extracted bit stream is a deterministic candidate, not proof of a hidden message.
 

@@ -10,8 +10,10 @@ pub use colors::{ColorLayer, ColorOutput};
 pub mod bits;
 pub mod decode;
 pub mod raw;
+pub mod traversal;
 pub use bits::{BitOrder, BitPlane, Incomplete, LsbOptions, LsbResult, Traversal};
 pub use raw::{RawInfo, RawLayout, SampleLayout};
+pub use traversal::Corner;
 pub mod transform;
 pub use analyze::{Channel, Comparison, Histogram, PixelData, Region};
 

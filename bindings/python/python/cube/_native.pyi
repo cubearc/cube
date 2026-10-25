@@ -200,6 +200,7 @@ class Image:
         channels: list[str] | None = None,
         bits: list[int] = ...,
         traversal: str = "row",
+        start_corner: str = "top_left",
         reverse: bool = False,
         bit_order: str = "msb",
         incomplete: str = "reject",

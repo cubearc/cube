@@ -181,6 +181,8 @@ pub(crate) enum ImageCommand {
         bits: Vec<u8>,
         #[arg(long, default_value = "row")]
         traversal: String,
+        #[arg(long, default_value = "top_left")]
+        start_corner: String,
         /// Reverse pixel order only
         #[arg(long)]
         reverse: bool,
@@ -398,6 +400,7 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             channels,
             bits,
             traversal,
+            start_corner,
             reverse,
             bit_order,
             incomplete,
@@ -412,11 +415,13 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
                 bit_order: image::BitOrder::parse(&bit_order)?,
                 incomplete: image::Incomplete::parse(&incomplete)?,
             };
-            let result = view.open(&path)?.lsb(&options)?;
+            let result = view
+                .open(&path)?
+                .lsb_with_corner(&options, image::Corner::parse(&start_corner)?)?;
             if destination.stdout {
-                output.write_all(&result.data)?;
+                output.write_all(&result.result.data)?;
             } else if let Some(path) = destination.output {
-                image::save_new(&path, &result.data)?;
+                image::save_new(&path, &result.result.data)?;
                 writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
             }
         }

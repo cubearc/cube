@@ -171,6 +171,8 @@ assert raw.pixel(0, 1) == [4, 5, 6]
 mask = raw.exact_colors([[4, 5, 6]])
 assert mask["selected_pixels"] == 1
 assert mask["image"].samples == b"\x00\xff"
+stream = raw.lsb(bits=list(range(7, -1, -1)), traversal="spiral_ccw")
+assert stream["data"] == raw.samples
 ```
 
 Structured results can contain native `bytes` or `Image` objects, so they are not

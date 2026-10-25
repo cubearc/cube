@@ -1,25 +1,8 @@
 //! Deterministic sample bits and packed extraction. No message inference or search.
+pub use super::traversal::Traversal;
 use super::{Channel, ColorModel, Image, PixelData, Region, invalid};
 use crate::errors::OperationError;
 use serde::Serialize;
-
-/// Order of image coordinates; channel/bit order is independent of traversal.
-#[derive(Clone, Copy, Debug, Default, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Traversal {
-    #[default]
-    Row,
-    Column,
-}
-impl Traversal {
-    pub fn parse(value: &str) -> Result<Self, OperationError> {
-        match value {
-            "row" => Ok(Self::Row),
-            "column" => Ok(Self::Column),
-            _ => Err(invalid("traversal must be row or column").parameter("traversal")),
-        }
-    }
-}
 /// First extracted bit occupies bit 7 (MSB) or bit 0 (LSB) of an output byte.
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -98,6 +81,13 @@ pub struct LsbResult {
     #[serde(skip)]
     pub data: Vec<u8>,
 }
+/// Extended traversal result preserves the original public LsbResult layout.
+#[derive(Debug, Serialize)]
+pub struct OrderedLsbResult {
+    #[serde(flatten)]
+    pub result: LsbResult,
+    pub start_corner: super::Corner,
+}
 /// Exact row-major 0/1 samples and MSB-first zero-padded bytes.
 #[derive(Debug, Serialize)]
 pub struct BitPlane {
@@ -166,6 +156,15 @@ impl Image {
     /// changes only coordinate order. This returns bytes without text conversion.
     /// Image sample limits also bound output to at most 16 MiB; no per-bit buffer.
     pub fn lsb(&self, options: &LsbOptions) -> Result<LsbResult, OperationError> {
+        self.lsb_with_corner(options, super::Corner::TopLeft)
+            .map(|v| v.result)
+    }
+    /// Extended coordinate traversal with an explicit starting corner.
+    pub fn lsb_with_corner(
+        &self,
+        options: &LsbOptions,
+        start_corner: super::Corner,
+    ) -> Result<OrderedLsbResult, OperationError> {
         let result = (|| {
             let region = options
                 .region
@@ -202,13 +201,11 @@ impl Image {
             let valid_bits = available_bits - dropped_bits;
             let mut data = vec![0; valid_bits.div_ceil(8)];
             let mut position = 0;
-            for i in 0..pixels {
-                let i = if options.reverse { pixels - 1 - i } else { i };
-                let (x, y) = match options.traversal {
-                    Traversal::Row => (i % region.width as usize, i / region.width as usize),
-                    Traversal::Column => (i / region.height as usize, i % region.height as usize),
-                };
-                let source = self.position(region.x + x as u32, region.y + y as u32)?;
+            for (x, y) in options
+                .traversal
+                .coordinates(region, start_corner, options.reverse)?
+            {
+                let source = self.position(x, y)?;
                 for channel in &indices {
                     for bit in &options.bits {
                         if position < valid_bits {
@@ -223,18 +220,21 @@ impl Image {
                     }
                 }
             }
-            Ok(LsbResult {
-                region,
-                channels,
-                bits: options.bits.clone(),
-                traversal: options.traversal,
-                reverse: options.reverse,
-                bit_order: options.bit_order,
-                incomplete: options.incomplete,
-                available_bits,
-                valid_bits,
-                dropped_bits,
-                data,
+            Ok(OrderedLsbResult {
+                start_corner,
+                result: LsbResult {
+                    region,
+                    channels,
+                    bits: options.bits.clone(),
+                    traversal: options.traversal,
+                    reverse: options.reverse,
+                    bit_order: options.bit_order,
+                    incomplete: options.incomplete,
+                    available_bits,
+                    valid_bits,
+                    dropped_bits,
+                    data,
+                },
             })
         })();
         result.map_err(|e: OperationError| e.operation("image.lsb.extract"))
@@ -303,15 +303,8 @@ pub const OPERATIONS: &[Descriptor] = &[
                     unique: true,
                 },
             },
-            Parameter {
-                name: "traversal",
-                description: "Coordinate traversal: row-major or column-major.",
-                required: false,
-                default: Some(ParameterValue::Text("row")),
-                constraints: ParameterType::Text {
-                    choices: &["row", "column"],
-                },
-            },
+            super::traversal::TRAVERSAL_PARAMETER,
+            super::traversal::CORNER_PARAMETER,
             Parameter {
                 name: "reverse",
                 description: "Reverse pixel coordinate order only, retaining channel/bit order.",

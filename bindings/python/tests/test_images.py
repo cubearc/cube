@@ -25,6 +25,20 @@ def bmp_bytes():
     return header + dib + pixels
 
 
+def test_extended_lsb_traversals_preserve_channel_and_bit_order():
+    image = cube.Image.from_samples(3, 2, "gray", bytes(range(6)))
+    options = {"bits": list(range(7, -1, -1))}
+    result = image.lsb(**options, traversal="spiral_cw", start_corner="top_right")
+    assert result["data"] == bytes([2, 5, 4, 3, 0, 1])
+    assert result["start_corner"] == "top_right"
+    assert image.lsb(**options, traversal="spiral_ccw")["data"] == bytes(
+        [0, 3, 4, 5, 2, 1]
+    )
+    assert image.lsb(**options)["data"] == image.samples
+    with pytest.raises(ValueError):
+        image.lsb(start_corner="middle")
+
+
 def test_exact_color_masks_layers_alpha_and_indexed_semantics(tmp_path):
     image = cube.Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 1, 2, 3, 255]))
     result = image.exact_colors([[1, 2, 3, 0]])

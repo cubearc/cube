@@ -23,6 +23,33 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn lsb_spiral_corner_and_reverse_have_exact_binary_output() {
+    let files = Files::new("spiral");
+    let path = files.path("source.png");
+    Image::from_bytes(3, 2, ColorModel::Gray, &[0, 1, 2, 3, 4, 5], &[], &[])
+        .unwrap()
+        .save_png(&path)
+        .unwrap();
+    let args = [
+        "image",
+        "lsb",
+        path.to_str().unwrap(),
+        "--bits",
+        "7,6,5,4,3,2,1,0",
+        "--traversal",
+        "spiral_cw",
+        "--start-corner",
+        "top_right",
+        "--stdout",
+    ];
+    let result = run(&args);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, [2, 5, 4, 3, 0, 1]);
+    let mut args = args.to_vec();
+    args.push("--reverse");
+    assert_eq!(run(&args).stdout, [1, 0, 3, 4, 5, 2]);
+}
+#[test]
 fn exact_color_exports_have_known_masks_and_preserve_sources() {
     let files = Files::new("colors");
     let path = files.path("source.png");

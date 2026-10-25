@@ -319,6 +319,7 @@ impl PyImage {
                 "channels",
                 "bits",
                 "traversal",
+                "start_corner",
                 "reverse",
                 "bit_order",
                 "incomplete",
@@ -351,6 +352,11 @@ impl PyImage {
             .map(|v| v.extract::<String>())
             .transpose()?
             .unwrap_or_else(|| "row".into());
+        let corner = kwargs
+            .get_item("start_corner")?
+            .map(|v| v.extract::<String>())
+            .transpose()?
+            .unwrap_or_else(|| "top_left".into());
         let order = kwargs
             .get_item("bit_order")?
             .map(|v| v.extract::<String>())
@@ -384,12 +390,15 @@ impl PyImage {
             .inner
             .view(expand)
             .map_err(super::file_error)?
-            .lsb(&options)
+            .lsb_with_corner(
+                &options,
+                cube_core::image::Corner::parse(&corner).map_err(super::file_error)?,
+            )
             .map_err(super::file_error)?;
         let output = super::structured(py, &serde_json::json!(result))?;
         output
             .bind(py)
-            .set_item("data", PyBytes::new(py, &result.data))?;
+            .set_item("data", PyBytes::new(py, &result.result.data))?;
         Ok(output)
     }
     #[staticmethod]

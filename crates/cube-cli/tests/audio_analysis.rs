@@ -169,3 +169,38 @@ fn reverse_creates_only_new_wav_and_preserves_sources_and_collisions() {
     std::fs::remove_file(path).unwrap();
     std::fs::remove_file(dest).unwrap();
 }
+#[test]
+fn dtmf_json_keeps_nominal_pair_evidence_and_candidate_status() {
+    let path = std::env::temp_dir().join(format!("cube-dtmf-{}.wav", std::process::id()));
+    let data: Vec<u8> = (0..1600)
+        .flat_map(|i| {
+            let value = 0.2
+                * ((std::f64::consts::TAU * 697.0 * i as f64 / 8000.0).sin()
+                    + (std::f64::consts::TAU * 1209.0 * i as f64 / 8000.0).sin());
+            ((value * 32768.0).round() as i16).to_le_bytes()
+        })
+        .collect();
+    let mut wav = b"RIFF".to_vec();
+    wav.extend((36 + data.len() as u32).to_le_bytes());
+    wav.extend(b"WAVEfmt ");
+    wav.extend(16u32.to_le_bytes());
+    wav.extend([1, 0, 1, 0]);
+    wav.extend(8000u32.to_le_bytes());
+    wav.extend(16000u32.to_le_bytes());
+    wav.extend([2, 0, 16, 0]);
+    wav.extend(b"data");
+    wav.extend((data.len() as u32).to_le_bytes());
+    wav.extend(data);
+    std::fs::write(&path, &wav).unwrap();
+    let r = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args(["audio", "dtmf", path.to_str().unwrap(), "--json"])
+        .output()
+        .unwrap();
+    assert!(r.status.success(), "{:?}", r.stderr);
+    let d: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(d["events"][0]["symbol"], "1");
+    assert_eq!(d["events"][0]["status"], "candidate");
+    assert_eq!(d["windows"][0]["row_hz"], 697);
+    assert_eq!(std::fs::read(&path).unwrap(), wav);
+    std::fs::remove_file(path).unwrap();
+}

@@ -39,6 +39,27 @@ pub(crate) struct SampleOutput {
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Timed nominal DTMF candidates with evidence and uncertainty; no forced string
+    Dtmf {
+        #[command(flatten)]
+        range: RangeArgs,
+        #[arg(long, default_value_t = 40)]
+        window_ms: u32,
+        #[arg(long, default_value_t = 80)]
+        min_tone_ms: u32,
+        #[arg(long, default_value_t = 40)]
+        min_gap_ms: u32,
+        #[arg(long,default_value_t=-40,allow_negative_numbers=true)]
+        min_level_dbfs: i32,
+        #[arg(long, default_value_t = 6)]
+        dominance_db: u32,
+        #[arg(long, default_value_t = 8)]
+        max_twist_db: u32,
+        #[arg(long, default_value_t = 75)]
+        purity_percent: u32,
+        #[arg(long)]
+        json: bool,
+    },
     /// Reverse PCM frames into a new minimal WAV; preserve channel groups and native bytes
     Reverse {
         #[command(flatten)]
@@ -115,6 +136,56 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Dtmf {
+            range,
+            window_ms,
+            min_tone_ms,
+            min_gap_ms,
+            min_level_dbfs,
+            dominance_db,
+            max_twist_db,
+            purity_percent,
+            json,
+        } => {
+            use cube_core::media::{
+                dtmf::{self, Options},
+                pcm,
+            };
+            let opts = Options {
+                window_ms,
+                min_tone_ms,
+                min_gap_ms,
+                min_level_dbfs,
+                dominance_db,
+                max_twist_db,
+                purity_percent,
+            };
+            opts.validate()?;
+            let samples = pcm::extract_file(&range.path, &range.selection())?;
+            let result = dtmf::detect(&samples, opts)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "{} windows; {} candidate/uncertain runs; timing tolerance {} frames",
+                    result.windows.len(),
+                    result.events.len(),
+                    result.timing_tolerance_frames
+                )?;
+                for event in result.events {
+                    writeln!(
+                        output,
+                        "{}..{} {:?} {} ({})",
+                        event.start_frame,
+                        event.start_frame + event.frames,
+                        event.symbol,
+                        event.status,
+                        event.reason
+                    )?;
+                }
+            }
+        }
         AudioCommand::Reverse {
             range,
             output: destination,

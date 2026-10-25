@@ -480,6 +480,23 @@ a byte-for-byte container round trip. Existing PCM limits bound allocation to
 The CLI creates a new file exclusively and removes a partial output on write
 failure. The SDK returns new WAV bytes and performs no implicit file write.
 
+DTMF analysis evaluates the nominal row frequencies 697/770/852/941 Hz and
+columns 1209/1336/1477/1633 Hz from [ITU-T Q.23](https://www.itu.int/rec/T-REC-Q.23/en).
+It requires exactly one selected channel and a sample rate of at least 8 kHz.
+Bounded Goertzel measurements use nonoverlapping rectangular windows; frequency
+offsets, speech, distortion and boundary mixtures can be inconclusive. This is
+puzzle-analysis evidence, not a certified telephony receiver or confirmed string.
+
+Defaults: 40 ms windows, minimum 80 ms tones/40 ms gaps, RMS level >=-40 dBFS,
+6 dB dominance over the second row/column, <=8 dB absolute twist and >=75% pair
+energy ratio. All thresholds are explicit advanced parameters in discovery/help.
+Partial tone windows, ambiguous bands, excessive twist, short runs and insufficient
+gaps retain reasons and uncertainty. Silence has a separate state. Events retain
+candidate symbols and measured windows; only runs meeting all selected thresholds
+have a non-null `symbol`, still labeled `candidate`. Timing tolerance is one window.
+Limits are 262,144 frames and 4,096 windows, with one fixed set of eight frequency
+measurements per frame. There is no automatic frequency search or device access.
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

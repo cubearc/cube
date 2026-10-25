@@ -252,10 +252,55 @@ fn reverse_wave<'py>(
     let output = cube_core::media::reverse::wave(&samples).map_err(super::file_error)?;
     Ok(pyo3::types::PyBytes::new(py, &output))
 }
+/// Timed nominal DTMF candidates, retaining uncertain windows/runs and evidence.
+#[pyfunction]
+#[pyo3(signature=(data,*,channels=None,start_frame=0,frames=None,**options))]
+fn detect_dtmf(
+    py: Python<'_>,
+    data: &[u8],
+    channels: Option<Vec<u16>>,
+    start_frame: u64,
+    frames: Option<u64>,
+    options: Option<&Bound<'_, pyo3::types::PyDict>>,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::media::{
+        dtmf::{self, Options},
+        pcm,
+    };
+    let mut opts = Options::default();
+    if let Some(options) = options {
+        for (key, value) in options.iter() {
+            let key: String = key.extract()?;
+            match key.as_str() {
+                "window_ms" => opts.window_ms = value.extract()?,
+                "min_tone_ms" => opts.min_tone_ms = value.extract()?,
+                "min_gap_ms" => opts.min_gap_ms = value.extract()?,
+                "min_level_dbfs" => opts.min_level_dbfs = value.extract()?,
+                "dominance_db" => opts.dominance_db = value.extract()?,
+                "max_twist_db" => opts.max_twist_db = value.extract()?,
+                "purity_percent" => opts.purity_percent = value.extract()?,
+                _ => {
+                    return Err(pyo3::exceptions::PyTypeError::new_err(
+                        "unknown DTMF option",
+                    ));
+                }
+            }
+        }
+    }
+    opts.validate().map_err(super::file_error)?;
+    let samples = pcm::extract(
+        &mut Cursor::new(data),
+        &selection(channels, start_frame, frames),
+    )
+    .map_err(super::file_error)?;
+    let result = dtmf::detect(&samples, opts).map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(result))
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(wave_spectrum, module)?)?;
     module.add_function(wrap_pyfunction!(wave_bits, module)?)?;
     module.add_function(wrap_pyfunction!(reverse_wave, module)?)?;
+    module.add_function(wrap_pyfunction!(detect_dtmf, module)?)?;
     module.add_function(wrap_pyfunction!(wave_spectrogram, module)?)?;
     module.add_function(wrap_pyfunction!(wave_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_file_envelope, module)?)?;

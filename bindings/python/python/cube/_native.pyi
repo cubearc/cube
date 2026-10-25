@@ -438,3 +438,17 @@ def reverse_wave(
     start_frame: int = 0,
     frames: int | None = None,
 ) -> bytes: ...
+def detect_dtmf(
+    data: bytes,
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    window_ms: int = 40,
+    min_tone_ms: int = 80,
+    min_gap_ms: int = 40,
+    min_level_dbfs: int = -40,
+    dominance_db: int = 6,
+    max_twist_db: int = 8,
+    purity_percent: int = 75,
+) -> dict[str, Any]: ...

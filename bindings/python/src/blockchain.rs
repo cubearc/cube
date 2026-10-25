@@ -86,8 +86,38 @@ fn derive_bitcoin_address(
         .set_item("hash160", PyBytes::new(py, &result.hash160))?;
     Ok(output)
 }
+#[pyfunction]
+#[pyo3(signature=(data, *, output, format="raw", network=None, compressed=None))]
+fn export_private_key(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    output: &str,
+    format: &str,
+    network: Option<&str>,
+    compressed: Option<bool>,
+) -> PyResult<Py<PyAny>> {
+    use blockchain::private::{ExportedPrivate, OutputFormat};
+    let network = network
+        .map(Network::parse)
+        .transpose()
+        .map_err(super::file_error)?;
+    let result = blockchain::private::export(
+        material(data, format, "blockchain.private.export")?,
+        OutputFormat::parse(output).map_err(super::file_error)?,
+        network,
+        compressed,
+    )
+    .map_err(super::file_error)?;
+    Ok(match result {
+        ExportedPrivate::Raw(bytes) => PyBytes::new(py, &bytes).into_any().unbind(),
+        ExportedPrivate::Hex(text) | ExportedPrivate::Wif(text) => {
+            PyString::new(py, &text).into_any().unbind()
+        }
+    })
+}
 pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(validate_wif, module)?)?;
+    module.add_function(wrap_pyfunction!(export_private_key, module)?)?;
     module.add_function(wrap_pyfunction!(derive_bitcoin_address, module)?)?;
     module.add_function(wrap_pyfunction!(validate_private_scalar, module)?)?;
     Ok(())

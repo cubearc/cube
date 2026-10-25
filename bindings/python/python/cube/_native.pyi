@@ -575,3 +575,14 @@ def derive_bitcoin_address(
 ) -> dict[str, Any]:
     """Public SEC1/P2PKH only; WIF network and encoding intent must agree."""
     ...
+
+def export_private_key(
+    data: bytes | str,
+    *,
+    output: str,
+    format: str = "raw",
+    network: str | None = None,
+    compressed: bool | None = None,
+) -> bytes | str:
+    """Explicit private export; returned plaintext stays caller-owned."""
+    ...

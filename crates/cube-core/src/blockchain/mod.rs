@@ -1,5 +1,6 @@
 //! Offline, bounded key-format operations; no wallets, generation or network I/O.
 pub mod bitcoin;
+pub mod private;
 pub mod wif;
 use crate::{
     encoding,

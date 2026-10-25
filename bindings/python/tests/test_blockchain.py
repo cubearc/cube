@@ -66,3 +66,25 @@ def test_native_bitcoin_public_derivation_and_digest_composition():
         "output"
     ] == cube.ripemd160(b"")
     assert cube.describe_operation("blockchain.bitcoin.derive")["pipeline"] is None
+
+
+def test_explicit_native_private_export_is_separate_from_safe_validation():
+    key = bytes(31) + b"\x01"
+    wif = cube.export_private_key(key, output="wif", network="mainnet", compressed=True)
+    assert wif == "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn"
+    assert cube.export_private_key(wif, format="wif", output="raw") == key
+    assert cube.export_private_key(wif, format="wif", output="hex") == key.hex()
+    assert "payload" not in cube.validate_wif(wif)
+    for kwargs in [
+        {"output": "wif"},
+        {"output": "wif", "network": "mainnet"},
+        {"output": "hex", "network": "mainnet"},
+    ]:
+        with pytest.raises(ValueError):
+            cube.export_private_key(key, **kwargs)
+    with pytest.raises(ValueError) as error:
+        cube.export_private_key(
+            wif, format="wif", output="wif", network="mainnet", compressed=False
+        )
+    assert wif not in str(error.value)
+    assert cube.describe_operation("blockchain.private.export")["pipeline"] is None

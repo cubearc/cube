@@ -113,3 +113,118 @@ fn bitcoin_derivation_requires_explicit_network_and_encoding() {
         b"9c1185a5c5e9fc54612808977ee8f548b2258d31\n"
     );
 }
+
+#[test]
+fn private_exports_require_intent_and_exclusive_restricted_destinations() {
+    let root = std::env::temp_dir().join(format!("cube-private-export-{}", std::process::id()));
+    std::fs::create_dir(&root).unwrap();
+    let output = root.join("key.wif");
+    let scalar = "0000000000000000000000000000000000000000000000000000000000000001";
+    let wif = "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn";
+    let args = [
+        "blockchain",
+        "export",
+        "--format",
+        "hex",
+        "--to",
+        "wif",
+        "--network",
+        "mainnet",
+        "--compressed",
+        "--private-output",
+        "--output",
+        output.to_str().unwrap(),
+    ];
+    let result = run(&args, scalar.as_bytes());
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert!(!String::from_utf8_lossy(&result.stdout).contains(wif));
+    assert_eq!(std::fs::read(&output).unwrap(), wif.as_bytes());
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        assert_eq!(
+            std::fs::metadata(&output).unwrap().permissions().mode() & 0o077,
+            0
+        );
+    }
+    assert!(!run(&args, scalar.as_bytes()).status.success());
+    assert_eq!(std::fs::read(&output).unwrap(), wif.as_bytes());
+    let raw = run(
+        &[
+            "blockchain",
+            "export",
+            "--format",
+            "wif",
+            "--to",
+            "raw",
+            "--private-output",
+            "--stdout",
+        ],
+        wif.as_bytes(),
+    );
+    assert!(raw.status.success());
+    assert_eq!(raw.stdout, [vec![0; 31], vec![1]].concat());
+    assert_eq!(
+        run(
+            &[
+                "blockchain",
+                "export",
+                "--format",
+                "wif",
+                "--to",
+                "hex",
+                "--private-output",
+                "--stdout"
+            ],
+            wif.as_bytes()
+        )
+        .stdout,
+        scalar.as_bytes()
+    );
+    let refused = run(
+        &[
+            "blockchain",
+            "export",
+            "--format",
+            "hex",
+            "--to",
+            "wif",
+            "--network",
+            "mainnet",
+            "--compressed",
+            "--stdout",
+        ],
+        scalar.as_bytes(),
+    );
+    assert!(!refused.status.success());
+    assert!(refused.stdout.is_empty());
+    assert!(!String::from_utf8_lossy(&refused.stderr).contains(scalar));
+    assert!(
+        !run(
+            &["blockchain", "export", "--to", "raw", "--private-output"],
+            &[1; 32]
+        )
+        .status
+        .success()
+    );
+    assert!(
+        !run(
+            &[
+                "blockchain",
+                "export",
+                "--to",
+                "wif",
+                "--private-output",
+                "--stdout"
+            ],
+            &[1; 32]
+        )
+        .status
+        .success()
+    );
+    std::fs::remove_dir_all(&root).unwrap();
+}

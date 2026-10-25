@@ -10,6 +10,7 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "blockchain.private.export": "export_private_key",
     "hash.ripemd160": "ripemd160",
     "blockchain.bitcoin.derive": "derive_bitcoin_address",
     "blockchain.wif.validate": "validate_wif",

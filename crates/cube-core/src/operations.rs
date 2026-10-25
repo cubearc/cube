@@ -345,6 +345,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         crate::blockchain::wif::OPERATIONS,
         crate::hashing::protocol::OPERATIONS,
         crate::blockchain::bitcoin::OPERATIONS,
+        crate::blockchain::private::OPERATIONS,
     ]
     .into_iter()
     .flatten()

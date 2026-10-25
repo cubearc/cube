@@ -544,6 +544,25 @@ Reusable `hash.ripemd160` returns 40 lowercase hex digits of exact bytes with a
 smaller engine budgets; it is separate from private-input derivation. It uses
 [RustCrypto RIPEMD](https://docs.rs/ripemd/0.2.0/ripemd/), not a custom primitive.
 
+### Explicit private conversion
+
+`blockchain.private.export` deliberately returns plaintext private material.
+Declared raw32/hex64/WIF input uses the same scalar/WIF validators. Output is
+exactly 32 raw bytes, 64 lowercase hex digits or canonical WIF, preserving every
+scalar byte. WIF output requires explicit network and compression; supplied source
+WIF intent must match. Source-WIF expectations are optional for raw/hex output;
+context flags on scalar-to-scalar conversion are rejected.
+
+Rust returns a nonserializable result with redacted Debug and an explicit
+`into_private_bytes` method. Native `export_private_key` returns caller-owned bytes
+or text by an explicitly named export call. CLI additionally requires
+`--private-output` and exactly one `--stdout`/`--output` destination. All output is
+exact without added newline/metadata. Files use exclusive creation, Unix mode
+0600 (other systems use platform ACLs), and failure removes only newly created
+partial files. Inputs/existing destinations are never overwritten. Transport/output
+is capped at 128 bytes. No automatic persistence, logging, pipeline/capture adapter
+or process-wide/Python memory-zeroization guarantee is introduced.
+
 ## Symbolic encodings
 
 Use `symbols` for textual International Morse or reversible Unicode Braille cells.

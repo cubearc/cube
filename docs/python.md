@@ -197,6 +197,23 @@ assert cube.ripemd160(b"Hello world!") == "7f772647d88750add82d8e1a7a3e5c0902a34
 bytes. Network and compression are explicit and must match WIF intent. Results
 contain public bytes and exact hex fields, never supplied private material.
 
+### Explicit private return values
+
+```python
+import cube
+
+# Public synthetic test vector. This call deliberately returns plaintext private data.
+key = bytes(31) + b"\x01"
+private_text = cube.export_private_key(key, output="wif", network="mainnet", compressed=True)
+assert cube.export_private_key(private_text, format="wif", output="raw") == key
+assert cube.export_private_key(private_text, format="wif", output="hex") == key.hex()
+```
+
+Raw output is `bytes`; hex/WIF output is `str`. WIF output always requires explicit
+network/compression and rejects source-WIF conflicts. Validation calls do not
+export. The SDK writes no files: returned plaintext, its use and any persistence
+belong to the caller, with no Python memory-zeroization guarantee.
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:

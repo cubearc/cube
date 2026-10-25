@@ -310,6 +310,23 @@ adds public SEC1/HASH160 hex and parameter facts. `--format wif` reuses validati
 and rejects conflicts with `--network`/encoding. The command exports no private
 material, accesses no network and creates no file.
 
+### Deliberately convert private formats
+
+This public scalar-1 example permits exact WIF stdout explicitly:
+
+```sh
+printf '%s' 0000000000000000000000000000000000000000000000000000000000000001 | cube blockchain export --format hex --to wif --network mainnet --compressed --private-output --stdout
+```
+
+Use `--output new-key.wif` instead of `--stdout` for an exclusive new file. On Unix,
+private files are created with mode 0600; other systems use platform ACLs.
+Existing files are rejected and partial new files are removed on write failure.
+No newline/metadata is added to private stdout or file content, so an explicitly
+chosen consumer can read exact bytes. For WIF input, `--to raw`/`--to hex` return
+only the scalar; re-exporting WIF requires matching explicit network/encoding.
+Missing intent/destination/required WIF parameters fails without private output.
+Validation commands remain safe reports. Caller-owned buffers may retain copies.
+
 ## Inspect binary files
 
 ```sh

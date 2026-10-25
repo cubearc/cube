@@ -717,3 +717,30 @@ or changed inputs are explicit failures. Skipped runs stay skipped. Hypotheses a
 not replayed as machine evidence. Digests identify content, not trust, and reports
 are not signed attestations. See [CLI](cli.md#record-an-investigation) and
 [Python](python.md#keep-an-investigation-record) for executable workflows.
+
+## Video container metadata
+
+`video.container.inspect` reads declared metadata from unfragmented MP4/MOV and
+WebM without a decoder. Track/codec IDs, coded dimensions, time bases and durations
+are observations; media packets, codec configuration and checksums are unverified.
+MP4 display dimensions retain the original 16.16 values separately from coded
+sample-entry dimensions. Integer durations/time bases remain exact; derived
+seconds use floating point. Absent durations and other unavailable fields are null.
+
+The MP4/MOV subset supports version 0/1 movie/media/track time headers, ordinary
+and extended atom lengths, and one sample description per track. Handler metadata
+must precede sample descriptions. Fragmentation, encrypted sample entries,
+versioned QuickTime audio entries and zero-sized nested atoms are unsupported.
+WebM requires its EBML DocType, Info and Tracks, supports known-sized child
+elements, and permits a Segment sized to the source end. Unknown-sized children,
+content encodings/encryption and non-default track timestamp scaling are unsupported.
+Unknown bodies and media payloads are skipped by checked extents, not validated.
+
+Limits are 1 GiB physical input, 10,000 records, 32 tracks, depth 8, 2 MiB cumulative
+metadata reads and 4,096 bytes per field (128 for WebM identifiers). Only known
+header paths are traversed. Small framing code enforces these limits without
+allocating full sample tables/packets or adopting a decoder/demuxer runtime.
+Format references: [QuickTime](https://developer.apple.com/documentation/quicktime-file-format),
+[EBML](https://www.rfc-editor.org/rfc/rfc8794) and
+[WebM](https://www.webmproject.org/docs/container/). This reader operation has no
+pipeline adapter; it does not grant a recipe file access or imply extraction support.

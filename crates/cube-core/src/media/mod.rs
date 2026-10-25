@@ -12,3 +12,4 @@ pub mod reverse;
 pub mod spectrogram;
 pub mod spectrum;
 mod tone;
+pub mod video;

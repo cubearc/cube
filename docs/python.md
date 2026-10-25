@@ -453,3 +453,18 @@ assert metadata["verification"] == "metadata_only_audio_payload_unverified"
 This is the bounded native-FLAC metadata profile; it does not decode audio or
 artwork. MP3/Ogg are unsupported. A null duration means the source did not declare
 a sample count; declared checksums are never presented as verified.
+
+## Inspect video metadata
+
+```python
+from pathlib import Path
+import cube
+
+video = cube.inspect_video(Path("sample.mp4").read_bytes())
+assert video["verification"] == "declared_container_metadata_media_payload_unverified"
+for track in video["tracks"]:
+    print(track["id"], track["kind"], track["codec_id"], track["time_base"])
+```
+
+The function accepts caller-owned bytes. Container/codec metadata does not imply
+frame decoding or extraction. Read [supported profiles and budgets](operations.md#video-container-metadata).

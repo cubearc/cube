@@ -318,6 +318,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::media::dtmf::OPERATIONS)
         .chain(crate::media::morse::OPERATIONS)
         .chain(crate::media::metadata::OPERATIONS)
+        .chain(crate::media::video::OPERATIONS)
         .chain(crate::pipeline::OPERATIONS)
         .chain(crate::pipeline::recipe::OPERATIONS)
         .chain(crate::investigation::triage::OPERATIONS)

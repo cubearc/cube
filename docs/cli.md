@@ -461,3 +461,15 @@ Fields include `code`, `message`, `operation`, `parameter` and byte `offset`;
 unavailable context is `null`. Pipeline errors also identify the zero-based
 `step`. Codes include `invalid_input`, `invalid_parameter`, `unsupported_format`,
 `resource_limit`, `cancelled`, `io`, and CLI-only `invalid_usage`.
+
+## Inspect video containers
+
+```sh
+cube video inspect sample.mp4 --json
+cube video inspect sample.webm --json
+```
+
+These commands read declared container/track metadata without decoding media.
+Unsupported encryption, fragmentation and profiles fail explicitly. See
+[container scope and limits](operations.md#video-container-metadata). Output never
+claims that media payloads are valid or playable; the source stays unchanged.

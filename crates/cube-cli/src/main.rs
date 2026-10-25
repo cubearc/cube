@@ -13,6 +13,7 @@ mod investigatecmd;
 mod pipelinecmd;
 mod recipecmd;
 mod textcmd;
+mod videocmd;
 
 #[derive(Parser)]
 #[command(
@@ -30,6 +31,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Inspect bounded local video metadata without decoding or playback
+    Video {
+        #[command(subcommand)]
+        command: videocmd::VideoCommand,
+    },
     /// Local explainable triage and bounded investigations
     Investigate {
         #[command(subcommand)]
@@ -364,6 +370,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Video { command } => videocmd::run(command, &mut output)?,
         Command::Investigate { command } => investigatecmd::run(command, &mut output)?,
         Command::Pipeline { command } => pipelinecmd::run(command, &mut output)?,
         Command::Recipe { command } => recipecmd::run(command, &mut output)?,

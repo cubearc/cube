@@ -451,6 +451,16 @@ numeric arrays and CLI JSON. No pipeline adapter or new pipeline value is added
 for sample blocks; existing audio APIs and recipes remain unchanged.
 
 
+`audio.spectrogram` reuses these FFT/window/amplitude rules. Its matrix is
+`[channel][window][bin]`; `frame_starts` and `times_seconds` refer to absolute
+source window starts, not centers. Choose `hop_size` in 1..N. `final_window=drop`
+(default) keeps full windows and reports the uncovered tail; `pad` visits every
+hop start before end and zero-fills tails using full-window normalization.
+`valid_frames` records how much source data each window contains. Empty input
+produces no windows; short input produces no windows with drop. The same 65,536
+cell/4 Mi work budgets cover the entire matrix, checked before FFT planning.
+No plotting dependency or second FFT implementation is added.
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

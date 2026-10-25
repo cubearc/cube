@@ -398,6 +398,9 @@ with wave.open(buffer, "wb") as writer:
 spectrum = cube.wave_spectrum(buffer.getvalue(), fft_size=8, channels=[0])
 assert spectrum["frequencies_hz"] == [0, 1000, 2000, 3000, 4000]
 assert spectrum["amplitudes"] == [[0.0] * 5]
+gram = cube.wave_spectrogram(buffer.getvalue(), fft_size=8, hop_size=4, final_window="pad")
+assert gram["frame_starts"] == [0, 4]
+assert gram["valid_frames"] == [8, 4]
 ```
 
 Selections use the existing WAVE/PCM rules. The result retains channels, absolute

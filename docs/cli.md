@@ -337,6 +337,7 @@ with wave.open("spectrum.wav", "wb") as output:
     output.writeframes(b"\x00\x00\x00\x40\x00\x00\x00\xc0" * 2)
 PYTHON
 cube audio spectrum spectrum.wav --channels 0 --fft-size 8 --json
+cube audio spectrogram spectrum.wav --channels 0 --fft-size 8 --hop-size 4 --final-window pad --json
 ```
 
 The command defaults to 1,024 frames at `--start-frame` and the periodic Hann

@@ -409,3 +409,14 @@ def wave_spectrum(
     fft_size: int = 1024,
     window: str = "hann",
 ) -> dict[str, Any]: ...
+def wave_spectrogram(
+    data: bytes,
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    fft_size: int = 1024,
+    hop_size: int = 512,
+    window: str = "hann",
+    final_window: str = "drop",
+) -> dict[str, Any]: ...

@@ -138,8 +138,56 @@ fn wave_spectrum(
     let result = spectrum::analyze(&samples, options).map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(result))
 }
+/// Windowed spectra; keyword extraction keeps the Rust adapter small and explicit.
+#[pyfunction]
+#[pyo3(signature=(data,*,channels=None,start_frame=0,frames=None,**options))]
+fn wave_spectrogram(
+    py: Python<'_>,
+    data: &[u8],
+    channels: Option<Vec<u16>>,
+    start_frame: u64,
+    frames: Option<u64>,
+    options: Option<&Bound<'_, pyo3::types::PyDict>>,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::media::{
+        pcm,
+        spectrogram::{self, FinalWindow, Options},
+        spectrum::Window,
+    };
+    let mut opts = Options::default();
+    if let Some(options) = options {
+        for (key, value) in options.iter() {
+            let key: String = key.extract()?;
+            match key.as_str() {
+                "fft_size" => opts.fft_size = value.extract()?,
+                "hop_size" => opts.hop_size = value.extract()?,
+                "window" => {
+                    opts.window = Window::parse(value.extract()?).map_err(super::file_error)?
+                }
+                "final_window" => {
+                    opts.final_window =
+                        FinalWindow::parse(value.extract()?).map_err(super::file_error)?
+                }
+                _ => {
+                    return Err(pyo3::exceptions::PyTypeError::new_err(
+                        "unknown spectrogram option",
+                    ));
+                }
+            }
+        }
+    }
+    opts.validate().map_err(super::file_error)?;
+    let samples = pcm::extract(
+        &mut Cursor::new(data),
+        &selection(channels, start_frame, frames),
+    )
+    .map_err(super::file_error)?;
+    let report = spectrogram::analyze(&samples, opts).map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(report))
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(wave_spectrum, module)?)?;
+    module.add_function(wrap_pyfunction!(wave_spectrogram, module)?)?;
     module.add_function(wrap_pyfunction!(wave_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_file_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_samples, module)?)?;

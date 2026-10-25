@@ -39,6 +39,21 @@ pub(crate) struct SampleOutput {
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Bounded channel/window/bin spectra; absolute times and explicit final-window policy
+    Spectrogram {
+        #[command(flatten)]
+        range: RangeArgs,
+        #[arg(long, default_value_t = 1024)]
+        fft_size: usize,
+        #[arg(long, default_value_t = 512)]
+        hop_size: usize,
+        #[arg(long, default_value = "hann")]
+        window: String,
+        #[arg(long, default_value = "drop")]
+        final_window: String,
+        #[arg(long)]
+        json: bool,
+    },
     /// Numerical one-sided FFT; exact N frames, periodic window, no plot
     Spectrum {
         #[command(flatten)]
@@ -77,6 +92,50 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Spectrogram {
+            range,
+            fft_size,
+            hop_size,
+            window,
+            final_window,
+            json,
+        } => {
+            use cube_core::media::{
+                pcm,
+                spectrogram::{self, FinalWindow, Options},
+                spectrum::Window,
+            };
+            let options = Options {
+                fft_size,
+                hop_size,
+                window: Window::parse(&window)?,
+                final_window: FinalWindow::parse(&final_window)?,
+            };
+            options.validate()?;
+            let samples = pcm::extract_file(&range.path, &range.selection())?;
+            let result = spectrogram::analyze(&samples, options)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "{} Hz; N={}; hop={}; channels={:?}; windows={}; bins={}; one-sided peak full-scale amplitudes",
+                    result.sample_rate,
+                    result.fft_size,
+                    result.hop_size,
+                    result.channels,
+                    result.frame_starts.len(),
+                    result.frequencies_hz.len()
+                )?;
+                for (i, f) in result.frame_starts.iter().enumerate() {
+                    writeln!(
+                        output,
+                        "window {i}: start_frame={f} seconds={:.9} valid_frames={}",
+                        result.times_seconds[i], result.valid_frames[i]
+                    )?;
+                }
+            }
+        }
         AudioCommand::Spectrum {
             mut range,
             fft_size,

@@ -108,6 +108,7 @@ pub(super) fn raster(encoded: &[u8]) -> Result<Image, OperationError> {
         ));
     };
     image.source_format = format;
+    image.representation = "decoded_raster8_samples";
     Ok(image)
 }
 
@@ -122,18 +123,21 @@ pub struct Provenance {
     pub frame_policy: &'static str,
 }
 impl Image {
-    /// Describe raster conversion explicitly. JPEG YCbCr/CMYK conversion and GIF/
+    /// Describe raster conversion explicitly. JPEG YCbCr conversion and GIF/
     /// BMP palette expansion are codec behavior; no ICC/gamma/EXIF correction runs.
     /// Transformations describe their resulting samples, not an encoded source.
     pub fn provenance(&self) -> Provenance {
         Provenance {
-            format: self.source_format,
-            representation: match self.source_format {
-                "png" => "native_png8_samples",
-                "raw" => "explicit_raw8_samples",
-                _ => "decoded_raster8_samples",
+            format: if self.representation == "constructed_8bit_samples" {
+                "constructed"
+            } else {
+                self.source_format
             },
-            source_samples_preserved: matches!(self.source_format, "png" | "raw"),
+            representation: self.representation,
+            source_samples_preserved: matches!(
+                self.representation,
+                "native_png8_samples" | "explicit_raw8_samples"
+            ),
             color_management: "none",
             orientation: "stored_coordinates_no_exif_transform",
             frame_policy: "single_frame",

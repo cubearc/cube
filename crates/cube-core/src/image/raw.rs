@@ -154,6 +154,7 @@ impl Image {
             vec![],
         )?;
         image.source_format = "raw";
+        image.representation = "explicit_raw8_samples";
         Ok(image)
     }
 }

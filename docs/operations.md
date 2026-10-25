@@ -200,6 +200,11 @@ Additional inputs are baseline Huffman JPEG (gray/RGB output), single-frame GIF
 (RGB/RGBA). JPEG color-space conversion and lossy artifacts are decoder results,
 not exact encoded/source samples. GIF/BMP palettes are expanded by their codecs.
 `Image.provenance()` and `image inspect --json` label these representations.
+Constructed and transformed results are labeled `constructed_8bit_samples`, without
+claiming an encoded original or preserved source samples. For compatibility,
+`Image.info().format` still says `png` for these objects' lossless export model;
+use provenance for their actual origin. A subsequent decoded PNG describes that
+new immediate PNG source, not its earlier transformation history.
 Limits include 32 MiB encoded data, 16384 pixels per side, 4 Mi pixels and 16 MiB
 of decoded samples. Decoder allocation requests are capped at 64 MiB where the
 codec supports them; dimensions/output and encoded-input limits always apply.

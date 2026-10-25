@@ -57,6 +57,18 @@ def bmp_bytes():
     return header + dib + pixels
 
 
+def test_constructed_and_transformed_provenance_never_claims_source_samples():
+    image = cube.Image.from_samples(1, 1, "rgb", b"\x01\x02\x03")
+    assert image.info()["format"] == "png"
+    assert image.provenance()["format"] == "constructed"
+    assert image.provenance()["source_samples_preserved"] is False
+    source = cube.Image.decode(bmp_bytes())
+    assert (
+        source.rotate(90).provenance()["representation"] == "constructed_8bit_samples"
+    )
+    assert source.grayscale().provenance()["source_samples_preserved"] is False
+
+
 def test_header_dimensions_remain_distinct_from_alternative_geometry():
     data = bmp_bytes()
     report = cube.Image.inspect_layout(data, 1, 2, "bgr", row_stride=4, offset=54)

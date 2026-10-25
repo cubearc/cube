@@ -109,6 +109,7 @@ pub struct Image {
     source_chunks: Vec<forensics::png::Chunk>,
     exif: Option<Vec<u8>>,
     source_format: &'static str,
+    representation: &'static str,
 }
 
 /// Image facts separate from sample bytes. Metadata is explicit and never decoded
@@ -237,6 +238,7 @@ impl Image {
             source_chunks: vec![],
             exif: None,
             source_format: "png",
+            representation: "constructed_8bit_samples",
         })
     }
 
@@ -324,6 +326,7 @@ impl Image {
                 Self::from_samples(width, height, model, samples, palette, transparency)?;
             image.source_chunks = report.chunks;
             image.exif = exif;
+            image.representation = "native_png8_samples";
             Ok(image)
         })();
         result.map_err(|e: OperationError| e.operation("image.decode"))

@@ -30,6 +30,35 @@ fn encoded(format: &str) -> Vec<u8> {
     bytes
 }
 #[test]
+fn constructed_and_transformed_samples_do_not_claim_an_encoded_source() {
+    let constructed = Image::from_bytes(
+        1,
+        1,
+        cube_core::image::ColorModel::Rgb,
+        &[1, 2, 3],
+        &[],
+        &[],
+    )
+    .unwrap();
+    assert_eq!(constructed.info().format, "png"); // Existing image-info contract is unchanged.
+    assert_eq!(constructed.provenance().format, "constructed");
+    assert!(!constructed.provenance().source_samples_preserved);
+    let jpeg = Image::decode(&encoded("jpeg")).unwrap();
+    for derived in [
+        jpeg.rotate(90).unwrap(),
+        jpeg.grayscale().unwrap(),
+        jpeg.invert(None).unwrap(),
+    ] {
+        assert_eq!(
+            derived.provenance().representation,
+            "constructed_8bit_samples"
+        );
+        assert!(!derived.provenance().source_samples_preserved);
+    }
+    let png = Image::decode(&constructed.encode_png().unwrap()).unwrap();
+    assert!(png.provenance().source_samples_preserved);
+}
+#[test]
 fn header_geometry_is_separate_from_raw_hypotheses_and_payload_validation() {
     use cube_core::image::{RawLayout, SampleLayout};
     let png = Image::from_bytes(2, 1, cube_core::image::ColorModel::Gray, &[1, 2], &[], &[])

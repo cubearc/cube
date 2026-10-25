@@ -35,6 +35,16 @@ The root `pyproject.toml` builds the PyO3 extension with Maturin. Source
 distributions retain the workspace members, shared Cargo.lock, README and licenses.
 SDKs call Rust functions; they do not duplicate algorithms or use CLI subprocesses.
 
+## Offline key formats
+
+`blockchain` owns exact scalar/WIF validation, explicit private exports, public
+Bitcoin/Ethereum derivation and bounded caller-supplied candidate iterators.
+Maintained `k256` supplies shared secp256k1 validation/SEC1 derivation; protocol
+digests reuse `hashing` and Base58Check reuses `encoding`. There is no wallet,
+network client, key generator or signing layer. Private-input operations have no
+pipeline/capture adapter. Only generic Base58Check encoding and protocol digests
+have explicit bounded v1 adapters; CLI/SDK handling never adds an algorithm.
+
 ## Core functions and data
 
 Operations remain ordinary public Rust functions or cohesive concrete types.

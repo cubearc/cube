@@ -27,6 +27,7 @@ SDK_BINDINGS = {
         for name in ("morse", "braille", "a1z26")
         for direction in ("encode", "decode")
     },
+    "cipher.book.decode": "book_decode",
     "binary.xor": "xor",
     "binary.and": "and_bytes",
     "binary.or": "or_bytes",

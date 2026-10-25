@@ -40,6 +40,7 @@ assert cube.a1z26_encode("Hi Cube") == "8-9 3-21-2-5"
 assert cube.a1z26_decode("8-9 3-21-2-5") == "HI CUBE"
 assert cube.select_text("Cube Uses Binary Evidence", "word_first") == "CUBE"
 assert cube.extract_characters("abcdef", start=1, stride=2) == "bdf"
+assert cube.book_decode("Cube Uses Binary Evidence", "1:1,2:1,3:1,4:1") == "CUBE"
 stats = cube.text_statistics("ABAB", ngram_size=2)
 assert stats["frequencies"] == [{"ngram": "AB", "count": 2}, {"ngram": "BA", "count": 1}]
 assert stats["shannon_entropy_bits"] == 1.0

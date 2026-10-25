@@ -179,6 +179,19 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Extract Unicode scalars from caller-supplied book coordinates; source <=1 MiB
+    Book {
+        #[command(flatten)]
+        input: Input,
+        /// Exact local UTF-8 source; never fetched or modified
+        #[arg(long)]
+        source: std::path::PathBuf,
+        /// word_character, line_character or line_word_character
+        #[arg(long, default_value = "word_character")]
+        scheme: String,
+        #[arg(long, default_value_t = 1)]
+        index_base: u8,
+    },
     /// Reverse ASCII alphabets, preserving other Unicode; <=1 MiB, not secure encryption
     Atbash(Input),
     /// Vigenère; repeat ASCII key on ASCII letters only, preserve other Unicode; <=1 MiB
@@ -494,6 +507,28 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Cipher { command } => {
             let text = match command {
+                Cipher::Book {
+                    input,
+                    source,
+                    scheme,
+                    index_base,
+                } => {
+                    let source = pipelinecmd::read_file(&source, cube_core::text::MAX_INPUT)?;
+                    let source = std::str::from_utf8(&source).map_err(|_| {
+                        cube_core::errors::OperationError::new(
+                            cube_core::errors::ErrorCode::InvalidInput,
+                            "source must be valid UTF-8",
+                        )
+                        .operation("cipher.book.decode")
+                        .parameter("source")
+                    })?;
+                    ciphers::book::decode(
+                        source,
+                        &input.read_text("cipher.book.decode")?,
+                        ciphers::book::Scheme::parse(&scheme)?,
+                        index_base,
+                    )?
+                }
                 Cipher::Atbash(input) => ciphers::atbash(&input.read_text("cipher.atbash")?)?,
                 Cipher::Vigenere(args) => {
                     let op = if args.decode {

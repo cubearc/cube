@@ -389,3 +389,10 @@ def investigate(
     *,
     cancellation: CancellationToken | None = None,
 ) -> dict[str, Any]: ...
+def book_decode(
+    source: str,
+    coordinates: str,
+    *,
+    scheme: str = "word_character",
+    index_base: int = 1,
+) -> str: ...

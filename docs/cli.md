@@ -136,6 +136,20 @@ cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 Use `--decode` with the original key/parameters to reverse supported ciphers.
 Classical ciphers are for puzzles and education, not modern confidentiality.
 
+## Extract from a caller-supplied book
+
+```sh
+printf 'Cube Uses Binary Evidence' > /tmp/cube-book-source.txt
+cube cipher book --source /tmp/cube-book-source.txt --text '1:1,2:1,3:1,4:1'
+# CUBE
+```
+
+Coordinates may also come from stdin. `--scheme line_character` selects
+line:scalar pairs; `--scheme line_word_character` selects line:word:scalar triples.
+Use `--index-base 0` for zero-based coordinates. The local source is read with a
+1 MiB limit and remains unchanged; errors never substitute guessed characters.
+See [coordinate semantics and limits](operations.md#classical-ciphers).
+
 ## Transform binary bytes
 
 Byte transforms preserve binary output conventions:

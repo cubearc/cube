@@ -98,3 +98,52 @@ fn scalar_selection_has_known_acrostics_and_crlf_behavior() {
         .success()
     );
 }
+
+#[test]
+fn book_cipher_reads_only_the_explicit_local_source() {
+    let source = std::env::temp_dir().join(format!("cube-book-{}.txt", std::process::id()));
+    let original = "Cube Uses\r\n\nBinary Evidence!\n雪 e\u{301}";
+    std::fs::write(&source, original).unwrap();
+    let path = source.to_str().unwrap();
+    let result = run(&["cipher", "book", "--source", path], b"1:1,2:1,3:1,4:1");
+    assert!(result.status.success(), "{:?}", result.stderr);
+    assert_eq!(result.stdout, b"CUBE\n");
+    let result = run(
+        &[
+            "cipher",
+            "book",
+            "--source",
+            path,
+            "--scheme",
+            "line_word_character",
+            "--text",
+            "3:2:9,4:2:2",
+        ],
+        b"",
+    );
+    assert_eq!(result.stdout, "!\u{301}\n".as_bytes());
+    let result = run(
+        &[
+            "cipher",
+            "book",
+            "--source",
+            path,
+            "--text",
+            "1:99",
+            "--json-errors",
+        ],
+        b"",
+    );
+    assert!(!result.status.success());
+    assert!(result.stdout.is_empty());
+    let report: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+    assert_eq!(report["error"]["operation"], "cipher.book.decode");
+    assert_eq!(std::fs::read_to_string(&source).unwrap(), original);
+    std::fs::write(&source, [0xff]).unwrap();
+    assert!(
+        !run(&["cipher", "book", "--source", path, "--text", "1:1"], b"")
+            .status
+            .success()
+    );
+    std::fs::remove_file(source).unwrap();
+}

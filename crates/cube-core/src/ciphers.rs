@@ -1,5 +1,6 @@
 //! Classical ciphers for text puzzles. These do not provide secure encryption.
 
+pub mod book;
 pub mod classical;
 pub use classical::{
     affine_decode, affine_encode, atbash, beaufort, vigenere_decode, vigenere_encode,

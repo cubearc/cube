@@ -403,6 +403,19 @@ fn rot13(text: &str) -> String {
     ciphers::rot13(text)
 }
 
+/// Extract scalars using caller-supplied source and comma-separated book coordinates.
+#[pyfunction]
+#[pyo3(signature=(source,coordinates,*,scheme="word_character",index_base=1))]
+fn book_decode(source: &str, coordinates: &str, scheme: &str, index_base: u8) -> PyResult<String> {
+    ciphers::book::decode(
+        source,
+        coordinates,
+        ciphers::book::Scheme::parse(scheme).map_err(file_error)?,
+        index_base,
+    )
+    .map_err(file_error)
+}
+
 /// Compute CRC-32/ISO-HDLC (IEEE) as eight lowercase hexadecimal digits.
 ///
 /// Accepts arbitrary bytes, preserves leading zeroes, and returns 00000000 for
@@ -463,6 +476,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(caesar_encode, module)?)?;
     module.add_function(wrap_pyfunction!(caesar_decode, module)?)?;
     module.add_function(wrap_pyfunction!(rot13, module)?)?;
+    module.add_function(wrap_pyfunction!(book_decode, module)?)?;
     module.add_function(wrap_pyfunction!(crc32, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
     module.add_function(wrap_pyfunction!(xor, module)?)?;

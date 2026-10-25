@@ -1,10 +1,12 @@
 use super::*;
+pub(super) mod index;
 fn u32be(data: &[u8]) -> u32 {
     u32::from_be_bytes(data.try_into().expect("four bytes"))
 }
 fn u64be(data: &[u8]) -> u64 {
     u64::from_be_bytes(data.try_into().expect("eight bytes"))
 }
+#[derive(Clone, Copy)]
 struct Atom {
     kind: [u8; 4],
     body: u64,

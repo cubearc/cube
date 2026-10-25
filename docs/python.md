@@ -469,6 +469,25 @@ for track in video["tracks"]:
 The function accepts caller-owned bytes. Container/codec metadata does not imply
 frame decoding or extraction. Read [supported profiles and budgets](operations.md#video-container-metadata).
 
+Extract selected independent JPEG frames from the supported MOV subset into
+existing native `Image` objects, without writing files implicitly:
+
+```python
+from pathlib import Path
+import cube
+
+frames = cube.extract_video_frames(Path("clip.mov").read_bytes(), 1, [0, 2])
+assert [f["provenance"]["frame_index"] for f in frames] == [0, 2]
+for frame in frames:
+    print(frame["provenance"]["decode_start_ticks"], frame["provenance"]["time_base"])
+    assert not frame["image"].provenance()["source_samples_preserved"]
+```
+
+Frame pixels follow the existing JPEG decoder; track display transforms are not
+applied. Provenance retains exact sample offsets, lengths, encoded hashes and
+decode-time ticks. Use ordinary image methods to inspect or export the result.
+Unsupported codecs, edits and external references fail explicitly.
+
 ## Inspect offline HTML and HAR
 
 ```python

@@ -474,6 +474,19 @@ Unsupported encryption, fragmentation and profiles fail explicitly. See
 [container scope and limits](operations.md#video-container-metadata). Output never
 claims that media payloads are valid or playable; the source stays unchanged.
 
+For the supported self-contained MOV/JPEG subset, choose explicit frame indexes
+and an existing output directory. The command writes new PNG files and emits a
+JSON manifest with source ranges, encoded hashes and exact decode times:
+
+```sh
+mkdir frames
+cube video frames clip.mov --track-id 1 --indexes 0,2 --output-dir frames
+```
+
+Names are `track-1-frame-0.png` and `track-1-frame-2.png`. Existing destinations
+cause an error; failed batches clean up only newly created files. Read the
+[JPEG extraction scope and budgets](operations.md#video-container-metadata).
+
 ## Inspect saved HTML and HAR
 
 ```sh

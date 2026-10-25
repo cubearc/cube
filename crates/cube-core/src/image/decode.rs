@@ -153,7 +153,7 @@ pub struct DeclaredGeometry {
     pub height: u32,
     pub verification: &'static str,
 }
-pub(super) fn header_geometry(encoded: &[u8]) -> Result<Option<DeclaredGeometry>, OperationError> {
+pub(crate) fn header_geometry(encoded: &[u8]) -> Result<Option<DeclaredGeometry>, OperationError> {
     if encoded.len() > super::MAX_ENCODED {
         return Err(super::limit("image header input exceeds 32 MiB"));
     }

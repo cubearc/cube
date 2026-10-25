@@ -3,6 +3,16 @@ use clap::Subcommand;
 use std::{error::Error, io::Write, path::PathBuf};
 #[derive(Subcommand)]
 pub(crate) enum VideoCommand {
+    /// Export explicitly indexed independent MOV/JPEG frames as new PNG files
+    Frames {
+        path: PathBuf,
+        #[arg(long)]
+        track_id: u64,
+        #[arg(long,value_delimiter=',',num_args=1..=8)]
+        indexes: Vec<usize>,
+        #[arg(long)]
+        output_dir: PathBuf,
+    },
     /// Inspect declared MP4/MOV/WebM metadata; unsupported profiles fail explicitly
     Inspect {
         path: PathBuf,
@@ -12,6 +22,16 @@ pub(crate) enum VideoCommand {
 }
 pub(crate) fn run(command: VideoCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        VideoCommand::Frames {
+            path,
+            track_id,
+            indexes,
+            output_dir,
+        } => {
+            let frames = cube_core::media::video::frames::extract_file(&path, track_id, &indexes)?;
+            let report = write_frames(&frames, &output_dir)?;
+            writeln!(output, "{}", serde_json::to_string_pretty(&report)?)?;
+        }
         VideoCommand::Inspect { path, json } => {
             let info = cube_core::media::video::inspect_file(&path)?;
             if json {
@@ -33,4 +53,51 @@ pub(crate) fn run(command: VideoCommand, output: &mut impl Write) -> Result<(), 
         }
     }
     Ok(())
+}
+
+fn write_frames(
+    frames: &[cube_core::media::video::frames::Frame],
+    directory: &std::path::Path,
+) -> Result<serde_json::Value, Box<dyn Error>> {
+    if !directory.is_dir() {
+        return Err("output directory must already exist".into());
+    }
+    let mut created = Vec::new();
+    let result = (|| {
+        let mut files = Vec::new();
+        for frame in frames {
+            let name = format!(
+                "track-{}-frame-{}.png",
+                frame.provenance.track_id, frame.provenance.frame_index
+            );
+            let path = directory.join(&name);
+            let file = std::fs::OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .open(&path)?;
+            created.push(path);
+            files.push((name, file));
+        }
+        let mut report = Vec::new();
+        let mut bytes = 0usize;
+        for (frame, (name, mut file)) in frames.iter().zip(files) {
+            let png = frame.image.encode_png()?;
+            bytes = bytes
+                .checked_add(png.len())
+                .ok_or("PNG output size overflows")?;
+            if bytes > 96 * 1024 * 1024 {
+                return Err("PNG batch output exceeds 96 MiB".into());
+            }
+            file.write_all(&png)?;
+            file.flush()?;
+            report.push(serde_json::json!({"file":name,"provenance":frame.provenance,"image":frame.image.info()}));
+        }
+        Ok(serde_json::json!({"frames":report,"png_bytes":bytes}))
+    })();
+    if result.is_err() {
+        for path in created {
+            let _ = std::fs::remove_file(path);
+        }
+    }
+    result
 }

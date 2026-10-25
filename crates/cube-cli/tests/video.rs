@@ -1,5 +1,7 @@
 #[path = "../../cube-core/tests/common/video.rs"]
 mod fixture;
+#[path = "../../cube-core/tests/common/mov.rs"]
+mod mov;
 use std::process::Command;
 #[test]
 fn video_inspection_json_matches_core_and_preserves_source() {
@@ -20,4 +22,50 @@ fn video_inspection_json_matches_core_and_preserves_source() {
         assert_eq!(std::fs::read(&path).unwrap(), input);
         std::fs::remove_file(path).unwrap();
     }
+}
+
+#[test]
+fn selected_frame_pngs_preserve_source_and_existing_outputs_with_batch_cleanup() {
+    let directory = std::env::temp_dir().join(format!("cube-mov-frames-{}", std::process::id()));
+    std::fs::create_dir(&directory).unwrap();
+    let source = directory.join("clip.mov");
+    let input = mov::movie(&[mov::jpeg(0), mov::jpeg(1)], false, false);
+    std::fs::write(&source, &input).unwrap();
+    let run = |indexes: &str| {
+        Command::new(env!("CARGO_BIN_EXE_cube"))
+            .args([
+                "video",
+                "frames",
+                source.to_str().unwrap(),
+                "--track-id",
+                "1",
+                "--indexes",
+                indexes,
+                "--output-dir",
+                directory.to_str().unwrap(),
+            ])
+            .output()
+            .unwrap()
+    };
+    let second = directory.join("track-1-frame-1.png");
+    std::fs::write(&second, b"existing").unwrap();
+    let result = run("0,1");
+    assert!(!result.status.success());
+    assert!(!directory.join("track-1-frame-0.png").exists());
+    assert_eq!(std::fs::read(&second).unwrap(), b"existing");
+    std::fs::remove_file(&second).unwrap();
+    let result = run("1,0");
+    assert!(result.status.success(), "{:?}", result.stderr);
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["frames"][0]["provenance"]["frame_index"], 1);
+    let image = cube_core::image::Image::open(&second).unwrap();
+    assert_eq!(
+        image.samples(),
+        cube_core::image::Image::decode(&mov::jpeg(1))
+            .unwrap()
+            .samples()
+    );
+    assert!(!run("0").status.success());
+    assert_eq!(std::fs::read(&source).unwrap(), input);
+    std::fs::remove_dir_all(directory).unwrap();
 }

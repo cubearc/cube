@@ -745,6 +745,32 @@ Format references: [QuickTime](https://developer.apple.com/documentation/quickti
 [WebM](https://www.webmproject.org/docs/container/). This reader operation has no
 pipeline adapter; it does not grant a recipe file access or imply extraction support.
 
+`video.frames.extract` is a separate, explicit MOV/ISO-BMFF baseline-JPEG (`jpeg`)
+extractor. Select one track ID and 1..=8 unique zero-based indexes in caller order.
+It validates self-contained version-zero descriptions/data references, stsz/stsc/
+stco or co64/stts relationships, exact decode times and all sample ranges within
+mdat without overlap. Optional stss must identify every JPEG as a sync sample.
+Edit lists, composition offsets, fragmentation, encryption, external references,
+description extensions and other sample-table features are unsupported. Pixel
+coordinates are stored JPEG coordinates; track display matrices are not applied.
+
+The combined inspection/index pass caps atoms/table rows at 10,000, metadata reads
+at 2 MiB and samples at 10,000. Input is at most 1 GiB. Only selected encoded JPEGs
+are read: <=2 MiB each and <=16 MiB total. Existing baseline framing/header/decode
+limits apply; JPEG framing must fill the sample and dimensions must match the
+description before decoding. Conservative RGBA-size bounds are <=16 MiB/frame and
+<=64 MiB total decoded samples; the existing decoder has a 64 MiB internal limit.
+No intervening frames are decoded. Cancellation occurs between calls, not during
+a codec call; these explicit work bounds do not claim a wall-clock timeout.
+
+Each result contains an existing Image and track/index/decode-start/duration/time
+base/source offset/length/encoded-SHA-256 provenance. Exact ticks retain timing;
+there is no timestamp-seek API or playback validation. JPEG pixels are decoded
+lossy-source data. Exported PNG preserves those pixels, not original JPEG bytes.
+CLI batches reserve all new names exclusively, cap PNG output at 96 MiB and remove
+only files created by a failed batch. SDK extraction performs no writes. Images
+and reader I/O remain outside the current pipeline value/adapter contract.
+
 ## Offline web artifacts
 
 `web.html.inspect` accepts UTF-8 HTML as inert data. A maintained tokenizer reports

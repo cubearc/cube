@@ -943,3 +943,19 @@ Native integers remain exact u32/u64 values; table entries reject booleans/float
 Character and word records retain source offsets. Custom tables are exact and
 unmapped defaults to error; `unmapped="skip"` retains null values/omitted counts.
 See [numeric report and sum limits](operations.md#numeric-text-evidence).
+
+## Inspect Unicode and compare scalar views
+
+```python
+report = cube.inspect_unicode("A\u200d", options={"max_results": 0})
+assert report["counts"]["format"] == 1 and not report["complete"]
+comparison = cube.compare_unicode("é", "e\u0301", normalization="NFC")
+assert not comparison["exact_equal"] and comparison["normalized_equal"]
+assert comparison["original"]["records"][1]["left"] is None
+assert comparison["normalized"]["coordinate_space"] == "normalized_scalar_index"
+```
+
+Concrete options accept max_results, max_work and max_output; unknown fields
+fail. Original/normalized offsets refer to separate buffers and are never
+realigned or substituted. Counts remain exact when listing is incomplete. See
+[data versions and bounds](operations.md#unicode-observations-and-scalar-differences).

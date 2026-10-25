@@ -287,3 +287,18 @@ A small internal counting writer bounds concrete definition/report serialization
 it is not a second value model or dispatch registry. CLI and PyO3 adapt these
 APIs and preserve their structured results. These direct-only operations do not
 change pipeline/recipe compatibility or add executable-language capabilities.
+
+## Advanced text and numeric evidence
+
+`numbers::alphabet` shares fixed-width magnitude accumulation/radix division with
+ordinary ASCII conversion, preserving their distinct input grammars. `text::word`
+indexes shared whitespace words and original scalar-byte positions for signed
+word extraction and `text::values` reports; book coordinates reuse the same origin
+subtraction. `text::traversal` owns bounded retained-ring/Fenwick removal traversal
+and releases its buffers before reusing existing extraction. `text::unicode`
+streams scalar comparisons and keeps normalized coordinate spaces separate. It
+reuses the pinned normalizer, preflights decomposed scalar counts, and uses one
+small pinned category-data dependency for Cf/titlecase rather than a second
+Unicode database implementation. Each dataset's version is explicit. Direct
+CLI/PyO3 adapters preserve concrete reports without changing engine/recipe value
+kinds or allowing additional pipeline execution.

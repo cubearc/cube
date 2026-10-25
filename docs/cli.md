@@ -916,3 +916,17 @@ All output is JSON, preserving numeric fields and original boundaries. Formats
 for codepoints are decimal, hex and unicode (U+XXXX). Custom tables match exact
 scalars; `--unmapped skip` retains null omissions. `--max-sum` bounds checked sums.
 See [numeric evidence limits](operations.md#numeric-text-evidence).
+
+## Inspect Unicode and compare scalar views
+
+```sh
+cube text unicode-inspect --text 'Aaé' --max-results 1000
+cube text unicode-compare --text 'é' --other 'é' --normalization NFC
+cube text unicode-compare --text A --other-file saved-text.txt
+```
+
+The second report is exact_equal=false, normalized_equal=true and retains the
+original differences separately. `--other` and bounded UTF-8 `--other-file` are
+mutually exclusive. Listing options are `--max-results` (zero counts-only), lower
+`--max-work` and `--max-output`. Inspect declared Unicode versions and complete
+flags; see [Unicode report semantics](operations.md#unicode-observations-and-scalar-differences).

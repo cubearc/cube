@@ -35,6 +35,7 @@ from ._native import (
     check_recipe,
     clock_directions,
     compare_files,
+    compare_unicode,
     compare_video_frames,
     constant_digits,
     convert_alphabet,
@@ -72,6 +73,7 @@ from ._native import (
     inspect_file,
     inspect_har,
     inspect_html,
+    inspect_unicode,
     inspect_video,
     inspect_wave,
     inspect_wave_file,
@@ -141,6 +143,8 @@ from ._native import (
 )
 
 __all__ = [
+    "inspect_unicode",
+    "compare_unicode",
     "word_lengths",
     "word_values",
     "text_codepoints",

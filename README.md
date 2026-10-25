@@ -21,6 +21,8 @@ is explicit.
 - Apply Bacon/Polybius/Tap alphabets, explicit keyboard/keypad mappings and
   character-class patterns with source positions.
 - Arrange Unicode scalars in exact grids and iterate bounded string combinations.
+- Traverse scalar/word positions, inspect Unicode differences and extract exact
+  numeric text evidence; convert caller-defined positional digit alphabets.
 - Inspect file signatures, EXIF, hex, strings and binary differences; validate
   supported embedded ZIP structures and recover selected bytes safely.
 - Analyze bounded PNG8/JPEG/GIF/BMP/WebP images, reconstruct raw rasters, and extract

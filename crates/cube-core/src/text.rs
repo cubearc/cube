@@ -9,6 +9,7 @@ pub mod selection;
 pub mod statistics;
 pub mod transform;
 pub mod traversal;
+pub mod unicode;
 pub mod values;
 pub mod word;
 use crate::errors::{ErrorCode, OperationError};

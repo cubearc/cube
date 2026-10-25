@@ -102,6 +102,10 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Versioned case/category observations with exact counts and bounded listings
+    UnicodeInspect(crate::unicodecmd::Listing),
+    /// Original and explicitly normalized scalar-index differences (JSON)
+    UnicodeCompare(crate::unicodecmd::Compare),
     /// Original word boundaries and exact scalar lengths (JSON)
     WordLengths(crate::Input),
     /// Exact numeric scalar values and explicit presentation (JSON)
@@ -205,6 +209,8 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::UnicodeInspect(args) => return crate::unicodecmd::inspect(args, output),
+        TextCommand::UnicodeCompare(args) => return crate::unicodecmd::compare(args, output),
         TextCommand::WordLengths(input) => return crate::valuescmd::lengths(input, output),
         TextCommand::Codepoints(args) => return crate::valuescmd::codepoints(args, output),
         TextCommand::WordValues(args) => return crate::valuescmd::words(args, output),

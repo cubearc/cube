@@ -4,6 +4,7 @@
 //! absolute and zero-based. No operation executes extracted content or uses the
 //! network. Reader APIs let callers control transport without a CLI subprocess.
 
+pub mod boundaries;
 pub mod exif;
 pub mod inspect;
 pub mod png;

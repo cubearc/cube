@@ -37,7 +37,7 @@ pub(crate) enum FileCommand {
         #[arg(long)]
         json: bool,
     },
-    /// Detect trailing bytes after validated PNG framing (no pixel decoding)
+    /// Detect trailing bytes after supported PNG/JPEG/GIF framing (no pixel decoding)
     Appended {
         path: PathBuf,
         #[arg(long)]
@@ -169,7 +169,7 @@ pub(crate) fn run(command: FileCommand, output: &mut impl Write) -> Result<(), B
             }
         }
         FileCommand::Appended { path, json } => {
-            let result = forensics::png::appended(&mut forensics::open_regular(&path)?)?;
+            let result = forensics::boundaries::inspect(&mut forensics::open_regular(&path)?)?;
             if json {
                 writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
             } else {

@@ -130,10 +130,17 @@ must be a stable regular file. Important limits and result meanings:
   a 1 MiB metadata prefix. Tags preserve
   original types and repeated/unknown values; absent EXIF succeeds, malformed
   input fails. Tags may contain sensitive information already in the input.
-- Appended-data detection currently validates basic PNG framing/CRCs through IEND,
-  then reports trailing offsets/counts. It does not validate compressed pixels;
-  APNG and unknown critical chunks are unsupported. Work before IEND is capped
-  at 64 MiB/10000 chunks. Trailing bytes do not establish concealed content.
+- Appended-data detection reports exact boundaries for PNG framing/CRCs, baseline
+  sequential Huffman JPEG with one or three components, and GIF raster framing.
+  JPEG checks segment/table/frame/scan relationships, stuffing and restart-marker
+  order; GIF checks palettes, raster rectangles, extensions and sub-block lengths.
+  End-marker bytes inside framed payloads do not establish a boundary. JPEG
+  progressive/arithmetic processes, GIF plain-text rendering, APNG and unknown
+  critical PNG chunks are unsupported. Compressed pixels/entropy codes are not
+  decoded. Work to the logical end is capped at 64 MiB/10000 framing records;
+  trailing bytes are counted without scanning them and do not establish hidden data.
+  The existing PNG report fields and legacy `file.png_boundary` semantic type name
+  remain compatible; `validated_chunks` counts framing records for other formats.
 
 ## Image analysis and steganography
 

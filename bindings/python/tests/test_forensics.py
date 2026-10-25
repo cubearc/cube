@@ -179,3 +179,24 @@ def test_appended_data_requires_valid_png_boundaries(tmp_path):
     with pytest.raises(ValueError) as error:
         cube.appended_data(path)
     assert error.value.code == "unsupported_format"
+
+
+def test_appended_gif_framing_and_malformed_inputs(tmp_path):
+    gif = (
+        b"GIF89a\x01\0\x01\0\x80\0\0\0\0\0\xff\xff\xff"
+        b"\x2c\0\0\0\0\x01\0\x01\0\0\x02\x02\x44\x01\0\x3b"
+    )
+    path = tmp_path / "artifact"
+    path.write_bytes(gif + b"tail")
+    result = cube.appended_data(path)
+    assert result["format"] == "gif"
+    assert result["logical_end"] == len(gif)
+    assert result["trailing_offset"] == len(gif)
+    assert result["trailing_bytes"] == 4
+    assert "not decoded" in result["evidence"]
+    assert path.read_bytes() == gif + b"tail"
+    for data in [gif[:-1], b"\xff\xd8\xff\xd9", b"unknown"]:
+        path.write_bytes(data)
+        with pytest.raises(ValueError) as error:
+            cube.appended_data(path)
+        assert error.value.operation == "file.appended.detect"

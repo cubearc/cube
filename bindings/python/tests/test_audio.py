@@ -140,3 +140,36 @@ def test_waveform_streaming_and_budget_errors():
         with pytest.raises(ValueError) as error:
             cube.wave_envelope(data, **options)
         assert error.value.operation == "audio.waveform.envelope"
+
+
+@pytest.mark.parametrize("width", [1, 2, 3, 4])
+def test_sample_bit_extraction_uses_native_storage_without_centering(width):
+    raw = bytes(width) + bytes([255] * width)
+    r = cube.wave_bits(
+        pcm_wave(raw, width=width), bits=list(reversed(range(width * 8)))
+    )
+    assert r["data"] == raw
+    assert r["storage"] == ("unsigned_8" if width == 1 else "signed_twos_complement")
+    assert r["valid_bits"] == 16 * width
+
+
+def test_audio_bits_packing_channels_and_errors_are_explicit():
+    data = pcm_wave(bytes([1, 0, 0, 1, 0, 1, 1, 0]))
+    assert cube.wave_bits(data)["data"] == b"\x96"
+    assert cube.wave_bits(data, reverse_frames=True)["data"] == b"\x69"
+    short = pcm_wave(bytes([1, 0, 1]))
+    assert cube.wave_bits(short, incomplete="pad")["data"] == b"\xa0"
+    assert cube.wave_bits(short, incomplete="pad", bit_order="lsb")["data"] == b"\x05"
+    assert cube.wave_bits(short, incomplete="drop")["dropped_bits"] == 3
+    for options in [
+        {"bits": []},
+        {"bits": [8]},
+        {"bits": [0, 0]},
+        {"bit_order": "guess"},
+        {"incomplete": "guess"},
+        {"surprise": True},
+    ]:
+        with pytest.raises((ValueError, TypeError)):
+            cube.wave_bits(data, **options)
+    with pytest.raises(ValueError):
+        cube.wave_bits(short)

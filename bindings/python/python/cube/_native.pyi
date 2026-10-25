@@ -420,3 +420,14 @@ def wave_spectrogram(
     window: str = "hann",
     final_window: str = "drop",
 ) -> dict[str, Any]: ...
+def wave_bits(
+    data: bytes,
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    bits: list[int] = ...,
+    reverse_frames: bool = False,
+    bit_order: str = "msb",
+    incomplete: str = "reject",
+) -> dict[str, Any]: ...

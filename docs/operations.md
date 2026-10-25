@@ -461,6 +461,16 @@ produces no windows; short input produces no windows with drop. The same 65,536
 cell/4 Mi work budgets cover the entire matrix, checked before FFT planning.
 No plotting dependency or second FFT implementation is added.
 
+`audio.bits.extract` visits selected frames, selected channels in their caller
+order, then requested unique bit positions. Reverse traversal reverses frames
+without reversing channel groups. Bit zero means the native storage LSB, including
+unsigned 8-bit PCM and two's-complement 16/24/32-bit PCM; little-endian storage
+never gets amplitude centering, sign extension or normalization for extraction.
+Packing reuses the image MSB/LSB and reject/drop/zero-pad rules and reports available,
+valid and dropped bit counts. It allows 16 Mi visited bits/2 MiB output, in addition
+to existing PCM bounds. Output is exact bytes, never guessed text. The same shared
+packing types remain available at their existing image API paths.
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

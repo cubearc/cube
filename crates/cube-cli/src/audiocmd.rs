@@ -33,12 +33,27 @@ pub(crate) struct SampleOutput {
     /// Exact raw PCM stdout without a newline or metadata
     #[arg(long)]
     stdout: bool,
-    /// Exact signed values and raw hex, capped at 10000 samples
+    /// Structured values/extraction metadata and exact hex; operation-specific limits
     #[arg(long)]
     json: bool,
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Extract exact native PCM bits; no amplitude normalization or text guess
+    Bits {
+        #[command(flatten)]
+        range: RangeArgs,
+        #[arg(long, value_delimiter = ',', default_value = "0")]
+        bits: Vec<u8>,
+        #[arg(long)]
+        reverse_frames: bool,
+        #[arg(long, default_value = "msb")]
+        bit_order: String,
+        #[arg(long, default_value = "reject")]
+        incomplete: String,
+        #[command(flatten)]
+        destination: SampleOutput,
+    },
     /// Bounded channel/window/bin spectra; absolute times and explicit final-window policy
     Spectrogram {
         #[command(flatten)]
@@ -92,6 +107,40 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Bits {
+            range,
+            bits,
+            reverse_frames,
+            bit_order,
+            incomplete,
+            destination,
+        } => {
+            use cube_core::media::{
+                bits::{self, BitOrder, Incomplete, Options},
+                pcm,
+            };
+            let options = Options {
+                bits,
+                reverse_frames,
+                bit_order: BitOrder::parse(&bit_order)?,
+                incomplete: Incomplete::parse(&incomplete)?,
+            };
+            let samples = pcm::extract_file(&range.path, &range.selection())?;
+            let result = bits::extract(&samples, &options)?;
+            if destination.stdout {
+                output.write_all(&result.data)?;
+            } else {
+                let mut info = serde_json::json!(result);
+                if destination.json {
+                    info["data_hex"] =
+                        serde_json::json!(cube_core::encoding::hex_encode(&result.data));
+                }
+                if let Some(path) = destination.output {
+                    crate::pipelinecmd::write_new(&path, &result.data)?;
+                }
+                writeln!(output, "{}", serde_json::to_string_pretty(&info)?)?;
+            }
+        }
         AudioCommand::Spectrogram {
             range,
             fft_size,

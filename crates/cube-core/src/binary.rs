@@ -68,3 +68,5 @@ mod tests {
         assert_eq!(xor(b"", b""), Err(Error::EmptyKey));
     }
 }
+
+pub mod packing;

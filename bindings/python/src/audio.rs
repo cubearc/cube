@@ -185,8 +185,58 @@ fn wave_spectrogram(
     let report = spectrogram::analyze(&samples, opts).map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(report))
 }
+/// Native storage bits, binary-safe output and explicit packing metadata.
+#[pyfunction]
+#[pyo3(signature=(data,*,channels=None,start_frame=0,frames=None,**options))]
+fn wave_bits(
+    py: Python<'_>,
+    data: &[u8],
+    channels: Option<Vec<u16>>,
+    start_frame: u64,
+    frames: Option<u64>,
+    options: Option<&Bound<'_, pyo3::types::PyDict>>,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::media::{
+        bits::{self, BitOrder, Incomplete, Options},
+        pcm,
+    };
+    let mut opts = Options::default();
+    if let Some(options) = options {
+        for (key, value) in options.iter() {
+            let key: String = key.extract()?;
+            match key.as_str() {
+                "bits" => opts.bits = value.extract()?,
+                "reverse_frames" => opts.reverse_frames = value.extract()?,
+                "bit_order" => {
+                    opts.bit_order = BitOrder::parse(value.extract()?).map_err(super::file_error)?
+                }
+                "incomplete" => {
+                    opts.incomplete =
+                        Incomplete::parse(value.extract()?).map_err(super::file_error)?
+                }
+                _ => {
+                    return Err(pyo3::exceptions::PyTypeError::new_err(
+                        "unknown audio bit extraction option",
+                    ));
+                }
+            }
+        }
+    }
+    let samples = pcm::extract(
+        &mut Cursor::new(data),
+        &selection(channels, start_frame, frames),
+    )
+    .map_err(super::file_error)?;
+    let report = bits::extract(&samples, &opts).map_err(super::file_error)?;
+    let result = super::structured(py, &serde_json::json!(report))?;
+    result
+        .bind(py)
+        .set_item("data", pyo3::types::PyBytes::new(py, &report.data))?;
+    Ok(result)
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(wave_spectrum, module)?)?;
+    module.add_function(wrap_pyfunction!(wave_bits, module)?)?;
     module.add_function(wrap_pyfunction!(wave_spectrogram, module)?)?;
     module.add_function(wrap_pyfunction!(wave_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_file_envelope, module)?)?;

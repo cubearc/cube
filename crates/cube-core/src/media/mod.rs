@@ -4,5 +4,6 @@ pub mod wave;
 
 pub mod envelope;
 
+pub mod bits;
 pub mod spectrogram;
 pub mod spectrum;

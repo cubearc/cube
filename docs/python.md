@@ -401,6 +401,9 @@ assert spectrum["amplitudes"] == [[0.0] * 5]
 gram = cube.wave_spectrogram(buffer.getvalue(), fft_size=8, hop_size=4, final_window="pad")
 assert gram["frame_starts"] == [0, 4]
 assert gram["valid_frames"] == [8, 4]
+packed = cube.wave_bits(buffer.getvalue(), bits=[0])
+assert packed["data"] == b"\x00"
+assert packed["valid_bits"] == 8
 ```
 
 Selections use the existing WAVE/PCM rules. The result retains channels, absolute

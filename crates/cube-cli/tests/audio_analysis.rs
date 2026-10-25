@@ -92,3 +92,39 @@ fn spectrogram_json_exposes_short_padding_and_preflight_errors() {
     assert!(r.stdout.is_empty());
     std::fs::remove_file(path).unwrap();
 }
+#[test]
+fn audio_bits_raw_json_and_exclusive_outputs_match_native_storage() {
+    let path = std::env::temp_dir().join(format!("cube-audio-bits-{}.wav", std::process::id()));
+    let dest = path.with_extension("bits");
+    let mut wav = b"RIFF".to_vec();
+    wav.extend(44u32.to_le_bytes());
+    wav.extend(b"WAVEfmt ");
+    wav.extend(16u32.to_le_bytes());
+    wav.extend([1, 0, 1, 0]);
+    wav.extend(8000u32.to_le_bytes());
+    wav.extend(8000u32.to_le_bytes());
+    wav.extend([1, 0, 8, 0]);
+    wav.extend(b"data");
+    wav.extend(8u32.to_le_bytes());
+    wav.extend([1, 0, 0, 1, 0, 1, 1, 0]);
+    std::fs::write(&path, &wav).unwrap();
+    let run = |extra: &[&str]| {
+        Command::new(env!("CARGO_BIN_EXE_cube"))
+            .args(["audio", "bits", path.to_str().unwrap()])
+            .args(extra)
+            .output()
+            .unwrap()
+    };
+    let r = run(&["--stdout"]);
+    assert!(r.status.success());
+    assert_eq!(r.stdout, [0x96]);
+    let r = run(&["--json"]);
+    let r: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(r["data_hex"], "96");
+    assert!(run(&["--output", dest.to_str().unwrap()]).status.success());
+    assert_eq!(std::fs::read(&dest).unwrap(), [0x96]);
+    assert!(!run(&["--output", dest.to_str().unwrap()]).status.success());
+    assert_eq!(std::fs::read(&path).unwrap(), wav);
+    std::fs::remove_file(path).unwrap();
+    std::fs::remove_file(dest).unwrap();
+}

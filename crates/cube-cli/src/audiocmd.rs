@@ -249,8 +249,17 @@ pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), 
                     tolerance_percent,
                     json,
                 } => {
-                    let report: morse::Detection =
-                        serde_json::from_str(&input.read_text("audio.morse.transcribe")?)?;
+                    let report: morse::Detection = serde_json::from_str(
+                        &input.read_text("audio.morse.transcribe")?,
+                    )
+                    .map_err(|error| {
+                        cube_core::errors::OperationError::new(
+                            cube_core::errors::ErrorCode::InvalidInput,
+                            "invalid tone interval JSON; use output from audio morse detect --json",
+                        )
+                        .operation("audio.morse.transcribe")
+                        .caused_by(error)
+                    })?;
                     let result = morse::transcribe(
                         &report.intervals,
                         report.sample_rate,

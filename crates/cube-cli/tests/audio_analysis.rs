@@ -283,3 +283,33 @@ fn flac_metadata_json_reports_header_observations_without_decoding_audio() {
     assert_eq!(std::fs::read(&path).unwrap(), bytes);
     std::fs::remove_file(path).unwrap();
 }
+#[test]
+fn malformed_morse_json_has_operation_context_without_echoing_private_fields() {
+    let report = serde_json::json!({"sample_rate":8000,"channel":0,"frequency_hz":700,"start_frame":0,"frames":800,"window_frames":80,"min_level_dbfs":-40,"purity_percent":80,"intervals":[{"start_frame":0,"frames":800,"state":"private-regression-marker"}]});
+    let r = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args([
+            "audio",
+            "morse",
+            "transcribe",
+            "--unit-ms",
+            "100",
+            "--text",
+            &report.to_string(),
+            "--json-errors",
+        ])
+        .output()
+        .unwrap();
+    assert!(!r.status.success());
+    assert!(r.stdout.is_empty());
+    let text = String::from_utf8(r.stderr).unwrap();
+    assert!(!text.contains("private-regression-marker"));
+    let r: serde_json::Value = serde_json::from_str(&text).unwrap();
+    assert_eq!(r["error"]["code"], "invalid_input");
+    assert_eq!(r["error"]["operation"], "audio.morse.transcribe");
+    assert!(
+        r["error"]["message"]
+            .as_str()
+            .unwrap()
+            .contains("audio morse detect --json")
+    );
+}

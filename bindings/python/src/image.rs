@@ -639,6 +639,17 @@ impl PyImage {
             &self.inner.encode_png().map_err(super::file_error)?,
         ))
     }
+    /// Exact CSV v1 physical samples, at most 10000 pixels; no palette/tRNS.
+    fn to_csv(&self) -> PyResult<String> {
+        self.inner.to_csv().map_err(super::file_error)
+    }
+    /// Validate a complete versioned CSV grid without I/O or color conversion.
+    #[staticmethod]
+    fn from_csv(text: &str) -> PyResult<Self> {
+        Ok(Self {
+            inner: Image::from_csv(text).map_err(super::file_error)?,
+        })
+    }
     fn save_png(&self, path: PathBuf) -> PyResult<()> {
         self.inner.save_png(&path).map_err(super::file_error)
     }

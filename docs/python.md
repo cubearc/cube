@@ -160,6 +160,21 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+Exchange small complete physical sample grids without filesystem access:
+
+```python
+from cube import Image
+
+source = Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 4, 5, 6, 255]))
+csv_text = source.to_csv()
+restored = Image.from_csv(csv_text)
+assert restored.samples == source.samples
+```
+
+[CSV v1](operations.md#pixel-csv-v1) preserves shape, native channel order and all
+8-bit samples. It rejects palettes/tRNS, incomplete grids and more than 10000
+pixels. It carries no original encoded bytes or ancillary metadata.
+
 `cube.string_combinations([["a", "b"], ["1", "2"]], separator="-")` returns a
 native iterator yielding `a-1`, `a-2`, `b-1`, `b-2`. `iterator.plan()` reports exact
 counts/byte bounds and remaining results; `len(iterator)` reports remaining count.

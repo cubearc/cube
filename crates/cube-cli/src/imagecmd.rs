@@ -5,6 +5,7 @@ use cube_core::{
     image::{self, BitwiseOperation, Channel, Image, PixelData, Region},
 };
 use std::{error::Error, io::Write, path::PathBuf};
+mod csv;
 mod output;
 mod pairs;
 
@@ -174,6 +175,11 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Exchange complete bounded exact-sample CSV v1 grids
+    Csv {
+        #[command(subcommand)]
+        command: csv::CsvCommand,
+    },
     /// Plan/execute bounded explicit pairs using existing single-pair operations
     Pairs(pairs::PairArgs),
     /// Export exact-color PNGs and manifest.json into an existing directory
@@ -438,6 +444,7 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Csv { command } => csv::run(command, output)?,
         ImageCommand::Pairs(args) => pairs::run(args, output)?,
         ImageCommand::ColorLayers {
             path,

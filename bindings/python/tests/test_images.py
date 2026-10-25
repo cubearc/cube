@@ -553,3 +553,32 @@ def test_lsb_binary_payload_selection_and_partial_byte_policies():
     assert (
         rgba.lsb(channels=["alpha"], bits=list(reversed(range(8))))["data"] == b"\x01"
     )
+
+
+def test_native_csv_complete_grid_round_trips_and_validation():
+    for model, channels in [("gray", 1), ("gray_alpha", 2), ("rgb", 3), ("rgba", 4)]:
+        data = bytes((n * 37) % 256 for n in range(6 * channels))
+        image = cube.Image.from_samples(3, 2, model, data)
+        text = image.to_csv()
+        assert isinstance(text, str)
+        restored = cube.Image.from_csv(text)
+        assert isinstance(restored, _native.Image)
+        assert restored.samples == data
+        assert restored.to_csv() == text
+        lines = text.splitlines()
+        reordered = "\r\n".join(lines[:2] + lines[2:][::-1])
+        assert cube.Image.from_csv(reordered).samples == data
+        with pytest.raises(ValueError, match="missing pixel"):
+            cube.Image.from_csv("\n".join(lines[:-1]))
+        with pytest.raises(ValueError, match="duplicate coordinate"):
+            cube.Image.from_csv("\n".join(lines[:2] + [lines[2]] * 6))
+    with pytest.raises(TypeError):
+        cube.Image.from_csv(None)
+    with pytest.raises(ValueError):
+        cube.Image.from_csv("cube_pixels,1,4294967295,4294967295,rgb,8")
+    with pytest.raises(ValueError):
+        cube.Image.from_csv("x" * (2 * 1024 * 1024 + 1))
+    with pytest.raises(ValueError):
+        cube.Image.from_samples(1, 1, "indexed", b"\0", [[1, 2, 3]]).to_csv()
+    with pytest.raises(ValueError):
+        cube.Image.from_samples(1, 1, "gray", b"\0", transparency=b"\0\0").to_csv()

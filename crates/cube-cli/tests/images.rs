@@ -1003,3 +1003,126 @@ fn bit_extraction_preserves_raw_stdout_and_explicit_representation() {
         source.samples()
     );
 }
+
+#[test]
+fn csv_exchanges_exact_samples_with_exclusive_files_and_stdin() {
+    use std::{io::Write, process::Stdio};
+    let files = Files::new("csv");
+    let source = files.path("source.png");
+    let csv = files.path("pixels.csv");
+    let restored = files.path("restored.png");
+    let image = Image::from_bytes(
+        2,
+        1,
+        ColorModel::Rgba,
+        &[1, 2, 3, 0, 4, 5, 6, 255],
+        &[],
+        &[],
+    )
+    .unwrap();
+    image.save_png(&source).unwrap();
+    let original = std::fs::read(&source).unwrap();
+    let output = run(&[
+        "image",
+        "csv",
+        "export",
+        source.to_str().unwrap(),
+        "--stdout",
+    ]);
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert_eq!(output.stdout, image.to_csv().unwrap().as_bytes());
+    let args = [
+        "image",
+        "csv",
+        "export",
+        source.to_str().unwrap(),
+        "--output",
+        csv.to_str().unwrap(),
+    ];
+    assert!(run(&args).status.success());
+    assert!(!run(&args).status.success());
+    assert_eq!(std::fs::read(&csv).unwrap(), output.stdout);
+    let args = [
+        "image",
+        "csv",
+        "import",
+        "--input",
+        csv.to_str().unwrap(),
+        "--output",
+        restored.to_str().unwrap(),
+        "--json",
+    ];
+    let imported = run(&args);
+    assert!(
+        imported.status.success(),
+        "{}",
+        String::from_utf8_lossy(&imported.stderr)
+    );
+    assert_eq!(
+        serde_json::from_slice::<serde_json::Value>(&imported.stdout).unwrap()["width"],
+        2
+    );
+    assert_eq!(Image::open(&restored).unwrap().samples(), image.samples());
+    assert!(!run(&args).status.success());
+    let piped = files.path("piped.png");
+    let mut child = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args([
+            "image",
+            "csv",
+            "import",
+            "--output",
+            piped.to_str().unwrap(),
+        ])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    child
+        .stdin
+        .take()
+        .unwrap()
+        .write_all(&output.stdout)
+        .unwrap();
+    assert!(child.wait_with_output().unwrap().status.success());
+    assert_eq!(Image::open(&piped).unwrap().samples(), image.samples());
+    std::fs::write(&csv, [255]).unwrap();
+    let invalid = files.path("invalid.png");
+    assert!(
+        !run(&[
+            "image",
+            "csv",
+            "import",
+            "--input",
+            csv.to_str().unwrap(),
+            "--output",
+            invalid.to_str().unwrap()
+        ])
+        .status
+        .success()
+    );
+    assert!(!invalid.exists());
+    assert!(
+        !run(&[
+            "image",
+            "csv",
+            "import",
+            "--text",
+            "invalid",
+            "--output",
+            invalid.to_str().unwrap()
+        ])
+        .status
+        .success()
+    );
+    assert!(
+        !run(&["image", "csv", "export", source.to_str().unwrap()])
+            .status
+            .success()
+    );
+    assert_eq!(std::fs::read(&source).unwrap(), original);
+}

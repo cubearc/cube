@@ -140,6 +140,9 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    def to_csv(self) -> str: ...
+    @staticmethod
+    def from_csv(text: str) -> Image: ...
     def color_layers(
         self,
         colors: list[list[int]] | None = None,

@@ -8,6 +8,7 @@ pub mod analyze;
 pub mod bitwise;
 pub use bitwise::BitwiseOperation;
 pub mod colors;
+pub mod csv;
 pub mod layers;
 pub mod pairs;
 pub use colors::{ColorLayer, ColorOutput};

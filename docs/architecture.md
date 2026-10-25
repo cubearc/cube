@@ -220,3 +220,12 @@ Introduce shared FFI machinery only when an implemented binding demonstrates a
 concrete need. A plugin runtime, distributed workflows and visual workbench are
 not implemented; future privileged extensions need a separate compatibility,
 permission, sandboxing and resource-limit design.
+
+
+Pixel CSV v1 reuses `Image::pixels`/`PixelData::records` and validated sample
+construction. `csv-core` supplies a pure Rust fixed-buffer tokenizer; a strict
+schema-specific lexical check rejects the permissive tokenizer's malformed-quote
+recovery. Byte/row/field/grid budgets bound parsing before image allocation. CLI
+transport and native Python methods call these core APIs without another raster
+model or image pipeline value. CSV carries exact supported samples, not encoded
+file/ancillary metadata.

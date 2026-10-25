@@ -69,6 +69,8 @@ SDK_BINDINGS = {
     "image.crop": "Image.crop",
     "image.decode": "Image.decode",
     "image.colors.extract": "Image.exact_colors",
+    "image.csv.export": "Image.to_csv",
+    "image.csv.import": "Image.from_csv",
     "image.colors.export": "Image.color_layers",
     "image.raw.interpret": "Image.from_raw",
     "image.geometry.inspect": "Image.inspect_layout",

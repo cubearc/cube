@@ -948,3 +948,37 @@ pipeline engine, value kinds, preflight, captures and lowered budgets. Adapter
 output is bytes; use direct extraction first when provenance must be retained.
 Caller-selected local files can enter the ordinary byte pipeline separately;
 artifact references never authorize opening them. Existing recipes remain valid.
+
+
+### Pixel CSV v1
+
+`image.csv.export` / `image.csv.import` exchange complete, small exact sample grids.
+The first record is `cube_pixels,1,width,height,model,8`; the second fixes channel
+order: `x,y,gray`, `x,y,gray,alpha`, `x,y,red,green,blue` or
+`x,y,red,green,blue,alpha` for `gray`, `gray_alpha`, `rgb` or `rgba` respectively.
+Coordinates are zero-based from the top left. Export is row-major; import allows
+reordered rows but requires every declared coordinate exactly once.
+
+```csv
+cube_pixels,1,2,1,rgba,8
+x,y,red,green,blue,alpha
+0,0,1,2,3,0
+1,0,4,5,6,255
+```
+
+LF/CRLF and an optional final newline are accepted. Every field may optionally be
+wholly double-quoted. Embedded quotes, commas/newlines, blank records, BOM and
+numeric whitespace/signs/prefixes/fractions are unsupported. Integers are decimal;
+samples must be 0..255. Dimensions must be positive and fit normal image limits.
+The additional limits are 10000 pixel records, 2 MiB input/output, 128 bytes per
+physical row (excluding its line ending), 16 unquoted bytes per field and six
+fields per record. Bounds precede allocation and incomplete images are never
+returned. Errors identify the row/field where applicable.
+
+The contract preserves dimensions/model/samples, including hidden RGB beneath
+zero alpha; it does not preserve original encoding, EXIF, profiles or other
+ancillary metadata. Indexed palettes and tRNS are explicitly rejected, rather
+than silently expanded/dropped. Explicitly expanded indexed RGBA samples may be
+exported as a new representation. Import constructs new 8-bit sample provenance.
+Both operations are direct Rust/CLI/native Python APIs; neither is a pipeline
+adapter because the engine has no image sample value.

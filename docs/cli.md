@@ -306,6 +306,20 @@ PY
 
 ## Analyze an image
 
+Exchange small exact sample grids through versioned CSV (gray, gray-alpha, RGB or
+RGBA, 8-bit, at most 10000 pixels). File outputs are exclusive; stdout contains
+only CSV bytes. Import accepts `--input`, `--text` or stdin and validates every
+coordinate before writing a new PNG:
+
+```sh
+cube image csv export sample.png --output pixels.csv
+cube image csv import --input pixels.csv --output restored.png --json
+cube image csv export sample.png --stdout | cube image csv import --output copied.png
+```
+
+Palette/tRNS inputs are rejected. See [CSV v1](operations.md#pixel-csv-v1) for the
+schema and limits; encoded bytes and ancillary metadata are outside this contract.
+
 Plan exact pair counts before exporting a bounded collection:
 
 ```sh

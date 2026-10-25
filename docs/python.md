@@ -181,6 +181,22 @@ Python strings remain caller-owned. Calls neither access networks nor save data,
 and do not promise Python memory zeroization. WIF test-family ambiguity and
 [resource/representation rules](operations.md#wif-and-scalar-validation) are explicit.
 
+### Derive public Bitcoin data
+
+```python
+import cube
+
+# Synthetic public scalar-1 vector.
+public = cube.derive_bitcoin_address(bytes(31) + b"\x01", network="mainnet", compressed=True)
+assert public["address"] == "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"
+assert isinstance(public["public_key"], bytes) and len(public["public_key"]) == 33
+assert cube.ripemd160(b"Hello world!") == "7f772647d88750add82d8e1a7a3e5c0902a346a3"
+```
+
+`format="hex"` or `format="wif"` requires text; the default raw format requires
+bytes. Network and compression are explicit and must match WIF intent. Results
+contain public bytes and exact hex fields, never supplied private material.
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:

@@ -300,6 +300,7 @@ dependencies = [
  "num-bigint",
  "png",
  "quircs",
+ "ripemd",
  "rustfft",
  "serde",
  "serde_json",
@@ -823,6 +824,15 @@ name = "rand_core"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "63b8176103e19a2643978565ca18b50549f6101881c443590420e4dc998a3c69"
+
+[[package]]
+name = "ripemd"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4dd4211456b4172d7e44261920c25acf07367c4f04bb5f5d54fc21b090d9b159"
+dependencies = [
+ "digest",
+]
 
 [[package]]
 name = "rustfft"

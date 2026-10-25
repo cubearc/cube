@@ -266,6 +266,8 @@ enum Cipher {
 
 #[derive(Subcommand)]
 enum Hash {
+    /// RIPEMD-160 for protocol compatibility; exact bytes, <=16 MiB
+    Ripemd160(Input),
     /// Compute SHA-512 as 128 lowercase hex digits; input <=16 MiB
     Sha512(Input),
     /// Legacy SHA-1; unsuitable for collision-resistant security; input <=16 MiB
@@ -726,6 +728,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Hash { command } => {
             let digest = match command {
+                Hash::Ripemd160(input) => hashing::ripemd160(
+                    &input
+                        .read_bounded(cube_core::hashing::protocol::MAX_INPUT, "hash.ripemd160")?,
+                )?,
                 Hash::Sha512(input) => hashing::sha512(
                     &input.read_bounded(cube_core::binary::transform::MAX_INPUT, "hash.sha512")?,
                 ),

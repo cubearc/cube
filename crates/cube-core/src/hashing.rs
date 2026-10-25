@@ -1,6 +1,8 @@
 //! Cryptographic hashes and non-cryptographic checksums through maintained crates.
 
 use sha2::{Digest, Sha256, Sha512};
+pub mod protocol;
+pub use protocol::ripemd160;
 
 /// Compute CRC-32/ISO-HDLC (IEEE CRC32) as eight lowercase hexadecimal digits.
 ///

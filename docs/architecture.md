@@ -65,7 +65,9 @@ transformations stay in their owning modules. Responsibilities include:
 - `blockchain`: offline structural key validation with bounded exact transports.
   K256's validated secret type owns scalar/range checks with only arithmetic
   enabled; no signing, random generation or native backend is required. Opaque
-  private inputs/keys have redacted debug and no serialization. Safe validation
+  private inputs/keys have redacted debug and no serialization. Public SEC1/P2PKH
+  derivation reuses the same key parser, K256 arithmetic, raw SHA-256, reusable
+  bounded RIPEMD-160 and Base58Check; no custom curve or wallet layer is added. Safe validation
   metadata stays separate from deliberate private export, and secret-bearing
   operations have no pipeline/capture adapter. Caller/interface copies prevent a
   general memory-zeroization promise.

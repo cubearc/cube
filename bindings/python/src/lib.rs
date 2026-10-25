@@ -431,6 +431,12 @@ fn crc32(data: &[u8]) -> String {
     hashing::crc32(data)
 }
 
+/// Compute RIPEMD-160 as 40 lowercase hexadecimal digits; input <=16 MiB.
+#[pyfunction]
+fn ripemd160(data: &[u8]) -> PyResult<String> {
+    hashing::ripemd160(data).map_err(file_error)
+}
+
 /// Compute SHA-256 as 64 lowercase hexadecimal digits.
 #[pyfunction]
 fn sha256(data: &[u8]) -> String {
@@ -518,6 +524,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(book_decode, module)?)?;
     module.add_function(wrap_pyfunction!(crc32, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
+    module.add_function(wrap_pyfunction!(ripemd160, module)?)?;
     module.add_function(wrap_pyfunction!(sha512, module)?)?;
     module.add_function(wrap_pyfunction!(sha1, module)?)?;
     module.add_function(wrap_pyfunction!(md5, module)?)?;

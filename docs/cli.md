@@ -295,6 +295,21 @@ The default human report and optional JSON contain no private bytes, WIF or
 fingerprints. The `testnet` expectation means the shared testnet/signet/regtest
 version family, not independent chain identification. [Contracts and limits](operations.md#wif-and-scalar-validation).
 
+### Derive a public Bitcoin address
+
+Use explicit network/SEC1 flags with supplied exact input. This synthetic public
+scalar-1 vector returns `1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH`:
+
+```sh
+printf '%s' 0000000000000000000000000000000000000000000000000000000000000001 | cube blockchain bitcoin --format hex --network mainnet --compressed --json
+cube hash ripemd160 --text 'Hello world!'
+```
+
+Default derivation output is just the public address plus a newline. `--json`
+adds public SEC1/HASH160 hex and parameter facts. `--format wif` reuses validation
+and rejects conflicts with `--network`/encoding. The command exports no private
+material, accesses no network and creates no file.
+
 ## Inspect binary files
 
 ```sh

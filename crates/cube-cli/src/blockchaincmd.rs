@@ -7,6 +7,22 @@ use cube_core::{
 use std::{error::Error, io::Write};
 #[derive(Subcommand)]
 pub(crate) enum Command {
+    /// Derive public SEC1/P2PKH offline; network/encoding must be explicit
+    #[command(group(clap::ArgGroup::new("bitcoin_encoding").required(true).multiple(false).args(["compressed","uncompressed"])))]
+    Bitcoin {
+        #[command(flatten)]
+        input: crate::Input,
+        #[arg(long, default_value = "raw")]
+        format: String,
+        #[arg(long)]
+        network: String,
+        #[arg(long)]
+        compressed: bool,
+        #[arg(long)]
+        uncompressed: bool,
+        #[arg(long)]
+        json: bool,
+    },
     /// Validate WIF without exporting material; prefer exact stdin to argv
     Wif {
         #[command(flatten)]
@@ -36,6 +52,30 @@ fn material<'a>(
 }
 pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        Command::Bitcoin {
+            input,
+            format,
+            network,
+            compressed,
+            uncompressed,
+            json,
+        } => {
+            if compressed == uncompressed {
+                return Err("select exactly one public-key encoding".into());
+            }
+            let bytes =
+                input.read_bounded(blockchain::MAX_MATERIAL_BYTES, "blockchain.bitcoin.derive")?;
+            let result = blockchain::bitcoin::derive(
+                material(&bytes, &format, "blockchain.bitcoin.derive")?,
+                Network::parse(&network)?,
+                compressed,
+            )?;
+            if json {
+                writeln!(out, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(out, "{}", result.address)?;
+            }
+        }
         Command::Wif {
             input,
             expected_network,

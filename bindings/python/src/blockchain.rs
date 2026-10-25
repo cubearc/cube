@@ -62,8 +62,33 @@ fn validate_private_scalar(
         .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(info))
 }
+#[pyfunction]
+#[pyo3(signature=(data, *, network, compressed, format="raw"))]
+fn derive_bitcoin_address(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    network: &str,
+    compressed: bool,
+    format: &str,
+) -> PyResult<Py<PyAny>> {
+    let result = blockchain::bitcoin::derive(
+        material(data, format, "blockchain.bitcoin.derive")?,
+        Network::parse(network).map_err(super::file_error)?,
+        compressed,
+    )
+    .map_err(super::file_error)?;
+    let output = super::structured(py, &serde_json::json!(result))?;
+    output
+        .bind(py)
+        .set_item("public_key", PyBytes::new(py, &result.public_key))?;
+    output
+        .bind(py)
+        .set_item("hash160", PyBytes::new(py, &result.hash160))?;
+    Ok(output)
+}
 pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(validate_wif, module)?)?;
+    module.add_function(wrap_pyfunction!(derive_bitcoin_address, module)?)?;
     module.add_function(wrap_pyfunction!(validate_private_scalar, module)?)?;
     Ok(())
 }

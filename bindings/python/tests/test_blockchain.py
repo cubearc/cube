@@ -35,3 +35,34 @@ def test_safe_native_wif_and_scalar_metadata():
         assert WIF not in repr(error.value.args)
         assert HEX not in repr(error.value.args)
         assert not hasattr(error.value, "object")
+
+
+def test_native_bitcoin_public_derivation_and_digest_composition():
+    key = bytes(31) + b"\x01"
+    result = cube.derive_bitcoin_address(key, network="mainnet", compressed=True)
+    assert result["address"] == "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"
+    assert isinstance(result["public_key"], bytes) and len(result["public_key"]) == 33
+    assert result["hash160"].hex() == "751e76e8199196d454941c45d1b3a323f1433bd6"
+    assert (
+        cube.derive_bitcoin_address(key, network="mainnet", compressed=False)["address"]
+        == "1EHNa6Q4Jz2uvNExL497mE43ikXhwF6kZm"
+    )
+    wif = "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn"
+    assert (
+        cube.derive_bitcoin_address(
+            wif, format="wif", network="mainnet", compressed=True
+        )["address"]
+        == result["address"]
+    )
+    for kwargs in [
+        {"network": "mainnet", "compressed": False},
+        {"network": "testnet", "compressed": True},
+    ]:
+        with pytest.raises(ValueError) as error:
+            cube.derive_bitcoin_address(wif, format="wif", **kwargs)
+        assert wif not in str(error.value)
+    assert cube.ripemd160(b"") == "9c1185a5c5e9fc54612808977ee8f548b2258d31"
+    assert cube.execute_pipeline([{"operation": "hash.ripemd160", "version": 1}], b"")[
+        "output"
+    ] == cube.ripemd160(b"")
+    assert cube.describe_operation("blockchain.bitcoin.derive")["pipeline"] is None

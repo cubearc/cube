@@ -3,6 +3,7 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    Ripemd160,
     Base58CheckEncode,
     SemaphoreEncode,
     SemaphoreDecode,
@@ -56,6 +57,11 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "hash.ripemd160",
+        version: 1,
+        action: Action::Ripemd160,
+    },
     Adapter {
         id: "encoding.base58check.encode",
         version: 1,

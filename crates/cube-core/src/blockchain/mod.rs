@@ -1,4 +1,5 @@
 //! Offline, bounded key-format operations; no wallets, generation or network I/O.
+pub mod bitcoin;
 pub mod wif;
 use crate::{
     encoding,
@@ -26,6 +27,12 @@ impl Network {
                 "network",
                 "network must be mainnet or testnet (shared version family)",
             )),
+        }
+    }
+    pub fn p2pkh_version(self) -> u8 {
+        match self {
+            Self::Mainnet => 0x00,
+            Self::Testnet => 0x6f,
         }
     }
     pub fn private_version(self) -> u8 {
@@ -156,3 +163,17 @@ pub const OPERATIONS: &[Descriptor] = &[Descriptor {
     command: "blockchain scalar",
     example: "cube blockchain scalar --format hex --json < public-test-scalar.hex",
 }];
+
+pub(crate) fn parse_private(
+    input: PrivateInput<'_>,
+    network: Option<Network>,
+    compressed: Option<bool>,
+) -> Result<(PrivateKey, Option<wif::WifInfo>), OperationError> {
+    match input {
+        PrivateInput::Raw(bytes) => PrivateKey::from_bytes(bytes).map(|key| (key, None)),
+        PrivateInput::Hex(text) => PrivateKey::from_hex(text).map(|key| (key, None)),
+        PrivateInput::Wif(text) => {
+            wif::decode(text, network, compressed).map(|(key, info)| (key, Some(info)))
+        }
+    }
+}

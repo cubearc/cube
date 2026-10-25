@@ -108,6 +108,7 @@ impl Prepared {
             Action::Base58Encode => size * 2,
             Action::Crc32 => 8,
             Action::Sha256 => 64,
+            Action::Ripemd160 => 40,
             Action::Sha512 => 128,
             Action::Sha1 => 40,
             Action::Md5 => 32,
@@ -284,6 +285,7 @@ impl Prepared {
             (Action::AffineDecode, Value::Text { data }, Arguments::Affine(a, b)) => {
                 text(ciphers::affine_decode(&data, *a, *b)?)
             }
+            (Action::Ripemd160, Value::Bytes { data }, _) => text(hashing::ripemd160(&data)?),
             (Action::Crc32, Value::Bytes { data }, _) => text(hashing::crc32(&data)),
             (Action::Sha512, Value::Bytes { data }, _) => text(hashing::sha512(&data)),
             (Action::Sha1, Value::Bytes { data }, _) => text(hashing::sha1(&data)),

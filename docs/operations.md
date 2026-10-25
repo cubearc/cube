@@ -526,6 +526,24 @@ stdin; using `--text` instead puts material in argv. Core/SDK calls perform no I
 or persistence. Interface strings/buffers can retain copies: no process-wide or
 Python memory-zeroization guarantee is made. Validation does not export material.
 
+### Bitcoin public keys and P2PKH
+
+`blockchain.bitcoin.derive` accepts declared raw32/hex64/WIF and requires explicit
+`mainnet`/`testnet` and compressed/uncompressed encoding. WIF network/compression
+intent must agree; neither is silently overridden. K256 provides standard SEC1
+bytes (33 compressed or 65 uncompressed). HASH160 is
+RIPEMD-160(SHA-256(public-key **bytes**)); P2PKH uses Base58Check versions 0x00/0x6f.
+Only public key/digest/address facts are returned. Native SDK fields include raw
+`public_key`/`hash160` bytes; CLI JSON uses `public_key_hex`/`hash160_hex` alongside
+address/version/encoding/network-family facts. Input remains bounded at 128 bytes,
+work is one validated curve multiplication and fixed-size hashes, and no network,
+private export or pipeline capture is performed.
+
+Reusable `hash.ripemd160` returns 40 lowercase hex digits of exact bytes with a
+16 MiB direct input cap. Its version-1 byte/text pipeline adapter uses the existing
+smaller engine budgets; it is separate from private-input derivation. It uses
+[RustCrypto RIPEMD](https://docs.rs/ripemd/0.2.0/ripemd/), not a custom primitive.
+
 ## Symbolic encodings
 
 Use `symbols` for textual International Morse or reversible Unicode Braille cells.

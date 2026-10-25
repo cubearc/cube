@@ -568,3 +568,10 @@ def validate_private_scalar(
 ) -> dict[str, Any]:
     """Validate exact raw32 or hex64 secp256k1 material without private export."""
     ...
+
+def ripemd160(data: bytes) -> str: ...
+def derive_bitcoin_address(
+    data: bytes | str, *, network: str, compressed: bool, format: str = "raw"
+) -> dict[str, Any]:
+    """Public SEC1/P2PKH only; WIF network and encoding intent must agree."""
+    ...

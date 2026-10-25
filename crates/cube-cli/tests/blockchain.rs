@@ -61,3 +61,55 @@ fn validators_read_stdin_and_never_report_private_material() {
     assert!(!run(&["blockchain", "wif"], &[255]).status.success());
     assert!(!run(&["blockchain", "scalar"], &[0; 32]).status.success());
 }
+
+#[test]
+fn bitcoin_derivation_requires_explicit_network_and_encoding() {
+    let scalar = "0000000000000000000000000000000000000000000000000000000000000001";
+    let result = run(
+        &[
+            "blockchain",
+            "bitcoin",
+            "--format",
+            "hex",
+            "--network",
+            "mainnet",
+            "--compressed",
+            "--json",
+        ],
+        scalar.as_bytes(),
+    );
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["address"], "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH");
+    assert_eq!(report["public_key_hex"].as_str().unwrap().len(), 66);
+    assert!(!String::from_utf8_lossy(&result.stdout).contains(scalar));
+    assert_eq!(
+        run(
+            &[
+                "blockchain",
+                "bitcoin",
+                "--format",
+                "hex",
+                "--network",
+                "testnet",
+                "--uncompressed"
+            ],
+            scalar.as_bytes()
+        )
+        .stdout,
+        b"mtoKs9V381UAhUia3d7Vb9GNak8Qvmcsme\n"
+    );
+    assert!(
+        !run(&["blockchain", "bitcoin", "--network", "mainnet"], &[1; 32])
+            .status
+            .success()
+    );
+    assert_eq!(
+        run(&["hash", "ripemd160"], b"").stdout,
+        b"9c1185a5c5e9fc54612808977ee8f548b2258d31\n"
+    );
+}

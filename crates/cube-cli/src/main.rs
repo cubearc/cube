@@ -18,6 +18,7 @@ mod puzzlecmd;
 mod recipecmd;
 mod textcmd;
 mod traversalcmd;
+mod valuescmd;
 mod videocmd;
 mod webcmd;
 mod wordcmd;

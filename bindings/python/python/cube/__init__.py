@@ -111,6 +111,7 @@ from ._native import (
     shift_right,
     string_combinations,
     swap_endian,
+    text_codepoints,
     text_grid,
     text_statistics,
     transcribe_morse,
@@ -134,10 +135,15 @@ from ._native import (
     wave_samples,
     wave_spectrogram,
     wave_spectrum,
+    word_lengths,
+    word_values,
     xor,
 )
 
 __all__ = [
+    "word_lengths",
+    "word_values",
+    "text_codepoints",
     "extract_word_characters",
     "keyed_skip",
     "josephus_extract",

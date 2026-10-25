@@ -20,6 +20,7 @@ mod puzzles;
 mod recipe;
 mod textops;
 mod traversal;
+mod values;
 mod video;
 mod web;
 mod word;
@@ -495,6 +496,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     web::register(module)?;
     binaryops::register(module)?;
     textops::register(module)?;
+    values::register(module)?;
     word::register(module)?;
     traversal::register(module)?;
     puzzles::register(module)?;

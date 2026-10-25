@@ -102,6 +102,12 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Original word boundaries and exact scalar lengths (JSON)
+    WordLengths(crate::Input),
+    /// Exact numeric scalar values and explicit presentation (JSON)
+    Codepoints(crate::valuescmd::Codepoints),
+    /// Per-word values, explicit tables and checked sums (JSON)
+    WordValues(crate::valuescmd::WordValues),
     /// Signed shared/per-word positions and explicit short-word omission records (JSON)
     WordExtract(crate::wordcmd::Args),
     /// Retained scalar ring with explicit cyclic steps/count, JSON provenance
@@ -199,6 +205,9 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::WordLengths(input) => return crate::valuescmd::lengths(input, output),
+        TextCommand::Codepoints(args) => return crate::valuescmd::codepoints(args, output),
+        TextCommand::WordValues(args) => return crate::valuescmd::words(args, output),
         TextCommand::WordExtract(args) => return crate::wordcmd::run(args, output),
         TextCommand::KeyedSkip(args) => return crate::traversalcmd::run(args, false, output),
         TextCommand::Josephus(args) => return crate::traversalcmd::run(args, true, output),

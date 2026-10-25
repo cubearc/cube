@@ -902,3 +902,17 @@ These emit JSON with extracted CbUeBnEi, babd and é respectively. The last repo
 retains the skipped request for A. Positive origin is 1 by default; `--index-base
 0` permits zero. Negative positions count from each word's end. See
 [word selection contracts](operations.md#signed-positions-inside-words).
+
+## Numeric text evidence
+
+```sh
+cube text word-lengths --text 'A é'
+cube text codepoints --format unicode --text 'A é'
+cube text word-values --sums --text 'A é'
+cube text word-values --sums --table '[["A",1],["B",2]]' --text AB
+```
+
+All output is JSON, preserving numeric fields and original boundaries. Formats
+for codepoints are decimal, hex and unicode (U+XXXX). Custom tables match exact
+scalars; `--unmapped skip` retains null omissions. `--max-sum` bounds checked sums.
+See [numeric evidence limits](operations.md#numeric-text-evidence).

@@ -929,3 +929,17 @@ Choose exactly one shared or per_word list; booleans/floats and out-of-i64 value
 are rejected. The report preserves original word/scalar/byte coordinates and every
 ordered request, including explicit null omissions. See
 [word extraction bounds](operations.md#signed-positions-inside-words).
+
+## Numeric text evidence
+
+```python
+assert [w["scalar_length"] for w in cube.word_lengths("A é")] == [1, 1]
+assert [c["value"] for c in cube.text_codepoints("A é", format="unicode")] == [65, 32, 233]
+assert [w["sum"] for w in cube.word_values("A é", sums=True)] == [65, 233]
+assert cube.word_values("AB", table=[("A", 1), ("B", 2)], sums=True)[0]["sum"] == 3
+```
+
+Native integers remain exact u32/u64 values; table entries reject booleans/floats.
+Character and word records retain source offsets. Custom tables are exact and
+unmapped defaults to error; `unmapped="skip"` retains null values/omitted counts.
+See [numeric report and sum limits](operations.md#numeric-text-evidence).

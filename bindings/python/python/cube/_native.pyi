@@ -757,3 +757,13 @@ def extract_word_characters(
     index_base: int = 1,
     short_word: str = "error",
 ) -> dict: ...
+def word_lengths(text: str) -> list[dict]: ...
+def text_codepoints(text: str, *, format: str = "decimal") -> list[dict]: ...
+def word_values(
+    text: str,
+    *,
+    table: list[tuple[str, int]] | None = None,
+    unmapped: str = "error",
+    sums: bool = False,
+    max_sum: int = 18446744073709551615,
+) -> list[dict]: ...

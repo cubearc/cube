@@ -23,6 +23,68 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn image_pairs_plan_and_export_reuse_single_pair_contracts() {
+    let files = Files::new("pair-batches");
+    let a = files.path("a.png");
+    let b = files.path("b.png");
+    Image::from_bytes(1, 1, ColorModel::Gray, &[170], &[], &[])
+        .unwrap()
+        .save_png(&a)
+        .unwrap();
+    Image::from_bytes(1, 1, ColorModel::Gray, &[85], &[], &[])
+        .unwrap()
+        .save_png(&b)
+        .unwrap();
+    let result = run(&[
+        "image",
+        "pairs",
+        a.to_str().unwrap(),
+        b.to_str().unwrap(),
+        "--operation",
+        "xor",
+        "--plan",
+    ]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let plan: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(plan["pair_count"], 1);
+    let dir = files.path("pairs");
+    std::fs::create_dir(&dir).unwrap();
+    let args = [
+        "image",
+        "pairs",
+        a.to_str().unwrap(),
+        b.to_str().unwrap(),
+        "--operation",
+        "xor",
+        "--output-dir",
+        dir.to_str().unwrap(),
+        "--json",
+    ];
+    assert!(run(&args).status.success());
+    assert_eq!(
+        Image::open(&dir.join("pair-00-01.png")).unwrap().samples(),
+        [255]
+    );
+    assert!(!run(&args).status.success());
+    assert!(
+        !run(&[
+            "image",
+            "pairs",
+            a.to_str().unwrap(),
+            a.to_str().unwrap(),
+            "--operation",
+            "compare",
+            "--plan"
+        ])
+        .status
+        .success()
+    );
+}
+#[test]
 fn color_layer_exports_have_deterministic_manifests_and_collision_safety() {
     let files = Files::new("color-exports");
     let source = files.path("source.png");

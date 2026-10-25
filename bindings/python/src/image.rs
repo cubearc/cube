@@ -38,6 +38,47 @@ pub struct PyImage {
     pub(super) inner: Image,
 }
 
+#[pyfunction]
+#[pyo3(signature=(images, operation, *, max_pairs=28, max_differences=1000, plan_only=false))]
+pub fn image_pairs(
+    py: Python<'_>,
+    images: &Bound<'_, pyo3::types::PyList>,
+    operation: &str,
+    max_pairs: usize,
+    max_differences: usize,
+    plan_only: bool,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::image::pairs::{self, PairOperation};
+    if images.len() > 8 {
+        return Err(pyo3::exceptions::PyValueError::new_err(
+            "image collection exceeds eight inputs",
+        ));
+    }
+    let images = images
+        .iter()
+        .map(|v| v.extract::<PyRef<'_, PyImage>>().map_err(PyErr::from))
+        .collect::<PyResult<Vec<_>>>()?;
+    let refs: Vec<_> = images.iter().map(|image| &image.inner).collect();
+    let op = PairOperation::parse(operation).map_err(super::file_error)?;
+    if plan_only {
+        return super::structured(
+            py,
+            &serde_json::json!(
+                pairs::plan(&refs, op, max_pairs, max_differences).map_err(super::file_error)?
+            ),
+        );
+    }
+    let batch = pairs::execute(&refs, op, max_pairs, max_differences).map_err(super::file_error)?;
+    let result = super::structured(py, &serde_json::json!(batch))?;
+    for (i, pair) in batch.results.iter().enumerate() {
+        result.bind(py).get_item("results")?.get_item(i)?.set_item(
+            "png",
+            pair.png.as_ref().map(|bytes| PyBytes::new(py, bytes)),
+        )?;
+    }
+    Ok(result)
+}
+
 #[pymethods]
 impl PyImage {
     #[pyo3(signature=(colors=None, *, representation="mask", expand_palette=false, max_colors=16, max_outputs=16))]

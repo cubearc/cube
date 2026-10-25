@@ -477,6 +477,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     binaryops::register(module)?;
     textops::register(module)?;
     module.add_class::<image::PyImage>()?;
+    module.add_function(wrap_pyfunction!(image::image_pairs, module)?)?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_exif, module)?)?;
     module.add_function(wrap_pyfunction!(file_exif, module)?)?;

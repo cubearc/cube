@@ -334,6 +334,17 @@ This operation is available through Rust, CLI and native Python, with no pipelin
 adapter or new image pipeline value. Existing byte XOR and image comparison keep
 their behavior.
 
+`image.pairs` enumerates unique `(i,j), i<j` in caller order, reusing bitwise or
+exact comparison APIs. Empty/single collections yield zero pairs; repeated object
+identities fail (CLI also rejects duplicate canonical paths). Hard limits are eight
+inputs, 28 pairs, 64 MiB retained input samples, 16 Mi pixel-pair work, 64 MiB
+conservative PNG output and 1000 global difference records. All pairs, including
+failed compatibility checks, count toward preflight. PNG bounds use the same
+conservative per-image formula as color exports. The compact manifest is capped
+at 512 KiB. Counts remain exact when difference listings are incomplete.
+Pair errors do not discard other results; filesystem writes reuse the CLI export
+reservation/rollback policy. No generic dispatcher or pipeline collection is added.
+
 `image.colors.export` reuses the complete native-channel histogram and existing
 single-color extraction. It returns canonical `color-<hex>.png` entries and counts;
 absent or duplicate subsets fail. Native indices and physical alpha distinguish

@@ -61,6 +61,7 @@ SDK_BINDINGS = {
     "image.bit_plane.extract": "Image.bit_plane",
     "image.channel.extract": "Image.channel",
     "image.compare": "Image.compare",
+    "image.pairs": "image_pairs",
     "image.bitwise": "Image.bitwise",
     "image.crop": "Image.crop",
     "image.decode": "Image.decode",

@@ -53,6 +53,7 @@ from ._native import (
     grid_factors,
     hex_decode,
     hex_encode,
+    image_pairs,
     inspect_audio_metadata,
     inspect_exif,
     inspect_file,
@@ -107,6 +108,7 @@ from ._native import (
 )
 
 __all__ = [
+    "image_pairs",
     "grid_factors",
     "text_grid",
     "and_bytes",

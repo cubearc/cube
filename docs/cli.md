@@ -269,6 +269,20 @@ PY
 
 ## Analyze an image
 
+Plan exact pair counts before exporting a bounded collection:
+
+```sh
+cube image pairs first.png second.png third.png --operation xor --plan
+mkdir pairs
+cube image pairs first.png second.png third.png --operation xor --output-dir pairs --json
+```
+
+The allowlist is `xor`, `and`, `or`, `compare`; paths are explicit and duplicate
+canonical paths fail. Pairs follow input indexes `(0,1),(0,2),(1,2)`. PNG names use
+`pair-00-01.png`; the manifest includes per-pair errors. A compatibility failure
+retains successful outputs and exits 1; output collisions/write failures roll back
+this invocation's new files. Default output is a concise count summary.
+
 Inspect scalar factor pairs or select exact geometry; grids use tab-separated,
 JSON-quoted cells and LF rows so control characters remain unambiguous:
 

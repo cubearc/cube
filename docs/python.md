@@ -160,6 +160,12 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+`cube.image_pairs([first, second, third], "xor", plan_only=True)` returns budgets
+without pair execution. Omit `plan_only` for results with PNG bytes or, for
+`"compare"`, existing structured comparison reports. Repeated image objects fail;
+distinct images with identical bytes are valid. Per-pair errors remain in results,
+and no files are written. `max_differences` applies across the entire collection.
+
 `cube.grid_factors("ABCDEF")` reports ordered exact scalar-length factors.
 `cube.text_grid("ABCDEF", 3)` returns rows plus quoted-cell text; optional
 `colors={"0": [0,0,0,255], "1": [255,255,255,255]}` returns PNG bytes for a binary

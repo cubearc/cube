@@ -3,6 +3,14 @@
 from os import PathLike
 from typing import Any, BinaryIO
 
+def image_pairs(
+    images: list[Image],
+    operation: str,
+    *,
+    max_pairs: int = 28,
+    max_differences: int = 1000,
+    plan_only: bool = False,
+) -> dict[str, Any]: ...
 def grid_factors(
     text: str, *, drop_whitespace: bool = False, max_candidates: int = 128
 ) -> dict[str, Any]: ...

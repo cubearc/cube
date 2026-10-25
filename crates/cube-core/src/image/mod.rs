@@ -9,6 +9,7 @@ pub mod bitwise;
 pub use bitwise::BitwiseOperation;
 pub mod colors;
 pub mod layers;
+pub mod pairs;
 pub use colors::{ColorLayer, ColorOutput};
 pub mod bits;
 pub mod decode;

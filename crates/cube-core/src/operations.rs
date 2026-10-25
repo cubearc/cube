@@ -297,6 +297,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::image::raw::OPERATIONS)
         .chain(crate::image::colors::OPERATIONS)
         .chain(crate::image::layers::OPERATIONS)
+        .chain(crate::image::pairs::OPERATIONS)
         .chain(crate::image::qr::OPERATIONS)
         .chain(crate::image::analyze::OPERATIONS)
         .chain(crate::image::bitwise::OPERATIONS)

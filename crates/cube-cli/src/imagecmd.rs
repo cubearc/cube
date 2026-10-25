@@ -6,6 +6,7 @@ use cube_core::{
 };
 use std::{error::Error, io::Write, path::PathBuf};
 mod output;
+mod pairs;
 
 #[derive(Args)]
 pub(crate) struct ViewOptions {
@@ -173,6 +174,8 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Plan/execute bounded explicit pairs using existing single-pair operations
+    Pairs(pairs::PairArgs),
     /// Export exact-color PNGs and manifest.json into an existing directory
     ColorLayers {
         path: PathBuf,
@@ -435,6 +438,7 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Pairs(args) => pairs::run(args, output)?,
         ImageCommand::ColorLayers {
             path,
             colors,

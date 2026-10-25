@@ -9,6 +9,29 @@ import pytest
 from cube import _native
 
 
+def test_image_pair_batches_are_bounded_ordered_and_native():
+    images = [cube.Image.from_samples(1, 1, "gray", bytes([i])) for i in range(3)]
+    assert cube.image_pairs([], "xor", plan_only=True)["pair_count"] == 0
+    batch = cube.image_pairs(images, "xor")
+    assert [(r["left"], r["right"]) for r in batch["results"]] == [
+        (0, 1),
+        (0, 2),
+        (1, 2),
+    ]
+    assert [cube.Image.decode(r["png"]).samples for r in batch["results"]] == [
+        b"\x01",
+        b"\x02",
+        b"\x03",
+    ]
+    compared = cube.image_pairs(images, "compare", max_differences=1)
+    assert compared["retained_differences"] == 1
+    assert compared["results"][2]["comparison"]["complete"] is False
+    with pytest.raises(ValueError):
+        cube.image_pairs([images[0], images[0]], "xor")
+    with pytest.raises(ValueError):
+        cube.image_pairs(images, "xor", max_pairs=2)
+
+
 def test_color_layers_have_exact_masks_and_bounded_canonical_manifests():
     image = cube.Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 1, 2, 3, 255]))
     report = image.color_layers()

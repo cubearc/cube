@@ -44,6 +44,7 @@ SDK_BINDINGS = {
     "image.compare": "Image.compare",
     "image.crop": "Image.crop",
     "image.decode": "Image.decode",
+    "image.colors.extract": "Image.exact_colors",
     "image.raw.interpret": "Image.from_raw",
     "image.encode": "Image.encode_png",
     "image.grayscale": "Image.grayscale",

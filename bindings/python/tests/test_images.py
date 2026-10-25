@@ -25,6 +25,28 @@ def bmp_bytes():
     return header + dib + pixels
 
 
+def test_exact_color_masks_layers_alpha_and_indexed_semantics(tmp_path):
+    image = cube.Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 1, 2, 3, 255]))
+    result = image.exact_colors([[1, 2, 3, 0]])
+    assert result["selected_pixels"] == 1
+    assert result["image"].samples == b"\xff\0"
+    layer = image.exact_colors([[1, 2, 3, 0]], representation="layer")["image"]
+    assert layer.samples == bytes([1, 2, 3, 0, 0, 0, 0, 0])
+    layer.save_png(tmp_path / "layer.png")
+    assert cube.Image.open(tmp_path / "layer.png").samples == layer.samples
+    indexed = cube.Image.from_samples(
+        2, 1, "indexed", b"\0\x01", [[1, 2, 3], [1, 2, 3]]
+    )
+    assert indexed.exact_colors([[0]])["selected_pixels"] == 1
+    assert (
+        indexed.exact_colors([[1, 2, 3, 255]], expand_palette=True)["selected_pixels"]
+        == 2
+    )
+    for colors in [[], [[1, 2, 3]], [[0] * 5], [[0] * 4] * 257]:
+        with pytest.raises(ValueError):
+            image.exact_colors(colors)
+
+
 def test_explicit_raw_layout_preserves_samples_and_checks_extent(tmp_path):
     data = b"xx" + bytes([3, 2, 1, 99, 6, 5, 4, 88])
     image = cube.Image.from_raw(data, 1, 2, "bgr", row_stride=4, offset=2)

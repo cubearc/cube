@@ -225,6 +225,14 @@ is needed for one-byte samples. The ordinary image/input budgets apply. The resu
 uses canonical gray/RGB/RGBA samples, with lossless PNG export to a new file.
 Raw images use direct APIs; no pipeline image value is introduced.
 
+Exact-color selection matches complete native tuples, including physical alpha.
+Select 1..=256 distinct colors. Masks preserve coordinates and use 255 for selected
+pixels, zero elsewhere; RGBA layers keep selected original colors/alpha (including
+tRNS) and use transparent black elsewhere. Transparent selected pixels still count
+and retain their color bytes. Native indexed selection matches indices; explicitly
+expand the palette to select RGBA colors, which can match multiple duplicate palette
+entries. No fuzzy matching or hidden-message inference is performed.
+
 Rotation, mirroring and channel permutations rearrange samples reversibly;
 inversion preserves alpha unless selected. Cropping discards pixels and grayscale
 conversion loses color. Saved PNGs retain samples/palette/transparency but drop

@@ -168,6 +168,9 @@ Raw layouts are explicit and preserve source buffers:
 ```python
 raw = cube.Image.from_raw(bytes([3, 2, 1, 0, 6, 5, 4, 0]), 1, 2, "bgr", row_stride=4)
 assert raw.pixel(0, 1) == [4, 5, 6]
+mask = raw.exact_colors([[4, 5, 6]])
+assert mask["selected_pixels"] == 1
+assert mask["image"].samples == b"\x00\xff"
 ```
 
 Structured results can contain native `bytes` or `Image` objects, so they are not

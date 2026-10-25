@@ -100,6 +100,13 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    def exact_colors(
+        self,
+        colors: list[list[int]],
+        *,
+        representation: str = "mask",
+        expand_palette: bool = False,
+    ) -> dict[str, Any]: ...
     @staticmethod
     def from_raw(
         data: bytes,

@@ -23,6 +23,39 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn exact_color_exports_have_known_masks_and_preserve_sources() {
+    let files = Files::new("colors");
+    let path = files.path("source.png");
+    let output = files.path("mask.png");
+    let image = Image::from_bytes(
+        2,
+        1,
+        ColorModel::Rgba,
+        &[1, 2, 3, 0, 1, 2, 3, 255],
+        &[],
+        &[],
+    )
+    .unwrap();
+    image.save_png(&path).unwrap();
+    let original = std::fs::read(&path).unwrap();
+    let args = [
+        "image",
+        "colors",
+        path.to_str().unwrap(),
+        "--colors",
+        "01020300",
+        "--output",
+        output.to_str().unwrap(),
+    ];
+    let result = run(&args);
+    assert!(result.status.success());
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["selected_pixels"], 1);
+    assert_eq!(Image::open(&output).unwrap().samples(), [255, 0]);
+    assert!(!run(&args).status.success());
+    assert_eq!(std::fs::read(path).unwrap(), original);
+}
+#[test]
 fn raw_layout_preview_export_and_collision_preserve_input() {
     let files = Files::new("raw");
     let path = files.path("pixels.bin");

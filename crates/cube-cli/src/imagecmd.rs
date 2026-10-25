@@ -126,6 +126,18 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Export a mask or RGBA layer for exact native colors (hex sample tuples)
+    Colors {
+        path: PathBuf,
+        #[arg(long, value_delimiter = ',', required = true)]
+        colors: Vec<String>,
+        #[arg(long, default_value = "mask")]
+        representation: String,
+        #[arg(long)]
+        expand_palette: bool,
+        #[arg(long)]
+        output: PathBuf,
+    },
     /// Inspect an explicit raw 8-bit layout; optionally export a new PNG
     Raw {
         path: PathBuf,
@@ -322,6 +334,29 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Colors {
+            path,
+            colors,
+            representation,
+            expand_palette,
+            output: destination,
+        } => {
+            if colors.len() > 256 || colors.iter().any(|s| s.len() > 8) {
+                return Err(
+                    "select at most 256 colors, each containing at most four hex bytes".into(),
+                );
+            }
+            let colors = colors
+                .iter()
+                .map(|s| cube_core::encoding::hex_decode(s))
+                .collect::<Result<Vec<_>, _>>()?;
+            let image = Image::open(&path)?;
+            let result = image
+                .view(expand_palette)?
+                .exact_colors(&colors, image::ColorOutput::parse(&representation)?)?;
+            result.image.save_png(&destination)?;
+            writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+        }
         ImageCommand::Raw {
             path,
             width,

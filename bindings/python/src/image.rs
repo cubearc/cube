@@ -40,6 +40,51 @@ pub struct PyImage {
 
 #[pymethods]
 impl PyImage {
+    #[pyo3(signature=(colors, *, representation="mask", expand_palette=false))]
+    fn exact_colors(
+        &self,
+        py: Python<'_>,
+        colors: &Bound<'_, pyo3::types::PyList>,
+        representation: &str,
+        expand_palette: bool,
+    ) -> PyResult<Py<PyAny>> {
+        if colors.is_empty() || colors.len() > 256 {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "select 1..=256 exact colors",
+            ));
+        }
+        let colors = colors
+            .iter()
+            .map(|c| {
+                if c.len()? > 4 {
+                    return Err(pyo3::exceptions::PyValueError::new_err(
+                        "each color has at most four samples",
+                    ));
+                }
+                c.extract::<Vec<u8>>()
+            })
+            .collect::<PyResult<Vec<_>>>()?;
+        let result = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .exact_colors(
+                &colors,
+                cube_core::image::ColorOutput::parse(representation).map_err(super::file_error)?,
+            )
+            .map_err(super::file_error)?;
+        let output = super::structured(py, &serde_json::json!(result))?;
+        output.bind(py).set_item(
+            "image",
+            Py::new(
+                py,
+                Self {
+                    inner: result.image,
+                },
+            )?,
+        )?;
+        Ok(output)
+    }
     #[staticmethod]
     #[pyo3(signature=(data, width, height, layout, *, row_stride=None, offset=0))]
     fn from_raw(

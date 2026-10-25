@@ -213,6 +213,7 @@ PY
 ```sh
 cube image inspect sample.png --json
 cube image histogram sample.png --channels red,green,blue --json
+cube image colors sample.png --colors 020000 --output exact-mask.png
 cube image channel sample.png --channel red --output red.bin
 cube image rotate sample.png --degrees 90 --output rotated.png
 cube image lsb sample.png --channels red --bits 0 --stdout > extracted.bin

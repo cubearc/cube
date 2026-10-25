@@ -74,7 +74,41 @@ pub(super) fn input(py: Python<'_>, value: &Bound<'_, PyAny>) -> PyResult<Value>
         }
         Value::Text { data: text.into() }
     } else if value.is_instance_of::<PyDict>() {
-        pipeline::json::value(&json_text(py, value)?).map_err(|e| error(py, e))?
+        // Only the concrete hex report has nested binary fields. Preserve the
+        // existing strict scalar behavior for every other tagged input.
+        let copy = value.cast::<PyDict>()?.copy()?;
+        if copy
+            .get_item("type")?
+            .and_then(|v| v.extract::<String>().ok())
+            .as_deref()
+            == Some("forensic_report")
+            && let Some(data) = copy.get_item("data")?
+            && let Ok(data) = data.cast::<PyDict>()
+            && data
+                .get_item("kind")?
+                .and_then(|v| v.extract::<String>().ok())
+                .as_deref()
+                == Some("hex")
+            && let Some(rows) = data.get_item("rows")?
+        {
+            let data = data.copy()?;
+            let converted = PyList::empty(py);
+            for row in rows.try_iter()? {
+                let row = row?.cast::<PyDict>()?.copy()?;
+                if let Some(bytes) = row.get_item("bytes")?
+                    && let Ok(bytes) = bytes.cast::<PyBytes>()
+                {
+                    row.set_item(
+                        "bytes",
+                        cube_core::encoding::base64_encode(bytes.as_bytes()),
+                    )?;
+                }
+                converted.append(row)?;
+            }
+            data.set_item("rows", converted)?;
+            copy.set_item("data", data)?;
+        }
+        pipeline::json::value(&json_text(py, copy.as_any())?).map_err(|e| error(py, e))?
     } else {
         return Err(pyo3::exceptions::PyTypeError::new_err(
             "pipeline input must be bytes, str or an explicit tagged value dict",
@@ -87,6 +121,18 @@ pub(super) fn output(py: Python<'_>, value: &Value) -> PyResult<Py<PyAny>> {
         Value::Bytes { data } => Ok(PyBytes::new(py, data).into_any().unbind()),
         Value::Text { data } => Ok(PyString::new(py, data).into_any().unbind()),
         Value::ByteRange { .. } => super::structured(py, &serde_json::json!(value)),
+        Value::ForensicReport { data } => {
+            let result = super::structured(py, &serde_json::json!(value))?;
+            if let pipeline::ForensicReport::Hex { rows } = data {
+                let records = result.bind(py).get_item("data")?.get_item("rows")?;
+                for (i, row) in rows.iter().enumerate() {
+                    records
+                        .get_item(i)?
+                        .set_item("bytes", PyBytes::new(py, &row.bytes))?;
+                }
+            }
+            Ok(result)
+        }
     }
 }
 pub(super) fn execution(py: Python<'_>, result: &pipeline::Execution) -> PyResult<Py<PyAny>> {

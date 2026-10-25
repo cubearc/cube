@@ -10,6 +10,7 @@ pub enum Kind {
     Bytes,
     Text,
     ByteRange,
+    ForensicReport,
 }
 impl std::str::FromStr for Kind {
     type Err = Error;
@@ -18,7 +19,11 @@ impl std::str::FromStr for Kind {
             "bytes" => Ok(Self::Bytes),
             "text" => Ok(Self::Text),
             "byte_range" => Ok(Self::ByteRange),
-            _ => Err(invalid("type must be bytes, text or byte_range").parameter("input_type")),
+            "forensic_report" => Ok(Self::ForensicReport),
+            _ => Err(
+                invalid("type must be bytes, text, byte_range or forensic_report")
+                    .parameter("input_type"),
+            ),
         }
     }
 }
@@ -36,6 +41,9 @@ pub enum Value {
         offset: u64,
         length: Option<u64>,
     },
+    ForensicReport {
+        data: super::ForensicReport,
+    },
 }
 impl Value {
     pub fn kind(&self) -> Kind {
@@ -43,6 +51,7 @@ impl Value {
             Self::Bytes { .. } => Kind::Bytes,
             Self::Text { .. } => Kind::Text,
             Self::ByteRange { .. } => Kind::ByteRange,
+            Self::ForensicReport { .. } => Kind::ForensicReport,
         }
     }
     /// Logical budget units: exact byte/UTF-8 length or 16 bytes for a byte range.
@@ -51,6 +60,7 @@ impl Value {
             Self::Bytes { data } => data.len(),
             Self::Text { data } => data.len(),
             Self::ByteRange { .. } => 16,
+            Self::ForensicReport { data } => data.size(),
         }
     }
     pub fn validate(&self, maximum: usize) -> Result<(), Error> {
@@ -59,6 +69,9 @@ impl Value {
                 ErrorCode::ResourceLimit,
                 "value exceeds byte budget",
             ));
+        }
+        if let Self::ForensicReport { data } = self {
+            data.validate()?;
         }
         if let Self::ByteRange {
             offset,

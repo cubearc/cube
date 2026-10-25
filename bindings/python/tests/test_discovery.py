@@ -117,6 +117,6 @@ def test_discovery_pipeline_support_matches_real_adapters_and_preflight():
                     [{"operation": operation, "version": 1}], "bytes"
                 )
     assert cube.describe_operation("encoding.hex.encode")["pipeline"] == {"version": 1}
-    assert cube.describe_operation("file.signature.detect")["pipeline"] is None
+    assert cube.describe_operation("file.info.inspect")["pipeline"] is None
     with pytest.raises(ValueError, match="unknown operation ID"):
         cube.describe_operation("missing.operation")

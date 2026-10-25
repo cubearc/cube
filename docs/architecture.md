@@ -126,3 +126,13 @@ Introduce shared FFI machinery only when an implemented binding demonstrates a
 concrete need. A plugin runtime, distributed workflows and visual workbench are
 not implemented; future privileged extensions need a separate compatibility,
 permission, sandboxing and resource-limit design.
+
+The `forensic_report` pipeline value is a closed enum of owned signature, hex and
+printable-string snapshots. It exists to preserve structured evidence without
+turning it into UTF-8 text or an arbitrary JSON value. Reader-based inspections
+use an explicit bytes-to-report adapter contract over `Cursor`; direct descriptors
+and APIs retain their original types. Adapter listings declare these kinds.
+Conservative output/work/capture estimates run before algorithms. Existing values,
+recipes and adapter versions retain their behavior; exhaustive Rust matches on
+`Kind`/`Value` must handle the new report variant. Report deserialization validates
+budgets and internal range/data consistency; caller-supplied evidence is still data.

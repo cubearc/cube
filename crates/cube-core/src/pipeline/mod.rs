@@ -1,11 +1,13 @@
 //! Small explicit linear composition boundary; no file, shell, network or plugin capabilities.
 mod adapters;
 mod execute;
+mod forensic;
 pub mod json;
 pub mod recipe;
 mod value;
 use crate::errors::{ErrorCode, OperationError};
 pub use execute::Execution;
+pub use forensic::{ForensicReport, HexEvidence, SignatureEvidence, StringEvidence};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, error::Error as StdError, fmt};
 pub use value::{Kind, Parameter, Value};
@@ -241,11 +243,33 @@ impl Plan {
         }
     }
 }
-#[derive(Serialize)]
 pub struct AdapterInfo {
     pub operation: &'static str,
     pub version: u32,
     pub descriptor: &'static crate::operations::Descriptor,
+}
+impl AdapterInfo {
+    /// Pipeline kinds may adapt a direct reader API to an owned byte buffer.
+    pub fn kinds(&self) -> Result<(Kind, Kind), Error> {
+        adapters::ADAPTERS
+            .iter()
+            .find(|a| a.id == self.operation)
+            .ok_or_else(|| invalid("unknown adapter"))?
+            .kinds()
+    }
+}
+impl Serialize for AdapterInfo {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct;
+        let (input, output) = self.kinds().map_err(serde::ser::Error::custom)?;
+        let mut state = serializer.serialize_struct("AdapterInfo", 5)?;
+        state.serialize_field("operation", self.operation)?;
+        state.serialize_field("version", &self.version)?;
+        state.serialize_field("descriptor", self.descriptor)?;
+        state.serialize_field("input_type", &input)?;
+        state.serialize_field("output_type", &output)?;
+        state.end()
+    }
 }
 /// Exact contract version for an allowed bounded adapter, or `None` for a
 /// catalog-only/unknown operation. Discovery does not grant execution capability;

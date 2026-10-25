@@ -271,3 +271,15 @@ Fields include `code`, `message`, `operation`, `parameter` and byte `offset`;
 unavailable context is `null`. Pipeline errors also identify the zero-based
 `step`. Codes include `invalid_input`, `invalid_parameter`, `unsupported_format`,
 `resource_limit`, `cancelled`, `io`, and CLI-only `invalid_usage`.
+
+### Compose a forensic inspection
+
+Decode exact bytes, then inspect their rows while retaining the decoded intermediate:
+
+```sh
+cube pipeline run --text '00ff' --steps '[{"operation":"encoding.hex.decode","version":1},{"operation":"file.hex.inspect","version":1,"parameters":{"width":1}}]' --capture 0 --format json
+```
+
+The final value is a typed forensic report; row offsets stay numeric and row bytes
+use base64 in JSON. `--format raw` rejects structured reports. The file is supplied
+by the caller or CLI input selector; steps never contain paths.

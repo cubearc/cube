@@ -187,3 +187,30 @@ fn appended_gif_reports_exact_bounds_without_modifying_source() {
     assert_eq!(json["trailing_bytes"], 4);
     assert_eq!(std::fs::read(&path).unwrap(), gif);
 }
+#[test]
+fn zip_candidate_validation_is_distinct_from_signature_detection() {
+    let files = Files::new("zip-validation");
+    let path = files.path("host");
+    let mut bytes = b"hostPK\x05\x06".to_vec();
+    bytes.extend([0; 18]);
+    bytes.extend(b"tail");
+    std::fs::write(&path, &bytes).unwrap();
+    let r = run(&[
+        "file",
+        "zip",
+        path.to_str().unwrap(),
+        "--offset",
+        "4",
+        "--json",
+    ]);
+    assert!(r.status.success(), "{}", String::from_utf8_lossy(&r.stderr));
+    let report: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(report["length"], 22);
+    assert_eq!(report["trailing_bytes"], 4);
+    assert_eq!(report["payload_verified"], false);
+    assert_eq!(std::fs::read(&path).unwrap(), bytes);
+    std::fs::write(&path, b"PK\x03\x04false").unwrap();
+    let r = run(&["file", "zip", path.to_str().unwrap(), "--json"]);
+    assert!(!r.status.success());
+    assert!(r.stdout.is_empty());
+}

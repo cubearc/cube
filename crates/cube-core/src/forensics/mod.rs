@@ -10,6 +10,7 @@ pub mod inspect;
 pub mod png;
 pub mod ranges;
 pub mod signatures;
+pub mod zip;
 
 use crate::errors::{ErrorCode, OperationError};
 use serde::Serialize;

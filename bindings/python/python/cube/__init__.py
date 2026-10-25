@@ -58,6 +58,8 @@ from ._native import (
     utf8_encode,
     validate_pipeline,
     validate_recipe,
+    validate_zip,
+    validate_zip_file,
     vigenere_decode,
     vigenere_encode,
     wave_envelope,
@@ -68,6 +70,8 @@ from ._native import (
 )
 
 __all__ = [
+    "validate_zip",
+    "validate_zip_file",
     "CancellationToken",
     "InvestigationSession",
     "investigate",

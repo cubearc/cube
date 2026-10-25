@@ -143,3 +143,10 @@ record cap; they do not allocate decoded images. The existing PNG boundary struc
 and descriptor type name are retained for compatibility. Rules follow the
 [GIF89a specification](https://www.w3.org/Graphics/GIF/spec-gif89a.txt) and the
 supported baseline subset of [ITU T.81](https://www.w3.org/Graphics/JPEG/itu-t81.pdf).
+
+`forensics::zip` checks a documented classic single-disk structural subset from
+[PKWARE APPNOTE](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT).
+A bounded prefix and cumulative candidate/header/metadata budgets prevent repeated
+EOCD decoys from causing unbounded parsing. Local extents are checked against the
+central directory and sorted for overlap/gap rejection. `boundaries` reuses the
+validator; no archive decompressor, entry execution or second ZIP parser is added.

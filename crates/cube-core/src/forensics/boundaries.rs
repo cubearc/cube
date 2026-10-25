@@ -78,7 +78,7 @@ fn unsupported(message: &str) -> OperationError {
 }
 
 /// Detect the logical end of strict PNG framing, baseline sequential Huffman
-/// JPEG, or GIF raster framing. At most 64 MiB and 10000 framing records are
+/// JPEG, or GIF raster framing; ZIP reuses the separate validator. At most 64 MiB and 10000 framing records are
 /// traversed. Compressed pixels/entropy codes are not validated. Unsupported
 /// JPEG processes and GIF plain-text rendering are explicit errors.
 /// PNG returns the existing report unchanged; `validated_chunks` counts framing
@@ -94,6 +94,17 @@ pub fn inspect(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationErr
         if n == 8 && &header == b"\x89PNG\r\n\x1a\n" {
             return super::png::appended(reader);
         }
+        if n >= 4 && (&header[..4] == b"PK\x03\x04" || &header[..4] == b"PK\x05\x06") {
+            let archive = super::zip::validate(reader, 0)?;
+            return Ok(Boundary {
+                format: "zip",
+                logical_end: archive.logical_end,
+                trailing_offset: archive.logical_end,
+                trailing_bytes: archive.trailing_bytes,
+                validated_chunks: archive.entries.len() * 2 + 1,
+                evidence: archive.evidence,
+            });
+        }
         let mut f = Framing {
             reader: BufReader::new(reader),
             pos: 0,
@@ -106,7 +117,7 @@ pub fn inspect(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationErr
             gif(&mut f)
         } else {
             Err(unsupported(
-                "boundary inspection supports PNG, baseline JPEG and GIF framing",
+                "boundary inspection supports PNG, baseline JPEG, GIF and classic ZIP framing",
             ))
         }
     })();
@@ -425,7 +436,7 @@ fn jpeg(f: &mut Framing<impl Read + Seek>) -> Result<Boundary, OperationError> {
 pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::Descriptor {
     id: "file.appended.detect",
     category: "file",
-    description: "Find trailing bytes after supported PNG, baseline JPEG or GIF framing; no pixel/entropy decoding.",
+    description: "Find trailing bytes after supported PNG, baseline JPEG, GIF or classic ZIP framing; no pixel/entropy decoding.",
     input_type: "byte_reader",
     output_type: "file.png_boundary",
     command: "file appended",

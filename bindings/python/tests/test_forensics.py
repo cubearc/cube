@@ -200,3 +200,30 @@ def test_appended_gif_framing_and_malformed_inputs(tmp_path):
         with pytest.raises(ValueError) as error:
             cube.appended_data(path)
         assert error.value.operation == "file.appended.detect"
+
+
+def test_embedded_zip_structure_uses_exact_candidate_origin(tmp_path):
+    import zipfile
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("sample.bin", b"Cube\0\xff")
+        archive.comment = b"decoy PK\x05\x06 comment"
+    encoded = buffer.getvalue()
+    source = b"host" + encoded + b"tail"
+    path = tmp_path / "artifact"
+    path.write_bytes(source)
+    report = cube.validate_zip(source, offset=4)
+    assert cube.validate_zip_file(path, offset=4) == report
+    assert report["length"] == len(encoded)
+    assert report["offset"] == 4
+    assert report["trailing_bytes"] == 4
+    assert report["payload_verified"] is False
+    assert report["entries"][0]["name_hex"] == b"sample.bin".hex()
+    assert report["entries"][0]["method"] == 8
+    assert path.read_bytes() == source
+    for bad in [encoded[:-1], b"PK\x03\x04false", b"unknown"]:
+        with pytest.raises(ValueError) as error:
+            cube.validate_zip(bad)
+        assert error.value.operation == "file.zip.validate"
+    assert cube.describe_operation("file.zip.validate")["pipeline"] is None

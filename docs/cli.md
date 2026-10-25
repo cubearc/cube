@@ -295,3 +295,17 @@ cube file appended sample.gif --json
 Read `evidence` for the validation scope. Supported JPEG/GIF framing is checked
 without decoding compressed pixels; an unsupported feature fails explicitly.
 The same command preserves existing strict PNG framing/CRC behavior.
+
+### Validate an embedded ZIP
+
+First locate candidate offsets, then select one explicitly:
+
+```sh
+cube file embedded sample.bin --format zip --json
+cube file zip sample.bin --offset 128 --json
+```
+
+A PK signature alone is a candidate. Validation reports exact archive bounds,
+entry offsets and verification limits; it does not decompress files or verify
+payload CRCs. Unsupported ZIP features fail explicitly. Use the reported range
+with an explicit extraction command when recovery is intended.

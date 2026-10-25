@@ -95,6 +95,58 @@ The JSON row's `hex` is `00ff`: two original bytes, not the four characters
 global output switch. [CLI output handling](cli.md#choose-an-output-format)
 explains the conventions for other command groups.
 
+## Recover an embedded file
+
+Run this example in a new scratch directory. Python's standard library creates
+an original ZIP fixture; Cube performs the investigation and recovery:
+
+```sh
+python - <<'PYTHON'
+import io
+import zipfile
+from pathlib import Path
+
+buffer = io.BytesIO()
+with zipfile.ZipFile(buffer, "w") as archive:
+    info = zipfile.ZipInfo("note.txt", (1980, 1, 1, 0, 0, 0))
+    info.create_system = 3
+    info.external_attr = 0o600 << 16
+    archive.writestr(info, b"Cube\x00\xff")
+encoded = buffer.getvalue()
+assert len(encoded) == 120
+Path("mystery.bin").write_bytes(b"CubeArc\x00" + encoded + b"\x00tail")
+PYTHON
+cube inspect mystery.bin --json
+cube file hex mystery.bin --length 32 --json
+cube file strings mystery.bin --json
+cube file embedded mystery.bin --format zip --json
+cube file zip mystery.bin --offset 8 --json
+cube file carve mystery.bin --offset 8 --output recovered.zip --json
+cube file extract mystery.bin --offset 8 --length 120 --output selected-range.zip
+```
+
+The host's unknown header is an observation. The PK match at offset 8 is a
+candidate; ZIP structure validation establishes the supported archive range
+`[8, 128)`, with five trailing bytes. Other PK matches are not automatically
+independent valid archives. The report states that payload CRCs and compressed
+content were not verified. Recovery revalidates framing, writes a new file and
+returns provenance including SHA-256; the explicit range copy produces the same
+120 bytes. Existing destinations are rejected and `mystery.bin` is unchanged.
+Nothing is decompressed or executed.
+
+For an encoded hint, compose compatible operations and retain the decoded bytes:
+
+```sh
+cube pipeline run --text '504b0304' --steps '[{"operation":"encoding.hex.decode","version":1},{"operation":"file.signature.detect","version":1}]' --capture 0 --format json
+```
+
+The final typed report contains a ZIP signature candidate; capture 0 contains the
+exact decoded bytes. A signature remains evidence, not structural validation.
+Use the [Python recovery example](python.md#validate-and-recover-an-embedded-zip)
+for the same workflow without parsing terminal text, and the
+[Operations Guide](operations.md#validate-a-zip-candidate) for limits and unsupported
+ZIP variants.
+
 ## Continue
 
 - Use `cube --help` or a nested command's `--help` for arguments.

@@ -44,6 +44,28 @@ transformations stay in their owning modules. Responsibilities include:
 Resource bounds and unsupported formats belong beside the implementation; the
 [Operations Guide](operations.md) summarizes those affecting users.
 
+`forensics::boundaries` dispatches supported image framing and reuses strict PNG
+inspection. JPEG/GIF parsers use bounded buffered readers, checked extents and a
+record cap; they do not allocate decoded images. The existing PNG boundary struct
+and descriptor type name are retained for compatibility. Rules follow the
+[GIF89a specification](https://www.w3.org/Graphics/GIF/spec-gif89a.txt) and the
+supported baseline subset of [ITU T.81](https://www.w3.org/Graphics/JPEG/itu-t81.pdf).
+
+`forensics::zip` checks a documented classic single-disk structural subset from
+[PKWARE APPNOTE](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT).
+A bounded prefix and cumulative candidate/header/metadata budgets prevent repeated
+EOCD decoys from causing unbounded parsing. Local extents are checked against the
+central directory and sorted for overlap/gap rejection. `boundaries` reuses the
+validator; no archive decompressor, entry execution or second ZIP parser is added.
+
+`forensics::carving` validates an explicit origin through a checked relative
+reader, then reuses `copy_range` for exclusive output. A small writer adapter
+computes the recovered content's SHA-256 while bytes stream. Provenance contains
+ranges/evidence/digest without automatically persisting source paths or content in
+sessions. Filesystem I/O stays outside recipes; caller-selected raw ranges never
+acquire a format-validation claim. Metadata changes trigger new-output cleanup;
+source stability remains a caller responsibility rather than a snapshot guarantee.
+
 ## Metadata and discovery
 
 Static descriptors live beside operations and are assembled by
@@ -97,6 +119,16 @@ adapter versions are explicit contracts. Recipe input slots hold caller-supplied
 values and confer no I/O capability. Community definitions/examples belong in
 `cubearc/recipes`, with independent compatibility checks and no copied algorithms.
 
+The `forensic_report` pipeline value is a closed enum of owned signature, hex and
+printable-string snapshots. It exists to preserve structured evidence without
+turning it into UTF-8 text or an arbitrary JSON value. Reader-based inspections
+use an explicit bytes-to-report adapter contract over `Cursor`; direct descriptors
+and APIs retain their original types. Adapter listings declare these kinds.
+Conservative output/work/capture estimates run before algorithms. Existing values,
+recipes and adapter versions retain their behavior; exhaustive Rust matches on
+`Kind`/`Value` must handle the new report variant. Report deserialization validates
+budgets and internal range/data consistency; caller-supplied evidence is still data.
+
 ## Investigations
 
 `investigation` reuses signature evidence, the available catalog and existing
@@ -126,35 +158,3 @@ Introduce shared FFI machinery only when an implemented binding demonstrates a
 concrete need. A plugin runtime, distributed workflows and visual workbench are
 not implemented; future privileged extensions need a separate compatibility,
 permission, sandboxing and resource-limit design.
-
-The `forensic_report` pipeline value is a closed enum of owned signature, hex and
-printable-string snapshots. It exists to preserve structured evidence without
-turning it into UTF-8 text or an arbitrary JSON value. Reader-based inspections
-use an explicit bytes-to-report adapter contract over `Cursor`; direct descriptors
-and APIs retain their original types. Adapter listings declare these kinds.
-Conservative output/work/capture estimates run before algorithms. Existing values,
-recipes and adapter versions retain their behavior; exhaustive Rust matches on
-`Kind`/`Value` must handle the new report variant. Report deserialization validates
-budgets and internal range/data consistency; caller-supplied evidence is still data.
-
-`forensics::boundaries` dispatches supported image framing and reuses strict PNG
-inspection. JPEG/GIF parsers use bounded buffered readers, checked extents and a
-record cap; they do not allocate decoded images. The existing PNG boundary struct
-and descriptor type name are retained for compatibility. Rules follow the
-[GIF89a specification](https://www.w3.org/Graphics/GIF/spec-gif89a.txt) and the
-supported baseline subset of [ITU T.81](https://www.w3.org/Graphics/JPEG/itu-t81.pdf).
-
-`forensics::zip` checks a documented classic single-disk structural subset from
-[PKWARE APPNOTE](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT).
-A bounded prefix and cumulative candidate/header/metadata budgets prevent repeated
-EOCD decoys from causing unbounded parsing. Local extents are checked against the
-central directory and sorted for overlap/gap rejection. `boundaries` reuses the
-validator; no archive decompressor, entry execution or second ZIP parser is added.
-
-`forensics::carving` validates an explicit origin through a checked relative
-reader, then reuses `copy_range` for exclusive output. A small writer adapter
-computes the recovered content's SHA-256 while bytes stream. Provenance contains
-ranges/evidence/digest without automatically persisting source paths or content in
-sessions. Filesystem I/O stays outside recipes; caller-selected raw ranges never
-acquire a format-validation claim. Metadata changes trigger new-output cleanup;
-source stability remains a caller responsibility rather than a snapshot guarantee.

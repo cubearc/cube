@@ -142,6 +142,47 @@ must be a stable regular file. Important limits and result meanings:
   The existing PNG report fields and legacy `file.png_boundary` semantic type name
   remain compatible; `validated_chunks` counts framing records for other formats.
 
+### Validate a ZIP candidate
+
+`file zip` / `validate_zip` validates a caller-selected classic ZIP origin. Local
+headers, central-directory records, EOCD counts/offsets, names, CRC/size fields and
+entry extents must agree. Offsets inside the archive are relative to the selected
+origin. Records must be contiguous and nonoverlapping. Stored and deflate methods,
+UTF-8 names/comments and signed 32-bit data descriptors are supported. Encrypted,
+ZIP64, multi-disk, unsigned-descriptor and alternate self-extracting offset variants
+fail explicitly. Names remain inert exact `name_hex` data; nothing is unpacked.
+
+Validation admits at most 16 MiB beyond the selected origin, 64 EOCD candidates,
+1000 entries, 10000 cumulative local/central header visits, 1 MiB metadata and
+64 MiB total declared uncompressed data. `scanned_bytes` and
+`candidate_scan_complete` expose whether the candidate suffix was fully searched;
+competing interpretations outside that prefix are not ruled out. `payload_verified`
+is always false: compressed content, actual CRC integrity and authenticity are not
+verified. `file appended` reuses this same validator for a ZIP at offset zero.
+Boundary/carving requests reject incomplete ZIP searches instead of choosing a
+potentially ambiguous extent. ZIP is available through direct APIs rather than
+the current pipeline report subset.
+
+### Recover selected embedded bytes
+
+`file carve` / `carve_file` requires an explicit offset and a new destination.
+Omit length to revalidate a supported PNG/JPEG/GIF/ZIP candidate at that origin;
+supply length to copy an exact raw range without claiming format validation.
+Candidate validation uses relative reader coordinates, while the report keeps
+absolute source offsets. ZIP candidate carving requires a complete bounded suffix
+search; if that is not possible, choose an explicit known range instead.
+
+The output budget defaults to 16 MiB and can be lowered or raised to the existing
+1 GiB streaming-copy hard limit. Range/size/format checks happen before output
+creation; existing destinations and source aliases are rejected. Copying reuses
+the 64 KiB streaming range API. A new partial output is removed on failure.
+The report includes source size, selected range, bytes written, selection mode,
+format/evidence when validated, and SHA-256 of the exact recovered bytes. This
+identifies content, not trust. Source size/mtime changes during recovery fail;
+callers must keep inputs stable because this is not an atomic filesystem snapshot.
+No paths or bytes are automatically retained in investigation sessions. Nothing is
+decompressed or executed, and source files are opened read-only.
+
 ## Image analysis and steganography
 
 Use `image` operations to inspect PNG structure, compare exact samples or extract
@@ -403,42 +444,3 @@ or changed inputs are explicit failures. Skipped runs stay skipped. Hypotheses a
 not replayed as machine evidence. Digests identify content, not trust, and reports
 are not signed attestations. See [CLI](cli.md#record-an-investigation) and
 [Python](python.md#keep-an-investigation-record) for executable workflows.
-
-### Validate a ZIP candidate
-
-`file zip` / `validate_zip` validates a caller-selected classic ZIP origin. Local
-headers, central-directory records, EOCD counts/offsets, names, CRC/size fields and
-entry extents must agree. Offsets inside the archive are relative to the selected
-origin. Records must be contiguous and nonoverlapping. Stored and deflate methods,
-UTF-8 names/comments and signed 32-bit data descriptors are supported. Encrypted,
-ZIP64, multi-disk, unsigned-descriptor and alternate self-extracting offset variants
-fail explicitly. Names remain inert exact `name_hex` data; nothing is unpacked.
-
-Validation admits at most 16 MiB beyond the selected origin, 64 EOCD candidates,
-1000 entries, 10000 cumulative local/central header visits, 1 MiB metadata and
-64 MiB total declared uncompressed data. `scanned_bytes` and
-`candidate_scan_complete` expose whether the candidate suffix was fully searched;
-competing interpretations outside that prefix are not ruled out. `payload_verified`
-is always false: compressed content, actual CRC integrity and authenticity are not
-verified. `file appended` reuses this same validator for a ZIP at offset zero.
-ZIP is available through direct APIs rather than the current pipeline report subset.
-
-### Recover selected embedded bytes
-
-`file carve` / `carve_file` requires an explicit offset and a new destination.
-Omit length to revalidate a supported PNG/JPEG/GIF/ZIP candidate at that origin;
-supply length to copy an exact raw range without claiming format validation.
-Candidate validation uses relative reader coordinates, while the report keeps
-absolute source offsets. ZIP candidate carving requires a complete bounded suffix
-search; if that is not possible, choose an explicit known range instead.
-
-The output budget defaults to 16 MiB and can be lowered or raised to the existing
-1 GiB streaming-copy hard limit. Range/size/format checks happen before output
-creation; existing destinations and source aliases are rejected. Copying reuses
-the 64 KiB streaming range API. A new partial output is removed on failure.
-The report includes source size, selected range, bytes written, selection mode,
-format/evidence when validated, and SHA-256 of the exact recovered bytes. This
-identifies content, not trust. Source size/mtime changes during recovery fail;
-callers must keep inputs stable because this is not an atomic filesystem snapshot.
-No paths or bytes are automatically retained in investigation sessions. Nothing is
-decompressed or executed, and source files are opened read-only.

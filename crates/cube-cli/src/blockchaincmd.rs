@@ -34,6 +34,24 @@ pub(crate) enum Command {
         #[arg(long)]
         stdout: bool,
     },
+    /// Validate caller-supplied JSON WIF/hex64 candidates without private output
+    #[command(group(clap::ArgGroup::new("candidate_encoding").multiple(false).args(["compressed","uncompressed"])))]
+    Candidates {
+        #[command(flatten)]
+        input: crate::Input,
+        #[arg(long)]
+        derive: Option<String>,
+        #[arg(long)]
+        network: Option<String>,
+        #[arg(long)]
+        compressed: bool,
+        #[arg(long)]
+        uncompressed: bool,
+        #[arg(long)]
+        checksum: Option<String>,
+        #[arg(long)]
+        json: bool,
+    },
     /// Derive public Ethereum address offline using Keccak-256, not SHA3
     Ethereum {
         #[command(flatten)]
@@ -124,6 +142,76 @@ pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn 
                 writeln!(out, "Wrote private output to a new file")?;
             } else {
                 out.write_all(&exported)?;
+            }
+        }
+        Command::Candidates {
+            input,
+            derive,
+            network,
+            compressed,
+            uncompressed,
+            checksum,
+            json,
+        } => {
+            use blockchain::candidates;
+            let mode = candidates::derivation(
+                derive.as_deref(),
+                network.as_deref().map(Network::parse).transpose()?,
+                (compressed || uncompressed).then_some(compressed),
+                checksum.as_deref(),
+            )?;
+            let document = input.read_bounded(
+                candidates::MAX_DOCUMENT_BYTES,
+                "blockchain.candidates.validate",
+            )?;
+            let mut batch =
+                candidates::CandidateBatch::new(candidates::parse_json(&document)?, mode)?;
+            let plan = batch.plan();
+            let results: Vec<_> = batch.by_ref().collect();
+            let progress = batch.progress();
+            if json {
+                let report = serde_json::to_vec_pretty(
+                    &serde_json::json!({"plan":plan,"results":results,"progress":progress}),
+                )?;
+                if report.len() + 1 > plan.max_output_bytes {
+                    return Err(cube_core::errors::OperationError::new(
+                        cube_core::errors::ErrorCode::ResourceLimit,
+                        "candidate result output bound exceeded",
+                    )
+                    .operation("blockchain.candidates.validate")
+                    .into());
+                }
+                out.write_all(&report)?;
+                writeln!(out)?;
+            } else {
+                for result in results {
+                    writeln!(
+                        out,
+                        "Entry {} ({:?}): {}",
+                        result.index,
+                        result.format,
+                        if result.valid { "valid" } else { "invalid" }
+                    )?;
+                    if let Some(public) = result.public_address {
+                        let address = match public {
+                            candidates::PublicAddress::Bitcoin(p) => p.address,
+                            candidates::PublicAddress::Ethereum(p) => p.address,
+                        };
+                        writeln!(out, "  Public address: {address}")?;
+                    }
+                    if let Some(error) = result.error.or(result.address_error) {
+                        writeln!(out, "  {error}")?;
+                    }
+                }
+                writeln!(
+                    out,
+                    "Complete: {}; processed {}; valid {}; invalid {}; public addresses {}",
+                    progress.complete,
+                    progress.processed,
+                    progress.valid,
+                    progress.invalid,
+                    progress.public_derived
+                )?;
             }
         }
         Command::Ethereum {

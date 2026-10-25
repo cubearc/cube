@@ -1120,3 +1120,37 @@ hex digits), also available through a v1 bytes-to-text pipeline adapter.
 pipeline/capture adapter, network calls, wallet functionality or automatic
 persistence. Scalar input handling has the same limits and privacy caveats as
 Bitcoin derivation.
+
+### Bounded key candidates
+
+`blockchain.candidates.validate` checks **caller-supplied**, ordered WIF or strict
+hex64 entries. Unknown format labels produce a fixed `unsupported` classification;
+invalid entries have isolated safe errors. There is no format guessing or candidate
+generation. Duplicate entries retain their original zero-based indexes.
+
+Default results contain validity, fixed scalar/WIF facts, safe errors and progress;
+they contain no input, private bytes, fingerprint or public address. Explicit
+Bitcoin derivation requires network/compression and preserves WIF intent. Explicit
+Ethereum derivation accepts scalar hex; a valid WIF remains valid but has a separate
+`address_error`, matching the single-entry Ethereum transport restriction. Address
+errors never change structural validation counts.
+
+Limits are preflighted before the first result: 256 entries, 128 UTF-8 bytes per
+entry and format label, 32 KiB total material, 1,048,576 input-work units, and 32 entries when public
+derivation is requested. Work is `(bytes + 2)^2` for WIF conversion and `bytes + 1`
+for other entries; curve work has its separate count cap. The conservative JSON
+output bound is `2048 + 2048 * entries` bytes, capped at 1 MiB. CLI JSON transport is
+at most 64 KiB and reuses duplicate-key rejection with depth 16/node 4096 limits;
+only `format` and `value` string fields are accepted.
+
+Rust and Python provide an iterator with a preflight plan and current progress.
+`complete` is false until the final entry is consumed (true for an empty batch).
+Stopping early does not process the remainder or claim complete counts. The CLI
+consumes the bounded batch and returns a complete report; interruption/write
+failure is a failed command, not a successful partial report. Malformed schemas,
+transport Unicode or resource failures reject the whole batch before processing.
+Ordinary invalid candidate content remains an independent result.
+
+There are no pipeline/capture adapters, saved reports, network requests, key search
+or ownership/balance claims. Input copies remain caller-owned; returned safe facts
+and opt-in public addresses can be persisted only by the caller.

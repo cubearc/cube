@@ -13,6 +13,7 @@ SDK_BINDINGS = {
     "blockchain.private.export": "export_private_key",
     "hash.ripemd160": "ripemd160",
     "hash.keccak256": "keccak256",
+    "blockchain.candidates.validate": "validate_key_candidates",
     "blockchain.ethereum.derive": "derive_ethereum_address",
     "blockchain.bitcoin.derive": "derive_bitcoin_address",
     "blockchain.wif.validate": "validate_wif",

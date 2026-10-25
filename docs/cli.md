@@ -757,3 +757,24 @@ cube hash keccak256 --text abc
 `--json` includes only public coordinates/address and checksum choice. Keccak-256
 is not SHA3-256; derivation never queries a chain. WIF is not an Ethereum scalar
 transport. Prefer exact stdin over private material in command-line arguments.
+
+### Validate supplied key candidates
+
+Provide an explicit JSON array of WIF/hex64 entries. This synthetic public test
+input demonstrates one valid scalar and one isolated invalid candidate:
+
+```sh
+printf '[{"format":"hex","value":"%064x"},{"format":"wif","value":"invalid"}]' 1 |
+  cube blockchain candidates --json
+```
+
+The report has stable zero-based indexes, safe structural facts/errors and complete
+counts. Default output omits all input and derived addresses. Add
+`--derive bitcoin --network mainnet --compressed` (or `--uncompressed`) for public
+Bitcoin output; add `--derive ethereum [--checksum eip55|lowercase]` for Ethereum
+from hex scalars. Conflicting WIF intent produces a separate address error while
+preserving its valid classification. Unused context flags are rejected.
+
+The input must fit the [candidate limits](operations.md#bounded-key-candidates).
+No candidate generation, file writes or network access occurs. Prefer stdin;
+command-line text may remain in shell history/process listings.

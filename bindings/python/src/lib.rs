@@ -9,6 +9,7 @@ mod audio;
 mod base58check;
 mod binaryops;
 mod blockchain;
+mod candidates;
 mod combinations;
 mod constants;
 mod image;
@@ -494,6 +495,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     constants::register(module)?;
     base58check::register(module)?;
     blockchain::register(module)?;
+    candidates::register(module)?;
     module.add_class::<image::PyImage>()?;
     module.add_function(wrap_pyfunction!(image::image_pairs, module)?)?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;

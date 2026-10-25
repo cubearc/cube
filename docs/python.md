@@ -755,3 +755,33 @@ Use `format="hex"` for exact hex64 input and `checksum="lowercase"` for lowercas
 text; the default is EIP-55. Byte fields have corresponding exact hex fields.
 Keccak-256 is distinct from SHA3-256. This call returns public data only and
 performs no network access, logging or persistence.
+
+### Validate supplied key candidates incrementally
+
+```python
+import cube
+
+batch = cube.validate_key_candidates([
+    {"format": "hex", "value": f"{1:064x}"},  # public test scalar
+    {"format": "wif", "value": "invalid"},
+])
+assert batch.plan()["entries"] == 2
+first = next(batch)
+assert first["index"] == 0 and first["valid"]
+assert not batch.progress()["complete"]
+assert [entry["valid"] for entry in batch] == [False]
+assert batch.progress()["complete"]
+```
+
+Results contain safe facts/errors and stable indexes. No original/private values
+or addresses are returned by default. Explicit `derive="bitcoin"` requires
+`network` and `compressed`; `derive="ethereum"` accepts hex scalars and optional
+`checksum` (default EIP-55). The batch's public-address fields use exact hex strings,
+matching CLI JSON; single-address APIs additionally offer raw byte fields.
+
+`len(batch)` is the unconsumed count. Stopping early leaves `complete=False`;
+remaining candidates are not processed. Transport/schema/resource errors reject
+the factory call, including unpaired Unicode surrogates without retaining the
+original value in exception attributes. Invalid candidate content yields isolated
+entry errors. All [core limits](operations.md#bounded-key-candidates) also apply to
+native Python; the iterator never generates candidates or accesses the network.

@@ -277,3 +277,80 @@ fn ethereum_and_keccak_cli_preserve_public_bytes_and_errors() {
         b"4e03657aea45a94fc7d47ba826c8d667c0d1e6e33a64a036ec44f58fa12d6c45\n"
     );
 }
+#[test]
+fn candidate_cli_has_safe_defaults_explicit_public_output_and_strict_transport() {
+    let hex = format!("{:064x}", 1);
+    let wif = "KwDiBf89QgGbjEhKnhXJuH7LrciVrZi3qYjgd9M7rFU73sVHnoWn";
+    let entries=serde_json::to_vec(&serde_json::json!([{"format":"wif","value":wif},{"format":"hex","value":hex},{"format":"wif","value":"invalid-private-material"}])).unwrap();
+    let result = run(&["blockchain", "candidates", "--json"], &entries);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let json: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(json["progress"]["valid"], 2);
+    assert_eq!(json["progress"]["invalid"], 1);
+    assert_eq!(json["progress"]["complete"], true);
+    assert!(json["results"][0].get("public_address").is_none());
+    for secret in [wif, &hex, "invalid-private-material"] {
+        assert!(!String::from_utf8_lossy(&result.stdout).contains(secret));
+    }
+    let human = run(&["blockchain", "candidates"], &entries);
+    assert!(human.status.success());
+    assert!(String::from_utf8_lossy(&human.stdout).contains("Complete: true"));
+    let public = run(
+        &[
+            "blockchain",
+            "candidates",
+            "--derive",
+            "bitcoin",
+            "--network",
+            "mainnet",
+            "--compressed",
+            "--json",
+        ],
+        &entries,
+    );
+    assert!(public.status.success());
+    let json: serde_json::Value = serde_json::from_slice(&public.stdout).unwrap();
+    assert_eq!(
+        json["results"][0]["public_address"]["value"]["address"],
+        "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH"
+    );
+    assert_eq!(json["progress"]["public_derived"], 2);
+    let public = run(
+        &["blockchain", "candidates", "--derive", "ethereum"],
+        &entries,
+    );
+    assert!(public.status.success());
+    assert!(
+        String::from_utf8_lossy(&public.stdout)
+            .contains("0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf")
+    );
+    for args in [
+        vec!["blockchain", "candidates", "--network", "mainnet"],
+        vec!["blockchain", "candidates", "--derive", "bitcoin"],
+        vec![
+            "blockchain",
+            "candidates",
+            "--derive",
+            "ethereum",
+            "--compressed",
+        ],
+    ] {
+        assert!(!run(&args, &entries).status.success());
+    }
+    for bad in [
+        br#"[{"format":"hex","format":"wif","value":"private-data"}]"#.to_vec(),
+        vec![b' '; 65537],
+    ] {
+        let failed = run(
+            &["--json-errors", "blockchain", "candidates", "--json"],
+            &bad,
+        );
+        assert!(!failed.status.success());
+        assert!(!String::from_utf8_lossy(&failed.stderr).contains("private-data"));
+        assert!(failed.stdout.is_empty());
+    }
+}

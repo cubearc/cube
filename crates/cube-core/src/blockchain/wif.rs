@@ -15,6 +15,38 @@ pub struct WifInfo {
     pub scalar_validated: bool,
     pub test_networks_indistinguishable: bool,
 }
+fn check_network(
+    network: Network,
+    expected_network: Option<Network>,
+) -> Result<(), OperationError> {
+    if expected_network.is_some_and(|n| n != network) {
+        return Err(invalid(
+            "network",
+            "WIF version does not match the expected network family",
+        ));
+    }
+    Ok(())
+}
+fn check_compression(
+    compressed: bool,
+    expected_compressed: Option<bool>,
+) -> Result<(), OperationError> {
+    if expected_compressed.is_some_and(|c| c != compressed) {
+        return Err(invalid(
+            "compressed",
+            "requested public-key encoding conflicts with WIF intent",
+        ));
+    }
+    Ok(())
+}
+pub(crate) fn check_intent(
+    info: &WifInfo,
+    network: Option<Network>,
+    compressed: Option<bool>,
+) -> Result<(), OperationError> {
+    check_network(info.network_family, network)?;
+    check_compression(info.compressed, compressed)
+}
 pub(super) fn decode(
     text: &str,
     expected_network: Option<Network>,
@@ -35,12 +67,7 @@ pub(super) fn decode(
                 ));
             }
         };
-        if expected_network.is_some_and(|n| n != network) {
-            return Err(invalid(
-                "network",
-                "WIF version does not match the expected network family",
-            ));
-        }
+        check_network(network, expected_network)?;
         let compressed = match decoded.payload.len() {
             32 => false,
             33 if decoded.payload[32] == 1 => true,
@@ -50,12 +77,7 @@ pub(super) fn decode(
                 ));
             }
         };
-        if expected_compressed.is_some_and(|c| c != compressed) {
-            return Err(invalid(
-                "compressed",
-                "requested public-key encoding conflicts with WIF intent",
-            ));
-        }
+        check_compression(compressed, expected_compressed)?;
         let key = PrivateKey::from_bytes(&decoded.payload[..32])?;
         let info = WifInfo {
             valid: true,

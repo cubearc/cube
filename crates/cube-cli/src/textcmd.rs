@@ -23,6 +23,18 @@ pub(crate) struct ExtractArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Stream bounded Cartesian strings as JSONL, preserving embedded newlines
+    Combinations {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long, default_value = "")]
+        separator: String,
+        #[arg(long, default_value_t = 1000)]
+        max_results: usize,
+        /// Validate and show counts/bounds without generating results
+        #[arg(long)]
+        plan: bool,
+    },
     /// Inspect factor pairs or render exact scalar grids; no inferred message
     Grid {
         #[command(flatten)]
@@ -93,6 +105,31 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Combinations {
+            input,
+            separator,
+            max_results,
+            plan,
+        } => {
+            let groups = text::combinations::parse_groups(&input.read_text_limit(
+                cube_core::pipeline::json::MAX_DOCUMENT_BYTES,
+                "text.combinations",
+            )?)?;
+            let combinations =
+                text::combinations::Combinations::new(groups, separator, max_results)?;
+            if plan {
+                writeln!(
+                    output,
+                    "{}",
+                    serde_json::to_string_pretty(combinations.plan())?
+                )?;
+            } else {
+                for value in combinations {
+                    writeln!(output, "{}", serde_json::to_string(&value)?)?;
+                }
+            }
+            return Ok(());
+        }
         TextCommand::Grid {
             input,
             width,

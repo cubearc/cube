@@ -178,6 +178,18 @@ See [coordinate semantics and limits](operations.md#classical-ciphers).
 
 ## Transform binary bytes
 
+Generate bounded ordered string candidates as JSON Lines (one quoted string per
+record, preserving embedded newlines and controls); `--plan` only reports bounds:
+
+```sh
+cube text combinations --text '[["a","b"],["1","2"]]' --separator - --plan
+cube text combinations --text '[["a","b"],["1","2"]]' --separator -
+```
+
+The rightmost group varies fastest. Duplicate strings remain separate results.
+Plans exceeding `--max-results` (default 1000, hard cap 10000) fail before output;
+there is no silent prefix. CLI group JSON uses the existing 256 KiB/4096-node parser.
+
 Byte transforms preserve binary output conventions:
 
 ```sh

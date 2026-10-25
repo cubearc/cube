@@ -137,6 +137,19 @@ one. Use raw output when chaining binary operations. The descriptor is `binary.x
 
 ## Text operations
 
+`text.combinations` is a bounded incremental Cartesian product of ordered string
+groups, with rightmost index varying fastest. It preserves duplicates, empty
+strings and Unicode/control data. Zero groups yield one empty string; any empty
+group yields zero candidates. Limits: 16 groups, 4096 fragments, 1 MiB total input,
+64 KiB fragments/results, 4096 separator bytes, finite result cap default 1000/hard
+10000, 16 MiB aggregate raw and escaped JSONL output, and 32 MiB work units.
+Preflight checks count overflow, exact aggregate lengths and JSON escaping costs;
+work includes input validation, output bytes and fragment/concatenation units.
+Excessive plans fail without a prefix. Rust/Python generate one result at a time;
+CLI streams unambiguous JSONL. Existing text/byte transforms accept each result
+through explicit caller conversion; no candidate engine or pipeline iterator type
+is introduced. JSON transport retains its existing depth/node/byte limits.
+
 `symbol.clock.directions` is a separate caller-selected convention, not official
 Semaphore or clock recognition. Select H:MM (ASCII hour 0..12, 0=12, minute 0..59;
 no seconds/fractional minutes) or two signed i64 millidegree angles, never both.

@@ -1,4 +1,5 @@
 //! Explicit Unicode text operations and shared limits for new text interfaces.
+pub mod combinations;
 pub mod grid;
 pub mod selection;
 pub mod statistics;

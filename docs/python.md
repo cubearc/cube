@@ -160,6 +160,13 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+`cube.string_combinations([["a", "b"], ["1", "2"]], separator="-")` returns a
+native iterator yielding `a-1`, `a-2`, `b-1`, `b-2`. `iterator.plan()` reports exact
+counts/byte bounds and remaining results; `len(iterator)` reports remaining count.
+Zero groups yield one empty string, any empty group yields no strings, and
+duplicates are preserved. Rejecting an excessive plan happens before iteration;
+stopping early does not generate the unused candidates.
+
 `cube.clock_directions("12:45")` reports an ambiguous hour sector.
 `cube.clock_directions("3:00", decode=True)["decoded"] == "J"` explicitly maps
 hour to sender LH and minute to RH. Alternative inputs use exact integer

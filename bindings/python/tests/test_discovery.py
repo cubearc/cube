@@ -87,6 +87,7 @@ SDK_BINDINGS = {
     "image.rotate": "Image.rotate",
     "text.extract": "extract_characters",
     "text.select": "select_text",
+    "text.combinations": "string_combinations",
     "text.grid.factors": "grid_factors",
     "text.grid.render": "text_grid",
     "text.statistics": "text_statistics",

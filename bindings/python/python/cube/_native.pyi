@@ -1,8 +1,18 @@
 """Native operations. Invalid encoded input or an empty XOR key raises ValueError."""
 
+from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO
 
+class StringCombinations(Iterator[str]):
+    def __iter__(self) -> StringCombinations: ...
+    def __next__(self) -> str: ...
+    def __len__(self) -> int: ...
+    def plan(self) -> dict[str, Any]: ...
+
+def string_combinations(
+    groups: list[list[str]], *, separator: str = "", max_results: int = 1000
+) -> StringCombinations: ...
 def clock_directions(
     time: str | None = None,
     *,

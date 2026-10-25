@@ -6,6 +6,7 @@ from ._native import (
     CancellationToken,
     Image,
     InvestigationSession,
+    StringCombinations,
     a1z26_decode,
     a1z26_encode,
     affine_decode,
@@ -87,6 +88,7 @@ from ._native import (
     sha512,
     shift_left,
     shift_right,
+    string_combinations,
     swap_endian,
     text_grid,
     text_statistics,
@@ -111,6 +113,8 @@ from ._native import (
 )
 
 __all__ = [
+    "StringCombinations",
+    "string_combinations",
     "clock_directions",
     "semaphore_encode",
     "semaphore_decode",

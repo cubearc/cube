@@ -370,6 +370,16 @@ cube audio morse transcribe --unit-ms 100 --json < intervals.json
 The frequency and dot duration are caller assumptions. Inspect uncertain segments
 and timing resolution before treating a candidate transcript as meaningful.
 
+Inspect a previously obtained native FLAC file without decoding audio:
+
+```sh
+cube audio metadata sample.flac --json
+```
+
+This supports STREAMINFO and bounded Vorbis comments. MP3/Ogg and ID3-prefixed
+FLAC are explicitly unsupported. Duration is declared metadata, and the audio
+payload/MD5 are unverified. See [metadata bounds](operations.md#audio-analysis).
+
 ## Run a pipeline or recipe
 
 ```sh

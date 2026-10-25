@@ -382,11 +382,19 @@ fn transcribe_morse(
         .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(result))
 }
+/// Inspect the bounded native FLAC metadata profile; never decode audio/artwork.
+#[pyfunction]
+fn inspect_audio_metadata(py: Python<'_>, data: &[u8]) -> PyResult<Py<PyAny>> {
+    let result =
+        cube_core::media::metadata::inspect(&mut Cursor::new(data)).map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(result))
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(wave_spectrum, module)?)?;
     module.add_function(wrap_pyfunction!(wave_bits, module)?)?;
     module.add_function(wrap_pyfunction!(reverse_wave, module)?)?;
     module.add_function(wrap_pyfunction!(detect_dtmf, module)?)?;
+    module.add_function(wrap_pyfunction!(inspect_audio_metadata, module)?)?;
     module.add_function(wrap_pyfunction!(detect_morse_intervals, module)?)?;
     module.add_function(wrap_pyfunction!(transcribe_morse, module)?)?;
     module.add_function(wrap_pyfunction!(wave_spectrogram, module)?)?;

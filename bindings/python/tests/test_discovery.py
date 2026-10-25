@@ -93,6 +93,7 @@ SDK_BINDINGS = {
     "audio.dtmf.detect": "detect_dtmf",
     "audio.morse.detect": "detect_morse_intervals",
     "audio.morse.transcribe": "transcribe_morse",
+    "audio.metadata.inspect": "inspect_audio_metadata",
     "audio.spectrum": "wave_spectrum",
     "audio.wave.inspect": "inspect_wave",
     "audio.pcm.extract": "wave_samples",

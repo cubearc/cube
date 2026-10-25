@@ -6,6 +6,7 @@ pub mod envelope;
 
 pub mod bits;
 pub mod dtmf;
+pub mod metadata;
 pub mod morse;
 pub mod reverse;
 pub mod spectrogram;

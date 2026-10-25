@@ -514,6 +514,24 @@ reuse Cube's existing Morse text decoder. Unsupported token sequences preserve
 tokens with `unsupported_tokens` and no invented letter. No automatic frequency
 search, speed estimation, radio capture or forced transcription occurs.
 
+`audio.metadata.inspect` supports native FLAC STREAMINFO and one optional
+Vorbis-comment block through Lofty. MP3, Ogg, ID3-prefixed FLAC and reserved block
+types are unsupported. It reports declared sample rate/channels/bit depth, duplicate
+key/value comments, block offsets and duration at millisecond precision. Zero
+total samples means unknown duration; an absent/all-zero declared MD5 is null.
+The audio payload and MD5 are unverified, so a metadata result is not proof of a
+valid audio stream. Artwork and noninterpreted blocks are never expanded.
+
+Limits: 1 GiB physical source, 1 MiB total metadata, 256 blocks/comments, 64 KiB per
+vendor/comment field and 16 KiB exported text. Framing, extents and comment lengths
+are preflighted before maintained parsing; duplicate STREAMINFO/comment blocks,
+truncation and invalid text fail. The operation reads no audio payload, performs
+no transcoding/decompression and changes no parser-global settings. Lofty's
+maintained default feature configuration is required by an upstream build issue;
+Cube's native-FLAC-only entry rejects ID3 before parsing, so compressed-tag code
+is unreachable. Format rules follow [RFC 9639](https://www.rfc-editor.org/rfc/rfc9639).
+This separate operation preserves the existing integer-WAVE `audio inspect` API.
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

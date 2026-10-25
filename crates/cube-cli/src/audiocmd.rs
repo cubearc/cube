@@ -68,6 +68,12 @@ pub(crate) enum MorseCommand {
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Inspect bounded native FLAC metadata; no compressed audio decoding
+    Metadata {
+        path: PathBuf,
+        #[arg(long)]
+        json: bool,
+    },
     /// Separate tone interval detection and caller-requested Morse transcription
     Morse {
         #[command(subcommand)]
@@ -170,6 +176,30 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Metadata { path, json } => {
+            let result = cube_core::media::metadata::inspect_file(&path)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "FLAC; {} Hz; {} channels; {}-bit; declared samples {:?}; duration ms {:?}",
+                    result.sample_rate,
+                    result.channels,
+                    result.bits_per_sample,
+                    result.declared_total_samples,
+                    result.duration_milliseconds
+                )?;
+                writeln!(
+                    output,
+                    "{}; artwork {}; metadata {} bytes",
+                    result.verification, result.artwork, result.metadata_bytes
+                )?;
+                for item in result.comments {
+                    writeln!(output, "{:?}={:?}", item.key, item.value)?;
+                }
+            }
+        }
         AudioCommand::Morse { command } => {
             use cube_core::media::{
                 morse::{self, Options},

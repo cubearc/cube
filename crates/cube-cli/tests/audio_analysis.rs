@@ -261,3 +261,25 @@ fn morse_detection_json_can_be_transcribed_as_a_separate_bounded_command() {
     assert_eq!(std::fs::read(&path).unwrap(), wav);
     std::fs::remove_file(path).unwrap();
 }
+#[test]
+fn flac_metadata_json_reports_header_observations_without_decoding_audio() {
+    let path = std::env::temp_dir().join(format!("cube-metadata-{}.flac", std::process::id()));
+    let mut info = [0u8; 34];
+    info[..4].copy_from_slice(&[0, 16, 0, 16]);
+    info[10..18].copy_from_slice(&((8000u64 << 44) | (15u64 << 36) | 1600).to_be_bytes());
+    let mut bytes = b"fLaC\x80\x00\x00\x22".to_vec();
+    bytes.extend(info);
+    bytes.extend([255; 16]);
+    std::fs::write(&path, &bytes).unwrap();
+    let r = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args(["audio", "metadata", path.to_str().unwrap(), "--json"])
+        .output()
+        .unwrap();
+    assert!(r.status.success(), "{:?}", r.stderr);
+    let d: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(d["sample_rate"], 8000);
+    assert_eq!(d["duration_milliseconds"], 200);
+    assert_eq!(d["verification"], "metadata_only_audio_payload_unverified");
+    assert_eq!(std::fs::read(&path).unwrap(), bytes);
+    std::fs::remove_file(path).unwrap();
+}

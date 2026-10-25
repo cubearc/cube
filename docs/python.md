@@ -438,3 +438,18 @@ assert transcript["tokens"] == "." and transcript["text"] == "E"
 The frequency and dot unit are explicit assumptions. Detection retains uncertain
 intervals; transcription returns no text when timings are ambiguous. DTMF likewise
 returns timed candidates/evidence through `detect_dtmf`, without a forced string.
+
+### Inspect compressed-audio metadata
+
+```python
+from pathlib import Path
+import cube
+
+metadata = cube.inspect_audio_metadata(Path("sample.flac").read_bytes())
+assert metadata["format"] == "flac"
+assert metadata["verification"] == "metadata_only_audio_payload_unverified"
+```
+
+This is the bounded native-FLAC metadata profile; it does not decode audio or
+artwork. MP3/Ogg are unsupported. A null duration means the source did not declare
+a sample count; declared checksums are never presented as verified.

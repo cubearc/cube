@@ -21,7 +21,8 @@ is explicit.
   supported embedded ZIP structures and recover selected bytes safely.
 - Analyze bounded PNG8/JPEG/GIF/BMP/WebP images, reconstruct raw rasters, and extract
   exact colors, ordered pixel/bit streams or binary QR payloads.
-- Inspect integer PCM WAVE audio, extract samples and calculate waveform data.
+- Analyze bounded PCM spectra/spectrograms, extract sample bits, reverse WAV frames,
+  inspect FLAC metadata and review DTMF/Morse candidates with explicit assumptions.
 - Compose typed linear pipelines and versioned JSON recipes.
 - Run bounded local investigations with evidence, reports and verified replay.
 

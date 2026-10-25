@@ -1,6 +1,6 @@
 [package]
 name = "cube-core"
-description = "Byte-oriented encoding, classical ciphers, hashing, binary transformations, file/image forensics, Unicode text, symbols, PCM WAVE analysis, typed pipelines/recipes, and local investigation"
+description = "Byte-oriented encoding, classical ciphers, hashing, binary transformations, file/image forensics, Unicode text, symbols, bounded audio analysis/FLAC metadata, typed pipelines/recipes, and local investigation"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

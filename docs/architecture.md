@@ -57,7 +57,17 @@ transformations stay in their owning modules. Responsibilities include:
 - `media`: WAVE framing, immutable selected PCM blocks and incremental min/max
   envelopes. Metadata skips payloads with `Read + Seek`; extraction/envelopes share
   frame-aligned bounded streaming. Block format/channel/continuity checks precede
-  consumption. No native multimedia or graphical runtime is required.
+  consumption. Spectra and spectrograms share one bounded RustFFT plan/window
+  implementation with explicit peak-amplitude scaling and checked total matrix
+  work. Tone detectors share bounded PCM/Goertzel evidence; candidate detection
+  stays separate from existing Morse text decoding. Binary/image/audio extraction
+  share packing contracts, preserving the public image type paths.
+  WAV reversal generates minimal fmt/data output from immutable samples; adapters
+  own exclusive file creation. A separate native-FLAC metadata profile preflights
+  block/comment extents before Lofty parsing and skips audio/artwork. It changes
+  no parser-global state and exposes no MP3/Ogg or decode capability. No native
+  multimedia or graphical runtime is required. Selected PCM/interval reports use
+  direct APIs; discovery accurately reports no audio pipeline adapters.
 
 Resource bounds and unsupported formats belong beside the implementation; the
 [Operations Guide](operations.md) summarizes those affecting users.

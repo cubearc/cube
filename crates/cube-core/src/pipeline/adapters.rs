@@ -228,3 +228,21 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
     };
     Ok(Prepared { adapter, arguments })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::BTreeSet;
+
+    #[test]
+    fn adapter_references_are_unique_known_and_typed() {
+        let mut ids = BTreeSet::new();
+        for adapter in ADAPTERS {
+            assert!(ids.insert(adapter.id), "duplicate adapter: {}", adapter.id);
+            let descriptor = operations::require(adapter.id).expect("known adapter operation");
+            assert!(adapter.version > 0);
+            descriptor.input_type.parse::<Kind>().expect("input kind");
+            descriptor.output_type.parse::<Kind>().expect("output kind");
+        }
+    }
+}

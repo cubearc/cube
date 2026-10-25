@@ -390,7 +390,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     write_text(
                         &mut output,
                         &serde_json::to_string_pretty(
-                            &serde_json::json!({"schema_version": 1, "operations": selected}),
+                            &serde_json::json!({"schema_version": 1, "operations": selected.iter().map(|d| d.discovery()).collect::<Vec<_>>()}),
                         )?,
                     )?;
                 } else {
@@ -408,14 +408,14 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     write_text(
                         &mut output,
                         &serde_json::to_string_pretty(
-                            &serde_json::json!({"schema_version": 1, "operation": descriptor}),
+                            &serde_json::json!({"schema_version": 1, "operation": descriptor.discovery()}),
                         )?,
                     )?;
                 } else {
                     write_text(
                         &mut output,
                         &format!(
-                            "{} — {}\nCategory: {}\nInput: {}\nOutput: {}\nDeterministic: {}\nReversible: {}\nExample: {}",
+                            "{} — {}\nCategory: {}\nInput: {}\nOutput: {}\nDeterministic: {}\nReversible: {}\nPipeline: {}\nExample: {}",
                             descriptor.id,
                             descriptor.description,
                             descriptor.category,
@@ -425,6 +425,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                             descriptor
                                 .reversible
                                 .map_or("not applicable", |value| if value { "yes" } else { "no" }),
+                            descriptor.discovery().pipeline.map_or_else(
+                                || "unavailable (no bounded adapter)".to_owned(),
+                                |support| format!("adapter version {}", support.version),
+                            ),
                             descriptor.example
                         ),
                     )?;

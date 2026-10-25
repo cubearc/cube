@@ -242,10 +242,22 @@ detector or playback feature. Video analysis is not implemented.
 
 Pipelines are implemented linear sequences over explicit bytes, UTF-8 text and an
 inert structured byte range. Direct Rust/Python functions keep their normal types.
-Only `cube pipeline adapters` / `cube.pipeline_adapters()` lists executable
-adapters; the broader catalog does not grant execution. Current adapters cover
+`cube ops list --json`, `cube ops describe` and the Python discovery functions
+report `pipeline`: an adapter contract version object when supported, or null
+(`None` in Python) otherwise. `cube pipeline adapters` /
+`cube.pipeline_adapters()` lists the same executable subset. Current adapters cover
 bounded encodings, classical ciphers, hashes/checksums, XOR and UTF-8 conversion.
 File/image/audio operations are not pipeline adapters.
+
+The current catalog's operations are available through direct Rust functions or
+methods, CLI commands, and native Python functions or methods. The descriptor's
+`command` identifies its CLI route; Python stubs describe SDK entry points.
+This includes orchestration such as recipe execution and investigation sessions,
+which is available directly but cannot itself be nested as a pipeline adapter.
+Read-only file APIs still require caller-selected I/O; discovery grants no file
+permission. Signature detection, hex rows and printable strings currently require
+direct APIs; their typed pipeline composition is tracked in
+[issue #58](https://github.com/cubearc/cube/issues/58).
 
 Every step declares an operation identifier, exact contract `version`, and optional
 parameters. The entire plan validates before transformation. Adjacent types must

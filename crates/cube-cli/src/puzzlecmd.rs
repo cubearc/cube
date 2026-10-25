@@ -70,25 +70,20 @@ pub(crate) fn polybius(args: PolybiusArgs) -> Result<String, Box<dyn Error>> {
             .aliases
             .iter()
             .map(|a| {
-                let (a, b) = a.split_once('=').ok_or_else(|| {
-                    cube_core::errors::OperationError::new(
+                let mut scalars = a.chars();
+                match (
+                    scalars.next(),
+                    scalars.next(),
+                    scalars.next(),
+                    scalars.next(),
+                ) {
+                    (Some(alias), Some('='), Some(target), None) => Ok((alias, target)),
+                    _ => Err(cube_core::errors::OperationError::new(
                         cube_core::errors::ErrorCode::InvalidParameter,
                         "alias must be SCALAR=SCALAR",
                     )
-                    .parameter("aliases")
-                })?;
-                let scalar = |s: &str| {
-                    let mut c = s.chars();
-                    match (c.next(), c.next()) {
-                        (Some(c), None) => Ok(c),
-                        _ => Err(cube_core::errors::OperationError::new(
-                            cube_core::errors::ErrorCode::InvalidParameter,
-                            "alias must be SCALAR=SCALAR",
-                        )
-                        .parameter("aliases")),
-                    }
-                };
-                Ok((scalar(a)?, scalar(b)?))
+                    .parameter("aliases")),
+                }
             })
             .collect::<Result<Vec<_>, cube_core::errors::OperationError>>()?;
         polybius::Square::new(args.side.expect("clap requires side"), &alphabet, &aliases)?

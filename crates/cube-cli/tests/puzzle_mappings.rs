@@ -17,6 +17,21 @@ fn success(args: &[&str]) -> String {
 #[test]
 fn explicit_puzzle_cli_vectors() {
     assert_eq!(
+        success(&[
+            "cipher",
+            "polybius",
+            "--alphabet",
+            "ABCD",
+            "--side",
+            "2",
+            "--alias",
+            "==A",
+            "--text",
+            "="
+        ]),
+        "1,1\n"
+    );
+    assert_eq!(
         success(&["cipher", "bacon", "--variant", "extended26", "--text", "AB"]),
         "AAAAA AAAAB\n"
     );

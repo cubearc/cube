@@ -31,7 +31,7 @@ transformations stay in their owning modules. Responsibilities include:
   transformations. Unicode normalization uses pinned data, exposed through
   `text::UNICODE_VERSION`; dependency/data changes require compatibility review.
 - `forensics`: checked ranges, signature evidence, file facts, bounded EXIF, byte
-  inspection and PNG framing. Reader/writer APIs support bounded or streaming work
+  inspection and bounded PNG/JPEG/GIF framing. Reader/writer APIs support bounded or streaming work
   without requiring paths. Signatures are candidates, not validity proofs.
 - `image`: an immutable validated PNG8 sample model, with separate analysis,
   geometry/color and bit-extraction modules. Indexed samples, palette and tRNS
@@ -136,3 +136,10 @@ Conservative output/work/capture estimates run before algorithms. Existing value
 recipes and adapter versions retain their behavior; exhaustive Rust matches on
 `Kind`/`Value` must handle the new report variant. Report deserialization validates
 budgets and internal range/data consistency; caller-supplied evidence is still data.
+
+`forensics::boundaries` dispatches supported image framing and reuses strict PNG
+inspection. JPEG/GIF parsers use bounded buffered readers, checked extents and a
+record cap; they do not allocate decoded images. The existing PNG boundary struct
+and descriptor type name are retained for compatibility. Rules follow the
+[GIF89a specification](https://www.w3.org/Graphics/GIF/spec-gif89a.txt) and the
+supported baseline subset of [ITU T.81](https://www.w3.org/Graphics/JPEG/itu-t81.pdf).

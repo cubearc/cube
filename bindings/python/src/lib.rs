@@ -207,11 +207,12 @@ fn file_exif(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
     structured(py, &serde_json::json!(result))
 }
 
-/// Detect trailing bytes after PNG framing and CRC validation; no pixel decoding.
+/// Detect trailing bytes after supported PNG/JPEG/GIF framing; no pixel decoding.
 #[pyfunction]
 fn appended_data(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
-    let result = forensics::png::appended(&mut forensics::open_regular(&path).map_err(file_error)?)
-        .map_err(file_error)?;
+    let result =
+        forensics::boundaries::inspect(&mut forensics::open_regular(&path).map_err(file_error)?)
+            .map_err(file_error)?;
     structured(py, &serde_json::json!(result))
 }
 

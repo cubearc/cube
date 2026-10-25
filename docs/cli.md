@@ -283,3 +283,15 @@ cube pipeline run --text '00ff' --steps '[{"operation":"encoding.hex.decode","ve
 The final value is a typed forensic report; row offsets stay numeric and row bytes
 use base64 in JSON. `--format raw` rejects structured reports. The file is supplied
 by the caller or CLI input selector; steps never contain paths.
+
+### Inspect a structural boundary
+
+```sh
+cube file appended sample.jpg --json
+cube file appended sample.gif --json
+```
+
+`logical_end`, `trailing_offset` and `trailing_bytes` are exact byte positions/counts.
+Read `evidence` for the validation scope. Supported JPEG/GIF framing is checked
+without decoding compressed pixels; an unsupported feature fails explicitly.
+The same command preserves existing strict PNG framing/CRC behavior.

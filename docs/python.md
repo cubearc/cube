@@ -301,3 +301,8 @@ Signature and printable-string adapters return the other concrete report variant
 Reports retain offsets and completeness; they do not validate embedded files or
 permit filesystem access. `pipeline_adapters()` declares each adapter's input and
 output types; direct reader-based APIs retain their own descriptor types.
+
+`cube.appended_data(path)` also accepts supported JPEG/GIF framing, returning the
+same boundary fields as PNG. `evidence` describes what was checked; successful
+framing inspection does not prove that entropy codes or compressed pixels decode.
+The file is opened read-only and no extraction happens implicitly.

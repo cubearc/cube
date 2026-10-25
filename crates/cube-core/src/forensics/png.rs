@@ -15,7 +15,8 @@ fn read(reader: &mut impl Read, bytes: &mut [u8]) -> Result<(), OperationError> 
     })
 }
 
-/// A validated PNG framing boundary, not proof that compressed pixels decode.
+/// A framing boundary, not proof that compressed pixels decode. The legacy PNG
+/// location/layout is shared by additional supported framing inspectors.
 #[derive(Clone, Debug, Serialize)]
 pub struct Boundary {
     pub format: &'static str,
@@ -248,47 +249,33 @@ pub fn appended(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationEr
 }
 
 /// Operation descriptors maintained beside the implementation.
-pub const OPERATIONS: &[crate::operations::Descriptor] = &[
-    crate::operations::Descriptor {
-        id: "file.appended.detect",
-        category: "file",
-        description: "Find trailing bytes after validated PNG framing and CRCs; no pixel decoding.",
-        input_type: "byte_reader",
-        output_type: "file.png_boundary",
-        command: "file appended",
-        example: "cube file appended sample.png",
-        parameters: &[],
-        deterministic: true,
-        reversible: None,
-    },
-    crate::operations::Descriptor {
-        id: "image.png.inspect",
-        category: "image",
-        description: "Inspect PNG chunks, exact offsets and CRC evidence without pixel decoding.",
-        input_type: "byte_reader",
-        output_type: "image.png_report",
-        command: "image chunks",
-        example: "cube image chunks sample.png --json",
-        deterministic: true,
-        reversible: None,
-        parameters: &[
-            crate::operations::Parameter {
-                name: "strict",
-                description: "Reject CRC errors; false reports mismatches but still rejects unsafe framing.",
-                required: false,
-                default: Some(crate::operations::ParameterValue::Boolean(true)),
-                constraints: crate::operations::ParameterType::Boolean,
+pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::Descriptor {
+    id: "image.png.inspect",
+    category: "image",
+    description: "Inspect PNG chunks, exact offsets and CRC evidence without pixel decoding.",
+    input_type: "byte_reader",
+    output_type: "image.png_report",
+    command: "image chunks",
+    example: "cube image chunks sample.png --json",
+    deterministic: true,
+    reversible: None,
+    parameters: &[
+        crate::operations::Parameter {
+            name: "strict",
+            description: "Reject CRC errors; false reports mismatches but still rejects unsafe framing.",
+            required: false,
+            default: Some(crate::operations::ParameterValue::Boolean(true)),
+            constraints: crate::operations::ParameterType::Boolean,
+        },
+        crate::operations::Parameter {
+            name: "payload_budget",
+            description: "Total optional raw payload export budget; zero disables payload export.",
+            required: false,
+            default: Some(crate::operations::ParameterValue::Unsigned(0)),
+            constraints: crate::operations::ParameterType::Unsigned {
+                min: 0,
+                max: 1048576,
             },
-            crate::operations::Parameter {
-                name: "payload_budget",
-                description: "Total optional raw payload export budget; zero disables payload export.",
-                required: false,
-                default: Some(crate::operations::ParameterValue::Unsigned(0)),
-                constraints: crate::operations::ParameterType::Unsigned {
-                    min: 0,
-                    max: 1048576,
-                },
-            },
-        ],
-    },
-];
+        },
+    ],
+}];

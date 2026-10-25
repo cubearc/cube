@@ -173,3 +173,17 @@ fn human_file_information_names_timestamp_units() {
     assert!(text.contains("Unix epoch") || text.contains("unavailable"));
     assert!(!text.contains("Some("));
 }
+#[test]
+fn appended_gif_reports_exact_bounds_without_modifying_source() {
+    let files = Files::new("gif-boundary");
+    let path = files.path("input");
+    let gif=b"GIF89a\x01\0\x01\0\x80\0\0\0\0\0\xff\xff\xff\x2c\0\0\0\0\x01\0\x01\0\0\x02\x02\x44\x01\0\x3btail";
+    std::fs::write(&path, gif).unwrap();
+    let r = run(&["file", "appended", path.to_str().unwrap(), "--json"]);
+    assert!(r.status.success(), "{}", String::from_utf8_lossy(&r.stderr));
+    let json: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(json["format"], "gif");
+    assert_eq!(json["logical_end"], gif.len() - 4);
+    assert_eq!(json["trailing_bytes"], 4);
+    assert_eq!(std::fs::read(&path).unwrap(), gif);
+}

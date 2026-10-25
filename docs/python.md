@@ -186,6 +186,27 @@ single-frame GIF, BMP and static WebP expose decoded 8-bit samples; inspect
 Use `pixel`, `channel`, `histogram`, `bit_plane` or `lsb` to inspect selected data.
 See [image semantics and limits](operations.md#image-analysis-and-steganography).
 
+Combine exact samples in two compatible images:
+
+```python
+import cube
+
+left = cube.Image.from_samples(1, 1, "rgba", bytes([10, 20, 30, 0]))
+right = cube.Image.from_samples(1, 1, "rgba", bytes([10, 20, 30, 255]))
+combined = left.bitwise(right, "xor")
+assert combined.samples == bytes([0, 0, 0, 255])
+assert left.bitwise(right, "and").samples == left.samples
+assert left.bitwise(right, "or").samples == right.samples
+combined.save_png("combined.png")
+```
+
+`bitwise` includes physical alpha without blending. Dimensions, sample models,
+palettes and raw transparency must match exactly. Indexed samples combine as
+indices; explicitly call `expand_palette()` on both inputs to combine RGBA.
+Invalid layouts or resulting indices raise `ValueError` with
+`operation == "image.bitwise"`; saving over an existing file raises `OSError`.
+Inputs stay immutable and output provenance describes constructed samples.
+
 Raw layouts are explicit and preserve source buffers:
 
 ```python

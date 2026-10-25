@@ -290,6 +290,20 @@ Pixel coordinates start at `(0,0)`
 at the top left; palette expansion and lossy transforms are explicit.
 See [image analysis](operations.md#image-analysis-and-steganography).
 
+Combine compatible images using every physical sample, including alpha:
+
+```sh
+cube image mirror sample.png --axis horizontal --output mirrored.png
+cube image bitwise sample.png mirrored.png --operation xor --output combined.png --json
+```
+
+`--operation` requires `xor`, `and` or `or`. Both images must have identical
+dimensions, sample models, palettes and raw transparency metadata. Native indexed
+samples combine as indices; expand each image explicitly with `image convert
+--expand-palette` to combine RGBA instead. Invalid resulting indices fail.
+The output is a new lossless PNG; existing destinations are rejected. JSON reports
+the selected operation, output image facts and constructed-sample provenance.
+
 Reconstruct explicitly selected raw bytes, without rewriting their source:
 
 ```sh

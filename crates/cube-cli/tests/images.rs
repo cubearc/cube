@@ -22,6 +22,311 @@ fn run(args: &[&str]) -> std::process::Output {
         .output()
         .unwrap()
 }
+
+#[test]
+fn bitwise_pairs_export_exact_samples_and_constructed_provenance() {
+    let files = Files::new("bitwise-pairs");
+    let first = files.path("first.png");
+    let second = files.path("second.png");
+    for model in [
+        ColorModel::Gray,
+        ColorModel::GrayAlpha,
+        ColorModel::Rgb,
+        ColorModel::Rgba,
+    ] {
+        let left = Image::from_samples(
+            2,
+            2,
+            model,
+            [0, 255, 170, 85].repeat(model.channels()),
+            vec![],
+            vec![],
+        )
+        .unwrap();
+        let right = Image::from_samples(
+            2,
+            2,
+            model,
+            [255, 15, 85, 170].repeat(model.channels()),
+            vec![],
+            vec![],
+        )
+        .unwrap();
+        // Each model gets fresh inputs; the CLI must never change them.
+        std::fs::write(&first, left.encode_png().unwrap()).unwrap();
+        std::fs::write(&second, right.encode_png().unwrap()).unwrap();
+        let original = [
+            std::fs::read(&first).unwrap(),
+            std::fs::read(&second).unwrap(),
+        ];
+        for (operation, expected) in [
+            ("xor", [255, 240, 255, 255]),
+            ("and", [0, 15, 0, 0]),
+            ("or", [255, 255, 255, 255]),
+        ] {
+            let output = files.path(&format!("{model:?}-{operation}.png"));
+            let result = run(&[
+                "image",
+                "bitwise",
+                first.to_str().unwrap(),
+                second.to_str().unwrap(),
+                "--operation",
+                operation,
+                "--output",
+                output.to_str().unwrap(),
+                "--json",
+            ]);
+            assert!(
+                result.status.success(),
+                "{}",
+                String::from_utf8_lossy(&result.stderr)
+            );
+            assert!(result.stderr.is_empty());
+            let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+            assert_eq!(report["operation"], operation);
+            assert_eq!(report["image"]["sample_bytes"], 4 * model.channels());
+            assert_eq!(
+                report["provenance"]["representation"],
+                "constructed_8bit_samples"
+            );
+            assert_eq!(report["provenance"]["source_samples_preserved"], false);
+            let combined = Image::open(&output).unwrap();
+            assert_eq!(combined.samples(), expected.repeat(model.channels()));
+            assert_eq!(combined.model(), model);
+            assert_eq!(
+                [
+                    std::fs::read(&first).unwrap(),
+                    std::fs::read(&second).unwrap()
+                ],
+                original
+            );
+        }
+    }
+    let output = files.path("human-output.png");
+    let result = run(&[
+        "image",
+        "bitwise",
+        first.to_str().unwrap(),
+        second.to_str().unwrap(),
+        "--operation",
+        "xor",
+        "--output",
+        output.to_str().unwrap(),
+    ]);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, b"Wrote PNG8 2 x 2\n");
+    let result = run(&["image", "bitwise", "--help"]);
+    assert!(result.status.success());
+    let help = String::from_utf8_lossy(&result.stdout);
+    assert!(help.contains("--operation") && help.contains("--output"));
+    let result = run(&["ops", "describe", "image.bitwise", "--json"]);
+    assert!(result.status.success());
+    let descriptor: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(descriptor["operation"]["id"], "image.bitwise");
+    assert_eq!(descriptor["operation"]["input_type"], "image.sample_pair");
+    assert!(descriptor["operation"]["pipeline"].is_null());
+}
+
+#[test]
+fn bitwise_indexed_outputs_validate_indices_and_require_explicit_expansion() {
+    let files = Files::new("bitwise-indexed");
+    let first = files.path("first.png");
+    let second = files.path("second.png");
+    let palette = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    Image::from_bytes(1, 1, ColorModel::Indexed, &[1], &palette, &[0, 128])
+        .unwrap()
+        .save_png(&first)
+        .unwrap();
+    Image::from_bytes(1, 1, ColorModel::Indexed, &[2], &palette, &[0, 128])
+        .unwrap()
+        .save_png(&second)
+        .unwrap();
+    let output = files.path("invalid.png");
+    let result = run(&[
+        "--json-errors",
+        "image",
+        "bitwise",
+        first.to_str().unwrap(),
+        second.to_str().unwrap(),
+        "--operation",
+        "xor",
+        "--output",
+        output.to_str().unwrap(),
+    ]);
+    assert_eq!(result.status.code(), Some(1));
+    let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+    assert_eq!(error["error"]["code"], "invalid_input");
+    assert_eq!(error["error"]["operation"], "image.bitwise");
+    assert!(!output.exists());
+    let output = files.path("native.png");
+    assert!(
+        run(&[
+            "image",
+            "bitwise",
+            first.to_str().unwrap(),
+            second.to_str().unwrap(),
+            "--operation",
+            "and",
+            "--output",
+            output.to_str().unwrap()
+        ])
+        .status
+        .success()
+    );
+    let combined = Image::open(&output).unwrap();
+    assert_eq!(combined.samples(), [0]);
+    assert_eq!(combined.palette(), palette);
+    assert_eq!(combined.transparency(), [0, 128]);
+    let rgba_first = files.path("first-rgba.png");
+    let rgba_second = files.path("second-rgba.png");
+    for (source, destination) in [(&first, &rgba_first), (&second, &rgba_second)] {
+        assert!(
+            run(&[
+                "image",
+                "convert",
+                source.to_str().unwrap(),
+                "--expand-palette",
+                "--output",
+                destination.to_str().unwrap()
+            ])
+            .status
+            .success()
+        );
+    }
+    let output = files.path("colors.png");
+    assert!(
+        run(&[
+            "image",
+            "bitwise",
+            rgba_first.to_str().unwrap(),
+            rgba_second.to_str().unwrap(),
+            "--operation",
+            "xor",
+            "--output",
+            output.to_str().unwrap()
+        ])
+        .status
+        .success()
+    );
+    let combined = Image::open(&output).unwrap();
+    assert_eq!(combined.model(), ColorModel::Rgba);
+    assert_eq!(combined.samples(), [3, 13, 15, 127]);
+}
+
+#[test]
+fn bitwise_failures_preserve_inputs_and_never_create_or_replace_outputs() {
+    let files = Files::new("bitwise-failures");
+    let first = files.path("first.png");
+    Image::from_bytes(2, 1, ColorModel::Gray, &[1, 2], &[], &[])
+        .unwrap()
+        .save_png(&first)
+        .unwrap();
+    let original = std::fs::read(&first).unwrap();
+    let second = files.path("second.png");
+    let output = files.path("output.png");
+    for other in [
+        Image::from_bytes(1, 2, ColorModel::Gray, &[1, 2], &[], &[]).unwrap(),
+        Image::from_bytes(2, 1, ColorModel::GrayAlpha, &[1, 2, 3, 4], &[], &[]).unwrap(),
+    ] {
+        std::fs::write(&second, other.encode_png().unwrap()).unwrap();
+        let result = run(&[
+            "--json-errors",
+            "image",
+            "bitwise",
+            first.to_str().unwrap(),
+            second.to_str().unwrap(),
+            "--operation",
+            "xor",
+            "--output",
+            output.to_str().unwrap(),
+        ]);
+        assert_eq!(result.status.code(), Some(1));
+        assert!(result.stdout.is_empty());
+        let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+        assert_eq!(error["error"]["operation"], "image.bitwise");
+        assert!(!output.exists());
+    }
+    for data in [
+        &[][..],
+        &b"not an image"[..],
+        &original[..original.len() - 1],
+    ] {
+        std::fs::write(&second, data).unwrap();
+        assert!(
+            !run(&[
+                "image",
+                "bitwise",
+                first.to_str().unwrap(),
+                second.to_str().unwrap(),
+                "--operation",
+                "and",
+                "--output",
+                output.to_str().unwrap()
+            ])
+            .status
+            .success()
+        );
+        assert!(!output.exists());
+    }
+    let oversized = std::fs::File::create(&second).unwrap();
+    oversized
+        .set_len(cube_core::image::MAX_ENCODED as u64 + 1)
+        .unwrap();
+    drop(oversized);
+    let result = run(&[
+        "--json-errors",
+        "image",
+        "bitwise",
+        first.to_str().unwrap(),
+        second.to_str().unwrap(),
+        "--operation",
+        "or",
+        "--output",
+        output.to_str().unwrap(),
+    ]);
+    assert_eq!(result.status.code(), Some(1));
+    let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+    assert_eq!(error["error"]["code"], "resource_limit");
+    assert!(!output.exists());
+    std::fs::write(&second, &original).unwrap();
+    for destination in [&first, &second, &output] {
+        if destination == &output {
+            std::fs::write(destination, b"existing destination").unwrap();
+        }
+        let before = std::fs::read(destination).unwrap();
+        assert!(
+            !run(&[
+                "image",
+                "bitwise",
+                first.to_str().unwrap(),
+                second.to_str().unwrap(),
+                "--operation",
+                "xor",
+                "--output",
+                destination.to_str().unwrap()
+            ])
+            .status
+            .success()
+        );
+        assert_eq!(std::fs::read(destination).unwrap(), before);
+    }
+    assert_eq!(std::fs::read(&first).unwrap(), original);
+    assert_eq!(std::fs::read(&second).unwrap(), original);
+    let result = run(&[
+        "--json-errors",
+        "image",
+        "bitwise",
+        first.to_str().unwrap(),
+        second.to_str().unwrap(),
+        "--operation",
+        "not",
+        "--output",
+        output.to_str().unwrap(),
+    ]);
+    let error: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
+    assert_eq!(error["error"]["operation"], "image.bitwise");
+    assert_eq!(error["error"]["parameter"], "operation");
+}
 #[test]
 fn qr_json_raw_and_exclusive_output_preserve_binary_payloads() {
     let files = Files::new("qr");

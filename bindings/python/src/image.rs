@@ -298,6 +298,17 @@ impl PyImage {
         )?;
         Ok(output)
     }
+    /// Combine identical sample layouts, including physical alpha; inputs stay immutable.
+    fn bitwise(&self, other: &Self, operation: &str) -> PyResult<Self> {
+        let operation =
+            cube_core::image::BitwiseOperation::parse(operation).map_err(super::file_error)?;
+        Ok(Self {
+            inner: self
+                .inner
+                .bitwise(&other.inner, operation)
+                .map_err(super::file_error)?,
+        })
+    }
     fn rotate(&self, degrees: u32) -> PyResult<Self> {
         Ok(Self {
             inner: self.inner.rotate(degrees).map_err(super::file_error)?,

@@ -186,6 +186,104 @@ def png_bytes(width, height, color, samples, palette=None, transparency=None, de
 
 
 @pytest.mark.parametrize(
+    ("model", "channels"), [("gray", 1), ("gray_alpha", 2), ("rgb", 3), ("rgba", 4)]
+)
+@pytest.mark.parametrize(
+    ("operation", "expected"),
+    [("xor", bytes([255, 240, 255, 255])), ("and", b"\0\x0f\0\0"), ("or", b"\xff" * 4)],
+)
+def test_bitwise_pairs_preserve_physical_samples_alpha_and_inputs(
+    model, channels, operation, expected, tmp_path
+):
+    left = cube.Image.from_samples(2, 2, model, bytes([0, 255, 170, 85]) * channels)
+    right = cube.Image.from_samples(2, 2, model, bytes([255, 15, 85, 170]) * channels)
+    assert cube.Image is _native.Image
+    output = left.bitwise(right, operation)
+    assert output.samples == expected * channels
+    assert (output.width, output.height, output.info()["color_model"]) == (2, 2, model)
+    assert output.provenance()["representation"] == "constructed_8bit_samples"
+    assert output.provenance()["source_samples_preserved"] is False
+    assert left.samples == bytes([0, 255, 170, 85]) * channels
+    assert right.samples == bytes([255, 15, 85, 170]) * channels
+    path = tmp_path / "combined.png"
+    output.save_png(path)
+    assert cube.Image.open(path).samples == output.samples
+    original = path.read_bytes()
+    with pytest.raises(OSError):
+        output.save_png(path)
+    assert path.read_bytes() == original
+    assert left.bitwise(right, "xor").bitwise(right, "xor").samples == left.samples
+
+
+def test_bitwise_native_indices_keep_palette_and_reject_invalid_output_indices():
+    palette = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    left = cube.Image.from_samples(1, 1, "indexed", b"\x01", palette, b"\0\x80")
+    right = cube.Image.from_samples(1, 1, "indexed", b"\x02", palette, b"\0\x80")
+    for operation in ["xor", "or"]:
+        with pytest.raises(ValueError) as error:
+            left.bitwise(right, operation)
+        assert error.value.code == "invalid_input"
+        assert error.value.operation == "image.bitwise"
+    output = left.bitwise(right, "and")
+    assert output.samples == b"\0"
+    assert output.info()["palette"] == palette
+    assert output.info()["transparency"] == [0, 128]
+    assert output.expand_palette().samples == bytes([1, 2, 3, 0])
+    assert left.samples == b"\x01" and right.samples == b"\x02"
+
+
+def test_bitwise_requires_matching_geometry_models_and_literal_metadata():
+    left = cube.Image.from_samples(2, 1, "gray", b"\x01\x02")
+    for right in [
+        cube.Image.from_samples(1, 2, "gray", b"\x01\x02"),
+        cube.Image.from_samples(2, 1, "gray_alpha", bytes([1, 2, 3, 4])),
+        cube.Image.from_samples(2, 1, "gray", b"\x01\x02", transparency=b"\0\0"),
+    ]:
+        with pytest.raises(ValueError) as error:
+            left.bitwise(right, "xor")
+        assert error.value.code == "invalid_parameter"
+        assert error.value.operation == "image.bitwise"
+        assert error.value.parameter == "other"
+    indexed = cube.Image.from_samples(1, 1, "indexed", b"\0", [[1, 2, 3]])
+    other = cube.Image.from_samples(1, 1, "indexed", b"\0", [[4, 5, 6]])
+    with pytest.raises(ValueError, match="identical palettes"):
+        indexed.bitwise(other, "xor")
+    assert indexed.expand_palette().bitwise(
+        other.expand_palette(), "xor"
+    ).samples == bytes([5, 7, 5, 0])
+    for operation in ["", "XOR", "not", " xor"]:
+        with pytest.raises(ValueError) as error:
+            left.bitwise(left, operation)
+        assert error.value.operation == "image.bitwise"
+        assert error.value.parameter == "operation"
+    with pytest.raises(TypeError):
+        left.bitwise(b"\x01\x02", "xor")
+
+
+def test_bitwise_preserves_source_evidence_and_reuses_decode_limits():
+    encoded = png_bytes(1, 1, 0, b"\x11", transparency=b"\0\0")
+    left = cube.Image.decode(encoded)
+    assert left.info()["chunks"]
+    output = left.bitwise(left, "xor")
+    assert output.samples == b"\0"
+    assert output.info()["transparency"] == [0, 0]
+    assert output.info()["chunks"] == []
+    assert left.encode_png() and left.samples == b"\x11"
+    for width, height in [(16385, 1), (2048, 2049)]:
+        with pytest.raises(ValueError) as error:
+            cube.Image.from_samples(width, height, "rgba", b"")
+        assert error.value.code == "resource_limit"
+    with pytest.raises(ValueError):
+        cube.Image.from_samples(1, 1, "gray", b"\0\x01")
+    for data in [b"", b"not an image", encoded[:-1]]:
+        with pytest.raises(ValueError):
+            cube.Image.decode(data)
+    with pytest.raises(ValueError) as error:
+        cube.Image.decode(png_bytes(1, 1, 0, b"\0\x01", depth=16))
+    assert error.value.code == "unsupported_format"
+
+
+@pytest.mark.parametrize(
     ("model", "color", "samples", "palette", "trns"),
     [
         ("gray", 0, b"\0\x80\xff\x11", None, b"\0\x80"),

@@ -304,6 +304,24 @@ color tuples in sorted order, including alpha only when selected. Exceeding a
 color budget fails, rather than approximating. Coordinate listings cap at 10000
 pixels. Comparison requires equal dimensions and compatible selected samples.
 
+`image.bitwise` combines two images with an explicitly selected `xor`, `and` or
+`or`, reusing the byte transformations. Dimensions, 8-bit model/channel order,
+palette and raw tRNS must match exactly; unequal sample buffers never cycle or pad.
+Every physical sample participates, including alpha, without blending. Indexed
+values combine as indices and must remain valid for the retained palette;
+explicitly expand both inputs first when RGBA color values are intended.
+Matching tRNS keys remain unchanged: output colors matching the retained key are
+transparent. Other source metadata is dropped; provenance describes constructed
+samples, not original compressed bytes. XOR can be reversed with the same second
+image when all intermediate images remain valid; AND/OR are lossy.
+
+The existing per-image pixel/dimension/sample limits apply to both inputs and the
+result, so their sample buffers total at most 48 MiB. Decoder and PNG export limits
+also apply. PNG export is lossless for resulting samples and creates a new file.
+This operation is available through Rust, CLI and native Python, with no pipeline
+adapter or new image pipeline value. Existing byte XOR and image comparison keep
+their behavior.
+
 Raw reconstruction supports unsigned 8-bit `gray`, `rgb`, `bgr`, `rgba` and `bgra`.
 Width, height and physical layout are mandatory; offset defaults to zero and stride
 to a packed row. Every row includes its declared padding, including the final row:

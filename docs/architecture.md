@@ -72,6 +72,9 @@ transformations stay in their owning modules. Responsibilities include:
   QR analysis reuses palette/luma operations and pure Rust Quircs with smaller
   pixel and candidate limits. Detection, decoding and raw payload bytes remain
   separate; it adds no browser, network or native multimedia dependency.
+  Image-pair bitwise transforms validate equal layouts and literal palette/tRNS
+  before reusing existing byte XOR/AND/OR. Results include physical alpha and
+  validate resulting palette indices; no new pipeline image type is introduced.
 - `media`: WAVE framing, immutable selected PCM blocks and incremental min/max
   envelopes. Metadata skips payloads with `Read + Seek`; extraction/envelopes share
   frame-aligned bounded streaming. Block format/channel/continuity checks precede

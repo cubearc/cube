@@ -5,6 +5,8 @@
 //! occurs. Indexed images retain indices, palette and tRNS independently.
 
 pub mod analyze;
+pub mod bitwise;
+pub use bitwise::BitwiseOperation;
 pub mod colors;
 pub use colors::{ColorLayer, ColorOutput};
 pub mod bits;

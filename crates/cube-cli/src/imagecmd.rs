@@ -2,7 +2,7 @@
 use clap::{Args, Subcommand};
 use cube_core::{
     forensics,
-    image::{self, Channel, Image, PixelData, Region},
+    image::{self, BitwiseOperation, Channel, Image, PixelData, Region},
 };
 use std::{error::Error, io::Write, path::PathBuf};
 
@@ -358,6 +358,19 @@ pub(crate) enum ImageCommand {
         #[arg(long)]
         json: bool,
     },
+    /// Combine compatible 8-bit images with XOR/AND/OR, including physical alpha
+    Bitwise {
+        first: PathBuf,
+        second: PathBuf,
+        /// Exact operation: xor, and, or; no operand cycling or blending
+        #[arg(long)]
+        operation: String,
+        /// New lossless PNG; existing destinations are rejected
+        #[arg(long)]
+        output: PathBuf,
+        #[arg(long)]
+        json: bool,
+    },
     /// Compare exact pixel/channel values without resizing or blending
     Compare {
         first: PathBuf,
@@ -662,6 +675,32 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
                 for count in histogram.colors {
                     writeln!(output, "{:?}: {}", count.values, count.count)?;
                 }
+            }
+        }
+        ImageCommand::Bitwise {
+            first,
+            second,
+            operation,
+            output: destination,
+            json,
+        } => {
+            let operation = BitwiseOperation::parse(&operation)?;
+            let left = Image::open(&first)?;
+            let right = Image::open(&second)?;
+            let image = left.bitwise(&right, operation)?;
+            image.save_png(&destination)?;
+            if json {
+                writeln!(
+                    output,
+                    "{}",
+                    serde_json::to_string_pretty(&serde_json::json!({
+                        "operation": operation,
+                        "image": image.info(),
+                        "provenance": image.provenance(),
+                    }))?
+                )?;
+            } else {
+                writeln!(output, "Wrote PNG8 {} x {}", image.width(), image.height())?;
             }
         }
         ImageCommand::Compare {

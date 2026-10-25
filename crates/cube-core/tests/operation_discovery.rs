@@ -20,7 +20,12 @@ fn discovery_preserves_descriptors_and_matches_the_executable_allowlist() {
         assert_eq!(support.is_null(), !adapters.contains_key(descriptor.id));
     }
     assert_eq!(pipeline::adapter_version("encoding.hex.encode"), Some(1));
-    for id in ["file.info.inspect", "image.decode", "pipeline.execute"] {
+    for id in [
+        "file.info.inspect",
+        "image.decode",
+        "image.bitwise",
+        "pipeline.execute",
+    ] {
         assert!(
             operations::require(id)
                 .unwrap()

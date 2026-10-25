@@ -431,6 +431,32 @@ fn sha256(data: &[u8]) -> String {
     hashing::sha256(data)
 }
 
+/// Exact SHA-512 digest of bytes, 128 lowercase hex digits.
+#[pyfunction]
+fn sha512(data: &[u8]) -> String {
+    hashing::sha512(data)
+}
+/// Legacy SHA-1; unsuitable for collision-resistant security.
+#[pyfunction]
+fn sha1(data: &[u8]) -> String {
+    hashing::sha1(data)
+}
+/// Legacy MD5; unsuitable for collision-resistant security.
+#[pyfunction]
+fn md5(data: &[u8]) -> String {
+    hashing::md5(data)
+}
+/// CRC-32/ISCSI (CRC32C), eight hex digits; not cryptographic.
+#[pyfunction]
+fn crc32c(data: &[u8]) -> String {
+    hashing::crc32c(data)
+}
+/// CRC-16/IBM-3740, four hex digits; not cryptographic.
+#[pyfunction]
+fn crc16_ibm3740(data: &[u8]) -> String {
+    hashing::crc16_ibm3740(data)
+}
+
 /// XOR bytes with a repeating key. An empty key raises ValueError.
 #[pyfunction]
 fn xor<'py>(py: Python<'py>, data: &[u8], key: &[u8]) -> PyResult<Bound<'py, PyBytes>> {
@@ -479,6 +505,11 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(book_decode, module)?)?;
     module.add_function(wrap_pyfunction!(crc32, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
+    module.add_function(wrap_pyfunction!(sha512, module)?)?;
+    module.add_function(wrap_pyfunction!(sha1, module)?)?;
+    module.add_function(wrap_pyfunction!(md5, module)?)?;
+    module.add_function(wrap_pyfunction!(crc32c, module)?)?;
+    module.add_function(wrap_pyfunction!(crc16_ibm3740, module)?)?;
     module.add_function(wrap_pyfunction!(xor, module)?)?;
     Ok(())
 }

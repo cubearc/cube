@@ -32,6 +32,11 @@ pub(super) enum Action {
     AffineDecode,
     Crc32,
     Sha256,
+    Sha512,
+    Sha1,
+    Md5,
+    Crc32c,
+    Crc16Ibm3740,
     Xor,
     Utf8Encode,
     Utf8Decode,
@@ -46,6 +51,31 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "hash.sha512",
+        version: 1,
+        action: Action::Sha512,
+    },
+    Adapter {
+        id: "hash.sha1",
+        version: 1,
+        action: Action::Sha1,
+    },
+    Adapter {
+        id: "hash.md5",
+        version: 1,
+        action: Action::Md5,
+    },
+    Adapter {
+        id: "hash.crc32c",
+        version: 1,
+        action: Action::Crc32c,
+    },
+    Adapter {
+        id: "hash.crc16_ibm3740",
+        version: 1,
+        action: Action::Crc16Ibm3740,
+    },
     Adapter {
         id: "binary.and",
         version: 1,

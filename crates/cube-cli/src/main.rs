@@ -208,6 +208,16 @@ enum Cipher {
 
 #[derive(Subcommand)]
 enum Hash {
+    /// Compute SHA-512 as 128 lowercase hex digits; input <=16 MiB
+    Sha512(Input),
+    /// Legacy SHA-1; unsuitable for collision-resistant security; input <=16 MiB
+    Sha1(Input),
+    /// Legacy MD5; unsuitable for collision-resistant security; input <=16 MiB
+    Md5(Input),
+    /// CRC-32/ISCSI (CRC32C) checksum; not cryptographic; input <=16 MiB
+    Crc32c(Input),
+    /// CRC-16/IBM-3740 checksum; not cryptographic; input <=16 MiB
+    Crc16Ibm3740(Input),
     /// Compute CRC-32/ISO-HDLC (IEEE) as eight lowercase hex digits; not cryptographic
     Crc32(Input),
     /// Compute SHA-256 as lowercase hexadecimal
@@ -573,6 +583,22 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Hash { command } => {
             let digest = match command {
+                Hash::Sha512(input) => hashing::sha512(
+                    &input.read_bounded(cube_core::binary::transform::MAX_INPUT, "hash.sha512")?,
+                ),
+                Hash::Sha1(input) => hashing::sha1(
+                    &input.read_bounded(cube_core::binary::transform::MAX_INPUT, "hash.sha1")?,
+                ),
+                Hash::Md5(input) => hashing::md5(
+                    &input.read_bounded(cube_core::binary::transform::MAX_INPUT, "hash.md5")?,
+                ),
+                Hash::Crc32c(input) => hashing::crc32c(
+                    &input.read_bounded(cube_core::binary::transform::MAX_INPUT, "hash.crc32c")?,
+                ),
+                Hash::Crc16Ibm3740(input) => hashing::crc16_ibm3740(&input.read_bounded(
+                    cube_core::binary::transform::MAX_INPUT,
+                    "hash.crc16_ibm3740",
+                )?),
                 Hash::Crc32(input) => hashing::crc32(&input.read()?),
                 Hash::Sha256(input) => hashing::sha256(&input.read()?),
             };

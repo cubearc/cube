@@ -78,6 +78,11 @@ impl Prepared {
             Action::Base58Encode => size * 2,
             Action::Crc32 => 8,
             Action::Sha256 => 64,
+            Action::Sha512 => 128,
+            Action::Sha1 => 40,
+            Action::Md5 => 32,
+            Action::Crc32c => 8,
+            Action::Crc16Ibm3740 => 4,
             Action::Signatures => 8192,
             _ => size,
         })
@@ -235,6 +240,11 @@ impl Prepared {
                 text(ciphers::affine_decode(&data, *a, *b)?)
             }
             (Action::Crc32, Value::Bytes { data }, _) => text(hashing::crc32(&data)),
+            (Action::Sha512, Value::Bytes { data }, _) => text(hashing::sha512(&data)),
+            (Action::Sha1, Value::Bytes { data }, _) => text(hashing::sha1(&data)),
+            (Action::Md5, Value::Bytes { data }, _) => text(hashing::md5(&data)),
+            (Action::Crc32c, Value::Bytes { data }, _) => text(hashing::crc32c(&data)),
+            (Action::Crc16Ibm3740, Value::Bytes { data }, _) => text(hashing::crc16_ibm3740(&data)),
             (Action::Sha256, Value::Bytes { data }, _) => text(hashing::sha256(&data)),
             (Action::Xor, Value::Bytes { data }, Arguments::Bytes(key)) => {
                 bytes(binary::xor(&data, key).map_err(legacy)?)

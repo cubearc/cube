@@ -57,7 +57,7 @@ fn help_version_and_discovery() {
     );
     let output = cube(&["ops", "list"], b"");
     assert!(output.status.success());
-    assert!(output.stdout.starts_with(b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nbinary xor\n"));
+    assert!(output.stdout.starts_with(b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nhash sha512\nhash sha1\nhash md5\nhash crc32c\nhash crc16-ibm3740\nbinary xor\n"));
 }
 
 #[test]

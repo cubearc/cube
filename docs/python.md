@@ -68,11 +68,18 @@ arbitrary bytes as text. Convert deliberately when the encoding is known:
 assert cube.utf8_encode("Olá") == "Olá".encode("utf-8")
 assert cube.utf8_decode(b"Hello") == "Hello"
 assert cube.crc32(b"123456789") == "cbf43926"
+assert cube.crc32c(b"123456789") == "e3069283"
+assert cube.crc16_ibm3740(b"123456789") == "29b1"
+assert len(cube.sha512(b"abc")) == 128
 assert cube.sha256(b"Hello") == (
     "185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969"
 )
 assert cube.xor(cube.xor(b"\x00\xff", b"key"), b"key") == b"\x00\xff"
 ```
+
+`md5` and `sha1` support legacy comparisons and are unsuitable for
+collision-resistant security. All hash functions consume exact caller-owned
+bytes; CRC variants are checksums. See [variant semantics](operations.md#hashing-and-checksums).
 
 Binary results have no added newline or hexadecimal display layer. To save them:
 

@@ -109,7 +109,8 @@ cube text statistics --text ABAB --ngram-size 2 --json
 cube text statistics --text 'B!Aa?雪' --case ascii_lower --filter ascii_letters
 ```
 
-These produce `CUBE` and `bdf`. Use `line_first` for an untrimmed acrostic;
+The first two commands produce `CUBE` and `bdf`; the statistics commands report
+counts and numeric observations. Use `line_first` for an untrimmed acrostic;
 `word_last` and `line_last` select final scalars, including punctuation or spaces.
 
 ```sh
@@ -164,6 +165,19 @@ Use `--output raw` for exact stdout bytes. AND/OR operands must have equal lengt
 shifts use independent unsigned big-endian units, with explicit zero-fill rules.
 
 ## Compute a hash or checksum
+
+SHA-512 is available alongside SHA-256. MD5 and SHA-1 are legacy and unsuitable
+for collision-resistant security. CRC32C and CRC-16/IBM-3740 are checksums, with
+parameters listed in the [operations guide](operations.md#hashing-and-checksums).
+New hash commands accept at most 16 MiB of exact input bytes.
+
+```sh
+cube hash sha512 --text abc
+cube hash crc32c --text '123456789'
+# e3069283
+cube hash crc16-ibm3740 --text '123456789'
+# 29b1
+```
 
 ```sh
 cube hash sha256 --text 'Hello'

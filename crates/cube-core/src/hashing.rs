@@ -1,6 +1,6 @@
 //! Cryptographic hashes and non-cryptographic checksums through maintained crates.
 
-use sha2::{Digest, Sha256};
+use sha2::{Digest, Sha256, Sha512};
 
 /// Compute CRC-32/ISO-HDLC (IEEE CRC32) as eight lowercase hexadecimal digits.
 ///
@@ -35,6 +35,35 @@ pub fn sha256(input: &[u8]) -> String {
     hex::encode(Sha256::digest(input))
 }
 
+/// Compute SHA-512 as 128 lowercase hex digits of exact bytes.
+/// An unkeyed digest, not password hashing or authentication.
+pub fn sha512(input: &[u8]) -> String {
+    hex::encode(Sha512::digest(input))
+}
+/// Legacy SHA-1 digest (40 lowercase hex digits). Unsuitable for collision-resistant
+/// security; provided only for identifying historical artifacts and puzzle data.
+pub fn sha1(input: &[u8]) -> String {
+    hex::encode(sha1::Sha1::digest(input))
+}
+/// Legacy MD5 digest (32 lowercase hex digits). Unsuitable for collision-resistant
+/// security; provided only for identifying historical artifacts and puzzle data.
+pub fn md5(input: &[u8]) -> String {
+    hex::encode(md5::Md5::digest(input))
+}
+/// CRC-32/ISCSI (CRC32C): polynomial 0x1EDC6F41, init/xor 0xFFFFFFFF,
+/// reflected input/output. Eight lowercase hex digits, including leading zeroes.
+/// A corruption checksum, not a cryptographic hash or authentication.
+pub fn crc32c(input: &[u8]) -> String {
+    const CRC: crc::Crc<u32> = crc::Crc::<u32>::new(&crc::CRC_32_ISCSI);
+    format!("{:08x}", CRC.checksum(input))
+}
+/// CRC-16/IBM-3740: polynomial 0x1021, init 0xFFFF, xor 0, no reflection.
+/// Four lowercase hex digits. A corruption checksum, not a cryptographic hash.
+pub fn crc16_ibm3740(input: &[u8]) -> String {
+    const CRC: crc::Crc<u16> = crc::Crc::<u16>::new(&crc::CRC_16_IBM_3740);
+    format!("{:04x}", CRC.checksum(input))
+}
+
 /// Static metadata for operations implemented in this module.
 pub const OPERATIONS: &[crate::operations::Descriptor] = &[
     crate::operations::Descriptor {
@@ -60,6 +89,66 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         reversible: Some(false),
         command: "hash sha256",
         example: "cube hash sha256 --text Hello",
+    },
+    crate::operations::Descriptor {
+        id: "hash.sha512",
+        category: "hashing",
+        description: "SHA-512 exact-byte digest (128 lowercase hex digits), not password hashing.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash sha512",
+        example: "cube hash sha512 --text abc",
+    },
+    crate::operations::Descriptor {
+        id: "hash.sha1",
+        category: "hashing",
+        description: "Legacy SHA-1 (40 lowercase hex digits); unsuitable for collision-resistant security.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash sha1",
+        example: "cube hash sha1 --text abc",
+    },
+    crate::operations::Descriptor {
+        id: "hash.md5",
+        category: "hashing",
+        description: "Legacy MD5 (32 lowercase hex digits); unsuitable for collision-resistant security.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash md5",
+        example: "cube hash md5 --text abc",
+    },
+    crate::operations::Descriptor {
+        id: "hash.crc32c",
+        category: "hashing",
+        description: "CRC-32/ISCSI (CRC32C) checksum, poly 0x1EDC6F41, init/xor 0xFFFFFFFF, reflected; not cryptographic.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash crc32c",
+        example: "cube hash crc32c --text abc",
+    },
+    crate::operations::Descriptor {
+        id: "hash.crc16_ibm3740",
+        category: "hashing",
+        description: "CRC-16/IBM-3740 checksum, poly 0x1021, init 0xFFFF, xor 0, unreflected; not cryptographic.",
+        input_type: "bytes",
+        output_type: "text",
+        parameters: &[],
+        deterministic: true,
+        reversible: Some(false),
+        command: "hash crc16-ibm3740",
+        example: "cube hash crc16-ibm3740 --text abc",
     },
 ];
 

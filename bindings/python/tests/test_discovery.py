@@ -21,7 +21,18 @@ SDK_BINDINGS = {
         for direction in ("encode", "decode")
     },
     **{f"cipher.{name}": name for name in ("rot13", "atbash", "beaufort")},
-    **{f"hash.{name}": name for name in ("crc32", "sha256")},
+    **{
+        f"hash.{name}": name
+        for name in (
+            "crc32",
+            "sha256",
+            "sha512",
+            "sha1",
+            "md5",
+            "crc32c",
+            "crc16_ibm3740",
+        )
+    },
     **{
         f"symbol.{name}.{direction}": f"{name}_{direction}"
         for name in ("morse", "braille", "a1z26")

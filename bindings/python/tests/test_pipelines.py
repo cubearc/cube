@@ -15,7 +15,7 @@ def test_binary_pipeline_capture_and_explicit_utf8():
     assert result["intermediates"] == {0: "00ff"}
     assert cube.execute_pipeline(steps, b"\x00\xff")["intermediates"] == {}
     assert cube.validate_pipeline(steps, "bytes")["output_type"] == "bytes"
-    assert len(cube.pipeline_adapters()["adapters"]) == 35
+    assert len(cube.pipeline_adapters()["adapters"]) == 40
     text = "é 世界🧊\x00\r\n"
     assert cube.utf8_decode(cube.utf8_encode(text)) == text
     assert (

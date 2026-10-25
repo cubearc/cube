@@ -228,3 +228,52 @@ fn private_exports_require_intent_and_exclusive_restricted_destinations() {
     );
     std::fs::remove_dir_all(&root).unwrap();
 }
+
+#[test]
+fn ethereum_and_keccak_cli_preserve_public_bytes_and_errors() {
+    let key = format!("{:064x}", 1);
+    let result = run(
+        &["blockchain", "ethereum", "--format", "hex", "--json"],
+        key.as_bytes(),
+    );
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let json: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(
+        json["address"],
+        "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"
+    );
+    assert_eq!(json["public_key_xy_hex"].as_str().unwrap().len(), 128);
+    assert!(!String::from_utf8_lossy(&result.stdout).contains(&key));
+    let lower = run(
+        &[
+            "blockchain",
+            "ethereum",
+            "--format",
+            "hex",
+            "--checksum",
+            "lowercase",
+        ],
+        key.as_bytes(),
+    );
+    assert_eq!(
+        lower.stdout,
+        b"0x7e5f4552091a69125d5dfcb7b8c2659029395bdf\n"
+    );
+    let invalid = "invalid-private-input";
+    let result = run(
+        &["--json-errors", "blockchain", "ethereum", "--format", "hex"],
+        invalid.as_bytes(),
+    );
+    assert!(!result.status.success());
+    assert!(!String::from_utf8_lossy(&result.stderr).contains(invalid));
+    let digest = run(&["hash", "keccak256", "--text", "abc"], b"");
+    assert!(digest.status.success());
+    assert_eq!(
+        digest.stdout,
+        b"4e03657aea45a94fc7d47ba826c8d667c0d1e6e33a64a036ec44f58fa12d6c45\n"
+    );
+}

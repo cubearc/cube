@@ -6,7 +6,6 @@ use crate::{
     hashing,
     operations::{Descriptor, Parameter, ParameterType},
 };
-use k256::elliptic_curve::sec1::ToSec1Point;
 use serde::Serialize;
 #[derive(Debug, Serialize)]
 pub struct BitcoinAddress {
@@ -33,8 +32,7 @@ pub(crate) fn from_key(
     network: Network,
     compressed: bool,
 ) -> Result<BitcoinAddress, OperationError> {
-    let point = key.0.public_key().to_sec1_point(compressed);
-    let public_key = point.as_bytes().to_vec();
+    let public_key = key.sec1_public_key(compressed);
     let hash160 = hashing::protocol::ripemd160_bytes(&hashing::sha256_bytes(&public_key));
     let address = address_from_hash(&hash160, network)?;
     Ok(BitcoinAddress {

@@ -115,8 +115,31 @@ fn export_private_key(
         }
     })
 }
+#[pyfunction]
+#[pyo3(signature=(data, *, format="raw", checksum="eip55"))]
+fn derive_ethereum_address(
+    py: Python<'_>,
+    data: &Bound<'_, PyAny>,
+    format: &str,
+    checksum: &str,
+) -> PyResult<Py<PyAny>> {
+    let result = blockchain::ethereum::derive(
+        material(data, format, "blockchain.ethereum.derive")?,
+        blockchain::ethereum::Checksum::parse(checksum).map_err(super::file_error)?,
+    )
+    .map_err(super::file_error)?;
+    let output = super::structured(py, &serde_json::json!(result))?;
+    output
+        .bind(py)
+        .set_item("public_key_xy", PyBytes::new(py, &result.public_key_xy))?;
+    output
+        .bind(py)
+        .set_item("address_bytes", PyBytes::new(py, &result.address_bytes))?;
+    Ok(output)
+}
 pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(validate_wif, module)?)?;
+    module.add_function(wrap_pyfunction!(derive_ethereum_address, module)?)?;
     module.add_function(wrap_pyfunction!(export_private_key, module)?)?;
     module.add_function(wrap_pyfunction!(derive_bitcoin_address, module)?)?;
     module.add_function(wrap_pyfunction!(validate_private_scalar, module)?)?;

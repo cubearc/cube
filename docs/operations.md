@@ -1099,3 +1099,24 @@ pipeline engine, value kinds, preflight, captures and lowered budgets. Adapter
 output is bytes; use direct extraction first when provenance must be retained.
 Caller-selected local files can enter the ordinary byte pipeline separately;
 artifact references never authorize opening them. Existing recipes remain valid.
+
+### Ethereum public addresses and Keccak-256
+
+`blockchain.ethereum.derive` accepts exact raw32/hex64 scalars through the shared
+secp256k1 validation/public-key implementation. It hashes the 64 uncompressed
+**x||y bytes without the SEC1 0x04 prefix** with Ethereum Keccak-256 and takes the
+last 20 bytes. Leading zero bytes remain present. WIF is rejected because Bitcoin
+network/compression intent has no equivalent here.
+
+The result includes public coordinates, exact address bytes and `0x` text. Choose
+`eip55` (default) or `lowercase`. [ERC-55/EIP-55](https://eips.ethereum.org/EIPS/eip-55)
+hashes the lowercase 40 ASCII hex digits **without** `0x` to select letter case;
+this is not a chain-specific checksum. Known answers include the published ERC-55
+cases and a [go-ethereum test vector](https://github.com/ethereum/go-ethereum/blob/master/crypto/crypto_test.go).
+
+`hash.keccak256` is a separate reusable exact-byte digest (<=16 MiB, 64 lowercase
+hex digits), also available through a v1 bytes-to-text pipeline adapter.
+**Keccak-256 is distinct from standardized SHA3-256.** Address derivation has no
+pipeline/capture adapter, network calls, wallet functionality or automatic
+persistence. Scalar input handling has the same limits and privacy caveats as
+Bitcoin derivation.

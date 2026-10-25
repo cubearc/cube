@@ -2,7 +2,7 @@
 
 use sha2::{Digest, Sha256, Sha512};
 pub mod protocol;
-pub use protocol::ripemd160;
+pub use protocol::{keccak256, ripemd160};
 
 /// Compute CRC-32/ISO-HDLC (IEEE CRC32) as eight lowercase hexadecimal digits.
 ///

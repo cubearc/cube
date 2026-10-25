@@ -12,6 +12,8 @@ from cube import _native
 SDK_BINDINGS = {
     "blockchain.private.export": "export_private_key",
     "hash.ripemd160": "ripemd160",
+    "hash.keccak256": "keccak256",
+    "blockchain.ethereum.derive": "derive_ethereum_address",
     "blockchain.bitcoin.derive": "derive_bitcoin_address",
     "blockchain.wif.validate": "validate_wif",
     "blockchain.scalar.validate": "validate_private_scalar",

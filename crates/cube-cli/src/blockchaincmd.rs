@@ -34,6 +34,17 @@ pub(crate) enum Command {
         #[arg(long)]
         stdout: bool,
     },
+    /// Derive public Ethereum address offline using Keccak-256, not SHA3
+    Ethereum {
+        #[command(flatten)]
+        input: crate::Input,
+        #[arg(long, default_value = "raw")]
+        format: String,
+        #[arg(long, default_value = "eip55")]
+        checksum: String,
+        #[arg(long)]
+        json: bool,
+    },
     /// Derive public SEC1/P2PKH offline; network/encoding must be explicit
     #[command(group(clap::ArgGroup::new("bitcoin_encoding").required(true).multiple(false).args(["compressed","uncompressed"])))]
     Bitcoin {
@@ -113,6 +124,25 @@ pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn 
                 writeln!(out, "Wrote private output to a new file")?;
             } else {
                 out.write_all(&exported)?;
+            }
+        }
+        Command::Ethereum {
+            input,
+            format,
+            checksum,
+            json,
+        } => {
+            let checksum = blockchain::ethereum::Checksum::parse(&checksum)?;
+            let bytes =
+                input.read_bounded(blockchain::MAX_MATERIAL_BYTES, "blockchain.ethereum.derive")?;
+            let result = blockchain::ethereum::derive(
+                material(&bytes, &format, "blockchain.ethereum.derive")?,
+                checksum,
+            )?;
+            if json {
+                writeln!(out, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(out, "{}", result.address)?;
             }
         }
         Command::Bitcoin {

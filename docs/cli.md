@@ -743,3 +743,17 @@ The output file must not exist. HTML uses `cube web asset html saved.html --inde
 or remote reference is followed. Both asset operations also compose directly as
 version-1 text-to-bytes steps; select an index and use explicit UTF-8 conversion
 only if a later text operation needs it.
+
+### Ethereum public derivation
+
+Use exact raw32 (default) or hex64 scalar input. This public scalar-1 example
+returns the default EIP-55 text; `--checksum lowercase` selects lowercase output:
+
+```sh
+printf '%064x' 1 | cube blockchain ethereum --format hex
+cube hash keccak256 --text abc
+```
+
+`--json` includes only public coordinates/address and checksum choice. Keccak-256
+is not SHA3-256; derivation never queries a chain. WIF is not an Ethereum scalar
+transport. Prefer exact stdin over private material in command-line arguments.

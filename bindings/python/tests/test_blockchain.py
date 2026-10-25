@@ -88,3 +88,39 @@ def test_explicit_native_private_export_is_separate_from_safe_validation():
         )
     assert wif not in str(error.value)
     assert cube.describe_operation("blockchain.private.export")["pipeline"] is None
+
+
+def test_native_ethereum_and_reusable_keccak():
+    key = bytes(31) + b"\x01"
+    result = cube.derive_ethereum_address(key)
+    assert result["address"] == "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"
+    assert (
+        isinstance(result["address_bytes"], bytes)
+        and len(result["address_bytes"]) == 20
+    )
+    assert (
+        isinstance(result["public_key_xy"], bytes)
+        and len(result["public_key_xy"]) == 64
+    )
+    assert result["address_hex"] == result["address_bytes"].hex()
+    assert (
+        cube.derive_ethereum_address(key.hex(), format="hex", checksum="lowercase")[
+            "address"
+        ]
+        == result["address"].lower()
+    )
+    assert (
+        cube.keccak256(b"")
+        == "c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+    )
+    assert cube.execute_pipeline(
+        [{"operation": "hash.keccak256", "version": 1}], b"abc"
+    )["output"] == cube.keccak256(b"abc")
+    assert cube.describe_operation("blockchain.ethereum.derive")["pipeline"] is None
+    for bad in ["g" * 64, HEX + "\ud800"]:
+        with pytest.raises(ValueError) as error:
+            cube.derive_ethereum_address(bad, format="hex")
+        assert bad not in repr(error.value.args)
+        assert not hasattr(error.value, "object")
+    with pytest.raises(ValueError):
+        cube.derive_ethereum_address(key, checksum="sha3")

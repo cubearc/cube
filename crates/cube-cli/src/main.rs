@@ -268,6 +268,8 @@ enum Cipher {
 enum Hash {
     /// RIPEMD-160 for protocol compatibility; exact bytes, <=16 MiB
     Ripemd160(Input),
+    /// Ethereum Keccak-256, distinct from SHA3-256; exact bytes, <=16 MiB
+    Keccak256(Input),
     /// Compute SHA-512 as 128 lowercase hex digits; input <=16 MiB
     Sha512(Input),
     /// Legacy SHA-1; unsuitable for collision-resistant security; input <=16 MiB
@@ -728,6 +730,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Hash { command } => {
             let digest = match command {
+                Hash::Keccak256(input) => hashing::keccak256(
+                    &input.read_bounded(hashing::protocol::MAX_INPUT, "hash.keccak256")?,
+                )?,
                 Hash::Ripemd160(input) => hashing::ripemd160(
                     &input
                         .read_bounded(cube_core::hashing::protocol::MAX_INPUT, "hash.ripemd160")?,

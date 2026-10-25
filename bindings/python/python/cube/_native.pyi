@@ -586,3 +586,13 @@ def export_private_key(
 ) -> bytes | str:
     """Explicit private export; returned plaintext stays caller-owned."""
     ...
+
+def keccak256(data: bytes) -> str:
+    """Ethereum Keccak-256, distinct from SHA3-256; <=16 MiB exact bytes."""
+    ...
+
+def derive_ethereum_address(
+    data: bytes | str, *, format: str = "raw", checksum: str = "eip55"
+) -> dict[str, Any]:
+    """Public x||y/address only; exact raw32/hex64 scalar, lowercase or EIP-55."""
+    ...

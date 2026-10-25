@@ -738,3 +738,20 @@ provenance distinguishes base64-decoded bytes from UTF-8 of logical JSON text;
 neither selection downloads or decompresses content. Inline HTML selection uses
 the default `selector="inline"` and requires an explicitly terminated script/style.
 Read the [selection rules and budgets](operations.md#offline-web-artifacts).
+
+### Ethereum public derivation
+
+```python
+import cube
+
+eth = cube.derive_ethereum_address(bytes(31) + b"\x01")  # public test scalar
+assert eth["address"] == "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf"
+assert len(eth["public_key_xy"]) == 64
+assert len(eth["address_bytes"]) == 20
+assert cube.keccak256(b"abc") == "4e03657aea45a94fc7d47ba826c8d667c0d1e6e33a64a036ec44f58fa12d6c45"
+```
+
+Use `format="hex"` for exact hex64 input and `checksum="lowercase"` for lowercase
+text; the default is EIP-55. Byte fields have corresponding exact hex fields.
+Keccak-256 is distinct from SHA3-256. This call returns public data only and
+performs no network access, logging or persistence.

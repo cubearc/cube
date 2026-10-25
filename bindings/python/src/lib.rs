@@ -433,6 +433,10 @@ fn crc32(data: &[u8]) -> String {
 
 /// Compute RIPEMD-160 as 40 lowercase hexadecimal digits; input <=16 MiB.
 #[pyfunction]
+fn keccak256(data: &[u8]) -> PyResult<String> {
+    hashing::keccak256(data).map_err(file_error)
+}
+#[pyfunction]
 fn ripemd160(data: &[u8]) -> PyResult<String> {
     hashing::ripemd160(data).map_err(file_error)
 }
@@ -525,6 +529,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(crc32, module)?)?;
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
     module.add_function(wrap_pyfunction!(ripemd160, module)?)?;
+    module.add_function(wrap_pyfunction!(keccak256, module)?)?;
     module.add_function(wrap_pyfunction!(sha512, module)?)?;
     module.add_function(wrap_pyfunction!(sha1, module)?)?;
     module.add_function(wrap_pyfunction!(md5, module)?)?;

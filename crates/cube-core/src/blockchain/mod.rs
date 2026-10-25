@@ -1,5 +1,6 @@
 //! Offline, bounded key-format operations; no wallets, generation or network I/O.
 pub mod bitcoin;
+pub mod ethereum;
 pub mod private;
 pub mod wif;
 use crate::{
@@ -119,6 +120,14 @@ impl PrivateKey {
         let bytes = encoding::hex_decode(text)
             .map_err(|_| malformed("invalid scalar hex").operation("blockchain.scalar.validate"))?;
         Self::from_bytes(&bytes)
+    }
+    pub(crate) fn sec1_public_key(&self, compressed: bool) -> Vec<u8> {
+        use k256::elliptic_curve::sec1::ToSec1Point;
+        self.0
+            .public_key()
+            .to_sec1_point(compressed)
+            .as_bytes()
+            .to_vec()
     }
     pub fn info(&self) -> ScalarInfo {
         ScalarInfo {

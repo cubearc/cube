@@ -2,6 +2,28 @@
 use cube_core::ciphers;
 use pyo3::prelude::*;
 #[pyfunction]
+#[pyo3(signature=(time=None, *, hour_millidegrees=None, minute_millidegrees=None, zero_axis="N", clockwise=true, decode=false))]
+fn clock_directions(
+    py: Python<'_>,
+    time: Option<&str>,
+    hour_millidegrees: Option<i64>,
+    minute_millidegrees: Option<i64>,
+    zero_axis: &str,
+    clockwise: bool,
+    decode: bool,
+) -> PyResult<Py<PyAny>> {
+    let report = cube_core::symbols::clock::inspect(
+        time,
+        hour_millidegrees,
+        minute_millidegrees,
+        zero_axis,
+        clockwise,
+        decode,
+    )
+    .map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(report))
+}
+#[pyfunction]
 fn semaphore_encode(text: &str) -> PyResult<String> {
     cube_core::symbols::semaphore::encode(text).map_err(super::file_error)
 }
@@ -193,6 +215,7 @@ fn utf8_decode(data: &[u8]) -> PyResult<String> {
     cube_core::text::from_utf8(data).map_err(super::file_error)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(clock_directions, module)?)?;
     module.add_function(wrap_pyfunction!(semaphore_encode, module)?)?;
     module.add_function(wrap_pyfunction!(semaphore_decode, module)?)?;
     module.add_function(wrap_pyfunction!(grid_factors, module)?)?;

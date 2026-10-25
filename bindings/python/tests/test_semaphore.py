@@ -17,3 +17,16 @@ def test_letter_pairs_arm_order_and_typed_composition():
         {"operation": "symbol.semaphore.decode", "version": 1},
     ]
     assert cube.execute_pipeline(steps, "A B", capture=[0])["output"] == "A B"
+
+
+def test_exact_clock_convention_is_separate_and_reports_uncertainty():
+    assert cube.clock_directions("3:00", decode=True)["decoded"] == "J"
+    assert cube.clock_directions("12:45")["hour"]["ambiguous"] is True
+    r = cube.clock_directions(hour_millidegrees=-45000, minute_millidegrees=0)
+    assert r["hour"]["directions"] == ["NW"]
+    with pytest.raises(ValueError):
+        cube.clock_directions("12:45", decode=True)
+    with pytest.raises(ValueError):
+        cube.clock_directions("3:00", hour_millidegrees=0, minute_millidegrees=0)
+    with pytest.raises((TypeError, OverflowError)):
+        cube.clock_directions(hour_millidegrees=float("nan"), minute_millidegrees=0)

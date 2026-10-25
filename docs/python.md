@@ -160,6 +160,12 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+`cube.clock_directions("12:45")` reports an ambiguous hour sector.
+`cube.clock_directions("3:00", decode=True)["decoded"] == "J"` explicitly maps
+hour to sender LH and minute to RH. Alternative inputs use exact integer
+`hour_millidegrees` and `minute_millidegrees`; floats/NaN are unsupported.
+`zero_axis` and `clockwise` configure the caller's convention; no clock image is read.
+
 `cube.semaphore_encode("A B") == "S,SW / S,W"` and
 `cube.semaphore_decode("S,SW / S,W") == "A B"`. Arm order is anatomical sender
 left/right, directions viewed facing the sender. Use version-1

@@ -77,6 +77,55 @@ fn semaphore_cli_uses_exact_anatomical_arm_contract() {
             .success()
     );
 }
+#[test]
+fn clock_cli_reports_ambiguity_and_exact_integer_angles() {
+    let report = cube(
+        &["number", "clock", "--time", "3:00", "--decode", "--json"],
+        b"",
+    );
+    assert!(
+        report.status.success(),
+        "{}",
+        String::from_utf8_lossy(&report.stderr)
+    );
+    let r: serde_json::Value = serde_json::from_slice(&report.stdout).unwrap();
+    assert_eq!(r["decoded"], "J");
+    let report = cube(
+        &[
+            "number",
+            "clock",
+            "--hour-millidegrees",
+            "-45000",
+            "--minute-millidegrees",
+            "0",
+            "--json",
+        ],
+        b"",
+    );
+    assert!(report.status.success());
+    assert!(
+        !cube(&["number", "clock", "--time", "12:45", "--decode"], b"")
+            .status
+            .success()
+    );
+    assert!(
+        !cube(
+            &[
+                "number",
+                "clock",
+                "--time",
+                "3:00",
+                "--hour-millidegrees",
+                "0",
+                "--minute-millidegrees",
+                "0"
+            ],
+            b""
+        )
+        .status
+        .success()
+    );
+}
 
 #[test]
 fn caesar_known_answers_and_inverse() {

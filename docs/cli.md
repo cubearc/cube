@@ -139,6 +139,19 @@ Classical ciphers are for challenges and education, not modern confidentiality.
 
 ## Extract from a caller-supplied book
 
+Interpret an exact 12-hour clock reading or signed integer millidegrees:
+
+```sh
+cube number clock --time 3:00 --decode --json
+cube number clock --hour-millidegrees -45000 --minute-millidegrees 0 --json
+cube number clock --time 12:45 --json
+```
+
+The last reading reports boundary ambiguity, without guessing. Hour motion is
+continuous. `--zero-axis N|E|S|W` and `--counterclockwise` explicitly change the
+convention. Optional decoding maps hour to sender LH and minute to RH; it fails
+for ambiguous/unsupported pairs and does not make clock mapping an official code.
+
 Letter-only flag Semaphore uses the sender's anatomical left/right arms, viewed
 facing the sender; directions are `N,NE,E,SE,S,SW,W,NW` in that receiver-facing plane:
 

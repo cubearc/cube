@@ -3,6 +3,15 @@
 from os import PathLike
 from typing import Any, BinaryIO
 
+def clock_directions(
+    time: str | None = None,
+    *,
+    hour_millidegrees: int | None = None,
+    minute_millidegrees: int | None = None,
+    zero_axis: str = "N",
+    clockwise: bool = True,
+    decode: bool = False,
+) -> dict[str, Any]: ...
 def semaphore_encode(text: str) -> str: ...
 def semaphore_decode(text: str) -> str: ...
 def image_pairs(

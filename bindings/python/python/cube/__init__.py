@@ -27,6 +27,7 @@ from ._native import (
     caesar_encode,
     carve_file,
     check_recipe,
+    clock_directions,
     compare_files,
     compare_video_frames,
     convert_base,
@@ -110,6 +111,7 @@ from ._native import (
 )
 
 __all__ = [
+    "clock_directions",
     "semaphore_encode",
     "semaphore_decode",
     "image_pairs",

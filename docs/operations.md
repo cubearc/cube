@@ -137,6 +137,19 @@ one. Use raw output when chaining binary operations. The descriptor is `binary.x
 
 ## Text operations
 
+`symbol.clock.directions` is a separate caller-selected convention, not official
+Semaphore or clock recognition. Select H:MM (ASCII hour 0..12, 0=12, minute 0..59;
+no seconds/fractional minutes) or two signed i64 millidegree angles, never both.
+Hours move 500 millidegrees/minute, minutes 6000. Bearings normalize modulo 360000
+before arithmetic, so signed extremes are safe. Zero axis defaults N, positive
+angles clockwise; E/S/W and reversed sense are explicit. Eight sector centers are
+45000 apart; within +/-1 millidegree of a 22500-offset boundary, return both
+directions as ambiguous rather than breaking a tie. Integer arithmetic makes
+these boundaries reproducible. Each call is one reading with fixed work/storage
+and output below 1 KiB. Optional decoding uses the separate Semaphore decoder with
+hour=sender LH and minute=sender RH, rejecting ambiguity/unsupported pairs. This
+structured result has no pipeline adapter.
+
 Letter-only flag Semaphore follows the anatomical LH/RH positions in the
 [Marine Corps Museum chart](https://www.usmcmuseum.com/uploads/6/0/3/6/60364049/nmmc_semaphore_flag_booklet_final_1.pdf)
 and [Scout Association chart](https://prod-cms.scouts.org.uk/media/5508/generic-resources-semaphore-signals.pdf).

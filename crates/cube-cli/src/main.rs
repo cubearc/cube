@@ -122,6 +122,24 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Map one exact clock reading to directions; optional caller-convention Semaphore
+    #[command(group(clap::ArgGroup::new("clock_input").required(true).multiple(false).args(["time","hour_millidegrees"])))]
+    Clock {
+        #[arg(long,conflicts_with_all=["hour_millidegrees","minute_millidegrees"])]
+        time: Option<String>,
+        #[arg(long, requires = "minute_millidegrees", allow_hyphen_values = true)]
+        hour_millidegrees: Option<i64>,
+        #[arg(long, requires = "hour_millidegrees", allow_hyphen_values = true)]
+        minute_millidegrees: Option<i64>,
+        #[arg(long, default_value = "N")]
+        zero_axis: String,
+        #[arg(long)]
+        counterclockwise: bool,
+        #[arg(long)]
+        decode: bool,
+        #[arg(long)]
+        json: bool,
+    },
     /// Convert signed ASCII integers; 2..36 radices, <=4096 digits and 128-bit magnitude; no prefixes/floats
     Base {
         #[command(flatten)]
@@ -380,6 +398,50 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Number {
+            command:
+                Number::Clock {
+                    time,
+                    hour_millidegrees,
+                    minute_millidegrees,
+                    zero_axis,
+                    counterclockwise,
+                    decode,
+                    json,
+                },
+        } => {
+            let report = cube_core::symbols::clock::inspect(
+                time.as_deref(),
+                hour_millidegrees,
+                minute_millidegrees,
+                &zero_axis,
+                !counterclockwise,
+                decode,
+            )?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&report)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "Hour: {}{}; minute: {}{}",
+                    report.hour.directions.join("|"),
+                    if report.hour.ambiguous {
+                        " (ambiguous)"
+                    } else {
+                        ""
+                    },
+                    report.minute.directions.join("|"),
+                    if report.minute.ambiguous {
+                        " (ambiguous)"
+                    } else {
+                        ""
+                    }
+                )?;
+                if let Some(letter) = report.decoded {
+                    writeln!(output, "Semaphore (hour=LH, minute=RH): {letter}")?;
+                }
+            }
+        }
         Command::Web { command } => webcmd::run(command, &mut output)?,
         Command::Video { command } => videocmd::run(command, &mut output)?,
         Command::Investigate { command } => investigatecmd::run(command, &mut output)?,

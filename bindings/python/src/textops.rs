@@ -2,6 +2,70 @@
 use cube_core::ciphers;
 use pyo3::prelude::*;
 #[pyfunction]
+#[pyo3(signature=(text, *, drop_whitespace=false, max_candidates=128))]
+fn grid_factors(
+    py: Python<'_>,
+    text: &str,
+    drop_whitespace: bool,
+    max_candidates: usize,
+) -> PyResult<Py<PyAny>> {
+    let result = cube_core::text::grid::factors(text, drop_whitespace, max_candidates)
+        .map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(result))
+}
+#[pyfunction]
+#[pyo3(signature=(text, width, *, drop_whitespace=false, traversal="row", colors=None))]
+fn text_grid(
+    py: Python<'_>,
+    text: &str,
+    width: u32,
+    drop_whitespace: bool,
+    traversal: &str,
+    colors: Option<&Bound<'_, pyo3::types::PyDict>>,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::{image::Traversal, text::grid};
+    let grid = grid::render(
+        text,
+        width,
+        drop_whitespace,
+        Traversal::parse(traversal).map_err(super::file_error)?,
+    )
+    .map_err(super::file_error)?;
+    let result = super::structured(py, &serde_json::json!(grid))?;
+    result
+        .bind(py)
+        .set_item("text", grid.text().map_err(super::file_error)?)?;
+    if let Some(colors) = colors {
+        if colors.len() > 256 {
+            return Err(pyo3::exceptions::PyValueError::new_err(
+                "mapping count exceeds 256",
+            ));
+        }
+        let colors = colors
+            .iter()
+            .map(|(key, value)| {
+                if key.len()? != 1 || value.len()? != 4 {
+                    return Err(pyo3::exceptions::PyValueError::new_err(
+                        "mapping requires a scalar and four RGBA bytes",
+                    ));
+                }
+                Ok((key.extract::<String>()?, value.extract::<[u8; 4]>()?))
+            })
+            .collect::<PyResult<Vec<_>>>()?;
+        let png = grid
+            .image(&colors)
+            .map_err(super::file_error)?
+            .encode_png()
+            .map_err(super::file_error)?;
+        result
+            .bind(py)
+            .set_item("png", pyo3::types::PyBytes::new(py, &png))?;
+    } else {
+        result.bind(py).set_item("png", py.None())?;
+    }
+    Ok(result)
+}
+#[pyfunction]
 #[pyo3(signature=(text, *, ngram_size=1, normalization="none", case="preserve", filter="all", max_results=1000))]
 fn text_statistics(
     py: Python<'_>,
@@ -121,6 +185,8 @@ fn utf8_decode(data: &[u8]) -> PyResult<String> {
     cube_core::text::from_utf8(data).map_err(super::file_error)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(grid_factors, module)?)?;
+    module.add_function(wrap_pyfunction!(text_grid, module)?)?;
     module.add_function(wrap_pyfunction!(text_statistics, module)?)?;
     module.add_function(wrap_pyfunction!(select_text, module)?)?;
     module.add(

@@ -137,6 +137,18 @@ one. Use raw output when chaining binary operations. The descriptor is `binary.x
 
 ## Text operations
 
+Grid factors and rendering retain Unicode scalars, not grapheme clusters. Input
+is capped at 1 MiB and 65536 retained scalars; optional Rust White_Space removal
+reports removed/retained counts using `WORD_UNICODE_VERSION`. Factors are ascending
+width, include both orientations within 16384 per side, and reject excessive
+candidate counts (default/hard cap 128). Explicit widths must divide the count.
+Placement reuses existing traversal coordinates. Plain text uses JSON-quoted cells,
+tabs and LF rows; its bounded scalar count keeps expansion below 1 MiB.
+Color rendering requires exactly one explicit RGBA tuple per distinct scalar
+(<=256), with no unused/missing/duplicate mappings; PNG construction is reused.
+No fonts, inference or pipeline grid value is introduced. CLI mappings use a strict
+JSON array of `[scalar, eight Hex digits]`, limited to 8192 bytes; Python uses a dict.
+
 Text statistics count Unicode scalars and overlapping n-grams (`n=1..16`). Defaults
 are no normalization, preserved case and all scalars; ASCII-only lowercasing and
 letter filtering are explicit choices. Counts sort by descending frequency, then

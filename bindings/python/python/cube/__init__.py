@@ -50,6 +50,7 @@ from ._native import (
     file_hex,
     file_signatures,
     file_strings,
+    grid_factors,
     hex_decode,
     hex_encode,
     inspect_audio_metadata,
@@ -83,6 +84,7 @@ from ._native import (
     shift_left,
     shift_right,
     swap_endian,
+    text_grid,
     text_statistics,
     transcribe_morse,
     triage_input,
@@ -105,6 +107,8 @@ from ._native import (
 )
 
 __all__ = [
+    "grid_factors",
+    "text_grid",
     "and_bytes",
     "or_bytes",
     "not_bytes",

@@ -269,6 +269,18 @@ PY
 
 ## Analyze an image
 
+Inspect scalar factor pairs or select exact geometry; grids use tab-separated,
+JSON-quoted cells and LF rows so control characters remain unambiguous:
+
+```sh
+cube text grid --text ABCDEF --json
+cube text grid --text ABCDEF --width 3
+cube text grid --text 0101 --width 2 --colors '[["0","000000ff"],["1","ffffffff"]]' --output grid.png
+```
+
+`--drop-whitespace` is explicit; no normalization occurs. `--traversal` reuses image
+coordinate order with a top-left start. PNG mappings are complete explicit RGBA.
+
 Export one exact-color mask per distinct native tuple to an existing directory:
 
 ```sh

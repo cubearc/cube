@@ -23,6 +23,26 @@ pub(crate) struct ExtractArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Inspect factor pairs or render exact scalar grids; no inferred message
+    Grid {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long)]
+        width: Option<u32>,
+        #[arg(long)]
+        drop_whitespace: bool,
+        #[arg(long, default_value = "row", requires = "width")]
+        traversal: String,
+        #[arg(long, default_value_t = 128)]
+        max_candidates: usize,
+        /// JSON array of [scalar,eight RGBA Hex digits]; requires --output
+        #[arg(long,requires_all=["width","output"])]
+        colors: Option<String>,
+        #[arg(long, requires = "colors")]
+        output: Option<std::path::PathBuf>,
+        #[arg(long)]
+        json: bool,
+    },
     /// Scalar frequencies, overlapping n-grams, IC and entropy; observations only
     Statistics {
         #[command(flatten)]
@@ -73,6 +93,45 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Grid {
+            input,
+            width,
+            drop_whitespace,
+            traversal,
+            max_candidates,
+            colors,
+            output: destination,
+            json,
+        } => {
+            let input = input.read_text("text.grid.render")?;
+            if let Some(width) = width {
+                let grid = text::grid::render(
+                    &input,
+                    width,
+                    drop_whitespace,
+                    cube_core::image::Traversal::parse(&traversal)?,
+                )?;
+                if let Some(colors) = colors {
+                    grid.image(&text::grid::parse_colors(&colors)?)?
+                        .save_png(&destination.expect("required output"))?;
+                }
+                if json {
+                    writeln!(output, "{}", serde_json::to_string_pretty(&grid)?)?;
+                } else {
+                    output.write_all(grid.text()?.as_bytes())?;
+                }
+            } else {
+                let factors = text::grid::factors(&input, drop_whitespace, max_candidates)?;
+                if json {
+                    writeln!(output, "{}", serde_json::to_string_pretty(&factors)?)?;
+                } else {
+                    for d in factors.candidates {
+                        writeln!(output, "{}x{}", d.width, d.height)?;
+                    }
+                }
+            }
+            return Ok(());
+        }
         TextCommand::Statistics {
             input,
             ngram_size,

@@ -3,6 +3,17 @@
 from os import PathLike
 from typing import Any, BinaryIO
 
+def grid_factors(
+    text: str, *, drop_whitespace: bool = False, max_candidates: int = 128
+) -> dict[str, Any]: ...
+def text_grid(
+    text: str,
+    width: int,
+    *,
+    drop_whitespace: bool = False,
+    traversal: str = "row",
+    colors: dict[str, list[int]] | None = None,
+) -> dict[str, Any]: ...
 def operations(category: str | None = None) -> list[dict[str, Any]]:
     """Sorted descriptors; pipeline is {\"version\": int} or None without an adapter."""
     ...

@@ -160,6 +160,12 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+`cube.grid_factors("ABCDEF")` reports ordered exact scalar-length factors.
+`cube.text_grid("ABCDEF", 3)` returns rows plus quoted-cell text; optional
+`colors={"0": [0,0,0,255], "1": [255,255,255,255]}` returns PNG bytes for a binary
+grid. Filtering is explicit (`drop_whitespace=True`); layouts use existing image
+traversals. Scalar units include combining marks separately.
+
 `image.color_layers()` returns a sorted manifest with PNG `bytes` in each
 `outputs[i]["png"]`; it never writes files. Decode those bytes with `Image.decode`
 to inspect each mask. `representation="layer"` preserves selected RGBA, including

@@ -331,7 +331,7 @@ def test_operation_errors_preserve_exception_types_and_add_context(call, operati
 
 def test_discovery_errors_and_file_parameters_share_core_contracts():
     assert len(cube.operations()) >= 23
-    assert len(cube.operations("file")) == 10
+    assert len(cube.operations("file")) == 11
     for call, operation, parameter in [
         (lambda: cube.operations("missing"), "ops.list", "category"),
         (lambda: cube.describe_operation("missing"), "ops.describe", "id"),

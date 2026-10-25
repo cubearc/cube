@@ -84,6 +84,17 @@ def validate_zip(data: bytes, *, offset: int = 0) -> dict[str, Any]:
 def validate_zip_file(
     path: str | PathLike[str], *, offset: int = 0
 ) -> dict[str, Any]: ...
+def carve_file(
+    source: str | PathLike[str],
+    destination: str | PathLike[str],
+    offset: int,
+    *,
+    length: int | None = None,
+    max_bytes: int = 16777216,
+) -> dict[str, Any]:
+    """Recover an exact range or validated candidate; never overwrite or unpack."""
+    ...
+
 def png_chunks(
     data: bytes, *, strict: bool = True, payload_budget: int = 0
 ) -> dict[str, Any]: ...

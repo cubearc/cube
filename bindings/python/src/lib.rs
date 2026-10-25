@@ -236,6 +236,26 @@ fn validate_zip_file(py: Python<'_>, path: std::path::PathBuf, offset: u64) -> P
 }
 
 struct PythonWriter<'py>(Bound<'py, PyAny>);
+
+/// Recover a selected range or revalidated candidate with explicit local output.
+#[pyfunction]
+#[pyo3(signature=(source, destination, offset, *, length=None, max_bytes=forensics::carving::DEFAULT_MAX_BYTES))]
+fn carve_file(
+    py: Python<'_>,
+    source: std::path::PathBuf,
+    destination: std::path::PathBuf,
+    offset: u64,
+    length: Option<u64>,
+    max_bytes: u64,
+) -> PyResult<Py<PyAny>> {
+    let selection = length.map_or(
+        forensics::carving::Selection::Candidate { offset },
+        |length| forensics::carving::Selection::Range { offset, length },
+    );
+    let report = forensics::carving::carve(&source, &destination, selection, max_bytes)
+        .map_err(file_error)?;
+    structured(py, &serde_json::json!(report))
+}
 impl std::io::Write for PythonWriter<'_> {
     fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
         let result = self
@@ -429,6 +449,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(describe_operation, module)?)?;
     module.add_function(wrap_pyfunction!(validate_zip, module)?)?;
     module.add_function(wrap_pyfunction!(validate_zip_file, module)?)?;
+    module.add_function(wrap_pyfunction!(carve_file, module)?)?;
     module.add_function(wrap_pyfunction!(base32_encode, module)?)?;
     module.add_function(wrap_pyfunction!(base32_decode, module)?)?;
     module.add_function(wrap_pyfunction!(base58_encode, module)?)?;

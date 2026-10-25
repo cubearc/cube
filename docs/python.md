@@ -313,3 +313,10 @@ report with absolute offsets, archive length and inert exact entry names as hex.
 Inspect `payload_verified`, `scanned_bytes`, `candidate_scan_complete` and `evidence`
 before interpreting the result. No payload is decompressed and no named entry is
 written or executed.
+
+`cube.carve_file(source, destination, offset, length=None, max_bytes=16777216)`
+revalidates a supported candidate when length is omitted, or copies an explicit
+raw range when it is supplied. The returned report includes exact offsets/length,
+selection/validation evidence and SHA-256 of the recovered bytes. Existing outputs
+raise `OSError`; invalid candidates, ranges and budgets raise `ValueError` with
+`operation == "file.carve"`. Output is explicit local I/O, outside recipe steps.

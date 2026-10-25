@@ -38,6 +38,7 @@ SDK_BINDINGS = {
     "file.signature.scan": "scan_file",
     "file.strings.extract": "file_strings",
     "file.zip.validate": "validate_zip",
+    "file.carve": "carve_file",
     "image.bit_plane.extract": "Image.bit_plane",
     "image.channel.extract": "Image.channel",
     "image.compare": "Image.compare",

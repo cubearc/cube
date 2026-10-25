@@ -227,3 +227,31 @@ def test_embedded_zip_structure_uses_exact_candidate_origin(tmp_path):
             cube.validate_zip(bad)
         assert error.value.operation == "file.zip.validate"
     assert cube.describe_operation("file.zip.validate")["pipeline"] is None
+
+
+def test_explicit_carving_provenance_and_no_overwrite(tmp_path):
+    archive = b"PK\x05\x06" + b"\0" * 18
+    source = tmp_path / "host"
+    target = tmp_path / "recovered"
+    source.write_bytes(b"host" + archive + b"tail")
+    report = cube.carve_file(source, target, 4, max_bytes=22)
+    assert target.read_bytes() == archive
+    assert report["offset"] == 4
+    assert report["length"] == report["bytes_written"] == 22
+    assert report["source_size"] == 30
+    assert report["selection"] == "candidate"
+    assert report["format"] == "zip"
+    assert report["sha256"] == cube.sha256(archive)
+    with pytest.raises(OSError):
+        cube.carve_file(source, target, 4)
+    assert source.read_bytes() == b"host" + archive + b"tail"
+    for offset, length, budget in [(30, 1, 100), (4, 22, 21)]:
+        missing = tmp_path / "missing"
+        with pytest.raises(ValueError) as error:
+            cube.carve_file(source, missing, offset, length=length, max_bytes=budget)
+        assert error.value.operation == "file.carve"
+        assert not missing.exists()
+    raw = cube.carve_file(source, tmp_path / "raw", 1, length=2)
+    assert raw["format"] is None
+    assert raw["selection"] == "range"
+    assert cube.describe_operation("file.carve")["pipeline"] is None

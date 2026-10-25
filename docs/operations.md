@@ -422,3 +422,23 @@ competing interpretations outside that prefix are not ruled out. `payload_verifi
 is always false: compressed content, actual CRC integrity and authenticity are not
 verified. `file appended` reuses this same validator for a ZIP at offset zero.
 ZIP is available through direct APIs rather than the current pipeline report subset.
+
+### Recover selected embedded bytes
+
+`file carve` / `carve_file` requires an explicit offset and a new destination.
+Omit length to revalidate a supported PNG/JPEG/GIF/ZIP candidate at that origin;
+supply length to copy an exact raw range without claiming format validation.
+Candidate validation uses relative reader coordinates, while the report keeps
+absolute source offsets. ZIP candidate carving requires a complete bounded suffix
+search; if that is not possible, choose an explicit known range instead.
+
+The output budget defaults to 16 MiB and can be lowered or raised to the existing
+1 GiB streaming-copy hard limit. Range/size/format checks happen before output
+creation; existing destinations and source aliases are rejected. Copying reuses
+the 64 KiB streaming range API. A new partial output is removed on failure.
+The report includes source size, selected range, bytes written, selection mode,
+format/evidence when validated, and SHA-256 of the exact recovered bytes. This
+identifies content, not trust. Source size/mtime changes during recovery fail;
+callers must keep inputs stable because this is not an atomic filesystem snapshot.
+No paths or bytes are automatically retained in investigation sessions. Nothing is
+decompressed or executed, and source files are opened read-only.

@@ -214,3 +214,41 @@ fn zip_candidate_validation_is_distinct_from_signature_detection() {
     assert!(!r.status.success());
     assert!(r.stdout.is_empty());
 }
+#[test]
+fn carving_validates_candidates_and_emits_range_provenance() {
+    let files = Files::new("carving");
+    let source = files.path("source");
+    let target = files.path("recovered");
+    let mut bytes = b"hostPK\x05\x06".to_vec();
+    bytes.extend([0; 18]);
+    bytes.extend(b"tail");
+    std::fs::write(&source, &bytes).unwrap();
+    let r = run(&[
+        "file",
+        "carve",
+        source.to_str().unwrap(),
+        "--offset",
+        "4",
+        "--output",
+        target.to_str().unwrap(),
+        "--json",
+    ]);
+    assert!(r.status.success(), "{}", String::from_utf8_lossy(&r.stderr));
+    let report: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(report["selection"], "candidate");
+    assert_eq!(report["format"], "zip");
+    assert_eq!(report["bytes_written"], 22);
+    assert_eq!(std::fs::read(&target).unwrap(), bytes[4..26]);
+    let r = run(&[
+        "file",
+        "carve",
+        source.to_str().unwrap(),
+        "--offset",
+        "4",
+        "--output",
+        target.to_str().unwrap(),
+    ]);
+    assert!(!r.status.success());
+    assert!(r.stdout.is_empty());
+    assert_eq!(std::fs::read(source).unwrap(), bytes);
+}

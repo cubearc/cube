@@ -96,6 +96,11 @@ pub fn inspect(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationErr
         }
         if n >= 4 && (&header[..4] == b"PK\x03\x04" || &header[..4] == b"PK\x05\x06") {
             let archive = super::zip::validate(reader, 0)?;
+            if !archive.candidate_scan_complete {
+                return Err(limit(
+                    "ZIP boundary is uncertain beyond the 16 MiB candidate search; select an explicit bounded range",
+                ));
+            }
             return Ok(Boundary {
                 format: "zip",
                 logical_end: archive.logical_end,

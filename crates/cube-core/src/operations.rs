@@ -293,6 +293,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::forensics::zip::OPERATIONS)
         .chain(crate::forensics::carving::OPERATIONS)
         .chain(crate::image::OPERATIONS)
+        .chain(crate::image::raw::OPERATIONS)
         .chain(crate::image::analyze::OPERATIONS)
         .chain(crate::image::transform::OPERATIONS)
         .chain(crate::image::bits::OPERATIONS)

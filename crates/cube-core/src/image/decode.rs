@@ -128,12 +128,12 @@ impl Image {
     pub fn provenance(&self) -> Provenance {
         Provenance {
             format: self.source_format,
-            representation: if self.source_format == "png" {
-                "native_png8_samples"
-            } else {
-                "decoded_raster8_samples"
+            representation: match self.source_format {
+                "png" => "native_png8_samples",
+                "raw" => "explicit_raw8_samples",
+                _ => "decoded_raster8_samples",
             },
-            source_samples_preserved: self.source_format == "png",
+            source_samples_preserved: matches!(self.source_format, "png" | "raw"),
             color_management: "none",
             orientation: "stored_coordinates_no_exif_transform",
             frame_policy: "single_frame",

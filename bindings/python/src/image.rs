@@ -40,6 +40,27 @@ pub struct PyImage {
 
 #[pymethods]
 impl PyImage {
+    #[staticmethod]
+    #[pyo3(signature=(data, width, height, layout, *, row_stride=None, offset=0))]
+    fn from_raw(
+        data: &[u8],
+        width: u32,
+        height: u32,
+        layout: &str,
+        row_stride: Option<usize>,
+        offset: usize,
+    ) -> PyResult<Self> {
+        let layout = cube_core::image::RawLayout {
+            width,
+            height,
+            layout: cube_core::image::SampleLayout::parse(layout).map_err(super::file_error)?,
+            row_stride,
+            offset,
+        };
+        Ok(Self {
+            inner: Image::from_raw(data, &layout).map_err(super::file_error)?,
+        })
+    }
     #[pyo3(signature = (x, y, *, expand_palette=false))]
     fn pixel<'py>(
         &self,

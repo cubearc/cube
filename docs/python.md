@@ -163,6 +163,13 @@ single-frame GIF, BMP and static WebP expose decoded 8-bit samples; inspect
 Use `pixel`, `channel`, `histogram`, `bit_plane` or `lsb` to inspect selected data.
 See [image semantics and limits](operations.md#image-analysis-and-steganography).
 
+Raw layouts are explicit and preserve source buffers:
+
+```python
+raw = cube.Image.from_raw(bytes([3, 2, 1, 0, 6, 5, 4, 0]), 1, 2, "bgr", row_stride=4)
+assert raw.pixel(0, 1) == [4, 5, 6]
+```
+
 Structured results can contain native `bytes` or `Image` objects, so they are not
 necessarily directly JSON-serializable. Convert those fields explicitly when
 serializing; do not replace binary values with guessed UTF-8 text.

@@ -227,6 +227,15 @@ Pixel coordinates start at `(0,0)`
 at the top left; palette expansion and lossy transforms are explicit.
 See [image analysis](operations.md#image-analysis-and-steganography).
 
+Reconstruct explicitly selected raw bytes, without rewriting their source:
+
+```sh
+python -c 'from pathlib import Path; Path("pixels.bin").write_bytes(bytes([3,2,1,0,6,5,4,0]))'
+cube image raw pixels.bin --width 1 --height 2 --layout bgr --row-stride 4 --output reconstructed.png
+```
+
+Omit `--output` to validate and inspect layout facts without writing a file.
+
 ## Inspect audio samples
 
 ```sh

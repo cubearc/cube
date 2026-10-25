@@ -216,6 +216,15 @@ color tuples in sorted order, including alpha only when selected. Exceeding a
 color budget fails, rather than approximating. Coordinate listings cap at 10000
 pixels. Comparison requires equal dimensions and compatible selected samples.
 
+Raw reconstruction supports unsigned 8-bit `gray`, `rgb`, `bgr`, `rgba` and `bgra`.
+Width, height and physical layout are mandatory; offset defaults to zero and stride
+to a packed row. Every row includes its declared padding, including the final row:
+input length must equal `offset + height * stride`. Extra or missing bytes fail.
+Only prefix and explicitly declared row padding are ignored. No byte-order option
+is needed for one-byte samples. The ordinary image/input budgets apply. The result
+uses canonical gray/RGB/RGBA samples, with lossless PNG export to a new file.
+Raw images use direct APIs; no pipeline image value is introduced.
+
 Rotation, mirroring and channel permutations rearrange samples reversibly;
 inversion preserves alpha unless selected. Cropping discards pixels and grayscale
 conversion loses color. Saved PNGs retain samples/palette/transparency but drop

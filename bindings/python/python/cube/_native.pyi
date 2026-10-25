@@ -100,6 +100,16 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    @staticmethod
+    def from_raw(
+        data: bytes,
+        width: int,
+        height: int,
+        layout: str,
+        *,
+        row_stride: int | None = None,
+        offset: int = 0,
+    ) -> Image: ...
     def provenance(self) -> dict[str, Any]: ...
     @staticmethod
     def decode(data: bytes) -> Image: ...

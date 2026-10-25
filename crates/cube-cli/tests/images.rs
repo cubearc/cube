@@ -23,6 +23,40 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn raw_layout_preview_export_and_collision_preserve_input() {
+    let files = Files::new("raw");
+    let path = files.path("pixels.bin");
+    let destination = files.path("raw.png");
+    let bytes = [3, 2, 1, 99, 6, 5, 4, 88];
+    std::fs::write(&path, bytes).unwrap();
+    let args = [
+        "image",
+        "raw",
+        path.to_str().unwrap(),
+        "--width",
+        "1",
+        "--height",
+        "2",
+        "--layout",
+        "bgr",
+        "--row-stride",
+        "4",
+    ];
+    let result = run(&args);
+    assert!(result.status.success());
+    let info: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(info["row_padding"], 1);
+    let mut args = args.to_vec();
+    args.extend(["--output", destination.to_str().unwrap()]);
+    assert!(run(&args).status.success());
+    assert!(!run(&args).status.success());
+    assert_eq!(
+        Image::open(&destination).unwrap().samples(),
+        [1, 2, 3, 4, 5, 6]
+    );
+    assert_eq!(std::fs::read(path).unwrap(), bytes);
+}
+#[test]
 fn bmp_inspection_reports_decoded_provenance_and_binary_pixels() {
     let files = Files::new("bmp");
     let path = files.path("original.bmp");

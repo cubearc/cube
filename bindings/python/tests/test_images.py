@@ -25,6 +25,21 @@ def bmp_bytes():
     return header + dib + pixels
 
 
+def test_explicit_raw_layout_preserves_samples_and_checks_extent(tmp_path):
+    data = b"xx" + bytes([3, 2, 1, 99, 6, 5, 4, 88])
+    image = cube.Image.from_raw(data, 1, 2, "bgr", row_stride=4, offset=2)
+    assert image.samples == bytes([1, 2, 3, 4, 5, 6])
+    assert image.pixel(0, 1) == [4, 5, 6]
+    assert image.provenance()["representation"] == "explicit_raw8_samples"
+    image.save_png(tmp_path / "raw.png")
+    assert cube.Image.open(tmp_path / "raw.png").samples == image.samples
+    for candidate in [data[:-1], data + b"\0"]:
+        with pytest.raises(ValueError):
+            cube.Image.from_raw(candidate, 1, 2, "bgr", row_stride=4, offset=2)
+    with pytest.raises(ValueError):
+        cube.Image.from_raw(b"abc", 1, 1, "rgb", row_stride=2)
+
+
 def test_bmp_decoding_provenance_and_lossless_export(tmp_path):
     source = bmp_bytes()
     path = tmp_path / "original.bmp"

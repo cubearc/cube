@@ -126,6 +126,23 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Inspect an explicit raw 8-bit layout; optionally export a new PNG
+    Raw {
+        path: PathBuf,
+        #[arg(long)]
+        width: u32,
+        #[arg(long)]
+        height: u32,
+        #[arg(long)]
+        layout: String,
+        /// Complete row bytes, including padding on the final row
+        #[arg(long)]
+        row_stride: Option<usize>,
+        #[arg(long, default_value_t = 0)]
+        offset: usize,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
     /// Extract row-major 0/1 bits; optional MSB packing or explicit 0/255 PNG
     BitPlane {
         path: PathBuf,
@@ -305,6 +322,29 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Raw {
+            path,
+            width,
+            height,
+            layout,
+            row_stride,
+            offset,
+            output: destination,
+        } => {
+            let data = crate::pipelinecmd::read_file(&path, image::MAX_ENCODED)?;
+            let layout = image::RawLayout {
+                width,
+                height,
+                layout: image::SampleLayout::parse(&layout)?,
+                row_stride,
+                offset,
+            };
+            let info = layout.inspect(data.len())?;
+            if let Some(destination) = destination {
+                Image::from_raw(&data, &layout)?.save_png(&destination)?;
+            }
+            writeln!(output, "{}", serde_json::to_string_pretty(&info)?)?;
+        }
         ImageCommand::BitPlane {
             path,
             view,

@@ -7,7 +7,9 @@
 pub mod analyze;
 pub mod bits;
 pub mod decode;
+pub mod raw;
 pub use bits::{BitOrder, BitPlane, Incomplete, LsbOptions, LsbResult, Traversal};
+pub use raw::{RawInfo, RawLayout, SampleLayout};
 pub mod transform;
 pub use analyze::{Channel, Comparison, Histogram, PixelData, Region};
 

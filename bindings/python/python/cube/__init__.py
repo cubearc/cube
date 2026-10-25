@@ -79,6 +79,8 @@ from ._native import (
     rot13,
     scan_file,
     select_text,
+    semaphore_decode,
+    semaphore_encode,
     sha1,
     sha256,
     sha512,
@@ -108,6 +110,8 @@ from ._native import (
 )
 
 __all__ = [
+    "semaphore_encode",
+    "semaphore_decode",
     "image_pairs",
     "grid_factors",
     "text_grid",

@@ -3,6 +3,8 @@
 from os import PathLike
 from typing import Any, BinaryIO
 
+def semaphore_encode(text: str) -> str: ...
+def semaphore_decode(text: str) -> str: ...
 def image_pairs(
     images: list[Image],
     operation: str,

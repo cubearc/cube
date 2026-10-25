@@ -139,6 +139,18 @@ Classical ciphers are for challenges and education, not modern confidentiality.
 
 ## Extract from a caller-supplied book
 
+Letter-only flag Semaphore uses the sender's anatomical left/right arms, viewed
+facing the sender; directions are `N,NE,E,SE,S,SW,W,NW` in that receiver-facing plane:
+
+```sh
+cube encode semaphore --text 'A B'
+cube decode semaphore --text 'S,SW / S,W'
+```
+
+Tokens are `LH,RH`, separated by one ASCII space; `/` encodes each literal space.
+ASCII letters canonicalize to uppercase; digits, other whitespace and control
+signals are rejected. D uses `S,N` and also accepts alternate `N,S` on decode.
+
 ```sh
 printf 'Cube Uses Binary Evidence' > /tmp/cube-book-source.txt
 cube cipher book --source /tmp/cube-book-source.txt --text '1:1,2:1,3:1,4:1'

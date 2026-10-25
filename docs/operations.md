@@ -137,6 +137,23 @@ one. Use raw output when chaining binary operations. The descriptor is `binary.x
 
 ## Text operations
 
+Letter-only flag Semaphore follows the anatomical LH/RH positions in the
+[Marine Corps Museum chart](https://www.usmcmuseum.com/uploads/6/0/3/6/60364049/nmmc_semaphore_flag_booklet_final_1.pdf)
+and [Scout Association chart](https://prod-cms.scouts.org.uk/media/5508/generic-resources-semaphore-signals.pdf).
+The [ANBG text](https://www.cpbr.gov.au/flags/semaphore.html) differs for I (RH up);
+both charts show RH high, so I is `SW,NW`, distinct from K `N,SW`.
+No artwork is bundled. Coordinates are receiver-facing: sender LH points toward
+screen-right when extended outward. `N,NE,E,SE,S,SW,W,NW` denote eight directions.
+Tokens are `LH,RH`, separated by exactly one ASCII space; `/` represents each
+literal ASCII space. A-Z letters canonicalize case; digits, other whitespace and
+procedural/numeric modes are excluded. J is literal J; D encodes canonically as
+`S,N` and also decodes `N,S`. Reversed arms are otherwise not inferred.
+Empty input is empty output. Limits are 1 MiB transport and 16384 symbols/tokens;
+encoding expands to less than 96 KiB. Two version-1 text pipeline adapters preflight
+16384 input bytes for encoding, 98304 for decoding and a 6x/1x output bound.
+Existing engine/adapter versions retain their behavior. Clock interpretation is
+a separate operation, not part of this alphabet.
+
 Grid factors and rendering retain Unicode scalars, not grapheme clusters. Input
 is capped at 1 MiB and 65536 retained scalars; optional Rust White_Space removal
 reports removed/retained counts using `WORD_UNICODE_VERSION`. Factors are ascending

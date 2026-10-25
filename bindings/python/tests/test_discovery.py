@@ -39,6 +39,8 @@ SDK_BINDINGS = {
         for direction in ("encode", "decode")
     },
     "cipher.book.decode": "book_decode",
+    "symbol.semaphore.encode": "semaphore_encode",
+    "symbol.semaphore.decode": "semaphore_decode",
     "binary.xor": "xor",
     "binary.and": "and_bytes",
     "binary.or": "or_bytes",

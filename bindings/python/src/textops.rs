@@ -2,6 +2,14 @@
 use cube_core::ciphers;
 use pyo3::prelude::*;
 #[pyfunction]
+fn semaphore_encode(text: &str) -> PyResult<String> {
+    cube_core::symbols::semaphore::encode(text).map_err(super::file_error)
+}
+#[pyfunction]
+fn semaphore_decode(text: &str) -> PyResult<String> {
+    cube_core::symbols::semaphore::decode(text).map_err(super::file_error)
+}
+#[pyfunction]
 #[pyo3(signature=(text, *, drop_whitespace=false, max_candidates=128))]
 fn grid_factors(
     py: Python<'_>,
@@ -185,6 +193,8 @@ fn utf8_decode(data: &[u8]) -> PyResult<String> {
     cube_core::text::from_utf8(data).map_err(super::file_error)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(semaphore_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(semaphore_decode, module)?)?;
     module.add_function(wrap_pyfunction!(grid_factors, module)?)?;
     module.add_function(wrap_pyfunction!(text_grid, module)?)?;
     module.add_function(wrap_pyfunction!(text_statistics, module)?)?;

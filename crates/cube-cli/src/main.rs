@@ -155,6 +155,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Letter-only flag Semaphore; anatomical sender LH,RH, viewed facing sender
+    Semaphore(Input),
     /// ASCII letters to 1..26 hyphen tokens, preserving ASCII whitespace
     A1z26(Input),
     /// International Morse A-Z/0-9; collapse ASCII spaces; <=1 MiB input
@@ -173,6 +175,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Exact LH,RH direction pairs or / spaces; no numeral/control state
+    Semaphore(Input),
     /// Strict 1..26 hyphen tokens to uppercase text; preserve ASCII whitespace
     A1z26(Input),
     /// Canonical Morse tokens (single spaces, / between words) to uppercase text
@@ -473,6 +477,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Encode { command } => {
             let text = match command {
+                Encode::Semaphore(input) => cube_core::symbols::semaphore::encode(
+                    &input.read_text("symbol.semaphore.encode")?,
+                )?,
                 Encode::A1z26(input) => {
                     cube_core::symbols::a1z26::encode(&input.read_text("symbol.a1z26.encode")?)?
                 }
@@ -490,6 +497,12 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             write_text(&mut output, &text)?;
         }
         Command::Decode { command } => match command {
+            Decode::Semaphore(input) => write_text(
+                &mut output,
+                &cube_core::symbols::semaphore::decode(
+                    &input.read_text("symbol.semaphore.decode")?,
+                )?,
+            )?,
             Decode::A1z26(input) => write_text(
                 &mut output,
                 &cube_core::symbols::a1z26::decode(&input.read_text_limit(

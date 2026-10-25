@@ -3,6 +3,8 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    SemaphoreEncode,
+    SemaphoreDecode,
     HtmlAsset,
     HarAsset,
     And,
@@ -53,6 +55,16 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "symbol.semaphore.encode",
+        version: 1,
+        action: Action::SemaphoreEncode,
+    },
+    Adapter {
+        id: "symbol.semaphore.decode",
+        version: 1,
+        action: Action::SemaphoreDecode,
+    },
     Adapter {
         id: "web.html.asset",
         version: 1,

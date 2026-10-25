@@ -160,6 +160,12 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+`cube.semaphore_encode("A B") == "S,SW / S,W"` and
+`cube.semaphore_decode("S,SW / S,W") == "A B"`. Arm order is anatomical sender
+left/right, directions viewed facing the sender. Use version-1
+`symbol.semaphore.encode` / `symbol.semaphore.decode` pipeline steps for bounded
+text composition. Case canonicalizes to uppercase; no numeric/control mode exists.
+
 `cube.image_pairs([first, second, third], "xor", plan_only=True)` returns budgets
 without pair execution. Omit `plan_only` for results with PNG bytes or, for
 `"compare"`, existing structured comparison reports. Repeated image objects fail;

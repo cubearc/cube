@@ -59,6 +59,24 @@ fn help_version_and_discovery() {
     assert!(output.status.success());
     assert!(output.stdout.starts_with(b"encode base32\nencode base58\nencode base64\nencode hex\ndecode base32\ndecode base58\ndecode base64\ndecode hex\ncipher caesar\ncipher rot13\nhash crc32\nhash sha256\nhash sha512\nhash sha1\nhash md5\nhash crc32c\nhash crc16-ibm3740\nbinary xor\n"));
 }
+#[test]
+fn semaphore_cli_uses_exact_anatomical_arm_contract() {
+    success(
+        &["encode", "semaphore", "--text", "A B"],
+        b"",
+        b"S,SW / S,W\n",
+    );
+    success(
+        &["decode", "semaphore", "--text", "S,SW / S,W"],
+        b"",
+        b"A B\n",
+    );
+    assert!(
+        !cube(&["decode", "semaphore", "--text", "SW,S"], b"")
+            .status
+            .success()
+    );
+}
 
 #[test]
 fn caesar_known_answers_and_inverse() {

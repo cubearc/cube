@@ -23,6 +23,16 @@ pub struct Execution {
 impl Prepared {
     /// Conservative output-size upper bounds guard allocation before algorithms.
     fn ceiling(&self, size: usize) -> Result<usize, Error> {
+        if (matches!(self.adapter.action, Action::SemaphoreEncode)
+            && size > crate::symbols::semaphore::MAX_SYMBOLS)
+            || (matches!(self.adapter.action, Action::SemaphoreDecode)
+                && size > 6 * crate::symbols::semaphore::MAX_SYMBOLS)
+        {
+            return Err(Error::new(
+                ErrorCode::ResourceLimit,
+                "Semaphore adapter exceeds bounded symbolic input",
+            ));
+        }
         if (matches!(self.adapter.action, Action::HtmlAsset) && size > crate::web::MAX_HTML_BYTES)
             || (matches!(self.adapter.action, Action::HarAsset)
                 && size > super::json::MAX_DOCUMENT_BYTES)
@@ -77,6 +87,7 @@ impl Prepared {
             ));
         }
         Ok(match self.adapter.action {
+            Action::SemaphoreEncode => size * 6,
             Action::HtmlAsset | Action::HarAsset => size.min(crate::web::assets::MAX_ASSET_BYTES),
             Action::A1z26Encode => size * 3,
             Action::Base32Encode => size.div_ceil(5) * 8,
@@ -106,6 +117,12 @@ impl Prepared {
         let bytes = |data| Value::Bytes { data };
         let text = |data| Value::Text { data };
         Ok(match (self.adapter.action, value, &self.arguments) {
+            (Action::SemaphoreEncode, Value::Text { data }, _) => {
+                text(crate::symbols::semaphore::encode(&data)?)
+            }
+            (Action::SemaphoreDecode, Value::Text { data }, _) => {
+                text(crate::symbols::semaphore::decode(&data)?)
+            }
             (Action::HtmlAsset, Value::Text { data }, Arguments::WebAsset { index, selector }) => {
                 crate::web::assets::html(&data, *index, *selector)?.into_value()
             }

@@ -7,10 +7,11 @@ use pyo3::{
     prelude::*,
     types::{PyBool, PyDict, PyList},
 };
-fn steps(values: &Bound<'_, PyList>) -> PyResult<Vec<u64>> {
+fn steps(values: &Bound<'_, PyList>, operation: &'static str) -> PyResult<Vec<u64>> {
     if values.len() > 65536 {
         return Err(super::file_error(
             OperationError::new(ErrorCode::ResourceLimit, "steps exceed 65536 entries")
+                .operation(operation)
                 .parameter("steps"),
         ));
     }
@@ -23,6 +24,7 @@ fn steps(values: &Bound<'_, PyList>) -> PyResult<Vec<u64>> {
                         ErrorCode::InvalidParameter,
                         "steps must be exact positive u64 integers",
                     )
+                    .operation(operation)
                     .parameter("steps"),
                 ));
             }
@@ -32,13 +34,18 @@ fn steps(values: &Bound<'_, PyList>) -> PyResult<Vec<u64>> {
                         ErrorCode::InvalidParameter,
                         "steps must be exact positive u64 integers",
                     )
+                    .operation(operation)
                     .parameter("steps"),
                 )
             })
         })
         .collect()
 }
-fn options(py: Python<'_>, value: Option<&Bound<'_, PyDict>>) -> PyResult<Options> {
+fn options(
+    py: Python<'_>,
+    value: Option<&Bound<'_, PyDict>>,
+    operation: &'static str,
+) -> PyResult<Options> {
     value
         .map(|v| {
             super::puzzles::document(py, v).and_then(|s| {
@@ -48,6 +55,7 @@ fn options(py: Python<'_>, value: Option<&Bound<'_, PyDict>>) -> PyResult<Option
                             ErrorCode::InvalidParameter,
                             "invalid concrete traversal options",
                         )
+                        .operation(operation)
                         .parameter("options"),
                     )
                 })
@@ -67,9 +75,9 @@ fn keyed_skip(
 ) -> PyResult<Py<PyAny>> {
     let result = traversal::keyed(
         text,
-        &self::steps(steps)?,
+        &self::steps(steps, "text.skip.keyed")?,
         count,
-        &self::options(py, options)?,
+        &self::options(py, options, "text.skip.keyed")?,
     )
     .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(result))
@@ -85,9 +93,9 @@ fn josephus_extract(
 ) -> PyResult<Py<PyAny>> {
     let result = traversal::josephus(
         text,
-        &self::steps(steps)?,
+        &self::steps(steps, "text.josephus.extract")?,
         count,
-        &self::options(py, options)?,
+        &self::options(py, options, "text.josephus.extract")?,
     )
     .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(result))

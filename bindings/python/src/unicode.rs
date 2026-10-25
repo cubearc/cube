@@ -4,7 +4,11 @@ use cube_core::{
     text::unicode::{self, Options},
 };
 use pyo3::{prelude::*, types::PyDict};
-fn options(py: Python<'_>, options: Option<&Bound<'_, PyDict>>) -> PyResult<Options> {
+fn options(
+    py: Python<'_>,
+    options: Option<&Bound<'_, PyDict>>,
+    operation: &'static str,
+) -> PyResult<Options> {
     options
         .map(|o| {
             super::puzzles::document(py, o).and_then(|s| {
@@ -14,6 +18,7 @@ fn options(py: Python<'_>, options: Option<&Bound<'_, PyDict>>) -> PyResult<Opti
                             ErrorCode::InvalidParameter,
                             "invalid concrete Unicode listing options",
                         )
+                        .operation(operation)
                         .parameter("options"),
                     )
                 })
@@ -29,7 +34,8 @@ fn inspect_unicode(
     text: &str,
     options: Option<&Bound<'_, PyDict>>,
 ) -> PyResult<Py<PyAny>> {
-    let report = unicode::inspect(text, &self::options(py, options)?).map_err(super::file_error)?;
+    let report = unicode::inspect(text, &self::options(py, options, "text.unicode.inspect")?)
+        .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(report))
 }
 #[pyfunction]
@@ -41,8 +47,13 @@ fn compare_unicode(
     normalization: &str,
     options: Option<&Bound<'_, PyDict>>,
 ) -> PyResult<Py<PyAny>> {
-    let report = unicode::compare(left, right, normalization, &self::options(py, options)?)
-        .map_err(super::file_error)?;
+    let report = unicode::compare(
+        left,
+        right,
+        normalization,
+        &self::options(py, options, "text.unicode.compare")?,
+    )
+    .map_err(super::file_error)?;
     super::structured(py, &serde_json::json!(report))
 }
 pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {

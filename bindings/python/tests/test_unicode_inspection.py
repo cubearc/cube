@@ -48,3 +48,17 @@ def test_original_and_normalized_offsets_are_separate():
             cube.inspect_unicode("A", options=options)
     with pytest.raises(ValueError):
         cube.compare_unicode("", "", normalization="bad")
+
+    for call, operation in [
+        (
+            lambda: cube.inspect_unicode("", options={"unknown": True}),
+            "text.unicode.inspect",
+        ),
+        (
+            lambda: cube.compare_unicode("", "", options={"unknown": True}),
+            "text.unicode.compare",
+        ),
+    ]:
+        with pytest.raises(ValueError) as caught:
+            call()
+        assert caught.value.operation == operation

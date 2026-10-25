@@ -30,3 +30,15 @@ def test_keyed_and_josephus_records_and_options():
     for key in ["max_work", "max_memory", "max_output"]:
         with pytest.raises(ValueError):
             cube.keyed_skip("ABC", [1], 1, options={key: 0})
+
+    for call, operation in [
+        (lambda: cube.keyed_skip("A", [-1], 1), "text.skip.keyed"),
+        (lambda: cube.josephus_extract("A", [-1]), "text.josephus.extract"),
+        (
+            lambda: cube.josephus_extract("A", [1], options={"unknown": True}),
+            "text.josephus.extract",
+        ),
+    ]:
+        with pytest.raises(ValueError) as caught:
+            call()
+        assert caught.value.operation == operation

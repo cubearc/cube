@@ -91,12 +91,10 @@ caller lists. Over-budget selections fail in full, without silent truncation.
 One-for-one scalar replacement bounds final output by 4 MiB, within the existing
 8 MiB output ceiling. Selector validation is reusable independently of ciphers.
 
-There is no pipeline/recipe adapter in engine API 1. Although discovery metadata
-can describe integer/text lists, `pipeline::Parameter` accepts only integer,
-boolean, text or explicit byte values; JSON arrays are rejected. Thus it cannot
-cleanly carry typed index/exclusion lists and override records. Discovery reports
-`pipeline: null`. The direct Rust/CLI/Python interfaces are complete; the linear
-engine and its parameter/version contracts remain unchanged.
+A version-1 text-to-text pipeline adapter calls this same operation. Tagged list
+parameters and mandatory per-step audits let it compose without losing explicit
+edits; see [composition contracts](#compose-operations). The engine API and recipe
+format remain 1; existing adapters retain their contracts.
 
 ## Classical ciphers
 
@@ -901,8 +899,28 @@ JSON values use explicit tags: `{"type":"bytes","base64":"AP8="}`,
 cannot overflow, and a range grants no file access. Only identity currently accepts
 range values. Parameter scalar types are not silently coerced.
 
+List parameters are concrete tagged objects: `{"unsigned_list":[0,2]}` or
+`{"text_list":["1=X"]}`. Tags distinguish even empty lists (`{"unsigned_list":[]}`
+versus `{"text_list":[]}`). Bare arrays, mixed/nested lists, floats, null, negative
+unsigned values, unknown/duplicate fields and integer overflow fail. Unsigned
+list transport preserves all u64 values and checks conversion to platform positions;
+scalar parameters retain signed i64 transport. Descriptor constraints validate
+lengths and element values. Tags add parameter types without changing engine API 1,
+recipe format 1, any existing adapter version, or legacy execution JSON.
+
+`text.transform.masked` version 1 stays text-to-text and always returns its full
+direct-operation report in `masked_audits[step]` alongside the composable output.
+This includes original input/configuration, selected positions, deterministic text,
+every explicit override and final text. Audits are mandatory even without captures;
+`recipe check` returns them too. Python uses integer step keys; JSON uses object
+keys. Existing executions/checks omit the field when no masked step is present.
+CLI pipeline/recipe runs require `--format json` for masked steps so an ordinary
+or raw output mode cannot silently discard their evidence. Investigation sessions
+currently record only a final typed value, so they reject masked pipelines before
+execution; use the direct pipeline/recipe interfaces to retain these reports.
+
 Hard pipeline bounds are 64 steps, 1 MiB per value, 256 KiB parameter data,
-16 MiB conservative work and 4 MiB captured intermediates. Lower these with
+16 MiB conservative work and 4 MiB shared captured-intermediate/masked-audit retention. Lower these with
 `max_steps`, `max_value_bytes`, `max_work_bytes` and `max_capture_bytes` in the
 limits object. Work counts initial input and each step's input/output upper bounds; ranges count
 as 16 logical bytes. Conservative bounds can reject a data-specific smaller result.
@@ -911,6 +929,25 @@ unique zero-based step indexes. Cancellation is cooperative between bounded step
 not a hard timeout. No shell, network, native loading or arbitrary file capability
 is granted. See [CLI](cli.md#run-a-pipeline-or-recipe) and
 [Python](python.md#compose-a-pipeline-or-recipe) examples.
+
+List storage counts toward the 256 KiB aggregate parameter budget: unsigned lists
+charge 16 header bytes plus 8 per entry; text lists charge 16 plus 24 per entry and
+exact UTF-8 bytes. Each list also has a hard 65,536-entry limit. The unchanged
+256 KiB/depth-16/4096-node JSON bounds apply before decoding, so practical list
+limits are smaller and depend on the entire document. The eight-bindings-per-step
+limit remains; mutually exclusive selectors allow even a full masked request.
+
+Masked output is bounded by input bytes plus three bytes per possible replaced
+scalar. Each audit charges a 512-byte header, its three UTF-8 text fields, 8 bytes
+per selected/configured index and 48 bytes per override. Captures and all audits
+share `max_capture_bytes`. Conservative bounds may charge more than the actual
+result, especially with repeated overrides or multibyte input. Masked work also
+charges 32 times input bytes, 16 times selector entries times (floor(log2(max(1,
+entries))) + 2), 64 per override and the audit bound, in addition to the normal
+input/output work charges. All estimates precede transformation. Input-dependent
+positions validate inside the step before its ciphers run; static later-step errors
+reject the whole plan before earlier steps execute. These bounds can reject large
+requests that a direct single-operation call accepts.
 
 ### Recipe files
 

@@ -162,9 +162,9 @@ Position-aware text transformation keeps reusable bounded position sets in
 `text::positions` and masked cipher composition/auditable overrides in
 `text::transform`. The latter calls existing Rust ciphers; CLI and PyO3 only
 adapt parameters and reports. Every Unicode scalar counts and text is never
-implicitly normalized. Pipeline API 1 cannot represent the required typed lists,
-so this operation is discoverable through direct interfaces with no adapter;
-see [its contract](operations.md#position-aware-transformations).
+implicitly normalized. Its version-1 text-to-text adapter returns mandatory,
+bounded reports alongside composable text; see
+[its contract](operations.md#position-aware-transformations).
 
 ## Metadata and discovery
 
@@ -212,6 +212,15 @@ failure and supports cooperative cancellation at bounded operation boundaries.
 Pipeline-only values distinguish bytes, text and explicitly supported structured
 kinds. Future adapters must declare concrete types and resource bounds; direct
 function APIs remain independent of this composition boundary.
+
+Pipeline parameters add concrete tagged unsigned/text lists to the existing
+scalar/byte forms. Descriptor constraints remain the single validation source;
+empty lists are unambiguous and arbitrary JSON values stay unsupported. This
+additive extension keeps engine API 1, recipe format 1 and all existing adapter
+contracts. `Execution.masked_audits` holds the existing typed masked reports,
+always retained against the same bound as intermediate captures, while ordinary
+steps keep their previous wire shape. Recipe checks preserve these reports too.
+CLI output modes and investigation sessions reject paths that would drop them.
 
 Offline HTML/HAR inspections tokenize or parse caller-owned text without a
 browser, URL resolver or file loader. Explicit asset selectors return bounded

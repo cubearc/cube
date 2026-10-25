@@ -19,10 +19,17 @@ pub struct Execution {
     pub output: Value,
     pub intermediates: BTreeMap<usize, Value>,
     pub work_bytes_upper_bound: u64,
+    /// Mandatory, bounded per-step evidence for masked transformations. Ordinary
+    /// legacy executions keep their existing serialized shape when this is empty.
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    pub masked_audits: BTreeMap<usize, text::transform::Report>,
 }
 impl Prepared {
     /// Conservative output-size upper bounds guard allocation before algorithms.
     fn ceiling(&self, size: usize) -> Result<usize, Error> {
+        if let Arguments::Masked(config) = &self.arguments {
+            return super::masked::output_bound(config, size);
+        }
         if matches!(self.adapter.action, Action::Base58CheckEncode)
             && size > encoding::base58check::MAX_PAYLOAD
         {
@@ -119,7 +126,19 @@ impl Prepared {
             _ => size,
         })
     }
-    fn apply(&self, value: Value) -> Result<Value, OperationError> {
+    fn apply(
+        &self,
+        value: Value,
+    ) -> Result<(Value, Option<text::transform::Report>), OperationError> {
+        if let (Arguments::Masked(config), Value::Text { data }) = (&self.arguments, &value) {
+            let report = text::transform::masked(data, config)?;
+            return Ok((
+                Value::Text {
+                    data: report.final_text.clone(),
+                },
+                Some(report),
+            ));
+        }
         let legacy = |e: crate::Error| {
             OperationError::new(e.code(), e.to_string())
                 .operation(e.operation_id())
@@ -127,7 +146,7 @@ impl Prepared {
         };
         let bytes = |data| Value::Bytes { data };
         let text = |data| Value::Text { data };
-        Ok(match (self.adapter.action, value, &self.arguments) {
+        let output = match (self.adapter.action, value, &self.arguments) {
             (Action::SemaphoreEncode, Value::Text { data }, _) => {
                 text(crate::symbols::semaphore::encode(&data)?)
             }
@@ -306,7 +325,8 @@ impl Prepared {
                     "validated adapter/value contract is inconsistent",
                 ));
             }
-        })
+        };
+        Ok((output, None))
     }
 }
 impl Plan {
@@ -356,7 +376,23 @@ impl Plan {
                         "conservative intermediate/output bound exceeds value budget",
                     ));
                 }
-                work += size as u64 + output as u64;
+                work = work
+                    .checked_add(size as u64 + output as u64)
+                    .ok_or_else(|| {
+                        Error::new(ErrorCode::ResourceLimit, "work-byte count overflows")
+                    })?;
+                if let Arguments::Masked(config) = &step.arguments {
+                    work = work
+                        .checked_add(super::masked::work_bound(config, size)?)
+                        .ok_or_else(|| {
+                            Error::new(ErrorCode::ResourceLimit, "masked work-byte count overflows")
+                        })?;
+                    retained = retained
+                        .checked_add(super::masked::audit_bound(config, size)?)
+                        .ok_or_else(|| {
+                            Error::new(ErrorCode::ResourceLimit, "audit byte count overflows")
+                        })?;
+                }
                 if matches!(step.adapter.action, Action::Base58CheckEncode) {
                     // The codec cap precedes this checked, conservative quadratic charge.
                     work += (size as u64 + 5).pow(2);
@@ -368,13 +404,15 @@ impl Plan {
                     ));
                 }
                 if capture.contains(&index) {
-                    retained += output;
-                    if retained > self.limits.max_capture_bytes {
-                        return Err(Error::new(
-                            ErrorCode::ResourceLimit,
-                            "conservative intermediate-capture budget exceeded",
-                        ));
-                    }
+                    retained = retained.checked_add(output).ok_or_else(|| {
+                        Error::new(ErrorCode::ResourceLimit, "capture byte count overflows")
+                    })?;
+                }
+                if retained > self.limits.max_capture_bytes {
+                    return Err(Error::new(
+                        ErrorCode::ResourceLimit,
+                        "conservative intermediate-capture budget exceeded",
+                    ));
                 }
                 size = output;
                 Ok(())
@@ -389,6 +427,8 @@ impl Plan {
         }
         let mut output = input;
         let mut intermediates = BTreeMap::new();
+        let mut masked_audits = BTreeMap::new();
+        let mut audit_bytes = 0usize;
         for (index, step) in self.steps.iter().enumerate() {
             if cancelled() {
                 return Err(Error::new(
@@ -397,9 +437,25 @@ impl Plan {
                 )
                 .at(index, Some(step.adapter.id)));
             }
-            output = step
+            let (next, audit) = step
                 .apply(output)
                 .map_err(|e| Error::from_operation(e).at(index, Some(step.adapter.id)))?;
+            output = next;
+            if let Some(report) = audit {
+                audit_bytes = audit_bytes
+                    .checked_add(super::masked::audit_size(&report)?)
+                    .ok_or_else(|| {
+                        Error::new(ErrorCode::ResourceLimit, "audit byte count overflows")
+                    })?;
+                if audit_bytes > self.limits.max_capture_bytes {
+                    return Err(Error::new(
+                        ErrorCode::ResourceLimit,
+                        "masked audit exceeds retention budget",
+                    )
+                    .at(index, Some(step.adapter.id)));
+                }
+                masked_audits.insert(index, report);
+            }
             output
                 .validate(self.limits.max_value_bytes)
                 .map_err(|e| e.at(index, Some(step.adapter.id)))?;
@@ -418,6 +474,7 @@ impl Plan {
             output,
             intermediates,
             work_bytes_upper_bound: work,
+            masked_audits,
         })
     }
 }

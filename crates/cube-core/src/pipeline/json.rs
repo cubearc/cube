@@ -105,7 +105,7 @@ pub(super) fn schema<T: serde::de::DeserializeOwned>(
     value: Value,
     field: &str,
 ) -> Result<T, Error> {
-    serde_json::from_value(value).map_err(|e|Error::from_operation(OperationError::new(ErrorCode::InvalidInput,"invalid schema: check required/unknown fields, scalar types and explicit base64 tags").caused_by(e)).parameter(field))
+    serde_json::from_value(value).map_err(|e|Error::from_operation(OperationError::new(ErrorCode::InvalidInput,"invalid schema: check required/unknown fields, parameter types and explicit data tags").caused_by(e)).parameter(field))
 }
 pub fn value(document: &str) -> Result<super::Value, Error> {
     let value: super::Value = schema(parse(document)?, "value")?;

@@ -322,11 +322,11 @@ fn exact_resource_limits_and_overflow_do_not_truncate() {
     );
 }
 #[test]
-fn metadata_exposes_actual_direct_contract_and_pipeline_limitation() {
+fn metadata_exposes_direct_contract_and_versioned_pipeline_support() {
     let d = operations::require("text.transform.masked").unwrap();
     assert_eq!((d.input_type, d.output_type), ("text", "text"));
     assert!(d.deterministic);
-    assert!(d.discovery().pipeline.is_none());
+    assert_eq!(d.discovery().pipeline.unwrap().version, 1);
     assert!(
         pipeline::Plan::validate(
             pipeline::Kind::Text,

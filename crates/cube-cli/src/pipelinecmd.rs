@@ -85,6 +85,11 @@ impl Output {
         result: &Execution,
         out: &mut impl Write,
     ) -> Result<(), Box<dyn Error>> {
+        if !result.masked_audits.is_empty() && !matches!(self.format, Format::Json) {
+            return Err(
+                "masked transformations require --format json to preserve step audits".into(),
+            );
+        }
         let mut data = match (&result.output, self.format) {
             (_, Format::Json) => serde_json::to_vec_pretty(result)?,
             (Value::Bytes { data }, Format::Hex) => {

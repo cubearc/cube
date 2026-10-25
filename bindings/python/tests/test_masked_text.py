@@ -134,7 +134,7 @@ def test_types_limits_and_operation_discovery():
             cube.transform_masked(text, selected="atbash", **options)
         assert error.value.code == "resource_limit"
     descriptor = cube.describe_operation("text.transform.masked")
-    assert descriptor["pipeline"] is None
+    assert descriptor["pipeline"] == {"version": 1}
     with pytest.raises(ValueError):
         cube.validate_pipeline(
             [dict(operation="text.transform.masked", version=1)], "text"

@@ -628,6 +628,21 @@ Recipe bindings are explicit `name=value` arguments: `--text`, `--hex`, `--input
 (raw file) or `--value` (tagged JSON). Validation does not execute steps. `check`
 compares exact typed output and returns a nonzero status on a mismatch.
 
+### Transform positions in a pipeline
+
+```sh
+cube pipeline run --text ABCDEFGHIJKLMNOPQRSTUVWXYZ --steps '[{"operation":"text.transform.masked","version":1,"parameters":{"selector":"fibonacci","exclude":{"unsigned_list":[13,21]},"index_base":1,"selected":"atbash","otherwise":"caesar","otherwise_shift":3}}]' --format json
+```
+
+The text output is `ZYXGVIJSLMNOPQRSTUVWXYZABC`; `masked_audits["0"]` preserves
+the full report, including deterministic text and each explicit replacement.
+Use `{"text_list":["1=雪","1=🧊"]}` for the `overrides` parameter to record edits
+in order. Both pipeline and recipe runs require `--format json` for this adapter;
+ordinary/raw output fails instead of discarding audits. `recipe check` includes
+these audits with its exact-output check. The existing recipe format/engine API 1
+can use this version-1 adapter. [Contracts and bounds](operations.md#compose-operations)
+explain tagged empty lists and shared retention/work budgets.
+
 ### Compose a forensic inspection
 
 Decode exact bytes, then inspect their rows while retaining the decoded intermediate:

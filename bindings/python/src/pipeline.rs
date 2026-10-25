@@ -150,6 +150,13 @@ pub(super) fn execution(py: Python<'_>, result: &pipeline::Execution) -> PyResul
         captures.set_item(index, output(py, value)?)?;
     }
     dictionary.set_item("intermediates", captures)?;
+    if !result.masked_audits.is_empty() {
+        let audits = PyDict::new(py);
+        for (index, report) in &result.masked_audits {
+            audits.set_item(index, super::structured(py, &serde_json::json!(report))?)?;
+        }
+        dictionary.set_item("masked_audits", audits)?;
+    }
     dictionary.set_item("work_bytes_upper_bound", result.work_bytes_upper_bound)?;
     Ok(dictionary.into_any().unbind())
 }

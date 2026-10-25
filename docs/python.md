@@ -516,6 +516,29 @@ assert cube.check_recipe(document, {"payload": b"\x00\xff"}, b"\x00\xff")["passe
 Bindings are values supplied by your program. Recipe definitions do not read
 files, execute shell commands or grant network access.
 
+### Keep positional transformation evidence
+
+```python
+steps = [{"operation": "text.transform.masked", "version": 1, "parameters": {
+    "selector": "fibonacci", "exclude": {"unsigned_list": [13, 21]},
+    "index_base": 1, "selected": "atbash", "otherwise": "caesar", "otherwise_shift": 3,
+    "overrides": {"text_list": ["1=雪", "1=🧊"]},
+}}]
+result = cube.execute_pipeline(steps, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+assert result["output"] == "🧊YXGVIJSLMNOPQRSTUVWXYZABC"
+assert result["masked_audits"][0]["deterministic_text"] == "ZYXGVIJSLMNOPQRSTUVWXYZABC"
+assert result["masked_audits"][0]["overrides"][1]["previous"] == "雪"
+```
+
+List tags are required, including for empty lists; no JSON string or CLI subprocess
+is needed. Audits are retained even when `capture` is omitted, and use integer step
+keys just like intermediates. `execute_recipe` and `check_recipe` preserve the same
+reports. Existing engine API/recipe format 1 definitions still work unchanged.
+Audits share `max_capture_bytes` with requested captures and contribute to the
+work bound; [exact contracts and limits](operations.md#compose-operations) describe
+these conservative charges. Investigation sessions reject this adapter because
+their value-only records cannot retain its mandatory audits.
+
 ### Inspect bytes in a pipeline
 
 ```python

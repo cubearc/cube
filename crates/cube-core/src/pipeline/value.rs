@@ -86,7 +86,9 @@ impl Value {
     }
 }
 /// JSON parameter scalars preserve their actual types; binary keys need an
-/// explicit {"base64":"..."} object. Floats/null/lists are not parameters in v1.
+/// explicit {"base64":"..."} object. Concrete tagged list objects are additive:
+/// {"unsigned_list":[0,2]} and {"text_list":["1=X"]}. Bare arrays, floats, null,
+/// mixed/nested lists and arbitrary objects remain invalid, including empty arrays.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum Parameter {
@@ -97,24 +99,66 @@ pub enum Parameter {
         #[serde(rename = "base64", with = "base64_wire")]
         data: Vec<u8>,
     },
+    UnsignedList {
+        #[serde(rename = "unsigned_list")]
+        values: Vec<u64>,
+    },
+    TextList {
+        #[serde(rename = "text_list")]
+        values: Vec<String>,
+    },
 }
 impl Parameter {
-    pub(super) fn borrowed(&self) -> crate::operations::ParameterValue<'_> {
+    pub(super) fn borrowed<'a>(
+        &'a self,
+        text: &'a [&'a str],
+    ) -> crate::operations::ParameterValue<'a> {
         use crate::operations::ParameterValue as V;
         match self {
             Self::Integer(n) => V::Integer(*n),
             Self::Boolean(v) => V::Boolean(*v),
             Self::Text(v) => V::Text(v),
             Self::Bytes { data } => V::Bytes(data),
+            Self::UnsignedList { values } => V::UnsignedList(values),
+            Self::TextList { .. } => V::TextList(text),
         }
     }
-    pub(super) fn size(&self) -> usize {
-        match self {
+    pub(super) fn size(&self) -> Result<usize, Error> {
+        let limit = || {
+            Error::new(
+                ErrorCode::ResourceLimit,
+                "parameter list exceeds count or byte budget",
+            )
+        };
+        let size = match self {
             Self::Integer(_) => 8,
             Self::Boolean(_) => 1,
             Self::Text(v) => v.len(),
             Self::Bytes { data } => data.len(),
+            Self::UnsignedList { values } => {
+                if values.len() > crate::text::MAX_INDICES {
+                    return Err(limit());
+                }
+                16usize
+                    .checked_add(values.len().checked_mul(8).ok_or_else(limit)?)
+                    .ok_or_else(limit)?
+            }
+            Self::TextList { values } => {
+                if values.len() > crate::text::MAX_INDICES {
+                    return Err(limit());
+                }
+                values
+                    .iter()
+                    .try_fold(16usize, |size, text| {
+                        size.checked_add(24)?.checked_add(text.len())
+                    })
+                    .ok_or_else(limit)?
+            }
+        };
+        if size > super::MAX_PARAMETER_BYTES {
+            return Err(limit());
         }
+        Ok(size)
     }
 }
 pub(super) mod base64_wire {

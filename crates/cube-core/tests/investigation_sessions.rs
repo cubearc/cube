@@ -356,3 +356,27 @@ fn record_loading_rejects_duplicate_ids_versions_forged_results_and_references()
         .remove("version");
     assert!(Session::from_json(&invalid.to_string()).is_err());
 }
+
+#[test]
+fn sessions_reject_masked_audits_before_execution_instead_of_dropping_evidence() {
+    let data = b"ABC";
+    let mut session = Session::new(3, SessionLimits::default()).unwrap();
+    let steps = cube_core::pipeline::json::steps(r#"[
+        {"operation":"text.utf8.decode","version":1},
+        {"operation":"text.transform.masked","version":1,"parameters":{"selector":"fibonacci","selected":"atbash"}}
+    ]"#).unwrap();
+    let error = session
+        .execute(
+            data,
+            RunSpec::pipeline(steps, Limits::default()),
+            Capture::default(),
+            None,
+        )
+        .unwrap_err();
+    assert!(
+        error
+            .to_string()
+            .contains("audits require direct pipeline or recipe")
+    );
+    assert!(session.runs().is_empty());
+}

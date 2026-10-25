@@ -3,6 +3,7 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    MaskedText,
     Keccak256,
     Ripemd160,
     Base58CheckEncode,
@@ -58,6 +59,11 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "text.transform.masked",
+        version: 1,
+        action: Action::MaskedText,
+    },
     Adapter {
         id: "hash.keccak256",
         version: 1,
@@ -296,6 +302,7 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    Masked(crate::text::transform::Config),
     Version(u8),
     WebAsset {
         index: usize,
@@ -360,10 +367,19 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
     }
     let descriptor =
         operations::describe(adapter.id).ok_or_else(|| invalid("missing adapter descriptor"))?;
+    let text_lists: Vec<Vec<&str>> = step
+        .parameters
+        .values()
+        .map(|p| match p {
+            Parameter::TextList { values } => values.iter().map(String::as_str).collect(),
+            _ => Vec::new(),
+        })
+        .collect();
     let values: Vec<_> = step
         .parameters
         .iter()
-        .map(|(k, v)| (k.as_str(), v.borrowed()))
+        .zip(&text_lists)
+        .map(|((k, v), text)| (k.as_str(), v.borrowed(text)))
         .collect();
     descriptor
         .validate(&values)
@@ -373,6 +389,7 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::MaskedText => Arguments::Masked(super::masked::prepare(step)?),
         Action::Base58CheckEncode => Arguments::Version(integer("version")? as u8),
         Action::HtmlAsset | Action::HarAsset => {
             let index = usize::try_from(integer("index")?)

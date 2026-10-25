@@ -3,6 +3,7 @@ mod adapters;
 mod execute;
 mod forensic;
 pub mod json;
+mod masked;
 pub mod recipe;
 mod value;
 use crate::errors::{ErrorCode, OperationError};
@@ -11,6 +12,8 @@ pub use forensic::{ForensicReport, HexEvidence, SignatureEvidence, StringEvidenc
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, error::Error as StdError, fmt};
 pub use value::{Kind, Parameter, Value};
+/// The linear execution contract remains 1. Tagged lists and the new masked
+/// adapter are additive; existing adapters and legacy execution JSON are unchanged.
 pub const ENGINE_API: u32 = 1;
 pub const MAX_STEPS: usize = 64;
 pub const MAX_VALUE_BYTES: usize = 1024 * 1024;
@@ -190,12 +193,20 @@ impl Plan {
                         "step exceeds eight parameter bindings",
                     ));
                 }
-                parameters += step.parameters.values().map(Parameter::size).sum::<usize>();
-                if parameters > MAX_PARAMETER_BYTES {
-                    return Err(Error::new(
-                        ErrorCode::ResourceLimit,
-                        "parameter values exceed 256 KiB",
-                    ));
+                for (name, value) in &step.parameters {
+                    parameters = parameters
+                        .checked_add(value.size().map_err(|e| e.parameter(name))?)
+                        .ok_or_else(|| {
+                            Error::new(ErrorCode::ResourceLimit, "parameter byte count overflows")
+                                .parameter(name)
+                        })?;
+                    if parameters > MAX_PARAMETER_BYTES {
+                        return Err(Error::new(
+                            ErrorCode::ResourceLimit,
+                            "parameter values exceed 256 KiB",
+                        )
+                        .parameter(name));
+                    }
                 }
                 let item = adapters::prepare(&step)?;
                 let (expected, output) = item.kinds()?;

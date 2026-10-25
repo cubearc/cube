@@ -58,7 +58,15 @@ fn check_recipe(
     let result = py
         .detach(|| recipe.check(&bindings, &expected))
         .map_err(|e| error(py, e))?;
-    super::structured(py, &serde_json::json!(result))
+    let report = super::structured(py, &serde_json::json!(result))?;
+    if !result.masked_audits.is_empty() {
+        let audits = PyDict::new(py);
+        for (index, audit) in &result.masked_audits {
+            audits.set_item(index, super::structured(py, &serde_json::json!(audit))?)?;
+        }
+        report.bind(py).set_item("masked_audits", audits)?;
+    }
+    Ok(report)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(validate_recipe, module)?)?;

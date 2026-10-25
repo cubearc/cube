@@ -236,7 +236,12 @@ impl RunSpec {
     }
     pub(super) fn plan(&self) -> Result<Option<Plan>> {
         if let Self::Pipeline { steps, limits } = self {
-            let steps=steps.iter().map(|s|Ok(Step{operation:s.operation.clone(),version:s.version,parameters:s.parameters.clone().ok_or_else(||invalid("pipeline parameters were redacted; replay requires the original explicit definition"))?})).collect::<Result<Vec<_>>>()?;
+            let steps: Vec<Step>=steps.iter().map(|s|Ok(Step{operation:s.operation.clone(),version:s.version,parameters:s.parameters.clone().ok_or_else(||invalid("pipeline parameters were redacted; replay requires the original explicit definition"))?})).collect::<Result<Vec<_>>>()?;
+            if steps.iter().any(|s| s.operation == "text.transform.masked") {
+                return Err(invalid(
+                    "masked step audits require direct pipeline or recipe execution; session value records cannot retain them",
+                ));
+            }
             Ok(Some(Plan::validate(Kind::Bytes, steps, limits.clone())?))
         } else {
             Ok(None)

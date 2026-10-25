@@ -187,9 +187,10 @@ impl Session {
                 limits.validate()?;
                 if steps.len() > limits.max_steps
                     || steps.iter().any(|s| {
-                        !pipeline::supported_adapters()
-                            .iter()
-                            .any(|a| a.operation == s.operation && a.version == s.version)
+                        s.operation == "text.transform.masked"
+                            || !pipeline::supported_adapters()
+                                .iter()
+                                .any(|a| a.operation == s.operation && a.version == s.version)
                     })
                 {
                     return Err(invalid(

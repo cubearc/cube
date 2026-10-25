@@ -384,19 +384,19 @@ def pipeline_adapters() -> dict[str, Any]:
     ...
 
 def validate_pipeline(
-    steps: list[dict[str, Any]],
+    steps: list[PipelineStep],
     input_type: str,
     *,
     limits: dict[str, Any] | None = None,
 ) -> dict[str, Any]: ...
 def execute_pipeline(
-    steps: list[dict[str, Any]],
+    steps: list[PipelineStep],
     input: bytes | str | dict[str, Any],
     *,
     limits: dict[str, Any] | None = None,
     capture: list[int] | None = None,
     cancellation: CancellationToken | None = None,
-) -> dict[str, Any]: ...
+) -> PipelineExecution: ...
 def validate_recipe(document: str) -> dict[str, Any]: ...
 def execute_recipe(
     document: str,
@@ -404,12 +404,12 @@ def execute_recipe(
     *,
     capture: list[int] | None = None,
     cancellation: CancellationToken | None = None,
-) -> dict[str, Any]: ...
+) -> PipelineExecution: ...
 def check_recipe(
     document: str,
     inputs: dict[str, bytes | str | dict[str, Any]],
     expected: bytes | str | dict[str, Any],
-) -> dict[str, Any]: ...
+) -> RecipeCheck: ...
 def triage_input(data: bytes, *, max_read_bytes: int = 12) -> dict[str, Any]: ...
 
 class InvestigationSession:
@@ -428,7 +428,7 @@ class InvestigationSession:
     def execute_pipeline(
         self,
         data: bytes,
-        steps: list[dict[str, Any]],
+        steps: list[PipelineStep],
         *,
         record_parameters: bool = False,
         retain_result: bool = False,
@@ -664,3 +664,37 @@ def transform_masked(
 ) -> MaskedReport:
     """Every scalar counts; return deterministic text and explicit override audit."""
     ...
+
+class PipelineMaskedAudits(TypedDict, total=False):
+    masked_audits: dict[int, MaskedReport]
+
+class PipelineExecution(PipelineMaskedAudits):
+    output: Any
+    output_type: str
+    intermediates: dict[int, Any]
+    work_bytes_upper_bound: int
+
+class RecipeCheck(PipelineMaskedAudits):
+    passed: bool
+    format_version: int
+    engine_api: int
+    engine_version: str
+
+class UnsignedListParameter(TypedDict):
+    unsigned_list: list[int]
+
+class TextListParameter(TypedDict):
+    text_list: list[str]
+
+class BytesParameter(TypedDict):
+    base64: str
+
+class PipelineStepHeader(TypedDict):
+    operation: str
+    version: int
+
+class PipelineStep(PipelineStepHeader, total=False):
+    parameters: dict[
+        str,
+        int | bool | str | BytesParameter | UnsignedListParameter | TextListParameter,
+    ]

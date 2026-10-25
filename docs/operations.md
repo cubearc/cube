@@ -123,7 +123,7 @@ XOR remains unchanged. New byte adapters reuse these functions; binary operand
 parameters are capped at 64 KiB in pipelines and value-dependent lengths are
 checked at execution, while types/parameters/budgets are preflighted.
 
-Use byte-wise repeating-key XOR to inspect a known mask or reverse a puzzle
+Use byte-wise repeating-key XOR to inspect a known mask or reverse a challenge
 transformation. Applying the same nonempty key twice restores the original bytes.
 It is not secure encryption.
 
@@ -485,7 +485,7 @@ columns 1209/1336/1477/1633 Hz from [ITU-T Q.23](https://www.itu.int/rec/T-REC-Q
 It requires exactly one selected channel and a sample rate of at least 8 kHz.
 Bounded Goertzel measurements use nonoverlapping rectangular windows; frequency
 offsets, speech, distortion and boundary mixtures can be inconclusive. This is
-puzzle-analysis evidence, not a certified telephony receiver or confirmed string.
+signal-analysis evidence, not a certified telephony receiver or confirmed string.
 
 Defaults: 40 ms windows, minimum 80 ms tones/40 ms gaps, RMS level >=-40 dBFS,
 6 dB dominance over the second row/column, <=8 dB absolute twist and >=75% pair

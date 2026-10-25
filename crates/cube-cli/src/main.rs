@@ -20,7 +20,7 @@ mod webcmd;
 #[command(
     name = "cube",
     version,
-    about = "Data transformations, bounded file/media and offline web forensics, pipelines, and local investigations"
+    about = "Data transformation, cryptography, digital forensics, and investigative workflows"
 )]
 struct Cli {
     /// Emit failures as schema-versioned JSON on stderr (including usage errors)

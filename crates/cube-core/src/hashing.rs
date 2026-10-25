@@ -41,12 +41,12 @@ pub fn sha512(input: &[u8]) -> String {
     hex::encode(Sha512::digest(input))
 }
 /// Legacy SHA-1 digest (40 lowercase hex digits). Unsuitable for collision-resistant
-/// security; provided only for identifying historical artifacts and puzzle data.
+/// security; provided only for identifying historical artifacts and challenge data.
 pub fn sha1(input: &[u8]) -> String {
     hex::encode(sha1::Sha1::digest(input))
 }
 /// Legacy MD5 digest (32 lowercase hex digits). Unsuitable for collision-resistant
-/// security; provided only for identifying historical artifacts and puzzle data.
+/// security; provided only for identifying historical artifacts and challenge data.
 pub fn md5(input: &[u8]) -> String {
     hex::encode(md5::Md5::digest(input))
 }

@@ -1,4 +1,4 @@
-"""Rust-backed transformations, forensics, typed pipelines and local investigations."""
+"""Data transformation, cryptography, digital forensics and investigative workflows."""
 
 from ._native import (
     UNICODE_VERSION,

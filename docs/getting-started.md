@@ -46,7 +46,7 @@ For saved web artifacts or media, inspect a small local input first and use the
 operation description to check supported formats and limits. In a scratch directory:
 
 ```sh
-printf '<a href="assets/puzzle.png">Saved link</a>' > saved.html
+printf '<a href="assets/challenge.png">Saved link</a>' > saved.html
 cube web html saved.html --json
 ```
 

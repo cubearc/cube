@@ -135,7 +135,7 @@ cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 ```
 
 Use `--decode` with the original key/parameters to reverse supported ciphers.
-Classical ciphers are for puzzles and education, not modern confidentiality.
+Classical ciphers are for challenges and education, not modern confidentiality.
 
 ## Extract from a caller-supplied book
 

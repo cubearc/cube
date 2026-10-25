@@ -27,5 +27,5 @@ Security fixes currently target `main`; no released-version support policy exist
 ## Intended use
 
 ROT13 and repeating-key XOR provide no modern confidentiality. SHA-256 is an
-unkeyed hash, not a password hashing scheme or authentication protocol. Cube's
-initial operations are building blocks for encoding and puzzle work.
+unkeyed hash, not a password hashing scheme or authentication protocol. Cube
+provides building blocks for data transformation and forensic investigation.

@@ -1,4 +1,4 @@
-//! Classical ciphers for text puzzles. These do not provide secure encryption.
+//! Classical ciphers for text challenges. These do not provide secure encryption.
 
 pub mod book;
 pub mod classical;
@@ -15,7 +15,7 @@ pub use classical::{
 /// The shift accepts the full [`i32`] range, from -2,147,483,648 to 2,147,483,647,
 /// and is normalized modulo 26. Zero and multiples of 26 leave text unchanged.
 /// Use [`caesar_decode`] with the same shift to restore the original text.
-/// This classical cipher is for education and puzzles, not secure encryption.
+/// This classical cipher is for education and challenges, not secure encryption.
 ///
 /// ```
 /// assert_eq!(cube_core::ciphers::caesar_encode("Attack at dawn!", 3), "Dwwdfn dw gdzq!");

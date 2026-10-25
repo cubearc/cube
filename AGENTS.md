@@ -8,6 +8,8 @@
 - Use stable Rust, edition 2024, idiomatic Rust and Python, and small cohesive
   modules. Do not add speculative frameworks or dependencies.
 - Write documentation, comments, errors, templates, and agent instructions in English.
+- Use challenge for generic activities and recipe for reusable workflows. Follow
+  [CubeArc product scope](docs/architecture.md#cubearc-product-scope) when positioning products.
 - Validate from the repository root with `cargo fmt --all -- --check`,
   `cargo clippy --workspace --all-targets --all-features -- -D warnings`, and
   `cargo test --workspace --all-features --locked`.

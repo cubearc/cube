@@ -4,7 +4,8 @@
 [![Coverage](https://codecov.io/gh/cubearc/cube/branch/main/graph/badge.svg)](https://codecov.io/gh/cubearc/cube)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-Cube is an open-source toolkit for transforming data and investigating files.
+Cube is an open-source Rust toolkit for data transformation, cryptography,
+digital forensics, and investigative workflows.
 Use it to decode unfamiliar representations, work with classical ciphers,
 inspect binary content, or reproduce a sequence of analysis steps.
 
@@ -30,7 +31,8 @@ is explicit.
 - Compose typed linear pipelines and versioned JSON recipes.
 - Run bounded local investigations with evidence, reports and verified replay.
 
-Classical ciphers and repeating-key XOR are puzzle tools, not secure encryption.
+Classical ciphers and repeating-key XOR are useful for challenges and education;
+they do not provide secure encryption.
 See the [Operations Guide](docs/operations.md) for supported formats and limits.
 
 ## Install from source
@@ -114,7 +116,10 @@ stubs are the API references; see [Contributing](CONTRIBUTING.md#rust-api-refere
 Report bugs and request features in [GitHub Issues](https://github.com/cubearc/cube/issues).
 Development is tracked in [CubeArc Roadmap](https://github.com/orgs/cubearc/projects/1)
 and repository [milestones](https://github.com/cubearc/cube/milestones).
-Community recipe definitions belong in [cubearc/recipes](https://github.com/cubearc/recipes).
+Reusable investigation workflows, examples and community challenges belong in
+[Cube Recipes](https://github.com/cubearc/recipes). See the
+[CubeArc product scope](docs/architecture.md#cubearc-product-scope) for the intended
+roles of Cube Play and Cube Play Platform.
 
 Contributions are welcome; read [Contributing](CONTRIBUTING.md) and the
 [Code of Conduct](CODE_OF_CONDUCT.md). Report vulnerabilities through the

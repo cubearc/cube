@@ -5,6 +5,24 @@ User workflows belong in the [CLI](cli.md), [Python](python.md) and
 [Operations](operations.md) guides. This document describes contributor-facing
 boundaries and extension contracts.
 
+## CubeArc product scope
+
+| Product | Scope |
+| --- | --- |
+| Cube | Open-source Rust toolkit for data transformation, cryptography, digital forensics and investigative workflows |
+| Cube Play | Local-first environment for hands-on challenges, visual analysis, terminal execution, notes and progress tracking |
+| Cube Play Platform | Central platform for publishing challenges, managing stages and hints, verifying submissions and supporting community features |
+| [Cube Recipes](https://github.com/cubearc/recipes) | Reusable investigation workflows, examples and community challenges |
+
+The Play and Platform rows describe intended product scope, not capabilities
+implemented in this repository. Cube provides the reusable core, CLI and native
+Python SDK; it does not implement challenge publishing or management.
+
+Use *challenge* for a generic activity. A recipe is a reusable workflow, and a
+pipeline step applies an operation. Existing investigation sessions record
+evidence and execution provenance; their APIs do not represent a lab or track
+challenge progress.
+
 ## Responsibilities
 
 | Package | Responsibility |

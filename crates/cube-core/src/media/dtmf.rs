@@ -102,8 +102,8 @@ fn strongest(amplitudes: &[f64; 4]) -> (usize, f64) {
 }
 /// Evaluate the Q.23 nominal row/column frequencies using bounded Goertzel
 /// measurements. Exactly one selected channel, actual sample rate >=8000 Hz,
-/// <=262144 frames and <=4096 nonoverlapping windows. Defaults are a conservative
-/// puzzle-analysis policy, not Q.24 certification. Rectangular fixed windows only;
+/// <=262144 frames and <=4096 nonoverlapping windows. Defaults are conservative
+/// analysis thresholds, not Q.24 certification. Rectangular fixed windows only;
 /// offset frequencies, speech, distortion or boundary mixtures may be uncertain.
 /// Timings are window boundaries with one-window tolerance. A candidate requires
 /// level, band dominance, pair-energy, twist, full-window and duration/gap tests.

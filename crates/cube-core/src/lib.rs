@@ -1,7 +1,9 @@
-//! Reusable operations and bounded investigations shared by Cube's CLI and SDKs.
+//! Data transformation, cryptography, digital forensics and investigative workflows.
+//! One Rust implementation shared by Cube's CLI and SDKs.
 //!
 //! Binary operations accept and return bytes. Text conversion belongs to the caller.
-//! Classical ciphers and repeating-key XOR are puzzle tools, not secure encryption.
+//! Classical ciphers and repeating-key XOR support challenges and education,
+//! but do not provide secure encryption.
 
 pub mod binary;
 pub mod ciphers;

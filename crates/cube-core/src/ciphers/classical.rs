@@ -1,4 +1,4 @@
-//! ASCII classical ciphers for puzzles, never secure encryption.
+//! ASCII classical ciphers for challenges, never secure encryption.
 use crate::{
     errors::{ErrorCode, OperationError},
     text::check_input,
@@ -75,7 +75,7 @@ fn polyalphabetic(
 }
 /// Vigenère C=(P+K) mod 26, A=0. Repeat an ASCII-letter key, advancing only for
 /// ASCII input letters; preserve case, all other scalars and whitespace. No
-/// normalization. Input <=1 MiB; key 1..=65536 bytes. Classical puzzle cipher.
+/// normalization. Input <=1 MiB; key 1..=65536 bytes. Not secure encryption.
 pub fn vigenere_encode(input: &str, key: &str) -> Result<String, OperationError> {
     polyalphabetic(input, key, "cipher.vigenere.encode", false, false)
 }

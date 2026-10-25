@@ -16,7 +16,8 @@ is explicit.
 
 - Encode and decode data, compute hashes/checksums, and apply byte-wise XOR.
 - Work with classical ciphers, Unicode text, Morse, Braille dot masks and integers.
-- Inspect file signatures, EXIF, hex, printable strings and binary differences.
+- Inspect file signatures, EXIF, hex, strings and binary differences; validate
+  supported embedded ZIP structures and recover selected bytes safely.
 - Analyze and transform 8-bit PNG images, including channels, colors and LSB bits.
 - Inspect integer PCM WAVE audio, extract samples and calculate waveform data.
 - Compose typed linear pipelines and versioned JSON recipes.

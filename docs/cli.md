@@ -145,6 +145,44 @@ are successful comparison results, not exit-code failures. Check `complete` on
 bounded scans/listings. See [file forensics](operations.md#file-forensics) for
 signatures, EXIF, embedded candidates and appended-data limits.
 
+### Inspect a structural boundary
+
+```sh
+cube file appended sample.jpg --json
+cube file appended sample.gif --json
+```
+
+`logical_end`, `trailing_offset` and `trailing_bytes` are exact byte positions/counts.
+Read `evidence` for the validation scope. Supported JPEG/GIF framing is checked
+without decoding compressed pixels; an unsupported feature fails explicitly.
+The same command preserves existing strict PNG framing/CRC behavior.
+
+### Validate an embedded ZIP
+
+First locate candidate offsets, then select one explicitly:
+
+```sh
+cube file embedded sample.bin --format zip --json
+cube file zip sample.bin --offset 128 --json
+```
+
+A PK signature alone is a candidate. Validation reports exact archive bounds,
+entry offsets and verification limits; it does not decompress files or verify
+payload CRCs. Unsupported ZIP features fail explicitly. Use the reported range
+with an explicit extraction command when recovery is intended.
+
+### Recover a selected candidate
+
+```sh
+cube file carve sample.bin --offset 128 --output recovered.zip --json
+cube file carve sample.bin --offset 128 --length 256 --max-bytes 256 --output selected.bin --json
+```
+
+The first command revalidates framing at the selected origin. The second selects
+an exact raw range. Both require a new destination and report exact range
+provenance and the recovered bytes' SHA-256; neither decompresses archive entries.
+`file extract` remains available for existing explicit range/stdout workflows.
+
 ## Create small image and audio fixtures
 
 These original fixtures need only Python's standard library. The PNG has eight
@@ -228,6 +266,18 @@ Recipe bindings are explicit `name=value` arguments: `--text`, `--hex`, `--input
 (raw file) or `--value` (tagged JSON). Validation does not execute steps. `check`
 compares exact typed output and returns a nonzero status on a mismatch.
 
+### Compose a forensic inspection
+
+Decode exact bytes, then inspect their rows while retaining the decoded intermediate:
+
+```sh
+cube pipeline run --text '00ff' --steps '[{"operation":"encoding.hex.decode","version":1},{"operation":"file.hex.inspect","version":1,"parameters":{"width":1}}]' --capture 0 --format json
+```
+
+The final value is a typed forensic report; row offsets stay numeric and row bytes
+use base64 in JSON. `--format raw` rejects structured reports. The file is supplied
+by the caller or CLI input selector; steps never contain paths.
+
 ## Record an investigation
 
 ```sh
@@ -271,53 +321,3 @@ Fields include `code`, `message`, `operation`, `parameter` and byte `offset`;
 unavailable context is `null`. Pipeline errors also identify the zero-based
 `step`. Codes include `invalid_input`, `invalid_parameter`, `unsupported_format`,
 `resource_limit`, `cancelled`, `io`, and CLI-only `invalid_usage`.
-
-### Compose a forensic inspection
-
-Decode exact bytes, then inspect their rows while retaining the decoded intermediate:
-
-```sh
-cube pipeline run --text '00ff' --steps '[{"operation":"encoding.hex.decode","version":1},{"operation":"file.hex.inspect","version":1,"parameters":{"width":1}}]' --capture 0 --format json
-```
-
-The final value is a typed forensic report; row offsets stay numeric and row bytes
-use base64 in JSON. `--format raw` rejects structured reports. The file is supplied
-by the caller or CLI input selector; steps never contain paths.
-
-### Inspect a structural boundary
-
-```sh
-cube file appended sample.jpg --json
-cube file appended sample.gif --json
-```
-
-`logical_end`, `trailing_offset` and `trailing_bytes` are exact byte positions/counts.
-Read `evidence` for the validation scope. Supported JPEG/GIF framing is checked
-without decoding compressed pixels; an unsupported feature fails explicitly.
-The same command preserves existing strict PNG framing/CRC behavior.
-
-### Validate an embedded ZIP
-
-First locate candidate offsets, then select one explicitly:
-
-```sh
-cube file embedded sample.bin --format zip --json
-cube file zip sample.bin --offset 128 --json
-```
-
-A PK signature alone is a candidate. Validation reports exact archive bounds,
-entry offsets and verification limits; it does not decompress files or verify
-payload CRCs. Unsupported ZIP features fail explicitly. Use the reported range
-with an explicit extraction command when recovery is intended.
-
-### Recover a selected candidate
-
-```sh
-cube file carve sample.bin --offset 128 --output recovered.zip --json
-cube file carve sample.bin --offset 128 --length 256 --max-bytes 256 --output selected.bin --json
-```
-
-The first command revalidates framing at the selected origin. The second selects
-an exact raw range. Both require a new destination and report exact range
-provenance and the recovered bytes' SHA-256; neither decompresses archive entries.
-`file extract` remains available for existing explicit range/stdout workflows.

@@ -101,6 +101,40 @@ binary writer instead of reading the entire file into Python memory.
 A signature returned by `file_signatures(data)` or `scan_file(path)` is a candidate,
 not proof that the format is valid. Read the [file limitations](operations.md#file-forensics).
 
+### Validate and recover an embedded ZIP
+
+Use the original `mystery.bin` from the
+[recovery tutorial](getting-started.md#recover-an-embedded-file):
+
+```python
+from pathlib import Path
+import cube
+
+source = Path("mystery.bin")
+candidates = cube.scan_file(source, format="zip")
+assert any(item["offset"] == 8 for item in candidates["candidates"])
+archive = cube.validate_zip_file(source, offset=8)
+assert archive["length"] == 120
+assert archive["payload_verified"] is False
+recovered = Path("python-recovered.zip")
+report = cube.carve_file(source, recovered, 8, max_bytes=archive["length"])
+assert recovered.read_bytes() == source.read_bytes()[8:128]
+assert report["sha256"] == cube.sha256(recovered.read_bytes())
+```
+
+The core revalidates the candidate before copying. Supply `length` only when you
+intend an exact raw range without a format-validation claim. Existing outputs
+raise `OSError`; invalid candidates/ranges/budgets raise `ValueError` with
+`operation == "file.carve"`. Reports contain source size, range and recovered
+content identity without automatically saving source paths in sessions.
+`validate_zip(data, offset=8)` supports caller-owned buffers with the same report.
+Read `scanned_bytes`, `candidate_scan_complete` and `evidence`; payloads are not
+expanded or verified, and entry names stay inert exact hex data.
+
+`appended_data(path)` also reports supported PNG/JPEG/GIF/ZIP structural
+boundaries. JPEG/GIF compressed pixels are not decoded. These direct file APIs
+perform explicit caller-selected local I/O, outside recipe steps.
+
 ## Analyze an image
 
 This example constructs an original two-pixel image without an external asset:
@@ -236,6 +270,26 @@ assert cube.check_recipe(document, {"payload": b"\x00\xff"}, b"\x00\xff")["passe
 Bindings are values supplied by your program. Recipe definitions do not read
 files, execute shell commands or grant network access.
 
+### Inspect bytes in a pipeline
+
+```python
+import cube
+
+result = cube.execute_pipeline(
+    [{"operation": "encoding.hex.decode", "version": 1},
+     {"operation": "file.hex.inspect", "version": 1, "parameters": {"width": 1}}],
+    "00ff", capture=[0],
+)
+assert result["intermediates"][0] == b"\x00\xff"
+assert result["output_type"] == "forensic_report"
+assert result["output"]["data"]["rows"][1]["bytes"] == b"\xff"
+```
+
+Signature and printable-string adapters return the other concrete report variants.
+Reports retain offsets and completeness; they do not validate embedded files or
+permit filesystem access. `pipeline_adapters()` declares each adapter's input and
+output types; direct reader-based APIs retain their own descriptor types.
+
 ## Keep an investigation record
 
 ```python
@@ -281,42 +335,3 @@ The included [type stubs](../bindings/python/python/cube/_native.pyi) are the Py
 API signature reference. Use the [Operations Guide](operations.md) for behavior
 and constraints, or [Contributing](../CONTRIBUTING.md) for rebuilding, tests and
 the Rust API reference.
-
-### Inspect bytes in a pipeline
-
-```python
-import cube
-
-result = cube.execute_pipeline(
-    [{"operation": "encoding.hex.decode", "version": 1},
-     {"operation": "file.hex.inspect", "version": 1, "parameters": {"width": 1}}],
-    "00ff", capture=[0],
-)
-assert result["intermediates"][0] == b"\x00\xff"
-assert result["output_type"] == "forensic_report"
-assert result["output"]["data"]["rows"][1]["bytes"] == b"\xff"
-```
-
-Signature and printable-string adapters return the other concrete report variants.
-Reports retain offsets and completeness; they do not validate embedded files or
-permit filesystem access. `pipeline_adapters()` declares each adapter's input and
-output types; direct reader-based APIs retain their own descriptor types.
-
-`cube.appended_data(path)` also accepts supported JPEG/GIF framing, returning the
-same boundary fields as PNG. `evidence` describes what was checked; successful
-framing inspection does not prove that entropy codes or compressed pixels decode.
-The file is opened read-only and no extraction happens implicitly.
-
-For an explicitly selected ZIP candidate, use `cube.validate_zip(data, offset=128)`
-or `cube.validate_zip_file(path, offset=128)`. Both return the same bounded core
-report with absolute offsets, archive length and inert exact entry names as hex.
-Inspect `payload_verified`, `scanned_bytes`, `candidate_scan_complete` and `evidence`
-before interpreting the result. No payload is decompressed and no named entry is
-written or executed.
-
-`cube.carve_file(source, destination, offset, length=None, max_bytes=16777216)`
-revalidates a supported candidate when length is omitted, or copies an explicit
-raw range when it is supplied. The returned report includes exact offsets/length,
-selection/validation evidence and SHA-256 of the recovered bytes. Existing outputs
-raise `OSError`; invalid candidates, ranges and budgets raise `ValueError` with
-`operation == "file.carve"`. Output is explicit local I/O, outside recipe steps.

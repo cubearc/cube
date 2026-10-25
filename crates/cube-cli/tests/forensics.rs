@@ -252,3 +252,81 @@ fn carving_validates_candidates_and_emits_range_provenance() {
     assert!(r.stdout.is_empty());
     assert_eq!(std::fs::read(source).unwrap(), bytes);
 }
+#[test]
+fn documented_unknown_binary_to_verified_range_workflow() {
+    let files = Files::new("documented-workflow");
+    let source = files.path("mystery.bin");
+    let carved = files.path("recovered.zip");
+    let selected = files.path("selected-range.zip");
+    // Original fixed-time stored ZIP, identical to the getting-started fixture.
+    let zip=cube_core::encoding::hex_decode(concat!(
+        "504b030414000000000000002100106f0dfb0600000006000000080000006e6f74652e7478744375626500ff",
+        "504b0102140314000000000000002100106f0dfb06000000060000000800000000000000000000008001000000006e6f74652e747874",
+        "504b05060000000001000100360000002c0000000000")).unwrap();
+    let mut host = b"CubeArc\0".to_vec();
+    host.extend(&zip);
+    host.extend(b"\0tail");
+    std::fs::write(&source, &host).unwrap();
+    let path = source.to_str().unwrap();
+    for args in [
+        vec!["inspect", path, "--json"],
+        vec!["file", "hex", path, "--length", "32", "--json"],
+        vec!["file", "strings", path, "--json"],
+        vec!["file", "embedded", path, "--format", "zip", "--json"],
+    ] {
+        let r = run(&args);
+        assert!(r.status.success(), "{}", String::from_utf8_lossy(&r.stderr));
+        let _: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    }
+    let r = run(&["file", "zip", path, "--offset", "8", "--json"]);
+    assert!(r.status.success());
+    let j: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(j["length"], 120);
+    assert_eq!(j["logical_end"], 128);
+    assert_eq!(j["trailing_bytes"], 5);
+    assert_eq!(j["payload_verified"], false);
+    let r = run(&[
+        "file",
+        "carve",
+        path,
+        "--offset",
+        "8",
+        "--output",
+        carved.to_str().unwrap(),
+        "--json",
+    ]);
+    assert!(r.status.success());
+    let j: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(j["sha256"], cube_core::hashing::sha256(&zip));
+    let r = run(&[
+        "file",
+        "extract",
+        path,
+        "--offset",
+        "8",
+        "--length",
+        "120",
+        "--output",
+        selected.to_str().unwrap(),
+    ]);
+    assert!(r.status.success());
+    assert_eq!(std::fs::read(carved).unwrap(), zip);
+    assert_eq!(std::fs::read(selected).unwrap(), zip);
+    assert_eq!(std::fs::read(source).unwrap(), host);
+    let r = run(&[
+        "pipeline",
+        "run",
+        "--text",
+        "504b0304",
+        "--steps",
+        r#"[{"operation":"encoding.hex.decode","version":1},{"operation":"file.signature.detect","version":1}]"#,
+        "--capture",
+        "0",
+        "--format",
+        "json",
+    ]);
+    assert!(r.status.success());
+    let j: serde_json::Value = serde_json::from_slice(&r.stdout).unwrap();
+    assert_eq!(j["output"]["data"]["matches"][0]["format"], "zip");
+    assert_eq!(j["intermediates"]["0"]["base64"], "UEsDBA==");
+}

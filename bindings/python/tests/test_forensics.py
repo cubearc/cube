@@ -255,3 +255,43 @@ def test_explicit_carving_provenance_and_no_overwrite(tmp_path):
     assert raw["format"] is None
     assert raw["selection"] == "range"
     assert cube.describe_operation("file.carve")["pipeline"] is None
+
+
+def test_documented_forensic_recovery_workflow(tmp_path):
+    import zipfile
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        info = zipfile.ZipInfo("note.txt", (1980, 1, 1, 0, 0, 0))
+        info.create_system = 3
+        info.external_attr = 0o600 << 16
+        archive.writestr(info, b"Cube\x00\xff")
+    encoded = buffer.getvalue()
+    assert len(encoded) == 120
+    source = tmp_path / "mystery.bin"
+    original = b"CubeArc\x00" + encoded + b"\x00tail"
+    source.write_bytes(original)
+    assert cube.inspect_file(source)["signatures"] == []
+    assert cube.file_strings(source)["strings"][0]["text"] == "CubeArc"
+    candidates = cube.scan_file(source, format="zip")
+    assert any(item["offset"] == 8 for item in candidates["candidates"])
+    archive = cube.validate_zip_file(source, offset=8)
+    assert archive["length"] == 120
+    assert archive["payload_verified"] is False
+    recovered = tmp_path / "python-recovered.zip"
+    report = cube.carve_file(source, recovered, 8, max_bytes=archive["length"])
+    assert recovered.read_bytes() == source.read_bytes()[8:128] == encoded
+    assert report["sha256"] == cube.sha256(recovered.read_bytes())
+    result = cube.execute_pipeline(
+        [
+            {"operation": "encoding.hex.decode", "version": 1},
+            {"operation": "file.signature.detect", "version": 1},
+        ],
+        "504b0304",
+        capture=[0],
+    )
+    assert result["intermediates"][0] == b"PK\x03\x04"
+    assert result["output"]["data"]["matches"][0]["format"] == "zip"
+    assert source.read_bytes() == original
+    with pytest.raises(OSError):
+        cube.carve_file(source, recovered, 8)

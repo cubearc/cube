@@ -239,6 +239,12 @@ cube image raw pixels.bin --width 1 --height 2 --layout bgr --row-stride 4 --out
 ```
 
 Omit `--output` to validate and inspect layout facts without writing a file.
+Use `--compare-header` to report declared header dimensions separately from the
+candidate layout, including header parsing errors. For another explicit hypothesis:
+
+```sh
+cube image raw pixels.bin --width 2 --height 1 --layout rgba --compare-header
+```
 
 ## Inspect audio samples
 

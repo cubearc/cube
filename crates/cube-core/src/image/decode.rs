@@ -140,3 +140,47 @@ impl Image {
         }
     }
 }
+
+/// Dimensions declared by a parsed header; no claim about compressed payloads.
+#[derive(Debug, Serialize)]
+pub struct DeclaredGeometry {
+    pub format: &'static str,
+    pub width: u32,
+    pub height: u32,
+    pub verification: &'static str,
+}
+pub(super) fn header_geometry(encoded: &[u8]) -> Result<Option<DeclaredGeometry>, OperationError> {
+    if encoded.len() > super::MAX_ENCODED {
+        return Err(super::limit("image header input exceeds 32 MiB"));
+    }
+    let (format, width, height) = if encoded.starts_with(b"\x89PNG\r\n\x1a\n") {
+        let mut decoder = png::Decoder::new_with_limits(
+            Cursor::new(encoded),
+            png::Limits {
+                bytes: 32 * 1024 * 1024,
+            },
+        );
+        decoder.set_ignore_text_chunk(true);
+        decoder.set_ignore_iccp_chunk(true);
+        let header = decoder.read_header_info().map_err(super::decode_error)?;
+        ("png", header.width, header.height)
+    } else {
+        let (format, name) = match raster_codecs::guess_format(encoded) {
+            Ok(raster_codecs::ImageFormat::Jpeg) => (raster_codecs::ImageFormat::Jpeg, "jpeg"),
+            Ok(raster_codecs::ImageFormat::Gif) => (raster_codecs::ImageFormat::Gif, "gif"),
+            Ok(raster_codecs::ImageFormat::Bmp) => (raster_codecs::ImageFormat::Bmp, "bmp"),
+            Ok(raster_codecs::ImageFormat::WebP) => (raster_codecs::ImageFormat::WebP, "webp"),
+            _ => return Ok(None),
+        };
+        let mut reader = raster_codecs::ImageReader::with_format(Cursor::new(encoded), format);
+        reader.limits(limits());
+        let (width, height) = reader.into_dimensions().map_err(error)?;
+        (name, width, height)
+    };
+    Ok(Some(DeclaredGeometry {
+        format,
+        width,
+        height,
+        verification: "header_only_no_payload_validation",
+    }))
+}

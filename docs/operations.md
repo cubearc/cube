@@ -225,6 +225,13 @@ is needed for one-byte samples. The ordinary image/input budgets apply. The resu
 uses canonical gray/RGB/RGBA samples, with lossless PNG export to a new file.
 Raw images use direct APIs; no pipeline image value is introduced.
 
+Alternative geometry is always a caller hypothesis. `image raw --compare-header`
+and `Image.inspect_layout` report parsed header dimensions separately from the
+validated raw candidate. Header-only evidence does not validate compressed data;
+malformed recognized headers report a separate error, while unknown data has no
+declared dimensions. PNG/JPEG/GIF/BMP/WebP header observations do not repair files.
+Optional export creates a new PNG from the exact candidate layout.
+
 Exact-color selection matches complete native tuples, including physical alpha.
 Select 1..=256 distinct colors. Masks preserve coordinates and use 255 for selected
 pixels, zero elsewhere; RGBA layers keep selected original colors/alpha (including

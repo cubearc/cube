@@ -46,6 +46,7 @@ SDK_BINDINGS = {
     "image.decode": "Image.decode",
     "image.colors.extract": "Image.exact_colors",
     "image.raw.interpret": "Image.from_raw",
+    "image.geometry.inspect": "Image.inspect_layout",
     "image.encode": "Image.encode_png",
     "image.grayscale": "Image.grayscale",
     "image.histogram": "Image.histogram",

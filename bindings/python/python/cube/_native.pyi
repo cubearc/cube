@@ -100,6 +100,16 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    @staticmethod
+    def inspect_layout(
+        data: bytes,
+        width: int,
+        height: int,
+        layout: str,
+        *,
+        row_stride: int | None = None,
+        offset: int = 0,
+    ) -> dict[str, Any]: ...
     def exact_colors(
         self,
         colors: list[list[int]],

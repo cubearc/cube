@@ -23,6 +23,32 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn raw_geometry_comparison_labels_headers_and_candidates_separately() {
+    let files = Files::new("geometry");
+    let path = files.path("source.png");
+    let image = Image::from_bytes(2, 1, ColorModel::Gray, &[1, 2], &[], &[]).unwrap();
+    image.save_png(&path).unwrap();
+    let source = std::fs::read(&path).unwrap();
+    let width = source.len().to_string();
+    let result = run(&[
+        "image",
+        "raw",
+        path.to_str().unwrap(),
+        "--width",
+        &width,
+        "--height",
+        "1",
+        "--layout",
+        "gray",
+        "--compare-header",
+    ]);
+    assert!(result.status.success());
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["declared"]["width"], 2);
+    assert_eq!(report["candidate"]["width"], source.len());
+    assert_eq!(std::fs::read(path).unwrap(), source);
+}
+#[test]
 fn ordered_pixels_have_exact_hex_raw_and_coordinate_records() {
     let files = Files::new("stream");
     let path = files.path("source.png");

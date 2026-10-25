@@ -25,6 +25,19 @@ def bmp_bytes():
     return header + dib + pixels
 
 
+def test_header_dimensions_remain_distinct_from_alternative_geometry():
+    data = bmp_bytes()
+    report = cube.Image.inspect_layout(data, 1, 2, "bgr", row_stride=4, offset=54)
+    assert report["declared"]["width"] == 2
+    assert report["declared"]["height"] == 1
+    assert report["candidate"]["width"] == 1
+    assert report["candidate"]["height"] == 2
+    assert report["interpretation"] == "caller_supplied_hypothesis"
+    assert report["header_error"] is None
+    malformed = cube.Image.inspect_layout(b"BM\0\0", 4, 1, "gray")
+    assert malformed["header_error"]["code"] == "invalid_input"
+
+
 def test_ordered_pixel_streams_are_binary_safe_and_composable():
     image = cube.Image.from_samples(2, 2, "rgba", bytes(range(1, 17)))
     result = image.pixels(channels=["alpha", "red"], traversal="spiral_cw")

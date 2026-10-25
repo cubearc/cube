@@ -29,6 +29,53 @@ fn encoded(format: &str) -> Vec<u8> {
     }
     bytes
 }
+#[test]
+fn header_geometry_is_separate_from_raw_hypotheses_and_payload_validation() {
+    use cube_core::image::{RawLayout, SampleLayout};
+    let png = Image::from_bytes(2, 1, cube_core::image::ColorModel::Gray, &[1, 2], &[], &[])
+        .unwrap()
+        .encode_png()
+        .unwrap();
+    for bytes in [
+        encoded("bmp"),
+        encoded("gif"),
+        encoded("jpeg"),
+        encoded("webp"),
+        png.clone(),
+    ] {
+        let layout = RawLayout {
+            width: bytes.len() as u32,
+            height: 1,
+            layout: SampleLayout::Gray,
+            row_stride: None,
+            offset: 0,
+        };
+        let report = layout.inspect_bytes(&bytes).unwrap();
+        let declared = report.declared.unwrap();
+        assert_eq!((declared.width, declared.height), (2, 1));
+        assert_eq!(declared.verification, "header_only_no_payload_validation");
+        assert_eq!(report.candidate.width, bytes.len() as u32);
+        assert!(report.header_error.is_none());
+        assert_eq!(Image::from_raw(&bytes, &layout).unwrap().samples(), bytes);
+    }
+    let prefix = &png[..33];
+    let layout = RawLayout {
+        width: 33,
+        height: 1,
+        layout: SampleLayout::Gray,
+        row_stride: None,
+        offset: 0,
+    };
+    assert!(Image::decode(prefix).is_err());
+    assert!(layout.inspect_bytes(prefix).unwrap().declared.is_some());
+    let bad = [b'B', b'M', 0, 0];
+    let layout = RawLayout { width: 4, ..layout };
+    let report = layout.inspect_bytes(&bad).unwrap();
+    assert!(report.declared.is_none());
+    assert!(report.header_error.is_some());
+    assert!(layout.inspect_bytes(&[0; 4]).unwrap().declared.is_none());
+    assert!(layout.inspect_bytes(&[0; 3]).is_err());
+}
 
 #[test]
 fn original_rasters_decode_explicit_models_and_reuse_exact_operations() {

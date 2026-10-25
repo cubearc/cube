@@ -175,6 +175,11 @@ stream = raw.lsb(bits=list(range(7, -1, -1)), traversal="spiral_ccw")
 assert stream["data"] == raw.samples
 ordered = raw.pixels(channels=["blue", "red"], traversal="spiral_cw")
 assert ordered["data"] == bytes([3, 1, 6, 4])
+encoded = raw.encode_png()
+geometry = cube.Image.inspect_layout(encoded, len(encoded), 1, "gray")
+assert geometry["declared"]["width"] == 1
+assert geometry["declared"]["height"] == 2
+assert geometry["candidate"]["width"] == len(encoded)
 ```
 
 Structured results can contain native `bytes` or `Image` objects, so they are not

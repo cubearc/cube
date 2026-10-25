@@ -40,6 +40,27 @@ pub struct PyImage {
 
 #[pymethods]
 impl PyImage {
+    #[staticmethod]
+    #[pyo3(signature=(data, width, height, layout, *, row_stride=None, offset=0))]
+    fn inspect_layout(
+        py: Python<'_>,
+        data: &[u8],
+        width: u32,
+        height: u32,
+        layout: &str,
+        row_stride: Option<usize>,
+        offset: usize,
+    ) -> PyResult<Py<PyAny>> {
+        let layout = cube_core::image::RawLayout {
+            width,
+            height,
+            layout: cube_core::image::SampleLayout::parse(layout).map_err(super::file_error)?,
+            row_stride,
+            offset,
+        };
+        let result = layout.inspect_bytes(data).map_err(super::file_error)?;
+        super::structured(py, &serde_json::json!(result))
+    }
     #[pyo3(signature=(colors, *, representation="mask", expand_palette=false))]
     fn exact_colors(
         &self,

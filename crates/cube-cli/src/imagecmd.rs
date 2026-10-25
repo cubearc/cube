@@ -198,6 +198,9 @@ pub(crate) enum ImageCommand {
         row_stride: Option<usize>,
         #[arg(long, default_value_t = 0)]
         offset: usize,
+        /// Compare parsed header observations with the independent raw hypothesis
+        #[arg(long)]
+        compare_header: bool,
         #[arg(long)]
         output: Option<PathBuf>,
     },
@@ -418,6 +421,7 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             layout,
             row_stride,
             offset,
+            compare_header,
             output: destination,
         } => {
             let data = crate::pipelinecmd::read_file(&path, image::MAX_ENCODED)?;
@@ -432,7 +436,15 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             if let Some(destination) = destination {
                 Image::from_raw(&data, &layout)?.save_png(&destination)?;
             }
-            writeln!(output, "{}", serde_json::to_string_pretty(&info)?)?;
+            if compare_header {
+                writeln!(
+                    output,
+                    "{}",
+                    serde_json::to_string_pretty(&layout.inspect_bytes(&data)?)?
+                )?;
+            } else {
+                writeln!(output, "{}", serde_json::to_string_pretty(&info)?)?;
+            }
         }
         ImageCommand::BitPlane {
             path,

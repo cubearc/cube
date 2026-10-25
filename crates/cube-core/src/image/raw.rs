@@ -61,6 +61,24 @@ pub struct RawInfo {
     pub sample_bytes: usize,
 }
 impl RawLayout {
+    /// Compare parsed header observations with an independently supplied raw
+    /// hypothesis. Header failures remain explicit observations; they do not
+    /// invalidate an otherwise exact raw layout or imply a repaired source.
+    pub fn inspect_bytes(&self, data: &[u8]) -> Result<GeometryReport, OperationError> {
+        let candidate = self
+            .inspect(data.len())
+            .map_err(|e| e.operation("image.geometry.inspect"))?;
+        let (declared, header_error) = match super::decode::header_geometry(data) {
+            Ok(v) => (v, None),
+            Err(e) => (None, Some(e)),
+        };
+        Ok(GeometryReport {
+            declared,
+            header_error,
+            candidate,
+            interpretation: "caller_supplied_hypothesis",
+        })
+    }
     /// Validate shape and exact source extent before any sample allocation.
     pub fn inspect(&self, input_bytes: usize) -> Result<RawInfo, OperationError> {
         let result = (|| {
@@ -102,6 +120,13 @@ impl RawLayout {
         result.map_err(|e: OperationError| e.operation("image.raw.interpret"))
     }
 }
+#[derive(Debug, Serialize)]
+pub struct GeometryReport {
+    pub declared: Option<super::decode::DeclaredGeometry>,
+    pub header_error: Option<OperationError>,
+    pub candidate: RawInfo,
+    pub interpretation: &'static str,
+}
 impl Image {
     /// Reinterpret a validated raw layout without changing the source buffer.
     pub fn from_raw(data: &[u8], layout: &RawLayout) -> Result<Self, OperationError> {
@@ -132,65 +157,80 @@ impl Image {
         Ok(image)
     }
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: "image.raw.interpret",
-    category: "image",
-    description: "Interpret exact unsigned 8-bit raw layouts, with explicit channel order, stride and offset; never pad or truncate.",
-    input_type: "bytes",
-    output_type: "image.samples",
-    deterministic: true,
-    reversible: Some(false),
-    command: "image raw",
-    example: "cube image raw pixels.bin --width 2 --height 1 --layout rgb --output reconstructed.png",
-    parameters: &[
-        Parameter {
-            name: "width",
-            description: "Positive candidate width, not an inferred source dimension.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Unsigned {
-                min: 1,
-                max: super::MAX_DIMENSION as u64,
-            },
+const RAW_PARAMETERS: &[Parameter] = &[
+    Parameter {
+        name: "width",
+        description: "Positive candidate width, not an inferred source dimension.",
+        required: true,
+        default: None,
+        constraints: ParameterType::Unsigned {
+            min: 1,
+            max: super::MAX_DIMENSION as u64,
         },
-        Parameter {
-            name: "height",
-            description: "Positive candidate height; total pixels <= 4 Mi.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Unsigned {
-                min: 1,
-                max: super::MAX_DIMENSION as u64,
-            },
+    },
+    Parameter {
+        name: "height",
+        description: "Positive candidate height; total pixels <= 4 Mi.",
+        required: true,
+        default: None,
+        constraints: ParameterType::Unsigned {
+            min: 1,
+            max: super::MAX_DIMENSION as u64,
         },
-        Parameter {
-            name: "layout",
-            description: "Unsigned 8-bit physical channel order; export uses canonical order.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["gray", "rgb", "bgr", "rgba", "bgra"],
-            },
+    },
+    Parameter {
+        name: "layout",
+        description: "Unsigned 8-bit physical channel order; export uses canonical order.",
+        required: true,
+        default: None,
+        constraints: ParameterType::Text {
+            choices: &["gray", "rgb", "bgr", "rgba", "bgra"],
         },
-        Parameter {
-            name: "row_stride",
-            description: "Full row byte count including padding on every row; omitted means packed.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Unsigned {
-                min: 1,
-                max: MAX_ENCODED as u64,
-            },
+    },
+    Parameter {
+        name: "row_stride",
+        description: "Full row byte count including padding on every row; omitted means packed.",
+        required: false,
+        default: None,
+        constraints: ParameterType::Unsigned {
+            min: 1,
+            max: MAX_ENCODED as u64,
         },
-        Parameter {
-            name: "offset",
-            description: "Explicit prefix byte count; remaining data must contain exactly complete rows.",
-            required: false,
-            default: Some(ParameterValue::Unsigned(0)),
-            constraints: ParameterType::Unsigned {
-                min: 0,
-                max: MAX_ENCODED as u64,
-            },
+    },
+    Parameter {
+        name: "offset",
+        description: "Explicit prefix byte count; remaining data must contain exactly complete rows.",
+        required: false,
+        default: Some(ParameterValue::Unsigned(0)),
+        constraints: ParameterType::Unsigned {
+            min: 0,
+            max: MAX_ENCODED as u64,
         },
-    ],
-}];
+    },
+];
+pub const OPERATIONS: &[Descriptor] = &[
+    Descriptor {
+        id: "image.raw.interpret",
+        category: "image",
+        description: "Interpret exact unsigned 8-bit raw layouts, with explicit channel order, stride and offset; never pad or truncate.",
+        input_type: "bytes",
+        output_type: "image.samples",
+        deterministic: true,
+        reversible: Some(false),
+        command: "image raw",
+        example: "cube image raw pixels.bin --width 2 --height 1 --layout rgb --output reconstructed.png",
+        parameters: RAW_PARAMETERS,
+    },
+    Descriptor {
+        id: "image.geometry.inspect",
+        category: "image",
+        description: "Compare declared header dimensions with an explicit checked raw-layout hypothesis, without repairing or decoding the source.",
+        input_type: "bytes",
+        output_type: "image.geometry",
+        parameters: RAW_PARAMETERS,
+        deterministic: true,
+        reversible: None,
+        command: "image raw",
+        example: "cube image raw pixels.bin --width 2 --height 1 --layout rgba --compare-header",
+    },
+];

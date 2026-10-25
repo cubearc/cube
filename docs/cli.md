@@ -38,6 +38,30 @@ the adapter contract required by a step, independent of the package version.
 Unknown categories or identifiers are errors. `pipeline adapters` lists the same
 executable subset; parameter, type and resource validation still applies.
 
+## Transform by scalar position
+
+```sh
+cube text transform masked --text ABCDEFGHIJKLMNOPQRSTUVWXYZ \
+  --selector fibonacci --exclude 13,21 --index-base 1 \
+  --selected atbash --otherwise caesar --otherwise-shift 3
+# ZYXGVIJSLMNOPQRSTUVWXYZABC
+```
+
+Use `--selector indices --indices 0,2,5` for an explicit position set, or
+`--selector every_nth --nth 2` for every second scalar. The default base is 0;
+`--index-base 1` numbers the first scalar 1. Every Unicode scalar counts,
+including spaces, punctuation and separate combining marks. See the
+[selection semantics and limits](operations.md#position-aware-transformations).
+
+Both sides accept `atbash`, `caesar`, `rot13` or `identity` (default for
+`--otherwise`). Caesar requires its corresponding `--selected-shift` or
+`--otherwise-shift`, including negative shifts. Ordinary output is the final text.
+Add `--json` for original input, configuration, selected positions, deterministic
+text, overrides and final text. Explicit `--override '1=Z'` records one manual
+replacement after transformation; repeat the option to apply edits in order.
+The deterministic text remains in JSON, so caller guesses can be distinguished
+from the reproducible cipher result. No replacements are inferred automatically.
+
 ## Supply text or bytes
 
 For transformation commands, use `--text` for inline UTF-8 text or omit it to

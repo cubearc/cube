@@ -21,8 +21,92 @@ pub(crate) struct ExtractArgs {
     #[arg(long, requires = "stride")]
     stop: Option<usize>,
 }
+#[derive(Args)]
+pub(crate) struct MaskedArgs {
+    #[command(flatten)]
+    input: Input,
+    /// indices, every_nth or fibonacci; every Unicode scalar counts
+    #[arg(long)]
+    selector: String,
+    /// Comma-separated explicit scalar positions, sorted/deduplicated; empty selects none
+    #[arg(long)]
+    indices: Option<String>,
+    /// Select the Nth, 2Nth, ... scalar (positive)
+    #[arg(long)]
+    nth: Option<usize>,
+    /// Comma-separated Fibonacci values to exclude (not sequence ordinals)
+    #[arg(long)]
+    exclude: Option<String>,
+    #[arg(long, default_value_t = 0)]
+    index_base: u8,
+    /// atbash, caesar, rot13 or identity
+    #[arg(long)]
+    selected: String,
+    /// Explicit signed i32 Caesar shift; only valid for selected caesar
+    #[arg(long, allow_hyphen_values = true)]
+    selected_shift: Option<i32>,
+    #[arg(long, default_value = "identity")]
+    otherwise: String,
+    #[arg(long, allow_hyphen_values = true)]
+    otherwise_shift: Option<i32>,
+    /// Explicit POSITION=SCALAR replacement after transformation; repeat to apply in order
+    #[arg(long = "override")]
+    overrides: Vec<String>,
+    /// Include original input, effective configuration, positions and override audit
+    #[arg(long)]
+    json: bool,
+}
+#[derive(Subcommand)]
+pub(crate) enum TransformCommand {
+    /// Apply separate ASCII ciphers by scalar position; no normalization
+    Masked(MaskedArgs),
+}
+fn position_list(
+    value: Option<String>,
+    parameter: &'static str,
+) -> Result<Option<Vec<usize>>, cube_core::errors::OperationError> {
+    value
+        .map(|value| {
+            let error = |code, message| {
+                cube_core::errors::OperationError::new(code, message)
+                    .operation("text.transform.masked")
+                    .parameter(parameter)
+            };
+            let limit = || {
+                error(
+                    cube_core::errors::ErrorCode::ResourceLimit,
+                    "position list exceeds byte or entry budget",
+                )
+            };
+            if value.len() > text::MAX_INDICES * 21 {
+                return Err(limit());
+            }
+            if value.is_empty() {
+                return Ok(Vec::new());
+            }
+            let mut positions = Vec::new();
+            for field in value.split(',') {
+                if positions.len() == text::MAX_INDICES {
+                    return Err(limit());
+                }
+                positions.push(field.parse().map_err(|_| {
+                    error(
+                        cube_core::errors::ErrorCode::InvalidParameter,
+                        "positions must be comma-separated unsigned integers",
+                    )
+                })?);
+            }
+            Ok(positions)
+        })
+        .transpose()
+}
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Position-dependent text transformations
+    Transform {
+        #[command(subcommand)]
+        command: TransformCommand,
+    },
     /// Stream bounded Cartesian strings as JSONL, preserving embedded newlines
     Combinations {
         #[command(flatten)]
@@ -105,6 +189,39 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Transform {
+            command: TransformCommand::Masked(args),
+        } => {
+            use text::{
+                positions::{IndexBase, Selector},
+                transform::{self, Config, Override, Transformation},
+            };
+            let report = transform::masked(
+                &args.input.read_text("text.transform.masked")?,
+                &Config {
+                    index_base: IndexBase::try_from(args.index_base)?,
+                    selector: Selector::from_options(
+                        &args.selector,
+                        position_list(args.indices, "indices")?,
+                        args.nth,
+                        position_list(args.exclude, "exclude")?,
+                    )?,
+                    selected: Transformation::parse(&args.selected, args.selected_shift)?,
+                    otherwise: Transformation::parse(&args.otherwise, args.otherwise_shift)?,
+                    overrides: args
+                        .overrides
+                        .iter()
+                        .map(|s| Override::parse(s))
+                        .collect::<Result<_, _>>()?,
+                },
+            )?;
+            if args.json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&report)?)?;
+            } else {
+                crate::write_text(output, &report.final_text)?;
+            }
+            return Ok(());
+        }
         TextCommand::Combinations {
             input,
             separator,

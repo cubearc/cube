@@ -31,6 +31,35 @@ Then run the same `python -m pip` commands. The local distribution is
 they do not assume a published package. For editable development and rebuilding
 after Rust changes, follow [Contributing](../CONTRIBUTING.md#setup).
 
+## Transform by scalar position
+
+```python
+import cube
+
+result = cube.transform_masked(
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    selector="fibonacci", exclude=[13, 21], index_base=1,
+    selected="atbash", otherwise="caesar", otherwise_shift=3,
+)
+assert result["selected_positions"] == [1, 2, 3, 5, 8]
+assert result["deterministic_text"] == "ZYXGVIJSLMNOPQRSTUVWXYZABC"
+assert result["final_text"] == result["deterministic_text"]
+```
+
+The native function always returns a report dictionary. Use `selector="indices"`
+with `indices=[0, 2, 5]`, or `selector="every_nth"` with `nth=2` for other modes.
+Positions default to base 0. Every scalar counts, including whitespace,
+punctuation and combining marks; text is never normalized. Both sides accept
+`atbash`, `caesar`, `rot13` or `identity`; Caesar needs an explicit corresponding
+shift. See [full semantics and limits](operations.md#position-aware-transformations).
+
+Optional `overrides=[(1, "雪"), (1, "🧊")]` applies explicit scalar replacements in
+caller order using the same numbering base. The report keeps the deterministic
+text, each edit's previous/replacement scalar, the original configuration and the
+final text. These are recorded caller choices, never automatic cryptographic
+inferences. Invalid parameters raise `ValueError` with Cube's operation/error
+attributes; Python values outside native integer ranges raise `OverflowError`.
+
 ## Start with bytes and text
 
 ```python

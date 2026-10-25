@@ -158,6 +158,14 @@ Bounds precede the quadratic conversion; its structured decoded result stays a
 direct API. The version-1 encoder adapter uses existing byte/text values and adds
 an explicit quadratic work charge without changing older adapter contracts.
 
+Position-aware text transformation keeps reusable bounded position sets in
+`text::positions` and masked cipher composition/auditable overrides in
+`text::transform`. The latter calls existing Rust ciphers; CLI and PyO3 only
+adapt parameters and reports. Every Unicode scalar counts and text is never
+implicitly normalized. Pipeline API 1 cannot represent the required typed lists,
+so this operation is discoverable through direct interfaces with no adapter;
+see [its contract](operations.md#position-aware-transformations).
+
 ## Metadata and discovery
 
 Static descriptors live beside operations and are assembled by

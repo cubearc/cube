@@ -79,6 +79,22 @@ one. Use raw output when chaining binary operations. The descriptor is `binary.x
 
 ## Text operations
 
+Text statistics count Unicode scalars and overlapping n-grams (`n=1..16`). Defaults
+are no normalization, preserved case and all scalars; ASCII-only lowercasing and
+letter filtering are explicit choices. Counts sort by descending frequency, then
+lexical text order. IC is `sum(c*(c-1))/(N*(N-1))`, undefined below two scalars;
+Shannon entropy is `-sum(p*log2(p))` bits/scalar, undefined for empty input and zero
+for a constant distribution. Both measures always use single-scalar counts, even
+when n-grams are requested. Floating results use f64 (allow numerical tolerance).
+
+Statistics accept 1 MiB UTF-8 input, reuse normalization's 8 MiB output cap, then
+limit the retained sample to 1 Mi scalars. Work is limited to 8 Mi scalar-window
+units; character and n-gram maps each allow at most 10000 distinct values. Exceeding
+these caps fails explicitly. `max_results` limits the sorted listing and `complete`
+discloses omitted rows; total windows/distinct counts remain exact. These are
+observations, not cipher identification. Structured results use direct APIs/JSON;
+no text-statistics pipeline value or lossy string adapter is introduced.
+
 `text.select` extracts first/last Unicode scalars per word or line. Words split
 on Unicode whitespace and keep punctuation. Lines follow LF/CRLF boundaries;
 bare CR, leading/trailing spaces and punctuation remain data. Empty lines add no

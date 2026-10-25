@@ -27,6 +27,48 @@ fn a1z26_uses_text_outputs_stdin_and_explicit_errors() {
 }
 
 #[test]
+fn structured_statistics_keep_counts_and_qualified_numbers() {
+    let result = run(
+        &[
+            "text",
+            "statistics",
+            "--ngram-size",
+            "2",
+            "--text",
+            "ABAB",
+            "--json",
+        ],
+        b"",
+    );
+    assert!(result.status.success());
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["frequencies"][0]["count"], 2);
+    assert_eq!(report["shannon_entropy_bits"], 1.0);
+    let result = run(
+        &[
+            "text",
+            "statistics",
+            "--filter",
+            "ascii_letters",
+            "--case",
+            "ascii_lower",
+        ],
+        b"A a!",
+    );
+    assert!(result.status.success());
+    assert!(
+        String::from_utf8(result.stdout)
+            .unwrap()
+            .contains("Scalars: 2")
+    );
+    assert!(
+        !run(&["text", "statistics", "--ngram-size", "0"], b"text")
+            .status
+            .success()
+    );
+}
+
+#[test]
 fn scalar_selection_has_known_acrostics_and_crlf_behavior() {
     let result = run(
         &[

@@ -105,6 +105,8 @@ file before Cube runs. Use a new path or Cube's exclusive destination option.
 ```sh
 cube text select --selector word_first --text 'Cube Uses Binary Evidence'
 cube text extract --start 1 --stride 2 --text abcdef
+cube text statistics --text ABAB --ngram-size 2 --json
+cube text statistics --text 'B!Aa?雪' --case ascii_lower --filter ascii_letters
 ```
 
 These produce `CUBE` and `bdf`. Use `line_first` for an untrimmed acrostic;

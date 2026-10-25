@@ -2,6 +2,31 @@
 use cube_core::ciphers;
 use pyo3::prelude::*;
 #[pyfunction]
+#[pyo3(signature=(text, *, ngram_size=1, normalization="none", case="preserve", filter="all", max_results=1000))]
+fn text_statistics(
+    py: Python<'_>,
+    text: &str,
+    ngram_size: usize,
+    normalization: &str,
+    case: &str,
+    filter: &str,
+    max_results: usize,
+) -> PyResult<Py<PyAny>> {
+    use cube_core::text::statistics::{self, CaseMode, Normalization, Options, TextFilter};
+    let report = statistics::analyze(
+        text,
+        Options {
+            ngram_size,
+            normalization: Normalization::parse(normalization).map_err(super::file_error)?,
+            case: CaseMode::parse(case).map_err(super::file_error)?,
+            filter: TextFilter::parse(filter).map_err(super::file_error)?,
+            max_results,
+        },
+    )
+    .map_err(super::file_error)?;
+    super::structured(py, &serde_json::json!(report))
+}
+#[pyfunction]
 fn select_text(text: &str, selector: &str) -> PyResult<String> {
     cube_core::text::selection::select(
         text,
@@ -96,6 +121,7 @@ fn utf8_decode(data: &[u8]) -> PyResult<String> {
     cube_core::text::from_utf8(data).map_err(super::file_error)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(text_statistics, module)?)?;
     module.add_function(wrap_pyfunction!(select_text, module)?)?;
     module.add(
         "WORD_UNICODE_VERSION",

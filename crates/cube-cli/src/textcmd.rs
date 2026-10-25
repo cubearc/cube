@@ -23,6 +23,26 @@ pub(crate) struct ExtractArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Scalar frequencies, overlapping n-grams, IC and entropy; observations only
+    Statistics {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long, default_value_t = 1)]
+        ngram_size: usize,
+        /// none, NFC, NFD, NFKC or NFKD
+        #[arg(long, default_value = "none")]
+        normalization: String,
+        /// preserve or ascii_lower
+        #[arg(long, default_value = "preserve")]
+        case: String,
+        /// all or ascii_letters
+        #[arg(long, default_value = "all")]
+        filter: String,
+        #[arg(long, default_value_t = 1000)]
+        max_results: usize,
+        #[arg(long)]
+        json: bool,
+    },
     /// First/last scalar per word/line; line_first is an acrostic without trimming
     Select {
         #[command(flatten)]
@@ -53,6 +73,51 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Statistics {
+            input,
+            ngram_size,
+            normalization,
+            case,
+            filter,
+            max_results,
+            json,
+        } => {
+            use text::statistics::{self, CaseMode, Normalization, Options, TextFilter};
+            let report = statistics::analyze(
+                &input.read_text("text.statistics")?,
+                Options {
+                    ngram_size,
+                    normalization: Normalization::parse(&normalization)?,
+                    case: CaseMode::parse(&case)?,
+                    filter: TextFilter::parse(&filter)?,
+                    max_results,
+                },
+            )?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&report)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "Scalars: {}; windows: {}; distinct n-grams: {}; listing complete: {}",
+                    report.scalar_count, report.windows, report.distinct_ngrams, report.complete
+                )?;
+                let number = |value: Option<f64>| {
+                    value
+                        .map(|v| format!("{v:.12}"))
+                        .unwrap_or_else(|| "undefined".into())
+                };
+                writeln!(
+                    output,
+                    "IC: {}; entropy (bits/scalar): {}",
+                    number(report.index_of_coincidence),
+                    number(report.shannon_entropy_bits)
+                )?;
+                for item in report.frequencies {
+                    writeln!(output, "{:?}\t{}", item.ngram, item.count)?;
+                }
+            }
+            return Ok(());
+        }
         TextCommand::Select { input, selector } => text::selection::select(
             &input.read_text("text.select")?,
             text::selection::Selector::parse(&selector)?,

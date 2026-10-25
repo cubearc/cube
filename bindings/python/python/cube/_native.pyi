@@ -234,6 +234,15 @@ UNICODE_VERSION: tuple[int, int, int]
 WORD_UNICODE_VERSION: tuple[int, int, int]
 
 def select_text(text: str, selector: str) -> str: ...
+def text_statistics(
+    text: str,
+    *,
+    ngram_size: int = 1,
+    normalization: str = "none",
+    case: str = "preserve",
+    filter: str = "all",
+    max_results: int = 1000,
+) -> dict[str, Any]: ...
 def normalize_text(text: str, form: str) -> str: ...
 def reverse_text(text: str) -> str: ...
 def extract_characters(

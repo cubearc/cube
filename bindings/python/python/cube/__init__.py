@@ -58,6 +58,7 @@ from ._native import (
     scan_file,
     select_text,
     sha256,
+    text_statistics,
     triage_input,
     utf8_decode,
     utf8_encode,
@@ -75,6 +76,7 @@ from ._native import (
 )
 
 __all__ = [
+    "text_statistics",
     "WORD_UNICODE_VERSION",
     "select_text",
     "a1z26_encode",

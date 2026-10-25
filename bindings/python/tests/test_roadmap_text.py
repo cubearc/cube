@@ -4,6 +4,28 @@ import cube
 import pytest
 
 
+def test_structured_text_statistics_are_numeric_and_reproducible():
+    report = cube.text_statistics("ABAB", ngram_size=2)
+    assert report["frequencies"] == [
+        {"ngram": "AB", "count": 2},
+        {"ngram": "BA", "count": 1},
+    ]
+    assert report["scalar_count"] == 4
+    assert report["index_of_coincidence"] == pytest.approx(1 / 3)
+    assert report["shannon_entropy_bits"] == 1.0
+    assert cube.text_statistics("", ngram_size=2)["shannon_entropy_bits"] is None
+    assert cube.text_statistics("ée\u0301", normalization="NFC")["frequencies"] == [
+        {"ngram": "é", "count": 2}
+    ]
+    report = cube.text_statistics(
+        "B!Aa?雪", case="ascii_lower", filter="ascii_letters", max_results=1
+    )
+    assert report["complete"] is False
+    assert report["frequencies"] == [{"ngram": "a", "count": 2}]
+    with pytest.raises(ValueError):
+        cube.text_statistics("ABC", ngram_size=0)
+
+
 def test_word_line_selection_scalar_semantics_and_existing_extraction():
     assert cube.select_text("Cube Uses Binary Evidence", "word_first") == "CUBE"
     assert (

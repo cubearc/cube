@@ -205,7 +205,12 @@ fn execute(
         .parameter("wrap"));
     }
     let mut work = 0;
-    charge(&mut work, input.len() as u64, options.max_work, op)?;
+    charge(
+        &mut work,
+        (input.len() + steps.len()) as u64,
+        options.max_work,
+        op,
+    )?;
     let n = input.chars().count();
     let count = count.unwrap_or(n);
     if count > MAX_INDICES || (remove && count > n) {
@@ -463,6 +468,21 @@ const PARAMETERS: &[Parameter] = &[
         },
     },
 ];
+// A retained ring requires count; removal defaults to all source scalars.
+const KEYED_PARAMETERS: &[Parameter] = &[
+    PARAMETERS[0],
+    Parameter {
+        required: true,
+        ..PARAMETERS[1]
+    },
+    PARAMETERS[2],
+    PARAMETERS[3],
+    PARAMETERS[4],
+    PARAMETERS[5],
+    PARAMETERS[6],
+    PARAMETERS[7],
+    PARAMETERS[8],
+];
 pub const OPERATIONS: &[Descriptor] = &[
     Descriptor {
         id: "text.skip.keyed",
@@ -470,7 +490,7 @@ pub const OPERATIONS: &[Descriptor] = &[
         description: "Bounded cyclic-step retained scalar ring with mandatory count and original positions; first selection is step-1 advances from start.",
         input_type: "text",
         output_type: "text.traversal.report",
-        parameters: PARAMETERS,
+        parameters: KEYED_PARAMETERS,
         deterministic: true,
         reversible: Some(false),
         command: "text keyed-skip",

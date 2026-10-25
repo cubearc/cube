@@ -234,3 +234,46 @@ fn traversal_budgets_and_invalid_requests_are_explicit() {
     );
     assert!(traversal::josephus(&"A".repeat(700000), &[1], Some(1), &Options::default()).is_err());
 }
+
+#[test]
+fn traversal_discovery_requires_count_only_for_retained_rings() {
+    use cube_core::operations::{self, ParameterValue};
+    let steps = [2];
+    assert!(
+        operations::require("text.skip.keyed")
+            .unwrap()
+            .validate(&[("steps", ParameterValue::UnsignedList(&steps))])
+            .is_err()
+    );
+    assert!(
+        operations::require("text.skip.keyed")
+            .unwrap()
+            .validate(&[
+                ("steps", ParameterValue::UnsignedList(&steps)),
+                ("count", ParameterValue::Unsigned(5))
+            ])
+            .is_ok()
+    );
+    assert!(
+        operations::require("text.josephus.extract")
+            .unwrap()
+            .validate(&[("steps", ParameterValue::UnsignedList(&steps))])
+            .is_ok()
+    );
+    let options = Options {
+        direction: Direction::Reverse,
+        ..Options::default()
+    };
+    assert_eq!(
+        traversal::josephus("ABCDE", &[2], None, &options)
+            .unwrap()
+            .extracted,
+        "ECABD"
+    );
+    assert_eq!(
+        traversal::josephus("ABCDE", &[2, 3], None, &Options::default())
+            .unwrap()
+            .extracted,
+        "BECDA"
+    );
+}

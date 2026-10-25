@@ -1365,7 +1365,7 @@ reports <=8 MiB are independent bounds, excluding caller-owned input. Exact
 source arrays cost eight bytes per scalar, plus four bytes per Fenwick cell for
 Josephus; extraction releases these before reusing `text.extract`. Thus Josephus
 can reject a large ASCII source below the byte limit. Work <=16,777,216 units
-charges input bytes, source indexing, tree initialization, each selection/tree
+charges input bytes, step-list validation, source indexing, tree initialization, each selection/tree
 visit, extraction visits and a conservative bound for serialized evidence. Rust
 options and CLI/native Python limits can only lower ceilings. Any exhausted
 budget fails without a partial success. These structured direct APIs have no

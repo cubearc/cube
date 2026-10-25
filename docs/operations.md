@@ -1447,3 +1447,8 @@ visits and decomposition preflight, 1,536 conservative units per retained record
 (including bounded serialization), and 2,048 report-header units. Limits may be
 lowered through concrete options. These direct reports have no pipeline adapter;
 existing normalization, binary comparison and recipe contracts are unchanged.
+
+Numeric-grid research in [#127](https://github.com/cubearc/cube/issues/127) records
+reuse of existing public coordinate traversal and explicit small rank mappings.
+It defers an automatic grid remapper; no additional matrix engine or placeholder
+operation is included in 0.17.0.

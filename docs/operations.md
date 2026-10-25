@@ -65,6 +65,11 @@ No book is bundled, fetched or stored. This direct operation has no pipeline
 adapter: the separate source stays caller-controlled rather than being embedded
 in recipe parameters. Its text result can be passed to ordinary text operations.
 
+Modern encrypted-file formats remain outside the current cipher API. The
+[format evaluation](https://github.com/cubearc/cube/issues/78) records a possible
+age v1/X25519 subset and the parser-budget/interoperability work needed before
+implementation. There is no modern decryption operation in this release.
+
 ## Hashing and checksums
 
 Use SHA-256 or SHA-512 for one-way content digests. Neither is password hashing
@@ -421,6 +426,11 @@ Bases are explicit 2..36. Digits use ASCII 0–9/A–Z; a leading sign is allowe
 while whitespace, radix prefixes, separators, fractions and floats are rejected.
 Magnitudes up to `2^128-1` are exact, with at most 4096 input digits. Output
 canonicalizes case, sign and leading zeros; the integer value is preserved.
+
+The v0.11.0 numeric evaluation is recorded in [issue #77](https://github.com/cubearc/cube/issues/77).
+Prime tests, bounded Fibonacci and modular arithmetic remain deferred; base
+conversion is the implemented numeric API. No proposed operation is advertised
+through discovery.
 
 ## Audio analysis
 

@@ -30,6 +30,14 @@ transformations stay in their owning modules. Responsibilities include:
 - `encoding`, `ciphers`, `hashing`, `binary`, `text`, `symbols`, `numbers`: explicit
   transformations. Unicode normalization uses pinned data, exposed through
   `text::UNICODE_VERSION`; dependency/data changes require compatibility review.
+  Word/line selectors and book coordinates share tokenization; word whitespace
+  data is exposed separately as `selection::WORD_UNICODE_VERSION`. Book indexes
+  cache selected scalar positions within source/coordinate/unit budgets.
+  Text statistics return numeric structured reports with explicit normalization,
+  filtering and listing/work limits; they do not acquire a string pipeline adapter.
+  Byte transforms use fixed unsigned units and do not change repeating-key XOR.
+  RustCrypto supplies SHA digests/legacy MD5; named CRC constants stay distinct
+  from cryptographic hashes. New hash adapters retain explicit output bounds.
 - `forensics`: checked ranges, signature evidence, file facts, bounded EXIF, byte
   inspection and bounded PNG/JPEG/GIF framing. Reader/writer APIs support bounded or streaming work
   without requiring paths. Signatures are candidates, not validity proofs.

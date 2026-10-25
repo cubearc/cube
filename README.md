@@ -14,8 +14,9 @@ is explicit.
 
 ## What you can do
 
-- Encode and decode data, compute hashes/checksums, and apply byte-wise XOR.
-- Work with classical ciphers, Unicode text, Morse, Braille dot masks and integers.
+- Encode/decode data, compare exact hashes/checksums and transform binary units.
+- Work with classical/book ciphers, Unicode selectors/statistics, A1Z26, Morse,
+  Braille dot masks and integer base conversion.
 - Inspect file signatures, EXIF, hex, strings and binary differences; validate
   supported embedded ZIP structures and recover selected bytes safely.
 - Analyze bounded PNG8/JPEG/GIF/BMP/WebP images, reconstruct raw rasters, and extract

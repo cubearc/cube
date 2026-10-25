@@ -128,7 +128,7 @@ pub fn decode(
             values[count] = field
                 .parse::<usize>()
                 .ok()
-                .and_then(|n| n.checked_sub(usize::from(index_base)))
+                .and_then(|n| selection::unsigned_position(n, index_base))
                 .ok_or_else(invalid)?;
             count += 1;
         }

@@ -889,3 +889,16 @@ remaining source size and charged work/scratch estimates. `--steps 2,3` cycles
 explicitly. Options include `--start`, `--index-base 0|1`, `--direction reverse`,
 keyed-only `--no-wrap` and lower `--max-work`, `--max-memory`, `--max-output`.
 See [traversal semantics and bounds](operations.md#keyed-skip-and-josephus-traversal).
+
+## Positions inside every word
+
+```sh
+cube text word-extract --positions '[1,3]' --text 'Cube Uses Binary Evidence'
+cube text word-extract --per-word '[[2,1,2],[-1]]' --text 'ab cd'
+cube text word-extract --positions '[2]' --short-word skip --text 'A bé'
+```
+
+These emit JSON with extracted CbUeBnEi, babd and é respectively. The last report
+retains the skipped request for A. Positive origin is 1 by default; `--index-base
+0` permits zero. Negative positions count from each word's end. See
+[word selection contracts](operations.md#signed-positions-inside-words).

@@ -915,3 +915,17 @@ Concrete `options` dictionaries accept start, index_base, direction (forward or
 reverse), wrap and lower max_work/max_memory/max_output. Unknown fields fail;
 Josephus count defaults to all, or `count=...` stops early. Every report retains
 original positions; see [traversal limits](operations.md#keyed-skip-and-josephus-traversal).
+
+## Positions inside every word
+
+```python
+assert cube.extract_word_characters("Cube Uses Binary Evidence", positions=[1, 3])["extracted"] == "CbUeBnEi"
+assert cube.extract_word_characters("ab cd", per_word=[[2, 1, 2], [-1]])["extracted"] == "babd"
+report = cube.extract_word_characters("A bé", positions=[2], short_word="skip")
+assert report["extracted"] == "é" and report["omitted_count"] == 1
+```
+
+Choose exactly one shared or per_word list; booleans/floats and out-of-i64 values
+are rejected. The report preserves original word/scalar/byte coordinates and every
+ordered request, including explicit null omissions. See
+[word extraction bounds](operations.md#signed-positions-inside-words).

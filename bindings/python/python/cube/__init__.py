@@ -58,6 +58,7 @@ from ._native import (
     extract_html_asset,
     extract_video_audio,
     extract_video_frames,
+    extract_word_characters,
     file_exif,
     file_hex,
     file_signatures,
@@ -137,6 +138,7 @@ from ._native import (
 )
 
 __all__ = [
+    "extract_word_characters",
     "keyed_skip",
     "josephus_extract",
     "bacon_encode",

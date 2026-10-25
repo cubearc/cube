@@ -7,6 +7,9 @@ use crate::{
 use serde::Serialize;
 /// Unicode data used by Rust's White_Space tokenization; no language segmentation.
 pub const WORD_UNICODE_VERSION: (u8, u8, u8) = std::char::UNICODE_VERSION;
+pub(crate) fn unsigned_position(value: usize, index_base: u8) -> Option<usize> {
+    value.checked_sub(usize::from(index_base))
+}
 pub(crate) fn words(input: &str) -> std::str::SplitWhitespace<'_> {
     input.split_whitespace()
 }

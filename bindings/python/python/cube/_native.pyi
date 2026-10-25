@@ -749,3 +749,11 @@ def josephus_extract(
     count: int | None = None,
     options: dict | None = None,
 ) -> dict: ...
+def extract_word_characters(
+    text: str,
+    *,
+    positions: list[int] | None = None,
+    per_word: list[list[int]] | None = None,
+    index_base: int = 1,
+    short_word: str = "error",
+) -> dict: ...

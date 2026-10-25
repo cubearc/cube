@@ -102,6 +102,8 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Signed shared/per-word positions and explicit short-word omission records (JSON)
+    WordExtract(crate::wordcmd::Args),
     /// Retained scalar ring with explicit cyclic steps/count, JSON provenance
     KeyedSkip(crate::traversalcmd::Args),
     /// Remove selected scalars and resume next remaining, JSON provenance
@@ -197,6 +199,7 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::WordExtract(args) => return crate::wordcmd::run(args, output),
         TextCommand::KeyedSkip(args) => return crate::traversalcmd::run(args, false, output),
         TextCommand::Josephus(args) => return crate::traversalcmd::run(args, true, output),
         TextCommand::Keyboard(args) => crate::puzzlecmd::keyboard(args)?,

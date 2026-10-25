@@ -22,6 +22,7 @@ mod textops;
 mod traversal;
 mod video;
 mod web;
+mod word;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
@@ -494,6 +495,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     web::register(module)?;
     binaryops::register(module)?;
     textops::register(module)?;
+    word::register(module)?;
     traversal::register(module)?;
     puzzles::register(module)?;
     combinations::register(module)?;

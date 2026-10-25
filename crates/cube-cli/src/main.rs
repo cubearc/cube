@@ -20,6 +20,7 @@ mod textcmd;
 mod traversalcmd;
 mod videocmd;
 mod webcmd;
+mod wordcmd;
 
 #[derive(Parser)]
 #[command(

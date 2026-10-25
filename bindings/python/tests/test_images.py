@@ -2,10 +2,42 @@
 
 import struct
 import zlib
+from pathlib import Path
 
 import cube
 import pytest
 from cube import _native
+
+
+def qr_image(scale=4):
+    matrix = (
+        (Path(__file__).resolve().parents[3] / "tests/fixtures/qr-binary.matrix")
+        .read_text()
+        .splitlines()
+    )
+    side = (len(matrix) + 8) * scale
+    samples = bytearray([255]) * (side * side)
+    for y, row in enumerate(matrix):
+        for x, value in enumerate(row):
+            for dy in range(scale):
+                for dx in range(scale):
+                    samples[((y + 4) * scale + dy) * side + (x + 4) * scale + dx] = (
+                        0 if value == "1" else 255
+                    )
+    return cube.Image.from_samples(side, side, "gray", bytes(samples))
+
+
+def test_qr_preserves_binary_payloads_and_reports_no_result():
+    image = qr_image()
+    for angle in [0, 90, 180, 270]:
+        report = image.rotate(angle).qr()
+        assert report["status"] == "decoded"
+        assert report["symbols"][0]["payload"] == b"Cube\0\xff"
+        assert report["symbols"][0]["version"] == 1
+    blank = cube.Image.from_samples(8, 8, "gray", b"\xff" * 64)
+    assert blank.qr()["status"] == "no_detection"
+    with pytest.raises(ValueError):
+        image.qr(max_symbols=0)
 
 
 def chunk(kind, data):

@@ -9,6 +9,7 @@ pub mod colors;
 pub use colors::{ColorLayer, ColorOutput};
 pub mod bits;
 pub mod decode;
+pub mod qr;
 pub mod raw;
 pub mod stream;
 pub mod traversal;

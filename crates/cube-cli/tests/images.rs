@@ -23,6 +23,69 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn qr_json_raw_and_exclusive_output_preserve_binary_payloads() {
+    let files = Files::new("qr");
+    let path = files.path("symbol.png");
+    let output = files.path("payload.bin");
+    let matrix: Vec<_> = include_str!("../../../tests/fixtures/qr-binary.matrix")
+        .lines()
+        .collect();
+    let side = (matrix.len() + 8) * 4;
+    let mut samples = vec![255; side * side];
+    for (y, row) in matrix.iter().enumerate() {
+        for (x, v) in row.bytes().enumerate() {
+            for dy in 0..4 {
+                for dx in 0..4 {
+                    samples[((y + 4) * 4 + dy) * side + (x + 4) * 4 + dx] =
+                        if v == b'1' { 0 } else { 255 };
+                }
+            }
+        }
+    }
+    Image::from_samples(
+        side as u32,
+        side as u32,
+        ColorModel::Gray,
+        samples,
+        vec![],
+        vec![],
+    )
+    .unwrap()
+    .save_png(&path)
+    .unwrap();
+    let result = run(&["image", "qr", path.to_str().unwrap(), "--json"]);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["symbols"][0]["payload_hex"], "4375626500ff");
+    let result = run(&["image", "qr", path.to_str().unwrap(), "--stdout"]);
+    assert!(result.status.success());
+    assert_eq!(result.stdout, b"Cube\0\xff");
+    let args = [
+        "image",
+        "qr",
+        path.to_str().unwrap(),
+        "--output",
+        output.to_str().unwrap(),
+    ];
+    assert!(run(&args).status.success());
+    assert!(!run(&args).status.success());
+    assert_eq!(std::fs::read(output).unwrap(), b"Cube\0\xff");
+    let blank = files.path("blank.png");
+    Image::from_bytes(1, 1, ColorModel::Gray, &[255], &[], &[])
+        .unwrap()
+        .save_png(&blank)
+        .unwrap();
+    assert!(
+        !run(&["image", "qr", blank.to_str().unwrap(), "--stdout"])
+            .status
+            .success()
+    );
+}
+#[test]
 fn raw_geometry_comparison_labels_headers_and_candidates_separately() {
     let files = Files::new("geometry");
     let path = files.path("source.png");

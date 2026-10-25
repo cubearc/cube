@@ -43,6 +43,9 @@ transformations stay in their owning modules. Responsibilities include:
   memory. Existing row/column and LsbOptions/LsbResult layouts remain compatible;
   explicit-corner results wrap LsbResult. Rust exhaustive matches on Traversal
   must account for its additional diagonal/zigzag/spiral variants.
+  QR analysis reuses palette/luma operations and pure Rust Quircs with smaller
+  pixel and candidate limits. Detection, decoding and raw payload bytes remain
+  separate; it adds no browser, network or native multimedia dependency.
 - `media`: WAVE framing, immutable selected PCM blocks and incremental min/max
   envelopes. Metadata skips payloads with `Read + Seek`; extraction/envelopes share
   frame-aligned bounded streaming. Block format/channel/continuity checks precede

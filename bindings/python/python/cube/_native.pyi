@@ -100,6 +100,7 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    def qr(self, *, max_symbols: int = 8) -> dict[str, Any]: ...
     @staticmethod
     def inspect_layout(
         data: bytes,

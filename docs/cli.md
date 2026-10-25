@@ -246,6 +246,11 @@ candidate layout, including header parsing errors. For another explicit hypothes
 cube image raw pixels.bin --width 2 --height 1 --layout rgba --compare-header
 ```
 
+For an already obtained QR image, use `cube image qr code.png --json`.
+`--stdout` emits one decoded payload as exact bytes; `--output payload.bin`
+creates a new destination. No detection is a normal JSON result, while ambiguous
+or undecoded raw output fails explicitly.
+
 ## Inspect audio samples
 
 ```sh

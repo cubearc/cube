@@ -180,6 +180,7 @@ geometry = cube.Image.inspect_layout(encoded, len(encoded), 1, "gray")
 assert geometry["declared"]["width"] == 1
 assert geometry["declared"]["height"] == 2
 assert geometry["candidate"]["width"] == len(encoded)
+assert raw.qr()["status"] == "no_detection"
 ```
 
 Structured results can contain native `bytes` or `Image` objects, so they are not

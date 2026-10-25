@@ -270,6 +270,21 @@ requires default row order; other orders use bytes or records. Feed exported byt
 to existing byte transformations/pipelines explicitly. Encoded-image decoding is
 kept outside recipes: image expansion/work budgets differ from byte adapters, and
 discovery does not advertise an image pipeline adapter.
+
+QR analysis accepts opaque supported images up to 262144 pixels and 1024 pixels
+per side. A temporary view expands palettes, reuses the integer luma conversion,
+then uses Quircs' Otsu thresholding. Transparent samples require explicit caller
+preprocessing; no background is guessed. Detection bounds are 32 capstones,
+65534 regions and eight grids; results flag reached detector limits and do not
+promise exhaustive detection. `max_symbols` is 1..=8 and total payload is capped
+at 64 KiB. Known fixtures cover two/four/eight pixels per module and quarter turns;
+other scale, perspective, damage and contrast conditions may fail.
+
+Reports distinguish no detection, detected but undecodable, decoded and partial
+decode. Each symbol has raw payload bytes or a decoding error, plus available
+corner/version/ECC/mask/type/ECI metadata. Binary bytes are preserved without text
+encoding guesses. CLI JSON represents them as exact Hex; raw output requires
+exactly one decoded symbol. No payload URL is followed or content executed.
 Selections must be nonempty and distinct; output is capped at 16 MiB.
 An extracted bit stream is a deterministic candidate, not proof of a hidden message.
 

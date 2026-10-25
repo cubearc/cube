@@ -40,6 +40,17 @@ pub struct PyImage {
 
 #[pymethods]
 impl PyImage {
+    #[pyo3(signature=(*, max_symbols=8))]
+    fn qr(&self, py: Python<'_>, max_symbols: usize) -> PyResult<Py<PyAny>> {
+        let report = self.inner.qr(max_symbols).map_err(super::file_error)?;
+        let output = super::structured(py, &serde_json::json!(report))?;
+        let symbols = output.bind(py).get_item("symbols")?;
+        for (index, symbol) in report.symbols.iter().enumerate() {
+            let payload = symbol.payload.as_ref().map(|data| PyBytes::new(py, data));
+            symbols.get_item(index)?.set_item("payload", payload)?;
+        }
+        Ok(output)
+    }
     #[staticmethod]
     #[pyo3(signature=(data, width, height, layout, *, row_stride=None, offset=0))]
     fn inspect_layout(

@@ -172,6 +172,20 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Detect/decode QR symbols as inert bytes; default JSON includes payload Hex
+    #[command(group(clap::ArgGroup::new("qr_destination").multiple(false).args(["json","stdout","output"])))]
+    Qr {
+        path: PathBuf,
+        #[arg(long, default_value_t = 8)]
+        max_symbols: usize,
+        #[arg(long)]
+        json: bool,
+        /// Requires exactly one successfully decoded symbol
+        #[arg(long)]
+        stdout: bool,
+        #[arg(long)]
+        output: Option<PathBuf>,
+    },
     /// Export a mask or RGBA layer for exact native colors (hex sample tuples)
     Colors {
         path: PathBuf,
@@ -391,6 +405,43 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Qr {
+            path,
+            max_symbols,
+            json: _,
+            stdout,
+            output: destination,
+        } => {
+            let report = Image::open(&path)?.qr(max_symbols)?;
+            if stdout || destination.is_some() {
+                let payload = match report.symbols.as_slice() {
+                    [symbol] => symbol.payload.as_deref(),
+                    _ => None,
+                }
+                .ok_or("raw QR output requires exactly one successfully decoded symbol")?;
+                if let Some(path) = destination {
+                    image::save_new(&path, payload)?;
+                } else {
+                    output.write_all(payload)?;
+                }
+            } else {
+                let mut value = serde_json::json!(report);
+                for (value, symbol) in value["symbols"]
+                    .as_array_mut()
+                    .expect("symbol array")
+                    .iter_mut()
+                    .zip(&report.symbols)
+                {
+                    value["payload_hex"] = serde_json::json!(
+                        symbol
+                            .payload
+                            .as_ref()
+                            .map(|data| cube_core::encoding::hex_encode(data))
+                    );
+                }
+                writeln!(output, "{}", serde_json::to_string_pretty(&value)?)?;
+            }
+        }
         ImageCommand::Colors {
             path,
             colors,

@@ -69,15 +69,16 @@ impl Budget {
         Ok(())
     }
 }
-fn extra(mut bytes: &[u8]) -> Result<(), OperationError> {
+fn extra(mut bytes: &[u8], mut offset: usize) -> Result<(), OperationError> {
     while !bytes.is_empty() {
-        let header = part(bytes, 0, 4)?;
+        let header = part(bytes, 0, 4).map_err(|e| e.offset(offset as u64))?;
         if word(header, 0) == 1 {
-            return Err(unsupported("ZIP64 extra fields are not supported"));
+            return Err(unsupported("ZIP64 extra fields are not supported").offset(offset as u64));
         }
         let n = word(header, 2) as usize;
-        part(bytes, 4, n)?;
+        part(bytes, 4, n).map_err(|e| e.offset((offset + 4) as u64))?;
         bytes = &bytes[4 + n..];
+        offset += 4 + n;
     }
     Ok(())
 }
@@ -154,7 +155,10 @@ pub fn validate(reader: &mut (impl Read + Seek), offset: u64) -> Result<Archive,
             Err(failure)
         }
     })();
-    result.map_err(|e: OperationError| e.operation("file.zip.validate"))
+    result.map_err(|mut e: OperationError| {
+        e.offset = e.offset.and_then(|relative| offset.checked_add(relative));
+        e.operation("file.zip.validate")
+    })
 }
 
 fn directory(
@@ -236,7 +240,10 @@ fn directory(
         }
         budget.charge(46 + name_len + extra_len + comment_len)?;
         let name = part(bytes, p + 46, name_len)?;
-        extra(part(bytes, p + 46 + name_len, extra_len)?)?;
+        extra(
+            part(bytes, p + 46 + name_len, extra_len)?,
+            p + 46 + name_len,
+        )?;
         let entry_comment = part(bytes, p + 46 + name_len + extra_len, comment_len)?;
         if flags & 0x800 != 0
             && (std::str::from_utf8(name).is_err() || std::str::from_utf8(entry_comment).is_err())
@@ -271,7 +278,10 @@ fn directory(
                 "ZIP local filename differs from central directory",
             ));
         }
-        extra(part(bytes, name_start + local_name, local_extra)?)?;
+        extra(
+            part(bytes, name_start + local_name, local_extra)?,
+            name_start + local_name,
+        )?;
         let data = name_start
             .checked_add(local_name + local_extra)
             .ok_or_else(|| malformed("ZIP data offset overflow"))?;

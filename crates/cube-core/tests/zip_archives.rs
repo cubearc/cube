@@ -243,3 +243,19 @@ fn bounded_search_does_not_claim_the_entire_suffix_was_searched() {
     assert!(!r.payload_verified);
     assert!(r.trailing_bytes > 0);
 }
+#[test]
+fn embedded_structure_errors_keep_absolute_source_offsets() {
+    let mut archive = fixture(&[b"a"], false, &[]);
+    let end = archive.len() - 22;
+    archive.pop();
+    let mut bytes = b"prefix!".to_vec();
+    bytes.extend(&archive);
+    let error = zip::validate(&mut Cursor::new(&bytes), 7).unwrap_err();
+    assert_eq!(error.offset, Some(7 + end as u64));
+    let archive = fixture(&[b"a"], false, &[1, 0, 0, 0]);
+    let extra = cd(&archive) + 46 + 1;
+    let mut bytes = b"prefix!".to_vec();
+    bytes.extend(&archive);
+    let error = zip::validate(&mut Cursor::new(&bytes), 7).unwrap_err();
+    assert_eq!(error.offset, Some(7 + extra as u64));
+}

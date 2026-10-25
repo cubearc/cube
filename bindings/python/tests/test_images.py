@@ -9,6 +9,25 @@ import pytest
 from cube import _native
 
 
+def test_color_layers_have_exact_masks_and_bounded_canonical_manifests():
+    image = cube.Image.from_samples(2, 1, "rgba", bytes([1, 2, 3, 0, 1, 2, 3, 255]))
+    report = image.color_layers()
+    assert [r["color"] for r in report["outputs"]] == [[1, 2, 3, 0], [1, 2, 3, 255]]
+    assert cube.Image.decode(report["outputs"][0]["png"]).samples == b"\xff\0"
+    assert report["outputs"][0]["selected_pixels"] == 1
+    with pytest.raises(ValueError):
+        image.color_layers(max_outputs=1)
+    with pytest.raises(ValueError):
+        image.color_layers([[1, 2, 3, 0], [1, 2, 3, 0]])
+    indexed = cube.Image.from_samples(
+        2, 1, "indexed", b"\0\x01", [[1, 2, 3], [1, 2, 3]]
+    )
+    assert len(indexed.color_layers()["outputs"]) == 2
+    assert (
+        indexed.color_layers(expand_palette=True)["outputs"][0]["selected_pixels"] == 2
+    )
+
+
 def qr_image(scale=4):
     matrix = (
         (Path(__file__).resolve().parents[3] / "tests/fixtures/qr-binary.matrix")

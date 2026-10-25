@@ -100,6 +100,15 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    def color_layers(
+        self,
+        colors: list[list[int]] | None = None,
+        *,
+        representation: str = "mask",
+        expand_palette: bool = False,
+        max_colors: int = 16,
+        max_outputs: int = 16,
+    ) -> dict[str, Any]: ...
     def qr(self, *, max_symbols: int = 8) -> dict[str, Any]: ...
     @staticmethod
     def inspect_layout(

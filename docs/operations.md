@@ -322,6 +322,16 @@ This operation is available through Rust, CLI and native Python, with no pipelin
 adapter or new image pipeline value. Existing byte XOR and image comparison keep
 their behavior.
 
+`image.colors.export` reuses the complete native-channel histogram and existing
+single-color extraction. It returns canonical `color-<hex>.png` entries and counts;
+absent or duplicate subsets fail. Native indices and physical alpha distinguish
+colors until explicit palette expansion. Both color/output caps default to 16
+(hard cap 64). Histogram plus extraction scans allow 16 Mi pixel-work; conservative
+PNG bounds of `2*sample_bytes+4096` per image must total at most 64 MiB before work.
+Actual encoded bytes are also checked. Rust/Python perform no implicit writes;
+CLI reserves the complete collection plus manifest and rolls back its new files
+on failure. This structured collection has no pipeline adapter.
+
 Raw reconstruction supports unsigned 8-bit `gray`, `rgb`, `bgr`, `rgba` and `bgra`.
 Width, height and physical layout are mandatory; offset defaults to zero and stride
 to a packed row. Every row includes its declared padding, including the final row:

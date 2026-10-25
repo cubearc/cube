@@ -269,6 +269,18 @@ PY
 
 ## Analyze an image
 
+Export one exact-color mask per distinct native tuple to an existing directory:
+
+```sh
+mkdir layers
+cube image color-layers sample.png --output-dir layers
+```
+
+The new `manifest.json` and canonical `color-<hex>.png` files are reserved together.
+Collisions fail without overwriting; failed writes remove only this invocation's
+new files. Use `--representation layer` for RGBA or an explicit `--colors` subset.
+`--max-colors` and `--max-outputs` default to 16 and may be lowered or raised to 64.
+
 ```sh
 cube image inspect sample.png --json
 cube image histogram sample.png --channels red,green,blue --json

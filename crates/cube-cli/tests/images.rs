@@ -22,6 +22,38 @@ fn run(args: &[&str]) -> std::process::Output {
         .output()
         .unwrap()
 }
+#[test]
+fn color_layer_exports_have_deterministic_manifests_and_collision_safety() {
+    let files = Files::new("color-exports");
+    let source = files.path("source.png");
+    let image = Image::from_bytes(2, 1, ColorModel::Gray, &[0, 255], &[], &[]).unwrap();
+    image.save_png(&source).unwrap();
+    let dir = files.path("layers");
+    std::fs::create_dir(&dir).unwrap();
+    let args = [
+        "image",
+        "color-layers",
+        source.to_str().unwrap(),
+        "--output-dir",
+        dir.to_str().unwrap(),
+    ];
+    let result = run(&args);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let manifest: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(manifest["outputs"][0]["name"], "color-00.png");
+    assert_eq!(
+        Image::open(&dir.join("color-00.png")).unwrap().samples(),
+        [255, 0]
+    );
+    let original = std::fs::read(dir.join("manifest.json")).unwrap();
+    assert!(!run(&args).status.success());
+    assert_eq!(std::fs::read(dir.join("manifest.json")).unwrap(), original);
+    assert_eq!(Image::open(&source).unwrap().samples(), image.samples());
+}
 
 #[test]
 fn bitwise_pairs_export_exact_samples_and_constructed_provenance() {

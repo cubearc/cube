@@ -40,6 +40,57 @@ pub struct PyImage {
 
 #[pymethods]
 impl PyImage {
+    #[pyo3(signature=(colors=None, *, representation="mask", expand_palette=false, max_colors=16, max_outputs=16))]
+    fn color_layers(
+        &self,
+        py: Python<'_>,
+        colors: Option<&Bound<'_, pyo3::types::PyList>>,
+        representation: &str,
+        expand_palette: bool,
+        max_colors: usize,
+        max_outputs: usize,
+    ) -> PyResult<Py<PyAny>> {
+        let colors = colors
+            .map(|colors| {
+                if colors.len() > 64 {
+                    return Err(pyo3::exceptions::PyValueError::new_err(
+                        "color selection exceeds 64 tuples",
+                    ));
+                }
+                colors
+                    .iter()
+                    .map(|c| {
+                        if c.len()? > 4 {
+                            return Err(pyo3::exceptions::PyValueError::new_err(
+                                "color exceeds four samples",
+                            ));
+                        }
+                        c.extract::<Vec<u8>>()
+                    })
+                    .collect::<PyResult<Vec<_>>>()
+            })
+            .transpose()?;
+        let report = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .color_layers(
+                colors.as_deref(),
+                cube_core::image::ColorOutput::parse(representation).map_err(super::file_error)?,
+                max_colors,
+                max_outputs,
+            )
+            .map_err(super::file_error)?;
+        let result = super::structured(py, &serde_json::json!(report))?;
+        for (i, entry) in report.outputs.iter().enumerate() {
+            result
+                .bind(py)
+                .get_item("outputs")?
+                .get_item(i)?
+                .set_item("png", PyBytes::new(py, &entry.png))?;
+        }
+        Ok(result)
+    }
     #[pyo3(signature=(*, max_symbols=8))]
     fn qr(&self, py: Python<'_>, max_symbols: usize) -> PyResult<Py<PyAny>> {
         let report = self.inner.qr(max_symbols).map_err(super::file_error)?;

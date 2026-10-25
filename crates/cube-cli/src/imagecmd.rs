@@ -5,6 +5,7 @@ use cube_core::{
     image::{self, BitwiseOperation, Channel, Image, PixelData, Region},
 };
 use std::{error::Error, io::Write, path::PathBuf};
+mod output;
 
 #[derive(Args)]
 pub(crate) struct ViewOptions {
@@ -172,6 +173,22 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Export exact-color PNGs and manifest.json into an existing directory
+    ColorLayers {
+        path: PathBuf,
+        #[arg(long, value_delimiter = ',')]
+        colors: Option<Vec<String>>,
+        #[arg(long, default_value = "mask")]
+        representation: String,
+        #[arg(long)]
+        expand_palette: bool,
+        #[arg(long, default_value_t = 16)]
+        max_colors: usize,
+        #[arg(long, default_value_t = 16)]
+        max_outputs: usize,
+        #[arg(long)]
+        output_dir: PathBuf,
+    },
     /// Detect/decode QR symbols as inert bytes; default JSON includes payload Hex
     #[command(group(clap::ArgGroup::new("qr_destination").multiple(false).args(["json","stdout","output"])))]
     Qr {
@@ -418,6 +435,46 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::ColorLayers {
+            path,
+            colors,
+            representation,
+            expand_palette,
+            max_colors,
+            max_outputs,
+            output_dir,
+        } => {
+            if colors
+                .as_ref()
+                .is_some_and(|v| v.len() > 64 || v.iter().any(|s| s.len() > 8))
+            {
+                return Err("color selection exceeds 64 four-byte tuples".into());
+            }
+            let colors = colors
+                .map(|v| {
+                    v.iter()
+                        .map(|s| cube_core::encoding::hex_decode(s))
+                        .collect::<Result<Vec<_>, _>>()
+                })
+                .transpose()?;
+            let image = Image::open(&path)?;
+            let report = image.view(expand_palette)?.color_layers(
+                colors.as_deref(),
+                image::ColorOutput::parse(&representation)?,
+                max_colors,
+                max_outputs,
+            )?;
+            let manifest = serde_json::to_vec_pretty(&report)?;
+            let mut files: Vec<_> = report
+                .outputs
+                .into_iter()
+                .map(|entry| (entry.name, entry.png))
+                .collect();
+            files.push(("manifest.json".into(), manifest.clone()));
+            output::write_outputs(&output_dir, &files)?;
+            output.write_all(&manifest)?;
+            writeln!(output)?;
+        }
         ImageCommand::Qr {
             path,
             max_symbols,

@@ -160,6 +160,12 @@ perform explicit caller-selected local I/O, outside recipe steps.
 
 ## Analyze an image
 
+`image.color_layers()` returns a sorted manifest with PNG `bytes` in each
+`outputs[i]["png"]`; it never writes files. Decode those bytes with `Image.decode`
+to inspect each mask. `representation="layer"` preserves selected RGBA, including
+hidden RGB under zero alpha. Explicit `expand_palette=True` matches RGBA instead
+of indices and merges duplicate palette colors.
+
 This example constructs an original two-pixel image without an external asset:
 
 ```python

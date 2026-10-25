@@ -237,6 +237,12 @@ malformed recognized headers report a separate error, while unknown data has no
 declared dimensions. PNG/JPEG/GIF/BMP/WebP header observations do not repair files.
 Optional export creates a new PNG from the exact candidate layout.
 
+PNG depths 1/2/4/16 remain unsupported by `Image`. The
+[precision evaluation](https://github.com/cubearc/cube/issues/70) records native
+packed-index/gray and big-endian 16-bit decoder fixtures, a compatibility strategy,
+budgets and a proposed future representation. Implementation is gated on agreement
+of that contract; no sample expansion/downsampling or public type migration occurs.
+
 Exact-color selection matches complete native tuples, including physical alpha.
 Select 1..=256 distinct colors. Masks preserve coordinates and use 255 for selected
 pixels, zero elsewhere; RGBA layers keep selected original colors/alpha (including

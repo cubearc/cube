@@ -104,7 +104,7 @@ fn alias_pairs(value: Option<&Bound<'_, PyList>>) -> PyResult<Vec<(char, char)>>
 }
 // Serialize native dictionaries incrementally; keep at most 64 KiB of transport.
 // Concrete schema validation remains in core.
-fn document(py: Python<'_>, value: &Bound<'_, PyDict>) -> PyResult<String> {
+pub(super) fn document(py: Python<'_>, value: &Bound<'_, PyDict>) -> PyResult<String> {
     let kwargs = PyDict::new(py);
     kwargs.set_item("allow_nan", false)?;
     kwargs.set_item("ensure_ascii", false)?;

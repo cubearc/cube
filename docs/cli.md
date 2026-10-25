@@ -876,3 +876,16 @@ cube number alphabet --source-alphabet 01 --target-alphabet abcdefghij \
 
 Alphabets and active bases are always explicit; custom digits are exact Unicode
 scalars. See [numeric alphabet limits](operations.md#custom-numeric-alphabets).
+
+## Explicit text traversal
+
+```sh
+cube text keyed-skip --steps 2 --count 5 --text ABCDE
+cube text josephus --steps 2 --text ABCDE
+```
+
+JSON reports contain extracted BDACE/BDAEC respectively, original positions,
+remaining source size and charged work/scratch estimates. `--steps 2,3` cycles
+explicitly. Options include `--start`, `--index-base 0|1`, `--direction reverse`,
+keyed-only `--no-wrap` and lower `--max-work`, `--max-memory`, `--max-output`.
+See [traversal semantics and bounds](operations.md#keyed-skip-and-josephus-traversal).

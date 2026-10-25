@@ -2,10 +2,17 @@
 use std::io::{self, Write};
 pub(crate) struct ByteBudget {
     remaining: usize,
+    initial: usize,
 }
 impl ByteBudget {
+    pub(crate) fn written(&self) -> usize {
+        self.initial - self.remaining
+    }
     pub(crate) fn new(limit: usize) -> Self {
-        Self { remaining: limit }
+        Self {
+            remaining: limit,
+            initial: limit,
+        }
     }
 }
 impl Write for ByteBudget {

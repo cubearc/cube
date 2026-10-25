@@ -10,6 +10,8 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "text.skip.keyed": "keyed_skip",
+    "text.josephus.extract": "josephus_extract",
     "number.alphabet.convert": "convert_alphabet",
     **{
         f"cipher.{name}.{direction}": f"{name}_{direction}"

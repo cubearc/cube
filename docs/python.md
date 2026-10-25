@@ -902,3 +902,16 @@ assert cube.convert_alphabet("-٠٠١٠", "٠١٢٣٤٥٦٧٨٩", "01", 10, 2) =
 This native integer converter preserves exact 128-bit magnitudes. Custom digits
 are case-sensitive scalars, with explicit source/target bases; see
 [numeric alphabet limits](operations.md#custom-numeric-alphabets).
+
+## Explicit text traversal
+
+```python
+assert cube.keyed_skip("ABCDE", [2], 5)["extracted"] == "BDACE"
+assert cube.josephus_extract("ABCDE", [2])["extracted"] == "BDAEC"
+assert cube.keyed_skip("ABCDE", [1], 3, options={"start": 2, "index_base": 1})["extracted"] == "BCD"
+```
+
+Concrete `options` dictionaries accept start, index_base, direction (forward or
+reverse), wrap and lower max_work/max_memory/max_output. Unknown fields fail;
+Josephus count defaults to all, or `count=...` stops early. Every report retains
+original positions; see [traversal limits](operations.md#keyed-skip-and-josephus-traversal).

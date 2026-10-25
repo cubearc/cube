@@ -739,3 +739,13 @@ def map_character_classes(
 def convert_alphabet(
     text: str, source_alphabet: str, target_alphabet: str, from_base: int, to_base: int
 ) -> str: ...
+def keyed_skip(
+    text: str, steps: list[int], count: int, *, options: dict | None = None
+) -> dict: ...
+def josephus_extract(
+    text: str,
+    steps: list[int],
+    *,
+    count: int | None = None,
+    options: dict | None = None,
+) -> dict: ...

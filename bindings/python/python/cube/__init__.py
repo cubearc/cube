@@ -75,8 +75,10 @@ from ._native import (
     inspect_wave,
     inspect_wave_file,
     investigate,
+    josephus_extract,
     keccak256,
     keyboard_remap,
+    keyed_skip,
     keypad_decode,
     keypad_encode,
     map_character_classes,
@@ -135,6 +137,8 @@ from ._native import (
 )
 
 __all__ = [
+    "keyed_skip",
+    "josephus_extract",
     "bacon_encode",
     "bacon_decode",
     "polybius_encode",

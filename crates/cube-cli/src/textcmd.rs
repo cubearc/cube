@@ -102,6 +102,10 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Retained scalar ring with explicit cyclic steps/count, JSON provenance
+    KeyedSkip(crate::traversalcmd::Args),
+    /// Remove selected scalars and resume next remaining, JSON provenance
+    Josephus(crate::traversalcmd::Args),
     /// Remap exact scalars by physical key/layer positions
     Keyboard(crate::puzzlecmd::KeyboardArgs),
     /// Map disjoint scalar classes with original positions and explicit filtering (JSON)
@@ -193,6 +197,8 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::KeyedSkip(args) => return crate::traversalcmd::run(args, false, output),
+        TextCommand::Josephus(args) => return crate::traversalcmd::run(args, true, output),
         TextCommand::Keyboard(args) => crate::puzzlecmd::keyboard(args)?,
         TextCommand::Class(args) => return crate::puzzlecmd::classes(args, output),
         TextCommand::Transform {

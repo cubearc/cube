@@ -17,6 +17,7 @@ mod pipelinecmd;
 mod puzzlecmd;
 mod recipecmd;
 mod textcmd;
+mod traversalcmd;
 mod videocmd;
 mod webcmd;
 

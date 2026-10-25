@@ -698,3 +698,41 @@ class PipelineStep(PipelineStepHeader, total=False):
         str,
         int | bool | str | BytesParameter | UnsignedListParameter | TextListParameter,
     ]
+
+# Explicit puzzle alphabets and physical/scalar mappings. No pipeline adapters.
+def bacon_encode(text: str, variant: str, *, notation: str = "ab") -> str: ...
+def bacon_decode(text: str, variant: str, *, notation: str = "ab") -> str: ...
+def polybius_encode(
+    text: str,
+    *,
+    preset: str | None = None,
+    alphabet: str | None = None,
+    side: int | None = None,
+    aliases: list[tuple[str, str]] | None = None,
+    index_base: int = 1,
+) -> list[list[int] | None]: ...
+def polybius_decode(
+    tokens: list[list[int] | tuple[int, int] | None],
+    *,
+    preset: str | None = None,
+    alphabet: str | None = None,
+    side: int | None = None,
+    aliases: list[tuple[str, str]] | None = None,
+    index_base: int = 1,
+) -> str: ...
+def keyboard_remap(
+    text: str,
+    source: str | dict,
+    target: str | dict,
+    *,
+    unmapped: str = "preserve",
+) -> str: ...
+def keypad_encode(text: str, mode: str, *, mapping: dict | None = None) -> str: ...
+def keypad_decode(text: str, mode: str, *, mapping: dict | None = None) -> dict: ...
+def map_character_classes(
+    text: str,
+    *,
+    y: str | None = None,
+    unmapped: str = "error",
+    definition: dict | None = None,
+) -> dict: ...

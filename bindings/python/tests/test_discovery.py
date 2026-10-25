@@ -10,6 +10,17 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    **{
+        f"cipher.{name}.{direction}": f"{name}_{direction}"
+        for name in ("bacon", "polybius")
+        for direction in ("encode", "decode")
+    },
+    **{
+        f"symbol.keypad.{direction}": f"keypad_{direction}"
+        for direction in ("encode", "decode")
+    },
+    "text.keyboard.remap": "keyboard_remap",
+    "text.class.map": "map_character_classes",
     "blockchain.private.export": "export_private_key",
     "hash.ripemd160": "ripemd160",
     "hash.keccak256": "keccak256",

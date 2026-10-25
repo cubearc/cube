@@ -13,6 +13,7 @@ mod filecmd;
 mod imagecmd;
 mod investigatecmd;
 mod pipelinecmd;
+mod puzzlecmd;
 mod recipecmd;
 mod textcmd;
 mod videocmd;
@@ -182,6 +183,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Explicit telephone or delimited multi-tap keypad mapping
+    Keypad(puzzlecmd::KeypadArgs),
     /// Bounded single-byte-version Base58Check; <=1024 payload bytes, empty allowed
     Base58check {
         #[command(flatten)]
@@ -210,6 +213,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Return canonical multi-tap text or telephone alternatives as JSON
+    Keypad(puzzlecmd::KeypadArgs),
     /// Verify Base58Check and report its version plus exact payload hex; <=1421 text bytes
     Base58check {
         #[command(flatten)]
@@ -237,6 +242,10 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Five-symbol Bacon encoding with explicit alphabet and notation
+    Bacon(puzzlecmd::BaconArgs),
+    /// Shared Polybius/Tap square, explicit row,column pairs and word tokens
+    Polybius(puzzlecmd::PolybiusArgs),
     /// Extract Unicode scalars from caller-supplied book coordinates; source <=1 MiB
     Book {
         #[command(flatten)]
@@ -581,6 +590,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                         "encoding.base58check.encode",
                     )?,
                 )?,
+                Encode::Keypad(args) => puzzlecmd::keypad(args, false)?,
                 Encode::Semaphore(input) => cube_core::symbols::semaphore::encode(
                     &input.read_text("symbol.semaphore.encode")?,
                 )?,
@@ -617,6 +627,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     )?;
                 }
             }
+            Decode::Keypad(args) => write_text(&mut output, &puzzlecmd::keypad(args, true)?)?,
             Decode::Semaphore(input) => write_text(
                 &mut output,
                 &cube_core::symbols::semaphore::decode(
@@ -664,6 +675,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Cipher { command } => {
             let text = match command {
+                Cipher::Bacon(args) => puzzlecmd::bacon(args)?,
+                Cipher::Polybius(args) => puzzlecmd::polybius(args)?,
                 Cipher::Book {
                     input,
                     source,

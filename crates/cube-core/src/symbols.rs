@@ -2,6 +2,7 @@
 //! No audio interpretation, natural-language transcription or hidden normalization.
 pub mod a1z26;
 pub mod clock;
+pub mod keypad;
 pub mod semaphore;
 use crate::{
     errors::{ErrorCode, OperationError},

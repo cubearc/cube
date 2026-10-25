@@ -18,6 +18,8 @@ is explicit.
 - Encode/decode data, compare exact hashes/checksums and transform binary units.
 - Work with classical/book ciphers, Unicode selectors/statistics, A1Z26, Morse,
   Braille dot masks, flag Semaphore, directional clocks and integer base conversion.
+- Apply Bacon/Polybius/Tap alphabets, explicit keyboard/keypad mappings and
+  character-class patterns with source positions.
 - Arrange Unicode scalars in exact grids and iterate bounded string combinations.
 - Inspect file signatures, EXIF, hex, strings and binary differences; validate
   supported embedded ZIP structures and recover selected bytes safely.

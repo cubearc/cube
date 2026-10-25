@@ -274,3 +274,16 @@ Introduce shared FFI machinery only when an implemented binding demonstrates a
 concrete need. A plugin runtime, distributed workflows and visual workbench are
 not implemented; future privileged extensions need a separate compatibility,
 permission, sandboxing and resource-limit design.
+
+## Puzzle mapping ownership
+
+`ciphers::bacon` owns explicit alphabet/notation grammar;
+`ciphers::polybius::Square` shares validated scalar geometry between I/J Polybius,
+C/K Tap and custom squares. `symbols::keypad` owns ordered mappings and bounded
+per-digit ambiguity. `text::keyboard` maps literal key/layer IDs on equal
+geometries, with immutable preset tables separate from transformation logic.
+`text::classes` retains original scalar/byte provenance and explicit filtering.
+A small internal counting writer bounds concrete definition/report serialization;
+it is not a second value model or dispatch registry. CLI and PyO3 adapt these
+APIs and preserve their structured results. These direct-only operations do not
+change pipeline/recipe compatibility or add executable-language capabilities.

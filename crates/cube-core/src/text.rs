@@ -1,6 +1,9 @@
 //! Explicit Unicode text operations and shared limits for new text interfaces.
+pub mod classes;
 pub mod combinations;
 pub mod grid;
+pub mod keyboard;
+pub(crate) mod mapping;
 pub mod positions;
 pub mod selection;
 pub mod statistics;

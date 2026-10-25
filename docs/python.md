@@ -837,3 +837,57 @@ the factory call, including unpaired Unicode surrogates without retaining the
 original value in exception attributes. Invalid candidate content yields isolated
 entry errors. All [core limits](operations.md#bounded-key-candidates) also apply to
 native Python; the iterator never generates candidates or accesses the network.
+
+## Puzzle mappings and evidence
+
+All of these functions call the native Rust implementation. They accept Unicode
+text explicitly and do not add pipeline adapters. See
+[Puzzle mappings](operations.md#puzzle-ciphers-and-symbolic-mappings) for exact
+alphabets, grammar, case policies and resource bounds.
+
+```python
+import cube
+
+assert cube.bacon_encode("AB", "extended26") == "AAAAA AAAAB"
+assert cube.bacon_decode("ABAAA BAABB", "classical24") == "IU"
+assert cube.polybius_encode("CK", preset="tap") == [[1, 3], [1, 3]]
+assert cube.polybius_decode([[1, 3]], preset="tap") == "C"
+assert cube.polybius_encode("δ α", alphabet="αβγδ", side=2, index_base=0) == [
+    [1, 1], None, [0, 0]
+]
+assert cube.keyboard_remap("yYzZ", "qwerty", "qwertz") == "zZyY"
+assert cube.keypad_encode("HELLO", "multi_tap") == "44|33|555|555|666"
+assert cube.keypad_decode("4", "telephone") == {
+    "text": None, "alternatives": ["GHI"], "reversible": False
+}
+report = cube.map_character_classes("éa!B", unmapped="filter")
+assert report["mapped_text"] == "01"
+assert report["records"][0]["scalar_index"] == 1
+assert report["records"][0]["byte_offset"] == 2
+assert report["filtered_count"] == 2
+```
+
+`polybius_encode/decode` support custom `aliases=[("a", "α")]`, with `alphabet`
+and `side` supplied together and `preset` omitted. Tokens are coordinate pairs or
+`None` spaces; repeated/edge spaces remain explicit. Bacon's `notation` keyword
+is `ab`, `binary` (A=0) or `binary_inverted` (A=1).
+
+Custom definitions are native dictionaries, with no Python algorithm fallback:
+
+```python
+mapping = {"ascii_fold": False, "keys": [{"digit": "0", "symbols": " 0🧊"}]}
+assert cube.keypad_encode("0 🧊", "multi_tap", mapping=mapping) == "00|0|000"
+definition = {
+    "ascii_fold": False,
+    "classes": [{"name": "greek", "characters": "αβ", "symbol": "!"}],
+}
+assert cube.map_character_classes("αβ", definition=definition)["mapped_text"] == "!!"
+source = {"geometry": "one", "entries": [{"key": "k", "layer": "base", "symbol": "α"}]}
+target = {"geometry": "one", "entries": [{"key": "k", "layer": "base", "symbol": "🧊"}]}
+assert cube.keyboard_remap("α", source, target) == "🧊"
+```
+
+Preset class mapping requires `y="vowel"`, `"consonant"` or `"unmapped"` when
+Y occurs; it defaults to errors for other unmapped scalars. Choose `preserve` or
+`filter` explicitly and inspect `preserved`/`filtered` records. Custom definitions
+conflict with preset Y options. No operation infers a language or normalizes text.

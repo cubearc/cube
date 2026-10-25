@@ -817,3 +817,51 @@ preserving its valid classification. Unused context flags are rejected.
 The input must fit the [candidate limits](operations.md#bounded-key-candidates).
 No candidate generation, file writes or network access occurs. Prefer stdin;
 command-line text may remain in shell history/process listings.
+
+## Puzzle mappings
+
+Choose a Bacon alphabet explicitly, or use the shared coordinate square with an
+explicit Tap preset:
+
+```sh
+cube cipher bacon --variant extended26 --text AB
+# AAAAA AAAAB
+cube cipher bacon --variant classical24 --decode --text 'ABAAA BAABB'
+# IU
+cube cipher polybius --preset tap --text 'CK J'
+# 1,3 1,3 / 2,5
+cube cipher polybius --alphabet 'αβγδ' --side 2 --index-base 0 --text 'δ α' --json
+# [[1,1],null,[0,0]]
+```
+
+`--alias 'a=α'` adds a custom scalar alias. `--decode` accepts the exact
+`ROW,COLUMN / ROW,COLUMN` grammar, retaining each space as a slash token.
+`--notation binary` and `binary_inverted` choose explicit Bacon bit orientation.
+
+```sh
+cube text keyboard --source qwerty --target dvorak --text qwerty
+# ',.pyf
+cube encode keypad --mode telephone --text HELLO
+# 43556
+cube encode keypad --mode multi_tap --text HELLO
+# 44|33|555|555|666
+cube decode keypad --mode telephone --text 4
+# {"text":null,"alternatives":["GHI"],"reversible":false}
+cube text class --unmapped filter --text 'éa!B'
+```
+
+Keypad decode and character classes always emit JSON to retain ambiguity and
+position evidence. `text class --y vowel|consonant|unmapped` resolves Y explicitly.
+Keyboard `--unmapped error` reports unknown scalars; its default preserves them.
+
+Custom `--source`/`--target` layouts, keypad `--mapping` and class `--definition`
+accept inline strict JSON, with the schemas and bounds in
+[Puzzle mappings](operations.md#puzzle-ciphers-and-symbolic-mappings). For example:
+
+```sh
+cube encode keypad --mode multi_tap --text '0 ' \
+  --mapping '{"ascii_fold":false,"keys":[{"digit":"0","symbols":" 0"}]}'
+# 00|0
+cube text class --text 'αβ' \
+  --definition '{"ascii_fold":false,"classes":[{"name":"greek","characters":"αβ","symbol":"!"}]}'
+```

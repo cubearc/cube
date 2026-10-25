@@ -102,6 +102,10 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Remap exact scalars by physical key/layer positions
+    Keyboard(crate::puzzlecmd::KeyboardArgs),
+    /// Map disjoint scalar classes with original positions and explicit filtering (JSON)
+    Class(crate::puzzlecmd::ClassArgs),
     /// Position-dependent text transformations
     Transform {
         #[command(subcommand)]
@@ -189,6 +193,8 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Keyboard(args) => crate::puzzlecmd::keyboard(args)?,
+        TextCommand::Class(args) => return crate::puzzlecmd::classes(args, output),
         TextCommand::Transform {
             command: TransformCommand::Masked(args),
         } => {

@@ -15,6 +15,7 @@ mod constants;
 mod image;
 mod investigation;
 mod pipeline;
+mod puzzles;
 mod recipe;
 mod textops;
 mod video;
@@ -491,6 +492,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     web::register(module)?;
     binaryops::register(module)?;
     textops::register(module)?;
+    puzzles::register(module)?;
     combinations::register(module)?;
     constants::register(module)?;
     base58check::register(module)?;

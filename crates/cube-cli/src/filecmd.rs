@@ -31,6 +31,21 @@ impl Selection {
 
 #[derive(Subcommand)]
 pub(crate) enum FileCommand {
+    /// Recover an explicit range or validated candidate to a new file with provenance
+    Carve {
+        path: PathBuf,
+        #[arg(long)]
+        offset: u64,
+        /// Omit to validate a supported candidate; supply for an exact raw range
+        #[arg(long)]
+        length: Option<u64>,
+        #[arg(long)]
+        output: PathBuf,
+        #[arg(long,default_value_t=forensics::carving::DEFAULT_MAX_BYTES)]
+        max_bytes: u64,
+        #[arg(long)]
+        json: bool,
+    },
     /// Validate one bounded classic ZIP candidate; no decompression or payload CRC check
     Zip {
         path: PathBuf,
@@ -161,6 +176,29 @@ pub(crate) fn info(
 
 pub(crate) fn run(command: FileCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        FileCommand::Carve {
+            path,
+            offset,
+            length,
+            output: destination,
+            max_bytes,
+            json,
+        } => {
+            let selection = length.map_or(
+                forensics::carving::Selection::Candidate { offset },
+                |length| forensics::carving::Selection::Range { offset, length },
+            );
+            let report = forensics::carving::carve(&path, &destination, selection, max_bytes)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&report)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "Recovered {} bytes at offset {}\nSelection: {}\nEvidence: {}",
+                    report.bytes_written, report.offset, report.selection, report.evidence
+                )?;
+            }
+        }
         FileCommand::Zip { path, offset, json } => {
             let result = forensics::zip::validate(&mut forensics::open_regular(&path)?, offset)?;
             if json {

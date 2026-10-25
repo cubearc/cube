@@ -5,6 +5,7 @@
 //! network. Reader APIs let callers control transport without a CLI subprocess.
 
 pub mod boundaries;
+pub mod carving;
 pub mod exif;
 pub mod inspect;
 pub mod png;
@@ -24,6 +25,8 @@ use std::{
 pub const MAX_SCAN_BYTES: u64 = 64 * 1024 * 1024;
 /// Hard allocation/output budget for byte-returning operations (16 MiB).
 pub const MAX_OUTPUT_BYTES: u64 = 16 * 1024 * 1024;
+/// Hard processing/output limit for streaming range copies (1 GiB).
+pub const MAX_COPY_BYTES: u64 = 1024 * 1024 * 1024;
 /// Maximum number of result records per request.
 pub const MAX_RESULTS: usize = 10_000;
 
@@ -103,7 +106,7 @@ pub fn copy_range(
             offset,
             length: Some(length),
         }
-        .resolve(size(reader)?, 1024 * 1024 * 1024)?;
+        .resolve(size(reader)?, MAX_COPY_BYTES)?;
         reader.seek(SeekFrom::Start(offset))?;
         let mut remaining = length;
         let mut buffer = [0; 64 * 1024];
@@ -146,7 +149,7 @@ pub fn extract_range(
             offset,
             length: Some(length),
         }
-        .resolve(input.metadata()?.len(), 1024 * 1024 * 1024)?;
+        .resolve(input.metadata()?.len(), MAX_COPY_BYTES)?;
         let mut output = OpenOptions::new()
             .write(true)
             .create_new(true)

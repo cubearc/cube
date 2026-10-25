@@ -20,6 +20,7 @@ from ._native import (
     braille_encode,
     caesar_decode,
     caesar_encode,
+    carve_file,
     check_recipe,
     compare_files,
     convert_base,
@@ -70,6 +71,7 @@ from ._native import (
 )
 
 __all__ = [
+    "carve_file",
     "validate_zip",
     "validate_zip_file",
     "CancellationToken",

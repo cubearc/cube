@@ -309,3 +309,15 @@ A PK signature alone is a candidate. Validation reports exact archive bounds,
 entry offsets and verification limits; it does not decompress files or verify
 payload CRCs. Unsupported ZIP features fail explicitly. Use the reported range
 with an explicit extraction command when recovery is intended.
+
+### Recover a selected candidate
+
+```sh
+cube file carve sample.bin --offset 128 --output recovered.zip --json
+cube file carve sample.bin --offset 128 --length 256 --max-bytes 256 --output selected.bin --json
+```
+
+The first command revalidates framing at the selected origin. The second selects
+an exact raw range. Both require a new destination and report exact range
+provenance and the recovered bytes' SHA-256; neither decompresses archive entries.
+`file extract` remains available for existing explicit range/stdout workflows.

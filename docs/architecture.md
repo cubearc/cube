@@ -150,3 +150,11 @@ A bounded prefix and cumulative candidate/header/metadata budgets prevent repeat
 EOCD decoys from causing unbounded parsing. Local extents are checked against the
 central directory and sorted for overlap/gap rejection. `boundaries` reuses the
 validator; no archive decompressor, entry execution or second ZIP parser is added.
+
+`forensics::carving` validates an explicit origin through a checked relative
+reader, then reuses `copy_range` for exclusive output. A small writer adapter
+computes the recovered content's SHA-256 while bytes stream. Provenance contains
+ranges/evidence/digest without automatically persisting source paths or content in
+sessions. Filesystem I/O stays outside recipes; caller-selected raw ranges never
+acquire a format-validation claim. Metadata changes trigger new-output cleanup;
+source stability remains a caller responsibility rather than a snapshot guarantee.

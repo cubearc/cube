@@ -61,6 +61,7 @@ SDK_BINDINGS = {
     "image.reorder": "Image.reorder",
     "image.rotate": "Image.rotate",
     "text.extract": "extract_characters",
+    "text.select": "select_text",
     "text.normalize": "normalize_text",
     "text.reverse": "reverse_text",
     "text.utf8.decode": "utf8_decode",

@@ -25,3 +25,34 @@ fn a1z26_uses_text_outputs_stdin_and_explicit_errors() {
     assert!(result.stdout.is_empty());
     let _: serde_json::Value = serde_json::from_slice(&result.stderr).unwrap();
 }
+
+#[test]
+fn scalar_selection_has_known_acrostics_and_crlf_behavior() {
+    let result = run(
+        &[
+            "text",
+            "select",
+            "--selector",
+            "word_first",
+            "--text",
+            "Cube Uses Binary Evidence",
+        ],
+        b"",
+    );
+    assert!(result.status.success());
+    assert_eq!(result.stdout, b"CUBE\n");
+    let result = run(
+        &["text", "select", "--selector", "line_last"],
+        "Alpha!\r\n\n雪🧊\n".as_bytes(),
+    );
+    assert!(result.status.success());
+    assert_eq!(result.stdout, "!🧊\n".as_bytes());
+    assert!(
+        !run(
+            &["text", "select", "--selector", "guess", "--text", "text"],
+            b""
+        )
+        .status
+        .success()
+    );
+}

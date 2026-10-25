@@ -23,6 +23,12 @@ pub struct Execution {
 impl Prepared {
     /// Conservative output-size upper bounds guard allocation before algorithms.
     fn ceiling(&self, size: usize) -> Result<usize, Error> {
+        if matches!(self.adapter.action, Action::TextSelect) && size > text::MAX_INPUT {
+            return Err(Error::new(
+                ErrorCode::ResourceLimit,
+                "text selection input exceeds 1 MiB",
+            ));
+        }
         if (matches!(self.adapter.action, Action::A1z26Encode) && size > text::MAX_INPUT)
             || (matches!(self.adapter.action, Action::A1z26Decode)
                 && size > crate::symbols::a1z26::MAX_ENCODED)
@@ -85,6 +91,9 @@ impl Prepared {
         let bytes = |data| Value::Bytes { data };
         let text = |data| Value::Text { data };
         Ok(match (self.adapter.action, value, &self.arguments) {
+            (Action::TextSelect, Value::Text { data }, Arguments::Selector(selector)) => {
+                text(crate::text::selection::select(&data, *selector)?)
+            }
             (Action::A1z26Encode, Value::Text { data }, _) => {
                 text(crate::symbols::a1z26::encode(&data)?)
             }

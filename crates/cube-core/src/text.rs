@@ -1,4 +1,5 @@
 //! Explicit Unicode text operations and shared limits for new text interfaces.
+pub mod selection;
 use crate::errors::{ErrorCode, OperationError};
 /// Maximum UTF-8 input bytes for v0.5 text/symbol/cipher operations (1 MiB).
 pub const MAX_INPUT: usize = 1024 * 1024;

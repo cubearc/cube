@@ -79,6 +79,15 @@ one. Use raw output when chaining binary operations. The descriptor is `binary.x
 
 ## Text operations
 
+`text.select` extracts first/last Unicode scalars per word or line. Words split
+on Unicode whitespace and keep punctuation. Lines follow LF/CRLF boundaries;
+bare CR, leading/trailing spaces and punctuation remain data. Empty lines add no
+character; `line_first` is an acrostic without trimming. Combining marks and emoji
+sequences are scalars, not grapheme clusters. The word tokenizer's Unicode version
+is exposed as `WORD_UNICODE_VERSION`, separately from normalization data.
+Input/output are bounded to 1 MiB. Positional and every-Nth selection still use
+the existing `text.extract` semantics; the new selector also has a text adapter.
+
 Use `text` for explicit normalization, reversal and positional extraction, rather
 than treating arbitrary data as UTF-8.
 

@@ -2,6 +2,7 @@
 
 from ._native import (
     UNICODE_VERSION,
+    WORD_UNICODE_VERSION,
     CancellationToken,
     Image,
     InvestigationSession,
@@ -55,6 +56,7 @@ from ._native import (
     reverse_text,
     rot13,
     scan_file,
+    select_text,
     sha256,
     triage_input,
     utf8_decode,
@@ -73,6 +75,8 @@ from ._native import (
 )
 
 __all__ = [
+    "WORD_UNICODE_VERSION",
+    "select_text",
     "a1z26_encode",
     "a1z26_decode",
     "carve_file",

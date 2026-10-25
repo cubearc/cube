@@ -23,6 +23,13 @@ pub(crate) struct ExtractArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// First/last scalar per word/line; line_first is an acrostic without trimming
+    Select {
+        #[command(flatten)]
+        input: Input,
+        #[arg(long)]
+        selector: String,
+    },
     /// Explicit UTF-8 text to bytes (no normalization/newline); <=1 MiB
     ToBytes {
         #[command(flatten)]
@@ -46,6 +53,10 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Select { input, selector } => text::selection::select(
+            &input.read_text("text.select")?,
+            text::selection::Selector::parse(&selector)?,
+        )?,
         TextCommand::ToBytes {
             input,
             output: format,

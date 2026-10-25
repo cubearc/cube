@@ -103,6 +103,14 @@ file before Cube runs. Use a new path or Cube's exclusive destination option.
 ## Transform encoded data and ciphers
 
 ```sh
+cube text select --selector word_first --text 'Cube Uses Binary Evidence'
+cube text extract --start 1 --stride 2 --text abcdef
+```
+
+These produce `CUBE` and `bdf`. Use `line_first` for an untrimmed acrostic;
+`word_last` and `line_last` select final scalars, including punctuation or spaces.
+
+```sh
 cube encode a1z26 --text 'Hi Cube'
 cube decode a1z26 --text '8-9 3-21-2-5'
 ```

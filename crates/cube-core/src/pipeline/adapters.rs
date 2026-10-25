@@ -3,6 +3,7 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    TextSelect,
     A1z26Encode,
     A1z26Decode,
     Base32Encode,
@@ -38,6 +39,11 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "text.select",
+        version: 1,
+        action: Action::TextSelect,
+    },
     Adapter {
         id: "symbol.a1z26.encode",
         version: 1,
@@ -176,6 +182,7 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    Selector(crate::text::selection::Selector),
     None,
     Shift(i32),
     Key(String),
@@ -243,6 +250,14 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::TextSelect => {
+            let Some(Parameter::Text(selector)) = step.parameters.get("selector") else {
+                return Err(invalid("selector is required").parameter("selector"));
+            };
+            Arguments::Selector(
+                crate::text::selection::Selector::parse(selector).map_err(Error::from_operation)?,
+            )
+        }
         Action::HexInspect | Action::Strings => {
             let number = |name: &str, default: u64| -> Result<u64, Error> {
                 match step.parameters.get(name) {

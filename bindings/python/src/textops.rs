@@ -2,6 +2,14 @@
 use cube_core::ciphers;
 use pyo3::prelude::*;
 #[pyfunction]
+fn select_text(text: &str, selector: &str) -> PyResult<String> {
+    cube_core::text::selection::select(
+        text,
+        cube_core::text::selection::Selector::parse(selector).map_err(super::file_error)?,
+    )
+    .map_err(super::file_error)
+}
+#[pyfunction]
 fn a1z26_encode(text: &str) -> PyResult<String> {
     cube_core::symbols::a1z26::encode(text).map_err(super::file_error)
 }
@@ -88,6 +96,11 @@ fn utf8_decode(data: &[u8]) -> PyResult<String> {
     cube_core::text::from_utf8(data).map_err(super::file_error)
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(select_text, module)?)?;
+    module.add(
+        "WORD_UNICODE_VERSION",
+        cube_core::text::selection::WORD_UNICODE_VERSION,
+    )?;
     module.add_function(wrap_pyfunction!(a1z26_encode, module)?)?;
     module.add_function(wrap_pyfunction!(a1z26_decode, module)?)?;
     module.add_function(wrap_pyfunction!(utf8_encode, module)?)?;

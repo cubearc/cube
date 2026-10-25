@@ -38,6 +38,8 @@ import cube
 
 assert cube.a1z26_encode("Hi Cube") == "8-9 3-21-2-5"
 assert cube.a1z26_decode("8-9 3-21-2-5") == "HI CUBE"
+assert cube.select_text("Cube Uses Binary Evidence", "word_first") == "CUBE"
+assert cube.extract_characters("abcdef", start=1, stride=2) == "bdf"
 ```
 
 ```python

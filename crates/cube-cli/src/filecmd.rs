@@ -31,13 +31,21 @@ impl Selection {
 
 #[derive(Subcommand)]
 pub(crate) enum FileCommand {
+    /// Validate one bounded classic ZIP candidate; no decompression or payload CRC check
+    Zip {
+        path: PathBuf,
+        #[arg(long, default_value_t = 0)]
+        offset: u64,
+        #[arg(long)]
+        json: bool,
+    },
     /// Explicitly inspect JPEG/TIFF EXIF; this may display sensitive metadata
     Exif {
         path: PathBuf,
         #[arg(long)]
         json: bool,
     },
-    /// Detect trailing bytes after supported PNG/JPEG/GIF framing (no pixel decoding)
+    /// Detect trailing bytes after supported PNG/JPEG/GIF/ZIP framing (no pixel decoding)
     Appended {
         path: PathBuf,
         #[arg(long)]
@@ -153,6 +161,21 @@ pub(crate) fn info(
 
 pub(crate) fn run(command: FileCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        FileCommand::Zip { path, offset, json } => {
+            let result = forensics::zip::validate(&mut forensics::open_regular(&path)?, offset)?;
+            if json {
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            } else {
+                writeln!(
+                    output,
+                    "ZIP at {}: {} bytes; {} entries\nEvidence: {}",
+                    result.offset,
+                    result.length,
+                    result.entries.len(),
+                    result.evidence
+                )?;
+            }
+        }
         FileCommand::Exif { path, json } => {
             let result = forensics::exif::read(&mut forensics::open_regular(&path)?)?;
             if json {

@@ -403,3 +403,22 @@ or changed inputs are explicit failures. Skipped runs stay skipped. Hypotheses a
 not replayed as machine evidence. Digests identify content, not trust, and reports
 are not signed attestations. See [CLI](cli.md#record-an-investigation) and
 [Python](python.md#keep-an-investigation-record) for executable workflows.
+
+### Validate a ZIP candidate
+
+`file zip` / `validate_zip` validates a caller-selected classic ZIP origin. Local
+headers, central-directory records, EOCD counts/offsets, names, CRC/size fields and
+entry extents must agree. Offsets inside the archive are relative to the selected
+origin. Records must be contiguous and nonoverlapping. Stored and deflate methods,
+UTF-8 names/comments and signed 32-bit data descriptors are supported. Encrypted,
+ZIP64, multi-disk, unsigned-descriptor and alternate self-extracting offset variants
+fail explicitly. Names remain inert exact `name_hex` data; nothing is unpacked.
+
+Validation admits at most 16 MiB beyond the selected origin, 64 EOCD candidates,
+1000 entries, 10000 cumulative local/central header visits, 1 MiB metadata and
+64 MiB total declared uncompressed data. `scanned_bytes` and
+`candidate_scan_complete` expose whether the candidate suffix was fully searched;
+competing interpretations outside that prefix are not ruled out. `payload_verified`
+is always false: compressed content, actual CRC integrity and authenticity are not
+verified. `file appended` reuses this same validator for a ZIP at offset zero.
+ZIP is available through direct APIs rather than the current pipeline report subset.

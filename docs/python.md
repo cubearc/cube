@@ -306,3 +306,10 @@ output types; direct reader-based APIs retain their own descriptor types.
 same boundary fields as PNG. `evidence` describes what was checked; successful
 framing inspection does not prove that entropy codes or compressed pixels decode.
 The file is opened read-only and no extraction happens implicitly.
+
+For an explicitly selected ZIP candidate, use `cube.validate_zip(data, offset=128)`
+or `cube.validate_zip_file(path, offset=128)`. Both return the same bounded core
+report with absolute offsets, archive length and inert exact entry names as hex.
+Inspect `payload_verified`, `scanned_bytes`, `candidate_scan_complete` and `evidence`
+before interpreting the result. No payload is decompressed and no named entry is
+written or executed.

@@ -207,13 +207,32 @@ fn file_exif(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
     structured(py, &serde_json::json!(result))
 }
 
-/// Detect trailing bytes after supported PNG/JPEG/GIF framing; no pixel decoding.
+/// Detect trailing bytes after supported PNG/JPEG/GIF/ZIP framing; no pixel decoding.
 #[pyfunction]
 fn appended_data(py: Python<'_>, path: std::path::PathBuf) -> PyResult<Py<PyAny>> {
     let result =
         forensics::boundaries::inspect(&mut forensics::open_regular(&path).map_err(file_error)?)
             .map_err(file_error)?;
     structured(py, &serde_json::json!(result))
+}
+
+/// Validate one explicit ZIP origin; payloads are never decompressed or executed.
+#[pyfunction]
+#[pyo3(signature=(data, *, offset=0))]
+fn validate_zip(py: Python<'_>, data: &[u8], offset: u64) -> PyResult<Py<PyAny>> {
+    let report =
+        forensics::zip::validate(&mut std::io::Cursor::new(data), offset).map_err(file_error)?;
+    structured(py, &serde_json::json!(report))
+}
+#[pyfunction]
+#[pyo3(signature=(path, *, offset=0))]
+fn validate_zip_file(py: Python<'_>, path: std::path::PathBuf, offset: u64) -> PyResult<Py<PyAny>> {
+    let report = forensics::zip::validate(
+        &mut forensics::open_regular(&path).map_err(file_error)?,
+        offset,
+    )
+    .map_err(file_error)?;
+    structured(py, &serde_json::json!(report))
 }
 
 struct PythonWriter<'py>(Bound<'py, PyAny>);
@@ -408,6 +427,8 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(copy_file_range, module)?)?;
     module.add_function(wrap_pyfunction!(operations, module)?)?;
     module.add_function(wrap_pyfunction!(describe_operation, module)?)?;
+    module.add_function(wrap_pyfunction!(validate_zip, module)?)?;
+    module.add_function(wrap_pyfunction!(validate_zip_file, module)?)?;
     module.add_function(wrap_pyfunction!(base32_encode, module)?)?;
     module.add_function(wrap_pyfunction!(base32_decode, module)?)?;
     module.add_function(wrap_pyfunction!(base58_encode, module)?)?;

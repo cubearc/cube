@@ -135,7 +135,12 @@ pub fn carve(
                     length,
                     pos: 0,
                 };
-                let report = boundaries::inspect(&mut origin)?;
+                let report = boundaries::inspect(&mut origin).map_err(|mut error| {
+                    error.offset = error
+                        .offset
+                        .and_then(|relative| offset.checked_add(relative));
+                    error
+                })?;
                 (
                     offset,
                     report.logical_end,

@@ -206,3 +206,29 @@ fn incomplete_zip_boundary_search_requires_an_explicit_range() {
     assert_eq!(r.format, None);
     assert_eq!(std::fs::read(target).unwrap(), empty_zip());
 }
+#[test]
+fn embedded_framing_errors_report_absolute_source_offsets() {
+    let files = common::Workspace::new();
+    let source = files.path("source");
+    let target = files.path("output");
+    let mut image = cube_core::image::Image::from_samples(
+        1,
+        1,
+        cube_core::image::ColorModel::Gray,
+        vec![7],
+        vec![],
+        vec![],
+    )
+    .unwrap()
+    .encode_png()
+    .unwrap();
+    image[12] = b'j';
+    let mut host = b"prefix!".to_vec();
+    host.extend(image);
+    std::fs::write(&source, host).unwrap();
+    let error =
+        carving::carve(&source, &target, Selection::Candidate { offset: 7 }, 1000).unwrap_err();
+    assert_eq!(error.offset, Some(15));
+    assert_eq!(error.operation, Some("file.carve"));
+    assert!(!target.exists());
+}

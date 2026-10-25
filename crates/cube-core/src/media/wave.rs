@@ -59,6 +59,35 @@ pub struct Format {
     pub block_align: u16,
     pub byte_rate: u32,
 }
+/// Shared internal minimal PCM header; callers append exact aligned data/padding.
+pub(super) fn pcm_header(format: Format, data_bytes: usize) -> Result<Vec<u8>, OperationError> {
+    let format = format.validate()?;
+    if data_bytes as u64 > super::pcm::MAX_PCM_BYTES {
+        return Err(limit("PCM WAVE output exceeds 8 MiB sample budget"));
+    }
+    if !data_bytes.is_multiple_of(usize::from(format.block_align)) {
+        return Err(malformed("PCM data is not frame aligned"));
+    }
+    let length = u32::try_from(data_bytes).map_err(|_| limit("PCM data exceeds RIFF size"))?;
+    let riff = 36u32
+        .checked_add(length)
+        .and_then(|n| n.checked_add(length % 2))
+        .ok_or_else(|| limit("RIFF extent overflow"))?;
+    let mut out = Vec::with_capacity(riff as usize + 8);
+    out.extend(b"RIFF");
+    out.extend(riff.to_le_bytes());
+    out.extend(b"WAVEfmt ");
+    out.extend(16u32.to_le_bytes());
+    out.extend(format.format_tag.to_le_bytes());
+    out.extend(format.channels.to_le_bytes());
+    out.extend(format.sample_rate.to_le_bytes());
+    out.extend(format.byte_rate.to_le_bytes());
+    out.extend(format.block_align.to_le_bytes());
+    out.extend(format.bits_per_sample.to_le_bytes());
+    out.extend(b"data");
+    out.extend(length.to_le_bytes());
+    Ok(out)
+}
 impl Format {
     pub(super) fn validate(self) -> Result<Self, OperationError> {
         if self.format_tag != 1 {

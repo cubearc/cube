@@ -174,3 +174,76 @@ def test_video_comparison_reuses_exact_images_and_retains_extraction_provenance(
             cube.compare_video_frames(data, 1, pairs)
     with pytest.raises(ValueError):
         cube.compare_video_frames(data, 1, [(0, 1)], channels=["alpha"])
+
+
+def mov_pcm(payloads, channels=2, rate=8000, wide=False):
+    def table(kind, rows):
+        return atom(kind, bytes(4) + struct.pack(">I", len(rows)) + b"".join(rows))
+
+    result = atom(b"ftyp", b"qt  " + bytes(4))
+    offset = len(result) + 8
+    result += atom(b"mdat", b"".join(payloads))
+    movie = bytearray(100)
+    movie[12:20] = struct.pack(">II", rate, len(payloads[0]) // channels)
+    moov = atom(b"mvhd", movie)
+    for track_id, payload in enumerate(payloads, 1):
+        frames = len(payload) // channels
+        tkhd = bytearray(84)
+        tkhd[12:16] = struct.pack(">I", track_id)
+        mdhd = bytearray(24)
+        mdhd[12:20] = struct.pack(">II", rate, frames)
+        hdlr = bytes(8) + b"soun" + bytes(12)
+        entry = bytearray(28)
+        entry[6:8] = struct.pack(">H", 1)
+        entry[16:20] = struct.pack(">HH", channels, 8)
+        entry[24:28] = struct.pack(">I", rate << 16)
+        tables = table(b"stsd", [atom(b"raw ", entry)])
+        tables += atom(b"stsz", struct.pack(">III", 0, channels, frames))
+        tables += table(b"stsc", [struct.pack(">III", 1, frames, 1)])
+        tables += table(
+            b"co64" if wide else b"stco", [struct.pack(">Q" if wide else ">I", offset)]
+        )
+        tables += table(b"stts", [struct.pack(">II", frames, 1)])
+        minf = atom(
+            b"dinf", table(b"dref", [atom(b"url ", bytes([0, 0, 0, 1]))])
+        ) + atom(b"stbl", tables)
+        mdia = atom(b"mdhd", mdhd) + atom(b"hdlr", hdlr) + atom(b"minf", minf)
+        moov += atom(b"trak", atom(b"tkhd", tkhd) + atom(b"mdia", mdia))
+        offset += len(payload)
+    return result + atom(b"moov", moov)
+
+
+def test_pcm_audio_track_extraction_preserves_binary_samples_and_existing_audio_apis():
+    import hashlib
+
+    raw = bytes([0, 255, 128, 64, 1, 254])
+    for channels in [1, 2]:
+        for wide in [False, True]:
+            source = mov_pcm([raw, raw[::-1]], channels=channels, wide=wide)
+            result = cube.extract_video_audio(source, 2)
+            p = result["provenance"]
+            assert isinstance(result["data"], bytes)
+            assert cube.wave_samples(result["data"])["data"] == raw[::-1]
+            assert p["format"]["channels"] == channels
+            assert p["time_base"] == {"numerator": 1, "denominator": 8000}
+            assert p["pcm_sha256"] == hashlib.sha256(raw[::-1]).hexdigest()
+            assert p["wav_sha256"] == hashlib.sha256(result["data"]).hexdigest()
+            assert (
+                b"".join(
+                    source[r["offset"] : r["offset"] + r["length"]]
+                    for r in p["source_ranges"]
+                )
+                == raw[::-1]
+            )
+    odd = cube.extract_video_audio(mov_pcm([b"\0\x80\xff"], channels=1), 1)
+    assert len(odd["data"]) == 48
+    assert cube.wave_samples(odd["data"])["data"] == b"\0\x80\xff"
+    assert cube.describe_operation("video.audio.extract")["pipeline"] is None
+    for source, track in [
+        (mov_frames(), 1),
+        (mov_pcm([raw]), 0),
+        (mov_pcm([raw]), 2),
+        (mov_pcm([raw])[:-1], 1),
+    ]:
+        with pytest.raises(ValueError):
+            cube.extract_video_audio(source, track)

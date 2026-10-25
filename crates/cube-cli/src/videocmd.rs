@@ -1,8 +1,24 @@
 //! Local video adapters; all parsing/algorithms stay in cube-core.
-use clap::Subcommand;
+use clap::{Args, Subcommand};
 use std::{error::Error, io::Write, path::PathBuf};
+#[derive(Args)]
+#[group(required=true,multiple=false,args=["stdout","output"])]
+pub(crate) struct AudioOutput {
+    #[arg(long)]
+    stdout: bool,
+    #[arg(long)]
+    output: Option<PathBuf>,
+}
 #[derive(Subcommand)]
 pub(crate) enum VideoCommand {
+    /// Extract one raw PCM8 MOV track as WAV, preserving exact sample bytes
+    Audio {
+        path: PathBuf,
+        #[arg(long)]
+        track_id: u64,
+        #[command(flatten)]
+        destination: AudioOutput,
+    },
     /// Compare selected MOV/JPEG pairs with exact frame/time/range provenance
     Compare {
         path: PathBuf,
@@ -34,6 +50,22 @@ pub(crate) enum VideoCommand {
 }
 pub(crate) fn run(command: VideoCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        VideoCommand::Audio {
+            path,
+            track_id,
+            destination,
+        } => {
+            let result = cube_core::media::video::audio::extract_file(&path, track_id)?;
+            if destination.stdout {
+                output.write_all(&result.data)?;
+            } else {
+                crate::pipelinecmd::write_new(
+                    &destination.output.expect("required output group"),
+                    &result.data,
+                )?;
+                writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+            }
+        }
         VideoCommand::Compare {
             path,
             track_id,

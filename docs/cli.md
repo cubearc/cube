@@ -499,6 +499,18 @@ The difference-list budget applies to the whole video batch; exact differing-pix
 counts and per-pair completeness remain available. Optional `--channels` selects
 existing sample channels; mismatched dimensions fail without resizing.
 
+For a supported raw PCM8 MOV track, export a new WAV and reuse the audio commands:
+
+```sh
+cube video audio sound.mov --track-id 1 --output track.wav
+cube audio inspect track.wav --json
+```
+
+File output emits JSON provenance and never overwrites. `--stdout` explicitly
+streams binary WAV bytes without appended text. This subset preserves unsigned
+PCM8 mono/stereo samples and rate; compressed codecs and other layouts are
+unsupported. See the [audio extraction limits](operations.md#video-container-metadata).
+
 ## Inspect saved HTML and HAR
 
 ```sh

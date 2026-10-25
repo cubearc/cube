@@ -62,10 +62,13 @@ pub fn extract(
             .parameter("indexes"));
         }
         let info = inspect(source)?;
-        let index = mp4::index::jpeg(source, &info, track_id)?;
+        let index = mp4::index::load(source, &info, track_id, mp4::index::Profile::Jpeg)?;
+        let mp4::index::Layout::Jpeg { width, height } = index.layout else {
+            return Err(unsupported("JPEG layout required for frame extraction"));
+        };
         let mut selected = Vec::with_capacity(indexes.len());
-        let decoded_per = u64::from(index.width)
-            .checked_mul(u64::from(index.height))
+        let decoded_per = u64::from(width)
+            .checked_mul(u64::from(height))
             .and_then(|n| n.checked_mul(4))
             .ok_or_else(|| limit("decoded frame geometry overflows"))?;
         if decoded_per > crate::image::MAX_SAMPLES as u64
@@ -101,7 +104,7 @@ pub fn extract(
             }
             let geometry = crate::image::decode::header_geometry(&data)?
                 .ok_or_else(|| invalid("JPEG geometry is unavailable"))?;
-            if geometry.width != index.width || geometry.height != index.height {
+            if geometry.width != width || geometry.height != height {
                 return Err(invalid("JPEG geometry differs from the sample description"));
             }
             encoded.push(data);

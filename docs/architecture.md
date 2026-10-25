@@ -68,6 +68,12 @@ transformations stay in their owning modules. Responsibilities include:
   no parser-global state and exposes no MP3/Ogg or decode capability. No native
   multimedia or graphical runtime is required. Selected PCM/interval reports use
   direct APIs; discovery accurately reports no audio pipeline adapters.
+  `media::video` keeps declared MP4/MOV/WebM observations separate from extraction.
+  One checked MOV sample indexer serves independent JPEG frames and raw PCM8;
+  JPEG decoding and pair comparison reuse `image`, while PCM remuxing and WAV
+  reversal share the minimal PCM header writer. Range/time/hash provenance and
+  profile-specific budgets remain concrete types; CLI adapters own destinations.
+  No general decoder backend or media pipeline value is introduced.
 
 Resource bounds and unsupported formats belong beside the implementation; the
 [Operations Guide](operations.md) summarizes those affecting users.

@@ -2,6 +2,8 @@
 mod fixture;
 #[path = "../../cube-core/tests/common/mov.rs"]
 mod mov;
+#[path = "../../cube-core/tests/common/pcm_mov.rs"]
+mod pcm_mov;
 use std::process::Command;
 #[test]
 fn video_inspection_json_matches_core_and_preserves_source() {
@@ -102,4 +104,61 @@ fn frame_pair_cli_reports_exact_existing_comparison_and_source_provenance() {
     assert_eq!(actual, serde_json::to_value(expected).unwrap());
     assert_eq!(std::fs::read(&path).unwrap(), input);
     std::fs::remove_file(path).unwrap();
+}
+
+#[test]
+fn pcm_track_cli_preserves_source_and_requires_explicit_nonoverwriting_output() {
+    let directory = std::env::temp_dir().join(format!("cube-mov-audio-{}", std::process::id()));
+    std::fs::create_dir(&directory).unwrap();
+    let source = directory.join("sound.mov");
+    let target = directory.join("track.wav");
+    let raw = vec![0, 255, 128, 64, 1, 254];
+    let input = pcm_mov::movie(std::slice::from_ref(&raw), 2, 8000, true);
+    std::fs::write(&source, &input).unwrap();
+    let run = |extra: &[&str]| {
+        Command::new(env!("CARGO_BIN_EXE_cube"))
+            .args(
+                [
+                    &[
+                        "video",
+                        "audio",
+                        source.to_str().unwrap(),
+                        "--track-id",
+                        "1",
+                    ][..],
+                    extra,
+                ]
+                .concat(),
+            )
+            .output()
+            .unwrap()
+    };
+    let result = run(&["--stdout"]);
+    assert!(result.status.success(), "{:?}", result.stderr);
+    let expected =
+        cube_core::media::video::audio::extract(&mut std::io::Cursor::new(&input), 1).unwrap();
+    assert_eq!(result.stdout, expected.data);
+    let result = run(&["--output", target.to_str().unwrap()]);
+    assert!(result.status.success(), "{:?}", result.stderr);
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["provenance"]["pcm_bytes"], 6);
+    assert_eq!(std::fs::read(&target).unwrap(), expected.data);
+    assert!(
+        !run(&["--output", target.to_str().unwrap()])
+            .status
+            .success()
+    );
+    assert!(
+        !run(&["--output", source.to_str().unwrap()])
+            .status
+            .success()
+    );
+    assert!(!run(&[]).status.success());
+    assert!(
+        !run(&["--stdout", "--output", target.to_str().unwrap()])
+            .status
+            .success()
+    );
+    assert_eq!(std::fs::read(&source).unwrap(), input);
+    std::fs::remove_dir_all(directory).unwrap();
 }

@@ -1,6 +1,16 @@
 //! Native wrappers for bounded video metadata; no decoder or network backend.
 use pyo3::prelude::*;
 #[pyfunction]
+fn extract_video_audio(py: Python<'_>, data: &[u8], track_id: u64) -> PyResult<Py<PyAny>> {
+    let result = cube_core::media::video::audio::extract(&mut std::io::Cursor::new(data), track_id)
+        .map_err(super::file_error)?;
+    let output = super::structured(py, &serde_json::json!(result))?;
+    output
+        .bind(py)
+        .set_item("data", pyo3::types::PyBytes::new(py, &result.data))?;
+    Ok(output)
+}
+#[pyfunction]
 #[pyo3(signature=(data,track_id,pairs,*,channels=None,max_results=1000))]
 fn compare_video_frames(
     py: Python<'_>,
@@ -72,6 +82,7 @@ fn inspect_video(py: Python<'_>, data: &[u8]) -> PyResult<Py<PyAny>> {
     super::structured(py, &serde_json::json!(info))
 }
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(extract_video_audio, module)?)?;
     module.add_function(wrap_pyfunction!(compare_video_frames, module)?)?;
     module.add_function(wrap_pyfunction!(extract_video_frames, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_video, module)?)?;

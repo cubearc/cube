@@ -784,6 +784,31 @@ Rust `comparison::compare_selected` accepts supplied Frame records and labels th
 provenance as caller data rather than authenticating it. Reader/image operations
 remain direct APIs, with no pipeline adapter or changed recipe contract.
 
+`video.audio.extract` remuxes one explicitly selected self-contained MOV/ISO-BMFF
+`raw ` PCM8 mono/stereo track to minimal RIFF/WAVE. The version-zero 28-byte sound
+description must declare unsigned 8-bit samples, zero compression/packet fields,
+an integer sample rate 1..=65535, fixed stsz width equal to channels, delta-1 stts
+and time scale equal to sample rate. Other legacy table conventions, description
+extensions, codecs, widths, edits, composition offsets, fragmentation, encryption
+and external references fail explicitly. This focused subset follows the
+[QuickTime sound description](https://developer.apple.com/documentation/quicktime-file-format/sound_sample_description_version_0).
+
+Shared indexing validates all selected-track sample ranges and relationships
+before copying. Limits are 1 GiB physical input, 2 MiB metadata reads, 10,000
+cumulative atoms/table rows, 1 Mi sample frames, 300 seconds and 64 MiB temporary
+index memory. Coalesced source ranges stay in sample order (up to 10,000 records),
+so physically reordered chunks remain reproducible without a seek/read per frame.
+PCM is capped at 8 MiB and output at that size plus the WAV header/pad. Samples,
+channel grouping and rate remain unchanged; there is no decoder, normalization,
+resampling or byte conversion. Source ancillary chunks are omitted.
+
+The result includes WAV bytes plus track/format/exact-time/source-range/PCM-hash/
+WAV-hash provenance. CLI output requires a new file or explicit binary stdout;
+SDK extraction performs no writes. Existing audio APIs consume the generated WAV.
+The operation has no pipeline adapter, privileged recipe I/O or new engine type.
+Reader inputs must remain stable during inspection/extraction; Cube does not make
+a full-file snapshot or claim that unselected media packets are valid.
+
 ## Offline web artifacts
 
 `web.html.inspect` accepts UTF-8 HTML as inert data. A maintained tokenizer reports

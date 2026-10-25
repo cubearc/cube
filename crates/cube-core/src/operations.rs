@@ -321,6 +321,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::media::video::OPERATIONS)
         .chain(crate::media::video::frames::OPERATIONS)
         .chain(crate::media::video::comparison::OPERATIONS)
+        .chain(crate::media::video::audio::OPERATIONS)
         .chain(crate::web::html::OPERATIONS)
         .chain(crate::web::har::OPERATIONS)
         .chain(crate::web::assets::OPERATIONS)

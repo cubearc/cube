@@ -507,6 +507,24 @@ Counts compare exact decoded samples. JPEG-source comparison does not establish
 encoded-byte equality or perceptual similarity. Dimensions must match; channels
 can be selected explicitly. Read the [pair/result/work limits](operations.md#video-container-metadata).
 
+Extract a supported raw PCM8 audio track and pass its WAV bytes to existing audio
+operations. No file is written by extraction:
+
+```python
+from pathlib import Path
+import cube
+
+track = cube.extract_video_audio(Path("sound.mov").read_bytes(), 1)
+samples = cube.wave_samples(track["data"])
+assert len(samples["data"]) == track["provenance"]["pcm_bytes"]
+assert track["provenance"]["format"]["bits_per_sample"] == 8
+```
+
+The supported MOV profile is deliberately explicit: unsigned PCM8 mono/stereo,
+self-contained version-zero tables and matching integer sample-rate timing.
+Output preserves sample bytes and channel grouping, with exact ranges and hashes;
+there is no silent transcoding. See the [format and resource limits](operations.md#video-container-metadata).
+
 ## Inspect offline HTML and HAR
 
 ```python

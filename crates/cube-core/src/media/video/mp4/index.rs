@@ -1,5 +1,16 @@
 //! Checked sample-table indexing, separate from declared metadata inspection.
 use super::*;
+#[derive(Clone, Copy)]
+pub(in crate::media::video) enum Profile {
+    Jpeg,
+    Pcm8,
+}
+#[derive(Clone, Copy)]
+pub(in crate::media::video) enum Layout {
+    Jpeg { width: u32, height: u32 },
+    Pcm8(crate::media::wave::Format),
+}
+pub(in crate::media::video) const MAX_INDEX_BYTES: usize = 64 * 1024 * 1024;
 
 #[derive(Clone, Debug)]
 pub(in crate::media::video) struct Sample {
@@ -10,8 +21,7 @@ pub(in crate::media::video) struct Sample {
 }
 pub(in crate::media::video) struct Index {
     pub samples: Vec<Sample>,
-    pub width: u32,
-    pub height: u32,
+    pub layout: Layout,
     pub time_base: TimeBase,
 }
 fn children<R: Read + Seek>(r: &mut Reader<'_, R>, a: Atom) -> Result<Vec<Atom>, OperationError> {
@@ -73,14 +83,15 @@ fn row<R: Read + Seek>(
     r.record()?;
     r.at(a.body + 8 + index as u64 * width as u64, width)
 }
-pub(in crate::media::video) fn jpeg<R: Read + Seek>(
+pub(in crate::media::video) fn load<R: Read + Seek>(
     source: &mut R,
     info: &Info,
     track_id: u64,
+    profile: Profile,
 ) -> Result<Index, OperationError> {
     if !["mp4", "mov"].contains(&info.container) {
         return Err(unsupported(
-            "frame extraction supports only the documented MOV/JPEG profile",
+            "media extraction supports only documented self-contained MOV/ISO-BMFF profiles",
         ));
     }
     let track = info
@@ -88,9 +99,13 @@ pub(in crate::media::video) fn jpeg<R: Read + Seek>(
         .iter()
         .find(|t| t.id == track_id)
         .ok_or_else(|| invalid("selected track ID is unavailable"))?;
-    if track.kind != "video" || track.codec_id.as_deref() != Some("jpeg") {
+    let (kind, codec, entry_bytes, max_samples) = match profile {
+        Profile::Jpeg => ("video", "jpeg", 78, MAX_RECORDS),
+        Profile::Pcm8 => ("audio", "raw ", 28, crate::media::pcm::MAX_FRAMES as usize),
+    };
+    if track.kind != kind || track.codec_id.as_deref() != Some(codec) {
         return Err(unsupported(
-            "selected track must contain independent baseline JPEG samples (jpeg)",
+            "selected track does not match the supported JPEG or raw-PCM8 extraction profile",
         ));
     }
     let mut r = Reader {
@@ -169,23 +184,93 @@ pub(in crate::media::video) fn jpeg<R: Read + Seek>(
         return Err(unsupported("one sample description is required"));
     }
     let entry = atom(&mut r, stsd.body + 8, stsd.end, false)?;
-    let bytes = prefix(&mut r, &entry, 78)?;
-    if entry.kind != *b"jpeg"
+    let bytes = prefix(&mut r, &entry, entry_bytes)?;
+    if entry.kind.as_slice() != codec.as_bytes()
         || entry.end != stsd.end
-        || entry.end - entry.body != 78
+        || entry.end - entry.body != entry_bytes as u64
         || bytes[6..8] != [0, 1]
         || bytes[8..12] != [0; 4]
     {
         return Err(unsupported(
-            "only one version-zero self-contained JPEG sample description without extensions is supported",
+            "only one version-zero self-contained sample description without extensions is supported",
         ));
     }
+    let layout = match profile {
+        Profile::Jpeg => Layout::Jpeg {
+            width: track.width.ok_or_else(|| invalid("missing coded width"))?,
+            height: track
+                .height
+                .ok_or_else(|| invalid("missing coded height"))?,
+        },
+        Profile::Pcm8 => {
+            let channels = u16::from_be_bytes(bytes[16..18].try_into().expect("channels"));
+            let bits = u16::from_be_bytes(bytes[18..20].try_into().expect("sample bits"));
+            let rate = u32be(&bytes[24..28]);
+            if ![1, 2].contains(&channels)
+                || bits != 8
+                || bytes[20..24] != [0; 4]
+                || rate & 65535 != 0
+                || rate >> 16 == 0
+            {
+                return Err(unsupported(
+                    "raw PCM requires unsigned 8-bit mono/stereo, integer sample rate and zero compression/packet fields",
+                ));
+            }
+            let sample_rate = rate >> 16;
+            if !track
+                .time_base
+                .is_some_and(|b| b.numerator == 1 && b.denominator == u64::from(sample_rate))
+            {
+                return Err(unsupported(
+                    "PCM track time scale must equal its sample rate",
+                ));
+            }
+            Layout::Pcm8(
+                crate::media::wave::Format {
+                    format_tag: 1,
+                    channels,
+                    sample_rate,
+                    bits_per_sample: 8,
+                    block_align: channels,
+                    byte_rate: sample_rate * u32::from(channels),
+                }
+                .validate()?,
+            )
+        }
+    };
     let stsz = one(&tables, b"stsz")?;
     let bytes = full(&mut r, &stsz, 12)?;
     let fixed = u32be(&bytes[4..8]);
     let n = u32be(&bytes[8..12]) as usize;
-    if n == 0 || n > MAX_RECORDS {
-        return Err(limit("video sample count must be 1..=10000"));
+    if n == 0 || n > max_samples {
+        return Err(limit(
+            "media sample count exceeds its nonempty extraction profile budget",
+        ));
+    }
+    if let Layout::Pcm8(format) = layout {
+        if fixed != u32::from(format.block_align) {
+            return Err(unsupported(
+                "PCM requires fixed stsz sample width equal to its channel count",
+            ));
+        }
+        if n as u64 > u64::from(format.sample_rate) * crate::media::pcm::MAX_DURATION_SECONDS
+            || n as u64 * u64::from(fixed) > crate::media::pcm::MAX_PCM_BYTES
+        {
+            return Err(limit("PCM exceeds 300 seconds or 8 MiB of samples"));
+        }
+    }
+    let index_bytes = n
+        .checked_mul(
+            std::mem::size_of::<Sample>()
+                + std::mem::size_of::<u32>()
+                + std::mem::size_of::<(u64, u64)>(),
+        )
+        .and_then(|n| n.checked_add(MAX_READ_BYTES + MAX_RECORDS * 64))
+        .ok_or_else(|| limit("sample indexing allocation overflows"))?;
+    if index_bytes > MAX_INDEX_BYTES {
+        return Err(limit(
+            "sample indexing exceeds 64 MiB temporary-memory budget",
+        ));
     }
     let expected = 12 + if fixed == 0 { n as u64 * 4 } else { 0 };
     if stsz.end - stsz.body != expected {
@@ -295,6 +380,11 @@ pub(in crate::media::video) fn jpeg<R: Read + Seek>(
         let b = row(&mut r, &stts, i, 8)?;
         let count = u32be(&b[..4]) as usize;
         let duration = u32be(&b[4..8]);
+        if matches!(profile, Profile::Pcm8) && duration != 1 {
+            return Err(unsupported(
+                "PCM timing must advance exactly one sample frame per tick",
+            ));
+        }
         if count == 0 || count > n - position || duration == 0 {
             return Err(invalid("invalid time-to-sample relationship"));
         }
@@ -313,6 +403,11 @@ pub(in crate::media::video) fn jpeg<R: Read + Seek>(
         ));
     }
     if tables.iter().any(|a| a.kind == *b"stss") {
+        if matches!(profile, Profile::Pcm8) {
+            return Err(unsupported(
+                "explicit sync tables are outside the raw PCM subset",
+            ));
+        }
         let a = one(&tables, b"stss")?;
         if self::table_count(&mut r, &a, 4)? != n {
             return Err(unsupported("every JPEG frame must be a sync sample"));
@@ -325,10 +420,7 @@ pub(in crate::media::video) fn jpeg<R: Read + Seek>(
     }
     Ok(Index {
         samples,
-        width: track.width.ok_or_else(|| invalid("missing coded width"))?,
-        height: track
-            .height
-            .ok_or_else(|| invalid("missing coded height"))?,
+        layout,
         time_base: track
             .time_base
             .ok_or_else(|| invalid("missing track time base"))?,

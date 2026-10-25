@@ -473,3 +473,21 @@ These commands read declared container/track metadata without decoding media.
 Unsupported encryption, fragmentation and profiles fail explicitly. See
 [container scope and limits](operations.md#video-container-metadata). Output never
 claims that media payloads are valid or playable; the source stays unchanged.
+
+## Inspect saved HTML and HAR
+
+```sh
+python - <<'PYTHON'
+import json
+from pathlib import Path
+Path("saved.html").write_text("<a href='../not-opened'>Link</a><script>fetch('https://invalid.example')</script>")
+artifact = {"log": {"version": "1.2", "entries": [{"request": {"method": "GET", "url": "https://invalid.example/asset"}, "response": {"status": 200, "content": {"mimeType": "application/octet-stream", "text": "AP8=", "encoding": "base64", "size": 2}}}]}}
+Path("saved.har").write_text(json.dumps(artifact))
+PYTHON
+cube web html saved.html --json
+cube web har saved.har --json
+```
+
+These commands inspect only the explicitly selected local artifact. References,
+scripts and handlers remain inert; no URL/path is resolved and no browser data is
+accessed. See the [supported subset and limits](operations.md#offline-web-artifacts).

@@ -94,6 +94,8 @@ SDK_BINDINGS = {
     "audio.morse.detect": "detect_morse_intervals",
     "audio.morse.transcribe": "transcribe_morse",
     "audio.metadata.inspect": "inspect_audio_metadata",
+    "web.html.inspect": "inspect_html",
+    "web.har.inspect": "inspect_har",
     "video.container.inspect": "inspect_video",
     "audio.spectrum": "wave_spectrum",
     "audio.wave.inspect": "inspect_wave",

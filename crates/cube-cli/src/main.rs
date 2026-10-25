@@ -14,6 +14,7 @@ mod pipelinecmd;
 mod recipecmd;
 mod textcmd;
 mod videocmd;
+mod webcmd;
 
 #[derive(Parser)]
 #[command(
@@ -31,6 +32,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Inspect caller-supplied offline web artifacts without network access
+    Web {
+        #[command(subcommand)]
+        command: webcmd::WebCommand,
+    },
     /// Inspect bounded local video metadata without decoding or playback
     Video {
         #[command(subcommand)]
@@ -370,6 +376,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Web { command } => webcmd::run(command, &mut output)?,
         Command::Video { command } => videocmd::run(command, &mut output)?,
         Command::Investigate { command } => investigatecmd::run(command, &mut output)?,
         Command::Pipeline { command } => pipelinecmd::run(command, &mut output)?,

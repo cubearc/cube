@@ -17,6 +17,7 @@ pub mod operations;
 pub mod pipeline;
 pub mod symbols;
 pub mod text;
+pub mod web;
 
 use std::fmt;
 

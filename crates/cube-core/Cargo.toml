@@ -13,6 +13,7 @@ crc32fast = "1.5"
 crc = "3.4"
 data-encoding = "2.11"
 hex = "0.4"
+html5gum = { version = "0.8.4", default-features = false }
 kamadak-exif = "0.6"
 lofty = "0.25.4"
 md-5 = "0.11"

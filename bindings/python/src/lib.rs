@@ -13,6 +13,7 @@ mod pipeline;
 mod recipe;
 mod textops;
 mod video;
+mod web;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
@@ -472,6 +473,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     recipe::register(module)?;
     audio::register(module)?;
     video::register(module)?;
+    web::register(module)?;
     binaryops::register(module)?;
     textops::register(module)?;
     module.add_class::<image::PyImage>()?;

@@ -468,3 +468,21 @@ for track in video["tracks"]:
 
 The function accepts caller-owned bytes. Container/codec metadata does not imply
 frame decoding or extraction. Read [supported profiles and budgets](operations.md#video-container-metadata).
+
+## Inspect offline HTML and HAR
+
+```python
+import json
+import cube
+
+html = cube.inspect_html("<a href='../not-opened'>A &amp; B</a><script>inert()</script>")
+assert html["references"][0]["value"] == "../not-opened"
+assert html["text"] == "A & B"
+artifact = {"log": {"version": "1.2", "entries": [{"request": {"method": "GET", "url": "https://invalid.example/asset"}, "response": {"status": 200}}]}}
+har = cube.inspect_har(json.dumps(artifact))
+assert har["entries"][0]["status"] == 200
+assert har["entries"][0]["body_text_bytes"] is None
+```
+
+Both functions call Rust and treat artifacts as local data. No reference lookup,
+script execution, browser access or implicit filesystem action occurs.

@@ -149,6 +149,9 @@ class Image:
         region: tuple[int, int, int, int] | None = None,
         channels: list[str] | None = None,
         expand_palette: bool = False,
+        traversal: str = "row",
+        start_corner: str = "top_left",
+        reverse: bool = False,
     ) -> dict[str, Any]: ...
     def channel(
         self,

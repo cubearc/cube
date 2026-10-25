@@ -254,6 +254,15 @@ counterclockwise, starting rightward or downward respectively from the top left.
 diagonal traversal, or rotate the starting edge while preserving a spiral's named
 direction. Regions retain absolute coordinates. Reverse reverses the final pixel
 sequence only. Coordinates are generated with constant memory under image limits.
+
+Pixel export uses the same traversal and corner options as LSB extraction, visiting
+each coordinate before its selected channels. Outputs are raw sample bytes;
+`--hex` renders exactly those bytes. Coordinate records retain source positions.
+Existing native row-major pixel export remains unchanged. PNG channel visualization
+requires default row order; other orders use bytes or records. Feed exported bytes
+to existing byte transformations/pipelines explicitly. Encoded-image decoding is
+kept outside recipes: image expansion/work budgets differ from byte adapters, and
+discovery does not advertise an image pipeline adapter.
 Selections must be nonempty and distinct; output is capped at 16 MiB.
 An extracted bit stream is a deterministic candidate, not proof of a hidden message.
 

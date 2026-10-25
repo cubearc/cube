@@ -39,7 +39,7 @@ fn selected(names: Option<Vec<String>>) -> Result<Option<Vec<Channel>>, Box<dyn 
 }
 
 #[derive(Args)]
-#[group(required=true,multiple=false,args=["output","stdout","png_output","json"])]
+#[group(required=true,multiple=false,args=["output","stdout","png_output","json","hex"])]
 pub(crate) struct PixelOutput {
     /// New file containing exact raw samples; shape metadata goes to stdout
     #[arg(long)]
@@ -53,9 +53,16 @@ pub(crate) struct PixelOutput {
     /// Explicit coordinate records, capped at 10000 pixels
     #[arg(long)]
     json: bool,
+    /// Exact hexadecimal bytes with one final newline
+    #[arg(long)]
+    hex: bool,
 }
 impl PixelOutput {
     fn write(self, data: PixelData, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+        if self.hex {
+            writeln!(output, "{}", cube_core::encoding::hex_encode(&data.data))?;
+            return Ok(());
+        }
         if self.stdout {
             output.write_all(&data.data)?;
             return Ok(());
@@ -68,6 +75,41 @@ impl PixelOutput {
         let mut metadata = serde_json::json!(data);
         if self.json {
             metadata["records"] = serde_json::json!(data.records()?);
+        }
+        writeln!(output, "{}", serde_json::to_string_pretty(&metadata)?)?;
+        Ok(())
+    }
+    fn write_stream(
+        self,
+        stream: image::PixelStream,
+        output: &mut impl Write,
+    ) -> Result<(), Box<dyn Error>> {
+        if self.stdout {
+            output.write_all(&stream.pixels.data)?;
+            return Ok(());
+        }
+        if self.hex {
+            writeln!(
+                output,
+                "{}",
+                cube_core::encoding::hex_encode(&stream.pixels.data)
+            )?;
+            return Ok(());
+        }
+        if let Some(path) = self.png_output {
+            if stream.traversal != image::Traversal::Row
+                || stream.start_corner != image::Corner::TopLeft
+                || stream.reverse
+            {
+                return Err("PNG channel export requires default row traversal; use raw bytes for other orders".into());
+            }
+            stream.pixels.grayscale_image()?.save_png(&path)?;
+        } else if let Some(path) = self.output {
+            image::save_new(&path, &stream.pixels.data)?;
+        }
+        let mut metadata = serde_json::json!(stream);
+        if self.json {
+            metadata["records"] = serde_json::json!(stream.records()?);
         }
         writeln!(output, "{}", serde_json::to_string_pretty(&metadata)?)?;
         Ok(())
@@ -96,6 +138,10 @@ impl PixelOutput {
         } else {
             &plane.pixels.data
         };
+        if self.hex {
+            writeln!(output, "{}", cube_core::encoding::hex_encode(bytes))?;
+            return Ok(());
+        }
         if self.stdout {
             output.write_all(bytes)?;
             return Ok(());
@@ -264,6 +310,12 @@ pub(crate) enum ImageCommand {
         view: ViewOptions,
         #[arg(long, value_delimiter = ',')]
         channels: Option<Vec<String>>,
+        #[arg(long, default_value = "row")]
+        traversal: String,
+        #[arg(long, default_value = "top_left")]
+        start_corner: String,
+        #[arg(long)]
+        reverse: bool,
         #[command(flatten)]
         destination: PixelOutput,
     },
@@ -496,11 +548,23 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             path,
             view,
             channels,
+            traversal,
+            start_corner,
+            reverse,
             destination,
         } => {
             let image = view.open(&path)?;
             let channels = selected(channels)?;
-            destination.write(image.pixels(view.region(), channels.as_deref())?, output)?;
+            destination.write_stream(
+                image.pixels_with_traversal(
+                    view.region(),
+                    channels.as_deref(),
+                    image::Traversal::parse(&traversal)?,
+                    image::Corner::parse(&start_corner)?,
+                    reverse,
+                )?,
+                output,
+            )?;
         }
         ImageCommand::Channel {
             path,

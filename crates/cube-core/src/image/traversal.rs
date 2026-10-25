@@ -223,6 +223,13 @@ impl Iterator for Coordinates {
 impl ExactSizeIterator for Coordinates {}
 
 use crate::operations::{Parameter, ParameterType, ParameterValue};
+pub(super) const REVERSE_PARAMETER: Parameter = Parameter {
+    name: "reverse",
+    description: "Reverse the complete pixel coordinate sequence, retaining channel and bit order.",
+    required: false,
+    default: Some(ParameterValue::Boolean(false)),
+    constraints: ParameterType::Boolean,
+};
 pub(super) const TRAVERSAL_PARAMETER: Parameter = Parameter {
     name: "traversal",
     description: "Row/column, anti-diagonals, alternating zigzag or clockwise/counterclockwise inward spiral.",

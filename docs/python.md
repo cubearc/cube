@@ -173,6 +173,8 @@ assert mask["selected_pixels"] == 1
 assert mask["image"].samples == b"\x00\xff"
 stream = raw.lsb(bits=list(range(7, -1, -1)), traversal="spiral_ccw")
 assert stream["data"] == raw.samples
+ordered = raw.pixels(channels=["blue", "red"], traversal="spiral_cw")
+assert ordered["data"] == bytes([3, 1, 6, 4])
 ```
 
 Structured results can contain native `bytes` or `Image` objects, so they are not

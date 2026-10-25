@@ -25,6 +25,25 @@ def bmp_bytes():
     return header + dib + pixels
 
 
+def test_ordered_pixel_streams_are_binary_safe_and_composable():
+    image = cube.Image.from_samples(2, 2, "rgba", bytes(range(1, 17)))
+    result = image.pixels(channels=["alpha", "red"], traversal="spiral_cw")
+    assert result["data"] == bytes([4, 1, 8, 5, 16, 13, 12, 9])
+    assert cube.hex_encode(result["data"]) == "04010805100d0c09"
+    assert image.pixels()["data"] == image.samples
+    assert image.pixels(channels=["alpha", "red"], traversal="spiral_cw", reverse=True)[
+        "data"
+    ] == bytes([12, 9, 16, 13, 8, 5, 4, 1])
+    assert (
+        cube.execute_pipeline(
+            [{"operation": "encoding.hex.encode", "version": 1}], result["data"]
+        )["output"]
+        == "04010805100d0c09"
+    )
+    with pytest.raises(TypeError):
+        image.pixels(unknown=True)
+
+
 def test_extended_lsb_traversals_preserve_channel_and_bit_order():
     image = cube.Image.from_samples(3, 2, "gray", bytes(range(6)))
     options = {"bits": list(range(7, -1, -1))}

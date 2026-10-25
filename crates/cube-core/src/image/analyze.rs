@@ -247,29 +247,14 @@ impl Image {
         region: Option<Region>,
         channels: Option<&[Channel]>,
     ) -> Result<PixelData, OperationError> {
-        let result = (|| {
-            let region = region
-                .unwrap_or_else(|| Region::full(self))
-                .validate(self)?;
-            let (channels, indices) = self.selection(channels)?;
-            let mut data =
-                Vec::with_capacity(region.width as usize * region.height as usize * channels.len());
-            for y in region.y..region.y + region.height {
-                for x in region.x..region.x + region.width {
-                    let position = self.position(x, y)?;
-                    for index in &indices {
-                        data.push(self.samples[position + index]);
-                    }
-                }
-            }
-            Ok(PixelData {
-                region,
-                channels,
-                bit_depth: 8,
-                data,
-            })
-        })();
-        result.map_err(|e: OperationError| e.operation("image.pixels.export"))
+        self.pixels_with_traversal(
+            region,
+            channels,
+            super::Traversal::Row,
+            super::Corner::TopLeft,
+            false,
+        )
+        .map(|v| v.pixels)
     }
     /// Select one named channel; missing alpha and implicit palette conversion fail.
     pub fn channel(
@@ -499,7 +484,14 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         reversible: None,
         command: "image pixels",
         example: "cube image pixels sample.png --json",
-        parameters: &[REGION_PARAMETER, CHANNELS_PARAMETER, EXPAND_PARAMETER],
+        parameters: &[
+            REGION_PARAMETER,
+            CHANNELS_PARAMETER,
+            EXPAND_PARAMETER,
+            super::traversal::TRAVERSAL_PARAMETER,
+            super::traversal::CORNER_PARAMETER,
+            super::traversal::REVERSE_PARAMETER,
+        ],
     },
     crate::operations::Descriptor {
         id: "image.channel.extract",

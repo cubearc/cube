@@ -23,6 +23,46 @@ fn run(args: &[&str]) -> std::process::Output {
         .unwrap()
 }
 #[test]
+fn ordered_pixels_have_exact_hex_raw_and_coordinate_records() {
+    let files = Files::new("stream");
+    let path = files.path("source.png");
+    Image::from_bytes(3, 2, ColorModel::Gray, &[0, 1, 2, 3, 4, 5], &[], &[])
+        .unwrap()
+        .save_png(&path)
+        .unwrap();
+    let args = [
+        "image",
+        "pixels",
+        path.to_str().unwrap(),
+        "--traversal",
+        "spiral_cw",
+        "--start-corner",
+        "top_right",
+    ];
+    for (format, expected) in [
+        ("--stdout", vec![2, 5, 4, 3, 0, 1]),
+        ("--hex", b"020504030001\n".to_vec()),
+    ] {
+        let mut args = args.to_vec();
+        args.push(format);
+        let result = run(&args);
+        assert!(result.status.success());
+        assert_eq!(result.stdout, expected);
+    }
+    let mut json = args.to_vec();
+    json.push("--json");
+    let result = run(&json);
+    assert!(result.status.success());
+    let report: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(report["records"][0]["x"], 2);
+    assert_eq!(report["records"][1]["y"], 1);
+    let mut bad = args.to_vec();
+    let output = files.path("ambiguous.png");
+    bad.extend(["--png-output", output.to_str().unwrap()]);
+    assert!(!run(&bad).status.success());
+    assert!(!output.exists());
+}
+#[test]
 fn lsb_spiral_corner_and_reverse_have_exact_binary_output() {
     let files = Files::new("spiral");
     let path = files.path("source.png");

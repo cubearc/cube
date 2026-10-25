@@ -122,23 +122,79 @@ impl PyImage {
             .map_err(super::file_error)?;
         pyo3::types::PyList::new(py, values)
     }
-    #[pyo3(signature = (*, region=None, channels=None, expand_palette=false))]
+    #[pyo3(signature = (**kwargs))]
     fn pixels(
         &self,
         py: Python<'_>,
-        region: Option<(u32, u32, u32, u32)>,
-        channels: Option<Vec<String>>,
-        expand_palette: bool,
+        kwargs: Option<&Bound<'_, pyo3::types::PyDict>>,
     ) -> PyResult<Py<PyAny>> {
+        let empty = pyo3::types::PyDict::new(py);
+        let kwargs = kwargs.unwrap_or(&empty);
+        for key in kwargs.keys() {
+            let name: String = key.extract()?;
+            if ![
+                "region",
+                "channels",
+                "expand_palette",
+                "traversal",
+                "start_corner",
+                "reverse",
+            ]
+            .contains(&name.as_str())
+            {
+                return Err(pyo3::exceptions::PyTypeError::new_err(format!(
+                    "unknown pixel option '{name}'"
+                )));
+            }
+        }
+        let region = kwargs
+            .get_item("region")?
+            .map(|v| v.extract::<Option<(u32, u32, u32, u32)>>())
+            .transpose()?
+            .flatten();
+        let channels = kwargs
+            .get_item("channels")?
+            .map(|v| v.extract::<Option<Vec<String>>>())
+            .transpose()?
+            .flatten();
+        let expand_palette = kwargs
+            .get_item("expand_palette")?
+            .map(|v| v.extract::<bool>())
+            .transpose()?
+            .unwrap_or(false);
+        let traversal = kwargs
+            .get_item("traversal")?
+            .map(|v| v.extract::<String>())
+            .transpose()?
+            .unwrap_or_else(|| "row".into());
+        let corner = kwargs
+            .get_item("start_corner")?
+            .map(|v| v.extract::<String>())
+            .transpose()?
+            .unwrap_or_else(|| "top_left".into());
+        let reverse = kwargs
+            .get_item("reverse")?
+            .map(|v| v.extract::<bool>())
+            .transpose()?
+            .unwrap_or(false);
         let selected = crate::image::channels(channels)?;
-        let selected_region = crate::image::region(region);
         let data = self
             .inner
             .view(expand_palette)
             .map_err(super::file_error)?
-            .pixels(selected_region, selected.as_deref())
+            .pixels_with_traversal(
+                crate::image::region(region),
+                selected.as_deref(),
+                cube_core::image::Traversal::parse(&traversal).map_err(super::file_error)?,
+                cube_core::image::Corner::parse(&corner).map_err(super::file_error)?,
+                reverse,
+            )
             .map_err(super::file_error)?;
-        pixel_data(py, &data)
+        let output = super::structured(py, &serde_json::json!(data))?;
+        output
+            .bind(py)
+            .set_item("data", PyBytes::new(py, &data.pixels.data))?;
+        Ok(output)
     }
     #[pyo3(signature = (channel, *, region=None, expand_palette=false))]
     fn channel(

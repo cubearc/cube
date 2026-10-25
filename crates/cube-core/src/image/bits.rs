@@ -305,13 +305,7 @@ pub const OPERATIONS: &[Descriptor] = &[
             },
             super::traversal::TRAVERSAL_PARAMETER,
             super::traversal::CORNER_PARAMETER,
-            Parameter {
-                name: "reverse",
-                description: "Reverse pixel coordinate order only, retaining channel/bit order.",
-                required: false,
-                default: Some(ParameterValue::Boolean(false)),
-                constraints: ParameterType::Boolean,
-            },
+            super::traversal::REVERSE_PARAMETER,
             Parameter {
                 name: "bit_order",
                 description: "First bit occupies output bit 7 (msb) or bit 0 (lsb).",

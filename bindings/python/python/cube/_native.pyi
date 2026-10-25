@@ -431,3 +431,10 @@ def wave_bits(
     bit_order: str = "msb",
     incomplete: str = "reject",
 ) -> dict[str, Any]: ...
+def reverse_wave(
+    data: bytes,
+    *,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+) -> bytes: ...

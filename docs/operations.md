@@ -471,6 +471,15 @@ valid and dropped bit counts. It allows 16 Mi visited bits/2 MiB output, in addi
 to existing PCM bounds. Output is exact bytes, never guessed text. The same shared
 packing types remain available at their existing image API paths.
 
+`audio.reverse` generates a new minimal PCM WAV containing only fmt/data chunks.
+It reverses time frames while preserving selected channel order, rate, integer
+width and native sample bytes; it never reverses bytes within samples. Reversing
+twice restores sample data. Source ancillary metadata is omitted, so this is not
+a byte-for-byte container round trip. Existing PCM limits bound allocation to
+8 MiB plus the WAV header/pad; sizes and byte rate are checked before writing.
+The CLI creates a new file exclusively and removes a partial output on write
+failure. The SDK returns new WAV bytes and performs no implicit file write.
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

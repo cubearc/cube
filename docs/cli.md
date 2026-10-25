@@ -339,6 +339,7 @@ PYTHON
 cube audio spectrum spectrum.wav --channels 0 --fft-size 8 --json
 cube audio spectrogram spectrum.wav --channels 0 --fft-size 8 --hop-size 4 --final-window pad --json
 cube audio bits spectrum.wav --channels 0 --bits 15 --frames 8 --json
+cube audio reverse spectrum.wav --output reversed-spectrum.wav
 ```
 
 The command defaults to 1,024 frames at `--start-frame` and the periodic Hann

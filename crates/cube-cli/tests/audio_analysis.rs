@@ -128,3 +128,44 @@ fn audio_bits_raw_json_and_exclusive_outputs_match_native_storage() {
     std::fs::remove_file(path).unwrap();
     std::fs::remove_file(dest).unwrap();
 }
+#[test]
+fn reverse_creates_only_new_wav_and_preserves_sources_and_collisions() {
+    let path = std::env::temp_dir().join(format!("cube-audio-reverse-{}.wav", std::process::id()));
+    let dest = path.with_extension("reversed.wav");
+    let mut wav = b"RIFF".to_vec();
+    wav.extend(44u32.to_le_bytes());
+    wav.extend(b"WAVEfmt ");
+    wav.extend(16u32.to_le_bytes());
+    wav.extend([1, 0, 2, 0]);
+    wav.extend(8000u32.to_le_bytes());
+    wav.extend(16000u32.to_le_bytes());
+    wav.extend([2, 0, 8, 0]);
+    wav.extend(b"data");
+    wav.extend(8u32.to_le_bytes());
+    wav.extend([1, 11, 2, 12, 3, 13, 4, 14]);
+    std::fs::write(&path, &wav).unwrap();
+    let run = |out: &std::path::Path| {
+        Command::new(env!("CARGO_BIN_EXE_cube"))
+            .args([
+                "audio",
+                "reverse",
+                path.to_str().unwrap(),
+                "--output",
+                out.to_str().unwrap(),
+            ])
+            .output()
+            .unwrap()
+    };
+    assert!(run(&dest).status.success());
+    let result = std::fs::read(&dest).unwrap();
+    let block =
+        cube_core::media::pcm::extract(&mut std::io::Cursor::new(&result), &Default::default())
+            .unwrap();
+    assert_eq!(block.raw(), [4, 14, 3, 13, 2, 12, 1, 11]);
+    assert!(!run(&dest).status.success());
+    assert!(!run(&path).status.success());
+    assert_eq!(std::fs::read(&path).unwrap(), wav);
+    assert_eq!(std::fs::read(&dest).unwrap(), result);
+    std::fs::remove_file(path).unwrap();
+    std::fs::remove_file(dest).unwrap();
+}

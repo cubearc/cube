@@ -89,6 +89,7 @@ SDK_BINDINGS = {
     "number.base.convert": "convert_base",
     "audio.spectrogram": "wave_spectrogram",
     "audio.bits.extract": "wave_bits",
+    "audio.reverse": "reverse_wave",
     "audio.spectrum": "wave_spectrum",
     "audio.wave.inspect": "inspect_wave",
     "audio.pcm.extract": "wave_samples",

@@ -173,3 +173,19 @@ def test_audio_bits_packing_channels_and_errors_are_explicit():
             cube.wave_bits(data, **options)
     with pytest.raises(ValueError):
         cube.wave_bits(short)
+
+
+@pytest.mark.parametrize("width", [1, 2, 3, 4])
+def test_reverse_wave_preserves_frame_groups_and_sample_bytes(width):
+    raw = bytes(range(6 * width))
+    data = pcm_wave(raw, channels=2, width=width, rate=44100)
+    reversed_data = cube.reverse_wave(data)
+    expected = b"".join(
+        raw[i : i + 2 * width] for i in reversed(range(0, len(raw), 2 * width))
+    )
+    assert cube.wave_samples(reversed_data)["data"] == expected
+    assert cube.inspect_wave(reversed_data)["format"]["sample_rate"] == 44100
+    assert cube.wave_samples(cube.reverse_wave(reversed_data))["data"] == raw
+    assert cube.wave_samples(cube.reverse_wave(pcm_wave()))["data"] == b""
+    with pytest.raises(ValueError):
+        cube.reverse_wave(b"invalid")

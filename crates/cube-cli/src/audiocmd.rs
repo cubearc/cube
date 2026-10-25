@@ -39,6 +39,14 @@ pub(crate) struct SampleOutput {
 }
 #[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Reverse PCM frames into a new minimal WAV; preserve channel groups and native bytes
+    Reverse {
+        #[command(flatten)]
+        range: RangeArgs,
+        /// New destination; existing files and source aliases are rejected
+        #[arg(long)]
+        output: PathBuf,
+    },
     /// Extract exact native PCM bits; no amplitude normalization or text guess
     Bits {
         #[command(flatten)]
@@ -107,6 +115,19 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Reverse {
+            range,
+            output: destination,
+        } => {
+            let samples = cube_core::media::pcm::extract_file(&range.path, &range.selection())?;
+            let bytes = cube_core::media::reverse::wave(&samples)?;
+            crate::pipelinecmd::write_new(&destination, &bytes)?;
+            writeln!(
+                output,
+                "Wrote {} reversed PCM frames to a new WAV (fmt/data only)",
+                samples.frames()
+            )?;
+        }
         AudioCommand::Bits {
             range,
             bits,

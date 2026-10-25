@@ -404,6 +404,8 @@ assert gram["valid_frames"] == [8, 4]
 packed = cube.wave_bits(buffer.getvalue(), bits=[0])
 assert packed["data"] == b"\x00"
 assert packed["valid_bits"] == 8
+reversed_wav = cube.reverse_wave(buffer.getvalue())
+assert cube.wave_samples(cube.reverse_wave(reversed_wav))["data"] == bytes(16)
 ```
 
 Selections use the existing WAVE/PCM rules. The result retains channels, absolute

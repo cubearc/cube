@@ -234,9 +234,28 @@ fn wave_bits(
         .set_item("data", pyo3::types::PyBytes::new(py, &report.data))?;
     Ok(result)
 }
+/// Return a new minimal WAV, reversing time frames without changing sample bytes.
+#[pyfunction]
+#[pyo3(signature=(data,*,channels=None,start_frame=0,frames=None))]
+fn reverse_wave<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    channels: Option<Vec<u16>>,
+    start_frame: u64,
+    frames: Option<u64>,
+) -> PyResult<Bound<'py, pyo3::types::PyBytes>> {
+    let samples = cube_core::media::pcm::extract(
+        &mut Cursor::new(data),
+        &selection(channels, start_frame, frames),
+    )
+    .map_err(super::file_error)?;
+    let output = cube_core::media::reverse::wave(&samples).map_err(super::file_error)?;
+    Ok(pyo3::types::PyBytes::new(py, &output))
+}
 pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(wave_spectrum, module)?)?;
     module.add_function(wrap_pyfunction!(wave_bits, module)?)?;
+    module.add_function(wrap_pyfunction!(reverse_wave, module)?)?;
     module.add_function(wrap_pyfunction!(wave_spectrogram, module)?)?;
     module.add_function(wrap_pyfunction!(wave_envelope, module)?)?;
     module.add_function(wrap_pyfunction!(wave_file_envelope, module)?)?;

@@ -452,3 +452,21 @@ def detect_dtmf(
     max_twist_db: int = 8,
     purity_percent: int = 75,
 ) -> dict[str, Any]: ...
+def detect_morse_intervals(
+    data: bytes,
+    *,
+    frequency_hz: int,
+    channels: list[int] | None = None,
+    start_frame: int = 0,
+    frames: int | None = None,
+    window_ms: int = 10,
+    min_level_dbfs: int = -40,
+    purity_percent: int = 80,
+) -> dict[str, Any]: ...
+def transcribe_morse(
+    intervals: list[dict[str, Any]],
+    *,
+    sample_rate: int,
+    unit_ms: int,
+    tolerance_percent: int = 20,
+) -> dict[str, Any]: ...

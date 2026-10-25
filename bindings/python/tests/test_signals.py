@@ -36,3 +36,35 @@ def test_dtmf_returns_candidates_evidence_and_uncertainty_without_forced_text():
     ]:
         with pytest.raises((ValueError, TypeError)):
             cube.detect_dtmf(signal([], 800), **options)
+
+
+def test_morse_intervals_and_transcription_are_separate_bounded_calls():
+    data = signal([700], 800)  # One original dot; source has no embedded text.
+    report = cube.detect_morse_intervals(data, frequency_hz=700)
+    assert report["intervals"] == [dict(start_frame=0, frames=800, state="tone")]
+    text = cube.transcribe_morse(report["intervals"], sample_rate=8000, unit_ms=100)
+    assert text["tokens"] == "." and text["text"] == "E"
+    assert "text" not in report
+    ambiguous = cube.detect_morse_intervals(signal([700], 1600), frequency_hz=700)
+    assert (
+        cube.transcribe_morse(ambiguous["intervals"], sample_rate=8000, unit_ms=100)[
+            "text"
+        ]
+        is None
+    )
+    off_band = cube.detect_morse_intervals(signal([1100], 800), frequency_hz=700)
+    assert off_band["intervals"][0]["state"] == "uncertain"
+    with pytest.raises(ValueError):
+        cube.transcribe_morse(
+            [dict(start_frame=2**64 - 1, frames=2, state="tone")],
+            sample_rate=8000,
+            unit_ms=100,
+        )
+    with pytest.raises(ValueError):
+        cube.transcribe_morse(
+            [dict(start_frame=0, frames=800, state="tone")] * 4097,
+            sample_rate=8000,
+            unit_ms=100,
+        )
+    with pytest.raises(ValueError):
+        cube.detect_morse_intervals(data, frequency_hz=4000)

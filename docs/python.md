@@ -412,3 +412,29 @@ assert cube.detect_dtmf(buffer.getvalue())["events"] == []
 Selections use the existing WAVE/PCM rules. The result retains channels, absolute
 start frame, window, units and the actual sample rate. See the
 [audio analysis contract](operations.md#audio-analysis) for normalization and limits.
+
+### Inspect tone intervals before transcription
+
+```python
+import math
+import struct
+import wave
+from io import BytesIO
+import cube
+
+values = [round(12000 * math.sin(math.tau * 700 * i / 8000)) for i in range(800)]
+buffer = BytesIO()
+with wave.open(buffer, "wb") as writer:
+    writer.setnchannels(1)
+    writer.setsampwidth(2)
+    writer.setframerate(8000)
+    writer.writeframes(struct.pack("<800h", *values))
+intervals = cube.detect_morse_intervals(buffer.getvalue(), frequency_hz=700)
+assert "text" not in intervals
+transcript = cube.transcribe_morse(intervals["intervals"], sample_rate=8000, unit_ms=100)
+assert transcript["tokens"] == "." and transcript["text"] == "E"
+```
+
+The frequency and dot unit are explicit assumptions. Detection retains uncertain
+intervals; transcription returns no text when timings are ambiguous. DTMF likewise
+returns timed candidates/evidence through `detect_dtmf`, without a forced string.

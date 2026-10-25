@@ -204,3 +204,60 @@ fn dtmf_json_keeps_nominal_pair_evidence_and_candidate_status() {
     assert_eq!(std::fs::read(&path).unwrap(), wav);
     std::fs::remove_file(path).unwrap();
 }
+#[test]
+fn morse_detection_json_can_be_transcribed_as_a_separate_bounded_command() {
+    use std::io::Write;
+    use std::process::Stdio;
+    let path = std::env::temp_dir().join(format!("cube-morse-{}.wav", std::process::id()));
+    let data: Vec<u8> = (0..800)
+        .flat_map(|i| {
+            ((12000.0 * (std::f64::consts::TAU * 700.0 * i as f64 / 8000.0).sin()).round() as i16)
+                .to_le_bytes()
+        })
+        .collect();
+    let mut wav = b"RIFF".to_vec();
+    wav.extend((36 + data.len() as u32).to_le_bytes());
+    wav.extend(b"WAVEfmt ");
+    wav.extend(16u32.to_le_bytes());
+    wav.extend([1, 0, 1, 0]);
+    wav.extend(8000u32.to_le_bytes());
+    wav.extend(16000u32.to_le_bytes());
+    wav.extend([2, 0, 16, 0]);
+    wav.extend(b"data");
+    wav.extend((data.len() as u32).to_le_bytes());
+    wav.extend(data);
+    std::fs::write(&path, &wav).unwrap();
+    let detected = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args([
+            "audio",
+            "morse",
+            "detect",
+            path.to_str().unwrap(),
+            "--frequency-hz",
+            "700",
+            "--json",
+        ])
+        .output()
+        .unwrap();
+    assert!(detected.status.success(), "{:?}", detected.stderr);
+    let mut child = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args(["audio", "morse", "transcribe", "--unit-ms", "100", "--json"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    child
+        .stdin
+        .take()
+        .unwrap()
+        .write_all(&detected.stdout)
+        .unwrap();
+    let result = child.wait_with_output().unwrap();
+    assert!(result.status.success(), "{:?}", result.stderr);
+    let r: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(r["tokens"], ".");
+    assert_eq!(r["text"], "E");
+    assert_eq!(std::fs::read(&path).unwrap(), wav);
+    std::fs::remove_file(path).unwrap();
+}

@@ -348,6 +348,28 @@ window. Set `--window rectangular` or `hamming` explicitly when needed. If
 `--frames` is provided it must equal `--fft-size`; short inputs fail. See
 [spectrum units and bounds](operations.md#audio-analysis).
 
+Tone intervals can be inspected before explicitly requesting Morse transcription:
+
+```sh
+python - <<'PYTHON'
+import math
+import struct
+import wave
+values = [round(12000 * math.sin(math.tau * 700 * i / 8000)) for i in range(800)]
+with wave.open("morse-dot.wav", "wb") as output:
+    output.setnchannels(1)
+    output.setsampwidth(2)
+    output.setframerate(8000)
+    output.writeframes(struct.pack("<800h", *values))
+PYTHON
+cube audio morse detect morse-dot.wav --frequency-hz 700 --json > intervals.json
+cube audio morse transcribe --unit-ms 100 --json < intervals.json
+# tokens: ".", text: "E"
+```
+
+The frequency and dot duration are caller assumptions. Inspect uncertain segments
+and timing resolution before treating a candidate transcript as meaningful.
+
 ## Run a pipeline or recipe
 
 ```sh

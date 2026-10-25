@@ -497,6 +497,23 @@ have a non-null `symbol`, still labeled `candidate`. Timing tolerance is one win
 Limits are 262,144 frames and 4,096 windows, with one fixed set of eight frequency
 measurements per frame. There is no automatic frequency search or device access.
 
+Morse-like analysis has two separate operations. `audio.morse.detect` measures a
+caller-supplied nominal frequency (>=100 Hz, below Nyquist) on exactly one channel
+at >=8 kHz. Defaults are 10 ms rectangular windows, -40 dBFS minimum RMS and 80%
+nominal-tone energy ratio. Below-level windows are silence; other audible or
+partial windows without enough expected tone energy remain uncertain. Adjacent
+same-state windows merge into exact absolute frame intervals. Resolution is one
+window, with the same 262,144-frame/4,096-window budget as signal analysis.
+
+`audio.morse.transcribe` separately requires a dot duration in 40..1,000 ms and
+relative tolerance in 0..40% (default 20%). It uses 1/3-unit tones and 1/3/7-unit
+internal gaps from [International Morse timing](https://www.itu.int/rec/R-REC-M.1677/en).
+Boundary silence is ignored. Invalid/noncontiguous/overlapping interval ranges
+fail; uncertain timings or ambiguous matches return no text. Recognized tokens
+reuse Cube's existing Morse text decoder. Unsupported token sequences preserve
+tokens with `unsupported_tokens` and no invented letter. No automatic frequency
+search, speed estimation, radio capture or forced transcription occurs.
+
 Use `audio` for RIFF/WAVE metadata, exact channel/frame samples and min/max waveform
 data. PCM stores sample amplitudes directly, without a compressed audio codec.
 Start with the [synthetic WAVE fixture](cli.md#create-small-image-and-audio-fixtures).

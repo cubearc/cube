@@ -38,7 +38,41 @@ pub(crate) struct SampleOutput {
     json: bool,
 }
 #[derive(Subcommand)]
+pub(crate) enum MorseCommand {
+    /// Detect tone/silence/uncertain intervals; no automatic transcription
+    Detect {
+        #[command(flatten)]
+        range: RangeArgs,
+        #[arg(long)]
+        frequency_hz: u32,
+        #[arg(long, default_value_t = 10)]
+        window_ms: u32,
+        #[arg(long,default_value_t=-40,allow_negative_numbers=true)]
+        min_level_dbfs: i32,
+        #[arg(long, default_value_t = 80)]
+        purity_percent: u32,
+        #[arg(long)]
+        json: bool,
+    },
+    /// Interpret a detection JSON from --text/stdin using an explicit dot duration
+    Transcribe {
+        #[command(flatten)]
+        input: crate::Input,
+        #[arg(long)]
+        unit_ms: u32,
+        #[arg(long, default_value_t = 20)]
+        tolerance_percent: u32,
+        #[arg(long)]
+        json: bool,
+    },
+}
+#[derive(Subcommand)]
 pub(crate) enum AudioCommand {
+    /// Separate tone interval detection and caller-requested Morse transcription
+    Morse {
+        #[command(subcommand)]
+        command: MorseCommand,
+    },
     /// Timed nominal DTMF candidates with evidence and uncertainty; no forced string
     Dtmf {
         #[command(flatten)]
@@ -136,6 +170,75 @@ pub(crate) enum AudioCommand {
 }
 pub(crate) fn run(command: AudioCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        AudioCommand::Morse { command } => {
+            use cube_core::media::{
+                morse::{self, Options},
+                pcm,
+            };
+            match command {
+                MorseCommand::Detect {
+                    range,
+                    frequency_hz,
+                    window_ms,
+                    min_level_dbfs,
+                    purity_percent,
+                    json,
+                } => {
+                    let samples = pcm::extract_file(&range.path, &range.selection())?;
+                    let result = morse::detect(
+                        &samples,
+                        Options {
+                            frequency_hz,
+                            window_ms,
+                            min_level_dbfs,
+                            purity_percent,
+                        },
+                    )?;
+                    if json {
+                        writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+                    } else {
+                        writeln!(
+                            output,
+                            "{} Hz; tone {} Hz; quantization {} frames",
+                            result.sample_rate, result.frequency_hz, result.window_frames
+                        )?;
+                        for interval in result.intervals {
+                            writeln!(
+                                output,
+                                "{}..{} {:?}",
+                                interval.start_frame,
+                                interval.start_frame + interval.frames,
+                                interval.state
+                            )?;
+                        }
+                    }
+                }
+                MorseCommand::Transcribe {
+                    input,
+                    unit_ms,
+                    tolerance_percent,
+                    json,
+                } => {
+                    let report: morse::Detection =
+                        serde_json::from_str(&input.read_text("audio.morse.transcribe")?)?;
+                    let result = morse::transcribe(
+                        &report.intervals,
+                        report.sample_rate,
+                        unit_ms,
+                        tolerance_percent,
+                    )?;
+                    if json {
+                        writeln!(output, "{}", serde_json::to_string_pretty(&result)?)?;
+                    } else {
+                        writeln!(
+                            output,
+                            "{}; tokens={:?}; text={:?}; uncertain intervals={:?}",
+                            result.status, result.tokens, result.text, result.uncertain_segments
+                        )?;
+                    }
+                }
+            }
+        }
         AudioCommand::Dtmf {
             range,
             window_ms,

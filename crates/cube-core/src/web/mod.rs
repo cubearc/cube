@@ -52,3 +52,5 @@ fn observations(value: &str) -> Vec<&'static str> {
     }
     result
 }
+
+pub mod assets;

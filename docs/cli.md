@@ -491,3 +491,20 @@ cube web har saved.har --json
 These commands inspect only the explicitly selected local artifact. References,
 scripts and handlers remain inert; no URL/path is resolved and no browser data is
 accessed. See the [supported subset and limits](operations.md#offline-web-artifacts).
+
+Extract a selected embedded HAR body to a new file, inspect its provenance, or
+send its exact bytes to the existing pipeline:
+
+```sh
+cube web asset har saved.har --index 0 --json
+cube web asset har saved.har --index 0 --output selected.bin
+cube web asset har saved.har --index 0 --stdout | cube pipeline run --steps '[{"operation":"encoding.hex.encode","version":1}]' --format raw
+# 00ff (without an added newline)
+```
+
+The output file must not exist. HTML uses `cube web asset html saved.html --index 0
+--selector inline --stdout` for an explicitly closed script/style body, or
+`--selector data_url` for a reported reference containing strict base64. No path
+or remote reference is followed. Both asset operations also compose directly as
+version-1 text-to-bytes steps; select an index and use explicit UTF-8 conversion
+only if a later text operation needs it.

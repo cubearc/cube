@@ -141,6 +141,13 @@ Pipeline-only values distinguish bytes, text and explicitly supported structured
 kinds. Future adapters must declare concrete types and resource bounds; direct
 function APIs remain independent of this composition boundary.
 
+Offline HTML/HAR inspections tokenize or parse caller-owned text without a
+browser, URL resolver or file loader. Explicit asset selectors return bounded
+bytes and representation/hash provenance. Their text-to-bytes adapters call those
+same core functions and reuse the engine's existing value kinds and budgets;
+they cannot turn references into I/O. Inspection reports stay direct structured
+results rather than being stringified to make them executable.
+
 The engine owns strict JSON recipe parsing, validation, compatibility and execution.
 A shared bounded unique-key parser rejects ambiguous documents. Format/engine and
 adapter versions are explicit contracts. Recipe input slots hold caller-supplied

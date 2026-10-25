@@ -1,3 +1,4 @@
+import hashlib
 import json
 
 import cube
@@ -63,3 +64,74 @@ def test_har_metadata_preserves_unknowns_and_rejects_duplicate_or_excessive_json
         with pytest.raises(ValueError) as e:
             cube.inspect_har(document)
         assert e.value.operation == "web.har.inspect"
+
+
+def test_selected_assets_keep_binary_data_provenance_and_existing_pipeline_types():
+    document = "雪<script>é\r\n&amp;</script><img src='data:;base64,AP8='>"
+    inline = cube.extract_html_asset(document, 0)
+    assert inline["data"] == "é\r\n&amp;".encode()
+    p = inline["provenance"]
+    start, end = p["source_range"]
+    assert document.encode()[start:end] == inline["data"]
+    assert p["artifact_sha256"] == hashlib.sha256(document.encode()).hexdigest()
+    assert p["sha256"] == hashlib.sha256(inline["data"]).hexdigest()
+    assert (
+        cube.extract_html_asset(document, 0, selector="data_url")["data"] == b"\0\xff"
+    )
+    selected = cube.extract_har_asset(har_document(), 0)
+    assert selected["data"] == b"\0\xff"
+    assert selected["provenance"]["representation"] == "har_base64_decoded_bytes"
+    steps = [{"operation": "encoding.hex.encode", "version": 1}]
+    assert cube.execute_pipeline(steps, selected["data"])["output"] == "00ff"
+    steps.insert(
+        0, {"operation": "web.har.asset", "version": 1, "parameters": {"index": 0}}
+    )
+    assert cube.execute_pipeline(steps, har_document(), capture=[0])[
+        "intermediates"
+    ] == {0: b"\0\xff"}
+    steps[0] = {
+        "operation": "web.html.asset",
+        "version": 1,
+        "parameters": {"index": 0, "selector": "data_url"},
+    }
+    assert cube.execute_pipeline(steps, document)["output"] == "00ff"
+    assert cube.describe_operation("web.html.asset")["pipeline"] == {"version": 1}
+
+
+def test_asset_selection_requires_explicit_supported_embedded_data(tmp_path):
+    source = tmp_path / "secret.bin"
+    source.write_bytes(b"private")
+    for reference in [
+        str(source),
+        source.as_uri(),
+        "https://invalid.example/x",
+        "data:,x",
+    ]:
+        with pytest.raises(ValueError):
+            cube.extract_html_asset(f"<img src='{reference}'>", 0, selector="data_url")
+    assert source.read_bytes() == b"private"
+    for document, index, selector in [
+        ("<script>x", 0, "inline"),
+        ("<script>x</script>", 1, "inline"),
+        ("<script>x</script>", 0, "automatic"),
+        ("<img src='data:;base64,AB=='>", 0, "data_url"),
+    ]:
+        with pytest.raises(ValueError):
+            cube.extract_html_asset(document, index, selector=selector)
+    with pytest.raises(ValueError):
+        cube.extract_har_asset(har_document(encoding="gzip"), 0)
+    artifact = json.loads(har_document("é\0", "base64"))
+    content = artifact["log"]["entries"][0]["response"]["content"]
+    del content["encoding"]
+    selected = cube.extract_har_asset(json.dumps(artifact), 0)
+    assert selected["data"] == "é\0".encode()
+    assert selected["provenance"]["representation"] == "har_logical_text_utf8"
+    del content["text"]
+    content["_file"] = str(source)
+    with pytest.raises(ValueError, match="absent"):
+        cube.extract_har_asset(json.dumps(artifact), 0)
+    with pytest.raises(ValueError):
+        cube.validate_pipeline(
+            [{"operation": "web.html.asset", "version": 1, "parameters": {"index": 0}}],
+            "bytes",
+        )

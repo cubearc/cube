@@ -486,3 +486,27 @@ assert har["entries"][0]["body_text_bytes"] is None
 
 Both functions call Rust and treat artifacts as local data. No reference lookup,
 script execution, browser access or implicit filesystem action occurs.
+
+Select an embedded body explicitly, then reuse ordinary byte operations. The SDK
+returns native `bytes` alongside source/hash/representation provenance:
+
+```python
+import cube
+
+document = "<img src='data:application/octet-stream;base64,AP8='>"
+asset = cube.extract_html_asset(document, 0, selector="data_url")
+assert asset["data"] == b"\x00\xff"
+assert asset["provenance"]["bytes"] == 2
+steps = [{"operation": "encoding.hex.encode", "version": 1}]
+assert cube.execute_pipeline(steps, asset["data"])["output"] == "00ff"
+
+steps.insert(0, {"operation": "web.html.asset", "version": 1,
+                 "parameters": {"index": 0, "selector": "data_url"}})
+assert cube.execute_pipeline(steps, document, capture=[0])["intermediates"][0] == b"\x00\xff"
+```
+
+`extract_har_asset(document, index)` selects an embedded HAR response body. Its
+provenance distinguishes base64-decoded bytes from UTF-8 of logical JSON text;
+neither selection downloads or decompresses content. Inline HTML selection uses
+the default `selector="inline"` and requires an explicitly terminated script/style.
+Read the [selection rules and budgets](operations.md#offline-web-artifacts).

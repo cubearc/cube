@@ -557,7 +557,7 @@ bytes, with 8 MiB raw output. Structured value listings cap at 10000 samples.
 Waveform buckets contain exact min/max signed amplitudes, absolute start frames
 and the final partial bucket; the sample rate supplies the time base. Budgets
 bound channel/bucket pairs. This is data, not a plot, spectrogram, FFT, Morse/DTMF
-detector or playback feature. Video analysis is not implemented.
+detector or playback feature. Video container inspection is described below.
 
 ## Compose operations
 
@@ -770,3 +770,23 @@ HAR adds <=128 entries, <=64 KiB strings, <=256-byte keys, <=8,192-byte URLs and
 <=128 KiB exported text. This subset is not complete HAR conformance validation.
 Browser credentials and referenced files are never accessed. Both inspection
 operations have no pipeline adapter or privileged I/O in their core functions.
+
+`web.html.asset` selects a zero-based inline script/style record or reference from
+that inspection. Inline selection preserves exact source UTF-8 bytes and requires
+an explicit closing tag. `selector=data_url` accepts only strict standard-base64
+data URLs after HTML character decoding; paths, remote URLs, percent decoding and
+non-base64 data URLs are unsupported. `web.har.asset` selects an entry with an
+embedded `response.content.text`. Base64 bodies yield decoded bytes; omitted
+encoding yields UTF-8 of the logical JSON string, which may differ from original
+HTTP wire bytes. Unknown encodings and external-body references fail. No automatic
+decompression, content interpretation or filesystem/network resolution occurs.
+
+Selections return bytes plus artifact SHA-256, record/pointer, source range where
+available, representation, size and output SHA-256. Output is at most 64 KiB and
+all inspection budgets still apply. CLI output must explicitly use `--stdout`,
+`--output` (exclusive new file) or `--json` (exact Hex plus provenance). The two
+asset operations have version-1 text-to-bytes adapters that reuse the existing
+pipeline engine, value kinds, preflight, captures and lowered budgets. Adapter
+output is bytes; use direct extraction first when provenance must be retained.
+Caller-selected local files can enter the ordinary byte pipeline separately;
+artifact references never authorize opening them. Existing recipes remain valid.

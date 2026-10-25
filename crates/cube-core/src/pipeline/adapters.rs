@@ -3,6 +3,8 @@ use super::{Error, Kind, Parameter, Step, invalid};
 use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
+    HtmlAsset,
+    HarAsset,
     And,
     Or,
     Not,
@@ -51,6 +53,16 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "web.html.asset",
+        version: 1,
+        action: Action::HtmlAsset,
+    },
+    Adapter {
+        id: "web.har.asset",
+        version: 1,
+        action: Action::HarAsset,
+    },
     Adapter {
         id: "hash.sha512",
         version: 1,
@@ -254,6 +266,10 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    WebAsset {
+        index: usize,
+        selector: crate::web::assets::HtmlSelector,
+    },
     Units {
         bits: u8,
         unit_bytes: usize,
@@ -326,6 +342,19 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::HtmlAsset | Action::HarAsset => {
+            let index = usize::try_from(integer("index")?)
+                .map_err(|_| invalid("invalid asset index").parameter("index"))?;
+            let selector = match step.parameters.get("selector") {
+                None => crate::web::assets::HtmlSelector::Inline,
+                Some(Parameter::Text(value)) => {
+                    crate::web::assets::HtmlSelector::parse(value).map_err(Error::from_operation)?
+                }
+                _ => return Err(invalid("selector must be text").parameter("selector")),
+            };
+            Arguments::WebAsset { index, selector }
+        }
+
         Action::ShiftLeft | Action::ShiftRight | Action::SwapEndian => {
             let unit_bytes = match step.parameters.get("unit_bytes") {
                 Some(Parameter::Integer(n)) => usize::try_from(*n)

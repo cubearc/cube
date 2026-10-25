@@ -1,4 +1,4 @@
-//! Bounded PNG8 images with exact source samples and explicit palette expansion.
+//! Bounded 8-bit rasters, with exact PNG8 samples and explicit palette expansion.
 //!
 //! Coordinates start at the top left. Samples are row-major, interleaved, 8-bit,
 //! unpremultiplied values. No gamma/profile conversion, compositing or normalization
@@ -31,7 +31,7 @@ use std::{
     path::Path,
 };
 
-/// Maximum encoded PNG bytes accepted or produced (32 MiB).
+/// Maximum encoded image/raw input or PNG output bytes (32 MiB).
 pub const MAX_ENCODED: usize = 32 * 1024 * 1024;
 /// Maximum pixel count (4 Mi pixels).
 pub const MAX_PIXELS: u64 = 4 * 1024 * 1024;
@@ -96,7 +96,7 @@ impl ColorModel {
     }
 }
 
-/// Exact decoded samples with validated shape. Fields are private so callers
+/// Decoded or caller-constructed samples with validated shape. Fields are private so callers
 /// cannot bypass resource, palette or transparency invariants.
 #[derive(Clone, Debug)]
 pub struct Image {

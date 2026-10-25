@@ -33,7 +33,7 @@ transformations stay in their owning modules. Responsibilities include:
 - `forensics`: checked ranges, signature evidence, file facts, bounded EXIF, byte
   inspection and bounded PNG/JPEG/GIF framing. Reader/writer APIs support bounded or streaming work
   without requiring paths. Signatures are candidates, not validity proofs.
-- `image`: an immutable validated PNG8 sample model, with separate analysis,
+- `image`: an immutable validated 8-bit sample model, with separate analysis,
   geometry/color and bit-extraction modules. Indexed samples, palette and tRNS
   remain separate until explicit expansion. PNG framing reuses `forensics`.
   A separate codec module uses `image` with only JPEG/GIF/BMP/WebP enabled (no

@@ -18,7 +18,8 @@ is explicit.
 - Work with classical ciphers, Unicode text, Morse, Braille dot masks and integers.
 - Inspect file signatures, EXIF, hex, strings and binary differences; validate
   supported embedded ZIP structures and recover selected bytes safely.
-- Analyze and transform 8-bit PNG images, including channels, colors and LSB bits.
+- Analyze bounded PNG8/JPEG/GIF/BMP/WebP images, reconstruct raw rasters, and extract
+  exact colors, ordered pixel/bit streams or binary QR payloads.
 - Inspect integer PCM WAVE audio, extract samples and calculate waveform data.
 - Compose typed linear pipelines and versioned JSON recipes.
 - Run bounded local investigations with evidence, reports and verified replay.

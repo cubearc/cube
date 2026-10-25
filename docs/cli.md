@@ -219,6 +219,24 @@ cube binary swap-endian --unit-bytes 2 --text ABCD
 Use `--output raw` for exact stdout bytes. AND/OR operands must have equal length;
 shifts use independent unsigned big-endian units, with explicit zero-fill rules.
 
+## Select mathematical constant digits
+
+`max-digits` controls the complete certified fractional prefix: default 256,
+explicitly adjustable to 1..4096. Positions never increase that budget implicitly.
+Index 0 is the first digit after the decimal point; plain output is the selected
+fractional digits plus one newline:
+
+```sh
+cube number digits pi --count 8
+cube number digits pi --start 256 --count 16 --max-digits 512 --json
+cube number digits sqrt2 --indices 2,0,2 --json
+```
+
+Choose a range (`--start` default 0, `--count` default 16) or `--indices`, never both.
+JSON includes the separate integer part, selected digits, prefix budget/hash and
+certification method. Empty selections are valid. The hard cap, work and integer
+bounds remain enforced with an override; see [numeric limits](operations.md#numeric-conversions).
+
 ## Compute a hash or checksum
 
 SHA-512 is available alongside SHA-256. MD5 and SHA-1 are legacy and unsuitable

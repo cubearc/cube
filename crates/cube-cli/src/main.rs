@@ -7,6 +7,7 @@ use cube_core::{ciphers, encoding, hashing, operations};
 
 mod audiocmd;
 mod binarycmd;
+mod constantcmd;
 mod filecmd;
 mod imagecmd;
 mod investigatecmd;
@@ -122,6 +123,8 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Select certified fractional digits with an explicit bounded prefix budget
+    Digits(constantcmd::DigitsArgs),
     /// Map one exact clock reading to directions; optional caller-convention Semaphore
     #[command(group(clap::ArgGroup::new("clock_input").required(true).multiple(false).args(["time","hour_millidegrees"])))]
     Clock {
@@ -398,6 +401,9 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Number {
+            command: Number::Digits(args),
+        } => constantcmd::run(args, &mut output)?,
         Command::Number {
             command:
                 Number::Clock {

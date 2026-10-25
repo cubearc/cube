@@ -316,6 +316,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::symbols::semaphore::OPERATIONS)
         .chain(crate::symbols::clock::OPERATIONS)
         .chain(crate::numbers::OPERATIONS)
+        .chain(crate::numbers::constants::OPERATIONS)
         .chain(crate::media::wave::OPERATIONS)
         .chain(crate::media::pcm::OPERATIONS)
         .chain(crate::media::envelope::OPERATIONS)

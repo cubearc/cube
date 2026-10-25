@@ -97,6 +97,7 @@ SDK_BINDINGS = {
     "text.reverse": "reverse_text",
     "text.utf8.decode": "utf8_decode",
     "text.utf8.encode": "utf8_encode",
+    "number.constant_digits": "constant_digits",
     "number.base.convert": "convert_base",
     "audio.spectrogram": "wave_spectrogram",
     "audio.bits.extract": "wave_bits",

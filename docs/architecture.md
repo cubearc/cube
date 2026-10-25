@@ -56,6 +56,12 @@ transformations stay in their owning modules. Responsibilities include:
   Byte transforms use fixed unsigned units and do not change repeating-key XOR.
   RustCrypto supplies SHA digests/legacy MD5; named CRC constants stay distinct
   from cryptographic hashes. New hash adapters retain explicit output bounds.
+- `numbers::constants`: explicit prefix/selection budgets surround maintained
+  `num-bigint` integer arithmetic. Fixed-point series/root intervals certify exact
+  truncation, with independent known-answer tests. Runtime generation supports an
+  explicit prefix override without a generated reference dataset, native backend,
+  floating approximation or new pipeline value. Other integer conversions keep
+  their existing fixed-width semantics.
 - `forensics`: checked ranges, signature evidence, file facts, bounded EXIF, byte
   inspection and bounded PNG/JPEG/GIF framing. Reader/writer APIs support bounded or streaming work
   without requiring paths. Signatures are candidates, not validity proofs.

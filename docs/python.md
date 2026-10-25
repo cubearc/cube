@@ -121,6 +121,27 @@ left/right, directions viewed facing the sender. Use version-1
 `symbol.semaphore.encode` / `symbol.semaphore.decode` pipeline steps for bounded
 text composition. Case canonicalizes to uppercase; no numeric/control mode exists.
 
+## Select mathematical constant digits
+
+The native SDK reuses the same bounded Rust calculation and indexing rules:
+
+```python
+from cube import constant_digits
+
+assert constant_digits("pi", count=8)["digits"] == "14159265"
+more = constant_digits("pi", start=256, count=16, max_digits=512)
+assert more["integer_part"] == "3"
+assert len(more["digits"]) == 16
+assert constant_digits("sqrt2", indices=[2, 0, 2])["digits"] == "444"
+```
+
+`max_digits` defaults to 256 and explicitly selects a complete certified prefix
+of 1..4096 fractional digits. A selection beyond that budget raises `ValueError`;
+there is no automatic expansion. Ranges and index lists are exclusive; lists
+preserve repeats/order and contain at most 1024 indexes. Structured results carry
+exact digit strings and the SHA-256 of the entire chosen prefix. No network or
+Python numerical fallback is used.
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:

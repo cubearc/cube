@@ -8,6 +8,7 @@ use pyo3::types::PyBytes;
 mod audio;
 mod binaryops;
 mod combinations;
+mod constants;
 mod image;
 mod investigation;
 mod pipeline;
@@ -478,6 +479,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     binaryops::register(module)?;
     textops::register(module)?;
     combinations::register(module)?;
+    constants::register(module)?;
     module.add_class::<image::PyImage>()?;
     module.add_function(wrap_pyfunction!(image::image_pairs, module)?)?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;

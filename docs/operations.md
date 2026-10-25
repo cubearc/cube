@@ -561,10 +561,37 @@ Prime tests, bounded Fibonacci and modular arithmetic remain deferred; base
 conversion is the implemented numeric API. No proposed operation is advertised
 through discovery.
 
-Indexed digits of pi, e, sqrt(2) and the golden ratio remain unimplemented.
-The [v0.14 research decision](https://github.com/cubearc/cube/issues/107#issuecomment-6398938938)
-records certified offline-reference feasibility, indexing, bounds and proposed
-tests; it defers a production operation until that contract is agreed.
+`number.constant_digits` selects exact fractional decimal digits of `pi`, `e`,
+`phi` (the golden ratio) or `sqrt2`. Index 0 excludes the integer part/decimal point;
+results return the integer part separately, exact selected text and the entire
+prefix's SHA-256. Range defaults are start 0/count 16; an explicit index list
+preserves order/repeats and may be empty. Ranges and lists are exclusive. A
+zero-count range may start at the prefix's end; other out-of-range positions fail.
+
+The explicit `max_digits` budget defaults to 256 and accepts 1..4096. It controls
+the complete generated/certified prefix, even when a small selection is requested.
+Increasing it permits additional positions while retaining the hard cap. Range
+addition is checked; lists have at most 1024 entries and CLI selector text is
+capped at 8 KiB. Inputs are integers, not fractional positions or precision guesses.
+Structured output is below 16 KiB; no partial prefix or silent truncation of an
+invalid selection is returned.
+
+The [original research](https://github.com/cubearc/cube/issues/107#issuecomment-6398938938)
+proposed a fixed offline reference. The [approved override follow-up](https://github.com/cubearc/cube/issues/134)
+instead uses bounded runtime generation in the Rust core, with maintained pure
+Rust `num-bigint` arithmetic and no native backend/reference dataset. pi uses
+`16 atan(1/5)-4 atan(1/239)` with alternating-series intervals; e uses factorial
+terms and a strict tail bound; sqrt2/phi use exact integer-root intervals. Sixteen
+fixed guard places support these bounds, but only agreement of both endpoints'
+truncated integers certifies a result. Uncertainty fails explicitly. No binary
+floating approximation or caller-controlled guard precision is used.
+
+Validated prefix lengths bound scale/root construction before allocation;
+integers are capped at 32768 bits and series work at 8192 steps. One integer root
+operates on a bounded radicand. These are deterministic work/size limits, not a
+wall-clock timeout. All four maximum prefixes match independent Fraction/Decimal
+checks. Rust, CLI and native Python share the implementation. No pipeline adapter
+is advertised for this structured parameter-only operation.
 
 ## Audio analysis
 

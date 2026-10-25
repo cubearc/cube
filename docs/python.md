@@ -162,6 +162,25 @@ at 1421 bytes. Plain Base58 remains unchanged. Only the encoding operation has a
 bounded pipeline adapter; a checksum is not authentication or permission to
 capture private inputs. See [Base58Check semantics](operations.md#versioned-base58check).
 
+## Validate offline key material
+
+```python
+import cube
+
+# Public Bitcoin Core test vector; validation returns no private material.
+info = cube.validate_wif("L5nJeqKmpHp4P7F8ZYyjwc5a7P4d8EabuGAzfGJk7yC1BJyzNaEd", expected_network="mainnet")
+assert info["valid"] and info["compressed"]
+assert info["network_family"] == "mainnet"
+assert cube.validate_private_scalar(bytes(31) + b"\x01")["valid"]
+```
+
+Use `format="hex"` with exactly 64 ASCII hex digits instead of raw32 bytes.
+Validation output/errors never contain the supplied material or a derived
+fingerprint. The core rejects zero/out-of-range secp256k1 scalars; inputs and
+Python strings remain caller-owned. Calls neither access networks nor save data,
+and do not promise Python memory zeroization. WIF test-family ambiguity and
+[resource/representation rules](operations.md#wif-and-scalar-validation) are explicit.
+
 ## Inspect a local file
 
 Create a small original fixture, then reuse its results without parsing terminal text:

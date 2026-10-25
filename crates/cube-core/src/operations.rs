@@ -340,6 +340,8 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         .chain(crate::investigation::session::OPERATIONS)
         .chain(crate::investigation::profile::OPERATIONS)
         .chain(crate::encoding::base58check::OPERATIONS)
+        .chain(crate::blockchain::OPERATIONS)
+        .chain(crate::blockchain::wif::OPERATIONS)
         .collect()
 }
 

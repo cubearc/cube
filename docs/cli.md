@@ -278,6 +278,23 @@ cube hash crc32 --text '123456789'
 A piped newline changes the input and therefore the result. SHA-256 is one-way;
 CRC32 detects accidental corruption and is not a cryptographic hash.
 
+## Validate offline key material
+
+These examples use public Bitcoin Core/synthetic test material. Cube reads exact
+stdin and reports only safe validation facts:
+
+```sh
+printf '%s' L5nJeqKmpHp4P7F8ZYyjwc5a7P4d8EabuGAzfGJk7yC1BJyzNaEd | cube blockchain wif --expected-network mainnet --json
+printf '%s' 0000000000000000000000000000000000000000000000000000000000000001 | cube blockchain scalar --format hex --json
+```
+
+For supplied files, redirect stdin (`cube blockchain wif --json < supplied.wif`).
+Text is strict: no trailing newline, prefix or whitespace is normalized. `--text`
+is available under existing conventions but exposes its value in process arguments.
+The default human report and optional JSON contain no private bytes, WIF or
+fingerprints. The `testnet` expectation means the shared testnet/signet/regtest
+version family, not independent chain identification. [Contracts and limits](operations.md#wif-and-scalar-validation).
+
 ## Inspect binary files
 
 ```sh

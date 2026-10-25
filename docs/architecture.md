@@ -62,6 +62,13 @@ transformations stay in their owning modules. Responsibilities include:
   explicit prefix override without a generated reference dataset, native backend,
   floating approximation or new pipeline value. Other integer conversions keep
   their existing fixed-width semantics.
+- `blockchain`: offline structural key validation with bounded exact transports.
+  K256's validated secret type owns scalar/range checks with only arithmetic
+  enabled; no signing, random generation or native backend is required. Opaque
+  private inputs/keys have redacted debug and no serialization. Safe validation
+  metadata stays separate from deliberate private export, and secret-bearing
+  operations have no pipeline/capture adapter. Caller/interface copies prevent a
+  general memory-zeroization promise.
 - `forensics`: checked ranges, signature evidence, file facts, bounded EXIF, byte
   inspection and bounded PNG/JPEG/GIF framing. Reader/writer APIs support bounded or streaming work
   without requiring paths. Signatures are candidates, not validity proofs.

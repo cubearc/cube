@@ -500,6 +500,32 @@ exported as a new representation. Import constructs new 8-bit sample provenance.
 Both operations are direct Rust/CLI/native Python APIs; neither is a pipeline
 adapter because the engine has no image sample value.
 
+## Offline key formats
+
+### WIF and scalar validation
+
+`blockchain.wif.validate` uses Base58Check, supports mainnet 0x80 and shared
+0xef test-family versions, and requires 32 scalar bytes or 32 followed by 0x01.
+The marker selects compressed public-key intent; it does not compress a scalar.
+The 0xef version cannot distinguish testnet, signet and regtest. An optional
+expected network family must match. Unsupported versions, lengths/markers,
+checksums and scalars fail explicitly without input contents in diagnostics.
+
+`blockchain.scalar.validate` accepts exactly 32 big-endian raw bytes or 64 ASCII
+hex digits (either case, no prefix/whitespace). Maintained pure Rust
+[K256](https://docs.rs/k256/0.14.0/k256/) validates `1 <= d < n`; no custom curve
+arithmetic or permissive numeric padding is introduced. Private input is capped
+at 128 transport bytes before processing. Rules/vectors follow
+[Bitcoin Core WIF handling](https://github.com/bitcoin/bitcoin/blob/master/src/key_io.cpp).
+
+Validation returns safe fixed scalar metadata or WIF version/network-family and
+compression facts. It never returns WIF, scalar bytes or derived fingerprints.
+Rust private input/key debug representations are redacted, and neither operation
+has a pipeline adapter or automatic investigation capture. CLI supports exact
+stdin; using `--text` instead puts material in argv. Core/SDK calls perform no I/O
+or persistence. Interface strings/buffers can retain copies: no process-wide or
+Python memory-zeroization guarantee is made. Validation does not export material.
+
 ## Symbolic encodings
 
 Use `symbols` for textual International Morse or reversible Unicode Braille cells.

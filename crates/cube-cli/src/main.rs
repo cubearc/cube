@@ -7,6 +7,7 @@ use cube_core::{ciphers, encoding, hashing, operations};
 
 mod audiocmd;
 mod binarycmd;
+mod blockchaincmd;
 mod constantcmd;
 mod filecmd;
 mod imagecmd;
@@ -33,6 +34,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Bounded offline key formats; secret validation is separate from export
+    Blockchain {
+        #[command(subcommand)]
+        command: blockchaincmd::Command,
+    },
     /// Inspect caller-supplied offline web artifacts without network access
     Web {
         #[command(subcommand)]
@@ -416,6 +422,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Blockchain { command } => blockchaincmd::run(command, &mut output)?,
         Command::Number {
             command: Number::Digits(args),
         } => constantcmd::run(args, &mut output)?,

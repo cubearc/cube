@@ -10,6 +10,7 @@ mod audiocmd;
 mod binarycmd;
 mod blockchaincmd;
 mod constantcmd;
+mod digitalcmd;
 mod filecmd;
 mod imagecmd;
 mod investigatecmd;
@@ -136,6 +137,8 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Decimal digital root of a signed 128-bit magnitude
+    DigitalRoot(digitalcmd::Args),
     /// Exact u64 GCD, including gcd(0,0)=0
     Gcd(modularcmd::Pair),
     /// Deterministic GCD and signed Bezout coefficients
@@ -463,6 +466,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Number {
             command: Number::ModPow(args),
         } => modularcmd::power(args, &mut output)?,
+        Command::Number {
+            command: Number::DigitalRoot(args),
+        } => digitalcmd::run(args, &mut output)?,
         Command::Blockchain { command } => blockchaincmd::run(command, &mut output)?,
         Command::Number {
             command: Number::Alphabet(args),

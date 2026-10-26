@@ -10,6 +10,7 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "number.digital_root": "digital_root",
     **{
         f"number.{name}": name
         for name in ("gcd", "extended_gcd", "mod_inverse", "mod_pow")

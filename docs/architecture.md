@@ -303,8 +303,16 @@ Unicode database implementation. Each dataset's version is explicit. Direct
 CLI/PyO3 adapters preserve concrete reports without changing engine/recipe value
 kinds or allowing additional pipeline execution.
 
+## Exact mathematical operations
+
 `numbers::modular` owns fixed-width Euclidean/coefficient and modular-power
 algorithms, bounds and strict decimal operand parsing. CLI and native Python
 only adapt transport; CLI JSON represents full-width results as decimal strings,
 while native results use exact Python integers. No dependency, numeric pipeline
 kind or adapter contract is added.
+
+`numbers::digital` shares sign/digit parsing and checked magnitude accumulation
+with the existing integer conversion. Its decimal parser visits at most 4,096
+digits once; the core formula takes an exact u128 magnitude. Native signed-int
+extraction only adapts sign and width, including negative u128::MAX, without
+converting through strings or floats. Generalized radices remain deferred.

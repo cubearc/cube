@@ -688,9 +688,13 @@ Magnitudes up to `2^128-1` are exact, with at most 4096 input digits. Output
 canonicalizes case, sign and leading zeros; the integer value is preserved.
 
 The v0.11.0 numeric evaluation is recorded in [issue #77](https://github.com/cubearc/cube/issues/77).
-Prime tests, bounded Fibonacci and modular arithmetic remain deferred; base
-conversion is the implemented numeric API. No proposed operation is advertised
-through discovery.
+Its prime/Fibonacci proposals remain deferred; the 0.18.0 scope extends its
+fixed-width approach with the [modular utilities](#exact-modular-arithmetic) and
+[decimal digital root](#decimal-digital-root). Research decisions in
+[#129](https://github.com/cubearc/cube/issues/129) and
+[#131](https://github.com/cubearc/cube/issues/131) retain explicit prime/candidate
+engine deferrals and reuse existing composition. Proposed operations are not
+advertised through discovery.
 
 `number.constant_digits` selects exact fractional decimal digits of `pi`, `e`,
 `phi` (the golden ratio) or `sqrt2`. Index 0 excludes the integer part/decimal point;
@@ -1453,7 +1457,7 @@ reuse of existing public coordinate traversal and explicit small rank mappings.
 It defers an automatic grid remapper; no additional matrix engine or placeholder
 operation is included in 0.17.0.
 
-### Exact modular arithmetic
+## Exact modular arithmetic
 
 `number.gcd`, `number.extended_gcd`, `number.mod_inverse` and `number.mod_pow`
 operate on nonnegative u64 values. CLI operands are required flags with 1..20
@@ -1481,3 +1485,28 @@ output has at most 20 digits for gcd and 21 characters per signed coefficient
 allocation or new dependency is required. These local mathematical tools make no
 constant-time cryptographic guarantee. They are direct APIs with no pipeline
 adapter; engine API 1 and recipe format 1 are unchanged.
+
+## Decimal digital root
+
+`number.digital_root` returns 0 for zero and 1+((magnitude-1) mod 9) otherwise.
+The sign is ignored, including negative magnitudes beyond the signed i128 range;
+all magnitudes through 2^128-1 are exact. For example, 38 and -38 yield 2,
+999 yields 9 and 10 yields 1. This is repeated decimal digit summation, not the
+ordinary digit sum or n mod 9, and it has no inverse or checksum guarantee.
+
+CLI input is strict decimal text with an optional leading ASCII +/- and <=4,096
+digits (<=4,097 bytes including a sign). Leading zeros count; empty/sign-only,
+whitespace (including a final newline), fractions, prefixes, separators and
+non-ASCII digits fail. Magnitude overflow errors even if its digital root could
+be computed without full parsing. One pass parses at most 4,096 digits using the
+existing sign/digit and checked 128-bit magnitude primitives; root arithmetic
+then uses constant storage and no heap allocation. Output is one digit, or the
+single numeric field `{"value":2}` under `--json`. Native Python accepts builtin
+signed integers with the same magnitude bound and rejects bool/float/string
+coercion. Rust accepts a u128 magnitude or the bounded decimal parser.
+
+Radix defaults to 10 and must equal 10 in every interface. Generalized radices
+remain deferred: no concrete workflow justifies another numeric interpretation
+or supported-range contract. Existing base conversion and its grammar remain
+unchanged. The root operation is discoverable directly and has no pipeline
+adapter; it does not change engine/recipe versions.

@@ -13,6 +13,7 @@ mod blockchain;
 mod candidates;
 mod combinations;
 mod constants;
+mod digital;
 mod image;
 mod investigation;
 mod modular;
@@ -507,6 +508,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     constants::register(module)?;
     alphabet::register(module)?;
     modular::register(module)?;
+    digital::register(module)?;
     base58check::register(module)?;
     blockchain::register(module)?;
     candidates::register(module)?;

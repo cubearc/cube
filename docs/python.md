@@ -960,7 +960,7 @@ fail. Original/normalized offsets refer to separate buffers and are never
 realigned or substituted. Counts remain exact when listing is incomplete. See
 [data versions and bounds](operations.md#unicode-observations-and-scalar-differences).
 
-### Exact modular arithmetic
+## Exact modular arithmetic
 
 These functions accept builtin integers in 0..2^64-1 and return exact integers;
 booleans, floats, negative and oversized operands raise contextual `ValueError`.
@@ -976,3 +976,17 @@ assert cube.mod_pow(0, 0, 1) == 0
 
 Inverse requires coprime operands and modulus>=2; power requires modulus>0.
 The extended result satisfies a*x+b*y=gcd, including zero operands.
+
+## Decimal digital root
+
+Use builtin integers with magnitude<=2^128-1; negative values use their magnitude.
+Only decimal radix 10 is supported. Bool, float and string inputs are rejected.
+
+```python
+assert cube.digital_root(-38) == 2
+assert cube.digital_root(999, radix=10) == 9
+assert cube.digital_root(-(2**128 - 1)) == 3
+```
+
+This lossy arithmetic operation is repeated decimal digit summation, not a plain
+sum, checksum or persistence API.

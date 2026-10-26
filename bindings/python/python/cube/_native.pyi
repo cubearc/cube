@@ -333,6 +333,10 @@ def constant_digits(
     """Certified fractional digits; explicit prefix budget 1..4096, default 256."""
     ...
 
+def digital_root(value: int, *, radix: int = 10) -> int:
+    """Decimal digital root, using magnitude<=2^128-1; builtin int, no bool/float."""
+    ...
+
 def gcd(a: int, b: int) -> int:
     """Exact u64 GCD, (0,0)=0; builtin ints only, no bool/float."""
     ...

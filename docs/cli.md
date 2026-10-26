@@ -931,7 +931,7 @@ mutually exclusive. Listing options are `--max-results` (zero counts-only), lowe
 `--max-work` and `--max-output`. Inspect declared Unicode versions and complete
 flags; see [Unicode report semantics](operations.md#unicode-observations-and-scalar-differences).
 
-### Exact modular arithmetic
+## Exact modular arithmetic
 
 Unsigned operands use 1..20 ASCII decimal digits, no sign/prefix/whitespace.
 JSON uses decimal strings to retain full u64 and signed coefficient precision.
@@ -945,3 +945,17 @@ cube number mod-pow --base 4 --exponent 13 --modulus 497 --json
 
 These return 6, gcd=2/x=-9/y=47, 4, and `{"value":"445"}` respectively.
 A nonexistent inverse errors; power accepts exponent zero and modulus 1.
+
+## Decimal digital root
+
+Use strict decimal text with <=4,096 digits and optional +/-; file/stdin input
+must contain exactly that numeral, including no final newline. Only radix 10 is
+supported. JSON contains a single small numeric field.
+
+```sh
+cube number digital-root --text=-38
+cube number digital-root --text +000999 --radix 10 --json
+```
+
+These return 2 and `{"value":9}`. Floats, prefixes and over-128-bit magnitudes
+error instead of being interpreted or rounded.

@@ -1,6 +1,7 @@
 //! Checked integer representations, distinct from byte encodings and floating point.
 pub mod alphabet;
 pub mod constants;
+pub mod digital;
 pub mod modular;
 use crate::errors::{ErrorCode, OperationError};
 /// Maximum ASCII digits, excluding one optional sign; leading zeros still count.
@@ -24,11 +25,7 @@ pub fn convert_base(input: &str, from_base: u32, to_base: u32) -> Result<String,
     if !(2..=36).contains(&to_base) {
         return Err(invalid("to_base", "target base must be in 2..36"));
     }
-    let (negative, digits, offset) = match input.as_bytes().first() {
-        Some(b'-') => (true, &input[1..], 1),
-        Some(b'+') => (false, &input[1..], 1),
-        _ => (false, input, 0),
-    };
+    let (negative, digits, offset) = signed_digits(input);
     if digits.len() > MAX_DIGITS {
         return Err(OperationError::new(
             ErrorCode::ResourceLimit,
@@ -43,14 +40,8 @@ pub fn convert_base(input: &str, from_base: u32, to_base: u32) -> Result<String,
         )
         .operation(OP));
     }
-    let digit = |b: u8| match b {
-        b'0'..=b'9' => u32::from(b - b'0'),
-        b'A'..=b'Z' => u32::from(b - b'A') + 10,
-        b'a'..=b'z' => u32::from(b - b'a') + 10,
-        _ => u32::MAX,
-    };
     for (i, b) in digits.bytes().enumerate() {
-        if digit(b) >= from_base {
+        if ascii_digit(b) >= from_base {
             return Err(OperationError::new(
                 ErrorCode::InvalidInput,
                 "digit is invalid for source base; prefixes and whitespace are not accepted",
@@ -59,7 +50,7 @@ pub fn convert_base(input: &str, from_base: u32, to_base: u32) -> Result<String,
             .offset((i + offset) as u64));
         }
     }
-    let value = magnitude(digits.bytes().map(digit), from_base, OP)?;
+    let value = magnitude(digits.bytes().map(ascii_digit), from_base, OP)?;
     let mut result = String::with_capacity(MAX_BITS as usize + 1);
     if negative && value != 0 {
         result.push('-');
@@ -73,6 +64,39 @@ pub fn convert_base(input: &str, from_base: u32, to_base: u32) -> Result<String,
     }));
     Ok(result)
 }
+// Shared exact grammar and arithmetic used by decimal digital root as well.
+fn signed_digits(input: &str) -> (bool, &str, usize) {
+    match input.as_bytes().first() {
+        Some(b'-') => (true, &input[1..], 1),
+        Some(b'+') => (false, &input[1..], 1),
+        _ => (false, input, 0),
+    }
+}
+fn ascii_digit(b: u8) -> u32 {
+    match b {
+        b'0'..=b'9' => u32::from(b - b'0'),
+        b'A'..=b'Z' => u32::from(b - b'A') + 10,
+        b'a'..=b'z' => u32::from(b - b'a') + 10,
+        _ => u32::MAX,
+    }
+}
+fn accumulate(
+    value: u128,
+    digit: u32,
+    base: u32,
+    op: &'static str,
+) -> Result<u128, OperationError> {
+    value
+        .checked_mul(u128::from(base))
+        .and_then(|v| v.checked_add(u128::from(digit)))
+        .ok_or_else(|| {
+            OperationError::new(
+                ErrorCode::ResourceLimit,
+                "integer magnitude exceeds 128 bits",
+            )
+            .operation(op)
+        })
+}
 // Shared fixed-width arithmetic; callers validate their distinct digit grammars first.
 fn magnitude(
     digits: impl Iterator<Item = u32>,
@@ -81,16 +105,7 @@ fn magnitude(
 ) -> Result<u128, OperationError> {
     let mut value = 0u128;
     for digit in digits {
-        value = value
-            .checked_mul(u128::from(base))
-            .and_then(|v| v.checked_add(u128::from(digit)))
-            .ok_or_else(|| {
-                OperationError::new(
-                    ErrorCode::ResourceLimit,
-                    "integer magnitude exceeds 128 bits",
-                )
-                .operation(op)
-            })?;
+        value = accumulate(value, digit, base, op)?;
     }
     Ok(value)
 }

@@ -302,3 +302,9 @@ small pinned category-data dependency for Cf/titlecase rather than a second
 Unicode database implementation. Each dataset's version is explicit. Direct
 CLI/PyO3 adapters preserve concrete reports without changing engine/recipe value
 kinds or allowing additional pipeline execution.
+
+`numbers::modular` owns fixed-width Euclidean/coefficient and modular-power
+algorithms, bounds and strict decimal operand parsing. CLI and native Python
+only adapt transport; CLI JSON represents full-width results as decimal strings,
+while native results use exact Python integers. No dependency, numeric pipeline
+kind or adapter contract is added.

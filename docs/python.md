@@ -959,3 +959,20 @@ Concrete options accept max_results, max_work and max_output; unknown fields
 fail. Original/normalized offsets refer to separate buffers and are never
 realigned or substituted. Counts remain exact when listing is incomplete. See
 [data versions and bounds](operations.md#unicode-observations-and-scalar-differences).
+
+### Exact modular arithmetic
+
+These functions accept builtin integers in 0..2^64-1 and return exact integers;
+booleans, floats, negative and oversized operands raise contextual `ValueError`.
+No coercion through floating point occurs.
+
+```python
+assert cube.gcd(48, 18) == 6
+assert cube.extended_gcd(240, 46) == {"gcd": 2, "x": -9, "y": 47}
+assert cube.mod_inverse(3, 11) == 4
+assert cube.mod_pow(4, 13, 497) == 445
+assert cube.mod_pow(0, 0, 1) == 0
+```
+
+Inverse requires coprime operands and modulus>=2; power requires modulus>0.
+The extended result satisfies a*x+b*y=gcd, including zero operands.

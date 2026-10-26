@@ -15,6 +15,7 @@ mod combinations;
 mod constants;
 mod image;
 mod investigation;
+mod modular;
 mod pipeline;
 mod puzzles;
 mod recipe;
@@ -505,6 +506,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     combinations::register(module)?;
     constants::register(module)?;
     alphabet::register(module)?;
+    modular::register(module)?;
     base58check::register(module)?;
     blockchain::register(module)?;
     candidates::register(module)?;

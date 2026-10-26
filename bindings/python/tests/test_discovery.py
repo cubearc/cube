@@ -10,6 +10,10 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    **{
+        f"number.{name}": name
+        for name in ("gcd", "extended_gcd", "mod_inverse", "mod_pow")
+    },
     "text.unicode.inspect": "inspect_unicode",
     "text.unicode.compare": "compare_unicode",
     "text.word.lengths": "word_lengths",

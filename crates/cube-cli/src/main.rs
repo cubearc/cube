@@ -13,6 +13,7 @@ mod constantcmd;
 mod filecmd;
 mod imagecmd;
 mod investigatecmd;
+mod modularcmd;
 mod pipelinecmd;
 mod puzzlecmd;
 mod recipecmd;
@@ -135,6 +136,14 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Exact u64 GCD, including gcd(0,0)=0
+    Gcd(modularcmd::Pair),
+    /// Deterministic GCD and signed Bezout coefficients
+    ExtendedGcd(modularcmd::Pair),
+    /// Canonical inverse for coprime u64 operands, modulus >=2
+    ModInverse(modularcmd::Inverse),
+    /// Exact u64 modular power, <=64 exponent-bit rounds
+    ModPow(modularcmd::Power),
     /// Exact integers over explicit ordered Unicode scalar alphabets
     Alphabet(alphabetcmd::Args),
     /// Select certified fractional digits with an explicit bounded prefix budget
@@ -442,6 +451,18 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Number {
+            command: Number::Gcd(args),
+        } => modularcmd::pair(args, false, &mut output)?,
+        Command::Number {
+            command: Number::ExtendedGcd(args),
+        } => modularcmd::pair(args, true, &mut output)?,
+        Command::Number {
+            command: Number::ModInverse(args),
+        } => modularcmd::inverse(args, &mut output)?,
+        Command::Number {
+            command: Number::ModPow(args),
+        } => modularcmd::power(args, &mut output)?,
         Command::Blockchain { command } => blockchaincmd::run(command, &mut output)?,
         Command::Number {
             command: Number::Alphabet(args),

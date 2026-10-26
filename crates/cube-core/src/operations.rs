@@ -327,6 +327,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         crate::symbols::semaphore::OPERATIONS,
         crate::symbols::clock::OPERATIONS,
         crate::numbers::OPERATIONS,
+        crate::numbers::modular::OPERATIONS,
         crate::numbers::alphabet::OPERATIONS,
         crate::numbers::constants::OPERATIONS,
         crate::media::wave::OPERATIONS,

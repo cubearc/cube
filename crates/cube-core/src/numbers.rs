@@ -1,6 +1,7 @@
 //! Checked integer representations, distinct from byte encodings and floating point.
 pub mod alphabet;
 pub mod constants;
+pub mod modular;
 use crate::errors::{ErrorCode, OperationError};
 /// Maximum ASCII digits, excluding one optional sign; leading zeros still count.
 pub const MAX_DIGITS: usize = 4096;

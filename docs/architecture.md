@@ -10,13 +10,19 @@ boundaries and extension contracts.
 | Product | Scope |
 | --- | --- |
 | Cube | Open-source Rust toolkit for data transformation, cryptography, digital forensics and investigative workflows |
-| Cube Play | Local-first environment for hands-on challenges, visual analysis, terminal execution, notes and progress tracking |
+| Cube Play | Local-first investigation laboratory with optional challenges, visual analysis, terminal execution, notes and progress tracking |
 | Cube Play Platform | Central platform for publishing challenges, managing stages and hints, verifying submissions and supporting community features |
 | [Cube Recipes](https://github.com/cubearc/recipes) | Reusable investigation workflows, examples and community challenges |
 
 The Play and Platform rows describe intended product scope, not capabilities
 implemented in this repository. Cube provides the reusable core, CLI and native
 Python SDK; it does not implement challenge publishing or management.
+
+Play's prerelease source build consumes `cube-core` directly from a sibling Cube
+checkout at the exact library version. The root `.dockerignore` restricts its named
+engine build context to the workspace manifest and Core Rust sources. Git history,
+credentials, SDKs, test fixtures and compiled output do not enter that context.
+Library algorithms and operation metadata remain owned here.
 
 Use *challenge* for a generic activity. A recipe is a reusable workflow, and a
 pipeline step applies an operation. Existing investigation sessions record

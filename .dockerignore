@@ -1,0 +1,13 @@
+# Only the versioned Rust library and its workspace metadata enter Play builds.
+**
+!Cargo.toml
+!crates/
+crates/**
+!crates/cube-core/
+crates/cube-core/**
+!crates/cube-core/Cargo.toml
+!crates/cube-core/src/
+!crates/cube-core/src/**
+**/.env*
+**/.git
+**/.git/**

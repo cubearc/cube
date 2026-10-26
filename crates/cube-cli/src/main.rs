@@ -16,6 +16,7 @@ mod imagecmd;
 mod investigatecmd;
 mod modularcmd;
 mod pipelinecmd;
+mod playcmd;
 mod puzzlecmd;
 mod recipecmd;
 mod textcmd;
@@ -42,6 +43,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Open a local investigation workspace with the separately installed Cube Play launcher
+    Play(playcmd::PlayArgs),
     /// Bounded offline key formats; secret validation is separate from export
     Blockchain {
         #[command(subcommand)]
@@ -454,6 +457,7 @@ fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Res
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Play(args) => playcmd::run(&args, cli.json_errors)?,
         Command::Number {
             command: Number::Gcd(args),
         } => modularcmd::pair(args, false, &mut output)?,
@@ -837,6 +841,9 @@ fn main() -> ExitCode {
     match run(cli) {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
+            if let Some(status) = error.downcast_ref::<playcmd::LauncherExit>() {
+                return ExitCode::from(status.0);
+            }
             let mut cause: Option<&(dyn Error + 'static)> = Some(error.as_ref());
             let mut broken_pipe = false;
             while let Some(error) = cause {

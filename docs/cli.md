@@ -19,6 +19,38 @@ Use the groups for the task at hand:
 Use `cube --help`, then progressively narrower help such as
 `cube image --help` and `cube image lsb --help`.
 
+## Open Cube Play
+
+`cube play [path]` delegates to the separately installed Cube Play host launcher.
+With no path, it preserves the current directory. Directory, file and challenge
+paths are passed as literal operating-system arguments; Cube does not evaluate
+challenge contents or manage Docker.
+
+```sh
+cube play
+cube play sample.mp4
+cube play rabbit.cube
+cube play --no-browser ./investigation
+cube play --offline ./investigation
+cube play --stop ./investigation
+```
+
+Install `cube-play` beside `cube` in a trusted installation directory, or set
+`CUBE_PLAY_LAUNCHER` to its absolute executable path. Relative overrides are rejected;
+Cube never searches the investigation directory or `PATH` for this executable.
+Installation and runtime prerequisites belong to [Cube Play](https://github.com/cubearc/play).
+
+Cube checks the bounded `cube-play-launcher 1` protocol before delegation. An
+incompatible or missing launcher returns actionable guidance; existing Cube
+commands continue to work without Play or Docker. `--json-errors` is forwarded
+and bootstrap errors use Cube's existing JSON envelope. `--offline` requires an
+installed runtime image. `--stop` preserves investigation data.
+
+On Unix, successful delegation replaces the Cube process, preserving signals and
+exit status without an extra parent. On Windows, both programs share the console;
+Cube waits and propagates the launcher's conventional 0–255 exit codes. Play owns
+interruption cleanup, startup/reuse, browser opening and shutdown.
+
 ## Discover operations
 
 ```sh

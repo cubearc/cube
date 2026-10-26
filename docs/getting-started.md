@@ -57,9 +57,9 @@ supported MOV/JPEG and PCM8 extraction workflows.
 ## Encode and decode
 
 ```sh
-cube encode base64 --text 'Hello'
+cube encode base64 'Hello'
 # SGVsbG8=
-cube decode base64 --text 'SGVsbG8='
+cube decode base64 'SGVsbG8='
 # 48656c6c6f
 ```
 
@@ -67,7 +67,7 @@ The decoder returns bytes. Its default display is hexadecimal: `48` is the byte
 for `H`, `65` for `e`, and so on. To write the decoded bytes directly:
 
 ```sh
-cube decode base64 --text 'SGVsbG8=' --output raw
+cube decode base64 'SGVsbG8=' --output raw
 ```
 
 This writes `Hello` without an added newline. For stdin input, preserve the exact
@@ -77,6 +77,10 @@ encoded text; a trailing newline is not ignored:
 printf 'SGVsbG8=' | cube decode base64 --output raw
 ```
 
+Text may be positional or supplied with `--text`/`-t`. These text/byte commands
+also read file contents with `--file`/`-f`; use exactly one input source. A
+positional filename is literal text, so reading a file is always explicit.
+
 ## Inspect a local file
 
 Create an original four-byte fixture in a scratch directory:
@@ -85,11 +89,13 @@ Create an original four-byte fixture in a scratch directory:
 printf 'Cube' > sample.bin
 cube inspect sample.bin
 cube file hex sample.bin
+cube encode base64 -f sample.bin
 ```
 
 Inspection reports `Size: 4 bytes`, filesystem timestamps when available, and no
 supported signature candidates. The hex row starts at offset `00000000` and
-contains `43 75 62 65`. An unknown signature does not mean a file is invalid.
+contains `43 75 62 65`. The file-content encoder prints `Q3ViZQ==`. An unknown
+signature does not mean a file is invalid.
 These commands read the file without changing it.
 
 ## Keep binary output intact

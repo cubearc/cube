@@ -96,25 +96,46 @@ from the reproducible cipher result. No replacements are inferred automatically.
 
 ## Supply text or bytes
 
-For transformation commands, use `--text` for inline UTF-8 text or omit it to
-read stdin until EOF. Quote text containing spaces or shell metacharacters.
-Use `printf` when you do not want an extra newline:
+Commands with inline text/byte input accept one source. Quote literal text
+containing spaces or shell metacharacters:
+
+| Source | Form |
+| --- | --- |
+| Literal UTF-8 text | `cube encode base64 'Hello'` |
+| Explicit inline text | `cube encode base64 --text 'Hello'` or `-t 'Hello'` |
+| File contents | `cube encode base64 --file message.txt` or `-f message.txt` |
+| Standard input | `printf 'Hello' \| cube encode base64` |
+
+`--input PATH` is an alias for `--file PATH` on these commands. Positional TEXT,
+`--text` and `--file` are mutually exclusive; no selector reads stdin until EOF.
+An empty quoted argument is an explicit empty input. Use `--` before positional
+text that begins with a dash, for example `cube text reverse -- '-literal'`.
 
 ```sh
-cube encode base64 --text 'Hello'
-printf 'Hello' | cube hash sha256
+cube cipher vigenere 'ATTACKATDAWN' -k LEMON
 printf 'Cube' > sample.bin
+cube encode hex -f sample.bin
+cube hash sha256 --file sample.bin
 cube encode hex < sample.bin
 ```
 
-Encoding, hashing and XOR accept arbitrary bytes. Text operations and classical
-ciphers require valid UTF-8. A filename passed to `--text` is treated as literal
-text; it does not open that file. File/image/audio commands take explicit paths.
-Paths must identify regular files; symbolic links, directories and devices fail.
+`-k` is the short spelling of `--key` for Vigenere, Beaufort and repeating-key
+XOR. These key parameters remain explicit; input data is a separate argument.
 
-Pipelines also accept `--input path`, `--hex value`, or `--value` tagged JSON.
-Choose one input selector. Their default input is raw stdin.
-Recipes instead require explicit named bindings; see [recipe files](operations.md#recipe-files).
+Encoding, hashing and XOR accept arbitrary bytes. Text operations and classical
+ciphers require valid UTF-8. Files and stdin preserve every byte, including
+newlines; use `printf` instead of `echo` when a final newline is not wanted.
+A positional value or `--text` value is always literal, even if it names an
+existing file. Use `--file` to read its contents. File input is read-only and
+must be a regular file; symbolic links, directories and devices fail. Existing
+operation-specific byte limits also apply to file and positional input.
+File/image/audio inspection commands continue to take explicit path arguments.
+
+Pipeline run also accepts positional TEXT or `--text`/`-t` as typed text.
+`--input PATH`, `--file PATH` and `-f PATH` select raw bytes from a regular file;
+`--hex` and `--value` retain their explicit representations. Choose exactly one
+selector; the default is raw stdin. Recipes instead require explicit named
+bindings; see [recipe files](operations.md#recipe-files).
 
 ## Choose an output format
 

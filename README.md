@@ -76,10 +76,13 @@ For Windows activation and setup details, see [Python installation](docs/python.
 
 ## Quick start
 
+Text/byte transformation commands accept literal text directly, `--file`/`-f`
+for file contents, or stdin when no source is given. `--text`/`-t` remains available.
+
 Decode Base64 into exact bytes without adding a newline:
 
 ```sh
-cube decode base64 --text 'SGVsbG8=' --output raw
+cube decode base64 'SGVsbG8=' --output raw
 ```
 
 This writes `Hello`. Without `--output raw`, the decoder prints `48656c6c6f`.
@@ -87,7 +90,7 @@ This writes `Hello`. Without `--output raw`, the decoder prints `48656c6c6f`.
 Apply a Caesar shift:
 
 ```sh
-cube cipher caesar --shift 3 --text 'Attack at dawn!'
+cube cipher caesar --shift 3 'Attack at dawn!'
 ```
 
 Output: `Dwwdfn dw gdzq!`.
@@ -97,6 +100,7 @@ Create and inspect a small local file (POSIX shell):
 ```sh
 printf 'Cube' > sample.bin
 cube inspect sample.bin
+cube encode base64 -f sample.bin
 ```
 
 Or use Cube as a Python library:

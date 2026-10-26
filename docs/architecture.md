@@ -323,3 +323,13 @@ digits once; the core formula takes an exact u128 magnitude. Native signed-int
 extraction checks builtin integer width before allocating a negated magnitude,
 including negative u128::MAX, without
 converting through strings or floats. Generalized radices remain deferred.
+
+## CLI input sources
+
+CLI source selection is centralized in `crates/cube-cli/src/input.rs`: literal UTF-8,
+explicit regular files and stdin feed the existing byte/text adapters. Clap
+rejects conflicting selectors; bounded operations read at most their existing
+limit plus one byte before reporting excess. Legacy unrestricted byte readers
+retain their behavior. Pipeline input keeps explicit byte/text kinds and its
+hex/tagged-value selectors; CSV import reuses common file aliases. No transform,
+SDK, operation descriptor or engine/recipe contract changes are required.

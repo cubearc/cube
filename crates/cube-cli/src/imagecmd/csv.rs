@@ -1,10 +1,7 @@
 //! CSV transport only; schema and validation belong to cube-core.
 use super::{ByteOutput, Image};
 use clap::Subcommand;
-use cube_core::{
-    errors::{ErrorCode, OperationError},
-    image,
-};
+use cube_core::image;
 use std::{error::Error, io::Write, path::PathBuf};
 
 #[derive(Subcommand)]
@@ -19,9 +16,6 @@ pub(crate) enum CsvCommand {
     Import {
         #[command(flatten)]
         input: crate::Input,
-        /// Read bounded UTF-8 CSV from a file instead of stdin
-        #[arg(long = "input", conflicts_with = "text")]
-        input_file: Option<PathBuf>,
         /// New PNG destination; existing files are never replaced
         #[arg(long)]
         output: PathBuf,
@@ -44,20 +38,10 @@ pub(super) fn run(command: CsvCommand, out: &mut impl Write) -> Result<(), Box<d
         }
         CsvCommand::Import {
             input,
-            input_file,
             output,
             json,
         } => {
-            let text = if let Some(path) = input_file {
-                let bytes = crate::pipelinecmd::read_file(&path, image::csv::MAX_BYTES)?;
-                String::from_utf8(bytes).map_err(|e| {
-                    OperationError::new(ErrorCode::InvalidInput, "CSV input must be UTF-8")
-                        .operation("image.csv.import")
-                        .caused_by(e)
-                })?
-            } else {
-                input.read_text_limit(image::csv::MAX_BYTES, "image.csv.import")?
-            };
+            let text = input.read_text_limit(image::csv::MAX_BYTES, "image.csv.import")?;
             let image = Image::from_csv(&text)?;
             image.save_png(&output)?;
             if json {

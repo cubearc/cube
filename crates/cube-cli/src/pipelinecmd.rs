@@ -19,14 +19,17 @@ pub(crate) struct Definition {
     limits: Option<String>,
 }
 #[derive(Args)]
-#[group(multiple=false,args=["text","hex","input","value"])]
+#[group(multiple=false,args=["literal","text","hex","input","value"])]
 pub(crate) struct Input {
-    #[arg(long)]
+    /// Literal UTF-8 text; no selector reads exact raw stdin bytes
+    #[arg(value_name = "TEXT")]
+    literal: Option<String>,
+    #[arg(short = 't', long)]
     text: Option<String>,
     #[arg(long, allow_hyphen_values = true)]
     hex: Option<String>,
     /// Explicit regular file containing raw input bytes; omitted selectors read raw stdin
-    #[arg(long)]
+    #[arg(short = 'f', long, visible_alias = "file")]
     input: Option<PathBuf>,
     /// Explicit tagged pipeline JSON value (including inert byte_range)
     #[arg(long)]
@@ -34,25 +37,27 @@ pub(crate) struct Input {
 }
 impl Input {
     fn read(self) -> Result<Value, Box<dyn Error>> {
-        Ok(match (self.text, self.hex, self.input, self.value) {
-            (Some(data), _, _, _) => Value::Text { data },
-            (_, Some(hex), _, _) => {
-                if hex.len() > pipeline::MAX_VALUE_BYTES * 2 {
-                    return Err("hex input exceeds value budget".into());
+        Ok(
+            match (self.literal.or(self.text), self.hex, self.input, self.value) {
+                (Some(data), _, _, _) => Value::Text { data },
+                (_, Some(hex), _, _) => {
+                    if hex.len() > pipeline::MAX_VALUE_BYTES * 2 {
+                        return Err("hex input exceeds value budget".into());
+                    }
+                    Value::Bytes {
+                        data: cube_core::encoding::hex_decode(&hex)?,
+                    }
                 }
-                Value::Bytes {
-                    data: cube_core::encoding::hex_decode(&hex)?,
-                }
-            }
-            (_, _, Some(path), _) => Value::Bytes {
-                data: read_file(&path, pipeline::MAX_VALUE_BYTES)?,
+                (_, _, Some(path), _) => Value::Bytes {
+                    data: read_file(&path, pipeline::MAX_VALUE_BYTES)?,
+                },
+                (_, _, _, Some(json)) => pipeline::json::value(&json)?,
+                _ => Value::Bytes {
+                    data: crate::Input::default()
+                        .read_bounded(pipeline::MAX_VALUE_BYTES, "pipeline.execute")?,
+                },
             },
-            (_, _, _, Some(json)) => pipeline::json::value(&json)?,
-            _ => Value::Bytes {
-                data: crate::Input { text: None }
-                    .read_bounded(pipeline::MAX_VALUE_BYTES, "pipeline.execute")?,
-            },
-        })
+        )
     }
 }
 #[derive(Clone, Copy, ValueEnum)]

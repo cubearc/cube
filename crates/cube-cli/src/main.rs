@@ -1,5 +1,5 @@
 use std::error::Error;
-use std::io::{self, Read, Write};
+use std::io::{self, Write};
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand, ValueEnum};
@@ -13,7 +13,9 @@ mod constantcmd;
 mod digitalcmd;
 mod filecmd;
 mod imagecmd;
+mod input;
 mod investigatecmd;
+use input::Input;
 mod modularcmd;
 mod pipelinecmd;
 mod playcmd;
@@ -318,75 +320,6 @@ enum Hash {
 }
 
 #[derive(Args)]
-struct Input {
-    /// Use UTF-8 text instead of stdin; stdin bytes are read exactly, including newlines
-    #[arg(long, value_name = "TEXT")]
-    text: Option<String>,
-}
-
-impl Input {
-    fn read_bounded(
-        self,
-        limit: usize,
-        operation: &'static str,
-    ) -> Result<Vec<u8>, cube_core::errors::OperationError> {
-        use cube_core::errors::{ErrorCode, OperationError};
-        let bytes = match self.text {
-            Some(text) => text.into_bytes(),
-            None => {
-                let mut bytes = Vec::new();
-                io::stdin()
-                    .lock()
-                    .take(limit as u64 + 1)
-                    .read_to_end(&mut bytes)
-                    .map_err(|e| OperationError::io(e).operation(operation))?;
-                bytes
-            }
-        };
-        if bytes.len() > limit {
-            return Err(OperationError::new(
-                ErrorCode::ResourceLimit,
-                "input exceeds documented operation byte limit",
-            )
-            .operation(operation));
-        }
-        Ok(bytes)
-    }
-    fn read_text(
-        self,
-        operation: &'static str,
-    ) -> Result<String, cube_core::errors::OperationError> {
-        self.read_text_limit(cube_core::text::MAX_INPUT, operation)
-    }
-    fn read_text_limit(
-        self,
-        limit: usize,
-        operation: &'static str,
-    ) -> Result<String, cube_core::errors::OperationError> {
-        let bytes = self.read_bounded(limit, operation)?;
-        String::from_utf8(bytes).map_err(|e| {
-            cube_core::errors::OperationError::new(
-                cube_core::errors::ErrorCode::InvalidInput,
-                "input must be valid UTF-8",
-            )
-            .operation(operation)
-            .offset(e.utf8_error().valid_up_to() as u64)
-            .caused_by(e)
-        })
-    }
-    fn read(self) -> io::Result<Vec<u8>> {
-        match self.text {
-            Some(text) => Ok(text.into_bytes()),
-            None => {
-                let mut bytes = Vec::new();
-                io::stdin().lock().read_to_end(&mut bytes)?;
-                Ok(bytes)
-            }
-        }
-    }
-}
-
-#[derive(Args)]
 struct DecodeArgs {
     #[command(flatten)]
     input: Input,
@@ -400,7 +333,7 @@ struct KeyCipherArgs {
     #[command(flatten)]
     input: Input,
     /// Nonempty ASCII-letter key, at most 64 KiB
-    #[arg(long)]
+    #[arg(short = 'k', long)]
     key: String,
     #[arg(long)]
     decode: bool,
@@ -410,7 +343,7 @@ struct BeaufortArgs {
     #[command(flatten)]
     input: Input,
     /// Nonempty ASCII-letter key, at most 64 KiB; apply twice to decode
-    #[arg(long)]
+    #[arg(short = 'k', long)]
     key: String,
 }
 #[derive(Args)]

@@ -15,7 +15,7 @@ pub(crate) struct XorArgs {
     #[command(flatten)]
     input: Input,
     /// Nonempty UTF-8 key
-    #[arg(long)]
+    #[arg(short = 'k', long)]
     key: Option<String>,
     /// Nonempty key as hexadecimal digits
     #[arg(long, value_name = "HEX")]

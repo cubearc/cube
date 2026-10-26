@@ -333,3 +333,9 @@ limit plus one byte before reporting excess. Legacy unrestricted byte readers
 retain their behavior. Pipeline input keeps explicit byte/text kinds and its
 hex/tagged-value selectors; CSV import reuses common file aliases. No transform,
 SDK, operation descriptor or engine/recipe contract changes are required.
+
+Cube Play container builds consume the versioned Core library and real CLI directly.
+The root Docker context allowlist includes their Rust sources, the shared manifest
+and lockfile, plus the Python member manifest/lib entry needed to resolve this
+workspace. It excludes history, credentials, SDK assets and tests. Runner isolation
+and terminal transport belong to Play; no algorithms are copied into that product.

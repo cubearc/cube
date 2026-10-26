@@ -20,6 +20,10 @@ fn digital_root(value: &Bound<'_, PyAny>, radix: u32) -> PyResult<u8> {
     if !value.is_exact_instance_of::<PyInt>() {
         return Err(invalid(ErrorCode::InvalidParameter));
     }
+    // Check the exact builtin's width before negation can copy caller-sized data.
+    if value.call_method0("bit_length")?.extract::<usize>()? > 128 {
+        return Err(invalid(ErrorCode::ResourceLimit));
+    }
     let magnitude = if value.lt(0)? {
         value.neg()?
     } else {

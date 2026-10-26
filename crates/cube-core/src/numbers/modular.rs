@@ -1,7 +1,7 @@
 //! Exact u64 Euclidean and modular arithmetic, with fixed storage.
 //!
 //! The Euclidean algorithm takes fewer than 128 divisions for u64 inputs
-//! (successive Fibonacci numbers are the worst case). We enforce a conservative
+//! (every two remainders at least halve). We enforce a conservative
 //! 256-round ceiling. In extended Euclid, generated coefficient magnitudes,
 //! including the terminal zero-remainder pair, are at most max(a,b)/gcd(a,b).
 //! Their alternating signs make each quotient product no larger than the next
@@ -36,16 +36,22 @@ pub fn parse_operand(
     op: &'static str,
     parameter: &'static str,
 ) -> Result<u64, OperationError> {
-    if text.len() > MAX_DECIMAL_BYTES {
-        return Err(limit(op).parameter(parameter));
-    }
-    if text.is_empty() || !text.bytes().all(|b| b.is_ascii_digit()) {
-        return Err(error(
+    let invalid = || {
+        error(
             op,
             ErrorCode::InvalidParameter,
             "operand requires unsigned ASCII decimal digits",
         )
-        .parameter(parameter));
+        .parameter(parameter)
+    };
+    if text.is_empty() || text.starts_with('-') || text.starts_with('+') {
+        return Err(invalid());
+    }
+    if text.len() > MAX_DECIMAL_BYTES {
+        return Err(limit(op).parameter(parameter));
+    }
+    if !text.bytes().all(|b| b.is_ascii_digit()) {
+        return Err(invalid());
     }
     text.parse().map_err(|_| limit(op).parameter(parameter))
 }

@@ -114,7 +114,19 @@ fn decimal_transport_is_strict_and_bounded_and_discovery_is_direct_only() {
         parse_operand(&"0".repeat(20), "number.gcd", "a").unwrap(),
         0
     );
-    for text in ["", "-1", "+1", " 1", "1 ", "1\n", "0x10", "1.0", "1_0", "١"] {
+    for text in [
+        "",
+        "-1",
+        "-18446744073709551615",
+        "+1",
+        " 1",
+        "1 ",
+        "1\n",
+        "0x10",
+        "1.0",
+        "1_0",
+        "١",
+    ] {
         let e = parse_operand(text, "number.gcd", "a").unwrap_err();
         assert_eq!(e.code, ErrorCode::InvalidParameter);
         assert_eq!(e.parameter, Some("a"));

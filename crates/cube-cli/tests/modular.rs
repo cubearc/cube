@@ -59,6 +59,7 @@ fn exact_decimal_commands_and_json_do_not_round_full_width_integers() {
 fn rejected_decimal_inputs_and_moduli_keep_context_and_no_stdout() {
     for (value, code) in [
         ("-1", "invalid_parameter"),
+        ("-18446744073709551615", "invalid_parameter"),
         ("+1", "invalid_parameter"),
         ("1.0", "invalid_parameter"),
         (" 1", "invalid_parameter"),

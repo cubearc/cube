@@ -23,7 +23,20 @@ def test_decimal_root_uses_exact_signed_magnitude():
     assert operation["pipeline"] is None
 
 
-@pytest.mark.parametrize("value", [True, False, 38.0, "38", None, 2**128, -(2**128)])
+@pytest.mark.parametrize(
+    "value",
+    [
+        True,
+        False,
+        38.0,
+        "38",
+        None,
+        2**128,
+        -(2**128),
+        pytest.param(1 << 16384, id="oversized_positive"),
+        pytest.param(-(1 << 16384), id="oversized_negative"),
+    ],
+)
 def test_invalid_transport_preserves_context(value):
     with pytest.raises(ValueError) as exc:
         cube.digital_root(value)

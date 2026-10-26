@@ -314,5 +314,6 @@ kind or adapter contract is added.
 `numbers::digital` shares sign/digit parsing and checked magnitude accumulation
 with the existing integer conversion. Its decimal parser visits at most 4,096
 digits once; the core formula takes an exact u128 magnitude. Native signed-int
-extraction only adapts sign and width, including negative u128::MAX, without
+extraction checks builtin integer width before allocating a negated magnitude,
+including negative u128::MAX, without
 converting through strings or floats. Generalized radices remain deferred.

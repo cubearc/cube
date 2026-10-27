@@ -13,6 +13,8 @@ pub struct TokenText(
 );
 #[derive(Debug, Clone, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
+/// One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8
+/// bytes. Every token is globally unique, including within the same entry.
 pub struct Entry {
     pub symbol: char,
     #[schemars(length(min = 1, max = 256), with = "Vec<TokenText>")]
@@ -20,6 +22,12 @@ pub struct Entry {
 }
 #[derive(Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
+#[schemars(extend("x-cube-max-serialized-bytes" = MAX_DEFINITION))]
+#[schemars(extend("x-cube-max-total-tokens" = MAX_SYMBOLS))]
+/// Caller-owned table whose compact JSON is <=64 KiB, with 1..4096 total tokens.
+/// Source scalars are unique and already canonical. When ascii_uppercase is true,
+/// ASCII source letters must be uppercase and input ASCII letters uppercase;
+/// other scalars remain exact, without Unicode normalization or case folding.
 pub struct Definition {
     pub ascii_uppercase: bool,
     #[schemars(length(min = 1, max = 4096))]

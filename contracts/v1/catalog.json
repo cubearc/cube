@@ -9881,7 +9881,8 @@
               "maxItems": 2,
               "minItems": 2
             },
-            "maxItems": 65536
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576
           }
         }
       ],
@@ -9900,6 +9901,7 @@
         ],
         "$defs": {
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. There are exactly 8, 9 or 10 rows, each with\nthat many uppercase ASCII letters. Repeated cells are allowed. Each label\nstring has exactly that many unique ASCII digits in cell order; no origin,\nword list or all-letter completeness is inferred.",
             "type": "object",
             "properties": {
               "column_labels": {
@@ -9931,7 +9933,8 @@
               "rows",
               "row_labels",
               "column_labels"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -10064,6 +10067,7 @@
         ],
         "$defs": {
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. There are exactly 8, 9 or 10 rows, each with\nthat many uppercase ASCII letters. Repeated cells are allowed. Each label\nstring has exactly that many unique ASCII digits in cell order; no origin,\nword list or all-letter completeness is inferred.",
             "type": "object",
             "properties": {
               "column_labels": {
@@ -10095,7 +10099,8 @@
               "rows",
               "row_labels",
               "column_labels"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -10122,7 +10127,8 @@
               "maxItems": 2,
               "minItems": 2
             },
-            "maxItems": 65536
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576
           }
         }
       ],
@@ -10225,6 +10231,7 @@
               "$ref": "#/$defs/TokenText"
             },
             "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
             "$defs": {
               "TokenText": {
                 "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
@@ -10252,6 +10259,7 @@
         ],
         "$defs": {
           "Definition": {
+            "description": "Caller-owned table whose compact JSON is <=64 KiB, with 1..4096 total tokens.\nSource scalars are unique and already canonical. When ascii_uppercase is true,\nASCII source letters must be uppercase and input ASCII letters uppercase;\nother scalars remain exact, without Unicode normalization or case folding.",
             "type": "object",
             "properties": {
               "ascii_uppercase": {
@@ -10270,9 +10278,12 @@
             "required": [
               "ascii_uppercase",
               "entries"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536,
+            "x-cube-max-total-tokens": 4096
           },
           "Entry": {
+            "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
             "type": "object",
             "properties": {
               "symbol": {
@@ -10463,6 +10474,7 @@
             ]
           },
           "Definition": {
+            "description": "Caller-owned table whose compact JSON is <=64 KiB, with 1..4096 total tokens.\nSource scalars are unique and already canonical. When ascii_uppercase is true,\nASCII source letters must be uppercase and input ASCII letters uppercase;\nother scalars remain exact, without Unicode normalization or case folding.",
             "type": "object",
             "properties": {
               "ascii_uppercase": {
@@ -10481,9 +10493,12 @@
             "required": [
               "ascii_uppercase",
               "entries"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536,
+            "x-cube-max-total-tokens": 4096
           },
           "Entry": {
+            "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
             "type": "object",
             "properties": {
               "symbol": {
@@ -10528,6 +10543,7 @@
               "$ref": "#/$defs/TokenText"
             },
             "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
             "$defs": {
               "TokenText": {
                 "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
@@ -10675,6 +10691,7 @@
             ]
           },
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique\nprintable ASCII, excluding lowercase. The operation selects the grammar:\nStraddling requires two distinct prefixes and at most 28 cells; Monome-Dinome\nrequires 24 uppercase cells, J->I and one other explicit merge covering A..Z;\nTridigital requires all 26 uppercase letters, empty prefixes and no aliases or\nescape. Aliases map unique noncell uppercase letters to canonical uppercase cells.\nA Straddling escape is a nonalphanumeric canonical cell, with no digit cells.",
             "type": "object",
             "properties": {
               "aliases": {
@@ -10717,7 +10734,8 @@
               "digits",
               "prefixes",
               "alphabet"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -10870,6 +10888,7 @@
             ]
           },
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique\nprintable ASCII, excluding lowercase. The operation selects the grammar:\nStraddling requires two distinct prefixes and at most 28 cells; Monome-Dinome\nrequires 24 uppercase cells, J->I and one other explicit merge covering A..Z;\nTridigital requires all 26 uppercase letters, empty prefixes and no aliases or\nescape. Aliases map unique noncell uppercase letters to canonical uppercase cells.\nA Straddling escape is a nonalphanumeric canonical cell, with no digit cells.",
             "type": "object",
             "properties": {
               "aliases": {
@@ -10912,7 +10931,8 @@
               "digits",
               "prefixes",
               "alphabet"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -11854,6 +11874,7 @@
             ]
           },
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique\nprintable ASCII, excluding lowercase. The operation selects the grammar:\nStraddling requires two distinct prefixes and at most 28 cells; Monome-Dinome\nrequires 24 uppercase cells, J->I and one other explicit merge covering A..Z;\nTridigital requires all 26 uppercase letters, empty prefixes and no aliases or\nescape. Aliases map unique noncell uppercase letters to canonical uppercase cells.\nA Straddling escape is a nonalphanumeric canonical cell, with no digit cells.",
             "type": "object",
             "properties": {
               "aliases": {
@@ -11896,7 +11917,8 @@
               "digits",
               "prefixes",
               "alphabet"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -12049,6 +12071,7 @@
             ]
           },
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique\nprintable ASCII, excluding lowercase. The operation selects the grammar:\nStraddling requires two distinct prefixes and at most 28 cells; Monome-Dinome\nrequires 24 uppercase cells, J->I and one other explicit merge covering A..Z;\nTridigital requires all 26 uppercase letters, empty prefixes and no aliases or\nescape. Aliases map unique noncell uppercase letters to canonical uppercase cells.\nA Straddling escape is a nonalphanumeric canonical cell, with no digit cells.",
             "type": "object",
             "properties": {
               "aliases": {
@@ -12091,7 +12114,8 @@
               "digits",
               "prefixes",
               "alphabet"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -12212,6 +12236,7 @@
       "parameters": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Substitution",
+        "description": "Choose exactly one target or keyword variant. Core checks uniqueness,\nbijection and the combined source+target/source+keyword UTF-8 byte ceiling.",
         "anyOf": [
           {
             "$ref": "#/$defs/Target"
@@ -12220,8 +12245,10 @@
             "$ref": "#/$defs/Keyword"
           }
         ],
+        "x-cube-max-combined-alphabet-utf8-bytes": 65536,
         "$defs": {
           "Keyword": {
+            "description": "Source has 1..4096 unique scalars; every keyword scalar belongs to it. Keep\nfirst keyword occurrences, then unused source scalars in source order. An\nempty keyword gives identity. Source plus keyword is <=64 KiB of UTF-8.",
             "type": "object",
             "properties": {
               "keyword": {
@@ -12247,6 +12274,7 @@
             ]
           },
           "Target": {
+            "description": "Source/target contain equal counts of 1..4096 unique scalars and form a\nbijection. Their combined UTF-8 length is <=64 KiB. Sets may differ; preserve\nis therefore not always invertible outside the declared alphabet.",
             "type": "object",
             "properties": {
               "source": {
@@ -12398,6 +12426,7 @@
       "parameters": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Substitution",
+        "description": "Choose exactly one target or keyword variant. Core checks uniqueness,\nbijection and the combined source+target/source+keyword UTF-8 byte ceiling.",
         "anyOf": [
           {
             "$ref": "#/$defs/Target"
@@ -12406,8 +12435,10 @@
             "$ref": "#/$defs/Keyword"
           }
         ],
+        "x-cube-max-combined-alphabet-utf8-bytes": 65536,
         "$defs": {
           "Keyword": {
+            "description": "Source has 1..4096 unique scalars; every keyword scalar belongs to it. Keep\nfirst keyword occurrences, then unused source scalars in source order. An\nempty keyword gives identity. Source plus keyword is <=64 KiB of UTF-8.",
             "type": "object",
             "properties": {
               "keyword": {
@@ -12433,6 +12464,7 @@
             ]
           },
           "Target": {
+            "description": "Source/target contain equal counts of 1..4096 unique scalars and form a\nbijection. Their combined UTF-8 length is <=64 KiB. Sets may differ; preserve\nis therefore not always invertible outside the declared alphabet.",
             "type": "object",
             "properties": {
               "source": {
@@ -12616,6 +12648,7 @@
             ]
           },
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique\nprintable ASCII, excluding lowercase. The operation selects the grammar:\nStraddling requires two distinct prefixes and at most 28 cells; Monome-Dinome\nrequires 24 uppercase cells, J->I and one other explicit merge covering A..Z;\nTridigital requires all 26 uppercase letters, empty prefixes and no aliases or\nescape. Aliases map unique noncell uppercase letters to canonical uppercase cells.\nA Straddling escape is a nonalphanumeric canonical cell, with no digit cells.",
             "type": "object",
             "properties": {
               "aliases": {
@@ -12658,7 +12691,8 @@
               "digits",
               "prefixes",
               "alphabet"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },
@@ -12681,7 +12715,8 @@
               "maxItems": 3,
               "minItems": 1
             },
-            "maxItems": 65536
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 4194304
           }
         }
       ],
@@ -12820,6 +12855,7 @@
             ]
           },
           "Definition": {
+            "description": "Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique\nprintable ASCII, excluding lowercase. The operation selects the grammar:\nStraddling requires two distinct prefixes and at most 28 cells; Monome-Dinome\nrequires 24 uppercase cells, J->I and one other explicit merge covering A..Z;\nTridigital requires all 26 uppercase letters, empty prefixes and no aliases or\nescape. Aliases map unique noncell uppercase letters to canonical uppercase cells.\nA Straddling escape is a nonalphanumeric canonical cell, with no digit cells.",
             "type": "object",
             "properties": {
               "aliases": {
@@ -12862,7 +12898,8 @@
               "digits",
               "prefixes",
               "alphabet"
-            ]
+            ],
+            "x-cube-max-serialized-bytes": 65536
           }
         }
       },

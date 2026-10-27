@@ -4,6 +4,11 @@ pub use crate::ciphers::polybius::Token;
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
+#[schemars(extend("x-cube-max-serialized-bytes" = MAX_DEFINITION))]
+/// Compact table JSON is <=64 KiB. There are exactly 8, 9 or 10 rows, each with
+/// that many uppercase ASCII letters. Repeated cells are allowed. Each label
+/// string has exactly that many unique ASCII digits in cell order; no origin,
+/// word list or all-letter completeness is inferred.
 pub struct Definition {
     #[schemars(
         length(min = 8, max = 10),

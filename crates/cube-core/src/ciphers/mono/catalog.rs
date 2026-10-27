@@ -849,6 +849,18 @@ pub(crate) const MODULE: o::Module =
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn has_serialized_budget(value: &serde_json::Value, maximum: usize) -> bool {
+        match value {
+            serde_json::Value::Object(fields) => {
+                fields.get("x-cube-max-serialized-bytes") == Some(&serde_json::json!(maximum))
+                    || fields.values().any(|v| has_serialized_budget(v, maximum))
+            }
+            serde_json::Value::Array(items) => {
+                items.iter().any(|v| has_serialized_budget(v, maximum))
+            }
+            _ => false,
+        }
+    }
     #[test]
     fn every_exported_cipher_has_real_conforming_known_answers_and_rejects_bad_shapes() {
         let mut ids = std::collections::BTreeSet::new();
@@ -864,6 +876,18 @@ mod tests {
             assert_eq!(contract.operation_version, 1);
             assert_eq!(contract.inputs.len(), 1);
             assert_eq!(contract.outputs.len(), 1);
+            if descriptor.parameters.iter().any(|p| p.name == "definition") {
+                assert!(has_serialized_budget(
+                    contract.parameters.as_value(),
+                    MAX_DEFINITION
+                ));
+            }
+            if descriptor.parameters.iter().any(|p| p.name == "source") {
+                assert_eq!(
+                    contract.parameters.as_value()["x-cube-max-combined-alphabet-utf8-bytes"],
+                    serde_json::json!(MAX_DEFINITION)
+                );
+            }
             assert!(
                 !contract.policy.grants_filesystem_access && !contract.policy.grants_network_access
             );

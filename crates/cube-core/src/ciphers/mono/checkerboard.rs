@@ -10,6 +10,14 @@ pub struct Alias {
 }
 #[derive(Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
+#[schemars(extend("x-cube-max-serialized-bytes" = MAX_DEFINITION))]
+/// Compact table JSON is <=64 KiB. Digits permute 0..9; alphabet cells are unique
+/// printable ASCII, excluding lowercase. The operation selects the grammar:
+/// Straddling requires two distinct prefixes and at most 28 cells; Monome-Dinome
+/// requires 24 uppercase cells, J->I and one other explicit merge covering A..Z;
+/// Tridigital requires all 26 uppercase letters, empty prefixes and no aliases or
+/// escape. Aliases map unique noncell uppercase letters to canonical uppercase cells.
+/// A Straddling escape is a nonalphanumeric canonical cell, with no digit cells.
 pub struct Definition {
     #[schemars(length(equal = 10), regex(pattern = r"^[0-9]{10}$"))]
     pub digits: String,

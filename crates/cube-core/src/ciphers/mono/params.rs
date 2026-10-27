@@ -20,6 +20,9 @@ impl Unmapped {
 }
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
+/// Source/target contain equal counts of 1..4096 unique scalars and form a
+/// bijection. Their combined UTF-8 length is <=64 KiB. Sets may differ; preserve
+/// is therefore not always invertible outside the declared alphabet.
 pub struct Target {
     #[schemars(length(min=1,max=4096),extend("x-cube-max-utf8-bytes"=65536))]
     pub source: String,
@@ -30,6 +33,9 @@ pub struct Target {
 }
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
+/// Source has 1..4096 unique scalars; every keyword scalar belongs to it. Keep
+/// first keyword occurrences, then unused source scalars in source order. An
+/// empty keyword gives identity. Source plus keyword is <=64 KiB of UTF-8.
 pub struct Keyword {
     #[schemars(length(min=1,max=4096),extend("x-cube-max-utf8-bytes"=65536))]
     pub source: String,
@@ -40,6 +46,9 @@ pub struct Keyword {
 }
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(untagged)]
+#[schemars(extend("x-cube-max-combined-alphabet-utf8-bytes" = super::MAX_DEFINITION))]
+/// Choose exactly one target or keyword variant. Core checks uniqueness,
+/// bijection and the combined source+target/source+keyword UTF-8 byte ceiling.
 pub enum Substitution {
     Target(Target),
     Keyword(Keyword),
@@ -98,14 +107,17 @@ pub struct ExpandedText(
 );
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(transparent)]
+#[schemars(extend("x-cube-max-serialized-bytes" = super::MAX_INPUT))]
 pub struct Tokens(
     #[schemars(length(max = 65536), with = "Vec<homophonic::TokenText>")] pub Vec<String>,
 );
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(transparent)]
+#[schemars(extend("x-cube-max-serialized-bytes" = super::MAX_INPUT))]
 pub struct Coordinates(#[schemars(length(max = 65536))] pub Vec<grandpre::Token>);
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(transparent)]
+#[schemars(extend("x-cube-max-serialized-bytes" = super::MAX_OUTPUT))]
 pub struct Alternatives(
     #[schemars(length(max = 65536), inner(length(min = 1, max = 3)))] pub Vec<Vec<char>>,
 );

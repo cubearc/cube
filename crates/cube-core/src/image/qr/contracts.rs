@@ -7,9 +7,7 @@ fn parameters() -> Schema {
     c::descriptor_parameters(&OPERATIONS[0])
 }
 fn fixture() -> Result<Fixture, OperationError> {
-    let rows: Vec<_> = include_str!("../../../../../tests/fixtures/qr-binary.matrix")
-        .lines()
-        .collect();
+    let rows: Vec<_> = include_str!("known-binary.matrix").lines().collect();
     let side = (rows.len() + 8) * 2;
     let mut samples = vec![255; side * side];
     for (y, row) in rows.iter().enumerate() {

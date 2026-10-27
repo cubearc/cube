@@ -5,7 +5,7 @@ use cube_core::{
 // Original byte-mode Cube\0\xff symbol generated with qrcode 0.14.1, not a
 // third-party message or copyrighted image. Matrix excludes its quiet zone.
 fn fixture(scale: usize) -> Image {
-    let matrix: Vec<_> = include_str!("../../../tests/fixtures/qr-binary.matrix")
+    let matrix: Vec<_> = include_str!("../src/image/qr/known-binary.matrix")
         .lines()
         .collect();
     let side = (matrix.len() + 8) * scale;

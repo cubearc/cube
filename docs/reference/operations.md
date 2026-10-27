@@ -10,10 +10,50 @@ Exact raw bit extraction from native PCM storage; frame/channel/bit order, optio
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.pcm_samples` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "channels": [
+        0
+      ],
+      "data": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "format": {
+        "bits_per_sample": 16,
+        "block_align": 2,
+        "byte_rate": 16000,
+        "channels": 1,
+        "format_tag": 1,
+        "sample_rate": 8000
+      },
+      "frames": 8,
+      "start_frame": 0
+    }
+  },
+  "parameters": {
+    "bit_order": "msb",
+    "bits": [
+      0
+    ],
+    "incomplete": "reject",
+    "reverse_frames": false
+  }
+}
+```
+
 
 Parameters:
 
@@ -79,10 +119,15 @@ Bounded timed DTMF candidates with nominal-band, level, dominance, twist, purity
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.pcm_samples` |
 | Output | `output` | `audio.dtmf_detection` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -158,10 +203,28 @@ Native FLAC metadata only: STREAMINFO and bounded Vorbis comments; unknown durat
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `audio.metadata` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "ZkxhQ4AAACIAEAAQAAAAAAAAAfQA8AAAAyAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -187,10 +250,15 @@ Detect bounded tone/silence/uncertain intervals at an explicit nominal frequency
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.pcm_samples` |
 | Output | `output` | `audio.tone_intervals` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -246,10 +314,46 @@ Separately interpret bounded explicit intervals using caller dot-unit/tolerance,
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.tone_intervals` |
 | Output | `output` | `audio.morse_transcription` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "channel": 0,
+      "frames": 800,
+      "frequency_hz": 700,
+      "intervals": [
+        {
+          "frames": 800,
+          "start_frame": 0,
+          "state": "tone"
+        }
+      ],
+      "min_level_dbfs": -40,
+      "purity_percent": 80,
+      "sample_rate": 8000,
+      "start_frame": 0,
+      "window_frames": 80
+    }
+  },
+  "parameters": {
+    "sample_rate": 8000,
+    "tolerance_percent": 20,
+    "unit_ms": 100
+  }
+}
+```
+
 
 Parameters:
 
@@ -298,10 +402,15 @@ Extract exact channel/range PCM bytes and signed values; no resampling, <=8 MiB 
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `audio.pcm_samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -384,10 +493,15 @@ Reverse selected PCM frames without changing sample bytes/channel grouping; gene
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.pcm_samples` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -413,10 +527,48 @@ Bounded channel/window/bin numeric spectra using shared FFT, absolute window-sta
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.pcm_samples` |
 | Output | `output` | `audio.spectrogram` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "channels": [
+        0
+      ],
+      "data": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "format": {
+        "bits_per_sample": 16,
+        "block_align": 2,
+        "byte_rate": 16000,
+        "channels": 1,
+        "format_tag": 1,
+        "sample_rate": 8000
+      },
+      "frames": 8,
+      "start_frame": 0
+    }
+  },
+  "parameters": {
+    "fft_size": 8,
+    "final_window": "drop",
+    "hop_size": 8,
+    "window": "rectangular"
+  }
+}
+```
+
 
 Parameters:
 
@@ -476,10 +628,46 @@ Bounded one-sided FFT of selected integer PCM; actual sample-rate frequencies, p
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `audio.pcm_samples` |
 | Output | `output` | `audio.spectrum` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "channels": [
+        0
+      ],
+      "data": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "format": {
+        "bits_per_sample": 16,
+        "block_align": 2,
+        "byte_rate": 16000,
+        "channels": 1,
+        "format_tag": 1,
+        "sample_rate": 8000
+      },
+      "frames": 8,
+      "start_frame": 0
+    }
+  },
+  "parameters": {
+    "fft_size": 8,
+    "window": "rectangular"
+  }
+}
+```
+
 
 Parameters:
 
@@ -523,10 +711,15 @@ Inspect bounded PCM RIFF/WAVE metadata and chunks without decoding samples; <=1 
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `audio.wave_info` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -552,10 +745,15 @@ Stream exact integer min/max envelopes per selected channel; preserve frame posi
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `audio.waveform_envelope` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -652,10 +850,17 @@ Add paired big-endian unsigned units modulo their width; <=16 MiB per operand.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -706,10 +911,17 @@ Bounded per-byte AND of equal-length operands; no repetition/padding; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -749,10 +961,28 @@ Invert all eight bits per byte; preserve byte length, <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -778,10 +1008,17 @@ Bounded per-byte OR of equal-length operands; no repetition/padding; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -821,10 +1058,28 @@ Reverse byte positions, not bits or Unicode scalars; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -850,10 +1105,31 @@ Rotate left per independent big-endian unit; u64 count modulo width; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {
+    "count": "18446744073709551615",
+    "unit_bytes": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -927,10 +1203,31 @@ Rotate right per independent big-endian unit; u64 count modulo width; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {
+    "count": "18446744073709551615",
+    "unit_bytes": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -1004,10 +1301,31 @@ Zero-filled left shifts within independent unsigned big-endian units; overflow b
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {
+    "bits": 1,
+    "unit_bytes": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -1053,10 +1371,31 @@ Logical right shifts within independent unsigned big-endian units; no signed ari
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {
+    "bits": 1,
+    "unit_bytes": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -1102,10 +1441,17 @@ Subtract paired big-endian unsigned units modulo their width; <=16 MiB per opera
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1156,10 +1502,30 @@ Reverse byte order per complete 1/2/4/8-byte unit; unit order unchanged; <=16 Mi
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQI="
+    }
+  },
+  "parameters": {
+    "unit_bytes": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -1197,10 +1563,17 @@ XOR exact bytes with a nonempty repeating key; not secure encryption.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1240,10 +1613,17 @@ Exact equal-length byte XOR; no key repetition; <=16 MiB per operand.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1283,10 +1663,17 @@ Derive SEC1 public keys and legacy P2PKH using validated secp256k1, RIPEMD160(SH
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `private.material` |
 | Output | `output` | `bitcoin.public_address` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1338,10 +1725,17 @@ Ordered caller-supplied WIF/hex64 candidates; <=256 entries, <=128 bytes each, <
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `private.candidates` |
 | Output | `output` | `key.validation_batch` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1398,10 +1792,17 @@ Offline validated secp256k1 raw32/hex64 scalar -> 64 uncompressed x||y bytes (no
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `private.scalar` |
 | Output | `output` | `ethereum.public_address` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1446,10 +1847,17 @@ Explicit private export between exact raw32, hex64 and supported WIF. WIF output
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `private.material` |
 | Output | `output` | `private.export` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1509,10 +1917,17 @@ Validate exactly 32 big-endian raw bytes or 64 strict hex digits using maintaine
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `private.scalar` |
 | Output | `output` | `key.validation` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1548,10 +1963,17 @@ Validate <=128 WIF bytes via Base58Check, supported 0x80/0xef version, 32-byte n
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `private.wif` |
 | Output | `output` | `key.validation` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -1586,10 +2008,32 @@ Adfgvx: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "AVXVFADX"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "square": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  }
+}
+```
+
 
 Parameters:
 
@@ -1705,10 +2149,32 @@ Adfgvx: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "AZ09"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "square": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  }
+}
+```
+
 
 Parameters:
 
@@ -1824,10 +2290,32 @@ Adfgx: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "AAAFAD"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "square": "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -1943,10 +2431,32 @@ Adfgx: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABC"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "square": "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2062,10 +2572,29 @@ Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "a": 5,
+    "b": 8
+  }
+}
+```
+
 
 Parameters:
 
@@ -2119,10 +2648,29 @@ Affine C=(aP+b) mod 26; preserve case and other Unicode, <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "a": 5,
+    "b": 8
+  }
+}
+```
+
 
 Parameters:
 
@@ -2176,10 +2724,39 @@ Amsco: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "CECRTEGLENPHPLUTNANTEIOMOWIRSITDDSINTNALINESAALEMHATGLRGR"
+  },
+  "parameters": {
+    "initial_cell": 2,
+    "key": {
+      "kind": "permutation",
+      "order": [
+        1,
+        3,
+        2,
+        0,
+        4
+      ]
+    },
+    "pattern": "aca"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2337,10 +2914,39 @@ Amsco: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "INCOMPLETECOLUMNARWITHALTERNATINGSINGLELETTERSANDDIGRAPHS"
+  },
+  "parameters": {
+    "initial_cell": 2,
+    "key": {
+      "kind": "permutation",
+      "order": [
+        1,
+        3,
+        2,
+        0,
+        4
+      ]
+    },
+    "pattern": "aca"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2498,10 +3104,26 @@ Reverse ASCII alphabets; preserve case and other Unicode, <=1 MiB; not secure en
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -2527,10 +3149,29 @@ Seeded Vigenere with explicit plaintext/ciphertext feedback and local bounded st
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "IYMMYKHRIYWTBLISUEQXMNZZLCMGLMMBEEMRROBVIUSHSXOLUCIMO"
+  },
+  "parameters": {
+    "feedback": "plaintext",
+    "seed": "PRIMER"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2580,10 +3221,29 @@ Seeded Vigenere with explicit plaintext/ciphertext feedback and local bounded st
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THEAUTOKEYCANBEUSEDWITHVIGENEREVARIANTBEAUFORTORPORTA"
+  },
+  "parameters": {
+    "feedback": "plaintext",
+    "seed": "PRIMER"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2633,10 +3293,29 @@ Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB inpu
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AAAAA AAAAB AAABA"
+  },
+  "parameters": {
+    "notation": "ab",
+    "variant": "extended26"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2683,10 +3362,29 @@ Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB inpu
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "notation": "ab",
+    "variant": "extended26"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2733,10 +3431,29 @@ Bazeries: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ACYYUXYMRQKXKCKGCRQIYITNKYXKCYGQGCI"
+  },
+  "parameters": {
+    "key": 3752,
+    "square": "THREOUSANDVFIYWBCGKLMPQXZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2780,10 +3497,29 @@ Bazeries: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "SIMPLESUBSTITUTIONPLUSTRANSPOSITION"
+  },
+  "parameters": {
+    "key": 3752,
+    "square": "THREOUSANDVFIYWBCGKLMPQXZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2827,10 +3563,17 @@ Standard reciprocal Beaufort C=(K-P) mod 26, ASCII letters only; <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -2864,10 +3607,29 @@ Bifid: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "MWEINGIMGEOYYRLVEYWY"
+  },
+  "parameters": {
+    "period": 7,
+    "square": "EXTRAKLMPOHWZQDGVUSIFCBYN"
+  }
+}
+```
+
 
 Parameters:
 
@@ -2936,10 +3698,29 @@ Bifid: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ODDPERIODSAREPOPULAR"
+  },
+  "parameters": {
+    "period": 7,
+    "square": "EXTRAKLMPOHWZQDGVUSIFCBYN"
+  }
+}
+```
+
 
 Parameters:
 
@@ -3008,10 +3789,28 @@ Decode caller-supplied book coordinates to exact Unicode scalars; source/coordin
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "1:1,2:1"
+  },
+  "parameters": {
+    "source": "ab cd"
+  }
+}
+```
+
 
 Parameters:
 
@@ -3061,6 +3860,8 @@ Deterministic inverse book coordinates; exact source hash and existing word/line
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `source` | `text` |
@@ -3069,6 +3870,25 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `source_sha256` | `text` |
 | Output | `coordinate_count` | `json` |
 | Output | `indexed_units` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "source": "aba cab\nA😀 a",
+    "text": "aaa😀"
+  },
+  "parameters": {
+    "index_base": 1,
+    "matching": "round_robin",
+    "scheme": "word_character"
+  }
+}
+```
+
 
 Parameters:
 
@@ -3129,10 +3949,28 @@ Decode ASCII letters with a signed Caesar shift; preserve other Unicode.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "DEF"
+  },
+  "parameters": {
+    "shift": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -3167,10 +4005,28 @@ Encode ASCII letters with a signed Caesar shift; preserve other Unicode.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "shift": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -3205,10 +4061,28 @@ Caesar Box: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ACBD"
+  },
+  "parameters": {
+    "side": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -3271,10 +4145,28 @@ Caesar Box: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCD"
+  },
+  "parameters": {
+    "side": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -3337,10 +4229,33 @@ Static explicit row-major mask; caller cover provenance retained; extract is sou
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEF"
+  },
+  "parameters": {
+    "columns": 3,
+    "holes": [
+      0,
+      4
+    ],
+    "rows": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -3474,12 +4389,36 @@ Static explicit row-major mask; caller cover provenance retained; overlay is sou
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `positions` | `json` |
 | Output | `original_selected` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEF"
+  },
+  "parameters": {
+    "columns": 3,
+    "holes": [
+      0,
+      4
+    ],
+    "replacements": "xy",
+    "rows": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -3619,10 +4558,29 @@ Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "OAHQHCNYNXTSZJRRHJBYHQKSOUJY"
+  },
+  "parameters": {
+    "left": "HXUCZVAMDSLKPEFJRIGTWOBNYQ",
+    "right": "PTLNBQDEOYSFAVZKGJRIHWXUMC"
+  }
+}
+```
+
 
 Parameters:
 
@@ -3664,10 +4622,29 @@ Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "WELLDONEISBETTERTHANWELLSAID"
+  },
+  "parameters": {
+    "left": "HXUCZVAMDSLKPEFJRIGTWOBNYQ",
+    "right": "PTLNBQDEOYSFAVZKGJRIHWXUMC"
+  }
+}
+```
+
 
 Parameters:
 
@@ -3709,10 +4686,31 @@ Columnar: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "BEHCFADG"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -3822,10 +4820,31 @@ Columnar: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEFGH"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -3935,12 +4954,35 @@ Complete Columnar: explicit bounded decode; see typed profile guide for conventi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `original_length` | `json` |
 | Output | `padding_count` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "IELKLDOXFLBC"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "original_length": 11,
+    "padding": "X"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4069,12 +5111,35 @@ Complete Columnar: explicit bounded encode; see typed profile guide for conventi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `original_length` | `json` |
 | Output | `padding_count` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "FILLEDBLOCK"
+  },
+  "parameters": {
+    "key": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "original_length": 11,
+    "padding": "X"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4203,10 +5268,29 @@ Keyed alphabet feedback from recovered plaintext one-based position; explicit in
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "MORCPPDNBKEDJKPMRTDBQCRJPXCKTVBNHUYJGVBYSFDXKCRCESIUOJJYFRQIXIMBVHKQPDNMPSBYJQBTTNK"
+  },
+  "parameters": {
+    "alphabet": "VWXYZSTRANGEBCDFHIJKLMOPQU",
+    "shift": 25
+  }
+}
+```
+
 
 Parameters:
 
@@ -4249,10 +5333,29 @@ Keyed alphabet feedback from recovered plaintext one-based position; explicit in
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "OURSISAVERYGREENPASTIMETHEWIDEVARIETYOFCIPHERSWEUSECANALLBESOLVEDWITHPENCILANDPAPER"
+  },
+  "parameters": {
+    "alphabet": "VWXYZSTRANGEBCDFHIJKLMOPQU",
+    "shift": 25
+  }
+}
+```
+
 
 Parameters:
 
@@ -4295,12 +5398,34 @@ Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and vi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `prepared` | `text` |
 | Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "HJMXWSWJADWGFCSPYI"
+  },
+  "parameters": {
+    "extra": "#",
+    "horizontal": "KEYWORDABCFGHIJLMNPQSTUVXZ#",
+    "padding": null,
+    "period": 3,
+    "vertical": "VDPEFQRGSTHUIJWCKXAMYLNZBO#"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4364,12 +5489,34 @@ Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and vi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `prepared` | `text` |
 | Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THISISTHEFORESTPRI"
+  },
+  "parameters": {
+    "extra": "#",
+    "horizontal": "KEYWORDABCFGHIJLMNPQSTUVXZ#",
+    "padding": null,
+    "period": 3,
+    "vertical": "VDPEFQRGSTHUIJWCKXAMYLNZBO#"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4433,10 +5580,35 @@ Double Columnar: explicit bounded decode; see typed profile guide for convention
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "EFDBCA"
+  },
+  "parameters": {
+    "first": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "second": {
+      "kind": "keyword",
+      "text": "BA"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -4550,10 +5722,35 @@ Double Columnar: explicit bounded encode; see typed profile guide for convention
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEF"
+  },
+  "parameters": {
+    "first": {
+      "kind": "keyword",
+      "text": "CAB"
+    },
+    "second": {
+      "kind": "keyword",
+      "text": "BA"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -4667,10 +5864,29 @@ I/J Four-square with fixed straight plaintext squares and explicit keyed top-rig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "LEWIXAFNEXCUDXUVDPGXHZ"
+  },
+  "parameters": {
+    "first": "GRDLUEYFNVOAHPWMBIQXTCKSZ",
+    "second": "LICNVOTDPWGHEQXAMFSYRBKUZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4712,10 +5928,29 @@ I/J Four-square with fixed straight plaintext squares and explicit keyed top-rig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "COMEQUICKLYWENEEDHELPX"
+  },
+  "parameters": {
+    "first": "GRDLUEYFNVOAHPWMBIQXTCKSZ",
+    "second": "LICNVOTDPWGHEQXAMFSYRBKUZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4757,6 +5992,8 @@ Fractionated Morse: explicit bounded decode; see typed profile guide for convent
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -4765,6 +6002,23 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `morse` | `text` |
 | Output | `padding_count` | `json` |
 | Output | `padding_ambiguous` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "CBIILTMHVVFL"
+  },
+  "parameters": {
+    "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ",
+    "padding_count": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -4810,6 +6064,8 @@ Fractionated Morse: explicit bounded encode; see typed profile guide for convent
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -4818,6 +6074,22 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `morse` | `text` |
 | Output | `padding_count` | `json` |
 | Output | `padding_ambiguous` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "COME AT ONCE"
+  },
+  "parameters": {
+    "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -4863,10 +6135,47 @@ Decode repeated-letter 8/9/10-square coordinates with explicit digit labels; nul
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `tokens` | `cipher.coordinate_tokens` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      [
+        1,
+        1
+      ],
+      null
+    ]
+  },
+  "parameters": {
+    "definition": {
+      "column_labels": "12345678",
+      "row_labels": "12345678",
+      "rows": [
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA"
+      ]
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -4937,10 +6246,41 @@ Encode repeated-letter 8/9/10-square coordinates with explicit digit labels; nul
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `tokens` | `cipher.coordinate_tokens` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A A"
+  },
+  "parameters": {
+    "definition": {
+      "column_labels": "12345678",
+      "row_labels": "12345678",
+      "rows": [
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA",
+        "AAAAAAAA"
+      ]
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -5011,10 +6351,29 @@ Explicit mixed alphabet and five decimal primer digits; exclude printed primer/c
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "NFYCKBTIJCNWZYCACJNAYNLQPWWSTWPJQFL"
+  },
+  "parameters": {
+    "alphabet": "AJRXEBKSYGFPVIDOUMHQWNCLTZ",
+    "primer": "23452"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5057,10 +6416,29 @@ Explicit mixed alphabet and five decimal primer digits; exclude printed primer/c
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THEREAREUPTOTENSUBSTITUTESPERLETTER"
+  },
+  "parameters": {
+    "alphabet": "AJRXEBKSYGFPVIDOUMHQWNCLTZ",
+    "primer": "23452"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5103,10 +6481,28 @@ Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "CKKTSWGDVGTXNPXIVIICYNQVZWRZELIFRNTNDNQLJDNWU"
+  },
+  "parameters": {
+    "key": "9321492"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5143,10 +6539,28 @@ Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THISONEUSESTENOFTHETWENTYSIXVIGENEREALPHABETS"
+  },
+  "parameters": {
+    "key": "9321492"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5183,11 +6597,37 @@ Exact modular row-major Hill matrix and column vectors over caller-owned Unicode
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "HIAT"
+  },
+  "parameters": {
+    "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "dimension": 2,
+    "matrix": [
+      3,
+      3,
+      2,
+      5
+    ],
+    "padding": null
+  }
+}
+```
+
 
 Parameters:
 
@@ -5279,11 +6719,37 @@ Exact modular row-major Hill matrix and column vectors over caller-owned Unicode
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "HELP"
+  },
+  "parameters": {
+    "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "dimension": 2,
+    "matrix": [
+      3,
+      3,
+      2,
+      5
+    ],
+    "padding": null
+  }
+}
+```
+
 
 Parameters:
 
@@ -5375,10 +6841,48 @@ Decode exact owned tokens to canonical text.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `tokens` | `cipher.symbol_tokens` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "1",
+      "2"
+    ]
+  },
+  "parameters": {
+    "definition": {
+      "ascii_uppercase": true,
+      "entries": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "3"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -5468,10 +6972,46 @@ Encode canonical scalars to explicit tokens using local per-symbol round robin.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `tokens` | `cipher.symbol_tokens` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "AABA"
+  },
+  "parameters": {
+    "counters": [],
+    "definition": {
+      "ascii_uppercase": true,
+      "entries": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "3"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -5591,10 +7131,43 @@ Decode with an explicit monome_dinome digit table; reject unassigned/incomplete 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "600676062"
+  },
+  "parameters": {
+    "definition": {
+      "aliases": [
+        {
+          "from": "J",
+          "to": "I"
+        },
+        {
+          "from": "Z",
+          "to": "Y"
+        }
+      ],
+      "alphabet": "NOTARIESBCDFGHKLMPQUVWXY",
+      "digit_escape": null,
+      "digits": "6318927054",
+      "prefixes": "63"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -5696,10 +7269,43 @@ Encode with an explicit monome_dinome digit table; reject unassigned/incomplete 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "HIGHF"
+  },
+  "parameters": {
+    "definition": {
+      "aliases": [
+        {
+          "from": "J",
+          "to": "I"
+        },
+        {
+          "from": "Z",
+          "to": "Y"
+        }
+      ],
+      "alphabet": "NOTARIESBCDFGHKLMPQUVWXY",
+      "digit_escape": null,
+      "digits": "6318927054",
+      "prefixes": "63"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -5801,6 +7407,8 @@ Morbit: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -5809,6 +7417,23 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `morse` | `text` |
 | Output | `padding_count` | `json` |
 | Output | `padding_ambiguous` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "27435881512827465679378"
+  },
+  "parameters": {
+    "digits": "958427136",
+    "padding_count": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -5854,6 +7479,8 @@ Morbit: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -5862,6 +7489,22 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `morse` | `text` |
 | Output | `padding_count` | `json` |
 | Output | `padding_ambiguous` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ONCE UPON A TIME"
+  },
+  "parameters": {
+    "digits": "958427136"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5907,10 +7550,28 @@ Myszkowski: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "BDFHJAGCEI"
+  },
+  "parameters": {
+    "keyword": "BANANA"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5946,10 +7607,28 @@ Myszkowski: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEFGHIJ"
+  },
+  "parameters": {
+    "keyword": "BANANA"
+  }
+}
+```
+
 
 Parameters:
 
@@ -5985,10 +7664,28 @@ Vigenere columns emitted by stable key order in explicit depth blocks, retaining
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "HAYREVGNKIXKUWMTWMUGTAH"
+  },
+  "parameters": {
+    "key": "CAT"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6032,10 +7729,28 @@ Vigenere columns emitted by stable key order in explicit depth blocks, retaining
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THEEARLYBIRDGETSTHEWORM"
+  },
+  "parameters": {
+    "key": "CAT"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6079,10 +7794,42 @@ Nihilist Substitution: explicit bounded decode; see typed profile guide for conv
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `tokens` | `json` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      65,
+      55,
+      32,
+      75,
+      43,
+      65,
+      26,
+      108,
+      44,
+      34,
+      54,
+      79
+    ]
+  },
+  "parameters": {
+    "key": "EASY",
+    "square": "SIMPLEABCDFGHKNOQRTUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6123,10 +7870,29 @@ Nihilist Substitution: explicit bounded encode; see typed profile guide for conv
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THEEARLYBIRD"
+  },
+  "parameters": {
+    "key": "EASY",
+    "square": "SIMPLEABCDFGHKNOQRTUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6167,10 +7933,29 @@ ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "RHNAAXNRUZBNIUARXCRTPATBRLIGDSVCIRCVOYPVRAAZZMUSREQYEVMMURGWTLUD"
+  },
+  "parameters": {
+    "keyword": "ENIGMA",
+    "period": 6
+  }
+}
+```
+
 
 Parameters:
 
@@ -6215,10 +8000,29 @@ ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "WINTRYSHOWERSWILLCONTINUEFORTHENEXTFEWDAYSACCORDINGTOTHEFORECAST"
+  },
+  "parameters": {
+    "keyword": "ENIGMA",
+    "period": 6
+  }
+}
+```
+
 
 Parameters:
 
@@ -6263,10 +8067,29 @@ Explicit Phillips rows/columns/rows_columns eight-state five-letter square sched
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "KZWLYTGEDTQETARBTYGTLFXWLPPOXLTYKUTKGKYTKZWLYTGXSEQETIRZQAAQTCITYKPPVBLHEFHGREYXO"
+  },
+  "parameters": {
+    "profile": "rows",
+    "square": "DIAGOCBSLNEFHKMUTRQPVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6316,10 +8139,29 @@ Explicit Phillips rows/columns/rows_columns eight-state five-letter square sched
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "SQUARESONEANDFIVEAREACTUALLYTHESAMEASARESQUARESTWOANDEIGHTTHEOVERALLPERIODISFORTY"
+  },
+  "parameters": {
+    "profile": "rows",
+    "square": "DIAGOCBSLNEFHKMUTRQPVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6369,12 +8211,30 @@ I/J-square adjacent digraphs with explicit filler evidence; decode keeps prepare
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `prepared` | `text` |
 | Output | `fillers` | `cipher.filler_positions` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "DLHFSNCNCRZXCQQGFEEQON"
+  },
+  "parameters": {
+    "square": "LOGARITHMBCDEFKNPQSUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6422,12 +8282,30 @@ I/J-square adjacent digraphs with explicit filler evidence; decode keeps prepare
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `prepared` | `text` |
 | Output | `fillers` | `cipher.filler_positions` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "COMEQUICKLYWENEXEDHELP"
+  },
+  "parameters": {
+    "square": "LOGARITHMBCDEFKNPQSUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6475,6 +8353,8 @@ Pollux: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -6483,6 +8363,22 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `morse` | `text` |
 | Output | `padding_count` | `json` |
 | Output | `padding_ambiguous` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "023519064732586971403598013259406738590"
+  },
+  "parameters": {
+    "classes": ".x-.x.--x."
+  }
+}
+```
+
 
 Parameters:
 
@@ -6518,6 +8414,8 @@ Pollux: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -6526,6 +8424,22 @@ Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `morse` | `text` |
 | Output | `padding_count` | `json` |
 | Output | `padding_ambiguous` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "LUCK HELPS"
+  },
+  "parameters": {
+    "classes": ".x-.x.--x."
+  }
+}
+```
+
 
 Parameters:
 
@@ -6561,10 +8475,29 @@ Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `polybius.tokens` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "1,1 2,4 / 2,4"
+  },
+  "parameters": {
+    "index_base": 1,
+    "preset": "polybius"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6629,10 +8562,29 @@ Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `polybius.tokens` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AJ I"
+  },
+  "parameters": {
+    "index_base": 1,
+    "preset": "polybius"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6697,10 +8649,28 @@ Reciprocal ACA 13-tableau letter schedule with AB/CD/.../YZ key pairing.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ENCIPHERMENTISRECIPROCAL"
+  },
+  "parameters": {
+    "key": "PORTA"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6737,10 +8707,28 @@ Reciprocal ACA Portax vertical pairs with exact even short-group handling and no
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THEEARLYBIRDGETSTHEWORMX"
+  },
+  "parameters": {
+    "key": "EASY"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6777,10 +8765,32 @@ Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "VBMRFCYISPMPBRRHEICXRREIGDX"
+  },
+  "parameters": {
+    "cipher_alphabet": "PERCTIONABDFGHJKLMQSUVWXYZ",
+    "indicator": "S",
+    "key": "EXTRA",
+    "plain_alphabet": "SENORYABCDFGHIJKLMPQTUVWXZ",
+    "profile": "iv"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6850,10 +8860,32 @@ Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THISONEEMPLOYSTHREEKEYWORDS"
+  },
+  "parameters": {
+    "cipher_alphabet": "PERCTIONABDFGHJKLMQSUVWXYZ",
+    "indicator": "S",
+    "key": "EXTRA",
+    "plain_alphabet": "SENORYABCDFGHIJKLMPQTUVWXZ",
+    "profile": "iv"
+  }
+}
+```
+
 
 Parameters:
 
@@ -6923,10 +8955,29 @@ Explicit 24-letter alphabet, optional J/I X/W merges, word+letter-1 schedule and
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "YBBL HNGQDUFGL DEF HFYR"
+  },
+  "parameters": {
+    "alphabet": "GROSBEAKCDFHILMNPQTUVWYZ",
+    "merge_aliases": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -6967,10 +9018,29 @@ Explicit 24-letter alphabet, optional J/I X/W merges, word+letter-1 schedule and
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "WORD DIVISIONS ARE KEPT"
+  },
+  "parameters": {
+    "alphabet": "GROSBEAKCDFHILMNPQTUVWYZ",
+    "merge_aliases": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -7011,10 +9081,30 @@ Rail Fence: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "WECRLTEERDSOEEFEAOCAIVDEN"
+  },
+  "parameters": {
+    "direction": "down",
+    "initial_rail": 0,
+    "rails": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -7124,10 +9214,30 @@ Rail Fence: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "WEAREDISCOVEREDFLEEATONCE"
+  },
+  "parameters": {
+    "direction": "down",
+    "initial_rail": 0,
+    "rails": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -7237,10 +9347,35 @@ Redefence: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "CGAEBDFH"
+  },
+  "parameters": {
+    "direction": "down",
+    "initial_rail": 0,
+    "order": [
+      2,
+      0,
+      1
+    ],
+    "rails": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -7387,10 +9522,35 @@ Redefence: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEFGH"
+  },
+  "parameters": {
+    "direction": "down",
+    "initial_rail": 0,
+    "order": [
+      2,
+      0,
+      1
+    ],
+    "rails": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -7537,10 +9697,26 @@ Rotate ASCII letters by 13; preserve other Unicode.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -7566,10 +9742,26 @@ Self-inverse ASCII ROT13 letters and ROT5 digits; preserve other scalars, <=1 Mi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A1"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -7594,10 +9786,26 @@ Self-inverse printable ASCII U+0021..U+007E rotation by 47; preserve other scala
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "!"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -7622,10 +9830,26 @@ Self-inverse ASCII digit rotation by five; preserve other scalars, <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A1"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -7650,10 +9874,37 @@ Route: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ADBECF"
+  },
+  "parameters": {
+    "columns": 3,
+    "fill": {
+      "corner": "top_left",
+      "kind": "rows"
+    },
+    "read": {
+      "corner": "top_left",
+      "kind": "columns"
+    },
+    "rows": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -7794,10 +10045,37 @@ Route: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEF"
+  },
+  "parameters": {
+    "columns": 3,
+    "fill": {
+      "corner": "top_left",
+      "kind": "rows"
+    },
+    "read": {
+      "corner": "top_left",
+      "kind": "columns"
+    },
+    "rows": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -7938,10 +10216,28 @@ Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "BDF"
+  },
+  "parameters": {
+    "key": "BCD"
+  }
+}
+```
+
 
 Parameters:
 
@@ -7978,10 +10274,28 @@ Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABC"
+  },
+  "parameters": {
+    "key": "BCD"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8018,10 +10332,28 @@ Scytale: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ADGBEHCF"
+  },
+  "parameters": {
+    "columns": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -8084,10 +10416,28 @@ Scytale: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEFGH"
+  },
+  "parameters": {
+    "columns": 3
+  }
+}
+```
+
 
 Parameters:
 
@@ -8150,10 +10500,33 @@ Sequence Transposition: explicit bounded decode; see typed profile guide for con
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "βA!😀"
+  },
+  "parameters": {
+    "order": [
+      2,
+      0,
+      3,
+      1
+    ]
+  }
+}
+```
+
 
 Parameters:
 
@@ -8218,10 +10591,33 @@ Sequence Transposition: explicit bounded encode; see typed profile guide for con
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A😀β!"
+  },
+  "parameters": {
+    "order": [
+      2,
+      0,
+      3,
+      1
+    ]
+  }
+}
+```
+
 
 Parameters:
 
@@ -8286,12 +10682,31 @@ I/J-square vertical pairs in explicit periods; inserted fillers retain scalar-po
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `prepared` | `text` |
 | Output | `fillers` | `cipher.filler_positions` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "NLBCSPCDFGXZQQCDCMGCGQTBHCFTRHFGWHGB"
+  },
+  "parameters": {
+    "period": 6,
+    "square": "LOGARITHMBCDEFKNPQSUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8346,12 +10761,31 @@ I/J-square vertical pairs in explicit periods; inserted fillers retain scalar-po
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
 | Output | `prepared` | `text` |
 | Output | `fillers` | `cipher.filler_positions` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "COMEQUICKLYWENEEDHELPIMMEDIATELYTOM"
+  },
+  "parameters": {
+    "period": 6,
+    "square": "LOGARITHMBCDEFKNPQSUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8406,10 +10840,29 @@ Skip: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ACEBD"
+  },
+  "parameters": {
+    "start": "0",
+    "step": "-9223372036854775808"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8498,10 +10951,29 @@ Skip: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDE"
+  },
+  "parameters": {
+    "start": "0",
+    "step": "-9223372036854775808"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8590,10 +11062,28 @@ Even canonical ACA Vigenere Slidefair digraphs; rectangle or equal-column right/
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ZD"
+  },
+  "parameters": {
+    "key": "B"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8630,10 +11120,28 @@ Even canonical ACA Vigenere Slidefair digraphs; rectangle or equal-column right/
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "CA"
+  },
+  "parameters": {
+    "key": "B"
+  }
+}
+```
+
 
 Parameters:
 
@@ -8670,10 +11178,17 @@ Original Schneier Solitaire/Pontifex with explicit private deck, optional passph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -8738,10 +11253,17 @@ Original Schneier Solitaire/Pontifex with explicit private deck, optional passph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -8806,10 +11328,37 @@ Spiral: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCFED"
+  },
+  "parameters": {
+    "columns": 3,
+    "fill": {
+      "corner": "top_left",
+      "kind": "rows"
+    },
+    "read": {
+      "corner": "top_left",
+      "kind": "clockwise"
+    },
+    "rows": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -8950,10 +11499,37 @@ Spiral: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCDEF"
+  },
+  "parameters": {
+    "columns": 3,
+    "fill": {
+      "corner": "top_left",
+      "kind": "rows"
+    },
+    "read": {
+      "corner": "top_left",
+      "kind": "clockwise"
+    },
+    "rows": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -9094,10 +11670,34 @@ Decode with an explicit straddling digit table; reject unassigned/incomplete dig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "01"
+  },
+  "parameters": {
+    "definition": {
+      "aliases": [],
+      "alphabet": "ABC",
+      "digit_escape": null,
+      "digits": "0123456789",
+      "prefixes": "37"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -9199,10 +11799,34 @@ Encode with an explicit straddling digit table; reject unassigned/incomplete dig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "AB"
+  },
+  "parameters": {
+    "definition": {
+      "aliases": [],
+      "alphabet": "ABC",
+      "digit_escape": null,
+      "digits": "0123456789",
+      "prefixes": "37"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -9304,10 +11928,30 @@ Decode exact Unicode scalars using a validated bijective alphabet; reject by def
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "CAB"
+  },
+  "parameters": {
+    "source": "ABC",
+    "target": "CAB",
+    "unmapped": "reject"
+  }
+}
+```
+
 
 Parameters:
 
@@ -9402,10 +12046,30 @@ Encode exact Unicode scalars using a validated bijective alphabet; reject by def
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABC"
+  },
+  "parameters": {
+    "source": "ABC",
+    "target": "CAB",
+    "unmapped": "reject"
+  }
+}
+```
+
 
 Parameters:
 
@@ -9500,10 +12164,30 @@ Explicit three I/J squares with deterministic cycles or caller-owned row/column 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "RHLQXRLXOEVZBATXSERXDDIUAAABFZ"
+  },
+  "parameters": {
+    "first": "NSFMUOAGPWVBHQXECIRYLDKTZ",
+    "middle": "PASTINOQRMLYZUEKXWVBHGFDC",
+    "second": "READINGBCFHKLMOPQSTUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -9576,10 +12260,54 @@ Explicit three I/J squares with deterministic cycles or caller-owned row/column 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THREEKEYSQUARESUSEDX"
+  },
+  "parameters": {
+    "columns": [
+      2,
+      0,
+      4,
+      4,
+      3,
+      1,
+      3,
+      4,
+      2,
+      4
+    ],
+    "first": "NSFMUOAGPWVBHQXECIRYLDKTZ",
+    "middle": "PASTINOQRMLYZUEKXWVBHGFDC",
+    "rows": [
+      3,
+      2,
+      4,
+      3,
+      2,
+      2,
+      3,
+      4,
+      1,
+      2
+    ],
+    "second": "READINGBCFHKLMOPQSTUVWXYZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -9652,10 +12380,34 @@ Decode with an explicit tridigital digit table; return per-digit alternatives wi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `alternatives` | `cipher.alternatives` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "0"
+  },
+  "parameters": {
+    "definition": {
+      "aliases": [],
+      "alphabet": "DRAGONFLYBCEHIJKMPQSTUVWXZ",
+      "digit_escape": null,
+      "digits": "6703528149",
+      "prefixes": ""
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -9757,10 +12509,34 @@ Encode with an explicit tridigital digit table; reject unassigned/incomplete dig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THE"
+  },
+  "parameters": {
+    "definition": {
+      "aliases": [],
+      "alphabet": "DRAGONFLYBCEHIJKMPQSTUVWXZ",
+      "digit_escape": null,
+      "digits": "6703528149",
+      "prefixes": ""
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -9862,10 +12638,29 @@ Trifid: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "EYMXVUCRYYYYEAYVYOVVXITDPATHE"
+  },
+  "parameters": {
+    "alphabet": "EXTRAODINYBCFGHJKLMPQSUVWZ#",
+    "period": 10
+  }
+}
+```
+
 
 Parameters:
 
@@ -9935,10 +12730,29 @@ Trifid: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "TRIFIDSAREFRACTIONATEDCIPHERS"
+  },
+  "parameters": {
+    "alphabet": "EXTRAODINYBCFGHJKLMPQSUVWZ#",
+    "period": 10
+  }
+}
+```
+
 
 Parameters:
 
@@ -10008,10 +12822,29 @@ Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ACE"
+  },
+  "parameters": {
+    "start": 0,
+    "step": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -10056,10 +12889,29 @@ Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABC"
+  },
+  "parameters": {
+    "start": 0,
+    "step": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -10104,10 +12956,40 @@ Turning Grille: explicit bounded decode; see typed profile guide for conventions
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "TILUNRGHGELTENIR"
+  },
+  "parameters": {
+    "holes": [
+      0,
+      7,
+      9,
+      11
+    ],
+    "orientations": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "side": 4
+  }
+}
+```
+
 
 Parameters:
 
@@ -10246,10 +13128,40 @@ Turning Grille: explicit bounded encode; see typed profile guide for conventions
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THETURNINGGRILLE"
+  },
+  "parameters": {
+    "holes": [
+      0,
+      7,
+      9,
+      11
+    ],
+    "orientations": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "side": 4
+  }
+}
+```
+
 
 Parameters:
 
@@ -10388,10 +13300,29 @@ Horizontal I/J Two-square with opposite ciphertext square order and no padding.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "IRRTEHMKGIMEQGRUNMMZSV"
+  },
+  "parameters": {
+    "first": "DIALOGUEBCFHKMNPQRSTVWXYZ",
+    "second": "BIOGRAPHYCDEFKLMNQSTUVWXZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -10433,10 +13364,29 @@ Horizontal I/J Two-square with opposite ciphertext square order and no padding.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ANOTHERDIGRAPHICSETUPX"
+  },
+  "parameters": {
+    "first": "DIALOGUEBCFHKMNPQRSTVWXYZ",
+    "second": "BIOGRAPHYCDEFKLMNQSTUVWXZ"
+  }
+}
+```
+
 
 Parameters:
 
@@ -10478,10 +13428,17 @@ Vigenère P=(C-K) mod 26 with the same key advancement; <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -10515,10 +13472,17 @@ Vigenère C=(P+K) mod 26; ASCII letters only, preserve other Unicode; <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
 
 Parameters:
 
@@ -10552,10 +13516,26 @@ Decode base32 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "IE======"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10581,10 +13561,28 @@ Encode base32 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10610,10 +13608,26 @@ Decode base58 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "28"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10639,10 +13653,28 @@ Encode base58 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10668,10 +13700,26 @@ Verify bounded Bitcoin Base58Check text and return exact version/payload. <=1421
 
 Category: `encoding`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `encoding.base58check.decoded` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "11VmypLhv"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10696,10 +13744,30 @@ Single-byte version plus <=1024 payload bytes, raw double-SHA256 four-byte check
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AP8="
+    }
+  },
+  "parameters": {
+    "version": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -10735,10 +13803,26 @@ Decode base64 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AP8="
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10764,10 +13848,28 @@ Encode base64 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AP8="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10793,10 +13895,26 @@ Decode hex with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "00ff80"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10822,10 +13940,28 @@ Encode hex with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -10851,11 +13987,36 @@ Compare isolated 8/16/32-bit runs with shared aggregate work/output/memory budge
 
 Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `source` | `text` |
 | Input | `input` | `bytes.array` |
 | Output | `output` | `brainfuck_comparison` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": [
+      255
+    ],
+    "source": ",."
+  },
+  "parameters": {
+    "widths": [
+      8,
+      16,
+      32
+    ]
+  }
+}
+```
+
 
 Parameters:
 
@@ -10948,11 +14109,30 @@ Strict bounded Brainfuck, <=1 MiB source/input/output, 65536 commands, depth 256
 
 Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `source` | `text` |
 | Input | `input` | `bytes.array` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": [
+      255
+    ],
+    "source": ",."
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -11020,11 +14200,30 @@ Bounded execution summary, exact tape range and optional post-dispatch traces; i
 
 Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `source` | `text` |
 | Input | `input` | `bytes.array` |
 | Output | `output` | `brainfuck_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": [
+      255
+    ],
+    "source": ",."
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -11127,10 +14326,28 @@ Find trailing bytes after supported PNG, baseline JPEG, GIF or classic ZIP frami
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `file.png_boundary` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAF0lEQVR4nGMSCTB6dmcfY8WqqA27vgEAKccG9iWFF4cAAAAASUVORK5CYIJ0YWls"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -11156,11 +14373,35 @@ Compare corresponding byte offsets; missing tail bytes remain distinct from zero
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `left` | `byte_reader` |
 | Input | `right` | `byte_reader` |
 | Output | `output` | `file.comparison` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "base64": "YWJj"
+    },
+    "right": {
+      "base64": "YXhjIQ=="
+    }
+  },
+  "parameters": {
+    "max_results": 1000,
+    "offset": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -11266,11 +14507,33 @@ Recover an explicit range or freshly validated framing candidate to a new file w
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `source` | `byte_reader` |
 | Output | `output` | `file.carving` |
 | Output | `data` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "source": {
+      "base64": "YQD/eg=="
+    }
+  },
+  "parameters": {
+    "length": 2,
+    "max_bytes": 16777216,
+    "offset": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -11374,10 +14637,28 @@ Inspect typed JPEG/TIFF EXIF metadata under explicit resource budgets.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `file.exif` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "SUkqAAgAAAAAAAAAAAA="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -11403,10 +14684,32 @@ Display exact bytes as bounded hex rows with absolute offsets.
 
 Category: `file`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `file.hex_rows` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AEFCQ/8="
+    }
+  },
+  "parameters": {
+    "length": 3,
+    "offset": "1",
+    "width": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -11512,10 +14815,28 @@ Inspect basic filesystem facts and bounded header evidence; no EXIF.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `file_path` |
 | Output | `output` | `file.info` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "reference": "fixture:one-zero-byte"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -11541,10 +14862,31 @@ Copy an explicit byte range to a new destination; never overwrite.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AP+ARU5E"
+    }
+  },
+  "parameters": {
+    "length": 2,
+    "offset": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -11614,10 +14956,28 @@ Detect header signatures as evidence, not structural validity.
 
 Category: `file`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `file.signatures` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAF0lEQVR4nGMSCTB6dmcfY8WqqA27vgEAKccG9iWFF4cAAAAASUVORK5CYIJ0YWls"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -11643,10 +15003,32 @@ Locate bounded embedded signature candidates with absolute offsets.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `file.signature_scan` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjJVBERi0xLjc="
+    }
+  },
+  "parameters": {
+    "format": "pdf",
+    "max_results": 1000,
+    "offset": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -11766,10 +15148,32 @@ Extract ASCII printable runs and exact byte offsets.
 
 Category: `file`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `file.strings` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AGFscGhhAGJldGH/"
+    }
+  },
+  "parameters": {
+    "max_results": 1000,
+    "min_length": 4,
+    "offset": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -11882,10 +15286,30 @@ Validate bounded classic ZIP structure at an explicit candidate origin; no decom
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `file.zip_structure` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA=="
+    }
+  },
+  "parameters": {
+    "offset": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -11950,10 +15374,49 @@ Weak components of explicit ordered directed/undirected multigraph; includes iso
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `graph_definition` |
 | Output | `output` | `graph_components` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "directed": false,
+      "edges": [
+        {
+          "from": "A",
+          "id": "ab",
+          "to": "B"
+        },
+        {
+          "from": "B",
+          "id": "bc",
+          "to": "C"
+        }
+      ],
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 4194304
+  }
+}
+```
+
 
 Parameters:
 
@@ -12001,10 +15464,49 @@ Cycle presence with exact ordered edge/vertex witness; loops and parallel undire
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `graph_definition` |
 | Output | `output` | `graph_cycle` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "directed": false,
+      "edges": [
+        {
+          "from": "A",
+          "id": "ab",
+          "to": "B"
+        },
+        {
+          "from": "B",
+          "id": "bc",
+          "to": "C"
+        }
+      ],
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 4194304
+  }
+}
+```
+
 
 Parameters:
 
@@ -12052,10 +15554,50 @@ Hierholzer edge-once trail/circuit with exact orientation, degree/connectivity r
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `graph_definition` |
 | Output | `output` | `graph_euler_trail` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "directed": false,
+      "edges": [
+        {
+          "from": "A",
+          "id": "ab",
+          "to": "B"
+        },
+        {
+          "from": "B",
+          "id": "bc",
+          "to": "C"
+        }
+      ],
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 4194304,
+    "start": "A"
+  }
+}
+```
+
 
 Parameters:
 
@@ -12107,10 +15649,51 @@ Unweighted BFS path with vertex/edge ID evidence, edge input order ties; null me
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `graph_definition` |
 | Output | `output` | `graph_path` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "directed": false,
+      "edges": [
+        {
+          "from": "A",
+          "id": "ab",
+          "to": "B"
+        },
+        {
+          "from": "B",
+          "id": "bc",
+          "to": "C"
+        }
+      ],
+      "vertices": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 4194304,
+    "source": "A",
+    "target": "C"
+  }
+}
+```
+
 
 Parameters:
 
@@ -12169,10 +15752,28 @@ CRC-16/IBM-3740 checksum, poly 0x1021, init 0xFFFF, xor 0, unreflected; not cryp
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12198,10 +15799,28 @@ CRC-32/ISO-HDLC checksum, not a cryptographic hash.
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12227,10 +15846,28 @@ CRC-32/ISCSI (CRC32C) checksum, poly 0x1EDC6F41, init/xor 0xFFFFFFFF, reflected;
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12256,10 +15893,28 @@ Ethereum Keccak-256 (not standardized SHA3-256), exact bytes as 64 lowercase hex
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12285,10 +15940,28 @@ Legacy MD5 (32 lowercase hex digits); unsuitable for collision-resistant securit
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12314,10 +15987,28 @@ RIPEMD-160 exact-byte digest as 40 lowercase hex digits for protocol compatibili
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12343,10 +16034,28 @@ Legacy SHA-1 (40 lowercase hex digits); unsuitable for collision-resistant secur
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12372,10 +16081,28 @@ SHA-256 digest of exact bytes, not password hashing.
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12401,10 +16128,28 @@ SHA-512 exact-byte digest (128 lowercase hex digits), not password hashing.
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12430,11 +16175,42 @@ Extract one row-major sample bit as 0/1 values and MSB-first zero-padded bytes.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.bit_plane` |
 | Output | `data` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    }
+  },
+  "parameters": {
+    "bit": 0,
+    "channel": "gray",
+    "expand_palette": false
+  }
+}
+```
+
 
 Parameters:
 
@@ -12499,11 +16275,52 @@ Combine exact 8-bit image samples with XOR/AND/OR, including alpha or native ind
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `left` | `image.samples` |
 | Input | `right` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    },
+    "right": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    }
+  },
+  "parameters": {
+    "operation": "xor"
+  }
+}
+```
+
 
 Parameters:
 
@@ -12541,12 +16358,41 @@ Extract one exact channel as bytes and optional grayscale PNG.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.pixel_data` |
 | Output | `data` | `bytes` |
 | Output | `image` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "channel": "red"
+  }
+}
+```
+
 
 Parameters:
 
@@ -12604,11 +16450,38 @@ Export sorted exact-color masks/layers as PNG bytes and a manifest; <=64 outputs
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.color_exports` |
 | Output | `images` | `image.png_collection` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AP8="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12673,11 +16546,44 @@ Isolate exact native colors as a coordinate-preserving 0/255 mask or RGBA layer 
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.color_layer` |
 | Output | `image` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    }
+  },
+  "parameters": {
+    "colors": [
+      "01"
+    ],
+    "expand_palette": false,
+    "representation": "mask"
+  }
+}
+```
+
 
 Parameters:
 
@@ -12730,12 +16636,53 @@ Compare exact image/channel samples, with bounded differences and an optional bi
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `left` | `image.samples` |
 | Input | `right` | `image.samples` |
 | Output | `output` | `image.comparison` |
 | Output | `mask` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    },
+    "right": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "mask": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -12804,10 +16751,44 @@ Extract a checked rectangle without resampling; unselected pixels are discarded.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "region": [
+      0,
+      0,
+      1,
+      1
+    ]
+  }
+}
+```
+
 
 Parameters:
 
@@ -12848,10 +16829,37 @@ Export CSV v1 exact 8-bit gray/gray_alpha/rgb/rgba samples without palette/tRNS;
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12877,10 +16885,26 @@ Import a complete CSV v1 grid, validating explicit shape/model/depth, zero-based
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "cube_pixels,1,8,1,gray,8\nx,y,gray\n0,0,0\n1,0,1\n2,0,0\n3,0,1\n4,0,0\n5,0,1\n6,0,0\n7,0,1\n"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12906,10 +16930,28 @@ Decode bounded PNG8, baseline JPEG, single-frame GIF, BMP or static WebP; preser
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAIAAAB7QOjdAAAAD0lEQVR4nGNhZGLmFJIGAACZAEHhFHfhAAAAAElFTkSuQmCC"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12935,10 +16977,37 @@ Encode exact PNG8 samples, preserving palette/tRNS and dropping other metadata.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -12964,10 +17033,33 @@ Compare declared header dimensions with an explicit checked raw-layout hypothesi
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `image.geometry` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAEAAQABAAE="
+    }
+  },
+  "parameters": {
+    "height": 1,
+    "layout": "gray",
+    "offset": 0,
+    "width": 8
+  }
+}
+```
+
 
 Parameters:
 
@@ -13034,10 +17126,39 @@ Lossy color reduction using (77R+150G+29B+128)>>8 without gamma conversion; pres
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "expand_palette": false
+  }
+}
+```
+
 
 Parameters:
 
@@ -13069,10 +17190,40 @@ Count exact selected channel tuples without blending, approximation or quantizat
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.histogram` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "expand_palette": false,
+    "max_colors": 1000
+  }
+}
+```
+
 
 Parameters:
 
@@ -13141,10 +17292,39 @@ Invert selected 8-bit samples as 255-value, preserving alpha by default.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "expand_palette": false
+  }
+}
+```
+
 
 Parameters:
 
@@ -13194,11 +17374,48 @@ Extract raw bytes under explicit pixel/channel/bit ordering and incomplete-byte 
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.bit_stream` |
 | Output | `data` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    }
+  },
+  "parameters": {
+    "bit_order": "msb",
+    "bits": [
+      0
+    ],
+    "expand_palette": false,
+    "incomplete": "reject",
+    "reverse": false,
+    "start_corner": "top_left",
+    "traversal": "row"
+  }
+}
+```
+
 
 Parameters:
 
@@ -13323,10 +17540,39 @@ Mirror exact samples left/right or top/bottom.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "axis": "horizontal"
+  }
+}
+```
+
 
 Parameters:
 
@@ -13363,11 +17609,57 @@ Plan/execute lexicographic unordered pairs over <=8 explicit image objects; reus
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `images` | `image.collection` |
 | Output | `output` | `image.pair_batch` |
 | Output | `images` | `image.collection` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "images": [
+      {
+        "color_model": "gray",
+        "height": 1,
+        "palette": [],
+        "samples": {
+          "base64": "AAEAAQABAAE="
+        },
+        "transparency": {
+          "base64": ""
+        },
+        "width": 8
+      },
+      {
+        "color_model": "gray",
+        "height": 1,
+        "palette": [],
+        "samples": {
+          "base64": "AAEAAQABAAE="
+        },
+        "transparency": {
+          "base64": ""
+        },
+        "width": 8
+      }
+    ]
+  },
+  "parameters": {
+    "max_differences": 1000,
+    "max_pairs": 28,
+    "operation": "xor",
+    "plan_only": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -13425,10 +17717,48 @@ Explicitly expand indexed PNG8 samples to unpremultiplied RGBA8.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "indexed",
+      "height": 1,
+      "palette": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          10,
+          20,
+          30
+        ]
+      ],
+      "samples": {
+        "base64": "AAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -13454,11 +17784,38 @@ Export selected samples with explicit shape/channel metadata or bounded coordina
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.pixel_data` |
 | Output | `data` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -13549,10 +17906,41 @@ Read exact native pixel samples at top-left coordinates.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "expand_palette": false,
+    "x": 1,
+    "y": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -13599,10 +17987,31 @@ Inspect PNG chunks, exact offsets and CRC evidence without pixel decoding.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `image.png_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "iVBORw0KGgoAAAANSUhEUgAAAAgAAAABCAAAAADGa7CfAAAADElEQVR4nGNmYIRAAAA0AAggDZSDAAAAAElFTkSuQmCC"
+    }
+  },
+  "parameters": {
+    "payload_budget": 0,
+    "strict": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -13641,11 +18050,16 @@ Decode bounded QR symbols as raw bytes, separating no detection, undecodable can
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.qr_report` |
 | Output | `payloads` | `bytes.collection` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
 
 Parameters:
 
@@ -13679,10 +18093,33 @@ Interpret exact unsigned 8-bit raw layouts, with explicit channel order, stride 
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAEAAQABAAE="
+    }
+  },
+  "parameters": {
+    "height": 1,
+    "layout": "gray",
+    "offset": 0,
+    "width": 8
+  }
+}
+```
+
 
 Parameters:
 
@@ -13749,10 +18186,44 @@ Apply a full sample channel permutation; moving alpha must be explicit.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "channels": [
+      "blue",
+      "green",
+      "red"
+    ],
+    "expand_palette": false
+  }
+}
+```
+
 
 Parameters:
 
@@ -13804,10 +18275,39 @@ Rotate exact samples clockwise by 0/90/180/270; no interpolation.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AQIDChQe"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "degrees": 90
+  }
+}
+```
+
 
 Parameters:
 
@@ -13846,11 +18346,45 @@ Ordered signed lag overlaps on one physical channel; exact moments and populatio
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `image` | `image.samples` |
 | Input | `lags` | `image.lags` |
 | Output | `output` | `spatial_autocorrelation` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "image": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAEAAQABAAE="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 8
+    },
+    "lags": "[{\"dx\":0,\"dy\":0}]"
+  },
+  "parameters": {
+    "channel": "gray",
+    "max_memory_bytes": 16777216,
+    "max_report_bytes": 1048576,
+    "max_work": 16777216,
+    "region": "0,0,8,1"
+  }
+}
+```
+
 
 Parameters:
 
@@ -13917,10 +18451,43 @@ Preflight a versioned bounded profile and expose exact ranges, operation units, 
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `investigation.profile_request` |
 | Output | `output` | `investigation.profile_plan` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "input_size": 2,
+      "profile": {
+        "budgets": {
+          "max_elapsed_ms": 5000,
+          "max_input_bytes": 1048576,
+          "max_inspected_bytes": 4194304,
+          "max_operations": 16,
+          "max_retained_bytes": 65536
+        },
+        "depth": "metadata",
+        "format_version": 1,
+        "identify": true,
+        "pipeline": null,
+        "record_parameters": false,
+        "retain_results": []
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -13946,11 +18513,44 @@ Run an explicit local metadata/preview profile through shared core operations an
 
 Category: `investigation`. Contract: 2. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `profile` | `investigation.profile` |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `investigation.session` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QUJD"
+    },
+    "profile": {
+      "budgets": {
+        "max_elapsed_ms": 5000,
+        "max_input_bytes": 1048576,
+        "max_inspected_bytes": 4194304,
+        "max_operations": 16,
+        "max_retained_bytes": 65536
+      },
+      "depth": "metadata",
+      "format_version": 1,
+      "identify": true,
+      "pipeline": null,
+      "record_parameters": false,
+      "retain_results": []
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -13976,10 +18576,82 @@ Verify input identity and all contracts before replaying supported deterministic
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `investigation.replay_request` |
 | Output | `output` | `investigation.session` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "input": {
+        "base64": "AP8="
+      },
+      "session": {
+        "engine_api": 1,
+        "engine_version": "0.18.0",
+        "findings": [
+          {
+            "description": "Computed SHA-256 input identity; identity does not establish trust",
+            "id": 1,
+            "input_id": 1,
+            "kind": "observation",
+            "offset": null,
+            "run_id": 1
+          }
+        ],
+        "format_version": 1,
+        "hypotheses": [],
+        "input": {
+          "digest": {
+            "algorithm": "sha256",
+            "value": "06eb7d6a69ee19e5fbdf749018d3d2abfa04bcbd1365db312eb86dc7169389b8"
+          },
+          "id": 1,
+          "size": 2
+        },
+        "limits": {
+          "max_findings": 128,
+          "max_hypotheses": 32,
+          "max_record_bytes": 131072,
+          "max_retained_bytes": 65536,
+          "max_runs": 64
+        },
+        "profile": null,
+        "runs": [
+          {
+            "diagnostic": null,
+            "id": 1,
+            "input_id": 1,
+            "operation": "hash.sha256",
+            "parameters": {
+              "kind": "identity"
+            },
+            "result_digest": {
+              "algorithm": "sha256",
+              "value": "2e60367916a5094e2f5c51c5e74f3bbc04b2a363f8fa6a4e6bcfd2698e521a3c"
+            },
+            "result_kind": "digest",
+            "retained": null,
+            "state": "succeeded",
+            "version": 1,
+            "warning": null
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14005,10 +18677,46 @@ Export versioned JSON or escaped text with explicit redactions and per-run resul
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `investigation.session` |
 | Output | `output` | `investigation.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "engine_api": 1,
+      "engine_version": "0.18.0",
+      "findings": [],
+      "format_version": 1,
+      "hypotheses": [],
+      "input": {
+        "digest": null,
+        "id": 1,
+        "size": "18446744073709551615"
+      },
+      "limits": {
+        "max_findings": 128,
+        "max_hypotheses": 32,
+        "max_record_bytes": 131072,
+        "max_retained_bytes": 65536,
+        "max_runs": 64
+      },
+      "profile": null,
+      "runs": []
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14034,10 +18742,42 @@ Record bounded operation provenance and separate observations from user hypothes
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `investigation.request` |
 | Output | `output` | `investigation.session` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "input": {
+        "base64": "AP8="
+      },
+      "limits": {
+        "max_findings": 128,
+        "max_hypotheses": 32,
+        "max_record_bytes": 131072,
+        "max_retained_bytes": 65536,
+        "max_runs": 64
+      },
+      "record_parameters": false,
+      "retain_result": false,
+      "spec": {
+        "kind": "identity"
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14063,10 +18803,30 @@ Recommend available inspections from bounded header evidence using explainable r
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `investigation.triage` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "JVBERi0xLjc="
+    }
+  },
+  "parameters": {
+    "max_read_bytes": 12
+  }
+}
+```
+
 
 Parameters:
 
@@ -14100,10 +18860,49 @@ Full bounded truth scan, exact counts/witnesses and optional implication/equival
 
 Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `boolean_model` |
 | Output | `output` | `boolean_analysis` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "formula": {
+        "left": {
+          "name": "A",
+          "op": "var"
+        },
+        "op": "or",
+        "right": {
+          "op": "not",
+          "operand": {
+            "name": "A",
+            "op": "var"
+          }
+        }
+      },
+      "variables": [
+        "A"
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 8388608,
+    "max_report_bytes": 8388608,
+    "max_rows": 2,
+    "max_work": 2097152
+  }
+}
+```
+
 
 Parameters:
 
@@ -14158,11 +18957,46 @@ Tagged const/var/not/and/or/xor/implies/iff; explicit variable order and complet
 
 Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `model` | `boolean_model` |
 | Input | `assignment` | `boolean.assignment` |
 | Output | `output` | `boolean_evaluation` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "assignment": [
+      {
+        "name": "A",
+        "value": true
+      }
+    ],
+    "model": {
+      "formula": {
+        "name": "A",
+        "op": "var"
+      },
+      "variables": [
+        "A"
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 8388608,
+    "max_report_bytes": 8388608,
+    "max_rows": 32,
+    "max_work": 2097152
+  }
+}
+```
+
 
 Parameters:
 
@@ -14217,10 +19051,31 @@ Exact positional integers over explicit unique scalar alphabets/bases; u128 magn
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text.integer` |
 | Output | `output` | `text.integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "10"
+  },
+  "parameters": {
+    "from_base": 2,
+    "source_alphabet": "01",
+    "target_alphabet": "ab",
+    "to_base": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -14272,10 +19127,29 @@ Convert signed ASCII integers between bases 2..36; <=4096 input digits, <=128-bi
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text.integer` |
 | Output | `output` | `text.integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "255"
+  },
+  "parameters": {
+    "from_base": 10,
+    "to_base": 16
+  }
+}
+```
+
 
 Parameters:
 
@@ -14317,11 +19191,31 @@ Exact C(n,k), n<=128, cancellation before multiplication; no factorial overflow.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `n` | `unsigned` |
 | Input | `k` | `unsigned` |
 | Output | `output` | `exact_count` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "k": 2,
+    "n": 5
+  },
+  "parameters": {
+    "max_report_bytes": 4096,
+    "max_work": 65536
+  }
+}
+```
+
 
 Parameters:
 
@@ -14362,9 +19256,28 @@ Certified decimal fractional digits of pi/e/phi/sqrt2; index 0 excludes integer 
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Output | `output` | `constant.digits` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {},
+  "parameters": {
+    "constant": "pi",
+    "count": 3,
+    "max_digits": 16,
+    "start": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -14436,10 +19349,28 @@ Decimal digital root of a signed 128-bit magnitude; <=4096 ASCII input digits, n
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `number.signed_magnitude` |
 | Output | `output` | `number.decimal_digit` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "-999"
+  },
+  "parameters": {
+    "radix": 10
+  }
+}
+```
+
 
 Parameters:
 
@@ -14474,11 +19405,28 @@ Exact GCD and signed i128 Bezout coefficients; deterministic Euclid; JSON decima
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `a` | `number.u64` |
 | Input | `b` | `number.u64` |
 | Output | `output` | `number.bezout` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "a": 12,
+    "b": 8
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14504,11 +19452,28 @@ Exact u64 GCD, including gcd(0,0)=0; fixed storage, <=256 Euclidean rounds.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `a` | `number.u64` |
 | Input | `b` | `number.u64` |
 | Output | `output` | `number.u64` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "a": "18446744073709551615",
+    "b": 3
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14534,11 +19499,28 @@ Canonical u64 modular inverse; noncoprime input errors; <=256 Euclidean rounds.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `a` | `number.u64` |
 | Input | `modulus` | `number.u64` |
 | Output | `output` | `number.u64` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "a": 3,
+    "modulus": 11
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14564,12 +19546,30 @@ Exact u64 modular power with u128 products, <=64 bit rounds; exponent zero gives
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `base` | `number.u64` |
 | Input | `exponent` | `number.u64` |
 | Input | `modulus` | `number.u64` |
 | Output | `output` | `number.u64` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "base": 2,
+    "exponent": 10,
+    "modulus": 1000
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14595,10 +19595,32 @@ Exact multinomial count, <=128 groups with total<=128, checked u128 result.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `groups` | `unsigned_list` |
 | Output | `output` | `exact_count` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "groups": [
+      2,
+      1
+    ]
+  },
+  "parameters": {
+    "max_report_bytes": 4096,
+    "max_work": 65536
+  }
+}
+```
+
 
 Parameters:
 
@@ -14639,10 +19661,29 @@ Exact Pascal rows 0..rows-1; <=129 rows including row 128; decimal strings, <=1 
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `rows` | `unsigned` |
 | Output | `output` | `pascal_triangle` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "rows": 3
+  },
+  "parameters": {
+    "max_output_bytes": 1048576,
+    "max_work": 65536
+  }
+}
+```
+
 
 Parameters:
 
@@ -14683,11 +19724,31 @@ Exact P(n,k), n<=128, u128 result; overflow is an error, <=64 Ki arithmetic step
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `n` | `unsigned` |
 | Input | `k` | `unsigned` |
 | Output | `output` | `exact_count` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "k": 2,
+    "n": 5
+  },
+  "parameters": {
+    "max_report_bytes": 4096,
+    "max_work": 65536
+  }
+}
+```
+
 
 Parameters:
 
@@ -14728,10 +19789,46 @@ Execute a prevalidated bounded linear plan; explicit typed values and optional b
 
 Category: `pipelines`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `pipeline.request` |
 | Output | `output` | `pipeline.execution` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "definition": {
+        "input_type": "bytes",
+        "limits": {
+          "max_capture_bytes": 4194304,
+          "max_steps": 64,
+          "max_value_bytes": 1048576,
+          "max_work_bytes": 16777216
+        },
+        "steps": [
+          {
+            "operation": "encoding.hex.encode",
+            "version": 1
+          }
+        ]
+      },
+      "input": {
+        "base64": "AP8=",
+        "type": "bytes"
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14757,10 +19854,40 @@ Validate all bounded linear step IDs, contract versions, parameters and adjacent
 
 Category: `pipelines`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `pipeline.definition` |
 | Output | `output` | `pipeline.plan` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "input_type": "bytes",
+      "limits": {
+        "max_capture_bytes": 4194304,
+        "max_steps": 64,
+        "max_value_bytes": 1048576,
+        "max_work_bytes": 16777216
+      },
+      "steps": [
+        {
+          "operation": "encoding.hex.encode",
+          "version": 1
+        }
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14786,10 +19913,51 @@ Strict left-win, tie and loss exact masses across two independent dice sum distr
 
 Category: `probability`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `dice_pair` |
 | Output | `output` | `dice_comparison` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "left": {
+        "dice": [
+          [
+            {
+              "value": 2,
+              "weight": "1"
+            }
+          ]
+        ]
+      },
+      "right": {
+        "dice": [
+          [
+            {
+              "value": 1,
+              "weight": "1"
+            }
+          ]
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216
+  }
+}
+```
+
 
 Parameters:
 
@@ -14837,10 +20005,43 @@ Exact bounded independent weighted dice convolution; 8 dice, 64 faces each, 4096
 
 Category: `probability`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `dice_model` |
 | Output | `output` | `dice_sum_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "dice": [
+        [
+          {
+            "value": 1,
+            "weight": "1"
+          },
+          {
+            "value": 2,
+            "weight": "1"
+          }
+        ]
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216
+  }
+}
+```
+
 
 Parameters:
 
@@ -14888,10 +20089,46 @@ Exact supplied finite masses, events, conditioning and signed expectation; 4096 
 
 Category: `probability`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `finite_probability_model` |
 | Output | `output` | `finite_probability_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "event_a": [
+        "red"
+      ],
+      "outcomes": [
+        {
+          "id": "red",
+          "value": 1,
+          "weight": "1"
+        },
+        {
+          "id": "blue",
+          "value": 2,
+          "weight": "1"
+        }
+      ]
+    }
+  },
+  "parameters": {
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216
+  }
+}
+```
+
 
 Parameters:
 
@@ -14939,10 +20176,53 @@ Check an independent community recipe against an exact typed expected output wit
 
 Category: `recipes`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `recipe.contract` |
 | Output | `output` | `recipe.check` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "expected": {
+        "data": "00ff",
+        "type": "text"
+      },
+      "input": {
+        "base64": "AP8=",
+        "type": "bytes"
+      },
+      "recipe": {
+        "engine_api": 1,
+        "format_version": 1,
+        "input": {
+          "name": "payload",
+          "source": "slot",
+          "type": "bytes"
+        },
+        "output": {
+          "type": "text"
+        },
+        "steps": [
+          {
+            "operation": "encoding.hex.encode",
+            "version": 1
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14968,10 +20248,51 @@ Execute a validated recipe with exact caller-supplied typed bindings and bounded
 
 Category: `recipes`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `recipe.request` |
 | Output | `output` | `pipeline.execution` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "bindings": {
+        "payload": {
+          "base64": "AP8=",
+          "type": "bytes"
+        }
+      },
+      "recipe": {
+        "engine_api": 1,
+        "format_version": 1,
+        "input": {
+          "name": "payload",
+          "source": "slot",
+          "type": "bytes"
+        },
+        "output": {
+          "type": "text"
+        },
+        "steps": [
+          {
+            "operation": "encoding.hex.encode",
+            "version": 1
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -14997,10 +20318,43 @@ Validate strict versioned JSON recipe contracts without executing operations or 
 
 Category: `recipes`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `recipe.document` |
 | Output | `output` | `recipe.plan` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "engine_api": 1,
+      "format_version": 1,
+      "input": {
+        "name": "payload",
+        "source": "slot",
+        "type": "bytes"
+      },
+      "output": {
+        "type": "text"
+      },
+      "steps": [
+        {
+          "operation": "encoding.hex.encode",
+          "version": 1
+        }
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15026,10 +20380,26 @@ Strict canonical 1..26 hyphen tokens to uppercase ASCII; preserve ASCII whitespa
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "1 2"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15055,10 +20425,26 @@ ASCII A-Z to canonical 1..26 hyphen tokens; preserve ASCII whitespace; lowercase
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AB"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15084,10 +20470,26 @@ Decode U+2800..U+28FF cells to exact mask bytes; reject other characters; <=1 Mi
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "⠀⠁⣿"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15113,10 +20515,28 @@ Encode bytes as Unicode Braille dot masks, bit n-1=dot n; no language transcript
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAH/"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15142,9 +20562,28 @@ Map one exact H:MM reading or two signed millidegree angles to eight receiver-fa
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Output | `output` | `clock.directions` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {},
+  "parameters": {
+    "clockwise": true,
+    "decode": false,
+    "time": "03:00",
+    "zero_axis": "N"
+  }
+}
+```
+
 
 Parameters:
 
@@ -15264,10 +20703,28 @@ Explicit telephone or multi-tap groups; decode telephone alternatives without wo
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `keypad.decoded` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "2"
+  },
+  "parameters": {
+    "mode": "telephone"
+  }
+}
+```
+
 
 Parameters:
 
@@ -15308,10 +20765,28 @@ Explicit telephone or multi-tap groups; decode telephone alternatives without wo
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "mode": "multi_tap"
+  }
+}
+```
+
 
 Parameters:
 
@@ -15352,10 +20827,26 @@ Canonical dot/dash tokens with one space; slash separates words; uppercase A-Z/0
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "... --- ... / ..---"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15381,10 +20872,26 @@ International Morse A-Z/0-9; collapse ASCII spaces, normalize decoded case; <=1 
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "SOS 2"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15410,10 +20917,26 @@ Decode exact LH,RH tokens or /, separated by one ASCII space; <=16384 tokens, li
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "S,SW S,W"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15439,10 +20962,26 @@ Letter-only flag Semaphore: sender anatomical LH,RH, receiver-facing N/NE/E/SE/S
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AB"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -15468,6 +21007,8 @@ Caller-owned symbolic token map; exact boundaries, aliases and original source p
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -15478,6 +21019,45 @@ Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `license_id` | `text` |
 | Output | `definition_sha256` | `text` |
 | Output | `bijective` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "triangle|○|△"
+  },
+  "parameters": {
+    "boundaries": {
+      "kind": "separated",
+      "separator": "|"
+    },
+    "output_separator": "|",
+    "table": {
+      "entries": [
+        {
+          "aliases": [
+            "triangle"
+          ],
+          "token": "△",
+          "value": "A"
+        },
+        {
+          "aliases": [],
+          "token": "○",
+          "value": "B"
+        }
+      ],
+      "license_id": "original-fixture",
+      "profile_id": "example-token-table",
+      "source_id": "synthetic:original-v1"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -15629,6 +21209,8 @@ Inverse of an explicitly bijective alias-free token table; no guessed glyphs or 
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -15639,6 +21221,43 @@ Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `license_id` | `text` |
 | Output | `definition_sha256` | `text` |
 | Output | `bijective` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A|B|A"
+  },
+  "parameters": {
+    "boundaries": {
+      "kind": "separated",
+      "separator": "|"
+    },
+    "output_separator": "|",
+    "table": {
+      "entries": [
+        {
+          "aliases": [],
+          "token": "△",
+          "value": "A"
+        },
+        {
+          "aliases": [],
+          "token": "○",
+          "value": "B"
+        }
+      ],
+      "license_id": "original-fixture",
+      "profile_id": "example-token-table",
+      "source_id": "synthetic:original-v1"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -15790,11 +21409,38 @@ Exact caller-dictionary unordered anagrams; 10000 entries, 64 scalars/entry, 4 M
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Input | `dictionary` | `text.dictionary` |
 | Output | `output` | `anagram_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "dictionary": "[\"AB\"]",
+    "input": "AB"
+  },
+  "parameters": {
+    "case": "preserve",
+    "filter": "all",
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_results": 100,
+    "max_words": 1,
+    "max_work": 1000000,
+    "normalization": "none",
+    "reuse": false
+  }
+}
+```
+
 
 Parameters:
 
@@ -15891,10 +21537,28 @@ Map disjoint scalar sets with source positions and explicit preserved/filtered r
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.class.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AEIOU"
+  },
+  "parameters": {
+    "unmapped": "error"
+  }
+}
+```
+
 
 Parameters:
 
@@ -15944,10 +21608,28 @@ Exact u32 scalar code points with original offsets and decimal/hex/U+ presentati
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.codepoints` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "é"
+  },
+  "parameters": {
+    "format": "decimal"
+  }
+}
+```
+
 
 Parameters:
 
@@ -15984,10 +21666,38 @@ Incremental ordered Cartesian strings; rightmost group fastest, duplicates retai
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text.collections` |
 | Output | `output` | `text.iterator` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": [
+      [
+        "A",
+        "B"
+      ],
+      [
+        "1",
+        "2"
+      ]
+    ]
+  },
+  "parameters": {
+    "max_results": 1000,
+    "separator": "-"
+  }
+}
+```
+
 
 Parameters:
 
@@ -16026,10 +21736,31 @@ Select Unicode scalar positions (not UTF-8 bytes); preserve list order/duplicate
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "indices": [
+      2,
+      0
+    ]
+  }
+}
+```
+
 
 Parameters:
 
@@ -16195,10 +21926,29 @@ Enumerate ascending-width factors of 1..=65536 retained Unicode scalars; sides <
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.grid_factors` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABCD"
+  },
+  "parameters": {
+    "drop_whitespace": false,
+    "max_candidates": 128
+  }
+}
+```
+
 
 Parameters:
 
@@ -16237,11 +21987,30 @@ Place exact scalars using existing image traversal; quoted-cell text or explicit
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.grid` |
 | Output | `image` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "0110"
+  },
+  "parameters": {
+    "colors": "[[\"0\",\"000000ff\"],[\"1\",\"ffffffff\"]]",
+    "width": 2
+  }
+}
+```
+
 
 Parameters:
 
@@ -16298,10 +22067,37 @@ Bounded removal-based scalar traversal, resume next remaining in chosen directio
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.traversal.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABCDE"
+  },
+  "parameters": {
+    "count": 1,
+    "direction": "forward",
+    "index_base": 0,
+    "max_memory": 8388608,
+    "max_output": 8388608,
+    "max_work": 16777216,
+    "steps": [
+      1
+    ],
+    "wrap": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -16451,12 +22247,93 @@ Decode explicit row,column,layer tuples; no inferred origin, layer or OS locale.
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `coordinates` | `json` |
 | Output | `text` | `text` |
 | Output | `positions` | `json` |
 | Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "coordinates": [
+      [
+        1,
+        1,
+        "base"
+      ],
+      [
+        2,
+        1,
+        "base"
+      ],
+      [
+        2,
+        1,
+        "shift"
+      ]
+    ]
+  },
+  "parameters": {
+    "index_base": 1,
+    "layout": {
+      "entries": [
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "base",
+          "row": 0,
+          "symbol": "a"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "base",
+          "row": 0,
+          "symbol": "b"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "base",
+          "row": 1,
+          "symbol": "😀"
+        },
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "A"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "B"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "shift",
+          "row": 1,
+          "symbol": "β"
+        }
+      ],
+      "geometry": "original-ragged"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -16565,12 +22442,77 @@ Exact row,column,layer tuples and original byte/scalar positions on explicit geo
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
 | Output | `coordinates` | `json` |
 | Output | `positions` | `json` |
 | Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "a😀β"
+  },
+  "parameters": {
+    "index_base": 1,
+    "layout": {
+      "entries": [
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "base",
+          "row": 0,
+          "symbol": "a"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "base",
+          "row": 0,
+          "symbol": "b"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "base",
+          "row": 1,
+          "symbol": "😀"
+        },
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "A"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "B"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "shift",
+          "row": 1,
+          "symbol": "β"
+        }
+      ],
+      "geometry": "original-ragged"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -16679,10 +22621,29 @@ Map physical key/layer positions on identical explicit geometries; no locale gue
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "qQ "
+  },
+  "parameters": {
+    "source": "qwerty",
+    "target": "dvorak"
+  }
+}
+```
+
 
 Parameters:
 
@@ -16729,6 +22690,8 @@ Explicit signed displacement; wrap follows destination row lengths; inverse requ
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -16738,6 +22701,71 @@ Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `positions` | `json` |
 | Output | `bijective` | `json` |
 | Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ba😀BAβ"
+  },
+  "parameters": {
+    "dx": "-9223372036854775807",
+    "dy": "0",
+    "edge": "wrap",
+    "layout": {
+      "entries": [
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "base",
+          "row": 0,
+          "symbol": "a"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "base",
+          "row": 0,
+          "symbol": "b"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "base",
+          "row": 1,
+          "symbol": "😀"
+        },
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "A"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "B"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "shift",
+          "row": 1,
+          "symbol": "β"
+        }
+      ],
+      "geometry": "original-ragged"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -16910,6 +22938,8 @@ Explicit signed displacement; wrap follows destination row lengths; inverse requ
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `text` | `text` |
@@ -16919,6 +22949,71 @@ Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 | Output | `positions` | `json` |
 | Output | `bijective` | `json` |
 | Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ab😀ABβ"
+  },
+  "parameters": {
+    "dx": "-9223372036854775807",
+    "dy": "0",
+    "edge": "wrap",
+    "layout": {
+      "entries": [
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "base",
+          "row": 0,
+          "symbol": "a"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "base",
+          "row": 0,
+          "symbol": "b"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "base",
+          "row": 1,
+          "symbol": "😀"
+        },
+        {
+          "column": 0,
+          "key": "k0",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "A"
+        },
+        {
+          "column": 1,
+          "key": "k1",
+          "layer": "shift",
+          "row": 0,
+          "symbol": "B"
+        },
+        {
+          "column": 0,
+          "key": "k2",
+          "layer": "shift",
+          "row": 1,
+          "symbol": "β"
+        }
+      ],
+      "geometry": "original-ragged"
+    }
+  }
+}
+```
+
 
 Parameters:
 
@@ -17091,10 +23186,34 @@ Exact sorted scalar inventories with equality, containment, residuals and defici
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `scalar_multiset_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "BABA"
+  },
+  "parameters": {
+    "case": "preserve",
+    "filter": "all",
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216,
+    "normalization": "none",
+    "requested": "AB"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17178,10 +23297,34 @@ Exact complete scalar subtraction and deficits; no underflow, hidden normalizati
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `scalar_multiset_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "BABA"
+  },
+  "parameters": {
+    "case": "preserve",
+    "filter": "all",
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216,
+    "normalization": "none",
+    "requested": "AB"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17265,10 +23408,28 @@ Explicit UAX #15 normalization; Unicode data version exposed by UNICODE_VERSION;
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "é"
+  },
+  "parameters": {
+    "form": "NFC"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17307,10 +23468,26 @@ Reverse Unicode scalar values, including combining marks/CRLF; not grapheme or b
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "Aé"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -17336,10 +23513,28 @@ First/last Unicode scalar per word or nonempty LF/CRLF line; punctuation/line sp
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AB CD"
+  },
+  "parameters": {
+    "selector": "word_first"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17378,10 +23573,37 @@ Bounded cyclic-step retained scalar ring with mandatory count and original posit
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.traversal.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABCDE"
+  },
+  "parameters": {
+    "count": 1,
+    "direction": "forward",
+    "index_base": 0,
+    "max_memory": 8388608,
+    "max_output": 8388608,
+    "max_work": 16777216,
+    "steps": [
+      1
+    ],
+    "wrap": true
+  }
+}
+```
+
 
 Parameters:
 
@@ -17532,10 +23754,32 @@ Bounded Unicode-scalar frequencies, overlapping n-grams, IC and entropy under ex
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.statistics` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AAA"
+  },
+  "parameters": {
+    "case": "preserve",
+    "filter": "all",
+    "max_results": 1000,
+    "ngram_size": 1,
+    "normalization": "none"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17606,10 +23850,35 @@ Apply existing ASCII ciphers to bounded scalar position sets and their complemen
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABCD"
+  },
+  "parameters": {
+    "index_base": 0,
+    "indices": [
+      0,
+      2
+    ],
+    "otherwise": "identity",
+    "selected": "atbash",
+    "selector": "indices"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17806,11 +24075,33 @@ Exact scalar-index comparison plus optional separately labeled normalized-view d
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Input | `other` | `text` |
 | Output | `output` | `text.unicode.comparison` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "é",
+    "other": "é"
+  },
+  "parameters": {
+    "max_output": 8388608,
+    "max_results": 1000,
+    "max_work": 134217728,
+    "normalization": "NFC"
+  }
+}
+```
+
 
 Parameters:
 
@@ -17870,10 +24161,30 @@ Versioned scalar case/category/control/space/format observations and finite zero
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.unicode.inspection` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "é"
+  },
+  "parameters": {
+    "max_output": 8388608,
+    "max_results": 1000,
+    "max_work": 134217728
+  }
+}
+```
+
 
 Parameters:
 
@@ -17921,10 +24232,28 @@ Explicit UTF-8 decoding, reject invalid bytes without replacement; <=1 MiB.
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `bytes` |
 | Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "5LiW55WM"
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -17950,10 +24279,26 @@ Explicit text-to-UTF-8 bytes, no normalization/newline; <=1 MiB.
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "世界"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -17979,10 +24324,30 @@ Ordered signed positions per Unicode-whitespace word, exact original scalar/byte
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.word.extraction` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "Cat Dog"
+  },
+  "parameters": {
+    "index_base": 1,
+    "positions": "[1,-1]",
+    "short_word": "error"
+  }
+}
+```
+
 
 Parameters:
 
@@ -18035,10 +24400,26 @@ Exact Unicode-scalar lengths of whitespace-delimited words with original boundar
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.word.lengths` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "Hi 世界"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -18064,10 +24445,30 @@ Ordered per-word scalar/u64 values with original positions, explicit optional ta
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.word.values` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "ABC"
+  },
+  "parameters": {
+    "max_sum": "18446744073709551615",
+    "sums": true,
+    "unmapped": "error"
+  }
+}
+```
+
 
 Parameters:
 
@@ -18150,12 +24551,36 @@ Indexed substitution adjacency and shared graph BFS; lexicographic ties, 32768 e
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `dictionary` | `text.dictionary` |
 | Input | `start` | `text` |
 | Input | `end` | `text` |
 | Output | `output` | `word_ladder_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "dictionary": "[\"CAT\",\"COT\",\"COG\",\"DOG\"]",
+    "end": "DOG",
+    "start": "CAT"
+  },
+  "parameters": {
+    "case": "preserve",
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216,
+    "normalization": "none"
+  }
+}
+```
+
 
 Parameters:
 
@@ -18224,11 +24649,34 @@ Validate exact single-scalar substitutions and caller dictionary membership; 409
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `dictionary` | `text.dictionary` |
 | Input | `path` | `text.list` |
 | Output | `output` | `word_ladder_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "dictionary": "[\"CAT\",\"COT\",\"COG\",\"DOG\"]",
+    "path": "[\"CAT\",\"COT\",\"COG\",\"DOG\"]"
+  },
+  "parameters": {
+    "case": "preserve",
+    "max_memory_bytes": 33554432,
+    "max_report_bytes": 8388608,
+    "max_work": 16777216,
+    "normalization": "none"
+  }
+}
+```
+
 
 Parameters:
 
@@ -18297,11 +24745,31 @@ Remux one explicit self-contained MOV raw-PCM8 mono/stereo track to bounded WAV 
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `video.audio_track` |
 | Output | `data` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAAAEGZ0eXBxdCAgAAAAAAAAAAxtZGF0AID/QAAAAeRtb292AAAAbG12aGQAAAAAAAAAAAAAAAAAAB9AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABcHRyYWsAAABcdGtoZAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQxtZGlhAAAAIG1kaGQAAAAAAAAAAAAAAAAAAB9AAAAABAAAAAAAAAAgaGRscgAAAAAAAAAAc291bgAAAAAAAAAAAAAAAAAAAMRtaW5mAAAAJGRpbmYAAAAcZHJlZgAAAAAAAAABAAAADHVybCAAAAABAAAAmHN0YmwAAAA0c3RzZAAAAAAAAAABAAAAJHJhdyAAAAAAAAAAAQAAAAAAAAAAAAEACAAAAAAfQAAAAAAAFHN0c3oAAAAAAAAAAQAAAAQAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAQAAAABAAAAFHN0Y28AAAAAAAAAAQAAABgAAAAYc3R0cwAAAAAAAAABAAAABAAAAAE="
+    }
+  },
+  "parameters": {
+    "track_id": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -18336,10 +24804,28 @@ Bounded declared MP4/MOV or WebM container/track/codec/dimension/time metadata; 
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `video.container_metadata` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAAAEGZ0eXBxdCAgAAAAAAAAAqJtZGF0/9j/4AAQSkZJRgABAgAAAQABAAD/wAALCAABAAIBAREA/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AP5/6//Z/9j/4AAQSkZJRgABAgAAAQABAAD/wAALCAABAAIBAREA/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AP6AK//ZAAACNm1vb3YAAABsbXZoZAAAAAAAAAAAAAAAAAAAA+gAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHCdHJhawAAAFx0a2hkAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXm1kaWEAAAAgbWRoZAAAAAAAAAAAAAAAAAAAA+gAAAAeAAAAAAAAACBoZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAAAABFm1pbmYAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAADqc3RibAAAAGZzdHNkAAAAAAAAAAEAAABWanBlZwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAj//wAAABxzdHN6AAAAAAAAAAAAAAACAAABTQAAAU0AAAAoc3RzYwAAAAAAAAACAAAAAQAAAAEAAAABAAAAAgAAAAEAAAABAAAAGHN0Y28AAAAAAAAAAgAAABgAAAFlAAAAIHN0dHMAAAAAAAAAAgAAAAEAAAAKAAAAAQAAABQ="
+    }
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -18365,10 +24851,37 @@ Compare <=8 explicit MOV/JPEG frame pairs through existing Image comparison, ret
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `video.frame_comparisons` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAAAEGZ0eXBxdCAgAAAAAAAAAqJtZGF0/9j/4AAQSkZJRgABAgAAAQABAAD/wAALCAABAAIBAREA/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AP5/6//Z/9j/4AAQSkZJRgABAgAAAQABAAD/wAALCAABAAIBAREA/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AP6AK//ZAAACNm1vb3YAAABsbXZoZAAAAAAAAAAAAAAAAAAAA+gAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHCdHJhawAAAFx0a2hkAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXm1kaWEAAAAgbWRoZAAAAAAAAAAAAAAAAAAAA+gAAAAeAAAAAAAAACBoZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAAAABFm1pbmYAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAADqc3RibAAAAGZzdHNkAAAAAAAAAAEAAABWanBlZwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAj//wAAABxzdHN6AAAAAAAAAAAAAAACAAABTQAAAU0AAAAoc3RzYwAAAAAAAAACAAAAAQAAAAEAAAABAAAAAgAAAAEAAAABAAAAGHN0Y28AAAAAAAAAAgAAABgAAAFlAAAAIHN0dHMAAAAAAAAAAgAAAAEAAAAKAAAAAQAAABQ="
+    }
+  },
+  "parameters": {
+    "max_results": 1000,
+    "pairs": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "track_id": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -18441,11 +24954,35 @@ Extract 1..=8 explicitly indexed independent baseline JPEG frames from bounded s
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `video.frames` |
 | Output | `images` | `image.collection` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AAAAEGZ0eXBxdCAgAAAAAAAAAqJtZGF0/9j/4AAQSkZJRgABAgAAAQABAAD/wAALCAABAAIBAREA/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AP5/6//Z/9j/4AAQSkZJRgABAgAAAQABAAD/wAALCAABAAIBAREA/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AP6AK//ZAAACNm1vb3YAAABsbXZoZAAAAAAAAAAAAAAAAAAAA+gAAAAeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHCdHJhawAAAFx0a2hkAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABXm1kaWEAAAAgbWRoZAAAAAAAAAAAAAAAAAAAA+gAAAAeAAAAAAAAACBoZGxyAAAAAAAAAAB2aWRlAAAAAAAAAAAAAAAAAAABFm1pbmYAAAAkZGluZgAAABxkcmVmAAAAAAAAAAEAAAAMdXJsIAAAAAEAAADqc3RibAAAAGZzdHNkAAAAAAAAAAEAAABWanBlZwAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAj//wAAABxzdHN6AAAAAAAAAAAAAAACAAABTQAAAU0AAAAoc3RzYwAAAAAAAAACAAAAAQAAAAEAAAABAAAAAgAAAAEAAAABAAAAGHN0Y28AAAAAAAAAAgAAABgAAAFlAAAAIHN0dHMAAAAAAAAAAgAAAAEAAAAKAAAAAQAAABQ="
+    }
+  },
+  "parameters": {
+    "indexes": [
+      1,
+      0
+    ],
+    "track_id": 1
+  }
+}
+```
+
 
 Parameters:
 
@@ -18493,10 +25030,28 @@ Explicit embedded HAR response body to bytes with logical-text/base64 provenance
 
 Category: `web`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "{\"log\":{\"version\":\"1.2\",\"entries\":[{\"request\":{\"method\":\"GET\",\"url\":\"https://fixture.invalid/\"},\"response\":{\"status\":200,\"content\":{\"text\":\"ABC\"}}}]}}"
+  },
+  "parameters": {
+    "index": 0
+  }
+}
+```
+
 
 Parameters:
 
@@ -18531,10 +25086,26 @@ Bounded inert HAR 1.2 metadata observations, explicit missing values/body availa
 
 Category: `web`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `web.har_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "{\"log\":{\"version\":\"1.2\",\"entries\":[{\"request\":{\"method\":\"GET\",\"url\":\"https://example.invalid\"},\"response\":{\"status\":200}}]}}"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 
@@ -18560,10 +25131,29 @@ Explicit inline source or strict base64 data-URL asset to bounded bytes with sou
 
 Category: `web`. Contract: 1. Pipeline adapter: 1.
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "<script>ABC</script>"
+  },
+  "parameters": {
+    "index": 0,
+    "selector": "inline"
+  }
+}
+```
+
 
 Parameters:
 
@@ -18607,10 +25197,26 @@ Bounded inert UTF-8 HTML token/reference/text/inline-range observations; no DOM/
 
 Category: `web`. Contract: 1. Pipeline adapter: none (direct API).
 
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
 | Direction | Port | Semantic type |
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `web.html_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "<p>Hello</p><img src='https://example.invalid/x'><script>throw 1</script>"
+  },
+  "parameters": {}
+}
+```
+
 
 Parameters:
 

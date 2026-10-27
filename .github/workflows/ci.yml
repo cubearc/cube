@@ -58,6 +58,12 @@ jobs:
         run: cargo llvm-cov --package cube-core --locked --fail-under-lines 80 --ignore-filename-regex '(/tests/|/target/)'
       - name: Export core LCOV report
         run: cargo llvm-cov report --lcov --output-path lcov.info --ignore-filename-regex '(/tests/|/target/)'
+      - name: Preserve exact operation conformance evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: core-operation-conformance
+          path: target/core-operation-conformance.json
+          if-no-files-found: error
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         # Local threshold enforcement above remains mandatory without Codecov setup.

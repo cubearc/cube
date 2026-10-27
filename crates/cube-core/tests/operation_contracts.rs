@@ -91,10 +91,6 @@ fn full_width_integers_round_trip_without_javascript_rounding() {
     contracts::validate_value(&signed, &contracts::canonical_value(json!(i64::MIN))).unwrap();
     assert!(contracts::validate_value(&signed, &json!("-9223372036854775809")).is_err());
 }
-#[test]
-fn module_owned_fixtures_execute_real_operations() {
-    assert!(contracts::validate_registered_fixtures().unwrap() >= 2);
-}
 
 #[test]
 fn promoted_inputs_retain_owning_parameter_bounds_and_list_constraints() {

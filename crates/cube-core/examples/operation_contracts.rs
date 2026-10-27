@@ -19,6 +19,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         .ok_or("repository root missing")?;
     let mut catalog = serde_json::to_string_pretty(&document)?;
     catalog.push('\n');
+    let fixtures: Vec<serde_json::Value> =
+        serde_json::from_str(include_str!("../src/operations/contracts/conformance.json"))?;
     let mut reference = String::from(
         "# Operation reference\n\nGenerated from Core descriptors and typed schemas. Edit their owning Rust declarations, then run `cargo run -p cube-core --example operation_contracts`. This reference lists implemented operations only.\n\nSchemas: [versioned catalog](../../contracts/v1/catalog.json). Structural contracts do not grant capabilities or replace operation runtime validation.\n\n",
     );
@@ -37,6 +39,21 @@ fn main() -> Result<(), Box<dyn Error>> {
         )?;
         writeln!(
             reference,
+            "Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.\n"
+        )?;
+        let fixture = fixtures
+            .iter()
+            .find(|f| f["operation"] == contract.operation)
+            .ok_or("missing conformance example")?;
+        contract.validate_fixture(&serde_json::from_value(fixture.clone())?)?;
+        if fixture["operation_version"] != contract.operation_version
+            || fixture["contract_sha256"]
+                != cube_core::hashing::sha256(&serde_json::to_vec(contract)?)
+        {
+            return Err("review the changed contract and its conformance fixture".into());
+        }
+        writeln!(
+            reference,
             "| Direction | Port | Semantic type |\n| --- | --- | --- |"
         )?;
         for (direction, ports) in [("Input", &contract.inputs), ("Output", &contract.outputs)] {
@@ -47,6 +64,29 @@ fn main() -> Result<(), Box<dyn Error>> {
                     port.name, port.semantic_type
                 )?;
             }
+        }
+        writeln!(
+            reference,
+            "\nFull named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).\n"
+        )?;
+        if !contract.policy.private_input
+            && !contract.policy.private_output
+            && contract.policy.sensitive_parameters.is_empty()
+        {
+            let example =
+                serde_json::json!({"inputs":fixture["inputs"],"parameters":fixture["parameters"]});
+            let encoded = serde_json::to_string_pretty(&example)?;
+            if encoded.len() <= 2048 {
+                writeln!(
+                    reference,
+                    "Typed example (validated by the complete conformance matrix):\n\n```json\n{encoded}\n```\n"
+                )?;
+            }
+        } else {
+            writeln!(
+                reference,
+                "Private fixture values are omitted here; capture and retention require explicit interface policy.\n"
+            )?;
         }
         writeln!(
             reference,

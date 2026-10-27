@@ -115,3 +115,30 @@ Filesystem interfaces can pass an already authorized regular file handle to
 without resolving another path. `forensics::carving::carve_reader` reuses file
 carving's candidate/range validation and returns exact bytes plus provenance under
 a 16 MiB in-memory ceiling. Neither API grants authority or writes a destination.
+
+## Complete conformance gate
+
+`cargo test -p cube-core --test conformance_matrix --locked` reconciles the entire
+implemented catalog with the packaged synthetic matrix at
+`crates/cube-core/src/operations/contracts/conformance.json`. Every ID executes its
+fixed owning-module callback or a test-only direct public API driver. The drivers
+accept no product requests and add no runtime dispatcher or metadata catalog.
+Known outputs, complete input/parameter/output schemas and rejection of unknown
+fields are checked. Missing/duplicate fixtures, stale versions and unreviewed
+contract SHA-256 identities fail the check. Existing domain boundary/security and
+CLI/native-Python discovery tests remain required.
+
+The compatibility `validate_registered_fixtures` helper counts only richer owning
+callbacks; that subset count is not a catalog coverage metric. The full gate emits
+`target/core-operation-conformance.json` with exact per-ID execution/schema evidence.
+Play separately executes the same synthetic invocations through authorized real API
+calls and writes `target/play-operation-conformance.json`. Its gate requires a
+working adapter for every installed ID, including direct-only operations. CI retains
+both reports; no arbitrary catalog-count threshold substitutes for ID parity.
+
+Synthetic fixture data contains only original redistributable test values, including
+publicly known test keys where required. Generated prose omits private values.
+Filesystem timestamps are validated against the complete schema but omitted from
+known-answer equality. Floating-point analyses use a relative tolerance of 1e-12;
+integer values/decimal strings and bytes compare exactly. No test invents execution
+attestation, host authorization or replay availability.

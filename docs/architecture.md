@@ -89,7 +89,8 @@ transformations stay in their owning modules. Responsibilities include:
   witnesses and Hierholzer construction. IDs, loops, parallel edges and limits
   remain explicit. Typed JSON visitors cap graph arrays before retention; Boolean
   transport reuses the existing unique-key JSON parser with private per-call bounds.
-  Structured discrete results have no pipeline adapters.
+  Structured discrete results have no pipeline adapters. Finite-domain feasibility
+  is research-only, with its standalone instrument under `docs/research`.
 - `numbers::constants`: explicit prefix/selection budgets surround maintained
   `num-bigint` integer arithmetic. Fixed-point series/root intervals certify exact
   truncation, with independent known-answer tests. Runtime generation supports an

@@ -204,3 +204,11 @@ exhaustion raises a resource error, never no-route/no-cycle/no-trail evidence.
 Core allocation bounds do not include the baseline/object overhead of CPython or
 other host runtimes. Native object transport is separately prewalked before JSON
 encoding to cap cardinality, bytes and depth.
+
+## Finite-domain research boundary
+
+[#145's evaluation](research/finite-domain-evaluation.md) records a concrete
+feasibility decision, original independently checked fixtures, AC-3/backtracking
+measurements, dependency evidence and a proposed finite model/limit contract.
+It adds no production solver, dictionary, generic framework or placeholder
+operation. Boolean truth scans and graph traversals remain distinct algorithms.

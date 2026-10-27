@@ -8,7 +8,7 @@ use pyo3::{
     prelude::*,
     types::{PyDict, PyList},
 };
-fn document(
+pub(crate) fn document(
     py: Python<'_>,
     value: &Bound<'_, PyAny>,
     maximum: usize,

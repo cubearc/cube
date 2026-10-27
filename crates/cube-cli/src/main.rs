@@ -27,6 +27,7 @@ mod modularcmd;
 mod monocmd;
 mod pipelinecmd;
 mod playcmd;
+mod polycmd;
 mod puzzlecmd;
 mod recipecmd;
 mod textcmd;
@@ -320,6 +321,53 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Explicit bounded historical profile; typed JSON parameters
+    Gronsfeld(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Trithemius(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Autokey(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    RunningKey(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Porta(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Gromark(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    PeriodicGromark(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Solitaire(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Slidefair(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Portax(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Ragbaby(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Condi(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Nicodemus(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Quagmire(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Phillips(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Chaocipher(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Playfair(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    SeriatedPlayfair(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    TwoSquare(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    FourSquare(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Hill(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    Digrafid(polycmd::Parameters),
+    /// Explicit bounded historical profile; typed JSON parameters
+    TriSquare(polycmd::Parameters),
+
     /// Exact Unicode alphabet or keyword permutation
     Substitution(monocmd::Substitution),
     /// Deterministic caller-owned homophonic token mapping
@@ -733,6 +781,29 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Cipher { command } => {
             let text = match command {
+                Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
+                Cipher::Trithemius(args) => polycmd::trithemius(args)?,
+                Cipher::Autokey(args) => polycmd::autokey(args)?,
+                Cipher::RunningKey(args) => polycmd::running_key(args)?,
+                Cipher::Porta(args) => polycmd::porta(args)?,
+                Cipher::Gromark(args) => polycmd::gromark(args)?,
+                Cipher::PeriodicGromark(args) => polycmd::periodic_gromark(args)?,
+                Cipher::Solitaire(args) => polycmd::solitaire(args)?,
+                Cipher::Slidefair(args) => polycmd::slidefair(args)?,
+                Cipher::Portax(args) => polycmd::portax(args)?,
+                Cipher::Ragbaby(args) => polycmd::ragbaby(args)?,
+                Cipher::Condi(args) => polycmd::condi(args)?,
+                Cipher::Nicodemus(args) => polycmd::nicodemus(args)?,
+                Cipher::Quagmire(args) => polycmd::quagmire(args)?,
+                Cipher::Phillips(args) => polycmd::phillips(args)?,
+                Cipher::Chaocipher(args) => polycmd::chaocipher(args)?,
+                Cipher::Playfair(args) => polycmd::playfair(args)?,
+                Cipher::SeriatedPlayfair(args) => polycmd::seriated_playfair(args)?,
+                Cipher::TwoSquare(args) => polycmd::two_square(args)?,
+                Cipher::FourSquare(args) => polycmd::four_square(args)?,
+                Cipher::Hill(args) => polycmd::hill(args)?,
+                Cipher::Digrafid(args) => polycmd::digrafid(args)?,
+                Cipher::TriSquare(args) => polycmd::tri_square(args)?,
                 Cipher::Substitution(args) => monocmd::substitution(args)?,
                 Cipher::Homophonic(args) => monocmd::homophonic(args)?,
                 Cipher::Straddling(args) => {

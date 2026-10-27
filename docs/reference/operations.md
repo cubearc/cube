@@ -1723,6 +1723,112 @@ Example:
 cube cipher atbash --text 'ABC xyz'
 ```
 
+## cipher.autokey.decode
+
+Seeded Vigenere with explicit plaintext/ciphertext feedback and local bounded state.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Autokey",
+  "type": "object",
+  "properties": {
+    "feedback": {
+      "$ref": "#/$defs/Feedback"
+    },
+    "seed": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "seed",
+    "feedback"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "Feedback": {
+      "type": "string",
+      "enum": [
+        "plaintext",
+        "ciphertext"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.autokey.encode
+
+Seeded Vigenere with explicit plaintext/ciphertext feedback and local bounded state.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Autokey",
+  "type": "object",
+  "properties": {
+    "feedback": {
+      "$ref": "#/$defs/Feedback"
+    },
+    "seed": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "seed",
+    "feedback"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "Feedback": {
+      "type": "string",
+      "enum": [
+        "plaintext",
+        "ciphertext"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.bacon.decode
 
 Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB input.
@@ -1989,6 +2095,416 @@ Example:
 cube cipher caesar --shift 3 --text Hello
 ```
 
+## cipher.chaocipher.decode
+
+Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset each call.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chaocipher",
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "right": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "left",
+    "right"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.chaocipher.encode
+
+Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset each call.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chaocipher",
+  "type": "object",
+  "properties": {
+    "left": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "right": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "left",
+    "right"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.condi.decode
+
+Keyed alphabet feedback from recovered plaintext one-based position; explicit initial shift.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Condi",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "shift": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 25,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "shift"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.condi.encode
+
+Keyed alphabet feedback from recovered plaintext one-based position; explicit initial shift.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Condi",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "shift": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 25,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "shift"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.digrafid.decode
+
+Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and visible padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `prepared` | `text` |
+| Output | `padding_count` | `integer` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Digrafid",
+  "type": "object",
+  "properties": {
+    "extra": {
+      "type": "string",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "horizontal": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 27
+    },
+    "padding": {
+      "description": "Required for odd input. Decode keeps this symbol visible.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "period": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 1
+    },
+    "vertical": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 27
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "horizontal",
+    "vertical",
+    "extra",
+    "period"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.digrafid.encode
+
+Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and visible padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `prepared` | `text` |
+| Output | `padding_count` | `integer` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Digrafid",
+  "type": "object",
+  "properties": {
+    "extra": {
+      "type": "string",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "horizontal": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 27
+    },
+    "padding": {
+      "description": "Required for odd input. Decode keeps this symbol visible.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "period": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 1
+    },
+    "vertical": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 27
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "horizontal",
+    "vertical",
+    "extra",
+    "period"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.four_square.decode
+
+I/J Four-square with fixed straight plaintext squares and explicit keyed top-right/bottom-left squares.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Squares",
+  "type": "object",
+  "properties": {
+    "first": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "second": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.four_square.encode
+
+I/J Four-square with fixed straight plaintext squares and explicit keyed top-right/bottom-left squares.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Squares",
+  "type": "object",
+  "properties": {
+    "first": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "second": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.grandpre.decode
 
 Decode repeated-letter 8/9/10-square coordinates with explicit digit labels; null represents each space.
@@ -2135,6 +2651,370 @@ Example:
 
 ```sh
 cube cipher grandpre --help
+```
+
+## cipher.gromark.decode
+
+Explicit mixed alphabet and five decimal primer digits; exclude printed primer/check digit.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gromark",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "primer": {
+      "type": "string",
+      "maxLength": 5,
+      "minLength": 5,
+      "pattern": "^[0-9]{5}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "primer"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.gromark.encode
+
+Explicit mixed alphabet and five decimal primer digits; exclude printed primer/check digit.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gromark",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "primer": {
+      "type": "string",
+      "maxLength": 5,
+      "minLength": 5,
+      "pattern": "^[0-9]{5}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "primer"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.gronsfeld.decode
+
+Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII letters only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gronsfeld",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[0-9]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.gronsfeld.encode
+
+Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII letters only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gronsfeld",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[0-9]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.hill.decode
+
+Exact modular row-major Hill matrix and column vectors over caller-owned Unicode alphabet; explicit padding count.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `padding_count` | `integer` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hill",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "description": "Exact unique scalars, no Unicode normalization; the modulus is its length.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 2
+    },
+    "dimension": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 8,
+      "minimum": 2
+    },
+    "matrix": {
+      "description": "Row-major signed 32-bit entries, multiplied by column vectors.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "int32",
+        "maximum": 2147483647,
+        "minimum": -2147483648
+      },
+      "maxItems": 64,
+      "minItems": 4
+    },
+    "padding": {
+      "description": "Encode only. Decode returns every recovered symbol, including padding.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Padding"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "dimension",
+    "matrix"
+  ],
+  "x-cube-max-serialized-bytes": 65536,
+  "$defs": {
+    "Padding": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 7,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "count"
+      ],
+      "x-cube-max-serialized-bytes": 2097152
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.hill.encode
+
+Exact modular row-major Hill matrix and column vectors over caller-owned Unicode alphabet; explicit padding count.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `padding_count` | `integer` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hill",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "description": "Exact unique scalars, no Unicode normalization; the modulus is its length.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 2
+    },
+    "dimension": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 8,
+      "minimum": 2
+    },
+    "matrix": {
+      "description": "Row-major signed 32-bit entries, multiplied by column vectors.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "int32",
+        "maximum": 2147483647,
+        "minimum": -2147483648
+      },
+      "maxItems": 64,
+      "minItems": 4
+    },
+    "padding": {
+      "description": "Encode only. Decode returns every recovered symbol, including padding.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Padding"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "dimension",
+    "matrix"
+  ],
+  "x-cube-max-serialized-bytes": 65536,
+  "$defs": {
+    "Padding": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 7,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "count"
+      ],
+      "x-cube-max-serialized-bytes": 2097152
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.homophonic.decode
@@ -2563,6 +3443,408 @@ Example:
 cube cipher monome-dinome --help
 ```
 
+## cipher.nicodemus.decode
+
+Vigenere columns emitted by stable key order in explicit depth blocks, retaining incomplete column lengths.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nicodemus",
+  "type": "object",
+  "properties": {
+    "depth": {
+      "type": "integer",
+      "format": "uint8",
+      "default": 5,
+      "maximum": 64,
+      "minimum": 1
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.nicodemus.encode
+
+Vigenere columns emitted by stable key order in explicit depth blocks, retaining incomplete column lengths.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nicodemus",
+  "type": "object",
+  "properties": {
+    "depth": {
+      "type": "integer",
+      "format": "uint8",
+      "default": 5,
+      "maximum": 64,
+      "minimum": 1
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.periodic_gromark.decode
+
+ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alphabet offsets; qualified widths 2..9.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PeriodicGromark",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "period": {
+      "description": "Must equal the number of distinct keyword letters (2..9).",
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 9,
+      "minimum": 2
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "keyword",
+    "period"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.periodic_gromark.encode
+
+ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alphabet offsets; qualified widths 2..9.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PeriodicGromark",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "period": {
+      "description": "Must equal the number of distinct keyword letters (2..9).",
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 9,
+      "minimum": 2
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "keyword",
+    "period"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.phillips.decode
+
+Explicit Phillips rows/columns/rows_columns eight-state five-letter square schedule.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phillips",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/PhillipsProfile"
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "profile"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "PhillipsProfile": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns",
+        "rows_columns"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.phillips.encode
+
+Explicit Phillips rows/columns/rows_columns eight-state five-letter square schedule.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Phillips",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/PhillipsProfile"
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "profile"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "PhillipsProfile": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns",
+        "rows_columns"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.playfair.decode
+
+I/J-square adjacent digraphs with explicit filler evidence; decode keeps prepared text.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `prepared` | `text` |
+| Output | `fillers` | `cipher.filler_positions` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Playfair",
+  "type": "object",
+  "properties": {
+    "alternate": {
+      "type": "string",
+      "default": "Q",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "filler": {
+      "type": "string",
+      "default": "X",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.playfair.encode
+
+I/J-square adjacent digraphs with explicit filler evidence; decode keeps prepared text.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `prepared` | `text` |
+| Output | `fillers` | `cipher.filler_positions` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Playfair",
+  "type": "object",
+  "properties": {
+    "alternate": {
+      "type": "string",
+      "default": "Q",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "filler": {
+      "type": "string",
+      "default": "X",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.polybius.decode
 
 Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536 tokens.
@@ -2699,6 +3981,320 @@ Example:
 cube cipher polybius --text A
 ```
 
+## cipher.porta
+
+Reciprocal ACA 13-tableau letter schedule with AB/CD/.../YZ key pairing.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Key",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.portax
+
+Reciprocal ACA Portax vertical pairs with exact even short-group handling and no padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Key",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.quagmire.decode
+
+Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated indicator key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Quagmire",
+  "type": "object",
+  "properties": {
+    "cipher_alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "indicator": {
+      "type": "string",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "plain_alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "profile": {
+      "$ref": "#/$defs/QuagmireProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "plain_alphabet",
+    "cipher_alphabet",
+    "indicator",
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "QuagmireProfile": {
+      "type": "string",
+      "enum": [
+        "i",
+        "ii",
+        "iii",
+        "iv"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.quagmire.encode
+
+Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated indicator key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Quagmire",
+  "type": "object",
+  "properties": {
+    "cipher_alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "indicator": {
+      "type": "string",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "plain_alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "profile": {
+      "$ref": "#/$defs/QuagmireProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "plain_alphabet",
+    "cipher_alphabet",
+    "indicator",
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "QuagmireProfile": {
+      "type": "string",
+      "enum": [
+        "i",
+        "ii",
+        "iii",
+        "iv"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.ragbaby.decode
+
+Explicit 24-letter alphabet, optional J/I X/W merges, word+letter-1 schedule and preserved separators.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ragbaby",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 24,
+      "minLength": 24
+    },
+    "merge_aliases": {
+      "description": "Explicitly merge J into I and X into W on encoding only.",
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "merge_aliases"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.ragbaby.encode
+
+Explicit 24-letter alphabet, optional J/I X/W merges, word+letter-1 schedule and preserved separators.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ragbaby",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 24,
+      "minLength": 24
+    },
+    "merge_aliases": {
+      "description": "Explicitly merge J into I and X into W on encoding only.",
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "merge_aliases"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.rot13
 
 Rotate ASCII letters by 13; preserve other Unicode.
@@ -2810,6 +4406,422 @@ Example:
 
 ```sh
 cube cipher rot5 --help
+```
+
+## cipher.running_key.decode
+
+Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RunningKey",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "Caller-owned material; empty is valid only when no letters require a key.",
+      "type": "string",
+      "maxLength": 1048576,
+      "pattern": "^[A-Za-z]*$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.running_key.encode
+
+Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RunningKey",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "Caller-owned material; empty is valid only when no letters require a key.",
+      "type": "string",
+      "maxLength": 1048576,
+      "pattern": "^[A-Za-z]*$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.seriated_playfair.decode
+
+I/J-square vertical pairs in explicit periods; inserted fillers retain scalar-position evidence.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `prepared` | `text` |
+| Output | `fillers` | `cipher.filler_positions` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SeriatedPlayfair",
+  "type": "object",
+  "properties": {
+    "alternate": {
+      "type": "string",
+      "default": "Q",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "filler": {
+      "type": "string",
+      "default": "X",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "period": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 1
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "period"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.seriated_playfair.encode
+
+I/J-square vertical pairs in explicit periods; inserted fillers retain scalar-position evidence.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `prepared` | `text` |
+| Output | `fillers` | `cipher.filler_positions` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SeriatedPlayfair",
+  "type": "object",
+  "properties": {
+    "alternate": {
+      "type": "string",
+      "default": "Q",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "filler": {
+      "type": "string",
+      "default": "X",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "period": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 1
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "period"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.slidefair.decode
+
+Even canonical ACA Vigenere Slidefair digraphs; rectangle or equal-column right/left step.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Key",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.slidefair.encode
+
+Even canonical ACA Vigenere Slidefair digraphs; rectangle or equal-column right/left step.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Key",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.solitaire.decode
+
+Original Schneier Solitaire/Pontifex with explicit private deck, optional passphrase and bounded rejected outputs; no implicit padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Solitaire",
+  "type": "object",
+  "properties": {
+    "deck": {
+      "description": "Cards 1..54 exactly once; jokers A=53, B=54. Sensitive.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Card"
+      },
+      "maxItems": 54,
+      "minItems": 54,
+      "writeOnly": true
+    },
+    "max_steps": {
+      "description": "Counts every deck round, including keying and rejected joker outputs.",
+      "type": "integer",
+      "format": "uint32",
+      "default": 1048576,
+      "maximum": 1048576,
+      "minimum": 0
+    },
+    "passphrase": {
+      "description": "Optional Schneier passphrase keying requires the ordered input deck.",
+      "type": "string",
+      "default": "",
+      "maxLength": 65536,
+      "pattern": "^[A-Za-z]*$",
+      "writeOnly": true
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "deck"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "Card": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 54,
+      "minimum": 1
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.solitaire.encode
+
+Original Schneier Solitaire/Pontifex with explicit private deck, optional passphrase and bounded rejected outputs; no implicit padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Solitaire",
+  "type": "object",
+  "properties": {
+    "deck": {
+      "description": "Cards 1..54 exactly once; jokers A=53, B=54. Sensitive.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Card"
+      },
+      "maxItems": 54,
+      "minItems": 54,
+      "writeOnly": true
+    },
+    "max_steps": {
+      "description": "Counts every deck round, including keying and rejected joker outputs.",
+      "type": "integer",
+      "format": "uint32",
+      "default": 1048576,
+      "maximum": 1048576,
+      "minimum": 0
+    },
+    "passphrase": {
+      "description": "Optional Schneier passphrase keying requires the ordered input deck.",
+      "type": "string",
+      "default": "",
+      "maxLength": 65536,
+      "pattern": "^[A-Za-z]*$",
+      "writeOnly": true
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "deck"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "Card": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 54,
+      "minimum": 1
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.straddling.decode
@@ -3218,6 +5230,158 @@ Example:
 cube cipher substitution --help
 ```
 
+## cipher.tri_square.decode
+
+Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TriSquare",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Choice"
+      },
+      "maxItems": 32768
+    },
+    "first": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "middle": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "rows": {
+      "description": "Empty chooses pair_index modulo 5, reset on each call.",
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Choice"
+      },
+      "maxItems": 32768
+    },
+    "second": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second",
+    "middle"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "Choice": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 4,
+      "minimum": 0
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.tri_square.encode
+
+Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TriSquare",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Choice"
+      },
+      "maxItems": 32768
+    },
+    "first": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "middle": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "rows": {
+      "description": "Empty chooses pair_index modulo 5, reset on each call.",
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Choice"
+      },
+      "maxItems": 32768
+    },
+    "second": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second",
+    "middle"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "Choice": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 4,
+      "minimum": 0
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.tridigital.decode
 
 Decode with an explicit tridigital digit table; return per-digit alternatives without guessing.
@@ -3426,6 +5590,192 @@ Example:
 
 ```sh
 cube cipher tridigital --help
+```
+
+## cipher.trithemius.decode
+
+Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 endpoints.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trithemius",
+  "description": "Signed endpoints are reduced modulo 26 before multiplication, avoiding overflow.",
+  "type": "object",
+  "properties": {
+    "start": {
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "step": {
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "start",
+    "step"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.trithemius.encode
+
+Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 endpoints.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trithemius",
+  "description": "Signed endpoints are reduced modulo 26 before multiplication, avoiding overflow.",
+  "type": "object",
+  "properties": {
+    "start": {
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "step": {
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "start",
+    "step"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.two_square.decode
+
+Horizontal I/J Two-square with opposite ciphertext square order and no padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Squares",
+  "type": "object",
+  "properties": {
+    "first": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "second": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.two_square.encode
+
+Horizontal I/J Two-square with opposite ciphertext square order and no padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Squares",
+  "type": "object",
+  "properties": {
+    "first": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "second": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.vigenere.decode

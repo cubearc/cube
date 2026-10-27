@@ -2,7 +2,7 @@
 
 from collections.abc import Iterator
 from os import PathLike
-from typing import Any, BinaryIO, Literal, TypedDict
+from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
 class StringCombinations(Iterator[str]):
     def __iter__(self) -> StringCombinations: ...
@@ -1377,3 +1377,175 @@ def grandpre_encode(
 def grandpre_decode(
     tokens: list[list[int] | None], definition: GrandpreDefinition
 ) -> str: ...
+
+# Exact Core historical profiles; bounds and canonicalization: docs/ciphers.md.
+class HillPadding(TypedDict):
+    symbol: str
+    count: int
+
+class PolyKeyParameters(TypedDict):
+    key: str
+
+class PolyGronsfeldParameters(TypedDict):
+    key: str
+
+class PolyTrithemiusParameters(TypedDict):
+    start: int
+    step: int
+
+class PolyAutokeyParameters(TypedDict):
+    seed: str
+    feedback: Literal["plaintext", "ciphertext"]
+
+class PolyRunningKeyParameters(TypedDict):
+    key: str
+
+class PolyGromarkParameters(TypedDict):
+    alphabet: str
+    primer: str
+
+class PolyPeriodicGromarkParameters(TypedDict):
+    keyword: str
+    period: int
+
+class PolySolitaireParameters(TypedDict):
+    deck: list[int]
+    passphrase: NotRequired[str]
+    max_steps: NotRequired[int]
+
+class PolyCondiParameters(TypedDict):
+    alphabet: str
+    shift: int
+
+class PolyRagbabyParameters(TypedDict):
+    alphabet: str
+    merge_aliases: bool
+
+class PolyChaocipherParameters(TypedDict):
+    left: str
+    right: str
+
+class PolyNicodemusParameters(TypedDict):
+    key: str
+    depth: NotRequired[int]
+
+class PolyQuagmireParameters(TypedDict):
+    profile: Literal["i", "ii", "iii", "iv"]
+    plain_alphabet: str
+    cipher_alphabet: str
+    indicator: str
+    key: str
+
+class PolyPhillipsParameters(TypedDict):
+    square: str
+    profile: Literal["rows", "columns", "rows_columns"]
+
+class PolySquaresParameters(TypedDict):
+    first: str
+    second: str
+
+class PolyPlayfairParameters(TypedDict):
+    square: str
+    filler: NotRequired[str]
+    alternate: NotRequired[str]
+
+class PolySeriatedPlayfairParameters(TypedDict):
+    square: str
+    period: int
+    filler: NotRequired[str]
+    alternate: NotRequired[str]
+
+class PolyTriSquareParameters(TypedDict):
+    first: str
+    second: str
+    middle: str
+    rows: NotRequired[list[int]]
+    columns: NotRequired[list[int]]
+
+class PolyDigrafidParameters(TypedDict):
+    horizontal: str
+    vertical: str
+    extra: str
+    period: int
+    padding: NotRequired[str | None]
+
+class PolyHillParameters(TypedDict):
+    alphabet: str
+    dimension: int
+    matrix: list[int]
+    padding: NotRequired[HillPadding | None]
+
+class PolyPreparedResult(TypedDict):
+    text: str
+    prepared: str
+    fillers: list[int]
+
+class PolyHillResult(TypedDict):
+    text: str
+    padding_count: int
+
+class PolyDigrafidResult(TypedDict):
+    text: str
+    prepared: str
+    padding_count: int
+
+def gronsfeld_encode(text: str, parameters: PolyGronsfeldParameters) -> str: ...
+def gronsfeld_decode(text: str, parameters: PolyGronsfeldParameters) -> str: ...
+def trithemius_encode(text: str, parameters: PolyTrithemiusParameters) -> str: ...
+def trithemius_decode(text: str, parameters: PolyTrithemiusParameters) -> str: ...
+def autokey_encode(text: str, parameters: PolyAutokeyParameters) -> str: ...
+def autokey_decode(text: str, parameters: PolyAutokeyParameters) -> str: ...
+def running_key_encode(text: str, parameters: PolyRunningKeyParameters) -> str: ...
+def running_key_decode(text: str, parameters: PolyRunningKeyParameters) -> str: ...
+def porta(text: str, parameters: PolyKeyParameters) -> str: ...
+def gromark_encode(text: str, parameters: PolyGromarkParameters) -> str: ...
+def gromark_decode(text: str, parameters: PolyGromarkParameters) -> str: ...
+def periodic_gromark_encode(
+    text: str, parameters: PolyPeriodicGromarkParameters
+) -> str: ...
+def periodic_gromark_decode(
+    text: str, parameters: PolyPeriodicGromarkParameters
+) -> str: ...
+def solitaire_encode(text: str, parameters: PolySolitaireParameters) -> str: ...
+def solitaire_decode(text: str, parameters: PolySolitaireParameters) -> str: ...
+def slidefair_encode(text: str, parameters: PolyKeyParameters) -> str: ...
+def slidefair_decode(text: str, parameters: PolyKeyParameters) -> str: ...
+def portax(text: str, parameters: PolyKeyParameters) -> str: ...
+def ragbaby_encode(text: str, parameters: PolyRagbabyParameters) -> str: ...
+def ragbaby_decode(text: str, parameters: PolyRagbabyParameters) -> str: ...
+def condi_encode(text: str, parameters: PolyCondiParameters) -> str: ...
+def condi_decode(text: str, parameters: PolyCondiParameters) -> str: ...
+def nicodemus_encode(text: str, parameters: PolyNicodemusParameters) -> str: ...
+def nicodemus_decode(text: str, parameters: PolyNicodemusParameters) -> str: ...
+def quagmire_encode(text: str, parameters: PolyQuagmireParameters) -> str: ...
+def quagmire_decode(text: str, parameters: PolyQuagmireParameters) -> str: ...
+def phillips_encode(text: str, parameters: PolyPhillipsParameters) -> str: ...
+def phillips_decode(text: str, parameters: PolyPhillipsParameters) -> str: ...
+def chaocipher_encode(text: str, parameters: PolyChaocipherParameters) -> str: ...
+def chaocipher_decode(text: str, parameters: PolyChaocipherParameters) -> str: ...
+def playfair_encode(
+    text: str, parameters: PolyPlayfairParameters
+) -> PolyPreparedResult: ...
+def playfair_decode(
+    text: str, parameters: PolyPlayfairParameters
+) -> PolyPreparedResult: ...
+def seriated_playfair_encode(
+    text: str, parameters: PolySeriatedPlayfairParameters
+) -> PolyPreparedResult: ...
+def seriated_playfair_decode(
+    text: str, parameters: PolySeriatedPlayfairParameters
+) -> PolyPreparedResult: ...
+def two_square_encode(text: str, parameters: PolySquaresParameters) -> str: ...
+def two_square_decode(text: str, parameters: PolySquaresParameters) -> str: ...
+def four_square_encode(text: str, parameters: PolySquaresParameters) -> str: ...
+def four_square_decode(text: str, parameters: PolySquaresParameters) -> str: ...
+def hill_encode(text: str, parameters: PolyHillParameters) -> PolyHillResult: ...
+def hill_decode(text: str, parameters: PolyHillParameters) -> PolyHillResult: ...
+def digrafid_encode(
+    text: str, parameters: PolyDigrafidParameters
+) -> PolyDigrafidResult: ...
+def digrafid_decode(
+    text: str, parameters: PolyDigrafidParameters
+) -> PolyDigrafidResult: ...
+def tri_square_encode(text: str, parameters: PolyTriSquareParameters) -> str: ...
+def tri_square_decode(text: str, parameters: PolyTriSquareParameters) -> str: ...

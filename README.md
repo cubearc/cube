@@ -150,3 +150,6 @@ Cube uses the [Apache License 2.0](LICENSE). Dependency notices are in
 
 [Bounded puzzle analysis](docs/puzzle-analysis.md) covers caller-dictionary anagrams and
 word ladders, exact finite probabilities/dice and explicit spatial lag measurements.
+
+For explicit keyed historical profiles, canonical text rules and visible padding,
+see the [cipher guide](docs/ciphers.md).

@@ -378,3 +378,8 @@ reads existing immutable physical samples for exact overlap moments. CLI and
 PyO3 only adapt transports. The [puzzle analysis guide](puzzle-analysis.md) records
 contracts, work units, limits and provenance; these structured reports introduce
 no pipeline kinds, adapters, dependencies or recipe/engine contract changes.
+
+The bounded historical profiles in `ciphers::poly` keep schedule/state, concrete
+square geometry and exact Hill arithmetic in Core. Typed DTO schemas, named
+output ports and known-answer fixtures are projected from module-owned rows;
+CLI/SDK/Play adapters only transport values. See [cipher profiles](ciphers.md).

@@ -25,6 +25,8 @@
   run real contract-conformance fixtures, and update the safe Play adapter/viewer
   handling. Direct-only operations remain in the catalog. Missing schema, docs or
   required Play integration is incomplete work, not an implicit scope exception.
+  Keep exact catalog/fixture parity in `conformance_matrix`, including reviewed
+  contract hashes and actual typed results; publish its per-operation CI report.
 - Keep planning in GitHub Issues and CubeArc Roadmap. Use descriptive issue titles
   without prefixes and Project fields for status and priority.
 

@@ -58,7 +58,7 @@ pub struct Limits {
     pub max_memory_bytes: Option<u64>,
 }
 /// A known-answer invocation whose outputs are produced by the actual operation.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, serde::Deserialize)]
 pub struct Fixture {
     pub inputs: Value,
     pub parameters: Value,
@@ -377,17 +377,25 @@ fn default_value(value: ParameterValue<'_>) -> Value {
     serde_json::to_value(value).expect("parameter default is serializable")
 }
 
-/// Exercise module-owned real fixtures without executing anything during catalog
-/// discovery. Called explicitly by tests and the contract-check command.
+/// Exercise module-owned real fixtures without executing during discovery.
+/// This compatibility helper counts owning-module callbacks only. Complete ID
+/// coverage, including legacy direct APIs, is enforced by `conformance_matrix`.
 pub fn validate_registered_fixtures() -> Result<usize, OperationError> {
-    let mut count = 0;
+    registered_fixtures().map(|fixtures| fixtures.len())
+}
+
+/// Execute the fixed owning-module known-answer fixtures, with their stable IDs.
+/// This accepts no caller inputs and is not an operation execution dispatcher.
+pub fn registered_fixtures() -> Result<Vec<(String, Fixture)>, OperationError> {
+    let mut fixtures = Vec::new();
     for module in super::MODULES {
         for entry in module.contracts {
-            describe(&entry.descriptor)?.validate_fixture(&(entry.fixture)()?)?;
-            count += 1;
+            let fixture = (entry.fixture)()?;
+            describe(&entry.descriptor)?.validate_fixture(&fixture)?;
+            fixtures.push((entry.descriptor.id.to_owned(), fixture));
         }
     }
-    Ok(count)
+    Ok(fixtures)
 }
 
 /// Opt-in complete discovery. The legacy writer and its schemas remain unchanged.

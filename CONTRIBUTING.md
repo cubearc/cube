@@ -109,6 +109,12 @@ For every new or changed operation:
   `cargo run --locked -p cube-core --example operation_contracts`.
 - Add positive and invalid/boundary contract/result fixtures; preserve applicable
   Rust, CLI and native Python behavior. Run the contract exporter with `--check`.
+- Add/review the synthetic invocation and contract SHA-256 in
+  `crates/cube-core/src/operations/contracts/conformance.json`. The complete
+  `conformance_matrix` test executes every ID through its owning callback or a
+  test-only direct API driver and rejects missing/duplicate examples, version or
+  schema drift, unknown fields and incompatible actual results. Keep fixture
+  drivers out of product execution paths; never lower the exact-ID gate.
 - Provide/update the required safe typed Play adapter and usable output handling.
   Missing integration stays open; `pipeline=null` does not hide an operation.
 - Keep sources read-only, processing bounded and secrets uncaptured by default.

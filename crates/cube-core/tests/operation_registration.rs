@@ -48,7 +48,7 @@ impl<'ast> Visit<'ast> for Ids<'_> {
             .path
             .segments
             .last()
-            .is_some_and(|s| s.ident == "Descriptor")
+            .is_some_and(|s| s.ident == "Descriptor" || s.ident == "Spec")
         {
             for field in &expr.fields {
                 if matches!(&field.member,syn::Member::Named(name) if name=="id")
@@ -125,6 +125,18 @@ fn imports(tree: &syn::UseTree, prefix: Vec<String>, result: &mut Vec<(Vec<Strin
         syn::UseTree::Glob(_) => result.push((prefix, "*".into())),
     }
 }
+fn owning_declaration(item: &Item) -> Option<&Expr> {
+    let (name, expr) = match item {
+        Item::Const(item) => (&item.ident, item.expr.as_ref()),
+        Item::Static(item) => (&item.ident, item.expr.as_ref()),
+        _ => return None,
+    };
+    matches!(
+        name.to_string().as_str(),
+        "OPERATIONS" | "PROFILED" | "ROWS"
+    )
+    .then_some(expr)
+}
 fn inspect(path: &Path, all: &mut BTreeSet<String>) {
     let mut files = Vec::new();
     sources(path, path, &mut files);
@@ -189,17 +201,27 @@ fn inspect(path: &Path, all: &mut BTreeSet<String>) {
             ids: BTreeSet::new(),
         };
         for item in &file.items {
-            if let Item::Const(item) = item
-                && matches!(
-                    item.ident.to_string().as_str(),
-                    "OPERATIONS" | "PROFILED" | "ROWS"
-                )
-            {
-                ids.visit_expr(&item.expr);
+            if let Some(expr) = owning_declaration(item) {
+                ids.visit_expr(expr);
             }
         }
         all.extend(ids.ids);
     }
+}
+#[test]
+fn static_spec_rows_cannot_evade_registration_auditing() {
+    let item: Item = syn::parse_quote! {
+        static ROWS:[u8;1]=[row(Spec{id:"cipher.source_only"})];
+    };
+    let constants = BTreeMap::new();
+    let mut visitor = Ids {
+        constants: &constants,
+        ids: BTreeSet::new(),
+    };
+    visitor.visit_expr(owning_declaration(&item).unwrap());
+    assert_eq!(visitor.ids, BTreeSet::from(["cipher.source_only".into()]));
+    let item: Item = syn::parse_quote! {static UNRELATED:&str="cipher.not_an_operation";};
+    assert!(owning_declaration(&item).is_none());
 }
 #[test]
 fn every_module_owned_operation_is_registered() {

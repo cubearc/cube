@@ -16,7 +16,7 @@ pub(crate) fn words(input: &str) -> std::str::SplitWhitespace<'_> {
 pub(crate) fn lines(input: &str) -> std::str::Lines<'_> {
     input.lines()
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Selector {
     WordFirst,

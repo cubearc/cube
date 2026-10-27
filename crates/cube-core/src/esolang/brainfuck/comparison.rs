@@ -3,7 +3,7 @@ use super::*;
 /// Comparison has independent per-run budgets plus shared hard-capped aggregate
 /// dispatch, retained output and memory ceilings. Widths execute in ascending
 /// order; duplicates/empty sets fail. Budget remainders only lower run budgets.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct ComparisonLimits {
     pub max_instructions: u64,
     pub max_output_bytes: usize,
@@ -18,7 +18,7 @@ impl Default for ComparisonLimits {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Comparison {
     pub runs: Vec<Report>,
     pub per_run_limits: Limits,

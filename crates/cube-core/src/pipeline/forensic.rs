@@ -2,7 +2,7 @@
 use super::{Error, invalid};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SignatureEvidence {
     pub format: String,
@@ -12,18 +12,19 @@ pub struct SignatureEvidence {
     pub rule: String,
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct HexEvidence {
     pub offset: u64,
     /// Exact bytes; JSON uses canonical base64, Python uses bytes.
     #[serde(with = "super::value::base64_wire")]
+    #[schemars(with = "String", extend("contentEncoding" = "base64"))]
     pub bytes: Vec<u8>,
     pub hex: String,
     pub ascii: String,
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct StringEvidence {
     pub offset: u64,
@@ -34,7 +35,7 @@ pub struct StringEvidence {
 /// Only these concrete result shapes are supported. These observations do not
 /// validate file contents or confer extraction permissions. Caller-supplied
 /// snapshots are data, not independently verified evidence.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ForensicReport {
     Signatures {

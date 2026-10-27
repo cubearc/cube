@@ -28,12 +28,12 @@ fn limit(message: &str) -> OperationError {
 fn unsupported(message: &str) -> OperationError {
     OperationError::new(ErrorCode::UnsupportedFormat, message).operation(OP)
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct TimeBase {
     pub numerator: u64,
     pub denominator: u64,
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(untagged)]
 pub enum Duration {
     Integer(u64),
@@ -52,7 +52,7 @@ impl Duration {
         Ok(seconds)
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Track {
     pub id: u64,
     pub kind: &'static str,
@@ -83,7 +83,7 @@ impl Default for Track {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Info {
     pub container: &'static str,
     pub major_brand: Option<String>,

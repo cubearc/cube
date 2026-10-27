@@ -91,7 +91,7 @@ fn valid_id(id: &str) -> bool {
             .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'.' || b == b'_')
 }
 /// Hard bounds may be lowered per plan. Zero permits only zero-size/identity work.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(default, deny_unknown_fields)]
 pub struct Limits {
     pub max_steps: usize,
@@ -126,7 +126,7 @@ impl Limits {
 }
 /// Each adapter has an explicit operation-contract version, independent of package
 /// version. Recipes must name it; matching only an ID is insufficient compatibility.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Step {
     pub operation: String,
@@ -151,7 +151,7 @@ pub struct Plan {
     steps: Vec<adapters::Prepared>,
     limits: Limits,
 }
-#[derive(Serialize)]
+#[derive(Serialize, schemars::JsonSchema)]
 pub struct StepInfo {
     pub step: usize,
     pub operation: &'static str,
@@ -159,7 +159,7 @@ pub struct StepInfo {
     pub input_type: Kind,
     pub output_type: Kind,
 }
-#[derive(Serialize)]
+#[derive(Serialize, schemars::JsonSchema)]
 pub struct PlanInfo<'a> {
     pub engine_api: u32,
     pub engine_version: &'static str,

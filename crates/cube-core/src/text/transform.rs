@@ -12,7 +12,7 @@ use serde::Serialize;
 
 /// Only existing ASCII ciphers that preserve scalar count and order are permitted.
 /// All non-ASCII scalars are preserved exactly; no normalization is performed.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum Transformation {
     Atbash,
@@ -45,7 +45,7 @@ impl Transformation {
 }
 
 /// An explicit replacement at a position in the original scalar numbering.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Override {
     pub position: usize,
     pub replacement: char,
@@ -82,7 +82,7 @@ impl Override {
 
 /// A complete request. Every Unicode scalar counts toward positions. Bases apply
 /// to selector labels, reported positions and overrides alike.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Config {
     pub index_base: IndexBase,
     pub selector: Selector,
@@ -91,14 +91,14 @@ pub struct Config {
     /// Applied in caller order; repeated positions are allowed and recorded separately.
     pub overrides: Vec<Override>,
 }
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct AppliedOverride {
     pub position: usize,
     pub previous: char,
     pub replacement: char,
 }
 /// The deterministic output remains available even when explicit guesses are applied.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub original_input: String,
     pub config: Config,

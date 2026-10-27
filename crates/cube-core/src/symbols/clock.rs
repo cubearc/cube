@@ -10,14 +10,14 @@ pub const TOLERANCE: i64 = 1;
 fn invalid(message: &str) -> OperationError {
     OperationError::new(ErrorCode::InvalidParameter, message)
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Hand {
     pub normalized_input_millidegrees: u32,
     pub bearing_millidegrees: u32,
     pub directions: Vec<&'static str>,
     pub ambiguous: bool,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Clock {
     pub hour: Hand,
     pub minute: Hand,

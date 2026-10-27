@@ -7,7 +7,7 @@ use crate::{
     operations::{Descriptor, Parameter, ParameterType},
 };
 use serde::Serialize;
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct BitcoinAddress {
     pub network_family: Network,
     pub compressed: bool,
@@ -16,11 +16,13 @@ pub struct BitcoinAddress {
         rename = "public_key_hex",
         serialize_with = "crate::encoding::serialize_hex"
     )]
+    #[schemars(with = "String", regex(pattern = r"^[0-9a-f]*$"))]
     pub public_key: Vec<u8>,
     #[serde(
         rename = "hash160_hex",
         serialize_with = "crate::encoding::serialize_hex"
     )]
+    #[schemars(with = "String", regex(pattern = r"^[0-9a-f]*$"))]
     pub hash160: [u8; 20],
     pub address: String,
 }

@@ -4,7 +4,7 @@ use crate::errors::{ErrorCode, OperationError};
 use serde::{Deserialize, Serialize};
 pub const MAX_WORK: u64 = 16_777_216;
 pub const MAX_MEMORY: usize = 8 * 1024 * 1024;
-#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Direction {
     #[default]
@@ -13,7 +13,7 @@ pub enum Direction {
 }
 /// Limits can only be lowered. Start defaults to the first scalar in the chosen
 /// input origin; output provenance always uses original zero-based indexes.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(default, deny_unknown_fields)]
 pub struct Options {
     pub start: Option<u64>,
@@ -37,13 +37,13 @@ impl Default for Options {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Record {
     pub scalar_index: usize,
     pub byte_offset: usize,
     pub scalar: char,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub extracted: String,
     pub records: Vec<Record>,

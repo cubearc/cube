@@ -80,19 +80,19 @@ fn comments(data: &[u8]) -> Result<(), OperationError> {
     }
     Ok(())
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Block {
     pub offset: u64,
     pub block_type: u8,
     pub length: usize,
     pub interpreted: bool,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Comment {
     pub key: String,
     pub value: String,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Metadata {
     pub format: &'static str,
     pub codec: &'static str,

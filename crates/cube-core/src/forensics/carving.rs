@@ -17,7 +17,7 @@ pub enum Selection {
     /// Revalidate supported framing at this explicit origin before copying.
     Candidate { offset: u64 },
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Extraction {
     pub source_size: u64,
     pub offset: u64,

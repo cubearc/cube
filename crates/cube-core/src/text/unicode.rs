@@ -9,7 +9,7 @@ use unicode_general_category::{GeneralCategory, get_general_category};
 pub const CATEGORY_UNICODE_VERSION: (u64, u64, u64) = unicode_general_category::UNICODE_VERSION;
 pub const MAX_WORK: u64 = 128 * 1024 * 1024;
 pub const MAX_NORMALIZED_SCALARS: usize = 2 * 1024 * 1024;
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(default, deny_unknown_fields)]
 pub struct Options {
     pub max_results: usize,
@@ -25,14 +25,14 @@ impl Default for Options {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Scalar {
     pub scalar_index: usize,
     pub byte_offset: usize,
     pub scalar: char,
     pub codepoint: u32,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Observation {
     #[serde(flatten)]
     pub source: Scalar,
@@ -45,7 +45,7 @@ pub struct Observation {
     pub zero_width_candidate: bool,
     pub bidi_control: bool,
 }
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Serialize, schemars::JsonSchema)]
 pub struct Counts {
     pub scalars: usize,
     pub uppercase: usize,
@@ -59,7 +59,7 @@ pub struct Counts {
     pub zero_width_candidates: usize,
     pub bidi_controls: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Inspection {
     pub derived_case_space_unicode_version: (u8, u8, u8),
     pub category_unicode_version: (u64, u64, u64),
@@ -69,13 +69,13 @@ pub struct Inspection {
     pub complete: bool,
     pub work_units: u64,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Difference {
     pub scalar_index: usize,
     pub left: Option<Scalar>,
     pub right: Option<Scalar>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Differences {
     pub coordinate_space: &'static str,
     pub left_scalars: usize,
@@ -84,7 +84,7 @@ pub struct Differences {
     pub records: Vec<Difference>,
     pub complete: bool,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Comparison {
     pub exact_equal: bool,
     pub normalized_equal: Option<bool>,

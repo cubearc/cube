@@ -32,12 +32,12 @@ fn source(input: &str, drop_whitespace: bool) -> Result<(Vec<char>, usize), Oper
     }
     Ok((chars, removed))
 }
-#[derive(Debug, Serialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, PartialEq, Eq, schemars::JsonSchema)]
 pub struct Dimensions {
     pub width: u32,
     pub height: u32,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Factors {
     pub retained_scalars: usize,
     pub removed_scalars: usize,
@@ -79,7 +79,7 @@ pub fn factors(
     })();
     result.map_err(|e: OperationError| e.operation("text.grid.factors"))
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Grid {
     pub width: u32,
     pub height: u32,

@@ -31,7 +31,7 @@ pub const MAX_COPY_BYTES: u64 = 1024 * 1024 * 1024;
 pub const MAX_RESULTS: usize = 10_000;
 
 /// Half-open byte selection. `None` length selects through EOF.
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Serialize, schemars::JsonSchema)]
 pub struct ByteRange {
     pub offset: u64,
     pub length: Option<u64>,

@@ -51,7 +51,7 @@ pub(super) fn json_bytes(value: &impl Serialize, maximum: usize) -> Result<Vec<u
         .map_err(|_| limit("serialized result/record exceeds byte budget"))?;
     Ok(writer.data)
 }
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Digest {
     pub algorithm: String,
@@ -79,14 +79,14 @@ impl Digest {
         Ok(())
     }
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Identity {
     pub id: u32,
     pub size: u64,
     pub digest: Option<Digest>,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(default, deny_unknown_fields)]
 pub struct SessionLimits {
     pub max_runs: usize,
@@ -121,7 +121,7 @@ impl SessionLimits {
         Ok(())
     }
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct RecordedStep {
     pub operation: String,
@@ -129,7 +129,7 @@ pub struct RecordedStep {
     pub parameters: Option<BTreeMap<String, Parameter>>,
 }
 /// Explicit supported recording/replay contracts; no arbitrary operation dispatch.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum RunSpec {
     Identity,
@@ -260,20 +260,20 @@ impl RunSpec {
         matches!(self,Self::Pipeline{steps,..} if steps.iter().any(|s|s.parameters.is_none()))
     }
 }
-#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum State {
     Succeeded,
     Failed,
     Skipped,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Diagnostic {
     pub code: String,
     pub message: String,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Run {
     pub id: u32,
@@ -289,13 +289,13 @@ pub struct Run {
     pub retained: Option<serde_json::Value>,
     pub warning: Option<String>,
 }
-#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum FindingKind {
     Observation,
     Candidate,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Finding {
     pub id: u32,
@@ -305,7 +305,7 @@ pub struct Finding {
     pub kind: FindingKind,
     pub description: String,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Hypothesis {
     pub id: u32,
@@ -313,7 +313,7 @@ pub struct Hypothesis {
     pub findings: Vec<u32>,
 }
 /// Immutable fields and validated loading preserve session-local IDs and provenance.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(try_from = "SessionWire")]
 pub struct Session {
     format_version: u32,
@@ -328,7 +328,7 @@ pub struct Session {
     profile: Option<super::profile::Context>,
 }
 // Deserializing through Serde must preserve the same invariants as record loading.
-#[derive(Deserialize)]
+#[derive(Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 struct SessionWire {
     format_version: u32,
@@ -373,7 +373,7 @@ pub struct Capture {
     pub parameters: bool,
     pub result: bool,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 struct Record {
     schema_version: u32,
@@ -427,3 +427,8 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         example: "cube investigate replay session.json sample.bin --json",
     },
 ];
+
+/// Keep the report contract attached to its actual serialized record.
+pub(crate) fn contract_report() -> schemars::Schema {
+    schemars::schema_for!(Record)
+}

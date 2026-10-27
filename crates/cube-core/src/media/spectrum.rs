@@ -16,7 +16,7 @@ pub(super) fn invalid(op: &'static str, message: &str) -> OperationError {
 pub(super) fn limit(op: &'static str, message: &str) -> OperationError {
     OperationError::new(ErrorCode::ResourceLimit, message).operation(op)
 }
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Window {
     Rectangular,
@@ -145,7 +145,7 @@ impl Transform {
             .collect()
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Spectrum {
     pub sample_rate: u32,
     pub bits_per_sample: u16,

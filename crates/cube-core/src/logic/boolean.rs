@@ -13,7 +13,7 @@ pub const MAX_DEPTH: usize = 32;
 pub const MAX_WORK: u64 = 2 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 8 * 1024 * 1024;
 pub const MAX_REPORT: usize = 8 * 1024 * 1024;
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(tag = "op", rename_all = "snake_case", deny_unknown_fields)]
 pub enum Formula {
     Const {
@@ -46,7 +46,7 @@ pub enum Formula {
         right: Box<Formula>,
     },
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Model {
     pub variables: Vec<String>,
@@ -54,13 +54,13 @@ pub struct Model {
     #[serde(default)]
     pub other: Option<Formula>,
 }
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Binding {
     pub name: String,
     pub value: bool,
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_work: u64,
     pub max_rows: usize,
@@ -77,7 +77,7 @@ impl Default for Limits {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Evaluation {
     pub value: bool,
     pub other_value: Option<bool>,
@@ -85,20 +85,20 @@ pub struct Evaluation {
     pub memory_bytes_upper_bound: usize,
     pub report_bytes_upper_bound: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct TruthRow {
     pub assignment: Vec<Binding>,
     pub value: bool,
     pub other_value: Option<bool>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Relationship {
     pub implies: bool,
     pub equivalent: bool,
     pub implication_counterexample: Option<Vec<Binding>>,
     pub equivalence_counterexample: Option<Vec<Binding>>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Analysis {
     pub variables: Vec<String>,
     pub assignments: usize,

@@ -1,15 +1,16 @@
 use super::*;
 use std::collections::{BTreeMap, BTreeSet};
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Outcome {
     pub id: String,
     #[serde(serialize_with = "weight", deserialize_with = "read_weight")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub weight: u64,
     #[serde(default)]
     pub value: Option<i32>,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct FiniteModel {
     pub outcomes: Vec<Outcome>,
@@ -17,15 +18,16 @@ pub struct FiniteModel {
     #[serde(default)]
     pub event_b: Option<Vec<String>>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct OutcomeProbability {
     pub id: String,
     pub probability: Fraction,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct FiniteReport {
     pub assumptions: FiniteModel,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub total_mass: u128,
     pub outcomes: Vec<OutcomeProbability>,
     pub probability_a: Fraction,

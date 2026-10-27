@@ -7,7 +7,7 @@ use crate::{
 use serde::{Deserialize, Serialize};
 use std::io::{Read, Seek, SeekFrom};
 pub const MAX_HEADER_BYTES: usize = 12;
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Fact {
     pub id: String,
@@ -16,7 +16,7 @@ pub struct Fact {
     pub offset: Option<u64>,
     pub description: String,
 }
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Suggestion {
     pub rule: String,
@@ -24,7 +24,7 @@ pub struct Suggestion {
     pub evidence: Vec<String>,
     pub uncertainty: String,
 }
-#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Triage {
     pub schema_version: u32,

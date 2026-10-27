@@ -9,7 +9,7 @@ pub const MAX_ENTRIES: usize = 1000;
 const MAX_METADATA: usize = 1024 * 1024;
 const MAX_DECLARED_BYTES: u64 = 64 * 1024 * 1024;
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Entry {
     /// Absolute source offsets. File names remain inert exact hexadecimal data.
     pub local_offset: u64,
@@ -21,7 +21,7 @@ pub struct Entry {
     pub flags: u16,
     pub name_hex: String,
 }
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Archive {
     pub format: &'static str,
     pub offset: u64,

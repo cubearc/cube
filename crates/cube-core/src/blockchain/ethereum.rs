@@ -7,7 +7,7 @@ use crate::{
     operations::{Descriptor, Parameter, ParameterType, ParameterValue},
 };
 use serde::Serialize;
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Checksum {
     Lowercase,
@@ -25,17 +25,19 @@ impl Checksum {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct EthereumAddress {
     #[serde(
         rename = "public_key_xy_hex",
         serialize_with = "crate::encoding::serialize_hex"
     )]
+    #[schemars(with = "String", regex(pattern = r"^[0-9a-f]*$"))]
     pub public_key_xy: Vec<u8>,
     #[serde(
         rename = "address_hex",
         serialize_with = "crate::encoding::serialize_hex"
     )]
+    #[schemars(with = "String", regex(pattern = r"^[0-9a-f]*$"))]
     pub address_bytes: [u8; 20],
     pub address: String,
     pub checksum: Checksum,

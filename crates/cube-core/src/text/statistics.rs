@@ -17,7 +17,7 @@ fn invalid(name: &'static str, message: &str) -> OperationError {
 fn limit(message: &str) -> OperationError {
     OperationError::new(ErrorCode::ResourceLimit, message).operation("text.statistics")
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub enum Normalization {
     #[serde(rename = "none")]
     None,
@@ -54,7 +54,7 @@ impl Normalization {
         }
     }
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum CaseMode {
     Preserve,
@@ -69,7 +69,7 @@ impl CaseMode {
         }
     }
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum TextFilter {
     All,
@@ -84,7 +84,7 @@ impl TextFilter {
         }
     }
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Options {
     pub ngram_size: usize,
     pub normalization: Normalization,
@@ -103,12 +103,12 @@ impl Default for Options {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Frequency {
     pub ngram: String,
     pub count: u64,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Statistics {
     #[serde(flatten)]
     pub options: Options,

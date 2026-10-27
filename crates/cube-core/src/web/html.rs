@@ -3,7 +3,7 @@ use crate::operations::Descriptor;
 use html5gum::{DefaultEmitter, Token, Tokenizer};
 use serde::Serialize;
 const OP: &str = "web.html.inspect";
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Reference {
     pub index: usize,
     pub tag: String,
@@ -14,7 +14,7 @@ pub struct Reference {
     pub attribute_span: [usize; 2],
     pub observations: Vec<&'static str>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Embedded {
     pub index: usize,
     pub kind: &'static str,
@@ -22,7 +22,7 @@ pub struct Embedded {
     pub terminated: bool,
     pub representation: &'static str,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub format: &'static str,
     pub input_bytes: usize,

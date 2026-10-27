@@ -25,7 +25,7 @@ use super::{Error, Execution, Kind, Limits, Plan, Step, Value, invalid, json};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, sync::atomic::AtomicBool};
 pub const FORMAT_VERSION: u32 = 1;
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, schemars::JsonSchema)]
 #[serde(tag = "source", rename_all = "snake_case", deny_unknown_fields)]
 enum Input {
     Slot {
@@ -45,19 +45,20 @@ impl Input {
         }
     }
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 struct Output {
     #[serde(rename = "type")]
     kind: Kind,
 }
-#[derive(Deserialize)]
+#[derive(Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 struct Definition {
     format_version: u32,
     engine_api: u32,
     input: Input,
     output: Output,
+    #[schemars(with = "Vec<super::Step>")]
     steps: Vec<serde_json::Value>,
     #[serde(default)]
     limits: Limits,
@@ -69,13 +70,13 @@ pub struct Recipe {
     plan: Plan,
 }
 /// Redacted validation report, with no inline contents, parameter secrets or bindings.
-#[derive(Serialize)]
+#[derive(Serialize, schemars::JsonSchema)]
 pub struct Info<'a> {
     pub format_version: u32,
     pub input_slot: Option<&'a str>,
     pub plan: super::PlanInfo<'a>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Check {
     pub passed: bool,
     pub format_version: u32,
@@ -259,3 +260,11 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[
         example: "cube recipe check recipe.json --hex payload=00ff --expect '{\"type\":\"bytes\",\"base64\":\"AP8=\"}'",
     },
 ];
+
+/// Schema from the exact private parser definition, without exposing its fields.
+pub(crate) fn contract_definition(generator: &mut schemars::SchemaGenerator) -> schemars::Schema {
+    generator.subschema_for::<Definition>()
+}
+pub(crate) fn contract_document() -> schemars::Schema {
+    schemars::schema_for!(Definition)
+}

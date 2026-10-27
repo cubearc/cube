@@ -13,7 +13,7 @@ use serde::Serialize;
 use std::fmt;
 
 pub const MAX_MATERIAL_BYTES: usize = 128;
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub enum Network {
     #[serde(rename = "mainnet")]
     Mainnet,
@@ -138,7 +138,7 @@ impl PrivateKey {
         }
     }
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct ScalarInfo {
     pub valid: bool,
     pub curve: &'static str,

@@ -13,7 +13,7 @@ const OP: &str = "audio.waveform.envelope";
 /// Bound both total buckets and channel/bucket pairs to 10000.
 pub const MAX_BUCKETS: usize = 10000;
 /// Exact extrema for one bucket, in the accompanying original channel-index order.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Bucket {
     pub start_frame: u64,
     pub frames: u64,
@@ -22,7 +22,7 @@ pub struct Bucket {
 }
 /// Sample rate is the exact time base for absolute frame positions; amplitudes
 /// retain signed integer sample units, including centered unsigned-8 storage.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Envelope {
     pub sample_rate: u32,
     pub bits_per_sample: u16,

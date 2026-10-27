@@ -6,7 +6,7 @@ use crate::{
     operations::{Descriptor, Parameter, ParameterType},
 };
 use serde::Serialize;
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct WifInfo {
     pub valid: bool,
     pub version: u8,

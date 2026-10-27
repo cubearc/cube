@@ -5,7 +5,7 @@ use serde::Serialize;
 use std::collections::BTreeMap;
 
 /// Named physical sample channel. Palette expansion must be an explicit operation.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Channel {
     Red,
@@ -33,7 +33,7 @@ impl Channel {
 }
 
 /// Checked half-open rectangle in absolute top-left image coordinates.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Region {
     pub x: u32,
     pub y: u32,
@@ -96,7 +96,7 @@ impl Region {
 }
 
 /// Shape and exact interleaved row-major selected channel samples.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct PixelData {
     pub region: Region,
     pub channels: Vec<Channel>,
@@ -104,7 +104,7 @@ pub struct PixelData {
     #[serde(skip)]
     pub data: Vec<u8>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct PixelRecord {
     pub x: u32,
     pub y: u32,
@@ -157,27 +157,27 @@ impl PixelData {
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct ColorCount {
     pub values: Vec<u8>,
     pub count: u64,
 }
 /// Exact histogram or an explicit resource-limit error; results are never quantized.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Histogram {
     pub region: Region,
     pub channels: Vec<Channel>,
     pub pixels: u64,
     pub colors: Vec<ColorCount>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct PixelDifference {
     pub x: u32,
     pub y: u32,
     pub left: Vec<u8>,
     pub right: Vec<u8>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Comparison {
     pub region: Region,
     pub channels: Vec<Channel>,

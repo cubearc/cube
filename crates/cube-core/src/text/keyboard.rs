@@ -4,7 +4,7 @@ use crate::errors::{ErrorCode, OperationError};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 /// One physical key in one layer. Layers are literal IDs, e.g. base/shift.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Entry {
     pub key: String,
@@ -12,7 +12,7 @@ pub struct Entry {
     pub symbol: char,
 }
 /// Caller-owned layout definition; no OS layout detection or event handling.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Layout {
     pub geometry: String,

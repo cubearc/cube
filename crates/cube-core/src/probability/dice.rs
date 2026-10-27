@@ -1,43 +1,46 @@
 use super::*;
 use std::collections::BTreeMap;
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Face {
     pub value: i32,
     #[serde(serialize_with = "weight", deserialize_with = "read_weight")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub weight: u64,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct DiceModel {
     pub dice: Vec<Vec<Face>>,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct DicePair {
     pub left: DiceModel,
     pub right: DiceModel,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Point {
     pub value: i64,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub mass: u128,
     pub probability: Fraction,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct SumReport {
     pub assumptions: DiceModel,
     pub independence: &'static str,
     pub distribution: Vec<Point>,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub total_mass: u128,
     pub expected_value: SignedFraction,
     pub work: usize,
     pub memory_bytes_upper_bound: usize,
     pub report_bytes_upper_bound: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Comparison {
     pub assumptions: DicePair,
     pub independence: &'static str,
@@ -45,12 +48,16 @@ pub struct Comparison {
     pub tie: Fraction,
     pub loss: Fraction,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub win_mass: u128,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub tie_mass: u128,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub loss_mass: u128,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub total_mass: u128,
     pub work: usize,
     pub memory_bytes_upper_bound: usize,

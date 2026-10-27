@@ -22,6 +22,7 @@ package only exports the native functions; it contains no algorithm fallbacks.
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features --locked
+cargo run --locked -p cube-core --example operation_contracts -- --check
 ruff check bindings/python
 ruff format --check bindings/python
 python -m pytest bindings/python/tests
@@ -89,6 +90,34 @@ expose the operation through the relevant CLI and Python APIs. Update command
 discovery, Python exports and type stubs, interface tests, and affected user
 examples. SDKs must call Rust rather than reimplement algorithms. The concise
 [add-operation skill](.agents/skills/add-operation/SKILL.md) records this workflow.
+
+### Operation contract Definition of Done
+
+Every implemented operation is part of the complete versioned contract catalog,
+including direct operations without a pipeline adapter. Existing Rust declarations
+and `schemars::JsonSchema` on their real data types are the authoring source. Keep
+custom serialization annotations accurate (bytes, hex and decimal integers).
+Use module-owned `contracts::Entry` rows for named ports, richer parameter DTOs,
+implementation-enforced ceilings and known-answer fixture callbacks. The callback
+must call the actual operation and check an independent expected result.
+
+For every new or changed operation:
+
+- Keep its ID/version, input/parameter/output/error schemas, defaults, bounds,
+  exact representations, sensitivity and explicit capability requirements accurate.
+- Regenerate the versioned catalog and reference; do not hand-edit either file:
+  `cargo run --locked -p cube-core --example operation_contracts`.
+- Add positive and invalid/boundary contract/result fixtures; preserve applicable
+  Rust, CLI and native Python behavior. Run the contract exporter with `--check`.
+- Provide/update the required safe typed Play adapter and usable output handling.
+  Missing integration stays open; `pipeline=null` does not hide an operation.
+- Keep sources read-only, processing bounded and secrets uncaptured by default.
+  Schema metadata grants no filesystem/network permissions.
+
+CI checks owning-module registration, complete concrete schemas, actual fixture
+conformance and generated-file drift. A minimum catalog size is not a completeness
+check. Human-written task guides remain concise; the generated reference owns the
+complete metadata listing. See [contract architecture](docs/contracts.md).
 
 ### Add a bounded pipeline adapter
 

@@ -12,7 +12,7 @@ use serde::Serialize;
 const OP: &str = "audio.dtmf.detect";
 const ROWS: [u16; 4] = [697, 770, 852, 941];
 const COLUMNS: [u16; 4] = [1209, 1336, 1477, 1633];
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Options {
     pub window_ms: u32,
     pub min_tone_ms: u32,
@@ -53,7 +53,7 @@ impl Options {
         Ok(())
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct WindowEvidence {
     pub start_frame: u64,
     pub frames: usize,
@@ -70,7 +70,7 @@ pub struct WindowEvidence {
     pub twist_db: f64,
     pub pair_energy_ratio: f64,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Event {
     pub start_frame: u64,
     pub frames: u64,
@@ -81,7 +81,7 @@ pub struct Event {
     pub candidate_symbol: char,
     pub symbol: Option<char>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Detection {
     pub sample_rate: u32,
     pub channel: u16,

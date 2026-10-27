@@ -3,7 +3,7 @@ use super::{multiset::Profile, statistics};
 use crate::errors::{ErrorCode, OperationError};
 use serde::Serialize;
 use std::collections::BTreeMap;
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Entry {
     pub text: String,
     pub aliases: Vec<usize>,

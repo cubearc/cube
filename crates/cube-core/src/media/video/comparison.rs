@@ -10,13 +10,13 @@ use crate::{
 pub const MAX_PAIRS: usize = 8;
 pub const MAX_PAIR_PIXELS: u64 = 8 * 1024 * 1024;
 const COMPARE_OP: &str = "video.frames.compare";
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct PairComparison {
     pub left: Provenance,
     pub right: Provenance,
     pub comparison: Comparison,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub pairs: Vec<PairComparison>,
     pub compared_pair_pixels: u64,

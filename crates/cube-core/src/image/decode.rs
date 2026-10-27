@@ -113,7 +113,7 @@ pub(super) fn raster(encoded: &[u8]) -> Result<Image, OperationError> {
 }
 
 /// Interpretation of a decoded image, separate from encoded bytes and profiles.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Provenance {
     pub format: &'static str,
     pub representation: &'static str,
@@ -146,7 +146,7 @@ impl Image {
 }
 
 /// Dimensions declared by a parsed header; no claim about compressed payloads.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct DeclaredGeometry {
     pub format: &'static str,
     pub width: u32,

@@ -7,7 +7,7 @@ use crate::{
 use serde::Serialize;
 
 /// Physical input channel order. Output uses canonical gray/RGB/RGBA order.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum SampleLayout {
     Gray,
@@ -46,7 +46,7 @@ pub struct RawLayout {
     pub row_stride: Option<usize>,
     pub offset: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct RawInfo {
     pub width: u32,
     pub height: u32,
@@ -120,7 +120,7 @@ impl RawLayout {
         result.map_err(|e: OperationError| e.operation("image.raw.interpret"))
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct GeometryReport {
     pub declared: Option<super::decode::DeclaredGeometry>,
     pub header_error: Option<OperationError>,

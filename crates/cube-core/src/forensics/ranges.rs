@@ -6,7 +6,7 @@ use serde::Serialize;
 use std::io::{Read, Seek, SeekFrom};
 
 /// Hex row with original bytes and a printable ASCII preview. JSON uses hex.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct HexRow {
     pub offset: u64,
     #[serde(skip)]
@@ -61,14 +61,14 @@ pub fn hex_rows(
 }
 
 /// One complete ASCII printable run (spaces included).
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct StringRun {
     pub offset: u64,
     pub length: u64,
     pub text: String,
 }
 /// String results and whether the entire requested range was scanned.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Strings {
     pub strings: Vec<StringRun>,
     pub scanned_bytes: u64,
@@ -157,14 +157,14 @@ pub fn strings(
 }
 
 /// One differing offset. A missing side at EOF is None, never a fabricated zero.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Difference {
     pub offset: u64,
     pub left: Option<u8>,
     pub right: Option<u8>,
 }
 /// Exact equality/count plus a bounded ordered difference listing.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Comparison {
     pub equal: bool,
     pub left_size: u64,

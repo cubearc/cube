@@ -17,3 +17,14 @@ body:
     attributes:
       label: Proposed behavior
       description: For an operation, describe input, output, and important edge cases. Use only public or synthetic examples.
+
+  - type: checkboxes
+    id: operation_contract
+    attributes:
+      label: Operation Definition of Done
+      description: Required when an implemented operation is added or changed.
+      options:
+        - label: Complete versioned input/parameter/output/error schemas and named ports.
+        - label: Accurate defaults, limits, sensitivity and capability requirements.
+        - label: Real conformance fixtures, generated references and compatible CLI/SDK behavior.
+        - label: Required safe typed Play execution and output handling.

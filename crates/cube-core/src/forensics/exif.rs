@@ -22,7 +22,7 @@ pub fn read(reader: &mut impl std::io::Read) -> Result<Metadata, OperationError>
 }
 
 /// Original EXIF values, without flattening typed values to display text.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 #[serde(tag = "type", content = "values", rename_all = "snake_case")]
 pub enum TagValue {
     Byte(Vec<u8>),
@@ -46,7 +46,7 @@ pub enum TagValue {
 }
 
 /// IFD/tag identity, typed original values, and an additional human display with units.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Tag {
     pub ifd: u16,
     pub context: String,
@@ -56,7 +56,7 @@ pub struct Tag {
     pub display: String,
 }
 /// Absence is a successful result, distinct from malformed or unsupported input.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Metadata {
     pub present: bool,
     pub little_endian: Option<bool>,

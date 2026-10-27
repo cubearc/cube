@@ -12,7 +12,7 @@ pub const NAMES: &[&str] = &[
     "spiral_ccw",
 ];
 pub const CORNER_NAMES: &[&str] = &["top_left", "top_right", "bottom_right", "bottom_left"];
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Traversal {
     #[default]
@@ -23,7 +23,7 @@ pub enum Traversal {
     SpiralCw,
     SpiralCcw,
 }
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Corner {
     #[default]

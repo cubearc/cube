@@ -2,7 +2,7 @@
 use super::{MAX_INDICES, MAX_OUTPUT, check_input, mapping::ByteBudget, selection};
 use crate::errors::{ErrorCode, OperationError};
 use serde::Serialize;
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub(crate) struct Span {
     pub scalar_index: usize,
     pub byte_offset: usize,
@@ -63,14 +63,14 @@ pub enum Positions<'a> {
     Shared(&'a [i64]),
     PerWord(&'a [Vec<i64>]),
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Selection {
     pub position: i64,
     pub scalar_index: Option<usize>,
     pub byte_offset: Option<usize>,
     pub scalar: Option<char>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct WordResult {
     pub word_index: usize,
     pub scalar_index: usize,
@@ -79,7 +79,7 @@ pub struct WordResult {
     pub byte_length: usize,
     pub selections: Vec<Selection>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub extracted: String,
     pub words: Vec<WordResult>,

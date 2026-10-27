@@ -19,6 +19,12 @@
   Rust APIs, CLI/Python examples, setup instructions, and brief architecture notes
   accurate. Explain internal-only changes in the commit or PR description.
   Recipes belong in `cubearc/recipes`.
+- Every new or changed operation must have a complete canonical versioned contract:
+  named input/output ports, typed parameter/result/error schemas, limits and privacy
+  policy. Regenerate `contracts/v1/catalog.json` and `docs/reference/operations.md`,
+  run real contract-conformance fixtures, and update the safe Play adapter/viewer
+  handling. Direct-only operations remain in the catalog. Missing schema, docs or
+  required Play integration is incomplete work, not an implicit scope exception.
 - Keep planning in GitHub Issues and CubeArc Roadmap. Use descriptive issue titles
   without prefixes and Project fields for status and priority.
 

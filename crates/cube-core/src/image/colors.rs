@@ -7,7 +7,7 @@ use crate::{
 use serde::Serialize;
 use std::collections::BTreeSet;
 
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ColorOutput {
     Mask,
@@ -22,7 +22,7 @@ impl ColorOutput {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct ColorLayer {
     pub selected_pixels: u64,
     pub representation: ColorOutput,

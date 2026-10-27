@@ -20,3 +20,9 @@ description: Add a Cube operation to the Rust core and expose it through the exi
    affects users. Do not describe future features as available.
 6. Run Rust formatting, Clippy, workspace tests, native Python installation,
    Ruff, pytest, and the 80% core coverage check using CONTRIBUTING.md.
+
+7. Supply/update the canonical versioned input, parameter, output and error
+   schemas and named ports; derive schemas from actual Rust types. Add a real
+   conformance fixture, regenerate the contract catalog/reference through the
+   `operation_contracts` Cargo example, and run its `--check` mode. Complete the
+   safe typed Play adapter and output handling; missing integration stays open.

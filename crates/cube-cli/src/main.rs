@@ -231,11 +231,14 @@ enum Ops {
         #[arg(long)]
         json: bool,
         /// Complete discovery output ceiling, including JSON envelope/whitespace
-        #[arg(long,default_value_t=operations::MAX_DISCOVERY_BYTES)]
-        max_output_bytes: usize,
+        #[arg(long)]
+        max_output_bytes: Option<usize>,
         /// Opt in to verified canonical names, aliases, safety and profile facts
         #[arg(long, requires = "json")]
         metadata: bool,
+        /// Include complete versioned input/parameter/output/error schemas
+        #[arg(long, requires = "json")]
+        contracts: bool,
     },
     /// Describe an exact stable operation ID
     Describe {
@@ -244,11 +247,14 @@ enum Ops {
         #[arg(long)]
         json: bool,
         /// Complete discovery output ceiling, including JSON envelope/whitespace
-        #[arg(long,default_value_t=operations::MAX_DISCOVERY_BYTES)]
-        max_output_bytes: usize,
+        #[arg(long)]
+        max_output_bytes: Option<usize>,
         /// Opt in to verified canonical names, aliases, safety and profile facts
         #[arg(long, requires = "json")]
         metadata: bool,
+        /// Include complete versioned input/parameter/output/error schemas
+        #[arg(long, requires = "json")]
+        contracts: bool,
     },
 }
 
@@ -564,12 +570,13 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Inspect { path, json } => filecmd::info(path, json, &mut output)?,
         Command::File { command } => filecmd::run(command, &mut output)?,
         Command::Ops { command } => {
-            let (request, json, max_output_bytes, metadata) = match command {
+            let (request, json, max_output_bytes, metadata, contracts) = match command {
                 Ops::List {
                     ref category,
                     json,
                     max_output_bytes,
                     metadata,
+                    contracts,
                 } => (
                     operations::DiscoveryRequest::List {
                         category: category.as_deref(),
@@ -577,17 +584,20 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     json,
                     max_output_bytes,
                     metadata,
+                    contracts,
                 ),
                 Ops::Describe {
                     ref id,
                     json,
                     max_output_bytes,
                     metadata,
+                    contracts,
                 } => (
                     operations::DiscoveryRequest::Describe { id },
                     json,
                     max_output_bytes,
                     metadata,
+                    contracts,
                 ),
             };
             let format = if json {
@@ -595,7 +605,16 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             } else {
                 operations::DiscoveryFormat::Text
             };
-            let document = operations::discovery_document(request, format, max_output_bytes)?;
+            let maximum = max_output_bytes.unwrap_or(if contracts {
+                operations::contracts::MAX_DOCUMENT_BYTES
+            } else {
+                operations::MAX_DISCOVERY_BYTES
+            });
+            let document = if contracts {
+                operations::contracts::discovery_document(request, format, maximum)?
+            } else {
+                operations::discovery_document(request, format, maximum)?
+            };
             output.write_all(document.as_bytes())?;
         }
         Command::Encode { command } => {

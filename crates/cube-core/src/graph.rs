@@ -17,7 +17,7 @@ pub const MAX_INPUT: usize = 2 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 32 * 1024 * 1024;
 pub const MAX_REPORT: usize = 8 * 1024 * 1024;
 pub const MAX_WORK: u64 = 4 * 1024 * 1024;
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Edge {
     #[serde(deserialize_with = "id")]
@@ -27,7 +27,7 @@ pub struct Edge {
     #[serde(deserialize_with = "id")]
     pub to: String,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Definition {
     #[serde(deserialize_with = "vertex_ids")]
@@ -36,7 +36,7 @@ pub struct Definition {
     #[serde(deserialize_with = "edge_list")]
     pub edges: Vec<Edge>,
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_work: u64,
     pub max_memory_bytes: usize,

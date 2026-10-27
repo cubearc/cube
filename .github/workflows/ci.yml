@@ -51,6 +51,8 @@ jobs:
           key: quality
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - name: Check complete operation contracts and generated references
+        run: cargo run --locked -p cube-core --example operation_contracts -- --check
       - run: cargo install cargo-llvm-cov --version 0.9.1 --locked
       - name: Enforce 80% core source line coverage and print summary
         run: cargo llvm-cov --package cube-core --locked --fail-under-lines 80 --ignore-filename-regex '(/tests/|/target/)'

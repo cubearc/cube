@@ -71,13 +71,16 @@ pub fn gcd(mut a: u64, mut b: u64) -> Result<u64, OperationError> {
 }
 /// Exact Bézout identity a*x+b*y=gcd, with deterministic Euclidean coefficients.
 /// Serialization uses decimal strings so JSON consumers never round integers.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize, schemars::JsonSchema)]
 pub struct ExtendedGcd {
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub gcd: u64,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^-?(0|[1-9][0-9]*)$"))]
     pub x: i128,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^-?(0|[1-9][0-9]*)$"))]
     pub y: i128,
 }
 fn decimal<S: serde::Serializer, T: std::fmt::Display>(

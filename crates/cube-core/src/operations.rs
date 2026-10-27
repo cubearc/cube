@@ -4,6 +4,7 @@
 //! not reuse an ID for different semantics. Categories are strings, so extending
 //! the catalog does not require changing a central category enum.
 
+pub mod contracts;
 mod discovery;
 pub mod metadata;
 pub use discovery::{
@@ -221,17 +222,30 @@ pub struct ProfiledDiscovery<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<&'static metadata::Metadata>,
 }
+/// Explicit opt-in; legacy and profile-only serialization remain intact.
+#[derive(Clone, Debug, Serialize)]
+pub struct ContractDiscovery<'a> {
+    #[serde(flatten)]
+    pub profiled: ProfiledDiscovery<'a>,
+    pub contract: contracts::Contract,
+}
 /// Only the existing catalog registration combines descriptor slices and their
 /// optional owning-module annotations. This is not an execution registry.
 pub(crate) struct Module {
     descriptors: &'static [Descriptor],
     profiles: &'static [metadata::Entry],
+    contracts: &'static [contracts::Entry],
 }
 impl Module {
+    pub(crate) const fn with_contracts(mut self, contracts: &'static [contracts::Entry]) -> Self {
+        self.contracts = contracts;
+        self
+    }
     const fn plain(descriptors: &'static [Descriptor]) -> Self {
         Self {
             descriptors,
             profiles: &[],
+            contracts: &[],
         }
     }
     pub(crate) const fn profiled(
@@ -241,6 +255,7 @@ impl Module {
         Self {
             descriptors,
             profiles,
+            contracts: &[],
         }
     }
 }
@@ -265,6 +280,19 @@ impl std::fmt::Display for ParameterError {
 impl std::error::Error for ParameterError {}
 
 impl Descriptor {
+    /// Complete canonical contract. Unknown schemas fail explicitly.
+    pub fn contract(&self) -> Result<contracts::Contract, crate::errors::OperationError> {
+        contracts::describe(self)
+    }
+    /// Add complete typed contracts without changing legacy discovery JSON.
+    pub fn contract_discovery(
+        &self,
+    ) -> Result<ContractDiscovery<'_>, crate::errors::OperationError> {
+        Ok(ContractDiscovery {
+            profiled: self.profiled_discovery(),
+            contract: self.contract()?,
+        })
+    }
     /// Opt in to verified profile annotations without changing the legacy view.
     pub fn profiled_discovery(&self) -> ProfiledDiscovery<'_> {
         ProfiledDiscovery {

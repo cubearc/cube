@@ -6,20 +6,20 @@ use crate::{
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 /// One digit key and its ordered exact character alternatives.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Key {
     pub digit: char,
     pub symbols: String,
 }
 /// Custom mapping must explicitly choose ASCII folding or exact scalar identity.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Mapping {
     pub ascii_fold: bool,
     pub keys: Vec<Key>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Decoded {
     pub text: Option<String>,
     pub alternatives: Vec<String>,

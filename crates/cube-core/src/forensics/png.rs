@@ -17,7 +17,7 @@ fn read(reader: &mut impl Read, bytes: &mut [u8]) -> Result<(), OperationError> 
 
 /// A framing boundary, not proof that compressed pixels decode. The legacy PNG
 /// location/layout is shared by additional supported framing inspectors.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Boundary {
     pub format: &'static str,
     pub logical_end: u64,
@@ -28,7 +28,7 @@ pub struct Boundary {
 }
 
 /// Exact chunk framing and CRC evidence. Payload hex is opt-in and budgeted.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Chunk {
     pub kind: String,
     pub offset: u64,
@@ -39,7 +39,7 @@ pub struct Chunk {
     pub payload_hex: Option<String>,
 }
 /// PNG framing report; valid CRCs do not prove that compressed pixels decode.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub boundary: Boundary,
     pub chunks: Vec<Chunk>,

@@ -98,17 +98,23 @@ def operations(
     category: str | None = None,
     *,
     include_metadata: bool = False,
+    include_contracts: bool = False,
     max_output_bytes: int | None = None,
 ) -> list[dict[str, Any]]:
     """Sorted descriptors; opt in to metadata: DiscoveryMetadata where annotated.
 
     Legacy fields remain unchanged. pipeline is {"version": int} or None.
-    Encoded output <=1 MiB including newline; max_output_bytes only lowers it.
+    Encoded output <=1 MiB, or <=4 MiB with include_contracts=True.
+    Contract schemas use lossless wide-integer decimal strings.
     """
     ...
 
 def describe_operation(
-    id: str, *, include_metadata: bool = False, max_output_bytes: int | None = None
+    id: str,
+    *,
+    include_metadata: bool = False,
+    include_contracts: bool = False,
+    max_output_bytes: int | None = None,
 ) -> dict[str, Any]:
     """Exact ID with optional metadata: DiscoveryMetadata; aliases are not IDs.
 

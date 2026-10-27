@@ -9,7 +9,7 @@ use crate::{
     operations::{Descriptor, Parameter, ParameterType, ParameterValue},
 };
 use serde::{Deserialize, Serialize};
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum State {
     Tone,
@@ -29,7 +29,7 @@ impl State {
         }
     }
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Interval {
     pub start_frame: u64,
@@ -60,7 +60,7 @@ impl Options {
         Ok(())
     }
 }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Detection {
     pub sample_rate: u32,
@@ -122,7 +122,7 @@ pub fn detect(samples: &Samples, options: Options) -> Result<Detection, Operatio
         intervals,
     })
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Transcription {
     pub status: &'static str,
     pub unit_ms: u32,

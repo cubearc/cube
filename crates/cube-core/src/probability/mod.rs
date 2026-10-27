@@ -12,7 +12,7 @@ pub const MAX_SUPPORT: usize = 4096;
 pub const MAX_WORK: usize = 16 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 32 * 1024 * 1024;
 pub const MAX_REPORT: usize = 8 * 1024 * 1024;
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_work: usize,
     pub max_memory_bytes: usize,
@@ -27,19 +27,23 @@ impl Default for Limits {
         }
     }
 }
-#[derive(Clone, Debug, Serialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, PartialEq, Eq, schemars::JsonSchema)]
 pub struct Fraction {
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub numerator: u128,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub denominator: u128,
 }
-#[derive(Clone, Debug, Serialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Serialize, PartialEq, Eq, schemars::JsonSchema)]
 pub struct SignedFraction {
     pub negative: bool,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub numerator: u128,
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub denominator: u128,
 }
 fn decimal<S: serde::Serializer>(v: &u128, s: S) -> Result<S::Ok, S::Error> {

@@ -3,7 +3,7 @@ use super::*;
 /// Effective per-run ceilings. Zero instruction/output limits are valid. The
 /// memory budget includes caller source/input, parser, tape, retained evidence
 /// and a conservative compact JSON serialization bound; no hidden budget growth.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_instructions: u64,
     pub max_output_bytes: usize,
@@ -19,7 +19,7 @@ impl Default for Limits {
     }
 }
 /// EOF behavior must be selected explicitly to depart from the default error.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum EofPolicy {
     #[default]
@@ -39,7 +39,7 @@ impl EofPolicy {
 }
 /// Unsigned wrapping cells; input zero-extends a byte and output projects the low
 /// eight bits at every width. Nonwrapping arithmetic is intentionally unsupported.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Options {
     pub cell_bits: u8,
     pub eof: EofPolicy,
@@ -56,7 +56,7 @@ impl Default for Options {
 /// Traces record after each attempted dispatch, including a failing dispatch.
 /// When either trace budget is exhausted execution continues and trace_complete
 /// becomes false. Zero records disables tracing and requires zero trace bytes.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Diagnostics {
     pub tape_start: usize,
     pub tape_len: usize,
@@ -75,7 +75,7 @@ impl Default for Diagnostics {
         }
     }
 }
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum StopReason {
     Completed,
@@ -86,21 +86,21 @@ pub enum StopReason {
 }
 /// Budget responsible for an instruction/output stop; pointer and input failures
 /// have no budget scope. Comparisons distinguish per-run and shared exhaustion.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum BudgetScope {
     PerRun,
     Aggregate,
     Both,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Cell {
     pub index: usize,
     pub value: u32,
 }
 /// `cell_before` is at pointer_before; `cell_after` is at pointer_after. Output
 /// and input effects belong to this dispatch; instruction is one-based.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct TraceRecord {
     pub instruction: u64,
     pub source_offset: u32,
@@ -114,7 +114,7 @@ pub struct TraceRecord {
 }
 /// Failed executions retain explicitly incomplete evidence. Parsing/invalid
 /// options fail before execution and return an OperationError instead.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub completed: bool,
     pub budget_scope: Option<BudgetScope>,

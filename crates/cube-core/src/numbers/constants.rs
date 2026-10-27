@@ -82,7 +82,7 @@ impl Default for DigitOptions<'_> {
 }
 
 /// Exact text plus the provenance of the entire certified `max_digits` prefix.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct DigitSelection {
     pub constant: &'static str,
     pub radix: u8,

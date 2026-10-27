@@ -3,7 +3,7 @@ use super::{MAX_INDICES, MAX_OUTPUT, check_input, mapping::ByteBudget, word::Ind
 use crate::errors::{ErrorCode, OperationError};
 use serde::Serialize;
 use std::collections::BTreeMap;
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Length {
     pub word_index: usize,
     pub scalar_index: usize,
@@ -11,7 +11,7 @@ pub struct Length {
     pub byte_length: usize,
     pub scalar_length: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Codepoint {
     pub scalar_index: usize,
     pub byte_offset: usize,
@@ -19,14 +19,14 @@ pub struct Codepoint {
     pub value: u32,
     pub presentation: String,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct CharacterValue {
     pub scalar_index: usize,
     pub byte_offset: usize,
     pub scalar: char,
     pub value: Option<u64>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct WordValues {
     pub word_index: usize,
     pub scalar_index: usize,

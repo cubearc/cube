@@ -93,7 +93,7 @@ const RULES: &[Rule] = &[
 ];
 
 /// Matched public signature rule and its exact evidence; this does not validate a file.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Signature {
     pub format: &'static str,
     pub mime: &'static str,
@@ -136,7 +136,7 @@ fn at(input: &[u8], offset: u64) -> Vec<Signature> {
 }
 
 /// Bounded embedded-candidate scan with absolute offsets and explicit completeness.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Scan {
     pub candidates: Vec<Signature>,
     pub scanned_bytes: u64,

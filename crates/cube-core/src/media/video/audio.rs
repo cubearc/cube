@@ -6,12 +6,12 @@ use crate::{
     operations::{Parameter, ParameterType},
 };
 const AUDIO_OP: &str = "video.audio.extract";
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct SourceRange {
     pub offset: u64,
     pub length: u64,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Provenance {
     pub track_id: u64,
     pub codec: &'static str,
@@ -26,7 +26,7 @@ pub struct Provenance {
     pub wav_sha256: String,
     pub processing: &'static str,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct AudioTrack {
     pub provenance: Provenance,
     #[serde(skip)]

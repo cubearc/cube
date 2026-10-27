@@ -1,19 +1,19 @@
 //! Deterministic weak connectivity, BFS, cycle witnesses and Hierholzer trails.
 use super::*;
 use std::collections::VecDeque;
-#[derive(Debug, Serialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, PartialEq, Eq, schemars::JsonSchema)]
 pub struct Path {
     pub vertices: Vec<String>,
     pub edges: Vec<String>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct QueryReport<T> {
     pub result: T,
     pub work: u64,
     pub memory_bytes_upper_bound: usize,
     pub report_bytes_upper_bound: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct EulerResult {
     pub exists: bool,
     pub circuit: bool,

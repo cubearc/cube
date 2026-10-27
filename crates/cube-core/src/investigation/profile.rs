@@ -9,14 +9,16 @@ use std::{
     sync::atomic::{AtomicBool, Ordering},
     time::{Duration, Instant},
 };
-#[derive(Clone, Copy, Debug, Default, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(
+    Clone, Copy, Debug, Default, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Depth {
     #[default]
     Metadata,
     Preview,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(default, deny_unknown_fields)]
 pub struct Budgets {
     pub max_input_bytes: usize,
@@ -51,14 +53,14 @@ impl Budgets {
         Ok(())
     }
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Pipeline {
     pub steps: Vec<Step>,
     #[serde(default)]
     pub limits: Limits,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Profile {
     pub format_version: u32,
@@ -90,7 +92,7 @@ impl Default for Profile {
     }
 }
 /// Safe saved profile provenance; parameter values and content are absent.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Context {
     pub format_version: u32,
@@ -115,7 +117,7 @@ impl Context {
         Ok(())
     }
 }
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct PlannedRun {
     pub id: u32,
     pub operation: &'static str,
@@ -132,7 +134,7 @@ pub struct PlannedRun {
     #[serde(skip)]
     spec: RunSpec,
 }
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct DryRun {
     pub format_version: u32,
     pub engine_api: u32,

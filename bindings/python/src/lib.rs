@@ -326,15 +326,26 @@ fn structured(py: Python<'_>, value: &serde_json::Value) -> PyResult<Py<PyAny>> 
 
 /// Bounded catalog discovery; annotations describe actual profiles and grant no execution authority.
 #[pyfunction]
-#[pyo3(signature=(category=None,*,include_metadata=false,max_output_bytes=None))]
+#[pyo3(signature=(category=None,*,include_metadata=false,include_contracts=false,max_output_bytes=None))]
 fn operations(
     py: Python<'_>,
     category: Option<&str>,
     include_metadata: bool,
+    include_contracts: bool,
     max_output_bytes: Option<&Bound<'_, PyAny>>,
 ) -> PyResult<Py<PyAny>> {
     let limit = discovery_limit(max_output_bytes, "ops.list")?;
-    let text = catalog::discovery_document(
+    let limit = if include_contracts && max_output_bytes.is_none() {
+        catalog::contracts::MAX_DOCUMENT_BYTES
+    } else {
+        limit
+    };
+    let writer = if include_contracts {
+        catalog::contracts::discovery_document
+    } else {
+        catalog::discovery_document
+    };
+    let text = writer(
         catalog::DiscoveryRequest::List { category },
         catalog::DiscoveryFormat::DirectJson {
             metadata: include_metadata,
@@ -346,15 +357,26 @@ fn operations(
 }
 /// Describe an exact stable ID with optional profile facts; aliases are not lookup IDs.
 #[pyfunction]
-#[pyo3(signature=(id,*,include_metadata=false,max_output_bytes=None))]
+#[pyo3(signature=(id,*,include_metadata=false,include_contracts=false,max_output_bytes=None))]
 fn describe_operation(
     py: Python<'_>,
     id: &str,
     include_metadata: bool,
+    include_contracts: bool,
     max_output_bytes: Option<&Bound<'_, PyAny>>,
 ) -> PyResult<Py<PyAny>> {
     let limit = discovery_limit(max_output_bytes, "ops.describe")?;
-    let text = catalog::discovery_document(
+    let limit = if include_contracts && max_output_bytes.is_none() {
+        catalog::contracts::MAX_DOCUMENT_BYTES
+    } else {
+        limit
+    };
+    let writer = if include_contracts {
+        catalog::contracts::discovery_document
+    } else {
+        catalog::discovery_document
+    };
+    let text = writer(
         catalog::DiscoveryRequest::Describe { id },
         catalog::DiscoveryFormat::DirectJson {
             metadata: include_metadata,

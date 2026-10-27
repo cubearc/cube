@@ -11,10 +11,11 @@ pub const MAX_FRAME: usize = MAX_PAYLOAD + 5;
 /// Conservative 1.38*frame conversion bound, including leading zero bytes.
 pub const MAX_ENCODED: usize = MAX_FRAME * 138 / 100 + 1;
 
-#[derive(Debug, PartialEq, Eq, Serialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Decoded {
     pub version: u8,
     #[serde(rename = "payload_hex", serialize_with = "super::serialize_hex")]
+    #[schemars(with = "String", regex(pattern = r"^[0-9a-f]*$"))]
     pub payload: Vec<u8>,
     pub checksum_verified: bool,
 }
@@ -229,4 +230,81 @@ const PROFILED: [crate::operations::metadata::Entry; 2] = [
 pub const OPERATIONS: &[crate::operations::Descriptor] =
     &crate::operations::metadata::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);
+
+// Typed declarations and real conformance fixtures belong to this implementation.
+#[derive(Serialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+struct ContractParameters {
+    version: u8,
+}
+#[derive(Serialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+struct NoParameters {}
+const CONTRACTS: &[crate::operations::contracts::Entry] = &[
+    crate::operations::contracts::Entry {
+        descriptor: OPERATIONS[0],
+        inputs: &[crate::operations::contracts::Port {
+            name: "input",
+            semantic_type: "bytes",
+            schema: crate::operations::contracts::schema::<
+                crate::operations::contracts::values::Bytes,
+            >,
+            required: true,
+        }],
+        parameters: crate::operations::contracts::schema::<ContractParameters>,
+        outputs: &[crate::operations::contracts::Port {
+            name: "output",
+            semantic_type: "text",
+            schema: crate::operations::contracts::schema::<String>,
+            required: true,
+        }],
+        limits: crate::operations::contracts::Limits {
+            max_input_bytes: Some(MAX_PAYLOAD as u64),
+            max_output_bytes: Some(MAX_ENCODED as u64),
+            max_items: None,
+            max_work: None,
+            max_memory_bytes: None,
+        },
+        fixture: encode_fixture,
+    },
+    crate::operations::contracts::Entry {
+        descriptor: OPERATIONS[1],
+        inputs: &[crate::operations::contracts::Port {
+            name: "input",
+            semantic_type: "text",
+            schema: crate::operations::contracts::schema::<String>,
+            required: true,
+        }],
+        parameters: crate::operations::contracts::schema::<NoParameters>,
+        outputs: &[crate::operations::contracts::Port {
+            name: "output",
+            semantic_type: "encoding.base58check.decoded",
+            schema: crate::operations::contracts::schema::<Decoded>,
+            required: true,
+        }],
+        limits: crate::operations::contracts::Limits {
+            max_input_bytes: Some(MAX_ENCODED as u64),
+            max_output_bytes: None,
+            max_items: None,
+            max_work: None,
+            max_memory_bytes: None,
+        },
+        fixture: decode_fixture,
+    },
+];
+fn encode_fixture() -> Result<crate::operations::contracts::Fixture, OperationError> {
+    Ok(crate::operations::contracts::Fixture {
+        inputs: serde_json::json!({"input":crate::operations::contracts::values::Bytes{data:vec![0,255]}}),
+        parameters: serde_json::json!({"version":0}),
+        outputs: serde_json::json!({"output":encode(0,&[0,255])?}),
+    })
+}
+fn decode_fixture() -> Result<crate::operations::contracts::Fixture, OperationError> {
+    let input = encode(0, &[0, 255])?;
+    Ok(crate::operations::contracts::Fixture {
+        inputs: serde_json::json!({"input":input}),
+        parameters: serde_json::json!({}),
+        outputs: serde_json::json!({"output":decode(&input)?}),
+    })
+}

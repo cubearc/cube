@@ -14,7 +14,7 @@ pub const MAX_WORK: usize = 16 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 32 * 1024 * 1024;
 pub const MAX_REPORT: usize = 8 * 1024 * 1024;
 pub const MAX_DICTIONARY_BYTES: usize = 1024 * 1024;
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Options {
     pub max_work: usize,
     pub max_memory_bytes: usize,
@@ -29,13 +29,13 @@ impl Default for Options {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Failure {
     pub position: usize,
     pub step: Option<usize>,
     pub reason: &'static str,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub profile: Profile,
     pub normalization_unicode_version: (u8, u8, u8),

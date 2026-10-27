@@ -3,7 +3,7 @@ use super::{Channel, Corner, Image, PixelData, Region, Traversal};
 use crate::errors::OperationError;
 use serde::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct PixelStream {
     #[serde(flatten)]
     pub pixels: PixelData,

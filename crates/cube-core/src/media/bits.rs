@@ -28,7 +28,7 @@ impl Default for Options {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct BitStream {
     pub sample_rate: u32,
     pub bits_per_sample: u16,

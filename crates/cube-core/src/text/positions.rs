@@ -22,7 +22,7 @@ pub(super) fn check_count(count: usize, parameter: &'static str) -> Result<(), O
 }
 
 /// Numbering for all scalar positions, including reported positions and overrides.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(into = "u8")]
 pub enum IndexBase {
     #[default]
@@ -71,7 +71,7 @@ impl IndexBase {
 
 /// Position-set semantics: explicit indexes are sorted/deduplicated, unlike
 /// `text::extract`, which preserves list order and duplicates.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum Selector {
     Indices {

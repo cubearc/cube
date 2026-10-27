@@ -32,7 +32,7 @@ impl Default for LsbOptions {
     }
 }
 /// Packed raw bytes plus effective parameters and explicit partial-byte accounting.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct LsbResult {
     pub region: Region,
     pub channels: Vec<Channel>,
@@ -48,14 +48,14 @@ pub struct LsbResult {
     pub data: Vec<u8>,
 }
 /// Extended traversal result preserves the original public LsbResult layout.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct OrderedLsbResult {
     #[serde(flatten)]
     pub result: LsbResult,
     pub start_corner: super::Corner,
 }
 /// Exact row-major 0/1 samples and MSB-first zero-padded bytes.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct BitPlane {
     pub pixels: PixelData,
     pub bit: u8,

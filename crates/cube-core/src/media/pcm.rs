@@ -38,7 +38,7 @@ pub struct Samples {
     data: Vec<u8>,
 }
 /// Export metadata sufficient to interpret the raw interleaved sample bytes.
-#[derive(Serialize)]
+#[derive(Serialize, schemars::JsonSchema)]
 pub struct SampleInfo<'a> {
     pub sample_rate: u32,
     pub bits_per_sample: u16,

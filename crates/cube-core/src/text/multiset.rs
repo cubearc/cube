@@ -11,7 +11,7 @@ use serde::Serialize;
 pub const MAX_WORK: usize = 16 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 32 * 1024 * 1024;
 pub const MAX_REPORT: usize = 8 * 1024 * 1024;
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Profile {
     pub normalization: Normalization,
     pub case: CaseMode,
@@ -26,7 +26,7 @@ impl Default for Profile {
         }
     }
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_work: usize,
     pub max_memory_bytes: usize,
@@ -41,12 +41,12 @@ impl Default for Limits {
         }
     }
 }
-#[derive(Debug, Serialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, PartialEq, Eq, schemars::JsonSchema)]
 pub struct ScalarCount {
     pub scalar: char,
     pub count: u64,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub profile: Profile,
     pub normalization_unicode_version: (u8, u8, u8),

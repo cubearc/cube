@@ -8,13 +8,13 @@ pub const MAX_WORK: usize = 16 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 16 * 1024 * 1024;
 pub const MAX_REPORT: usize = 1024 * 1024;
 const OP: &str = "image.spatial.autocorrelation";
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Lag {
     pub dx: i32,
     pub dy: i32,
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_work: usize,
     pub max_memory_bytes: usize,
@@ -29,7 +29,7 @@ impl Default for Limits {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Measurement {
     pub lag: Lag,
     pub source_overlap: Region,
@@ -44,7 +44,7 @@ pub struct Measurement {
     pub population_covariance: f64,
     pub correlation: Option<f64>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub region: Region,
     pub channel: Channel,

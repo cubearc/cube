@@ -9,7 +9,7 @@ pub const MAX_FRAMES: usize = 8;
 pub const MAX_FRAME_BYTES: usize = 2 * 1024 * 1024;
 pub const MAX_TOTAL_DECODED: usize = 64 * 1024 * 1024;
 const FRAME_OP: &str = "video.frames.extract";
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Provenance {
     pub track_id: u64,
     pub frame_index: usize,
@@ -21,7 +21,7 @@ pub struct Provenance {
     pub encoded_sha256: String,
     pub representation: &'static str,
 }
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Frame {
     pub provenance: Provenance,
     #[serde(skip)]

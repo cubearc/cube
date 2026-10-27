@@ -9,7 +9,7 @@ pub const MAX_QR_PIXELS: u64 = 262144;
 pub const MAX_QR_DIMENSION: u32 = 1024;
 pub const MAX_QR_SYMBOLS: usize = 8;
 pub const MAX_QR_PAYLOAD: usize = 65536;
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QrStatus {
     NoDetection,
@@ -17,7 +17,7 @@ pub enum QrStatus {
     Decoded,
     PartialDecode,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct QrSymbol {
     pub status: QrStatus,
     pub corners: Option<[[i32; 2]; 4]>,
@@ -30,7 +30,7 @@ pub struct QrSymbol {
     #[serde(skip)]
     pub payload: Option<Vec<u8>>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct QrReport {
     pub status: QrStatus,
     pub symbols: Vec<QrSymbol>,

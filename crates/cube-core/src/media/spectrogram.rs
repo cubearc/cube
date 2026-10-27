@@ -8,7 +8,7 @@ use crate::{
     operations::{Descriptor, Parameter, ParameterType, ParameterValue},
 };
 use serde::Serialize;
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum FinalWindow {
     #[default]
@@ -56,7 +56,7 @@ impl Options {
         Ok(())
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Spectrogram {
     pub sample_rate: u32,
     pub channels: Vec<u16>,

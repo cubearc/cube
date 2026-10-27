@@ -13,7 +13,7 @@ pub const MAX_WORK: usize = 1_000_000;
 pub const MAX_MEMORY: usize = 32 * 1024 * 1024;
 pub const MAX_REPORT: usize = 8 * 1024 * 1024;
 const OP: &str = "text.anagram.search";
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Options {
     pub max_words: usize,
     pub reuse: bool,
@@ -34,7 +34,7 @@ impl Default for Options {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub profile: Profile,
     pub normalization_unicode_version: (u8, u8, u8),

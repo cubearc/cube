@@ -35,13 +35,13 @@ pub(super) fn read(reader: &mut impl Read, bytes: &mut [u8]) -> Result<(), Opera
     })
 }
 /// Exact rational duration in seconds: numerator frames / denominator frames/sec.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Duration {
     pub numerator: u64,
     pub denominator: u32,
 }
 /// Top-level chunk framing. Offsets are absolute bytes; size excludes header/pad.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Chunk {
     pub id: String,
     pub offset: u64,
@@ -50,7 +50,7 @@ pub struct Chunk {
     pub padding_bytes: u8,
 }
 /// Validated integer PCM layout. Physical channels have indexes, not guessed labels.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub struct Format {
     pub format_tag: u16,
     pub channels: u16,
@@ -116,7 +116,7 @@ impl Format {
     }
 }
 /// Framing facts separate from audio samples. Trailing bytes are reported, not decoded.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Serialize, schemars::JsonSchema)]
 pub struct Info {
     pub container: &'static str,
     pub byte_order: &'static str,

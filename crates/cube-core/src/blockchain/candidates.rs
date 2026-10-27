@@ -14,7 +14,7 @@ pub const MAX_WORK: usize = 1024 * 1024;
 pub const MAX_OUTPUT_BYTES: usize = 1024 * 1024;
 pub const MAX_DERIVATIONS: usize = 32;
 const OP: &str = "blockchain.candidates.validate";
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Format {
     Wif,
@@ -89,7 +89,7 @@ pub fn derivation(
         _ => Err(invalid()),
     }
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct BatchPlan {
     pub entries: usize,
     pub input_bytes: usize,
@@ -97,7 +97,7 @@ pub struct BatchPlan {
     pub max_output_bytes: usize,
     pub max_public_derivations: usize,
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Progress {
     pub total: usize,
     pub processed: usize,
@@ -106,13 +106,13 @@ pub struct Progress {
     pub public_derived: usize,
     pub complete: bool,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]
 pub enum PublicAddress {
     Bitcoin(bitcoin::BitcoinAddress),
     Ethereum(ethereum::EthereumAddress),
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct CandidateResult {
     pub index: usize,
     pub format: Format,

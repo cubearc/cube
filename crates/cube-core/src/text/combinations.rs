@@ -17,7 +17,7 @@ fn invalid(message: &str) -> OperationError {
 fn limit(message: &str) -> OperationError {
     OperationError::new(ErrorCode::ResourceLimit, message).operation("text.combinations")
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct CombinationPlan {
     pub input_groups: usize,
     pub total_results: usize,

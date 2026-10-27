@@ -29,7 +29,7 @@ impl PairOperation {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Plan {
     pub operation: &'static str,
     pub input_count: usize,
@@ -113,7 +113,7 @@ pub fn plan(
     })();
     result.map_err(|e: OperationError| e.operation("image.pairs"))
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct PairResult {
     pub left: usize,
     pub right: usize,
@@ -124,7 +124,7 @@ pub struct PairResult {
     #[serde(skip)]
     pub png: Option<Vec<u8>>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Batch {
     pub plan: Plan,
     pub successes: usize,

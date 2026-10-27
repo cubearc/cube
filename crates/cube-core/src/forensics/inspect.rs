@@ -10,7 +10,7 @@ use std::{
 };
 
 /// Exact timestamp duration relative to the Unix epoch. Unavailable times are None.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Timestamp {
     pub seconds: u64,
     pub nanoseconds: u32,
@@ -47,7 +47,7 @@ fn timestamp(time: std::io::Result<SystemTime>) -> Option<Timestamp> {
 }
 
 /// Basic file facts; unavailable filesystem times are null rather than zero.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct FileInfo {
     pub size: u64,
     pub regular_file: bool,

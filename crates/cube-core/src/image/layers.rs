@@ -11,7 +11,7 @@ pub const MAX_OUTPUTS: usize = 64;
 pub const MAX_WORK: u64 = 16 * 1024 * 1024;
 pub const MAX_BYTES: usize = 64 * 1024 * 1024;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct ColorExport {
     pub color: Vec<u8>,
     pub selected_pixels: u64,
@@ -20,7 +20,7 @@ pub struct ColorExport {
     #[serde(skip)]
     pub png: Vec<u8>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct ColorExports {
     pub representation: ColorOutput,
     pub color_model: ColorModel,

@@ -6,7 +6,7 @@ use crate::{
 };
 use serde::Serialize;
 pub const MAX_ASSET_BYTES: usize = 65536;
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum HtmlSelector {
     Inline,
@@ -26,7 +26,7 @@ impl HtmlSelector {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Provenance {
     pub artifact: &'static str,
     pub artifact_sha256: String,
@@ -38,7 +38,7 @@ pub struct Provenance {
     pub bytes: usize,
     pub sha256: String,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Asset {
     pub provenance: Provenance,
     #[serde(skip)]

@@ -41,7 +41,7 @@ fn rows_decimal<S: Serializer>(rows: &[Vec<u128>], s: S) -> Result<S::Ok, S::Err
     }
     seq.end()
 }
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, Serialize, schemars::JsonSchema)]
 pub struct Limits {
     pub max_work: u64,
     pub max_report_bytes: usize,
@@ -54,9 +54,10 @@ impl Default for Limits {
         }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Count {
     #[serde(serialize_with = "decimal")]
+    #[schemars(with = "String", regex(pattern = r"^(0|[1-9][0-9]*)$"))]
     pub value: u128,
     pub work: u64,
     pub report_bytes_upper_bound: usize,
@@ -193,9 +194,10 @@ pub fn multinomial(groups: &[u64], limits: Limits) -> Result<Count, OperationErr
     }
     Ok(b.finish(value))
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Triangle {
     #[serde(serialize_with = "rows_decimal")]
+    #[schemars(with = "Vec<Vec<String>>")]
     pub rows: Vec<Vec<u128>>,
     pub work: u64,
     pub report_bytes_upper_bound: usize,

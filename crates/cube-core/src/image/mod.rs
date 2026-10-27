@@ -60,7 +60,7 @@ pub(super) fn unsupported(message: &str) -> OperationError {
 }
 
 /// Supported physical sample layouts; indexed samples are palette indices.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ColorModel {
     Gray,
@@ -120,7 +120,7 @@ pub struct Image {
 
 /// Image facts separate from sample bytes. Metadata is explicit and never decoded
 /// into color corrections; eXIf is available only through `Image::exif`.
-#[derive(Serialize)]
+#[derive(Serialize, schemars::JsonSchema)]
 pub struct ImageInfo<'a> {
     pub format: &'static str,
     pub width: u32,

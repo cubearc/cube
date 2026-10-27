@@ -4,7 +4,7 @@ use serde::Serialize;
 use serde_json::Value;
 const OP: &str = "web.har.inspect";
 pub const MAX_ENTRIES: usize = 128;
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Entry {
     pub index: usize,
     pub pointer: String,
@@ -20,7 +20,7 @@ pub struct Entry {
     pub body_text_bytes: Option<usize>,
     pub body_encoding: Option<String>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub format: &'static str,
     pub version: String,

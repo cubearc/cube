@@ -5,7 +5,7 @@ fn invalid(message: &str) -> OperationError {
     OperationError::new(ErrorCode::InvalidParameter, message)
 }
 /// First extracted bit occupies bit 7 (MSB) or bit 0 (LSB) of an output byte.
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum BitOrder {
     #[default]
@@ -22,7 +22,7 @@ impl BitOrder {
     }
 }
 /// Policy for a final incomplete byte. Pad fills unused packing positions with zero.
-#[derive(Clone, Copy, Debug, Default, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Incomplete {
     #[default]

@@ -4,38 +4,38 @@ use crate::errors::{ErrorCode, OperationError};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 /// One exact set with a unique nonempty name and distinct nonempty output symbol.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Class {
     pub name: String,
     pub characters: String,
     pub symbol: String,
 }
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Definition {
     pub ascii_fold: bool,
     pub classes: Vec<Class>,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Position {
     pub scalar_index: usize,
     pub byte_offset: usize,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Record {
     pub scalar_index: usize,
     pub byte_offset: usize,
     pub class: String,
     pub emitted: String,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Preserved {
     pub scalar_index: usize,
     pub byte_offset: usize,
     pub scalar: char,
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Report {
     pub mapped_text: String,
     pub records: Vec<Record>,

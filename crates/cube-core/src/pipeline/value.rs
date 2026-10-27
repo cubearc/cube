@@ -4,7 +4,7 @@ use crate::errors::ErrorCode;
 use serde::{Deserialize, Serialize};
 /// The initial structured kind is an inert byte range, with no associated path
 /// or file permission. No initial transform adapter consumes it; identity works.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Kind {
     Bytes,
@@ -27,11 +27,12 @@ impl std::str::FromStr for Kind {
         }
     }
 }
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
 pub enum Value {
     Bytes {
         #[serde(rename = "base64", with = "base64_wire")]
+        #[schemars(with = "String", extend("contentEncoding" = "base64"))]
         data: Vec<u8>,
     },
     Text {
@@ -89,7 +90,7 @@ impl Value {
 /// explicit {"base64":"..."} object. Concrete tagged list objects are additive:
 /// {"unsigned_list":[0,2]} and {"text_list":["1=X"]}. Bare arrays, floats, null,
 /// mixed/nested lists and arbitrary objects remain invalid, including empty arrays.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum Parameter {
     Integer(i64),
@@ -97,6 +98,7 @@ pub enum Parameter {
     Text(String),
     Bytes {
         #[serde(rename = "base64", with = "base64_wire")]
+        #[schemars(with = "String", extend("contentEncoding" = "base64"))]
         data: Vec<u8>,
     },
     UnsignedList {

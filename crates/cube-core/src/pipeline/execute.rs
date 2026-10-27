@@ -14,7 +14,7 @@ use std::{
     collections::BTreeMap,
     sync::atomic::{AtomicBool, Ordering},
 };
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, schemars::JsonSchema)]
 pub struct Execution {
     pub output: Value,
     pub intermediates: BTreeMap<usize, Value>,

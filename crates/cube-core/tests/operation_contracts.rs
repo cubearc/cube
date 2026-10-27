@@ -95,3 +95,48 @@ fn full_width_integers_round_trip_without_javascript_rounding() {
 fn module_owned_fixtures_execute_real_operations() {
     assert!(contracts::validate_registered_fixtures().unwrap() >= 2);
 }
+
+#[test]
+fn promoted_inputs_retain_owning_parameter_bounds_and_list_constraints() {
+    for (id, valid, invalid) in [
+        (
+            "number.binomial",
+            json!({"n":128,"k":2}),
+            json!({"n":129,"k":2}),
+        ),
+        (
+            "number.permutations",
+            json!({"n":3,"k":2}),
+            json!({"n":3,"k":129}),
+        ),
+        ("number.pascal", json!({"rows":1}), json!({"rows":130})),
+        (
+            "number.multinomial",
+            json!({"groups":[]}),
+            json!({"groups":[129]}),
+        ),
+    ] {
+        let descriptor = operations::require(id).unwrap();
+        let contract = descriptor.contract().unwrap();
+        contract.validate_inputs(&valid).unwrap();
+        assert!(contract.validate_inputs(&invalid).is_err(), "{id}");
+        for input in &contract.inputs {
+            assert!(
+                contract.parameters.as_value()["properties"]
+                    .get(&input.name)
+                    .is_none()
+            );
+        }
+    }
+}
+
+#[test]
+fn unregistered_or_modified_descriptors_cannot_publish_canonical_contracts() {
+    let descriptor = operations::require("text.reverse").unwrap();
+    let mut changed = *descriptor;
+    changed.id = "text.invented";
+    assert!(changed.contract().is_err());
+    changed = *descriptor;
+    changed.description = "Unregistered changed semantics";
+    assert!(changed.contract().is_err());
+}

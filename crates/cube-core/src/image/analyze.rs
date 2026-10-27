@@ -1,6 +1,8 @@
 //! Exact pixel/channel exports, histograms and comparisons; no inferred messages.
+mod contracts;
 use super::{ColorModel, Image, invalid, limit};
 use crate::errors::OperationError;
+pub(crate) use contracts::CONTRACTS;
 use serde::Serialize;
 use std::collections::BTreeMap;
 

@@ -384,7 +384,8 @@ const MODULES: &[Module] = &[
     Module::plain(crate::image::layers::OPERATIONS),
     Module::plain(crate::image::pairs::OPERATIONS),
     Module::plain(crate::image::qr::OPERATIONS),
-    Module::plain(crate::image::analyze::OPERATIONS),
+    Module::plain(crate::image::analyze::OPERATIONS)
+        .with_contracts(crate::image::analyze::CONTRACTS),
     Module::plain(crate::image::bitwise::OPERATIONS),
     Module::plain(crate::image::transform::OPERATIONS),
     Module::plain(crate::image::bits::OPERATIONS),

@@ -21,6 +21,10 @@ pub const MAX_INSTANCE_BYTES: usize = 64 * 1024 * 1024;
 pub fn schema<T: JsonSchema>() -> Schema {
     wire::schema(schemars::schema_for!(T))
 }
+/// Reuse an owning descriptor's parameter declarations in a richer module entry.
+pub(crate) fn descriptor_parameters(descriptor: &Descriptor) -> Schema {
+    parameters::schema(descriptor).expect("registered parameter declarations are valid")
+}
 #[derive(Clone, Copy)]
 pub struct Port {
     pub name: &'static str,
@@ -28,8 +32,9 @@ pub struct Port {
     pub schema: fn() -> Schema,
     pub required: bool,
 }
-/// Optional implementation-enforced ceilings. None explicitly means that the
-/// direct API has no independent cap; callers still apply their own boundaries.
+/// Optional implementation-enforced ceilings. None means no separate ceiling is
+/// declared here, not that the API is unbounded. Owning parsers and callers still
+/// enforce their actual limits.
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 pub struct Limits {
     pub max_input_bytes: Option<u64>,
@@ -49,6 +54,7 @@ pub struct Fixture {
 /// changing public Descriptor literals or adding another algorithm registry.
 #[derive(Clone, Copy)]
 pub(crate) struct Entry {
+    pub operation_version: u32,
     pub descriptor: Descriptor,
     pub inputs: &'static [Port],
     pub parameters: fn() -> Schema,
@@ -117,7 +123,12 @@ fn port(value: &Port) -> PortContract {
 /// Return the complete contract for an exact registered descriptor. Unknown
 /// semantic types fail rather than publishing name-only or permissive schemas.
 pub fn describe(descriptor: &Descriptor) -> Result<Contract, OperationError> {
-    let (inputs, parameters, outputs, limits) = if let Some(entry) = entry(descriptor) {
+    if !super::catalog().contains(&descriptor) {
+        return Err(invalid(
+            "canonical contracts require an exact registered descriptor",
+        ));
+    }
+    let (mut inputs, parameters, outputs, limits) = if let Some(entry) = entry(descriptor) {
         (
             entry.inputs.iter().map(port).collect(),
             (entry.parameters)(),
@@ -134,12 +145,18 @@ pub fn describe(descriptor: &Descriptor) -> Result<Contract, OperationError> {
     };
     let mut parameters_value = parameters.to_value();
     if entry(descriptor).is_none() {
-        for input in &inputs {
+        for input in &mut inputs {
             if let Some(properties) = parameters_value
                 .get_mut("properties")
                 .and_then(Value::as_object_mut)
+                && let Some(schema) = properties.remove(&input.name)
             {
-                properties.remove(&input.name);
+                // Promoting a real argument to a named port must preserve
+                // its owning declaration's bounds, choices and defaults.
+                input.schema = wire::schema(
+                    Schema::try_from(schema)
+                        .map_err(|_| invalid("invalid promoted input schema"))?,
+                );
             }
             if let Some(required) = parameters_value
                 .get_mut("required")
@@ -155,7 +172,7 @@ pub fn describe(descriptor: &Descriptor) -> Result<Contract, OperationError> {
     let metadata = descriptor.metadata();
     let contract = Contract {
         schema_version: FORMAT_VERSION,
-        operation_version: 1,
+        operation_version: entry(descriptor).map_or(1, |entry| entry.operation_version),
         operation: descriptor.id.into(),
         category: descriptor.category.into(),
         description: descriptor.description.into(),
@@ -185,6 +202,9 @@ pub fn describe(descriptor: &Descriptor) -> Result<Contract, OperationError> {
             grants_network_access: false,
         },
     };
+    if contract.operation_version == 0 {
+        return Err(invalid("operation versions must be positive"));
+    }
     for ports in [&contract.inputs, &contract.outputs] {
         let mut names = BTreeSet::new();
         if ports.len() > 32 {

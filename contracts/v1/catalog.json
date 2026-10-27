@@ -14552,9 +14552,15 @@
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "string",
-            "type": "string"
+            "description": "Explicit program input bytes, <=1 MiB; never implicit stdin in Core.",
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "minItems": 0
           }
         }
       ],
@@ -15805,9 +15811,15 @@
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "string",
-            "type": "string"
+            "description": "Explicit program input bytes, <=1 MiB; never implicit stdin in Core.",
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "minItems": 0
           }
         }
       ],
@@ -15974,9 +15986,15 @@
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "string",
-            "type": "string"
+            "description": "Explicit program input bytes, <=1 MiB; never implicit stdin in Core.",
+            "type": "array",
+            "default": [],
+            "items": {
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "minItems": 0
           }
         }
       ],
@@ -24099,6 +24117,88 @@
               "base64"
             ]
           }
+        },
+        {
+          "name": "image",
+          "semantic_type": "image.samples",
+          "required": false,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Image",
+            "type": "object",
+            "properties": {
+              "color_model": {
+                "$ref": "#/$defs/ColorModel"
+              },
+              "height": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "palette": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 255,
+                    "minimum": 0
+                  },
+                  "maxItems": 3,
+                  "minItems": 3
+                }
+              },
+              "samples": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "transparency": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "width": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "width",
+              "height",
+              "color_model",
+              "samples",
+              "palette",
+              "transparency"
+            ],
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              },
+              "ColorModel": {
+                "description": "Supported physical sample layouts; indexed samples are palette indices.",
+                "type": "string",
+                "enum": [
+                  "gray",
+                  "gray_alpha",
+                  "rgb",
+                  "rgba",
+                  "indexed"
+                ]
+              }
+            }
+          }
         }
       ],
       "errors": {
@@ -24164,7 +24264,7 @@
       "limits": {
         "max_input_bytes": null,
         "max_output_bytes": null,
-        "max_items": null,
+        "max_items": 4194304,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -25301,6 +25401,88 @@
               }
             }
           }
+        },
+        {
+          "name": "mask",
+          "semantic_type": "image.samples",
+          "required": false,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Image",
+            "type": "object",
+            "properties": {
+              "color_model": {
+                "$ref": "#/$defs/ColorModel"
+              },
+              "height": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "palette": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 255,
+                    "minimum": 0
+                  },
+                  "maxItems": 3,
+                  "minItems": 3
+                }
+              },
+              "samples": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "transparency": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "width": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "width",
+              "height",
+              "color_model",
+              "samples",
+              "palette",
+              "transparency"
+            ],
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              },
+              "ColorModel": {
+                "description": "Supported physical sample layouts; indexed samples are palette indices.",
+                "type": "string",
+                "enum": [
+                  "gray",
+                  "gray_alpha",
+                  "rgb",
+                  "rgba",
+                  "indexed"
+                ]
+              }
+            }
+          }
         }
       ],
       "errors": {
@@ -25366,7 +25548,7 @@
       "limits": {
         "max_input_bytes": null,
         "max_output_bytes": null,
-        "max_items": null,
+        "max_items": 4194304,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -30071,7 +30253,7 @@
           "required": true,
           "schema": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "PixelData",
+            "title": "PixelStream",
             "description": "Shape and exact interleaved row-major selected channel samples.",
             "type": "object",
             "properties": {
@@ -30089,12 +30271,24 @@
               },
               "region": {
                 "$ref": "#/$defs/Region"
+              },
+              "reverse": {
+                "type": "boolean"
+              },
+              "start_corner": {
+                "$ref": "#/$defs/Corner"
+              },
+              "traversal": {
+                "$ref": "#/$defs/Traversal"
               }
             },
             "required": [
               "region",
               "channels",
-              "bit_depth"
+              "bit_depth",
+              "traversal",
+              "start_corner",
+              "reverse"
             ],
             "$defs": {
               "Channel": {
@@ -30107,6 +30301,15 @@
                   "alpha",
                   "gray",
                   "index"
+                ]
+              },
+              "Corner": {
+                "type": "string",
+                "enum": [
+                  "top_left",
+                  "top_right",
+                  "bottom_right",
+                  "bottom_left"
                 ]
               },
               "Region": {
@@ -30143,6 +30346,17 @@
                   "y",
                   "width",
                   "height"
+                ]
+              },
+              "Traversal": {
+                "type": "string",
+                "enum": [
+                  "row",
+                  "column",
+                  "diagonal",
+                  "zigzag",
+                  "spiral_cw",
+                  "spiral_ccw"
                 ]
               }
             }
@@ -30232,7 +30446,7 @@
       "limits": {
         "max_input_bytes": null,
         "max_output_bytes": null,
-        "max_items": null,
+        "max_items": 4194304,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -32082,36 +32296,8 @@
           "semantic_type": "image.lags",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "Array_of_Lag",
-            "type": "array",
-            "items": {
-              "$ref": "#/$defs/Lag"
-            },
-            "$defs": {
-              "Lag": {
-                "type": "object",
-                "properties": {
-                  "dx": {
-                    "type": "integer",
-                    "format": "int32",
-                    "maximum": 2147483647,
-                    "minimum": -2147483648
-                  },
-                  "dy": {
-                    "type": "integer",
-                    "format": "int32",
-                    "maximum": 2147483647,
-                    "minimum": -2147483648
-                  }
-                },
-                "additionalProperties": false,
-                "required": [
-                  "dx",
-                  "dy"
-                ]
-              }
-            }
+            "description": "Ordered JSON array of signed i32 dx/dy; overlap only, no wrapping.",
+            "type": "string"
           }
         }
       ],
@@ -44878,42 +45064,10 @@
           "semantic_type": "unsigned",
           "required": true,
           "schema": {
-            "title": "uint64",
-            "anyOf": [
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
-                "type": "integer",
-                "format": "uint64",
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
-              },
-              {
-                "type": "string",
-                "maxLength": 40,
-                "pattern": "^(0|-?[1-9][0-9]*)$",
-                "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
-                  "type": "integer",
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                }
-              }
-            ],
-            "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
-              "type": "integer",
-              "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
-            }
+            "description": "Unsigned integer, at most 128.",
+            "type": "integer",
+            "maximum": 128,
+            "minimum": 0
           }
         },
         {
@@ -44921,42 +45075,10 @@
           "semantic_type": "unsigned",
           "required": true,
           "schema": {
-            "title": "uint64",
-            "anyOf": [
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
-                "type": "integer",
-                "format": "uint64",
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
-              },
-              {
-                "type": "string",
-                "maxLength": 40,
-                "pattern": "^(0|-?[1-9][0-9]*)$",
-                "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
-                  "type": "integer",
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                }
-              }
-            ],
-            "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
-              "type": "integer",
-              "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
-            }
+            "description": "Unsigned selection size, k<=n.",
+            "type": "integer",
+            "maximum": 128,
+            "minimum": 0
           }
         }
       ],
@@ -45505,13 +45627,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -45522,10 +45642,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -45533,10 +45652,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -45548,13 +45666,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -45565,10 +45681,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -45576,10 +45691,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -45718,13 +45832,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -45735,10 +45847,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -45746,10 +45857,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -45761,13 +45871,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -45778,10 +45886,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -45789,10 +45896,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -45944,13 +46050,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -45961,10 +46065,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -45972,10 +46075,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -45987,41 +46089,37 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
-                "minimum": 0,
+                "minimum": 2,
                 "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
+                "x-cube-minimum-decimal": "2"
               },
               {
                 "type": "string",
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
+                  "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
+                  "maximum": 18446744073709551615,
+                  "minimum": 2,
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
+                  "x-cube-minimum-decimal": "2"
                 }
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
+              "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
+              "maximum": 18446744073709551615,
+              "minimum": 2,
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
+              "x-cube-minimum-decimal": "2"
             }
           }
         }
@@ -46170,13 +46268,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -46187,10 +46283,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -46198,10 +46293,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -46213,13 +46307,11 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
                 "minimum": 0,
                 "x-cube-maximum-decimal": "18446744073709551615",
@@ -46230,10 +46322,9 @@
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
+                  "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+                  "maximum": 18446744073709551615,
                   "minimum": 0,
-                  "title": "uint64",
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
                   "x-cube-minimum-decimal": "0"
@@ -46241,10 +46332,9 @@
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
+              "description": "Exact u64; CLI <=20 unsigned ASCII decimal digits, Python builtin int (no bool/float).",
+              "maximum": 18446744073709551615,
               "minimum": 0,
-              "title": "uint64",
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
               "x-cube-minimum-decimal": "0"
@@ -46256,41 +46346,37 @@
           "semantic_type": "number.u64",
           "required": true,
           "schema": {
-            "title": "uint64",
+            "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
             "anyOf": [
               {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
+                "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
                 "type": "integer",
-                "format": "uint64",
                 "maximum": 9007199254740991,
-                "minimum": 0,
+                "minimum": 1,
                 "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
+                "x-cube-minimum-decimal": "1"
               },
               {
                 "type": "string",
                 "maxLength": 40,
                 "pattern": "^(0|-?[1-9][0-9]*)$",
                 "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
+                  "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
+                  "maximum": 18446744073709551615,
+                  "minimum": 1,
                   "type": "integer",
                   "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
+                  "x-cube-minimum-decimal": "1"
                 }
               }
             ],
             "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
+              "description": "Explicit positive modulus; inverse additionally requires >=2 and coprime operands.",
+              "maximum": 18446744073709551615,
+              "minimum": 1,
               "type": "integer",
               "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
+              "x-cube-minimum-decimal": "1"
             }
           }
         }
@@ -46439,40 +46525,16 @@
           "semantic_type": "unsigned_list",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "Array_of_uint64",
+            "description": "Explicit group sizes including zeros, checked total<=128; empty gives one.",
             "type": "array",
             "items": {
-              "anyOf": [
-                {
-                  "type": "integer",
-                  "format": "uint64",
-                  "maximum": 9007199254740991,
-                  "minimum": 0,
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                },
-                {
-                  "type": "string",
-                  "maxLength": 40,
-                  "pattern": "^(0|-?[1-9][0-9]*)$",
-                  "x-cube-native-integer": {
-                    "format": "uint64",
-                    "minimum": 0,
-                    "type": "integer",
-                    "x-cube-maximum-decimal": "18446744073709551615",
-                    "x-cube-minimum-decimal": "0"
-                  }
-                }
-              ],
-              "x-cube-integer": {
-                "format": "uint64",
-                "minimum": 0,
-                "type": "integer",
-                "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
-              }
-            }
+              "type": "integer",
+              "maximum": 128,
+              "minimum": 0
+            },
+            "maxItems": 128,
+            "minItems": 0,
+            "uniqueItems": false
           }
         }
       ],
@@ -46675,42 +46737,10 @@
           "semantic_type": "unsigned",
           "required": true,
           "schema": {
-            "title": "uint64",
-            "anyOf": [
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
-                "type": "integer",
-                "format": "uint64",
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
-              },
-              {
-                "type": "string",
-                "maxLength": 40,
-                "pattern": "^(0|-?[1-9][0-9]*)$",
-                "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
-                  "type": "integer",
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                }
-              }
-            ],
-            "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
-              "type": "integer",
-              "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
-            }
+            "description": "Number of rows; zero is empty, 129 includes index 128.",
+            "type": "integer",
+            "maximum": 129,
+            "minimum": 0
           }
         }
       ],
@@ -46918,42 +46948,10 @@
           "semantic_type": "unsigned",
           "required": true,
           "schema": {
-            "title": "uint64",
-            "anyOf": [
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
-                "type": "integer",
-                "format": "uint64",
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
-              },
-              {
-                "type": "string",
-                "maxLength": 40,
-                "pattern": "^(0|-?[1-9][0-9]*)$",
-                "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
-                  "type": "integer",
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                }
-              }
-            ],
-            "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
-              "type": "integer",
-              "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
-            }
+            "description": "Unsigned integer, at most 128.",
+            "type": "integer",
+            "maximum": 128,
+            "minimum": 0
           }
         },
         {
@@ -46961,42 +46959,10 @@
           "semantic_type": "unsigned",
           "required": true,
           "schema": {
-            "title": "uint64",
-            "anyOf": [
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "uint64",
-                "type": "integer",
-                "format": "uint64",
-                "maximum": 9007199254740991,
-                "minimum": 0,
-                "x-cube-maximum-decimal": "18446744073709551615",
-                "x-cube-minimum-decimal": "0"
-              },
-              {
-                "type": "string",
-                "maxLength": 40,
-                "pattern": "^(0|-?[1-9][0-9]*)$",
-                "x-cube-native-integer": {
-                  "$schema": "https://json-schema.org/draft/2020-12/schema",
-                  "format": "uint64",
-                  "minimum": 0,
-                  "title": "uint64",
-                  "type": "integer",
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                }
-              }
-            ],
-            "x-cube-integer": {
-              "$schema": "https://json-schema.org/draft/2020-12/schema",
-              "format": "uint64",
-              "minimum": 0,
-              "title": "uint64",
-              "type": "integer",
-              "x-cube-maximum-decimal": "18446744073709551615",
-              "x-cube-minimum-decimal": "0"
-            }
+            "description": "Unsigned selection size, k<=n.",
+            "type": "integer",
+            "maximum": 128,
+            "minimum": 0
           }
         }
       ],
@@ -56470,12 +56436,8 @@
           "semantic_type": "text.dictionary",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "Array_of_string",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "description": "Explicit ordered bounded JSON string array.",
+            "type": "string"
           }
         }
       ],
@@ -61660,8 +61622,7 @@
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "string",
+            "description": "Caller-supplied right UTF-8 input, <=1 MiB.",
             "type": "string"
           }
         }
@@ -64386,12 +64347,8 @@
           "semantic_type": "text.dictionary",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "Array_of_string",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "description": "Explicit JSON string array; retain original alias indexes.",
+            "type": "string"
           }
         },
         {
@@ -64399,8 +64356,7 @@
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "string",
+            "description": "Required prepared-length word present in the dictionary.",
             "type": "string"
           }
         },
@@ -64409,8 +64365,7 @@
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "string",
+            "description": "Required prepared-length word present in the dictionary.",
             "type": "string"
           }
         }
@@ -64939,12 +64894,8 @@
           "semantic_type": "text.dictionary",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "Array_of_string",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "description": "Explicit JSON string array; retain original alias indexes.",
+            "type": "string"
           }
         },
         {
@@ -64952,12 +64903,8 @@
           "semantic_type": "text.list",
           "required": true,
           "schema": {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "Array_of_string",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "description": "Required ordered JSON word array, 1..4096 entries and <=1 MiB.",
+            "type": "string"
           }
         }
       ],

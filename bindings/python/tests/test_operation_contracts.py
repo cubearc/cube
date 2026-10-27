@@ -1,7 +1,22 @@
 """Complete native contracts preserve legacy discovery and exact wire semantics."""
 
+import json
+from pathlib import Path
+
 import cube
 import pytest
+
+
+def test_native_contracts_match_the_checked_in_canonical_export():
+    document = json.loads(
+        (Path(__file__).resolve().parents[3] / "contracts/v1/catalog.json").read_text()
+    )
+    expected = {entry["operation"]: entry for entry in document["operations"]}
+    actual = {
+        entry["id"]: entry["contract"]
+        for entry in cube.operations(include_contracts=True)
+    }
+    assert actual == expected
 
 
 def test_complete_contract_discovery():

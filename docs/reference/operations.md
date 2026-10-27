@@ -5499,6 +5499,7 @@ Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.pixel_data` |
 | Output | `data` | `bytes` |
+| Output | `image` | `image.samples` |
 
 Parameters:
 
@@ -5686,6 +5687,7 @@ Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 | Input | `left` | `image.samples` |
 | Input | `right` | `image.samples` |
 | Output | `output` | `image.comparison` |
+| Output | `mask` | `image.samples` |
 
 Parameters:
 

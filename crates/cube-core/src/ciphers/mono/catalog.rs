@@ -94,6 +94,7 @@ struct Row {
 const fn row(s: Spec) -> Row {
     Row {
         contract: c::Entry {
+            operation_version: 1,
             descriptor: s.descriptor,
             inputs: s.inputs,
             parameters: s.parameters,

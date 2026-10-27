@@ -54,9 +54,24 @@ Semantic type and transport representation are distinct. Bytes have explicit
 Base64; rasters and PCM have typed metadata and exact sample bytes. Binary fields
 omitted from legacy JSON reports become separate named data/image outputs.
 Operations with multiple arguments expose named ports; generators can have none.
+The current raster value follows Core's native 8-bit sample model. Core rejects
+unsupported source depths; a browser preview never establishes sample precision.
+Channel reports keep their bytes and optional image separate. Ordered pixel
+exports describe traversal/corner/reversal, and comparison masks are optional
+named raster outputs rather than silently omitted serde fields.
 Compatible types still need actual format, dimension, capability and resource
-validation by Core before execution. None in a direct resource ceiling means no
-independent cap is enforced by that API; interfaces must retain their own limits.
+validation by Core before execution. A null direct resource ceiling means that no
+separate ceiling is declared there, not that the API is unbounded. Consult the
+owning parser/API limits and retain interface budgets. When a descriptor argument
+becomes a named input, its original bounds, choices and defaults stay on that port.
+Canonical contracts are available only for exact registered descriptors.
+
+Schema format and operation versions are independent. Legacy declarations start
+at operation version 1; richer owning-module entries declare a positive
+`operation_version`. Bump that version for an incompatible invocation/result
+change and update the adapter, fixtures and generated reference together. This
+keeps public `Descriptor` literals compatible; a package release does not silently
+change every operation version.
 
 Integers beyond JavaScript's exact range use canonical decimal strings on the
 contract wire. `contracts::canonical_value` preserves their digits. The

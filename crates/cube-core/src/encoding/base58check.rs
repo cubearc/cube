@@ -243,6 +243,7 @@ struct ContractParameters {
 struct NoParameters {}
 const CONTRACTS: &[crate::operations::contracts::Entry] = &[
     crate::operations::contracts::Entry {
+        operation_version: 1,
         descriptor: OPERATIONS[0],
         inputs: &[crate::operations::contracts::Port {
             name: "input",
@@ -269,6 +270,7 @@ const CONTRACTS: &[crate::operations::contracts::Entry] = &[
         fixture: encode_fixture,
     },
     crate::operations::contracts::Entry {
+        operation_version: 1,
         descriptor: OPERATIONS[1],
         inputs: &[crate::operations::contracts::Port {
             name: "input",

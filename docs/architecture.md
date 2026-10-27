@@ -383,3 +383,11 @@ The bounded historical profiles in `ciphers::poly` keep schedule/state, concrete
 square geometry and exact Hill arithmetic in Core. Typed DTO schemas, named
 output ports and known-answer fixtures are projected from module-owned rows;
 CLI/SDK/Play adapters only transport values. See [cipher profiles](ciphers.md).
+
+`ciphers::transposition` owns validated scalar permutations, rail/column/cell
+schedules, full routes and explicit grille masks. `ciphers::fractionation` reuses
+Polybius coordinates, the concrete column schedule and International Morse,
+adding only the small 3x3x3 helper required by Trifid. Their module-owned rows
+project descriptors, historical metadata and typed canonical contracts. Native
+SDK/CLI/Play are thin adapters; named padding/source evidence survives the full
+path. See [exact profiles and examples](cipher-permutations.md).

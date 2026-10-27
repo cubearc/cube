@@ -1580,6 +1580,482 @@ Example:
 cube blockchain wif --expected-network mainnet --json < public-test-key.wif
 ```
 
+## cipher.adfgvx.decode
+
+Adfgvx: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Adfgvx",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 36,
+      "minLength": 36
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.adfgvx.encode
+
+Adfgvx: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Adfgvx",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 36,
+      "minLength": 36
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.adfgx.decode
+
+Adfgx: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Adfgx",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.adfgx.encode
+
+Adfgx: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Adfgx",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.affine.decode
 
 Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB.
@@ -1692,6 +2168,328 @@ Example:
 
 ```sh
 cube cipher affine --a 5 --b 8 --text AFFINECIPHER
+```
+
+## cipher.amsco.decode
+
+Amsco: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Amsco",
+  "type": "object",
+  "properties": {
+    "initial_cell": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "default": 1,
+          "maximum": 2,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 1,
+            "format": "uint",
+            "maximum": 2,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 1,
+      "x-cube-integer": {
+        "default": 1,
+        "format": "uint",
+        "maximum": 2,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "pattern": {
+      "$ref": "#/$defs/CellPattern"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "pattern"
+  ],
+  "$defs": {
+    "CellPattern": {
+      "type": "string",
+      "enum": [
+        "aca",
+        "continuous"
+      ]
+    },
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.amsco.encode
+
+Amsco: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Amsco",
+  "type": "object",
+  "properties": {
+    "initial_cell": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "default": 1,
+          "maximum": 2,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 1,
+            "format": "uint",
+            "maximum": 2,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 1,
+      "x-cube-integer": {
+        "default": 1,
+        "format": "uint",
+        "maximum": 2,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "pattern": {
+      "$ref": "#/$defs/CellPattern"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "pattern"
+  ],
+  "$defs": {
+    "CellPattern": {
+      "type": "string",
+      "enum": [
+        "aca",
+        "continuous"
+      ]
+    },
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.atbash
@@ -1929,6 +2727,100 @@ Example:
 cube cipher bacon --variant extended26 --text A
 ```
 
+## cipher.bazeries.decode
+
+Bazeries: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bazeries",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "Decimal key 1..999999; every digit must be nonzero.",
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 999999,
+      "minimum": 1
+    },
+    "square": {
+      "description": "Explicit ACA ciphertext square, row-major. No locale-dependent spelling.",
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "square"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.bazeries.encode
+
+Bazeries: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bazeries",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "Decimal key 1..999999; every digit must be nonzero.",
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 999999,
+      "minimum": 1
+    },
+    "square": {
+      "description": "Explicit ACA ciphertext square, row-major. No locale-dependent spelling.",
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "square"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.beaufort
 
 Standard reciprocal Beaufort C=(K-P) mod 26, ASCII letters only; <=1 MiB.
@@ -1964,6 +2856,150 @@ Example:
 
 ```sh
 cube cipher beaufort --key B --text A
+```
+
+## cipher.bifid.decode
+
+Bifid: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bifid",
+  "type": "object",
+  "properties": {
+    "period": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "period"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.bifid.encode
+
+Bifid: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bifid",
+  "type": "object",
+  "properties": {
+    "period": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "period"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.book.decode
@@ -2095,6 +3131,420 @@ Example:
 cube cipher caesar --shift 3 --text Hello
 ```
 
+## cipher.caesar_box.decode
+
+Caesar Box: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CaesarBox",
+  "type": "object",
+  "properties": {
+    "side": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 256,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 256,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 256,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "side"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.caesar_box.encode
+
+Caesar Box: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CaesarBox",
+  "type": "object",
+  "properties": {
+    "side": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 256,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 256,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 256,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "side"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.cardan.extract
+
+Static explicit row-major mask; caller cover provenance retained; extract is source-dependent.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cardan",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "holes": {
+      "description": "Selected cover positions in strictly increasing row-major order.",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 65536
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rows",
+    "columns",
+    "holes"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.cardan.overlay
+
+Static explicit row-major mask; caller cover provenance retained; overlay is source-dependent.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `positions` | `json` |
+| Output | `original_selected` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Overlay",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "holes": {
+      "description": "Selected cover positions in strictly increasing row-major order.",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 65536
+    },
+    "replacements": {
+      "type": "string",
+      "maxLength": 65536,
+      "x-cube-max-utf8-bytes": 262144
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rows",
+    "columns",
+    "holes",
+    "replacements"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.chaocipher.decode
 
 Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset each call.
@@ -2176,6 +3626,500 @@ Parameters:
     "right"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.columnar.decode
+
+Columnar: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Columnar",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.columnar.encode
+
+Columnar: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Columnar",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.complete_columnar.decode
+
+Complete Columnar: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `json` |
+| Output | `padding_count` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CompleteColumnar",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "original_length": {
+      "description": "Required for explicit unpadding; omitted means preserve all decoded symbols.",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1,
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.complete_columnar.encode
+
+Complete Columnar: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `json` |
+| Output | `padding_count` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CompleteColumnar",
+  "type": "object",
+  "properties": {
+    "key": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "original_length": {
+      "description": "Required for explicit unpadding; omitted means preserve all decoded symbols.",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 1,
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
 }
 ```
 
@@ -2415,6 +4359,240 @@ Example:
 cube cipher --help
 ```
 
+## cipher.double_columnar.decode
+
+Double Columnar: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DoubleColumnar",
+  "type": "object",
+  "properties": {
+    "first": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "second": {
+      "$ref": "#/$defs/ColumnKey"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.double_columnar.encode
+
+Double Columnar: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DoubleColumnar",
+  "type": "object",
+  "properties": {
+    "first": {
+      "$ref": "#/$defs/ColumnKey"
+    },
+    "second": {
+      "$ref": "#/$defs/ColumnKey"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "first",
+    "second"
+  ],
+  "$defs": {
+    "ColumnKey": {
+      "description": "Keyword ties sort by Unicode scalar value then original column position.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "keyword"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 4096,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 16384
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "text"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "permutation"
+            },
+            "order": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "maxItems": 4096,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "order"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.four_square.decode
 
 I/J Four-square with fixed straight plaintext squares and explicit keyed top-right/bottom-left squares.
@@ -2496,6 +4674,112 @@ Parameters:
     "second"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.fractionated_morse.decode
+
+Fractionated Morse: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ciphertext` | `text` |
+| Output | `morse` | `text` |
+| Output | `padding_count` | `json` |
+| Output | `padding_ambiguous` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FractionatedMorse",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "padding_count": {
+      "description": "Decode only: exact count of terminal x padding (0..2). None preserves\nthe raw stream and returns no guessed plaintext.",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint8",
+      "default": null,
+      "maximum": 2,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.fractionated_morse.encode
+
+Fractionated Morse: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ciphertext` | `text` |
+| Output | `morse` | `text` |
+| Output | `padding_count` | `json` |
+| Output | `padding_ambiguous` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FractionatedMorse",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26
+    },
+    "padding_count": {
+      "description": "Decode only: exact count of terminal x padding (0..2). None preserves\nthe raw stream and returns no guessed plaintext.",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint8",
+      "default": null,
+      "maximum": 2,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet"
+  ]
 }
 ```
 
@@ -3443,6 +5727,190 @@ Example:
 cube cipher monome-dinome --help
 ```
 
+## cipher.morbit.decode
+
+Morbit: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ciphertext` | `text` |
+| Output | `morse` | `text` |
+| Output | `padding_count` | `json` |
+| Output | `padding_ambiguous` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Morbit",
+  "type": "object",
+  "properties": {
+    "digits": {
+      "description": "Digits 1..9 assigned to lexicographic pairs over dot,dash,x.",
+      "type": "string",
+      "maxLength": 9,
+      "minLength": 9
+    },
+    "padding_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint8",
+      "default": null,
+      "maximum": 1,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "digits"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.morbit.encode
+
+Morbit: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ciphertext` | `text` |
+| Output | `morse` | `text` |
+| Output | `padding_count` | `json` |
+| Output | `padding_ambiguous` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Morbit",
+  "type": "object",
+  "properties": {
+    "digits": {
+      "description": "Digits 1..9 assigned to lexicographic pairs over dot,dash,x.",
+      "type": "string",
+      "maxLength": 9,
+      "minLength": 9
+    },
+    "padding_count": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint8",
+      "default": null,
+      "maximum": 1,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "digits"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.myszkowski.decode
+
+Myszkowski: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Myszkowski",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 16384
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "keyword"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.myszkowski.encode
+
+Myszkowski: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Myszkowski",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 16384
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "keyword"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.nicodemus.decode
 
 Vigenere columns emitted by stable key order in explicit depth blocks, retaining incomplete column lengths.
@@ -3528,6 +5996,94 @@ Parameters:
     "key"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.nihilist_substitution.decode
+
+Nihilist Substitution: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nihilist",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "key"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.nihilist_substitution.encode
+
+Nihilist Substitution: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `tokens` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nihilist",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1
+    },
+    "square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "square",
+    "key"
+  ]
 }
 ```
 
@@ -3836,6 +6392,92 @@ Parameters:
     "square"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.pollux.decode
+
+Pollux: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ciphertext` | `text` |
+| Output | `morse` | `text` |
+| Output | `padding_count` | `json` |
+| Output | `padding_ambiguous` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pollux",
+  "type": "object",
+  "properties": {
+    "classes": {
+      "description": "Classes for digits 0..9, using '.'/'-'/'x'; all classes required.",
+      "type": "string",
+      "maxLength": 10,
+      "minLength": 10
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "classes"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.pollux.encode
+
+Pollux: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ciphertext` | `text` |
+| Output | `morse` | `text` |
+| Output | `padding_count` | `json` |
+| Output | `padding_ambiguous` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pollux",
+  "type": "object",
+  "properties": {
+    "classes": {
+      "description": "Classes for digits 0..9, using '.'/'-'/'x'; all classes required.",
+      "type": "string",
+      "maxLength": 10,
+      "minLength": 10
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "classes"
+  ]
 }
 ```
 
@@ -4295,6 +6937,532 @@ Example:
 cube cipher --help
 ```
 
+## cipher.rail_fence.decode
+
+Rail Fence: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rails",
+  "type": "object",
+  "properties": {
+    "direction": {
+      "$ref": "#/$defs/Direction"
+    },
+    "initial_rail": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4095,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4095,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4095,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "rails": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rails",
+    "initial_rail",
+    "direction"
+  ],
+  "$defs": {
+    "Direction": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.rail_fence.encode
+
+Rail Fence: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rails",
+  "type": "object",
+  "properties": {
+    "direction": {
+      "$ref": "#/$defs/Direction"
+    },
+    "initial_rail": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4095,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4095,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4095,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "rails": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rails",
+    "initial_rail",
+    "direction"
+  ],
+  "$defs": {
+    "Direction": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.redefence.decode
+
+Redefence: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Redefence",
+  "type": "object",
+  "properties": {
+    "direction": {
+      "$ref": "#/$defs/Direction"
+    },
+    "initial_rail": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4095,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4095,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4095,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "order": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 4096,
+      "minItems": 1
+    },
+    "rails": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rails",
+    "initial_rail",
+    "direction",
+    "order"
+  ],
+  "$defs": {
+    "Direction": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.redefence.encode
+
+Redefence: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Redefence",
+  "type": "object",
+  "properties": {
+    "direction": {
+      "$ref": "#/$defs/Direction"
+    },
+    "initial_rail": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4095,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4095,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4095,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "order": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 4096,
+      "minItems": 1
+    },
+    "rails": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rails",
+    "initial_rail",
+    "direction",
+    "order"
+  ],
+  "$defs": {
+    "Direction": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.rot13
 
 Rotate ASCII letters by 13; preserve other Unicode.
@@ -4408,6 +7576,294 @@ Example:
 cube cipher rot5 --help
 ```
 
+## cipher.route.decode
+
+Route: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Routes",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "fill": {
+      "$ref": "#/$defs/Route"
+    },
+    "read": {
+      "$ref": "#/$defs/Route"
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rows",
+    "columns",
+    "fill",
+    "read"
+  ],
+  "$defs": {
+    "Corner": {
+      "type": "string",
+      "enum": [
+        "top_left",
+        "top_right",
+        "bottom_right",
+        "bottom_left"
+      ]
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "corner": {
+          "$ref": "#/$defs/Corner"
+        },
+        "kind": {
+          "$ref": "#/$defs/RouteKind"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "corner"
+      ]
+    },
+    "RouteKind": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns",
+        "clockwise",
+        "counterclockwise"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.route.encode
+
+Route: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Routes",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "fill": {
+      "$ref": "#/$defs/Route"
+    },
+    "read": {
+      "$ref": "#/$defs/Route"
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rows",
+    "columns",
+    "fill",
+    "read"
+  ],
+  "$defs": {
+    "Corner": {
+      "type": "string",
+      "enum": [
+        "top_left",
+        "top_right",
+        "bottom_right",
+        "bottom_left"
+      ]
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "corner": {
+          "$ref": "#/$defs/Corner"
+        },
+        "kind": {
+          "$ref": "#/$defs/RouteKind"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "corner"
+      ]
+    },
+    "RouteKind": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns",
+        "clockwise",
+        "counterclockwise"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.running_key.decode
 
 Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
@@ -4479,6 +7935,274 @@ Parameters:
     "key"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.scytale.decode
+
+Scytale: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scytale",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "columns"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.scytale.encode
+
+Scytale: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scytale",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "columns"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.sequence_transposition.decode
+
+Sequence Transposition: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sequence",
+  "type": "object",
+  "properties": {
+    "order": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 65536
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "order"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.sequence_transposition.encode
+
+Sequence Transposition: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sequence",
+  "type": "object",
+  "properties": {
+    "order": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 65536
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "order"
+  ]
 }
 ```
 
@@ -4599,6 +8323,190 @@ Parameters:
     "period"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.skip.decode
+
+Skip: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Skip",
+  "type": "object",
+  "properties": {
+    "start": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    },
+    "step": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "start",
+    "step"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.skip.encode
+
+Skip: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Skip",
+  "type": "object",
+  "properties": {
+    "start": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    },
+    "step": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "start",
+    "step"
+  ]
 }
 ```
 
@@ -4813,6 +8721,294 @@ Parameters:
       "format": "uint8",
       "maximum": 54,
       "minimum": 1
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.spiral.decode
+
+Spiral: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Routes",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "fill": {
+      "$ref": "#/$defs/Route"
+    },
+    "read": {
+      "$ref": "#/$defs/Route"
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rows",
+    "columns",
+    "fill",
+    "read"
+  ],
+  "$defs": {
+    "Corner": {
+      "type": "string",
+      "enum": [
+        "top_left",
+        "top_right",
+        "bottom_right",
+        "bottom_left"
+      ]
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "corner": {
+          "$ref": "#/$defs/Corner"
+        },
+        "kind": {
+          "$ref": "#/$defs/RouteKind"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "corner"
+      ]
+    },
+    "RouteKind": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns",
+        "clockwise",
+        "counterclockwise"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.spiral.encode
+
+Spiral: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Routes",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "fill": {
+      "$ref": "#/$defs/Route"
+    },
+    "read": {
+      "$ref": "#/$defs/Route"
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "rows",
+    "columns",
+    "fill",
+    "read"
+  ],
+  "$defs": {
+    "Corner": {
+      "type": "string",
+      "enum": [
+        "top_left",
+        "top_right",
+        "bottom_right",
+        "bottom_left"
+      ]
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "corner": {
+          "$ref": "#/$defs/Corner"
+        },
+        "kind": {
+          "$ref": "#/$defs/RouteKind"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "corner"
+      ]
+    },
+    "RouteKind": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns",
+        "clockwise",
+        "counterclockwise"
+      ]
     }
   }
 }
@@ -5592,6 +9788,152 @@ Example:
 cube cipher tridigital --help
 ```
 
+## cipher.trifid.decode
+
+Trifid: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trifid",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 27,
+      "x-cube-max-utf8-bytes": 108
+    },
+    "period": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "period"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.trifid.encode
+
+Trifid: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trifid",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 27,
+      "x-cube-max-utf8-bytes": 108
+    },
+    "period": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "period"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.trithemius.decode
 
 Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 endpoints.
@@ -5679,6 +10021,290 @@ Parameters:
     "step"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.turning_grille.decode
+
+Turning Grille: explicit bounded decode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TurningGrille",
+  "type": "object",
+  "properties": {
+    "holes": {
+      "description": "Zero-based row-major holes in orientation zero. Must be strictly sorted.",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 1024,
+      "minItems": 1
+    },
+    "orientations": {
+      "description": "Quarter-turn counts 0..3; explicit order must visit all four orientations.",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 4,
+      "minItems": 4
+    },
+    "side": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 64,
+          "minimum": 2,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 64,
+            "minimum": 2,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 64,
+        "minimum": 2,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "side",
+    "holes",
+    "orientations"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.turning_grille.encode
+
+Turning Grille: explicit bounded encode; see typed profile guide for conventions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TurningGrille",
+  "type": "object",
+  "properties": {
+    "holes": {
+      "description": "Zero-based row-major holes in orientation zero. Must be strictly sorted.",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 1024,
+      "minItems": 1
+    },
+    "orientations": {
+      "description": "Quarter-turn counts 0..3; explicit order must visit all four orientations.",
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "format": "uint",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          },
+          {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^(0|-?[1-9][0-9]*)$",
+            "x-cube-native-integer": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          }
+        ],
+        "x-cube-integer": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer",
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        }
+      },
+      "maxItems": 4,
+      "minItems": 4
+    },
+    "side": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 64,
+          "minimum": 2,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 64,
+            "minimum": 2,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 64,
+        "minimum": 2,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "side",
+    "holes",
+    "orientations"
+  ]
 }
 ```
 

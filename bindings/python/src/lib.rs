@@ -18,6 +18,7 @@ mod constants;
 mod digital;
 mod discrete_transport;
 mod esolang;
+mod fraction;
 mod graph;
 mod image;
 mod investigation;
@@ -581,6 +582,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     puzzles::register(module)?;
     mono::register(module)?;
     poly::register(module)?;
+    fraction::register(module)?;
     combinations::register(module)?;
     constants::register(module)?;
     alphabet::register(module)?;

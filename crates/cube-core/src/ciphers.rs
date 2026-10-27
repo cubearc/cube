@@ -307,3 +307,6 @@ mod tests {
         assert_eq!(rot13(text), rot13(text));
     }
 }
+
+pub mod fractionation;
+pub mod transposition;

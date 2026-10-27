@@ -23,6 +23,7 @@ mod logiccmd;
 mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
+mod fractioncmd;
 mod modularcmd;
 mod monocmd;
 mod pipelinecmd;
@@ -321,6 +322,56 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Explicit bounded scytale profile; JSON parameters required
+    Scytale(polycmd::Parameters),
+    /// Explicit bounded rail fence profile; JSON parameters required
+    RailFence(polycmd::Parameters),
+    /// Explicit bounded redefence profile; JSON parameters required
+    Redefence(polycmd::Parameters),
+    /// Explicit bounded sequence transposition profile; JSON parameters required
+    SequenceTransposition(polycmd::Parameters),
+    /// Explicit bounded skip profile; JSON parameters required
+    Skip(polycmd::Parameters),
+    /// Explicit bounded columnar profile; JSON parameters required
+    Columnar(polycmd::Parameters),
+    /// Explicit bounded complete columnar profile; JSON parameters required
+    CompleteColumnar(polycmd::Parameters),
+    /// Explicit bounded double columnar profile; JSON parameters required
+    DoubleColumnar(polycmd::Parameters),
+    /// Explicit bounded myszkowski profile; JSON parameters required
+    Myszkowski(polycmd::Parameters),
+    /// Explicit bounded amsco profile; JSON parameters required
+    Amsco(polycmd::Parameters),
+    /// Explicit bounded route profile; JSON parameters required
+    Route(polycmd::Parameters),
+    /// Explicit bounded spiral profile; JSON parameters required
+    Spiral(polycmd::Parameters),
+    /// Explicit bounded caesar box profile; JSON parameters required
+    CaesarBox(polycmd::Parameters),
+    /// Explicit bounded turning grille profile; JSON parameters required
+    TurningGrille(polycmd::Parameters),
+    /// Explicit bounded bifid profile; JSON parameters required
+    Bifid(polycmd::Parameters),
+    /// Explicit bounded trifid profile; JSON parameters required
+    Trifid(polycmd::Parameters),
+    /// Explicit bounded adfgx profile; JSON parameters required
+    Adfgx(polycmd::Parameters),
+    /// Explicit bounded adfgvx profile; JSON parameters required
+    Adfgvx(polycmd::Parameters),
+    /// Explicit bounded nihilist substitution profile; JSON parameters required
+    NihilistSubstitution(polycmd::Parameters),
+    /// Explicit bounded bazeries profile; JSON parameters required
+    Bazeries(polycmd::Parameters),
+    /// Explicit bounded fractionated morse profile; JSON parameters required
+    FractionatedMorse(polycmd::Parameters),
+    /// Explicit bounded morbit profile; JSON parameters required
+    Morbit(polycmd::Parameters),
+    /// Explicit bounded pollux profile; JSON parameters required
+    Pollux(polycmd::Parameters),
+    /// Static caller-owned Cardan cover extract
+    CardanExtract(polycmd::Parameters),
+    /// Static caller-owned Cardan cover overlay
+    CardanOverlay(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
     Gronsfeld(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
@@ -782,6 +833,31 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Cipher { command } => {
             let text = match command {
                 Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
+                Cipher::Scytale(args) => fractioncmd::scytale(args)?,
+                Cipher::RailFence(args) => fractioncmd::rail_fence(args)?,
+                Cipher::Redefence(args) => fractioncmd::redefence(args)?,
+                Cipher::SequenceTransposition(args) => fractioncmd::sequence_transposition(args)?,
+                Cipher::Skip(args) => fractioncmd::skip(args)?,
+                Cipher::Columnar(args) => fractioncmd::columnar(args)?,
+                Cipher::CompleteColumnar(args) => fractioncmd::complete_columnar(args)?,
+                Cipher::DoubleColumnar(args) => fractioncmd::double_columnar(args)?,
+                Cipher::Myszkowski(args) => fractioncmd::myszkowski(args)?,
+                Cipher::Amsco(args) => fractioncmd::amsco(args)?,
+                Cipher::Route(args) => fractioncmd::route(args)?,
+                Cipher::Spiral(args) => fractioncmd::spiral(args)?,
+                Cipher::CaesarBox(args) => fractioncmd::caesar_box(args)?,
+                Cipher::TurningGrille(args) => fractioncmd::turning_grille(args)?,
+                Cipher::Bifid(args) => fractioncmd::bifid(args)?,
+                Cipher::Trifid(args) => fractioncmd::trifid(args)?,
+                Cipher::Adfgx(args) => fractioncmd::adfgx(args)?,
+                Cipher::Adfgvx(args) => fractioncmd::adfgvx(args)?,
+                Cipher::NihilistSubstitution(args) => fractioncmd::nihilist_substitution(args)?,
+                Cipher::Bazeries(args) => fractioncmd::bazeries(args)?,
+                Cipher::FractionatedMorse(args) => fractioncmd::fractionated_morse(args)?,
+                Cipher::Morbit(args) => fractioncmd::morbit(args)?,
+                Cipher::Pollux(args) => fractioncmd::pollux(args)?,
+                Cipher::CardanExtract(args) => fractioncmd::cardan_extract(args)?,
+                Cipher::CardanOverlay(args) => fractioncmd::cardan_overlay(args)?,
                 Cipher::Trithemius(args) => polycmd::trithemius(args)?,
                 Cipher::Autokey(args) => polycmd::autokey(args)?,
                 Cipher::RunningKey(args) => polycmd::running_key(args)?,

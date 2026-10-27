@@ -14,9 +14,12 @@ pub(crate) struct Parameters {
     #[arg(long)]
     parameters: PathBuf,
     #[arg(long)]
-    decode: bool,
+    pub(crate) decode: bool,
 }
-fn transport(args: Parameters, op: &'static str) -> Result<(String, String, bool), Box<dyn Error>> {
+pub(crate) fn transport(
+    args: Parameters,
+    op: &'static str,
+) -> Result<(String, String, bool), Box<dyn Error>> {
     let file = cube_core::forensics::open_regular(&args.parameters).map_err(|e| e.operation(op))?;
     let mut bytes = Vec::new();
     file.take(poly::MAX_PARAMETERS as u64 + 1)

@@ -1,0 +1,330 @@
+[
+  {
+    "function": "bifid_encode",
+    "operation": "cipher.bifid.encode",
+    "command": "bifid",
+    "parameters": {
+      "square": "EXTRAKLMPOHWZQDGVUSIFCBYN",
+      "period": 7
+    },
+    "inputs": {
+      "text": "ODDPERIODSAREPOPULAR"
+    },
+    "outputs": {
+      "text": "MWEINGIMGEOYYRLVEYWY"
+    }
+  },
+  {
+    "function": "bifid_decode",
+    "operation": "cipher.bifid.decode",
+    "command": "bifid",
+    "parameters": {
+      "square": "EXTRAKLMPOHWZQDGVUSIFCBYN",
+      "period": 7
+    },
+    "inputs": {
+      "text": "MWEINGIMGEOYYRLVEYWY"
+    },
+    "outputs": {
+      "text": "ODDPERIODSAREPOPULAR"
+    }
+  },
+  {
+    "function": "trifid_encode",
+    "operation": "cipher.trifid.encode",
+    "command": "trifid",
+    "parameters": {
+      "alphabet": "EXTRAODINYBCFGHJKLMPQSUVWZ#",
+      "period": 10
+    },
+    "inputs": {
+      "text": "TRIFIDSAREFRACTIONATEDCIPHERS"
+    },
+    "outputs": {
+      "text": "EYMXVUCRYYYYEAYVYOVVXITDPATHE"
+    }
+  },
+  {
+    "function": "trifid_decode",
+    "operation": "cipher.trifid.decode",
+    "command": "trifid",
+    "parameters": {
+      "alphabet": "EXTRAODINYBCFGHJKLMPQSUVWZ#",
+      "period": 10
+    },
+    "inputs": {
+      "text": "EYMXVUCRYYYYEAYVYOVVXITDPATHE"
+    },
+    "outputs": {
+      "text": "TRIFIDSAREFRACTIONATEDCIPHERS"
+    }
+  },
+  {
+    "function": "adfgx_encode",
+    "operation": "cipher.adfgx.encode",
+    "command": "adfgx",
+    "parameters": {
+      "square": "ABCDEFGHIKLMNOPQRSTUVWXYZ",
+      "key": {
+        "kind": "keyword",
+        "text": "CAB"
+      }
+    },
+    "inputs": {
+      "text": "ABC"
+    },
+    "outputs": {
+      "text": "AAAFAD"
+    }
+  },
+  {
+    "function": "adfgx_decode",
+    "operation": "cipher.adfgx.decode",
+    "command": "adfgx",
+    "parameters": {
+      "square": "ABCDEFGHIKLMNOPQRSTUVWXYZ",
+      "key": {
+        "kind": "keyword",
+        "text": "CAB"
+      }
+    },
+    "inputs": {
+      "text": "AAAFAD"
+    },
+    "outputs": {
+      "text": "ABC"
+    }
+  },
+  {
+    "function": "adfgvx_encode",
+    "operation": "cipher.adfgvx.encode",
+    "command": "adfgvx",
+    "parameters": {
+      "square": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      "key": {
+        "kind": "keyword",
+        "text": "CAB"
+      }
+    },
+    "inputs": {
+      "text": "AZ09"
+    },
+    "outputs": {
+      "text": "AVXVFADX"
+    }
+  },
+  {
+    "function": "adfgvx_decode",
+    "operation": "cipher.adfgvx.decode",
+    "command": "adfgvx",
+    "parameters": {
+      "square": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      "key": {
+        "kind": "keyword",
+        "text": "CAB"
+      }
+    },
+    "inputs": {
+      "text": "AVXVFADX"
+    },
+    "outputs": {
+      "text": "AZ09"
+    }
+  },
+  {
+    "function": "nihilist_substitution_encode",
+    "operation": "cipher.nihilist_substitution.encode",
+    "command": "nihilist-substitution",
+    "parameters": {
+      "square": "SIMPLEABCDFGHKNOQRTUVWXYZ",
+      "key": "EASY"
+    },
+    "inputs": {
+      "text": "THEEARLYBIRD"
+    },
+    "outputs": {
+      "tokens": [
+        65,
+        55,
+        32,
+        75,
+        43,
+        65,
+        26,
+        108,
+        44,
+        34,
+        54,
+        79
+      ]
+    }
+  },
+  {
+    "function": "nihilist_substitution_decode",
+    "operation": "cipher.nihilist_substitution.decode",
+    "command": "nihilist-substitution",
+    "parameters": {
+      "square": "SIMPLEABCDFGHKNOQRTUVWXYZ",
+      "key": "EASY"
+    },
+    "inputs": {
+      "tokens": [
+        65,
+        55,
+        32,
+        75,
+        43,
+        65,
+        26,
+        108,
+        44,
+        34,
+        54,
+        79
+      ]
+    },
+    "outputs": {
+      "text": "THEEARLYBIRD"
+    }
+  },
+  {
+    "function": "bazeries_encode",
+    "operation": "cipher.bazeries.encode",
+    "command": "bazeries",
+    "parameters": {
+      "key": 3752,
+      "square": "THREOUSANDVFIYWBCGKLMPQXZ"
+    },
+    "inputs": {
+      "text": "SIMPLESUBSTITUTIONPLUSTRANSPOSITION"
+    },
+    "outputs": {
+      "text": "ACYYUXYMRQKXKCKGCRQIYITNKYXKCYGQGCI"
+    }
+  },
+  {
+    "function": "bazeries_decode",
+    "operation": "cipher.bazeries.decode",
+    "command": "bazeries",
+    "parameters": {
+      "key": 3752,
+      "square": "THREOUSANDVFIYWBCGKLMPQXZ"
+    },
+    "inputs": {
+      "text": "ACYYUXYMRQKXKCKGCRQIYITNKYXKCYGQGCI"
+    },
+    "outputs": {
+      "text": "SIMPLESUBSTITUTIONPLUSTRANSPOSITION"
+    }
+  },
+  {
+    "function": "fractionated_morse_encode",
+    "operation": "cipher.fractionated_morse.encode",
+    "command": "fractionated-morse",
+    "parameters": {
+      "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ"
+    },
+    "inputs": {
+      "text": "COME AT ONCE"
+    },
+    "outputs": {
+      "text": "COME AT ONCE",
+      "ciphertext": "CBIILTMHVVFL",
+      "morse": "-.-.x---x--x.xx.-x-xx---x-.x-.-.x.xx",
+      "padding_count": 2,
+      "padding_ambiguous": false
+    }
+  },
+  {
+    "function": "fractionated_morse_decode",
+    "operation": "cipher.fractionated_morse.decode",
+    "command": "fractionated-morse",
+    "parameters": {
+      "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ",
+      "padding_count": 2
+    },
+    "inputs": {
+      "text": "CBIILTMHVVFL"
+    },
+    "outputs": {
+      "text": "COME AT ONCE",
+      "ciphertext": "CBIILTMHVVFL",
+      "morse": "-.-.x---x--x.xx.-x-xx---x-.x-.-.x.xx",
+      "padding_count": 2,
+      "padding_ambiguous": false
+    }
+  },
+  {
+    "function": "morbit_encode",
+    "operation": "cipher.morbit.encode",
+    "command": "morbit",
+    "parameters": {
+      "digits": "958427136"
+    },
+    "inputs": {
+      "text": "ONCE UPON A TIME"
+    },
+    "outputs": {
+      "text": "ONCE UPON A TIME",
+      "ciphertext": "27435881512827465679378",
+      "morse": "---x-.x-.-.x.xx..-x.--.x---x-.xx.-xx-x..x--x.x",
+      "padding_count": 1,
+      "padding_ambiguous": false
+    }
+  },
+  {
+    "function": "morbit_decode",
+    "operation": "cipher.morbit.decode",
+    "command": "morbit",
+    "parameters": {
+      "digits": "958427136",
+      "padding_count": 1
+    },
+    "inputs": {
+      "text": "27435881512827465679378"
+    },
+    "outputs": {
+      "text": "ONCE UPON A TIME",
+      "ciphertext": "27435881512827465679378",
+      "morse": "---x-.x-.-.x.xx..-x.--.x---x-.xx.-xx-x..x--x.x",
+      "padding_count": 1,
+      "padding_ambiguous": false
+    }
+  },
+  {
+    "function": "pollux_encode",
+    "operation": "cipher.pollux.encode",
+    "command": "pollux",
+    "parameters": {
+      "classes": ".x-.x.--x."
+    },
+    "inputs": {
+      "text": "LUCK HELPS"
+    },
+    "outputs": {
+      "text": "LUCK HELPS",
+      "ciphertext": "023519064732586971403598013259406738590",
+      "morse": ".-..x..-x-.-.x-.-xx....x.x.-..x.--.x...",
+      "padding_count": 0,
+      "padding_ambiguous": false
+    }
+  },
+  {
+    "function": "pollux_decode",
+    "operation": "cipher.pollux.decode",
+    "command": "pollux",
+    "parameters": {
+      "classes": ".x-.x.--x."
+    },
+    "inputs": {
+      "text": "023519064732586971403598013259406738590"
+    },
+    "outputs": {
+      "text": "LUCK HELPS",
+      "ciphertext": "023519064732586971403598013259406738590",
+      "morse": ".-..x..-x-.-.x-.-xx....x.x.-..x.--.x...",
+      "padding_count": 0,
+      "padding_ambiguous": false
+    }
+  }
+]

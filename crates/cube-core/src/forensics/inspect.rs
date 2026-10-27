@@ -4,7 +4,7 @@ use super::{open_regular, signatures};
 use crate::errors::OperationError;
 use serde::Serialize;
 use std::{
-    io::Read,
+    io::{Read, Seek, SeekFrom},
     path::Path,
     time::{SystemTime, UNIX_EPOCH},
 };
@@ -61,9 +61,23 @@ pub struct FileInfo {
 pub fn file_info(path: &Path) -> Result<FileInfo, OperationError> {
     let result = (|| {
         let mut file = open_regular(path)?;
+        file_info_reader(&mut file)
+    })();
+    result.map_err(|e: OperationError| e.operation("file.info.inspect"))
+}
+
+/// Inspect a regular file handle already opened by the caller's filesystem
+/// capability. Reads at most 12 header bytes from offset zero; paths are never
+/// resolved here. The caller owns authorization and source stability.
+pub fn file_info_reader(file: &mut std::fs::File) -> Result<FileInfo, OperationError> {
+    let result = (|| {
+        if !file.metadata()?.is_file() {
+            return Err(super::invalid("input handle must be a regular file"));
+        }
+        file.seek(SeekFrom::Start(0))?;
         let metadata = file.metadata()?;
         let mut header = Vec::new();
-        (&mut file).take(12).read_to_end(&mut header)?;
+        (&mut *file).take(12).read_to_end(&mut header)?;
         Ok(FileInfo {
             size: metadata.len(),
             regular_file: true,

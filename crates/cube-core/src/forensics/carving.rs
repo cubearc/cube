@@ -116,40 +116,13 @@ pub fn carve(
         let mut input = open_regular(source)?;
         let before = input.metadata()?;
         let source_size = before.len();
-        let (offset, length, mode, format, evidence) = match selection {
-            Selection::Range { offset, length } => (
-                offset,
-                length,
-                "range",
-                None,
-                "Caller-selected exact byte range; no file-structure validation",
-            ),
-            Selection::Candidate { offset } => {
-                let length = source_size.checked_sub(offset).ok_or_else(|| {
-                    invalid("candidate origin extends beyond EOF").parameter("offset")
-                })?;
-                input.seek(SeekFrom::Start(offset))?;
-                let mut origin = Origin {
-                    reader: &mut input,
-                    base: offset,
-                    length,
-                    pos: 0,
-                };
-                let report = boundaries::inspect(&mut origin).map_err(|mut error| {
-                    error.offset = error
-                        .offset
-                        .and_then(|relative| offset.checked_add(relative));
-                    error
-                })?;
-                (
-                    offset,
-                    report.logical_end,
-                    "candidate",
-                    Some(report.format),
-                    report.evidence,
-                )
-            }
-        };
+        let SelectedRange {
+            offset,
+            length,
+            mode,
+            format,
+            evidence,
+        } = selected(&mut input, selection, source_size)?;
         ByteRange {
             offset,
             length: Some(length),
@@ -187,6 +160,101 @@ pub fn carve(
             let _cleanup = std::fs::remove_file(destination);
         }
         copied
+    })();
+    result.map_err(|e: OperationError| e.operation("file.carve"))
+}
+
+struct SelectedRange {
+    offset: u64,
+    length: u64,
+    mode: &'static str,
+    format: Option<&'static str>,
+    evidence: &'static str,
+}
+fn selected(
+    input: &mut (impl Read + Seek),
+    selection: Selection,
+    source_size: u64,
+) -> Result<SelectedRange, OperationError> {
+    Ok(match selection {
+        Selection::Range { offset, length } => SelectedRange {
+            offset,
+            length,
+            mode: "range",
+            format: None,
+            evidence: "Caller-selected exact byte range; no file-structure validation",
+        },
+        Selection::Candidate { offset } => {
+            let length = source_size.checked_sub(offset).ok_or_else(|| {
+                invalid("candidate origin extends beyond EOF").parameter("offset")
+            })?;
+            input.seek(SeekFrom::Start(offset))?;
+            let mut origin = Origin {
+                reader: input,
+                base: offset,
+                length,
+                pos: 0,
+            };
+            let report = boundaries::inspect(&mut origin).map_err(|mut error| {
+                error.offset = error
+                    .offset
+                    .and_then(|relative| offset.checked_add(relative));
+                error
+            })?;
+            SelectedRange {
+                offset,
+                length: report.logical_end,
+                mode: "candidate",
+                format: Some(report.format),
+                evidence: report.evidence,
+            }
+        }
+    })
+}
+
+/// Recover exact bytes from a caller-authorized stable reader, with the same
+/// candidate validation and provenance as `carve`. No filesystem write occurs.
+/// The in-memory API is capped at 16 MiB; callers may lower the output budget.
+pub fn carve_reader(
+    input: &mut (impl Read + Seek),
+    selection: Selection,
+    max_bytes: u64,
+) -> Result<(Extraction, Vec<u8>), OperationError> {
+    let result = (|| {
+        if max_bytes > super::MAX_OUTPUT_BYTES {
+            return Err(invalid("in-memory carving budget exceeds 16 MiB").parameter("max_bytes"));
+        }
+        let source_size = input.seek(SeekFrom::End(0))?;
+        let SelectedRange {
+            offset,
+            length,
+            mode,
+            format,
+            evidence,
+        } = selected(input, selection, source_size)?;
+        ByteRange {
+            offset,
+            length: Some(length),
+        }
+        .resolve(source_size, max_bytes)?;
+        let data = super::read_range(
+            input,
+            ByteRange {
+                offset,
+                length: Some(length),
+            },
+        )?;
+        let report = Extraction {
+            source_size,
+            offset,
+            length,
+            bytes_written: data.len() as u64,
+            selection: mode,
+            format,
+            evidence,
+            sha256: crate::hashing::sha256(&data),
+        };
+        Ok((report, data))
     })();
     result.map_err(|e: OperationError| e.operation("file.carve"))
 }

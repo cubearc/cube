@@ -22,6 +22,7 @@ pub struct Execution {
     /// Mandatory, bounded per-step evidence for masked transformations. Ordinary
     /// legacy executions keep their existing serialized shape when this is empty.
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    #[schemars(default)]
     pub masked_audits: BTreeMap<usize, text::transform::Report>,
 }
 impl Prepared {

@@ -232,3 +232,62 @@ fn embedded_framing_errors_report_absolute_source_offsets() {
     assert_eq!(error.operation, Some("file.carve"));
     assert!(!target.exists());
 }
+
+#[test]
+fn authorized_reader_recovery_matches_file_recovery_without_writes() {
+    let bytes = empty_zip();
+    let mut source = b"prefix".to_vec();
+    source.extend(&bytes);
+    source.extend(b"tail");
+    let (report, data) = carving::carve_reader(
+        &mut std::io::Cursor::new(&source),
+        Selection::Candidate { offset: 6 },
+        bytes.len() as u64,
+    )
+    .unwrap();
+    assert_eq!(data, bytes);
+    assert_eq!(report.sha256, cube_core::hashing::sha256(&bytes));
+    assert_eq!(report.source_size, source.len() as u64);
+    assert_eq!(report.selection, "candidate");
+    assert!(
+        carving::carve_reader(
+            &mut std::io::Cursor::new(&source),
+            Selection::Candidate { offset: 6 },
+            1
+        )
+        .is_err()
+    );
+    assert!(
+        carving::carve_reader(
+            &mut std::io::Cursor::new(&source),
+            Selection::Range {
+                offset: u64::MAX,
+                length: 1
+            },
+            100
+        )
+        .is_err()
+    );
+    assert!(
+        carving::carve_reader(
+            &mut std::io::Cursor::new(&source),
+            Selection::Range {
+                offset: 0,
+                length: 0
+            },
+            forensics::MAX_OUTPUT_BYTES + 1
+        )
+        .is_err()
+    );
+    let (empty, data) = carving::carve_reader(
+        &mut std::io::Cursor::new(&source),
+        Selection::Range {
+            offset: 0,
+            length: 0,
+        },
+        0,
+    )
+    .unwrap();
+    assert_eq!(empty.bytes_written, 0);
+    assert!(data.is_empty());
+}

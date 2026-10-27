@@ -10849,11 +10849,12 @@ cube encode hex --text foo
 
 Compare isolated 8/16/32-bit runs with shared aggregate work/output/memory budgets; incomplete comparisons are explicit.
 
-Category: `esolang`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
-| Input | `input` | `text` |
+| Input | `source` | `text` |
+| Input | `input` | `bytes.array` |
 | Output | `output` | `brainfuck_comparison` |
 
 Parameters:
@@ -10945,11 +10946,12 @@ cube esolang brainfuck compare --code '-.' --widths 8,16,32
 
 Strict bounded Brainfuck, <=1 MiB source/input/output, 65536 commands, depth 256, fixed 30000 cells; exact bytes only on completion.
 
-Category: `esolang`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
-| Input | `input` | `text` |
+| Input | `source` | `text` |
+| Input | `input` | `bytes.array` |
 | Output | `output` | `bytes` |
 
 Parameters:
@@ -11016,11 +11018,12 @@ cube esolang brainfuck run --code '++++++++[>++++++++<-]>+.' --output text
 
 Bounded execution summary, exact tape range and optional post-dispatch traces; incomplete output is labeled.
 
-Category: `esolang`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
-| Input | `input` | `text` |
+| Input | `source` | `text` |
+| Input | `input` | `bytes.array` |
 | Output | `output` | `brainfuck_report` |
 
 Parameters:
@@ -12605,6 +12608,7 @@ Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.color_exports` |
+| Output | `images` | `image.png_collection` |
 
 Parameters:
 
@@ -13641,6 +13645,7 @@ Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 | --- | --- | --- |
 | Input | `input` | `image.samples` |
 | Output | `output` | `image.qr_report` |
+| Output | `payloads` | `bytes.collection` |
 
 Parameters:
 
@@ -13939,10 +13944,11 @@ cube investigate plan sample.bin --depth preview --json
 
 Run an explicit local metadata/preview profile through shared core operations and record executed/skipped/failed provenance with cooperative limits.
 
-Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `investigation`. Contract: 2. Pipeline adapter: none (direct API).
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
+| Input | `profile` | `investigation.profile` |
 | Input | `input` | `byte_reader` |
 | Output | `output` | `investigation.session` |
 
@@ -16235,6 +16241,7 @@ Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 | --- | --- | --- |
 | Input | `input` | `text` |
 | Output | `output` | `text.grid` |
+| Output | `image` | `image.samples` |
 
 Parameters:
 

@@ -83,6 +83,7 @@ pub struct Check {
     pub engine_api: u32,
     pub engine_version: &'static str,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    #[schemars(default)]
     pub masked_audits: BTreeMap<usize, crate::text::transform::Report>,
 }
 /// Slot names are symbolic, never paths, environment lookups or expressions.

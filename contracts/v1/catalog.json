@@ -31205,7 +31205,7 @@
     },
     {
       "schema_version": 1,
-      "operation_version": 1,
+      "operation_version": 2,
       "operation": "esolang.brainfuck.compare",
       "category": "esolang",
       "description": "Compare isolated 8/16/32-bit runs with shared aggregate work/output/memory budgets; incomplete comparisons are explicit.",
@@ -31215,19 +31215,27 @@
       "pipeline_adapter": null,
       "inputs": [
         {
-          "name": "input",
+          "name": "source",
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "description": "Explicit program input bytes, <=1 MiB; never implicit stdin in Core.",
+            "description": "Strict Brainfuck source; the parser also enforces a 1 MiB UTF-8 byte bound.",
+            "type": "string",
+            "maxLength": 1048576
+          }
+        },
+        {
+          "name": "input",
+          "semantic_type": "bytes.array",
+          "required": true,
+          "schema": {
             "type": "array",
-            "default": [],
             "items": {
               "type": "integer",
               "maximum": 255,
               "minimum": 0
             },
-            "minItems": 0
+            "maxItems": 1048576
           }
         }
       ],
@@ -32447,11 +32455,11 @@
         }
       },
       "limits": {
-        "max_input_bytes": null,
-        "max_output_bytes": null,
-        "max_items": null,
-        "max_work": null,
-        "max_memory_bytes": null
+        "max_input_bytes": 2097152,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": 1000000,
+        "max_memory_bytes": 8388608
       },
       "policy": {
         "private_input": false,
@@ -32464,7 +32472,7 @@
     },
     {
       "schema_version": 1,
-      "operation_version": 1,
+      "operation_version": 2,
       "operation": "esolang.brainfuck.execute",
       "category": "esolang",
       "description": "Strict bounded Brainfuck, <=1 MiB source/input/output, 65536 commands, depth 256, fixed 30000 cells; exact bytes only on completion.",
@@ -32474,19 +32482,27 @@
       "pipeline_adapter": null,
       "inputs": [
         {
-          "name": "input",
+          "name": "source",
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "description": "Explicit program input bytes, <=1 MiB; never implicit stdin in Core.",
+            "description": "Strict Brainfuck source; the parser also enforces a 1 MiB UTF-8 byte bound.",
+            "type": "string",
+            "maxLength": 1048576
+          }
+        },
+        {
+          "name": "input",
+          "semantic_type": "bytes.array",
+          "required": true,
+          "schema": {
             "type": "array",
-            "default": [],
             "items": {
               "type": "integer",
               "maximum": 255,
               "minimum": 0
             },
-            "minItems": 0
+            "maxItems": 1048576
           }
         }
       ],
@@ -32622,11 +32638,11 @@
         }
       },
       "limits": {
-        "max_input_bytes": null,
-        "max_output_bytes": null,
-        "max_items": null,
-        "max_work": null,
-        "max_memory_bytes": null
+        "max_input_bytes": 2097152,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": 1000000,
+        "max_memory_bytes": 8388608
       },
       "policy": {
         "private_input": false,
@@ -32639,7 +32655,7 @@
     },
     {
       "schema_version": 1,
-      "operation_version": 1,
+      "operation_version": 2,
       "operation": "esolang.brainfuck.report",
       "category": "esolang",
       "description": "Bounded execution summary, exact tape range and optional post-dispatch traces; incomplete output is labeled.",
@@ -32649,19 +32665,27 @@
       "pipeline_adapter": null,
       "inputs": [
         {
-          "name": "input",
+          "name": "source",
           "semantic_type": "text",
           "required": true,
           "schema": {
-            "description": "Explicit program input bytes, <=1 MiB; never implicit stdin in Core.",
+            "description": "Strict Brainfuck source; the parser also enforces a 1 MiB UTF-8 byte bound.",
+            "type": "string",
+            "maxLength": 1048576
+          }
+        },
+        {
+          "name": "input",
+          "semantic_type": "bytes.array",
+          "required": true,
+          "schema": {
             "type": "array",
-            "default": [],
             "items": {
               "type": "integer",
               "maximum": 255,
               "minimum": 0
             },
-            "minItems": 0
+            "maxItems": 1048576
           }
         }
       ],
@@ -33658,11 +33682,11 @@
         }
       },
       "limits": {
-        "max_input_bytes": null,
-        "max_output_bytes": null,
-        "max_items": null,
-        "max_work": null,
-        "max_memory_bytes": null
+        "max_input_bytes": 2097152,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": 1000000,
+        "max_memory_bytes": 8388608
       },
       "policy": {
         "private_input": false,
@@ -41254,6 +41278,34 @@
               }
             }
           }
+        },
+        {
+          "name": "images",
+          "semantic_type": "image.png_collection",
+          "required": false,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Array_of_Bytes",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Bytes"
+            },
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              }
+            }
+          }
         }
       ],
       "errors": {
@@ -41318,9 +41370,9 @@
       },
       "limits": {
         "max_input_bytes": null,
-        "max_output_bytes": null,
-        "max_items": null,
-        "max_work": null,
+        "max_output_bytes": 67108864,
+        "max_items": 64,
+        "max_work": 16777216,
         "max_memory_bytes": null
       },
       "policy": {
@@ -47986,6 +48038,41 @@
               }
             }
           }
+        },
+        {
+          "name": "payloads",
+          "semantic_type": "bytes.collection",
+          "required": false,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Array_of_Nullable_Bytes",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Bytes"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              }
+            }
+          }
         }
       ],
       "errors": {
@@ -48050,9 +48137,9 @@
       },
       "limits": {
         "max_input_bytes": null,
-        "max_output_bytes": null,
-        "max_items": null,
-        "max_work": null,
+        "max_output_bytes": 65536,
+        "max_items": 8,
+        "max_work": 262144,
         "max_memory_bytes": null
       },
       "policy": {
@@ -50829,7 +50916,7 @@
     },
     {
       "schema_version": 1,
-      "operation_version": 1,
+      "operation_version": 2,
       "operation": "investigation.profile.run",
       "category": "investigation",
       "description": "Run an explicit local metadata/preview profile through shared core operations and record executed/skipped/failed provenance with cooperative limits.",
@@ -50838,6 +50925,571 @@
       "reversible": null,
       "pipeline_adapter": null,
       "inputs": [
+        {
+          "name": "profile",
+          "semantic_type": "investigation.profile",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Profile",
+            "type": "object",
+            "properties": {
+              "budgets": {
+                "$ref": "#/$defs/Budgets",
+                "default": {
+                  "max_elapsed_ms": 5000,
+                  "max_input_bytes": 1048576,
+                  "max_inspected_bytes": 4194304,
+                  "max_operations": 16,
+                  "max_retained_bytes": 65536
+                }
+              },
+              "depth": {
+                "$ref": "#/$defs/Depth",
+                "default": "metadata"
+              },
+              "format_version": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "identify": {
+                "type": "boolean",
+                "default": false
+              },
+              "pipeline": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/Pipeline"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "record_parameters": {
+                "type": "boolean",
+                "default": false
+              },
+              "retain_results": {
+                "description": "Session-local run IDs, matching dry-run IDs, to retain in memory.",
+                "type": "array",
+                "default": [],
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 4294967295,
+                  "minimum": 0
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "format_version"
+            ],
+            "$defs": {
+              "Budgets": {
+                "type": "object",
+                "properties": {
+                  "max_elapsed_ms": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 5000,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 5000,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 5000,
+                    "x-cube-integer": {
+                      "default": 5000,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_input_bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 1048576,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 1048576,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 1048576,
+                    "x-cube-integer": {
+                      "default": 1048576,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_inspected_bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 4194304,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4194304,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 4194304,
+                    "x-cube-integer": {
+                      "default": 4194304,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_operations": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 16,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 16,
+                    "x-cube-integer": {
+                      "default": 16,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_retained_bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 65536,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 65536,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 65536,
+                    "x-cube-integer": {
+                      "default": 65536,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "Depth": {
+                "type": "string",
+                "enum": [
+                  "metadata",
+                  "preview"
+                ]
+              },
+              "Limits": {
+                "description": "Hard bounds may be lowered per plan. Zero permits only zero-size/identity work.",
+                "type": "object",
+                "properties": {
+                  "max_capture_bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 4194304,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4194304,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 4194304,
+                    "x-cube-integer": {
+                      "default": 4194304,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_steps": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 64,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 64,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 64,
+                    "x-cube-integer": {
+                      "default": 64,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_value_bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 1048576,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 1048576,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 1048576,
+                    "x-cube-integer": {
+                      "default": 1048576,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_work_bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 16777216,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16777216,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 16777216,
+                    "x-cube-integer": {
+                      "default": 16777216,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "Parameter": {
+                "description": "JSON parameter scalars preserve their actual types; binary keys need an\nexplicit {\"base64\":\"...\"} object. Concrete tagged list objects are additive:\n{\"unsigned_list\":[0,2]} and {\"text_list\":[\"1=X\"]}. Bare arrays, floats, null,\nmixed/nested lists and arbitrary objects remain invalid, including empty arrays.",
+                "anyOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "int64",
+                        "maximum": 9007199254740991,
+                        "minimum": -9007199254740991,
+                        "x-cube-maximum-decimal": "9223372036854775807",
+                        "x-cube-minimum-decimal": "-9223372036854775808"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "int64",
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "9223372036854775807",
+                          "x-cube-minimum-decimal": "-9223372036854775808"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "int64",
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "9223372036854775807",
+                      "x-cube-minimum-decimal": "-9223372036854775808"
+                    }
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "base64": {
+                        "type": "string",
+                        "contentEncoding": "base64"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "base64"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "unsigned_list": {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "format": "uint64",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            },
+                            {
+                              "type": "string",
+                              "maxLength": 40,
+                              "pattern": "^(0|-?[1-9][0-9]*)$",
+                              "x-cube-native-integer": {
+                                "format": "uint64",
+                                "minimum": 0,
+                                "type": "integer",
+                                "x-cube-maximum-decimal": "18446744073709551615",
+                                "x-cube-minimum-decimal": "0"
+                              }
+                            }
+                          ],
+                          "x-cube-integer": {
+                            "format": "uint64",
+                            "minimum": 0,
+                            "type": "integer",
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          }
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "unsigned_list"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "text_list": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "text_list"
+                    ]
+                  }
+                ]
+              },
+              "Pipeline": {
+                "type": "object",
+                "properties": {
+                  "limits": {
+                    "$ref": "#/$defs/Limits",
+                    "default": {
+                      "max_capture_bytes": 4194304,
+                      "max_steps": 64,
+                      "max_value_bytes": 1048576,
+                      "max_work_bytes": 16777216
+                    }
+                  },
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Step"
+                    }
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "steps"
+                ]
+              },
+              "Step": {
+                "description": "Each adapter has an explicit operation-contract version, independent of package\nversion. Recipes must name it; matching only an ID is insufficient compatibility.",
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "type": "string"
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/Parameter"
+                    },
+                    "default": {}
+                  },
+                  "version": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 4294967295,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "operation",
+                  "version"
+                ]
+              }
+            }
+          }
+        },
         {
           "name": "input",
           "semantic_type": "byte_reader",
@@ -52368,9 +53020,9 @@
         }
       },
       "limits": {
-        "max_input_bytes": null,
-        "max_output_bytes": null,
-        "max_items": null,
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 131072,
+        "max_items": 64,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -64641,8 +65293,7 @@
             "required": [
               "output",
               "intermediates",
-              "work_bytes_upper_bound",
-              "masked_audits"
+              "work_bytes_upper_bound"
             ],
             "$defs": {
               "AppliedOverride": {
@@ -68400,8 +69051,7 @@
               "passed",
               "format_version",
               "engine_api",
-              "engine_version",
-              "masked_audits"
+              "engine_version"
             ],
             "$defs": {
               "AppliedOverride": {
@@ -69797,8 +70447,7 @@
             "required": [
               "output",
               "intermediates",
-              "work_bytes_upper_bound",
-              "masked_audits"
+              "work_bytes_upper_bound"
             ],
             "$defs": {
               "AppliedOverride": {
@@ -76501,6 +77150,88 @@
               "rows"
             ]
           }
+        },
+        {
+          "name": "image",
+          "semantic_type": "image.samples",
+          "required": false,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Image",
+            "type": "object",
+            "properties": {
+              "color_model": {
+                "$ref": "#/$defs/ColorModel"
+              },
+              "height": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "palette": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 255,
+                    "minimum": 0
+                  },
+                  "maxItems": 3,
+                  "minItems": 3
+                }
+              },
+              "samples": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "transparency": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "width": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "width",
+              "height",
+              "color_model",
+              "samples",
+              "palette",
+              "transparency"
+            ],
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              },
+              "ColorModel": {
+                "description": "Supported physical sample layouts; indexed samples are palette indices.",
+                "type": "string",
+                "enum": [
+                  "gray",
+                  "gray_alpha",
+                  "rgb",
+                  "rgba",
+                  "indexed"
+                ]
+              }
+            }
+          }
         }
       ],
       "errors": {
@@ -76564,9 +77295,9 @@
         }
       },
       "limits": {
-        "max_input_bytes": null,
+        "max_input_bytes": 1048576,
         "max_output_bytes": null,
-        "max_items": null,
+        "max_items": 65536,
         "max_work": null,
         "max_memory_bytes": null
       },

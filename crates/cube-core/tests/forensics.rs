@@ -606,3 +606,22 @@ fn png_palette_rules_reject_invalid_color_models_and_index_depths() {
         );
     }
 }
+
+#[test]
+fn metadata_reader_uses_authorized_handle_and_reads_only_the_header() {
+    let dir = Workspace::new();
+    let source = dir.path("metadata");
+    std::fs::write(&source, b"\x89PNG\r\n\x1a\n").unwrap();
+    std::fs::OpenOptions::new()
+        .write(true)
+        .open(&source)
+        .unwrap()
+        .set_len(20 * 1024 * 1024)
+        .unwrap();
+    let mut file = forensics::open_regular(&source).unwrap();
+    file.seek(SeekFrom::Start(100)).unwrap();
+    let info = inspect::file_info_reader(&mut file).unwrap();
+    assert_eq!(info.size, 20 * 1024 * 1024);
+    assert_eq!(info.signatures[0].format, "png");
+    assert_eq!(file.stream_position().unwrap(), 12);
+}

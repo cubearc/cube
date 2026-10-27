@@ -4,6 +4,8 @@ use super::session::{
 };
 use crate::pipeline::{self, Limits, Step};
 use serde::{Deserialize, Serialize};
+mod contracts;
+pub(crate) use contracts::CONTRACTS;
 use std::{
     io::{Read, Seek, SeekFrom},
     sync::atomic::{AtomicBool, Ordering},

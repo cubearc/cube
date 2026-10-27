@@ -5,6 +5,8 @@ use crate::{
     operations::{Descriptor, Parameter, ParameterType, ParameterValue},
 };
 use serde::Serialize;
+mod contracts;
+pub(crate) use contracts::CONTRACTS;
 pub const MAX_QR_PIXELS: u64 = 262144;
 pub const MAX_QR_DIMENSION: u32 = 1024;
 pub const MAX_QR_SYMBOLS: usize = 8;

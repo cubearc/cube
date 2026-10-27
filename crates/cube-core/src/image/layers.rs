@@ -6,6 +6,8 @@ use crate::{
 };
 use serde::Serialize;
 use std::collections::BTreeSet;
+mod contracts;
+pub(crate) use contracts::CONTRACTS;
 
 pub const MAX_OUTPUTS: usize = 64;
 pub const MAX_WORK: u64 = 16 * 1024 * 1024;

@@ -6,6 +6,8 @@ use crate::{
 };
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
+mod contracts;
+pub(crate) use contracts::CONTRACTS;
 pub const MAX_UNITS: usize = 65536;
 fn error(message: &str) -> OperationError {
     OperationError::new(ErrorCode::InvalidParameter, message)

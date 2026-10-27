@@ -4,6 +4,8 @@
 use crate::errors::{ErrorCode, OperationError};
 use serde::Serialize;
 mod comparison;
+mod contracts;
+pub(crate) use contracts::CONTRACTS;
 mod metadata;
 mod types;
 pub use comparison::{Comparison, ComparisonLimits, compare};

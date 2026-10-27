@@ -91,3 +91,27 @@ adapter and trusted viewer or useful structured fallback for every implemented
 operation. Direct-only operations stay discoverable. Missing adapters, schemas,
 fixtures or references remain delivery gaps. Secret capture is explicit and off
 by default; private-export operations never become automatic recording actions.
+
+Brainfuck invocation contracts use operation version 2: `source` is strict program
+text and `input` is an explicit array of bytes. The initial version accidentally
+promoted the byte parameter over the program source. Rust, CLI and Python calls
+retain their existing behavior; stored version-1 invocations need explicit repair. The profile-run contract also
+uses operation version 2 because it now requires the explicit `profile` alongside
+its byte input, rather than silently choosing a profile.
+
+The color-export `images` and QR `payloads` ports preserve exact binary results
+alongside their existing reports. Slots follow manifest/symbol order, including
+null QR slots when decoding fails. The scalar-grid `image` port is present only
+when the caller supplies a complete explicit color mapping. These additive ports
+are optional for existing report consumers; filenames and payloads grant no I/O.
+
+Typed Rust interfaces can rehydrate transported PCM with
+`media::pcm::Samples::from_raw`. Core checks native format consistency, channel
+indexes, frame origin/extent, exact byte length and processing ceilings. This does
+not parse a WAVE file, infer missing metadata or reinterpret sample bytes.
+
+Filesystem interfaces can pass an already authorized regular file handle to
+`forensics::inspect::file_info_reader`; Core reads at most twelve header bytes
+without resolving another path. `forensics::carving::carve_reader` reuses file
+carving's candidate/range validation and returns exact bytes plus provenance under
+a 16 MiB in-memory ceiling. Neither API grants authority or writes a destination.

@@ -54,6 +54,55 @@ pub struct SampleInfo<'a> {
     pub value_type: &'static str,
 }
 impl Samples {
+    /// Rehydrate exact logical PCM transported by a typed interface. No WAVE
+    /// framing, channel inference or sample conversion is performed. Original
+    /// source channel indexes and absolute frame origin remain explicit.
+    pub fn from_raw(
+        format: Format,
+        channels: Vec<u16>,
+        start_frame: u64,
+        frames: u64,
+        data: Vec<u8>,
+    ) -> Result<Self, OperationError> {
+        let format = format.validate()?;
+        if frames > MAX_FRAMES
+            || frames > MAX_DURATION_SECONDS * u64::from(format.sample_rate)
+            || data.len() as u64 > MAX_PCM_BYTES
+            || frames.saturating_mul(channels.len() as u64) > MAX_SAMPLES
+        {
+            return Err(limit(
+                "logical PCM exceeds frame, duration, sample or byte budget",
+            ));
+        }
+        if channels.is_empty()
+            || channels.len() > usize::from(format.channels)
+            || channels
+                .iter()
+                .enumerate()
+                .any(|(i, c)| *c >= format.channels || channels[..i].contains(c))
+        {
+            return Err(
+                invalid("channels must be nonempty, unique, available zero-based indexes")
+                    .parameter("channels"),
+            );
+        }
+        start_frame
+            .checked_add(frames)
+            .ok_or_else(|| invalid("frame range overflows").parameter("frames"))?;
+        let expected = frames * channels.len() as u64 * u64::from(format.bits_per_sample / 8);
+        if data.len() as u64 != expected {
+            return Err(invalid(
+                "logical PCM bytes do not match frames, channels and sample width",
+            ));
+        }
+        Ok(Self {
+            format,
+            channels,
+            start_frame,
+            frames,
+            data,
+        })
+    }
     pub fn format(&self) -> Format {
         self.format
     }

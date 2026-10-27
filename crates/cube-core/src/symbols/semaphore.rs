@@ -124,29 +124,133 @@ pub fn decode(input: &str) -> Result<String, OperationError> {
     }
     Ok(output)
 }
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "symbol.semaphore.encode",
-        category: "symbols",
-        description: "Letter-only flag Semaphore: sender anatomical LH,RH, receiver-facing N/NE/E/SE/S/SW/W/NW; ASCII letters uppercase, each space=/, <=16384 symbols; no numeric/control state.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "encode semaphore",
-        example: "cube encode semaphore --text 'A B'",
+const PROFILED: [crate::operations::metadata::Entry; 2] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.semaphore.encode",
+            category: "symbols",
+            description: "Letter-only flag Semaphore: sender anatomical LH,RH, receiver-facing N/NE/E/SE/S/SW/W/NW; ASCII letters uppercase, each space=/, <=16384 symbols; no numeric/control state.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "encode semaphore",
+            example: "cube encode semaphore --text 'A B'",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Flag Semaphore",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Explicit receiver-facing direction pairs for the supported letter table; ASCII case folds; every literal space is preserved as a / token. No image recognition.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: (6 * MAX_SYMBOLS - 1) as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "symbols",
+                        maximum: crate::symbols::semaphore::MAX_SYMBOLS as u64,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::semaphore::encode",
+                python_api: "semaphore_encode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "symbol.semaphore.decode",
-        category: "symbols",
-        description: "Decode exact LH,RH tokens or /, separated by one ASCII space; <=16384 tokens, literal J, alternate D accepted; no guessing or visual recognition.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "decode semaphore",
-        example: "cube decode semaphore --text 'S,SW / S,W'",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.semaphore.decode",
+            category: "symbols",
+            description: "Decode exact LH,RH tokens or /, separated by one ASCII space; <=16384 tokens, literal J, alternate D accepted; no guessing or visual recognition.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "decode semaphore",
+            example: "cube decode semaphore --text 'S,SW / S,W'",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Flag Semaphore",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Explicit receiver-facing direction pairs for the supported letter table; ASCII case folds; every literal space is preserved as a / token. No image recognition.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: MAX_SYMBOLS as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "symbols",
+                        maximum: crate::symbols::semaphore::MAX_SYMBOLS as u64,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::semaphore::decode",
+                python_api: "semaphore_decode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

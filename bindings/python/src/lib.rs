@@ -324,28 +324,64 @@ fn structured(py: Python<'_>, value: &serde_json::Value) -> PyResult<Py<PyAny>> 
         .unbind())
 }
 
-/// List descriptors with pipeline availability, sorted by ID; optionally filter a category.
+/// Bounded catalog discovery; annotations describe actual profiles and grant no execution authority.
 #[pyfunction]
-#[pyo3(signature = (category=None))]
-fn operations(py: Python<'_>, category: Option<&str>) -> PyResult<Py<PyAny>> {
-    let mut descriptors = catalog::filtered(category).map_err(file_error)?;
-    descriptors.sort_by_key(|d| d.id);
-    structured(
-        py,
-        &serde_json::json!(
-            descriptors
-                .iter()
-                .map(|d| d.discovery())
-                .collect::<Vec<_>>()
-        ),
+#[pyo3(signature=(category=None,*,include_metadata=false,max_output_bytes=None))]
+fn operations(
+    py: Python<'_>,
+    category: Option<&str>,
+    include_metadata: bool,
+    max_output_bytes: Option<&Bound<'_, PyAny>>,
+) -> PyResult<Py<PyAny>> {
+    let limit = discovery_limit(max_output_bytes, "ops.list")?;
+    let text = catalog::discovery_document(
+        catalog::DiscoveryRequest::List { category },
+        catalog::DiscoveryFormat::DirectJson {
+            metadata: include_metadata,
+        },
+        limit,
     )
+    .map_err(file_error)?;
+    Ok(py.import("json")?.call_method1("loads", (text,))?.unbind())
 }
-
-/// Describe an exact stable ID with pipeline availability. Unknown IDs raise ValueError.
+/// Describe an exact stable ID with optional profile facts; aliases are not lookup IDs.
 #[pyfunction]
-fn describe_operation(py: Python<'_>, id: &str) -> PyResult<Py<PyAny>> {
-    let descriptor = catalog::require(id).map_err(file_error)?;
-    structured(py, &serde_json::json!(descriptor.discovery()))
+#[pyo3(signature=(id,*,include_metadata=false,max_output_bytes=None))]
+fn describe_operation(
+    py: Python<'_>,
+    id: &str,
+    include_metadata: bool,
+    max_output_bytes: Option<&Bound<'_, PyAny>>,
+) -> PyResult<Py<PyAny>> {
+    let limit = discovery_limit(max_output_bytes, "ops.describe")?;
+    let text = catalog::discovery_document(
+        catalog::DiscoveryRequest::Describe { id },
+        catalog::DiscoveryFormat::DirectJson {
+            metadata: include_metadata,
+        },
+        limit,
+    )
+    .map_err(file_error)?;
+    Ok(py.import("json")?.call_method1("loads", (text,))?.unbind())
+}
+fn discovery_limit(value: Option<&Bound<'_, PyAny>>, op: &'static str) -> PyResult<usize> {
+    value
+        .map(|v| modular::operand(v, op, "max_output_bytes"))
+        .transpose()?
+        .map(|n| {
+            usize::try_from(n).map_err(|_| {
+                file_error(
+                    cube_core::errors::OperationError::new(
+                        cube_core::errors::ErrorCode::InvalidParameter,
+                        "discovery limit exceeds platform bounds",
+                    )
+                    .operation(op)
+                    .parameter("max_output_bytes"),
+                )
+            })
+        })
+        .transpose()
+        .map(|v| v.unwrap_or(catalog::MAX_DISCOVERY_BYTES))
 }
 
 /// Encode bytes as padded standard Base32 using uppercase letters.

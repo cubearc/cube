@@ -172,117 +172,231 @@ pub fn from_utf8(input: &[u8]) -> Result<String, OperationError> {
 
 use crate::operations::{Descriptor, Parameter, ParameterType};
 /// Static metadata is adjacent to the text implementation.
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "text.utf8.encode",
-        category: "text",
-        description: "Explicit text-to-UTF-8 bytes, no normalization/newline; <=1 MiB.",
-        input_type: "text",
-        output_type: "bytes",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "text to-bytes",
-        example: "cube text to-bytes --text Hello --output hex",
-    },
-    Descriptor {
-        id: "text.utf8.decode",
-        category: "text",
-        description: "Explicit UTF-8 decoding, reject invalid bytes without replacement; <=1 MiB.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "text from-bytes",
-        example: "printf Hello | cube text from-bytes",
-    },
-    Descriptor {
-        id: "text.normalize",
-        category: "text",
-        description: "Explicit UAX #15 normalization; Unicode data version exposed by UNICODE_VERSION; <=1 MiB input/8 MiB output.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[Parameter {
-            name: "form",
-            description: "Canonical compose/decompose (NFC/NFD) or compatibility forms (NFKC/NFKD); no implicit normalization.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["NFC", "NFD", "NFKC", "NFKD"],
-            },
-        }],
-        deterministic: true,
-        reversible: Some(false),
-        command: "text normalize",
-        example: "cube text normalize --form NFC --text café",
-    },
-    Descriptor {
-        id: "text.reverse",
-        category: "text",
-        description: "Reverse Unicode scalar values, including combining marks/CRLF; not grapheme or byte reversal; <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "text reverse",
-        example: "cube text reverse --text 'Cube 🧊'",
-    },
-    Descriptor {
-        id: "text.extract",
-        category: "text",
-        description: "Select Unicode scalar positions (not UTF-8 bytes); preserve list order/duplicates, no normalization; <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[
-            Parameter {
-                name: "indices",
-                description: "Zero-based list, <=65536 items; mutually exclusive with start/stride/stop. An empty list is valid.",
-                required: false,
-                default: None,
-                constraints: ParameterType::UnsignedList {
-                    min: 0,
-                    max: usize::MAX as u64,
-                    min_length: 0,
-                    max_length: MAX_INDICES,
-                    unique: false,
+const PROFILED: [crate::operations::metadata::Entry; 5] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "text.utf8.encode",
+            category: "text",
+            description: "Explicit text-to-UTF-8 bytes, no normalization/newline; <=1 MiB.",
+            input_type: "text",
+            output_type: "bytes",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "text to-bytes",
+            example: "cube text to-bytes --text Hello --output hex",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "UTF-8",
+                family: "character_encodings",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Encoding,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
                 },
-            },
-            Parameter {
-                name: "start",
-                description: "Start scalar index for stride mode; default 0 only in stride mode.",
-                required: false,
-                default: None,
-                constraints: ParameterType::Unsigned {
-                    min: 0,
-                    max: usize::MAX as u64,
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact Unicode scalar text <-> valid UTF-8 bytes, including NUL/newlines; reject malformed bytes without replacement or normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
                 },
-            },
-            Parameter {
-                name: "stride",
-                description: "Explicit positive stride, required unless indices are provided.",
-                required: false,
-                default: None,
-                constraints: ParameterType::Unsigned {
-                    min: 1,
-                    max: usize::MAX as u64,
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Existing UTF-8 conversion only; ASCII range validation, UTF-16/32 byte order and BOM policies are separate pending profiles.",
+                rust_api: "cube_core::text::to_utf8",
+                python_api: "utf8_encode",
+                references: &[
+                    "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-3/",
+                ],
+            }),
+        }
+    },
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "text.utf8.decode",
+            category: "text",
+            description: "Explicit UTF-8 decoding, reject invalid bytes without replacement; <=1 MiB.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "text from-bytes",
+            example: "printf Hello | cube text from-bytes",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "UTF-8",
+                family: "character_encodings",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Encoding,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
                 },
-            },
-            Parameter {
-                name: "stop",
-                description: "Exclusive scalar stop in stride mode; omitted means scalar length.",
-                required: false,
-                default: None,
-                constraints: ParameterType::Unsigned {
-                    min: 0,
-                    max: usize::MAX as u64,
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact Unicode scalar text <-> valid UTF-8 bytes, including NUL/newlines; reject malformed bytes without replacement or normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
                 },
-            },
-        ],
-        deterministic: true,
-        reversible: Some(false),
-        command: "text extract",
-        example: "cube text extract --start 1 --stride 2 --text abcdef",
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Existing UTF-8 conversion only; ASCII range validation, UTF-16/32 byte order and BOM policies are separate pending profiles.",
+                rust_api: "cube_core::text::from_utf8",
+                python_api: "utf8_decode",
+                references: &[
+                    "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-3/",
+                ],
+            }),
+        }
+    },
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "text.normalize",
+            category: "text",
+            description: "Explicit UAX #15 normalization; Unicode data version exposed by UNICODE_VERSION; <=1 MiB input/8 MiB output.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[Parameter {
+                name: "form",
+                description: "Canonical compose/decompose (NFC/NFD) or compatibility forms (NFKC/NFKD); no implicit normalization.",
+                required: true,
+                default: None,
+                constraints: ParameterType::Text {
+                    choices: &["NFC", "NFD", "NFKC", "NFKD"],
+                },
+            }],
+            deterministic: true,
+            reversible: Some(false),
+            command: "text normalize",
+            example: "cube text normalize --form NFC --text café",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: None,
+        }
+    },
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "text.reverse",
+            category: "text",
+            description: "Reverse Unicode scalar values, including combining marks/CRLF; not grapheme or byte reversal; <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "text reverse",
+            example: "cube text reverse --text 'Cube 🧊'",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: None,
+        }
+    },
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "text.extract",
+            category: "text",
+            description: "Select Unicode scalar positions (not UTF-8 bytes); preserve list order/duplicates, no normalization; <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[
+                Parameter {
+                    name: "indices",
+                    description: "Zero-based list, <=65536 items; mutually exclusive with start/stride/stop. An empty list is valid.",
+                    required: false,
+                    default: None,
+                    constraints: ParameterType::UnsignedList {
+                        min: 0,
+                        max: usize::MAX as u64,
+                        min_length: 0,
+                        max_length: MAX_INDICES,
+                        unique: false,
+                    },
+                },
+                Parameter {
+                    name: "start",
+                    description: "Start scalar index for stride mode; default 0 only in stride mode.",
+                    required: false,
+                    default: None,
+                    constraints: ParameterType::Unsigned {
+                        min: 0,
+                        max: usize::MAX as u64,
+                    },
+                },
+                Parameter {
+                    name: "stride",
+                    description: "Explicit positive stride, required unless indices are provided.",
+                    required: false,
+                    default: None,
+                    constraints: ParameterType::Unsigned {
+                        min: 1,
+                        max: usize::MAX as u64,
+                    },
+                },
+                Parameter {
+                    name: "stop",
+                    description: "Exclusive scalar stop in stride mode; omitted means scalar length.",
+                    required: false,
+                    default: None,
+                    constraints: ParameterType::Unsigned {
+                        min: 0,
+                        max: usize::MAX as u64,
+                    },
+                },
+            ],
+            deterministic: true,
+            reversible: Some(false),
+            command: "text extract",
+            example: "cube text extract --start 1 --stride 2 --text abcdef",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: None,
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

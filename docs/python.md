@@ -454,6 +454,12 @@ limits still apply. Use ordinary functions or `Image`/`InvestigationSession`
 methods for direct SDK calls; their signatures are in the shipped stubs.
 `pipeline_adapters()` lists the same executable subset with its descriptors.
 
+Opt in to profile facts with `cube.describe_operation("hash.sha256",
+include_metadata=True)` or `cube.operations(include_metadata=True)`. Original
+dictionaries remain unchanged by default. Both functions accept a keyword-only
+`max_output_bytes` to lower the 1 MiB discovery JSON ceiling. See
+[profile discovery](discovery.md) for exact limits and qualified security facts.
+
 ## Handle invalid input
 
 ```python

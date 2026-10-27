@@ -645,6 +645,89 @@ fn structured_discovery_and_descriptions() {
 }
 
 #[test]
+fn optional_profile_discovery_preserves_json_and_enforces_complete_output_limits() {
+    use cube_core::operations::{self as o, DiscoveryFormat as F, DiscoveryRequest as R};
+    let result = cube(&["ops", "list", "--json", "--metadata"], b"");
+    assert!(result.status.success());
+    let expected = o::discovery_document(
+        R::List { category: None },
+        F::CliJson { metadata: true },
+        o::MAX_DISCOVERY_BYTES,
+    )
+    .unwrap();
+    assert_eq!(result.stdout, expected.as_bytes());
+    let value: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(
+        value["operations"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|d| d.get("metadata").is_some())
+            .count(),
+        65
+    );
+    let args = [
+        "ops",
+        "describe",
+        "blockchain.private.export",
+        "--json",
+        "--metadata",
+    ];
+    let result = cube(&args, b"");
+    assert!(result.status.success());
+    let value: serde_json::Value = serde_json::from_slice(&result.stdout).unwrap();
+    assert_eq!(
+        value["operation"]["metadata"]["security"]["private_output"],
+        true
+    );
+    assert!(value["operation"]["pipeline"].is_null());
+    let exact = result.stdout.len().to_string();
+    let mut bounded = args.to_vec();
+    bounded.extend(["--max-output-bytes", &exact]);
+    success(&bounded, b"", &result.stdout);
+    let smaller = (result.stdout.len() - 1).to_string();
+    *bounded.last_mut().unwrap() = &smaller;
+    bounded.insert(0, "--json-errors");
+    let failure = cube(&bounded, b"");
+    assert!(!failure.status.success());
+    assert!(failure.stdout.is_empty());
+    let error: serde_json::Value = serde_json::from_slice(&failure.stderr).unwrap();
+    assert!(error.to_string().contains("resource_limit"));
+    for args in [
+        vec!["ops", "list", "--metadata"],
+        vec![
+            "ops",
+            "describe",
+            "hash.sha256",
+            "--max-output-bytes",
+            "1048577",
+        ],
+        vec![
+            "ops",
+            "describe",
+            "Variant Beaufort",
+            "--json",
+            "--metadata",
+        ],
+        vec![
+            "ops",
+            "list",
+            "--json",
+            "--metadata",
+            "--max-output-bytes",
+            "0",
+        ],
+    ] {
+        let failure = cube(&args, b"");
+        assert!(!failure.status.success());
+        assert!(failure.stdout.is_empty());
+    }
+    let result = cube(&["ops", "describe", "hash.sha256"], b"");
+    assert!(result.status.success());
+    assert!(String::from_utf8_lossy(&result.stdout).contains("Canonical name: SHA-256"));
+}
+
+#[test]
 fn structured_errors_keep_exit_codes_and_stdout_clean() {
     for (args, input, code, status) in [
         (

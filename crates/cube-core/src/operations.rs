@@ -4,6 +4,12 @@
 //! not reuse an ID for different semantics. Categories are strings, so extending
 //! the catalog does not require changing a central category enum.
 
+mod discovery;
+pub mod metadata;
+pub use discovery::{
+    DiscoveryFormat, DiscoveryRequest, MAX_DISCOVERY_BYTES, MAX_DISCOVERY_QUERY_BYTES,
+    discovery_document,
+};
 use serde::Serialize;
 
 /// A parameter value used only for metadata and validation, not runtime dispatch.
@@ -41,7 +47,7 @@ impl std::fmt::Display for ParameterValue<'_> {
 }
 
 /// Parameter constraints, shared by discovery and explicit preflight validation.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ParameterType {
     /// Inclusive integer range.
@@ -162,7 +168,7 @@ impl ParameterType {
 }
 
 /// One named operation parameter. Defaults are explicit and never applied silently.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 pub struct Parameter {
     pub name: &'static str,
     pub description: &'static str,
@@ -172,7 +178,7 @@ pub struct Parameter {
 }
 
 /// Describes an implemented operation without imposing an execution hierarchy.
-#[derive(Clone, Copy, Debug, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 pub struct Descriptor {
     pub id: &'static str,
     pub category: &'static str,
@@ -206,6 +212,38 @@ pub struct Discovery<'a> {
     pub pipeline: Option<PipelineSupport>,
 }
 
+/// Opt-in additive view. Legacy Discovery serialization and literal construction
+/// stay unchanged, including for consumers that reject unknown JSON fields.
+#[derive(Clone, Copy, Debug, Serialize)]
+pub struct ProfiledDiscovery<'a> {
+    #[serde(flatten)]
+    pub discovery: Discovery<'a>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<&'static metadata::Metadata>,
+}
+/// Only the existing catalog registration combines descriptor slices and their
+/// optional owning-module annotations. This is not an execution registry.
+pub(crate) struct Module {
+    descriptors: &'static [Descriptor],
+    profiles: &'static [metadata::Entry],
+}
+impl Module {
+    const fn plain(descriptors: &'static [Descriptor]) -> Self {
+        Self {
+            descriptors,
+            profiles: &[],
+        }
+    }
+    pub(crate) const fn profiled(
+        descriptors: &'static [Descriptor],
+        profiles: &'static [metadata::Entry],
+    ) -> Self {
+        Self {
+            descriptors,
+            profiles,
+        }
+    }
+}
 /// A precise parameter validation failure, without including its input value.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ParameterError {
@@ -227,6 +265,24 @@ impl std::fmt::Display for ParameterError {
 impl std::error::Error for ParameterError {}
 
 impl Descriptor {
+    /// Opt in to verified profile annotations without changing the legacy view.
+    pub fn profiled_discovery(&self) -> ProfiledDiscovery<'_> {
+        ProfiledDiscovery {
+            discovery: self.discovery(),
+            metadata: self.metadata(),
+        }
+    }
+    /// Facts apply only to the complete owning declaration, including exact
+    /// copies. A caller-created descriptor reusing an ID with changed semantics
+    /// does not inherit another operation's profile or security claims.
+    pub fn metadata(&self) -> Option<&'static metadata::Metadata> {
+        MODULES
+            .iter()
+            .flat_map(|m| m.profiles)
+            .find(|row| row.descriptor == *self)
+            .and_then(|row| row.metadata.as_ref())
+    }
+
     /// Describe execution availability without copying metadata or executing code.
     /// Direct Rust APIs and the declared CLI command remain independent of the
     /// pipeline allowlist. SDK entry points are documented in their native stubs.
@@ -277,103 +333,103 @@ impl Descriptor {
 
 /// Collect metadata from its owning modules in legacy command order.
 /// This is metadata assembly, not a dispatcher. Consumers may sort by stable ID.
+const MODULES: &[Module] = &[
+    crate::encoding::MODULE,
+    crate::ciphers::MODULE,
+    crate::hashing::MODULE,
+    crate::binary::MODULE,
+    crate::binary::transform::MODULE,
+    Module::plain(crate::esolang::brainfuck::OPERATIONS),
+    Module::plain(crate::forensics::OPERATIONS),
+    Module::plain(crate::forensics::signatures::OPERATIONS),
+    Module::plain(crate::forensics::inspect::OPERATIONS),
+    Module::plain(crate::forensics::ranges::OPERATIONS),
+    Module::plain(crate::forensics::boundaries::OPERATIONS),
+    Module::plain(crate::forensics::png::OPERATIONS),
+    Module::plain(crate::forensics::exif::OPERATIONS),
+    Module::plain(crate::forensics::zip::OPERATIONS),
+    Module::plain(crate::forensics::carving::OPERATIONS),
+    Module::plain(crate::image::OPERATIONS),
+    Module::plain(crate::image::raw::OPERATIONS),
+    Module::plain(crate::image::colors::OPERATIONS),
+    Module::plain(crate::image::csv::OPERATIONS),
+    Module::plain(crate::image::layers::OPERATIONS),
+    Module::plain(crate::image::pairs::OPERATIONS),
+    Module::plain(crate::image::qr::OPERATIONS),
+    Module::plain(crate::image::analyze::OPERATIONS),
+    Module::plain(crate::image::bitwise::OPERATIONS),
+    Module::plain(crate::image::transform::OPERATIONS),
+    Module::plain(crate::image::bits::OPERATIONS),
+    crate::ciphers::classical::MODULE,
+    crate::ciphers::book::MODULE,
+    crate::ciphers::bacon::MODULE,
+    crate::ciphers::polybius::MODULE,
+    crate::symbols::keypad::MODULE,
+    Module::plain(crate::text::keyboard::OPERATIONS),
+    Module::plain(crate::text::classes::OPERATIONS),
+    crate::text::MODULE,
+    Module::plain(crate::text::selection::OPERATIONS),
+    Module::plain(crate::text::word::OPERATIONS),
+    Module::plain(crate::text::values::OPERATIONS),
+    Module::plain(crate::text::unicode::OPERATIONS),
+    Module::plain(crate::text::traversal::OPERATIONS),
+    Module::plain(crate::text::transform::OPERATIONS),
+    Module::plain(crate::text::grid::OPERATIONS),
+    Module::plain(crate::text::combinations::OPERATIONS),
+    Module::plain(crate::text::statistics::OPERATIONS),
+    Module::plain(crate::text::multiset::OPERATIONS),
+    Module::plain(crate::text::anagram::OPERATIONS),
+    Module::plain(crate::text::word_ladder::OPERATIONS),
+    Module::plain(crate::probability::OPERATIONS),
+    Module::plain(crate::image::spatial::OPERATIONS),
+    crate::symbols::MODULE,
+    crate::symbols::a1z26::MODULE,
+    crate::symbols::semaphore::MODULE,
+    crate::symbols::clock::MODULE,
+    Module::plain(crate::numbers::OPERATIONS),
+    Module::plain(crate::numbers::combinatorics::OPERATIONS),
+    Module::plain(crate::logic::boolean::OPERATIONS),
+    Module::plain(crate::graph::OPERATIONS),
+    Module::plain(crate::numbers::modular::OPERATIONS),
+    Module::plain(crate::numbers::digital::OPERATIONS),
+    Module::plain(crate::numbers::alphabet::OPERATIONS),
+    Module::plain(crate::numbers::constants::OPERATIONS),
+    Module::plain(crate::media::wave::OPERATIONS),
+    Module::plain(crate::media::pcm::OPERATIONS),
+    Module::plain(crate::media::envelope::OPERATIONS),
+    Module::plain(crate::media::spectrum::OPERATIONS),
+    Module::plain(crate::media::spectrogram::OPERATIONS),
+    Module::plain(crate::media::bits::OPERATIONS),
+    Module::plain(crate::media::reverse::OPERATIONS),
+    Module::plain(crate::media::dtmf::OPERATIONS),
+    Module::plain(crate::media::morse::OPERATIONS),
+    Module::plain(crate::media::metadata::OPERATIONS),
+    Module::plain(crate::media::video::OPERATIONS),
+    Module::plain(crate::media::video::frames::OPERATIONS),
+    Module::plain(crate::media::video::comparison::OPERATIONS),
+    Module::plain(crate::media::video::audio::OPERATIONS),
+    Module::plain(crate::web::html::OPERATIONS),
+    Module::plain(crate::web::har::OPERATIONS),
+    Module::plain(crate::web::assets::OPERATIONS),
+    Module::plain(crate::pipeline::OPERATIONS),
+    Module::plain(crate::pipeline::recipe::OPERATIONS),
+    Module::plain(crate::investigation::triage::OPERATIONS),
+    Module::plain(crate::investigation::session::OPERATIONS),
+    Module::plain(crate::investigation::profile::OPERATIONS),
+    crate::encoding::base58check::MODULE,
+    crate::blockchain::MODULE,
+    crate::blockchain::wif::MODULE,
+    crate::hashing::protocol::MODULE,
+    crate::blockchain::bitcoin::MODULE,
+    crate::blockchain::candidates::MODULE,
+    crate::blockchain::ethereum::MODULE,
+    crate::blockchain::private::MODULE,
+];
 pub fn catalog() -> Vec<&'static Descriptor> {
-    // Flatten equal slice types instead of nesting iterator types as the catalog grows.
-    [
-        crate::encoding::OPERATIONS,
-        crate::ciphers::OPERATIONS,
-        crate::hashing::OPERATIONS,
-        crate::binary::OPERATIONS,
-        crate::binary::transform::OPERATIONS,
-        crate::esolang::brainfuck::OPERATIONS,
-        crate::forensics::OPERATIONS,
-        crate::forensics::signatures::OPERATIONS,
-        crate::forensics::inspect::OPERATIONS,
-        crate::forensics::ranges::OPERATIONS,
-        crate::forensics::boundaries::OPERATIONS,
-        crate::forensics::png::OPERATIONS,
-        crate::forensics::exif::OPERATIONS,
-        crate::forensics::zip::OPERATIONS,
-        crate::forensics::carving::OPERATIONS,
-        crate::image::OPERATIONS,
-        crate::image::raw::OPERATIONS,
-        crate::image::colors::OPERATIONS,
-        crate::image::csv::OPERATIONS,
-        crate::image::layers::OPERATIONS,
-        crate::image::pairs::OPERATIONS,
-        crate::image::qr::OPERATIONS,
-        crate::image::analyze::OPERATIONS,
-        crate::image::bitwise::OPERATIONS,
-        crate::image::transform::OPERATIONS,
-        crate::image::bits::OPERATIONS,
-        crate::ciphers::classical::OPERATIONS,
-        crate::ciphers::book::OPERATIONS,
-        crate::ciphers::bacon::OPERATIONS,
-        crate::ciphers::polybius::OPERATIONS,
-        crate::symbols::keypad::OPERATIONS,
-        crate::text::keyboard::OPERATIONS,
-        crate::text::classes::OPERATIONS,
-        crate::text::OPERATIONS,
-        crate::text::selection::OPERATIONS,
-        crate::text::word::OPERATIONS,
-        crate::text::values::OPERATIONS,
-        crate::text::unicode::OPERATIONS,
-        crate::text::traversal::OPERATIONS,
-        crate::text::transform::OPERATIONS,
-        crate::text::grid::OPERATIONS,
-        crate::text::combinations::OPERATIONS,
-        crate::text::statistics::OPERATIONS,
-        crate::text::multiset::OPERATIONS,
-        crate::text::anagram::OPERATIONS,
-        crate::text::word_ladder::OPERATIONS,
-        crate::probability::OPERATIONS,
-        crate::image::spatial::OPERATIONS,
-        crate::symbols::OPERATIONS,
-        crate::symbols::a1z26::OPERATIONS,
-        crate::symbols::semaphore::OPERATIONS,
-        crate::symbols::clock::OPERATIONS,
-        crate::numbers::OPERATIONS,
-        crate::numbers::combinatorics::OPERATIONS,
-        crate::logic::boolean::OPERATIONS,
-        crate::graph::OPERATIONS,
-        crate::numbers::modular::OPERATIONS,
-        crate::numbers::digital::OPERATIONS,
-        crate::numbers::alphabet::OPERATIONS,
-        crate::numbers::constants::OPERATIONS,
-        crate::media::wave::OPERATIONS,
-        crate::media::pcm::OPERATIONS,
-        crate::media::envelope::OPERATIONS,
-        crate::media::spectrum::OPERATIONS,
-        crate::media::spectrogram::OPERATIONS,
-        crate::media::bits::OPERATIONS,
-        crate::media::reverse::OPERATIONS,
-        crate::media::dtmf::OPERATIONS,
-        crate::media::morse::OPERATIONS,
-        crate::media::metadata::OPERATIONS,
-        crate::media::video::OPERATIONS,
-        crate::media::video::frames::OPERATIONS,
-        crate::media::video::comparison::OPERATIONS,
-        crate::media::video::audio::OPERATIONS,
-        crate::web::html::OPERATIONS,
-        crate::web::har::OPERATIONS,
-        crate::web::assets::OPERATIONS,
-        crate::pipeline::OPERATIONS,
-        crate::pipeline::recipe::OPERATIONS,
-        crate::investigation::triage::OPERATIONS,
-        crate::investigation::session::OPERATIONS,
-        crate::investigation::profile::OPERATIONS,
-        crate::encoding::base58check::OPERATIONS,
-        crate::blockchain::OPERATIONS,
-        crate::blockchain::wif::OPERATIONS,
-        crate::hashing::protocol::OPERATIONS,
-        crate::blockchain::bitcoin::OPERATIONS,
-        crate::blockchain::candidates::OPERATIONS,
-        crate::blockchain::ethereum::OPERATIONS,
-        crate::blockchain::private::OPERATIONS,
-    ]
-    .into_iter()
-    .flatten()
-    .collect()
+    MODULES
+        .iter()
+        .flat_map(|module| module.descriptors)
+        .collect()
 }
 
 /// Look up an exact stable ID; no aliases or heuristic matching are performed.

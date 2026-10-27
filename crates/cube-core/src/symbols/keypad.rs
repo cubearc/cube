@@ -216,29 +216,169 @@ const PARAMETERS: &[Parameter] = &[
         constraints: ParameterType::Text { choices: &[] },
     },
 ];
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "symbol.keypad.encode",
-        category: "symbols",
-        description: "Explicit telephone or multi-tap groups; decode telephone alternatives without word guessing; <=65536 groups.",
-        input_type: "text",
-        output_type: "text",
-        parameters: PARAMETERS,
-        deterministic: true,
-        reversible: Some(false),
-        command: "encode keypad",
-        example: "cube encode keypad --mode multi_tap --text H",
+const PROFILED: [crate::operations::metadata::Entry; 2] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.keypad.encode",
+            category: "symbols",
+            description: "Explicit telephone or multi-tap groups; decode telephone alternatives without word guessing; <=65536 groups.",
+            input_type: "text",
+            output_type: "text",
+            parameters: PARAMETERS,
+            deterministic: true,
+            reversible: Some(false),
+            command: "encode keypad",
+            example: "cube encode keypad --mode multi_tap --text H",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Explicit keypad mapping",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Caller-selected exact groups or the built-in telephone table; explicit multi-tap/T9 mode and case policy. T9 returns alternatives without dictionary inference.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "symbols_or_groups",
+                        maximum: MAX_INDICES as u64,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "mapping_bytes",
+                        maximum: 65536,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "mapping_keys",
+                        maximum: 10,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "mapping_scalars",
+                        maximum: 256,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: crate::text::MAX_OUTPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::keypad::Mapping::encode",
+                python_api: "keypad_encode",
+                references: &["https://www.itu.int/rec/T-REC-E.161-200102-I/en"],
+            }),
+        }
     },
-    Descriptor {
-        id: "symbol.keypad.decode",
-        category: "symbols",
-        description: "Explicit telephone or multi-tap groups; decode telephone alternatives without word guessing; <=65536 groups.",
-        input_type: "text",
-        output_type: "keypad.decoded",
-        parameters: PARAMETERS,
-        deterministic: true,
-        reversible: Some(false),
-        command: "decode keypad",
-        example: "cube decode keypad --mode multi_tap --text 44",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.keypad.decode",
+            category: "symbols",
+            description: "Explicit telephone or multi-tap groups; decode telephone alternatives without word guessing; <=65536 groups.",
+            input_type: "text",
+            output_type: "keypad.decoded",
+            parameters: PARAMETERS,
+            deterministic: true,
+            reversible: Some(false),
+            command: "decode keypad",
+            example: "cube decode keypad --mode multi_tap --text 44",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Explicit keypad mapping",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Caller-selected exact groups or the built-in telephone table; explicit multi-tap/T9 mode and case policy. T9 returns alternatives without dictionary inference.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "symbols_or_groups",
+                        maximum: MAX_INDICES as u64,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "mapping_bytes",
+                        maximum: 65536,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "mapping_keys",
+                        maximum: 10,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "mapping_scalars",
+                        maximum: 256,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: crate::text::MAX_OUTPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::keypad::Mapping::decode",
+                python_api: "keypad_decode",
+                references: &["https://www.itu.int/rec/T-REC-E.161-200102-I/en"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

@@ -160,53 +160,233 @@ pub fn braille_decode(input: &str) -> Result<Vec<u8>, OperationError> {
 }
 use crate::operations::Descriptor;
 /// Metadata next to the cell/grammar contracts.
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "symbol.morse.encode",
-        category: "symbols",
-        description: "International Morse A-Z/0-9; collapse ASCII spaces, normalize decoded case; <=1 MiB input/8 MiB output.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "encode morse",
-        example: "cube encode morse --text 'SOS 2'",
+const PROFILED: [crate::operations::metadata::Entry; 4] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.morse.encode",
+            category: "symbols",
+            description: "International Morse A-Z/0-9; collapse ASCII spaces, normalize decoded case; <=1 MiB input/8 MiB output.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "encode morse",
+            example: "cube encode morse --text 'SOS 2'",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "International Morse text",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "International Morse A-Z/a-z/0-9 only; uppercase decode, canonical symbol/word separators; ASCII-space runs collapse.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: crate::text::MAX_OUTPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::morse_encode",
+                python_api: "morse_encode",
+                references: &["https://www.itu.int/rec/R-REC-M.1677-1-200910-I/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "symbol.morse.decode",
-        category: "symbols",
-        description: "Canonical dot/dash tokens with one space; slash separates words; uppercase A-Z/0-9, <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "decode morse",
-        example: "cube decode morse --text '... --- ... / ..---'",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.morse.decode",
+            category: "symbols",
+            description: "Canonical dot/dash tokens with one space; slash separates words; uppercase A-Z/0-9, <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "decode morse",
+            example: "cube decode morse --text '... --- ... / ..---'",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "International Morse text",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "International Morse A-Z/a-z/0-9 only; uppercase decode, canonical symbol/word separators; ASCII-space runs collapse.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: crate::text::MAX_OUTPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::morse_decode",
+                python_api: "morse_decode",
+                references: &["https://www.itu.int/rec/R-REC-M.1677-1-200910-I/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "symbol.braille.encode",
-        category: "symbols",
-        description: "Encode bytes as Unicode Braille dot masks, bit n-1=dot n; no language transcription; <=1 MiB.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "encode braille",
-        example: "printf '\\001' | cube encode braille",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.braille.encode",
+            category: "symbols",
+            description: "Encode bytes as Unicode Braille dot masks, bit n-1=dot n; no language transcription; <=1 MiB.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "encode braille",
+            example: "printf '\\001' | cube encode braille",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Unicode Braille dot masks",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact 8-dot masks <-> U+2800..U+28FF; bit n-1 is dot n. No language transcription or contractions.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_mask_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: (3 * crate::text::MAX_INPUT) as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::braille_encode",
+                python_api: "braille_encode",
+                references: &["https://www.unicode.org/charts/PDF/U2800.pdf"],
+            }),
+        }
     },
-    Descriptor {
-        id: "symbol.braille.decode",
-        category: "symbols",
-        description: "Decode U+2800..U+28FF cells to exact mask bytes; reject other characters; <=1 MiB.",
-        input_type: "text",
-        output_type: "bytes",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "decode braille",
-        example: "cube decode braille --text '⠁⣿' --output hex",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "symbol.braille.decode",
+            category: "symbols",
+            description: "Decode U+2800..U+28FF cells to exact mask bytes; reject other characters; <=1 MiB.",
+            input_type: "text",
+            output_type: "bytes",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "decode braille",
+            example: "cube decode braille --text '⠁⣿' --output hex",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Unicode Braille dot masks",
+                family: "puzzle_representations",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::PuzzleCode,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact 8-dot masks <-> U+2800..U+28FF; bit n-1 is dot n. No language transcription or contractions.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_bytes",
+                        maximum: (crate::text::MAX_INPUT / 3) as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. These are the documented supported subsets, not linguistic decipherment, predictive text or a general secure cipher.",
+                rust_api: "cube_core::symbols::braille_decode",
+                python_api: "braille_decode",
+                references: &["https://www.unicode.org/charts/PDF/U2800.pdf"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

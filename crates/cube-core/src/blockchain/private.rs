@@ -98,50 +98,93 @@ pub fn export(
     })();
     result.map_err(|e: OperationError| e.operation(OP))
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: OP,
-    category: "blockchain",
-    description: "Explicit private export between exact raw32, hex64 and supported WIF. WIF output requires network/compression; conflicting source WIF intent fails. <=128-byte input/output; returned plaintext is caller-owned, Debug redacted/no Serialize. CLI requires --private-output and explicit stdout/new-file destination. No automatic I/O, logging, pipeline/capture adapter or memory-zeroization promise.",
-    input_type: "private.material",
-    output_type: "private.export",
-    deterministic: true,
-    reversible: Some(true),
-    command: "blockchain export",
-    example: "cube blockchain export --format hex --to wif --network mainnet --compressed --private-output --stdout < public-test-scalar.hex",
-    parameters: &[
-        Parameter {
-            name: "format",
-            description: "Exact declared input representation.",
-            required: false,
-            default: Some(ParameterValue::Text("raw")),
-            constraints: ParameterType::Text {
-                choices: &["raw", "hex", "wif"],
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: OP,
+        category: "blockchain",
+        description: "Explicit private export between exact raw32, hex64 and supported WIF. WIF output requires network/compression; conflicting source WIF intent fails. <=128-byte input/output; returned plaintext is caller-owned, Debug redacted/no Serialize. CLI requires --private-output and explicit stdout/new-file destination. No automatic I/O, logging, pipeline/capture adapter or memory-zeroization promise.",
+        input_type: "private.material",
+        output_type: "private.export",
+        deterministic: true,
+        reversible: Some(true),
+        command: "blockchain export",
+        example: "cube blockchain export --format hex --to wif --network mainnet --compressed --private-output --stdout < public-test-scalar.hex",
+        parameters: &[
+            Parameter {
+                name: "format",
+                description: "Exact declared input representation.",
+                required: false,
+                default: Some(ParameterValue::Text("raw")),
+                constraints: ParameterType::Text {
+                    choices: &["raw", "hex", "wif"],
+                },
             },
-        },
-        Parameter {
-            name: "output",
-            description: "Explicit private output: raw32, lowercase hex64 or WIF; no implicit export.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["raw", "hex", "wif"],
+            Parameter {
+                name: "output",
+                description: "Explicit private output: raw32, lowercase hex64 or WIF; no implicit export.",
+                required: true,
+                default: None,
+                constraints: ParameterType::Text {
+                    choices: &["raw", "hex", "wif"],
+                },
             },
-        },
-        Parameter {
-            name: "network",
-            description: "Required for WIF output; optional source-WIF expectation for raw/hex output.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["mainnet", "testnet"],
+            Parameter {
+                name: "network",
+                description: "Required for WIF output; optional source-WIF expectation for raw/hex output.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Text {
+                    choices: &["mainnet", "testnet"],
+                },
             },
-        },
-        Parameter {
-            name: "compressed",
-            description: "Required WIF-output intent; optional source-WIF expectation, never silently overridden.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Boolean,
-        },
-    ],
+            Parameter {
+                name: "compressed",
+                description: "Required WIF-output intent; optional source-WIF expectation, never silently overridden.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Boolean,
+            },
+        ],
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Explicit private material export",
+            family: "private_key_formats",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PrivateMaterial,
+                limitations: "Known private-key input; no logging/capture, hidden I/O, network validation, zeroization or certification promise. Explicitly authorized plaintext private output is caller-owned.",
+                private_input: true,
+                private_output: true,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Exact declared raw32/hex64/WIF representations; no trimming, normalization or network inference.",
+                key: "Nonzero 256-bit big-endian secp256k1 scalar strictly below the curve order; preserve leading zeros.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[crate::operations::metadata::ResourceBound {
+                name: "material_bytes",
+                maximum: crate::blockchain::MAX_MATERIAL_BYTES as u64,
+                unit: "bytes",
+                scope: crate::operations::metadata::Scope::Core,
+            }],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Direct-only secret inputs. Actual private export still requires its existing explicit intent/capability controls; annotation grants no execution permission.",
+            rust_api: "cube_core::blockchain::private::export",
+            python_api: "export_private_key",
+            references: &[
+                "https://www.secg.org/sec2-v2.pdf",
+                "https://github.com/bitcoin/bitcoin/blob/v29.0/src/key_io.cpp",
+            ],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

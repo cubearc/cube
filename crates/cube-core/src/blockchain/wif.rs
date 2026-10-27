@@ -97,23 +97,66 @@ pub(super) fn decode(
 pub fn validate(text: &str, expected_network: Option<Network>) -> Result<WifInfo, OperationError> {
     decode(text, expected_network, None).map(|(_, info)| info)
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: "blockchain.wif.validate",
-    category: "blockchain",
-    description: "Validate <=128 WIF bytes via Base58Check, supported 0x80/0xef version, 32-byte nonzero secp256k1 scalar < n and optional 0x01 compression marker. Return safe version/network-family/compression metadata, never private bytes, WIF or fingerprints. Shared test versions cannot identify a chain; no I/O or pipeline adapter.",
-    input_type: "private.wif",
-    output_type: "key.validation",
-    parameters: &[Parameter {
-        name: "expected_network",
-        description: "Optional encoded network-family expectation; testnet means shared testnet/signet/regtest versions.",
-        required: false,
-        default: None,
-        constraints: ParameterType::Text {
-            choices: &["mainnet", "testnet"],
-        },
-    }],
-    deterministic: true,
-    reversible: None,
-    command: "blockchain wif",
-    example: "cube blockchain wif --expected-network mainnet --json < public-test-key.wif",
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: "blockchain.wif.validate",
+        category: "blockchain",
+        description: "Validate <=128 WIF bytes via Base58Check, supported 0x80/0xef version, 32-byte nonzero secp256k1 scalar < n and optional 0x01 compression marker. Return safe version/network-family/compression metadata, never private bytes, WIF or fingerprints. Shared test versions cannot identify a chain; no I/O or pipeline adapter.",
+        input_type: "private.wif",
+        output_type: "key.validation",
+        parameters: &[Parameter {
+            name: "expected_network",
+            description: "Optional encoded network-family expectation; testnet means shared testnet/signet/regtest versions.",
+            required: false,
+            default: None,
+            constraints: ParameterType::Text {
+                choices: &["mainnet", "testnet"],
+            },
+        }],
+        deterministic: true,
+        reversible: None,
+        command: "blockchain wif",
+        example: "cube blockchain wif --expected-network mainnet --json < public-test-key.wif",
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Wallet Import Format validation",
+            family: "private_key_formats",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PrivateMaterial,
+                limitations: "Known private-key input; no logging/capture, hidden I/O, network validation, zeroization or certification promise. Outputs are public derivation or structural validation facts, not private material.",
+                private_input: true,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Strict Bitcoin Base58Check WIF text only, versions 0x80/0xef; no whitespace or inferred chain identity.",
+                key: "Nonzero 256-bit big-endian secp256k1 scalar strictly below the curve order; preserve leading zeros.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[crate::operations::metadata::ResourceBound {
+                name: "material_bytes",
+                maximum: crate::blockchain::MAX_MATERIAL_BYTES as u64,
+                unit: "bytes",
+                scope: crate::operations::metadata::Scope::Core,
+            }],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Direct-only secret inputs. Actual private export still requires its existing explicit intent/capability controls; annotation grants no execution permission.",
+            rust_api: "cube_core::blockchain::wif::validate",
+            python_api: "validate_wif",
+            references: &[
+                "https://www.secg.org/sec2-v2.pdf",
+                "https://github.com/bitcoin/bitcoin/blob/v29.0/src/key_io.cpp",
+            ],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

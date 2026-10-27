@@ -149,29 +149,127 @@ const PARAMETERS: &[Parameter] = &[
         },
     },
 ];
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "cipher.bacon.encode",
-        category: "ciphers",
-        description: "Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB input.",
-        input_type: "text",
-        output_type: "text",
-        parameters: PARAMETERS,
-        deterministic: true,
-        reversible: Some(false),
-        command: "cipher bacon",
-        example: "cube cipher bacon --variant extended26 --text A",
+const PROFILED: [crate::operations::metadata::Entry; 2] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.bacon.encode",
+            category: "ciphers",
+            description: "Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB input.",
+            input_type: "text",
+            output_type: "text",
+            parameters: PARAMETERS,
+            deterministic: true,
+            reversible: Some(false),
+            command: "cipher bacon",
+            example: "cube cipher bacon --variant extended26 --text A",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Baconian",
+                family: "classical_code",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "Bacon's cipher",
+                    usage: "Five-symbol code groups, not automatic steganographic cover-text generation.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Required classical24 (I/J and U/V merged) or extended26; uppercase canonical output. ASCII-space runs collapse; unsupported scalars fail.",
+                    key: "No cryptographic key. Required alphabet variant and ab/binary/binary_inverted notation.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: 6 * crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::bacon::encode",
+                python_api: "bacon_encode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.bacon.decode",
-        category: "ciphers",
-        description: "Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB input.",
-        input_type: "text",
-        output_type: "text",
-        parameters: PARAMETERS,
-        deterministic: true,
-        reversible: Some(false),
-        command: "cipher bacon",
-        example: "cube cipher bacon --variant extended26 --decode --text AAAAA",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.bacon.decode",
+            category: "ciphers",
+            description: "Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB input.",
+            input_type: "text",
+            output_type: "text",
+            parameters: PARAMETERS,
+            deterministic: true,
+            reversible: Some(false),
+            command: "cipher bacon",
+            example: "cube cipher bacon --variant extended26 --decode --text AAAAA",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Baconian",
+                family: "classical_code",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "Bacon's cipher",
+                    usage: "Five-symbol code groups, not automatic steganographic cover-text generation.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Required classical24 (I/J and U/V merged) or extended26; uppercase canonical output. ASCII-space runs collapse; unsupported scalars fail.",
+                    key: "No cryptographic key. Required alphabet variant and ab/binary/binary_inverted notation.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::bacon::decode",
+                python_api: "bacon_decode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

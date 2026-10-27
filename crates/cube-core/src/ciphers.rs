@@ -78,44 +78,162 @@ const CAESAR_PARAMETERS: &[crate::operations::Parameter] = &[crate::operations::
     },
 }];
 /// Static metadata for operations implemented in this module.
-pub const OPERATIONS: &[crate::operations::Descriptor] = &[
-    crate::operations::Descriptor {
-        id: "cipher.caesar.encode",
-        category: "ciphers",
-        description: "Encode ASCII letters with a signed Caesar shift; preserve other Unicode.",
-        input_type: "text",
-        output_type: "text",
-        parameters: CAESAR_PARAMETERS,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher caesar",
-        example: "cube cipher caesar --shift 3 --text Hello",
+const PROFILED: [crate::operations::metadata::Entry; 3] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "cipher.caesar.encode",
+            category: "ciphers",
+            description: "Encode ASCII letters with a signed Caesar shift; preserve other Unicode.",
+            input_type: "text",
+            output_type: "text",
+            parameters: CAESAR_PARAMETERS,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher caesar",
+            example: "cube cipher caesar --shift 3 --text Hello",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Caesar",
+                family: "classical_substitution",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "ROT1..ROT25",
+                    usage: "Use the corresponding Caesar shift; these are parameter profiles, not extra operation IDs.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z separately; preserve case and every other scalar, NUL and whitespace without normalization.",
+                    key: "Signed i32 shift reduced modulo 26, including i32::MIN.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[crate::operations::metadata::ResourceBound {
+                    name: "input_utf8_bytes",
+                    maximum: crate::text::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Cli,
+                }],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI UTF-8 input is capped at 1 MiB. Direct output preserves UTF-8 byte length; pipeline adapters enforce their own value/work/parameter budgets.",
+                rust_api: "cube_core::ciphers::caesar_encode",
+                python_api: "caesar_encode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "cipher.caesar.decode",
-        category: "ciphers",
-        description: "Decode ASCII letters with a signed Caesar shift; preserve other Unicode.",
-        input_type: "text",
-        output_type: "text",
-        parameters: CAESAR_PARAMETERS,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher caesar",
-        example: "cube cipher caesar --shift 3 --decode --text Hello",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "cipher.caesar.decode",
+            category: "ciphers",
+            description: "Decode ASCII letters with a signed Caesar shift; preserve other Unicode.",
+            input_type: "text",
+            output_type: "text",
+            parameters: CAESAR_PARAMETERS,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher caesar",
+            example: "cube cipher caesar --shift 3 --decode --text Hello",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Caesar",
+                family: "classical_substitution",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "ROT1..ROT25",
+                    usage: "Use the corresponding Caesar shift; these are parameter profiles, not extra operation IDs.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z separately; preserve case and every other scalar, NUL and whitespace without normalization.",
+                    key: "Signed i32 shift reduced modulo 26, including i32::MIN.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[crate::operations::metadata::ResourceBound {
+                    name: "input_utf8_bytes",
+                    maximum: crate::text::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Cli,
+                }],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI UTF-8 input is capped at 1 MiB. Direct output preserves UTF-8 byte length; pipeline adapters enforce their own value/work/parameter budgets.",
+                rust_api: "cube_core::ciphers::caesar_decode",
+                python_api: "caesar_decode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "cipher.rot13",
-        category: "ciphers",
-        description: "Rotate ASCII letters by 13; preserve other Unicode.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher rot13",
-        example: "cube cipher rot13 --text Hello",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "cipher.rot13",
+            category: "ciphers",
+            description: "Rotate ASCII letters by 13; preserve other Unicode.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher rot13",
+            example: "cube cipher rot13 --text Hello",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "ROT13",
+                family: "classical_substitution",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z separately; preserve case and every other scalar, NUL and whitespace without normalization.",
+                    key: "ROT13 is fixed shift 13.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[crate::operations::metadata::ResourceBound {
+                    name: "input_utf8_bytes",
+                    maximum: crate::text::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Cli,
+                }],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI UTF-8 input is capped at 1 MiB. Direct output preserves UTF-8 byte length; pipeline adapters enforce their own value/work/parameter budgets.",
+                rust_api: "cube_core::ciphers::rot13",
+                python_api: "rot13",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
 
 #[cfg(test)]
 mod tests {

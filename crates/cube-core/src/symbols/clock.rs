@@ -129,66 +129,120 @@ pub fn inspect(
     })();
     result.map_err(|e: OperationError| e.operation("symbol.clock.directions"))
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: "symbol.clock.directions",
-    category: "symbols",
-    description: "Map one exact H:MM reading or two signed millidegree angles to eight receiver-facing sectors; continuous hour motion, explicit orientation and +/-1 millidegree boundary ambiguity. Optional letter-only Semaphore composition is a caller convention.",
-    input_type: "clock.reading",
-    output_type: "clock.directions",
-    parameters: &[
-        Parameter {
-            name: "time",
-            description: "H:MM or HH:MM, hour 0..12 (0=12), minute 0..59; mutually exclusive with angles; no seconds.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Text { choices: &[] },
-        },
-        Parameter {
-            name: "hour_millidegrees",
-            description: "Exact signed hour-hand angle; requires minute_millidegrees, conflicts with time.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Integer {
-                min: i64::MIN,
-                max: i64::MAX,
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: "symbol.clock.directions",
+        category: "symbols",
+        description: "Map one exact H:MM reading or two signed millidegree angles to eight receiver-facing sectors; continuous hour motion, explicit orientation and +/-1 millidegree boundary ambiguity. Optional letter-only Semaphore composition is a caller convention.",
+        input_type: "clock.reading",
+        output_type: "clock.directions",
+        parameters: &[
+            Parameter {
+                name: "time",
+                description: "H:MM or HH:MM, hour 0..12 (0=12), minute 0..59; mutually exclusive with angles; no seconds.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Text { choices: &[] },
             },
-        },
-        Parameter {
-            name: "minute_millidegrees",
-            description: "Exact signed minute-hand angle, normalized modulo 360000.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Integer {
-                min: i64::MIN,
-                max: i64::MAX,
+            Parameter {
+                name: "hour_millidegrees",
+                description: "Exact signed hour-hand angle; requires minute_millidegrees, conflicts with time.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Integer {
+                    min: i64::MIN,
+                    max: i64::MAX,
+                },
             },
-        },
-        Parameter {
-            name: "zero_axis",
-            description: "Receiver-facing zero bearing.",
-            required: false,
-            default: Some(ParameterValue::Text("N")),
-            constraints: ParameterType::Text {
-                choices: &["N", "E", "S", "W"],
+            Parameter {
+                name: "minute_millidegrees",
+                description: "Exact signed minute-hand angle, normalized modulo 360000.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Integer {
+                    min: i64::MIN,
+                    max: i64::MAX,
+                },
             },
-        },
-        Parameter {
-            name: "clockwise",
-            description: "Positive angles follow clockwise bearings; false reverses the sense.",
-            required: false,
-            default: Some(ParameterValue::Boolean(true)),
-            constraints: ParameterType::Boolean,
-        },
-        Parameter {
-            name: "decode",
-            description: "Explicit hour=sender LH / minute=sender RH Semaphore composition; ambiguity or unsupported pairs fail.",
-            required: false,
-            default: Some(ParameterValue::Boolean(false)),
-            constraints: ParameterType::Boolean,
-        },
-    ],
-    deterministic: true,
-    reversible: Some(false),
-    command: "number clock",
-    example: "cube number clock --time 3:00 --decode",
+            Parameter {
+                name: "zero_axis",
+                description: "Receiver-facing zero bearing.",
+                required: false,
+                default: Some(ParameterValue::Text("N")),
+                constraints: ParameterType::Text {
+                    choices: &["N", "E", "S", "W"],
+                },
+            },
+            Parameter {
+                name: "clockwise",
+                description: "Positive angles follow clockwise bearings; false reverses the sense.",
+                required: false,
+                default: Some(ParameterValue::Boolean(true)),
+                constraints: ParameterType::Boolean,
+            },
+            Parameter {
+                name: "decode",
+                description: "Explicit hour=sender LH / minute=sender RH Semaphore composition; ambiguity or unsupported pairs fail.",
+                required: false,
+                default: Some(ParameterValue::Boolean(false)),
+                constraints: ParameterType::Boolean,
+            },
+        ],
+        deterministic: true,
+        reversible: Some(false),
+        command: "number clock",
+        example: "cube number clock --time 3:00 --decode",
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Clock directions",
+            family: "puzzle_representations",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PuzzleCode,
+                limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                private_input: false,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "One labeled H:MM or pair of signed-i64 millidegree readings; explicit zero axis and clockwise convention. No visual recognition.",
+                key: "No key.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[
+                crate::operations::metadata::ResourceBound {
+                    name: "time_utf8_bytes",
+                    maximum: 5,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "reading_count",
+                    maximum: 1,
+                    unit: "readings",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "output_bytes",
+                    maximum: 1024,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+            ],
+            resource_notes: "One reading with bounded numeric fields and constant output; query validation retains the existing exact time/angle grammar.",
+            rust_api: "cube_core::symbols::clock::inspect",
+            python_api: "clock_directions",
+            references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

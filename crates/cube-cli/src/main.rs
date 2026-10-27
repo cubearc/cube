@@ -230,6 +230,12 @@ enum Ops {
         /// Emit schema-versioned JSON sorted by stable operation ID
         #[arg(long)]
         json: bool,
+        /// Complete discovery output ceiling, including JSON envelope/whitespace
+        #[arg(long,default_value_t=operations::MAX_DISCOVERY_BYTES)]
+        max_output_bytes: usize,
+        /// Opt in to verified canonical names, aliases, safety and profile facts
+        #[arg(long, requires = "json")]
+        metadata: bool,
     },
     /// Describe an exact stable operation ID
     Describe {
@@ -237,6 +243,12 @@ enum Ops {
         /// Emit a schema-versioned JSON description
         #[arg(long)]
         json: bool,
+        /// Complete discovery output ceiling, including JSON envelope/whitespace
+        #[arg(long,default_value_t=operations::MAX_DISCOVERY_BYTES)]
+        max_output_bytes: usize,
+        /// Opt in to verified canonical names, aliases, safety and profile facts
+        #[arg(long, requires = "json")]
+        metadata: bool,
     },
 }
 
@@ -551,75 +563,41 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Image { command } => imagecmd::run(command, &mut output)?,
         Command::Inspect { path, json } => filecmd::info(path, json, &mut output)?,
         Command::File { command } => filecmd::run(command, &mut output)?,
-        Command::Ops { command } => match command {
-            Ops::List { category, json } => {
-                let mut selected = operations::filtered(category.as_deref())?;
-                if json {
-                    selected.sort_by_key(|d| d.id);
-                    write_text(
-                        &mut output,
-                        &serde_json::to_string_pretty(
-                            &serde_json::json!({"schema_version": 1, "operations": selected.iter().map(|d| d.discovery()).collect::<Vec<_>>()}),
-                        )?,
-                    )?;
-                } else {
-                    let mut seen = std::collections::HashSet::new();
-                    for descriptor in selected {
-                        if seen.insert(descriptor.command) {
-                            write_text(&mut output, descriptor.command)?;
-                        }
-                    }
-                }
-            }
-            Ops::Describe { id, json } => {
-                let descriptor = operations::require(&id)?;
-                if json {
-                    write_text(
-                        &mut output,
-                        &serde_json::to_string_pretty(
-                            &serde_json::json!({"schema_version": 1, "operation": descriptor.discovery()}),
-                        )?,
-                    )?;
-                } else {
-                    write_text(
-                        &mut output,
-                        &format!(
-                            "{} — {}\nCategory: {}\nInput: {}\nOutput: {}\nDeterministic: {}\nReversible: {}\nPipeline: {}\nExample: {}",
-                            descriptor.id,
-                            descriptor.description,
-                            descriptor.category,
-                            descriptor.input_type,
-                            descriptor.output_type,
-                            descriptor.deterministic,
-                            descriptor
-                                .reversible
-                                .map_or("not applicable", |value| if value { "yes" } else { "no" }),
-                            descriptor.discovery().pipeline.map_or_else(
-                                || "unavailable (no bounded adapter)".to_owned(),
-                                |support| format!("adapter version {}", support.version),
-                            ),
-                            descriptor.example
-                        ),
-                    )?;
-                    for parameter in descriptor.parameters {
-                        write_text(
-                            &mut output,
-                            &format!(
-                                "{}: {} (required: {}, constraints: {}, default: {})",
-                                parameter.name,
-                                parameter.description,
-                                parameter.required,
-                                parameter.constraints,
-                                parameter
-                                    .default
-                                    .map(|value| value.to_string())
-                                    .unwrap_or_else(|| "none".into())
-                            ),
-                        )?;
-                    }
-                }
-            }
-        },
+        Command::Ops { command } => {
+            let (request, json, max_output_bytes, metadata) = match command {
+                Ops::List {
+                    ref category,
+                    json,
+                    max_output_bytes,
+                    metadata,
+                } => (
+                    operations::DiscoveryRequest::List {
+                        category: category.as_deref(),
+                    },
+                    json,
+                    max_output_bytes,
+                    metadata,
+                ),
+                Ops::Describe {
+                    ref id,
+                    json,
+                    max_output_bytes,
+                    metadata,
+                } => (
+                    operations::DiscoveryRequest::Describe { id },
+                    json,
+                    max_output_bytes,
+                    metadata,
+                ),
+            };
+            let format = if json {
+                operations::DiscoveryFormat::CliJson { metadata }
+            } else {
+                operations::DiscoveryFormat::Text
+            };
+            let document = operations::discovery_document(request, format, max_output_bytes)?;
+            output.write_all(document.as_bytes())?;
+        }
         Command::Encode { command } => {
             let text = match command {
                 Encode::Base58check {

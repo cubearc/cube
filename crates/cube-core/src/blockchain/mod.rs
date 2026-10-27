@@ -154,26 +154,66 @@ pub fn validate_scalar(input: PrivateInput<'_>) -> Result<ScalarInfo, OperationE
     }
     .map(|key| key.info())
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: "blockchain.scalar.validate",
-    category: "blockchain",
-    description: "Validate exactly 32 big-endian raw bytes or 64 strict hex digits using maintained secp256k1 scalar validation (1 <= d < n). Safe fixed structural metadata only; no private bytes/fingerprints, I/O or pipeline adapter.",
-    input_type: "private.scalar",
-    output_type: "key.validation",
-    parameters: &[Parameter {
-        name: "format",
-        description: "Declared scalar representation; hex preserves all 32 bytes and accepts no prefixes/whitespace.",
-        required: false,
-        default: Some(ParameterValue::Text("raw")),
-        constraints: ParameterType::Text {
-            choices: &["raw", "hex"],
-        },
-    }],
-    deterministic: true,
-    reversible: None,
-    command: "blockchain scalar",
-    example: "cube blockchain scalar --format hex --json < public-test-scalar.hex",
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: "blockchain.scalar.validate",
+        category: "blockchain",
+        description: "Validate exactly 32 big-endian raw bytes or 64 strict hex digits using maintained secp256k1 scalar validation (1 <= d < n). Safe fixed structural metadata only; no private bytes/fingerprints, I/O or pipeline adapter.",
+        input_type: "private.scalar",
+        output_type: "key.validation",
+        parameters: &[Parameter {
+            name: "format",
+            description: "Declared scalar representation; hex preserves all 32 bytes and accepts no prefixes/whitespace.",
+            required: false,
+            default: Some(ParameterValue::Text("raw")),
+            constraints: ParameterType::Text {
+                choices: &["raw", "hex"],
+            },
+        }],
+        deterministic: true,
+        reversible: None,
+        command: "blockchain scalar",
+        example: "cube blockchain scalar --format hex --json < public-test-scalar.hex",
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "secp256k1 scalar validation",
+            family: "private_key_formats",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PrivateMaterial,
+                limitations: "Known private-key input; no logging/capture, hidden I/O, network validation, zeroization or certification promise. Outputs are public derivation or structural validation facts, not private material.",
+                private_input: true,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Exactly 32 raw bytes or 64 ASCII hex digits; WIF rejected. No prefix, trimming or normalization.",
+                key: "Nonzero 256-bit big-endian secp256k1 scalar strictly below the curve order; preserve leading zeros.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[crate::operations::metadata::ResourceBound {
+                name: "accepted_material_bytes",
+                maximum: 64,
+                unit: "bytes",
+                scope: crate::operations::metadata::Scope::Core,
+            }],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Direct-only secret inputs. Actual private export still requires its existing explicit intent/capability controls; annotation grants no execution permission.",
+            rust_api: "cube_core::blockchain::validate_scalar",
+            python_api: "validate_private_scalar",
+            references: &["https://www.secg.org/sec2-v2.pdf"],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
 
 pub(crate) fn parse_private(
     input: PrivateInput<'_>,

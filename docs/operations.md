@@ -6,7 +6,9 @@ then `cube ops describe <identifier>` and the command's `--help` for exact
 parameters. Python exposes the same metadata through `operations()` and
 `describe_operation()`. This guide explains choices and representative workflows;
 it is not a second catalog. See the [CLI](cli.md) or [Python](python.md) guide for
-input/output handling and locally generated image/audio fixtures.
+input/output handling and locally generated image/audio fixtures. Optional
+[profile discovery](discovery.md) adds canonical names, qualified aliases, security
+limitations and interface-specific bounds while preserving default discovery JSON.
 
 ## Encoding and decoding
 

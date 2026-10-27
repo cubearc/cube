@@ -253,29 +253,163 @@ const PARAMETERS: &[Parameter] = &[
         constraints: ParameterType::UnsignedChoices { choices: &[0, 1] },
     },
 ];
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "cipher.polybius.encode",
-        category: "ciphers",
-        description: "Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536 tokens.",
-        input_type: "text",
-        output_type: "polybius.tokens",
-        parameters: PARAMETERS,
-        deterministic: true,
-        reversible: Some(false),
-        command: "cipher polybius",
-        example: "cube cipher polybius --text A",
+const PROFILED: [crate::operations::metadata::Entry; 2] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.polybius.encode",
+            category: "ciphers",
+            description: "Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536 tokens.",
+            input_type: "text",
+            output_type: "polybius.tokens",
+            parameters: PARAMETERS,
+            deterministic: true,
+            reversible: Some(false),
+            command: "cipher polybius",
+            example: "cube cipher polybius --text A",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Polybius square",
+                family: "coordinate_substitution",
+                aliases: &[
+                    crate::operations::metadata::Alias {
+                        name: "Tap Code",
+                        usage: "Use Square::preset(\"tap\") / preset=tap; coordinate tokens, not an audio recognizer.",
+                    },
+                    crate::operations::metadata::Alias {
+                        name: "Polybius Coordinates",
+                        usage: "Use the same explicit row-column token profile.",
+                    },
+                ],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "polybius preset merges J into I; tap preset merges K into C. Both fold ASCII case. Custom squares use exact unique non-space scalars and explicit aliases.",
+                    key: "Explicit side 2..64 and side-squared alphabet, or named preset; row then column, index_base 0/1.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "tokens",
+                        maximum: crate::text::MAX_INDICES as u64,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "definition_bytes",
+                        maximum: 65536,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "aliases",
+                        maximum: 4096,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Token text parsing additionally caps raw UTF-8 at 1 MiB; definitions charge eight bytes per alias. Presets/custom mappings can canonicalize symbols and are not general inverses of aliases.",
+                rust_api: "cube_core::ciphers::polybius::Square::encode",
+                python_api: "polybius_encode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.polybius.decode",
-        category: "ciphers",
-        description: "Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536 tokens.",
-        input_type: "polybius.tokens",
-        output_type: "text",
-        parameters: PARAMETERS,
-        deterministic: true,
-        reversible: Some(false),
-        command: "cipher polybius",
-        example: "cube cipher polybius --decode --text 1,1",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.polybius.decode",
+            category: "ciphers",
+            description: "Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536 tokens.",
+            input_type: "polybius.tokens",
+            output_type: "text",
+            parameters: PARAMETERS,
+            deterministic: true,
+            reversible: Some(false),
+            command: "cipher polybius",
+            example: "cube cipher polybius --decode --text 1,1",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Polybius square",
+                family: "coordinate_substitution",
+                aliases: &[
+                    crate::operations::metadata::Alias {
+                        name: "Tap Code",
+                        usage: "Use Square::preset(\"tap\") / preset=tap; coordinate tokens, not an audio recognizer.",
+                    },
+                    crate::operations::metadata::Alias {
+                        name: "Polybius Coordinates",
+                        usage: "Use the same explicit row-column token profile.",
+                    },
+                ],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "polybius preset merges J into I; tap preset merges K into C. Both fold ASCII case. Custom squares use exact unique non-space scalars and explicit aliases.",
+                    key: "Explicit side 2..64 and side-squared alphabet, or named preset; row then column, index_base 0/1.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "tokens",
+                        maximum: crate::text::MAX_INDICES as u64,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "definition_bytes",
+                        maximum: 65536,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "aliases",
+                        maximum: 4096,
+                        unit: "items",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: 4 * crate::text::MAX_INDICES as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Token text parsing additionally caps raw UTF-8 at 1 MiB; definitions charge eight bytes per alias. Presets/custom mappings can canonicalize symbols and are not general inverses of aliases.",
+                rust_api: "cube_core::ciphers::polybius::Square::decode",
+                python_api: "polybius_decode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

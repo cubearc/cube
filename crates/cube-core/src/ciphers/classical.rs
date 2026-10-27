@@ -165,77 +165,375 @@ const AFFINE: &[Parameter] = &[
     },
 ];
 /// Lightweight metadata beside the reusable functions, without runtime dispatch.
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "cipher.atbash",
-        category: "ciphers",
-        description: "Reverse ASCII alphabets; preserve case and other Unicode, <=1 MiB; not secure encryption.",
-        input_type: "text",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher atbash",
-        example: "cube cipher atbash --text 'ABC xyz'",
+const PROFILED: [crate::operations::metadata::Entry; 6] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.atbash",
+            category: "ciphers",
+            description: "Reverse ASCII alphabets; preserve case and other Unicode, <=1 MiB; not secure encryption.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher atbash",
+            example: "cube cipher atbash --text 'ABC xyz'",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Atbash",
+                family: "classical_substitution",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z; preserve case and all other scalars/whitespace exactly; no normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::classical::atbash",
+                python_api: "atbash",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.vigenere.encode",
-        category: "ciphers",
-        description: "Vigenère C=(P+K) mod 26; ASCII letters only, preserve other Unicode; <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: KEY,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher vigenere",
-        example: "cube cipher vigenere --key LEMON --text ATTACKATDAWN",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.vigenere.encode",
+            category: "ciphers",
+            description: "Vigenère C=(P+K) mod 26; ASCII letters only, preserve other Unicode; <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: KEY,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher vigenere",
+            example: "cube cipher vigenere --key LEMON --text ATTACKATDAWN",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Vigenère",
+                family: "classical_substitution",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "Variant Beaufort",
+                    usage: "For C=P-K use vigenere_decode; its inverse uses vigenere_encode with identical ASCII advancement. This is not standard reciprocal Beaufort.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &["key"],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z; preserve case and all other scalars/whitespace exactly; no normalization.",
+                    key: "Required nonempty ASCII-letter key, 1..65536 bytes; key case is ignored.",
+                    key_advancement: "Advance/repeat the key only on transformed ASCII input letters.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "key_bytes",
+                        maximum: crate::ciphers::classical::MAX_KEY as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::classical::vigenere_encode",
+                python_api: "vigenere_encode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.vigenere.decode",
-        category: "ciphers",
-        description: "Vigenère P=(C-K) mod 26 with the same key advancement; <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: KEY,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher vigenere",
-        example: "cube cipher vigenere --decode --key LEMON --text LXFOPVEFRNHR",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.vigenere.decode",
+            category: "ciphers",
+            description: "Vigenère P=(C-K) mod 26 with the same key advancement; <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: KEY,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher vigenere",
+            example: "cube cipher vigenere --decode --key LEMON --text LXFOPVEFRNHR",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Vigenère",
+                family: "classical_substitution",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "Variant Beaufort",
+                    usage: "For C=P-K use vigenere_decode; its inverse uses vigenere_encode with identical ASCII advancement. This is not standard reciprocal Beaufort.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &["key"],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z; preserve case and all other scalars/whitespace exactly; no normalization.",
+                    key: "Required nonempty ASCII-letter key, 1..65536 bytes; key case is ignored.",
+                    key_advancement: "Advance/repeat the key only on transformed ASCII input letters.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "key_bytes",
+                        maximum: crate::ciphers::classical::MAX_KEY as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::classical::vigenere_decode",
+                python_api: "vigenere_decode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.beaufort",
-        category: "ciphers",
-        description: "Standard reciprocal Beaufort C=(K-P) mod 26, ASCII letters only; <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: KEY,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher beaufort",
-        example: "cube cipher beaufort --key B --text A",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.beaufort",
+            category: "ciphers",
+            description: "Standard reciprocal Beaufort C=(K-P) mod 26, ASCII letters only; <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: KEY,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher beaufort",
+            example: "cube cipher beaufort --key B --text A",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Beaufort",
+                family: "classical_substitution",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &["key"],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z; preserve case and all other scalars/whitespace exactly; no normalization.",
+                    key: "Required nonempty ASCII-letter key, 1..65536 bytes; key case is ignored.",
+                    key_advancement: "Advance/repeat the key only on transformed ASCII input letters.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "key_bytes",
+                        maximum: crate::ciphers::classical::MAX_KEY as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::classical::beaufort",
+                python_api: "beaufort",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.affine.encode",
-        category: "ciphers",
-        description: "Affine C=(aP+b) mod 26; preserve case and other Unicode, <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: AFFINE,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher affine",
-        example: "cube cipher affine --a 5 --b 8 --text AFFINECIPHER",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.affine.encode",
+            category: "ciphers",
+            description: "Affine C=(aP+b) mod 26; preserve case and other Unicode, <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: AFFINE,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher affine",
+            example: "cube cipher affine --a 5 --b 8 --text AFFINECIPHER",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Affine",
+                family: "classical_substitution",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "Multiplicative",
+                    usage: "Use the existing Affine profile with b=0; keep a coprime to 26.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z; preserve case and all other scalars/whitespace exactly; no normalization.",
+                    key: "a in 0..25 coprime to 26; b in 0..25. Inversion uses the modular inverse of a.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::classical::affine_encode",
+                python_api: "affine_encode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
-    Descriptor {
-        id: "cipher.affine.decode",
-        category: "ciphers",
-        description: "Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB.",
-        input_type: "text",
-        output_type: "text",
-        parameters: AFFINE,
-        deterministic: true,
-        reversible: Some(true),
-        command: "cipher affine",
-        example: "cube cipher affine --decode --a 5 --b 8 --text IHHWVCSWFRCP",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "cipher.affine.decode",
+            category: "ciphers",
+            description: "Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB.",
+            input_type: "text",
+            output_type: "text",
+            parameters: AFFINE,
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher affine",
+            example: "cube cipher affine --decode --a 5 --b 8 --text IHHWVCSWFRCP",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Affine",
+                family: "classical_substitution",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "Multiplicative",
+                    usage: "Use the existing Affine profile with b=0; keep a coprime to 26.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::HistoricalCipher,
+                    limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "ASCII A-Z/a-z; preserve case and all other scalars/whitespace exactly; no normalization.",
+                    key: "a in 0..25 coprime to 26; b in 0..25. Inversion uses the modular inverse of a.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_utf8_bytes",
+                        maximum: crate::text::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::ciphers::classical::affine_decode",
+                python_api: "affine_decode",
+                references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

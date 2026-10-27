@@ -33,29 +33,121 @@ pub fn keccak256(data: &[u8]) -> Result<String, OperationError> {
     }
     Ok(crate::encoding::hex_encode(&keccak256_bytes(data)))
 }
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "hash.keccak256",
-        category: "hashing",
-        description: "Ethereum Keccak-256 (not standardized SHA3-256), exact bytes as 64 lowercase hex digits; <=16 MiB. No protocol-specific prefixes or normalization.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash keccak256",
-        example: "cube hash keccak256 --text abc",
+const PROFILED: [crate::operations::metadata::Entry; 2] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "hash.keccak256",
+            category: "hashing",
+            description: "Ethereum Keccak-256 (not standardized SHA3-256), exact bytes as 64 lowercase hex digits; <=16 MiB. No protocol-specific prefixes or normalization.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash keccak256",
+            example: "cube hash keccak256 --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Keccak-256",
+                family: "hash_functions",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::UnkeyedDigest,
+                    limitations: "Unkeyed digest, not encryption, message authentication or password hashing. No implementation certification is claimed.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: Some(1088),
+                    output_bits: Some(256),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 64,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::hashing::protocol::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::hashing::keccak256",
+                python_api: "keccak256",
+                references: &["https://keccak.team/keccak_specs_summary.html"],
+            }),
+        }
     },
-    Descriptor {
-        id: "hash.ripemd160",
-        category: "hashing",
-        description: "RIPEMD-160 exact-byte digest as 40 lowercase hex digits for protocol compatibility; <=16 MiB input, not password hashing/authentication.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash ripemd160",
-        example: "cube hash ripemd160 --text abc",
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "hash.ripemd160",
+            category: "hashing",
+            description: "RIPEMD-160 exact-byte digest as 40 lowercase hex digits for protocol compatibility; <=16 MiB input, not password hashing/authentication.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash ripemd160",
+            example: "cube hash ripemd160 --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "RIPEMD-160",
+                family: "hash_functions",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::UnkeyedDigest,
+                    limitations: "Unkeyed digest, not encryption, message authentication or password hashing. No implementation certification is claimed.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: Some(512),
+                    output_bits: Some(160),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 40,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::hashing::protocol::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. ",
+                rust_api: "cube_core::hashing::ripemd160",
+                python_api: "ripemd160",
+                references: &["https://homes.esat.kuleuven.be/~bosselae/ripemd160.html"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

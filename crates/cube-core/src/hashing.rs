@@ -71,92 +71,397 @@ pub fn crc16_ibm3740(input: &[u8]) -> String {
 }
 
 /// Static metadata for operations implemented in this module.
-pub const OPERATIONS: &[crate::operations::Descriptor] = &[
-    crate::operations::Descriptor {
-        id: "hash.crc32",
-        category: "hashing",
-        description: "CRC-32/ISO-HDLC checksum, not a cryptographic hash.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash crc32",
-        example: "cube hash crc32 --text Hello",
+const PROFILED: [crate::operations::metadata::Entry; 7] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.crc32",
+            category: "hashing",
+            description: "CRC-32/ISO-HDLC checksum, not a cryptographic hash.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash crc32",
+            example: "cube hash crc32 --text Hello",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "CRC-32/ISO-HDLC",
+                family: "checksums",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "CRC32",
+                    usage: "This exact IEEE/ISO-HDLC profile only; do not substitute CRC32C.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Checksum,
+                    limitations: "Corruption checksum, not cryptographic hashing, authentication or encryption.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: Some(32),
+                },
+                resources: &[crate::operations::metadata::ResourceBound {
+                    name: "output_hex_characters",
+                    maximum: 8,
+                    unit: "ASCII characters",
+                    scope: crate::operations::metadata::Scope::Core,
+                }],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is also caller-sized. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::crc32",
+                python_api: "crc32",
+                references: &["https://docs.rs/crc/3.4.0/crc/"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "hash.sha256",
-        category: "hashing",
-        description: "SHA-256 digest of exact bytes, not password hashing.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash sha256",
-        example: "cube hash sha256 --text Hello",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.sha256",
+            category: "hashing",
+            description: "SHA-256 digest of exact bytes, not password hashing.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash sha256",
+            example: "cube hash sha256 --text Hello",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "SHA-256",
+                family: "hash_functions",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::UnkeyedDigest,
+                    limitations: "Unkeyed digest, not encryption, message authentication or password hashing. No implementation certification is claimed.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: Some(512),
+                    output_bits: Some(256),
+                },
+                resources: &[crate::operations::metadata::ResourceBound {
+                    name: "output_hex_characters",
+                    maximum: 64,
+                    unit: "ASCII characters",
+                    scope: crate::operations::metadata::Scope::Core,
+                }],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is also caller-sized. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::sha256",
+                python_api: "sha256",
+                references: &["https://csrc.nist.gov/projects/hash-functions"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "hash.sha512",
-        category: "hashing",
-        description: "SHA-512 exact-byte digest (128 lowercase hex digits), not password hashing.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash sha512",
-        example: "cube hash sha512 --text abc",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.sha512",
+            category: "hashing",
+            description: "SHA-512 exact-byte digest (128 lowercase hex digits), not password hashing.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash sha512",
+            example: "cube hash sha512 --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "SHA-512",
+                family: "hash_functions",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::UnkeyedDigest,
+                    limitations: "Unkeyed digest, not encryption, message authentication or password hashing. No implementation certification is claimed.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: Some(1024),
+                    output_bits: Some(512),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 128,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::binary::transform::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Cli,
+                    },
+                ],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is capped at 16 MiB. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::sha512",
+                python_api: "sha512",
+                references: &["https://csrc.nist.gov/projects/hash-functions"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "hash.sha1",
-        category: "hashing",
-        description: "Legacy SHA-1 (40 lowercase hex digits); unsuitable for collision-resistant security.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash sha1",
-        example: "cube hash sha1 --text abc",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.sha1",
+            category: "hashing",
+            description: "Legacy SHA-1 (40 lowercase hex digits); unsuitable for collision-resistant security.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash sha1",
+            example: "cube hash sha1 --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "SHA-1",
+                family: "hash_functions",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::LegacyDigest,
+                    limitations: "Unsuitable for collision-resistant security; historical identification/interoperability only. Not authentication, encryption or password hashing.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: Some(512),
+                    output_bits: Some(160),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 40,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::binary::transform::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Cli,
+                    },
+                ],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is capped at 16 MiB. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::sha1",
+                python_api: "sha1",
+                references: &["https://csrc.nist.gov/projects/hash-functions"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "hash.md5",
-        category: "hashing",
-        description: "Legacy MD5 (32 lowercase hex digits); unsuitable for collision-resistant security.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash md5",
-        example: "cube hash md5 --text abc",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.md5",
+            category: "hashing",
+            description: "Legacy MD5 (32 lowercase hex digits); unsuitable for collision-resistant security.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash md5",
+            example: "cube hash md5 --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "MD5",
+                family: "hash_functions",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::LegacyDigest,
+                    limitations: "Unsuitable for collision-resistant security; historical identification/interoperability only. Not authentication, encryption or password hashing.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: Some(512),
+                    output_bits: Some(128),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 32,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::binary::transform::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Cli,
+                    },
+                ],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is capped at 16 MiB. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::md5",
+                python_api: "md5",
+                references: &["https://www.rfc-editor.org/rfc/rfc6151.html"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "hash.crc32c",
-        category: "hashing",
-        description: "CRC-32/ISCSI (CRC32C) checksum, poly 0x1EDC6F41, init/xor 0xFFFFFFFF, reflected; not cryptographic.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash crc32c",
-        example: "cube hash crc32c --text abc",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.crc32c",
+            category: "hashing",
+            description: "CRC-32/ISCSI (CRC32C) checksum, poly 0x1EDC6F41, init/xor 0xFFFFFFFF, reflected; not cryptographic.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash crc32c",
+            example: "cube hash crc32c --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "CRC-32/ISCSI",
+                family: "checksums",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "CRC32C",
+                    usage: "The ISCSI Castagnoli profile, not IEEE CRC32.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Checksum,
+                    limitations: "Corruption checksum, not cryptographic hashing, authentication or encryption.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: Some(32),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 8,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::binary::transform::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Cli,
+                    },
+                ],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is capped at 16 MiB. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::crc32c",
+                python_api: "crc32c",
+                references: &["https://docs.rs/crc/3.4.0/crc/"],
+            }),
+        }
     },
-    crate::operations::Descriptor {
-        id: "hash.crc16_ibm3740",
-        category: "hashing",
-        description: "CRC-16/IBM-3740 checksum, poly 0x1021, init 0xFFFF, xor 0, unreflected; not cryptographic.",
-        input_type: "bytes",
-        output_type: "text",
-        parameters: &[],
-        deterministic: true,
-        reversible: Some(false),
-        command: "hash crc16-ibm3740",
-        example: "cube hash crc16-ibm3740 --text abc",
+    {
+        const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+            id: "hash.crc16_ibm3740",
+            category: "hashing",
+            description: "CRC-16/IBM-3740 checksum, poly 0x1021, init 0xFFFF, xor 0, unreflected; not cryptographic.",
+            input_type: "bytes",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(false),
+            command: "hash crc16-ibm3740",
+            example: "cube hash crc16-ibm3740 --text abc",
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "CRC-16/IBM-3740",
+                family: "checksums",
+                aliases: &[crate::operations::metadata::Alias {
+                    name: "CRC-16/CCITT-FALSE",
+                    usage: "Alias of IBM-3740 with the existing exact parameters.",
+                }],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Checksum,
+                    limitations: "Corruption checksum, not cryptographic hashing, authentication or encryption.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Exact bytes; no Unicode normalization.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: Some(16),
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "output_hex_characters",
+                        maximum: 4,
+                        unit: "ASCII characters",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "input_bytes",
+                        maximum: crate::binary::transform::MAX_INPUT as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Cli,
+                    },
+                ],
+                resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI input is capped at 16 MiB. Digest/checksum output has a fixed lowercase-hex length; pipeline bounds remain separate.",
+                rust_api: "cube_core::hashing::crc16_ibm3740",
+                python_api: "crc16_ibm3740",
+                references: &["https://docs.rs/crc/3.4.0/crc/"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
 
 #[cfg(test)]
 mod tests {

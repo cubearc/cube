@@ -94,35 +94,139 @@ pub fn decode(text: &str) -> Result<Decoded, OperationError> {
     })
 }
 
-pub const OPERATIONS: &[Descriptor] = &[
-    Descriptor {
-        id: "encoding.base58check.encode",
-        category: "encoding",
-        description: "Single-byte version plus <=1024 payload bytes, raw double-SHA256 four-byte checksum and Bitcoin Base58. Empty payload allowed; <=1421 encoded bytes, bounded quadratic conversion. Corruption check, not authentication.",
-        input_type: "bytes",
-        output_type: "text",
-        deterministic: true,
-        reversible: Some(true),
-        command: "encode base58check",
-        example: "cube encode base58check --version-byte 0 --text abc",
-        parameters: &[Parameter {
-            name: "version",
-            description: "Exact single-byte data prefix, separate from any pipeline adapter-contract version.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Unsigned { min: 0, max: 255 },
-        }],
+const PROFILED: [crate::operations::metadata::Entry; 2] = [
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "encoding.base58check.encode",
+            category: "encoding",
+            description: "Single-byte version plus <=1024 payload bytes, raw double-SHA256 four-byte checksum and Bitcoin Base58. Empty payload allowed; <=1421 encoded bytes, bounded quadratic conversion. Corruption check, not authentication.",
+            input_type: "bytes",
+            output_type: "text",
+            deterministic: true,
+            reversible: Some(true),
+            command: "encode base58check",
+            example: "cube encode base58check --version-byte 0 --text abc",
+            parameters: &[Parameter {
+                name: "version",
+                description: "Exact single-byte data prefix, separate from any pipeline adapter-contract version.",
+                required: true,
+                default: None,
+                constraints: ParameterType::Unsigned { min: 0, max: 255 },
+            }],
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Base58Check",
+                family: "base_encodings",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Encoding,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Bitcoin Base58 plus one version byte and first four bytes of double SHA-256; checksum verified.",
+                    key: "Required single-byte version for Base58Check encoding.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "payload_bytes",
+                        maximum: crate::encoding::base58check::MAX_PAYLOAD as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "encoded_bytes",
+                        maximum: crate::encoding::base58check::MAX_ENCODED as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "frame_bytes",
+                        maximum: crate::encoding::base58check::MAX_FRAME as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Decode is structured and direct-only; checksum detects corruption, not authenticity. Network/wallet interpretation is outside this codec.",
+                rust_api: "cube_core::encoding::base58check::encode",
+                python_api: "base58check_encode",
+                references: &["https://docs.rs/bs58/0.5.1/bs58/alphabet/struct.Alphabet.html"],
+            }),
+        }
     },
-    Descriptor {
-        id: "encoding.base58check.decode",
-        category: "encoding",
-        description: "Verify bounded Bitcoin Base58Check text and return exact version/payload. <=1421 encoded/working bytes, 5..1029 accepted frame bytes, <=1024 payload bytes; no trimming, network inference or authentication claim. Structured direct result, no pipeline adapter.",
-        input_type: "text",
-        output_type: "encoding.base58check.decoded",
-        deterministic: true,
-        reversible: Some(true),
-        command: "decode base58check",
-        example: "cube decode base58check --text 1FsSia9rv4NeEwvJ2GvXrX7LyxYspbN2mo --json",
-        parameters: &[],
+    {
+        const DECLARATION: crate::operations::Descriptor = Descriptor {
+            id: "encoding.base58check.decode",
+            category: "encoding",
+            description: "Verify bounded Bitcoin Base58Check text and return exact version/payload. <=1421 encoded/working bytes, 5..1029 accepted frame bytes, <=1024 payload bytes; no trimming, network inference or authentication claim. Structured direct result, no pipeline adapter.",
+            input_type: "text",
+            output_type: "encoding.base58check.decoded",
+            deterministic: true,
+            reversible: Some(true),
+            command: "decode base58check",
+            example: "cube decode base58check --text 1FsSia9rv4NeEwvJ2GvXrX7LyxYspbN2mo --json",
+            parameters: &[],
+        };
+        crate::operations::metadata::Entry {
+            descriptor: DECLARATION,
+            metadata: Some(crate::operations::metadata::Metadata {
+                schema_version: 1,
+                canonical_name: "Base58Check",
+                family: "base_encodings",
+                aliases: &[],
+                security: crate::operations::metadata::Security {
+                    classification: crate::operations::metadata::Classification::Encoding,
+                    limitations: "Representation only; encoding and corruption checks do not provide secrecy or authenticity.",
+                    private_input: false,
+                    private_output: false,
+                    sensitive_parameters: &[],
+                },
+                profile: crate::operations::metadata::Profile {
+                    variant: DECLARATION.description,
+                    alphabet: "Bitcoin Base58 plus one version byte and first four bytes of double SHA-256; checksum verified.",
+                    key: "No key.",
+                    key_advancement: "Not applicable.",
+                    block_bits: None,
+                    output_bits: None,
+                },
+                resources: &[
+                    crate::operations::metadata::ResourceBound {
+                        name: "payload_bytes",
+                        maximum: crate::encoding::base58check::MAX_PAYLOAD as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "encoded_bytes",
+                        maximum: crate::encoding::base58check::MAX_ENCODED as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                    crate::operations::metadata::ResourceBound {
+                        name: "frame_bytes",
+                        maximum: crate::encoding::base58check::MAX_FRAME as u64,
+                        unit: "bytes",
+                        scope: crate::operations::metadata::Scope::Core,
+                    },
+                ],
+                resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Decode is structured and direct-only; checksum detects corruption, not authenticity. Network/wallet interpretation is outside this codec.",
+                rust_api: "cube_core::encoding::base58check::decode",
+                python_api: "base58check_decode",
+                references: &["https://docs.rs/bs58/0.5.1/bs58/alphabet/struct.Alphabet.html"],
+            }),
+        }
     },
 ];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

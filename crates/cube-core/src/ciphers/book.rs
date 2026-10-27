@@ -151,39 +151,105 @@ pub fn decode(
     }
     Ok(output)
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: OP,
-    category: "ciphers",
-    description: "Decode caller-supplied book coordinates to exact Unicode scalars; source/coordinates <=1 MiB, <=65536 coordinates/indexed units; no source retrieval.",
-    input_type: "text",
-    output_type: "text",
-    parameters: &[
-        Parameter {
-            name: "source",
-            description: "Exact caller-supplied UTF-8 source, <=1 MiB; no normalization. Preserve edition/line endings and record a source hash for reproducibility.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Text { choices: &[] },
-        },
-        Parameter {
-            name: "scheme",
-            description: "Comma-separated pairs/triples of decimal indexes; Unicode scalars, shared word/line tokenization.",
-            required: false,
-            default: Some(ParameterValue::Text("word_character")),
-            constraints: ParameterType::Text {
-                choices: &["word_character", "line_character", "line_word_character"],
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: OP,
+        category: "ciphers",
+        description: "Decode caller-supplied book coordinates to exact Unicode scalars; source/coordinates <=1 MiB, <=65536 coordinates/indexed units; no source retrieval.",
+        input_type: "text",
+        output_type: "text",
+        parameters: &[
+            Parameter {
+                name: "source",
+                description: "Exact caller-supplied UTF-8 source, <=1 MiB; no normalization. Preserve edition/line endings and record a source hash for reproducibility.",
+                required: true,
+                default: None,
+                constraints: ParameterType::Text { choices: &[] },
             },
-        },
-        Parameter {
-            name: "index_base",
-            description: "Indexing base for every coordinate component.",
-            required: false,
-            default: Some(ParameterValue::Integer(1)),
-            constraints: ParameterType::Integer { min: 0, max: 1 },
-        },
-    ],
-    deterministic: true,
-    reversible: Some(false),
-    command: "cipher book",
-    example: "cube cipher book --source source.txt --text '1:1,2:1'",
+            Parameter {
+                name: "scheme",
+                description: "Comma-separated pairs/triples of decimal indexes; Unicode scalars, shared word/line tokenization.",
+                required: false,
+                default: Some(ParameterValue::Text("word_character")),
+                constraints: ParameterType::Text {
+                    choices: &["word_character", "line_character", "line_word_character"],
+                },
+            },
+            Parameter {
+                name: "index_base",
+                description: "Indexing base for every coordinate component.",
+                required: false,
+                default: Some(ParameterValue::Integer(1)),
+                constraints: ParameterType::Integer { min: 0, max: 1 },
+            },
+        ],
+        deterministic: true,
+        reversible: Some(false),
+        command: "cipher book",
+        example: "cube cipher book --source source.txt --text '1:1,2:1'",
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Book coordinate extraction",
+            family: "book_code",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::HistoricalCipher,
+                limitations: "Not secure encryption; use only for historical interoperability, education and challenges. No authentication or certification claim.",
+                private_input: false,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Exact Unicode scalars. Unicode-whitespace word units or LF/CRLF line units retain documented punctuation/blank-line semantics; no normalization.",
+                key: "Caller-supplied source; word_character, line_character or line_word_character coordinates with index_base 0/1.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[
+                crate::operations::metadata::ResourceBound {
+                    name: "source_utf8_bytes",
+                    maximum: crate::text::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "coordinate_utf8_bytes",
+                    maximum: crate::text::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "coordinates",
+                    maximum: crate::ciphers::book::MAX_COORDINATES as u64,
+                    unit: "items",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "indexed_units",
+                    maximum: crate::ciphers::book::MAX_UNITS as u64,
+                    unit: "items",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "output_utf8_bytes",
+                    maximum: 4 * crate::ciphers::book::MAX_COORDINATES as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+            ],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Decode/extraction only; no running-key arithmetic, source acquisition or inferred book edition.",
+            rust_api: "cube_core::ciphers::book::decode",
+            python_api: "book_decode",
+            references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

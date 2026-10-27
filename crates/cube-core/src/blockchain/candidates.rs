@@ -347,50 +347,122 @@ impl Iterator for CandidateBatch {
     }
 }
 impl ExactSizeIterator for CandidateBatch {}
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: OP,
-    category: "blockchain",
-    description: "Ordered caller-supplied WIF/hex64 candidates; <=256 entries, <=128 bytes each, <=32 KiB material, <=1 Mi work units, <=1 MiB bounded result, <=64 KiB strict JSON with depth16/nodes4096. Safe fixed validation facts/errors only, no inputs/fingerprints. Optional explicit Bitcoin/Ethereum public derivation <=32 entries; source intent remains enforced. Incremental results/progress mark incomplete consumption. No generation, I/O, pipeline/capture adapter or zeroization promise.",
-    input_type: "private.candidates",
-    output_type: "key.validation_batch",
-    deterministic: true,
-    reversible: None,
-    command: "blockchain candidates",
-    example: "cube blockchain candidates --json < public-test-candidates.json",
-    parameters: &[
-        Parameter {
-            name: "derive",
-            description: "Explicit public-address output; none by default.",
-            required: false,
-            default: Some(ParameterValue::Text("none")),
-            constraints: ParameterType::Text {
-                choices: &["none", "bitcoin", "ethereum"],
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: OP,
+        category: "blockchain",
+        description: "Ordered caller-supplied WIF/hex64 candidates; <=256 entries, <=128 bytes each, <=32 KiB material, <=1 Mi work units, <=1 MiB bounded result, <=64 KiB strict JSON with depth16/nodes4096. Safe fixed validation facts/errors only, no inputs/fingerprints. Optional explicit Bitcoin/Ethereum public derivation <=32 entries; source intent remains enforced. Incremental results/progress mark incomplete consumption. No generation, I/O, pipeline/capture adapter or zeroization promise.",
+        input_type: "private.candidates",
+        output_type: "key.validation_batch",
+        deterministic: true,
+        reversible: None,
+        command: "blockchain candidates",
+        example: "cube blockchain candidates --json < public-test-candidates.json",
+        parameters: &[
+            Parameter {
+                name: "derive",
+                description: "Explicit public-address output; none by default.",
+                required: false,
+                default: Some(ParameterValue::Text("none")),
+                constraints: ParameterType::Text {
+                    choices: &["none", "bitcoin", "ethereum"],
+                },
             },
-        },
-        Parameter {
-            name: "network",
-            description: "Required only for Bitcoin derivation; WIF intent must match.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["mainnet", "testnet"],
+            Parameter {
+                name: "network",
+                description: "Required only for Bitcoin derivation; WIF intent must match.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Text {
+                    choices: &["mainnet", "testnet"],
+                },
             },
-        },
-        Parameter {
-            name: "compressed",
-            description: "Required only for Bitcoin derivation; WIF intent must match.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Boolean,
-        },
-        Parameter {
-            name: "checksum",
-            description: "Only for Ethereum derivation; defaults to eip55.",
-            required: false,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["lowercase", "eip55"],
+            Parameter {
+                name: "compressed",
+                description: "Required only for Bitcoin derivation; WIF intent must match.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Boolean,
             },
-        },
-    ],
+            Parameter {
+                name: "checksum",
+                description: "Only for Ethereum derivation; defaults to eip55.",
+                required: false,
+                default: None,
+                constraints: ParameterType::Text {
+                    choices: &["lowercase", "eip55"],
+                },
+            },
+        ],
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Caller-supplied private candidate validation",
+            family: "private_key_formats",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PrivateMaterial,
+                limitations: "Known private-key input; no logging/capture, hidden I/O, network validation, zeroization or certification promise. Outputs are public derivation or structural validation facts, not private material.",
+                private_input: true,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Caller-supplied exact WIF or hex64 candidates; no raw format, generation, trimming or normalization.",
+                key: "Nonzero 256-bit big-endian secp256k1 scalar strictly below the curve order; preserve leading zeros.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[
+                crate::operations::metadata::ResourceBound {
+                    name: "entries",
+                    maximum: crate::blockchain::candidates::MAX_ENTRIES as u64,
+                    unit: "items",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "entry_bytes",
+                    maximum: crate::blockchain::candidates::MAX_ENTRY_BYTES as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "aggregate_material_bytes",
+                    maximum: crate::blockchain::candidates::MAX_INPUT_BYTES as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "document_bytes",
+                    maximum: crate::blockchain::candidates::MAX_DOCUMENT_BYTES as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "work",
+                    maximum: crate::blockchain::candidates::MAX_WORK as u64,
+                    unit: "charged units",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "output_bytes",
+                    maximum: crate::blockchain::candidates::MAX_OUTPUT_BYTES as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Core,
+                },
+            ],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Direct-only secret inputs. Actual private export still requires its existing explicit intent/capability controls; annotation grants no execution permission.",
+            rust_api: "cube_core::blockchain::candidates::Batch::new",
+            python_api: "validate_key_candidates",
+            references: &["https://www.secg.org/sec2-v2.pdf"],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);

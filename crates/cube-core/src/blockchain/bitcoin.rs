@@ -59,44 +59,87 @@ pub fn derive(
     })();
     result.map_err(|e: OperationError| e.operation("blockchain.bitcoin.derive"))
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: "blockchain.bitcoin.derive",
-    category: "blockchain",
-    description: "Derive SEC1 public keys and legacy P2PKH using validated secp256k1, RIPEMD160(SHA256(pubkey bytes)) and Base58Check (0x00/0x6f). Explicit network/compression, exact raw32/hex64/WIF, <=128 transport bytes. Reject conflicting WIF intent; public output only, no network/capture adapter.",
-    input_type: "private.material",
-    output_type: "bitcoin.public_address",
-    deterministic: true,
-    reversible: Some(false),
-    command: "blockchain bitcoin",
-    example: "cube blockchain bitcoin --format hex --network mainnet --compressed --json < public-test-scalar.hex",
-    parameters: &[
-        Parameter {
-            name: "format",
-            description: "Exact supplied representation; no inference or normalization.",
-            required: false,
-            default: Some(crate::operations::ParameterValue::Text("raw")),
-            constraints: ParameterType::Text {
-                choices: &["raw", "hex", "wif"],
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: "blockchain.bitcoin.derive",
+        category: "blockchain",
+        description: "Derive SEC1 public keys and legacy P2PKH using validated secp256k1, RIPEMD160(SHA256(pubkey bytes)) and Base58Check (0x00/0x6f). Explicit network/compression, exact raw32/hex64/WIF, <=128 transport bytes. Reject conflicting WIF intent; public output only, no network/capture adapter.",
+        input_type: "private.material",
+        output_type: "bitcoin.public_address",
+        deterministic: true,
+        reversible: Some(false),
+        command: "blockchain bitcoin",
+        example: "cube blockchain bitcoin --format hex --network mainnet --compressed --json < public-test-scalar.hex",
+        parameters: &[
+            Parameter {
+                name: "format",
+                description: "Exact supplied representation; no inference or normalization.",
+                required: false,
+                default: Some(crate::operations::ParameterValue::Text("raw")),
+                constraints: ParameterType::Text {
+                    choices: &["raw", "hex", "wif"],
+                },
             },
-        },
-        Parameter {
-            name: "network",
-            description: "Explicit P2PKH network version; testnet selects the shared test-family version.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Text {
-                choices: &["mainnet", "testnet"],
+            Parameter {
+                name: "network",
+                description: "Explicit P2PKH network version; testnet selects the shared test-family version.",
+                required: true,
+                default: None,
+                constraints: ParameterType::Text {
+                    choices: &["mainnet", "testnet"],
+                },
             },
-        },
-        Parameter {
-            name: "compressed",
-            description: "Explicit public-key SEC1 encoding, matching WIF intent when supplied.",
-            required: true,
-            default: None,
-            constraints: ParameterType::Boolean,
-        },
-    ],
+            Parameter {
+                name: "compressed",
+                description: "Explicit public-key SEC1 encoding, matching WIF intent when supplied.",
+                required: true,
+                default: None,
+                constraints: ParameterType::Boolean,
+            },
+        ],
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Bitcoin P2PKH public derivation",
+            family: "public_address_derivation",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PublicDerivation,
+                limitations: "Known private-key input; no logging/capture, hidden I/O, network validation, zeroization or certification promise. Outputs are public derivation or structural validation facts, not private material.",
+                private_input: true,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Exact declared raw32/hex64/WIF representations; no trimming, normalization or network inference.",
+                key: "Nonzero 256-bit big-endian secp256k1 scalar strictly below the curve order; preserve leading zeros.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[crate::operations::metadata::ResourceBound {
+                name: "material_bytes",
+                maximum: crate::blockchain::MAX_MATERIAL_BYTES as u64,
+                unit: "bytes",
+                scope: crate::operations::metadata::Scope::Core,
+            }],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Direct-only secret inputs. Actual private export still requires its existing explicit intent/capability controls; annotation grants no execution permission.",
+            rust_api: "cube_core::blockchain::bitcoin::derive",
+            python_api: "derive_bitcoin_address",
+            references: &[
+                "https://www.secg.org/sec2-v2.pdf",
+                "https://github.com/bitcoin/bitcoin/blob/v29.0/src/key_io.cpp",
+            ],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -36,18 +36,72 @@ const XOR_PARAMETERS: &[crate::operations::Parameter] = &[crate::operations::Par
     constraints: crate::operations::ParameterType::Bytes { min_length: 1 },
 }];
 /// Static metadata for operations implemented in this module.
-pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::Descriptor {
-    id: "binary.xor",
-    category: "binary",
-    description: "XOR exact bytes with a nonempty repeating key; not secure encryption.",
-    input_type: "bytes",
-    output_type: "bytes",
-    parameters: XOR_PARAMETERS,
-    deterministic: true,
-    reversible: Some(true),
-    command: "binary xor",
-    example: "cube binary xor --key-hex ff --text Hello",
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = crate::operations::Descriptor {
+        id: "binary.xor",
+        category: "binary",
+        description: "XOR exact bytes with a nonempty repeating key; not secure encryption.",
+        input_type: "bytes",
+        output_type: "bytes",
+        parameters: XOR_PARAMETERS,
+        deterministic: true,
+        reversible: Some(true),
+        command: "binary xor",
+        example: "cube binary xor --key-hex ff --text Hello",
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Repeating-key XOR",
+            family: "binary_transforms",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::BinaryTransform,
+                limitations: "A reversible/bitwise transformation does not by itself provide secure encryption or authentication.",
+                private_input: false,
+                private_output: false,
+                sensitive_parameters: &["key"],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Exact byte sequence, including NUL/non-UTF8; no text interpretation.",
+                key: "Required nonempty repeated byte key.",
+                key_advancement: "Advance one key byte per data byte, repeating modulo nonempty key length.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[
+                crate::operations::metadata::ResourceBound {
+                    name: "input_bytes",
+                    maximum: crate::binary::transform::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Cli,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "key_bytes",
+                    maximum: crate::binary::transform::MAX_INPUT as u64,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Cli,
+                },
+                crate::operations::metadata::ResourceBound {
+                    name: "pipeline_operand_parameter_bytes",
+                    maximum: 65536,
+                    unit: "bytes",
+                    scope: crate::operations::metadata::Scope::Pipeline,
+                },
+            ],
+            resource_notes: "No enforced direct Rust/native-Python input or allocation/work budget; caller-sized processing. CLI operands are capped at 16 MiB. The key must be nonempty and repeats over the input; this is not exact-length XOR.",
+            rust_api: "cube_core::binary::xor",
+            python_api: "xor",
+            references: &["https://doc.rust-lang.org/std/primitive.u64.html"],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
 
 #[cfg(test)]
 mod tests {

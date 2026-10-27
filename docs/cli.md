@@ -72,6 +72,11 @@ the adapter contract required by a step, independent of the package version.
 Unknown categories or identifiers are errors. `pipeline adapters` lists the same
 executable subset; parameter, type and resource validation still applies.
 
+Use `--json --metadata` for optional canonical names, qualified aliases, security
+limitations and exact profile/resource facts. Existing JSON is unchanged by
+default. Discovery output is capped at 1 MiB; `--max-output-bytes` can lower it.
+See [profile discovery](discovery.md) for compatibility, bounds and examples.
+
 ## Transform by scalar position
 
 ```sh

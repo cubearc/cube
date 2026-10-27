@@ -102,37 +102,80 @@ pub fn derive(
     })();
     result.map_err(|e: OperationError| e.operation("blockchain.ethereum.derive"))
 }
-pub const OPERATIONS: &[Descriptor] = &[Descriptor {
-    id: "blockchain.ethereum.derive",
-    category: "blockchain",
-    description: "Offline validated secp256k1 raw32/hex64 scalar -> 64 uncompressed x||y bytes (no 04 prefix) -> Ethereum Keccak-256 (not SHA3) -> final20 bytes. Exact lowercase or ERC-55/EIP-55 text; <=128 transport bytes. Public output only; no network, persistence or pipeline/capture adapter.",
-    input_type: "private.scalar",
-    output_type: "ethereum.public_address",
-    deterministic: true,
-    reversible: Some(false),
-    command: "blockchain ethereum",
-    example: "cube blockchain ethereum --format hex --checksum eip55 --json < public-test-scalar.hex",
-    parameters: &[
-        Parameter {
-            name: "format",
-            description: "Exact declared scalar representation.",
-            required: false,
-            default: Some(ParameterValue::Text("raw")),
-            constraints: ParameterType::Text {
-                choices: &["raw", "hex"],
+const PROFILED: [crate::operations::metadata::Entry; 1] = [{
+    const DECLARATION: crate::operations::Descriptor = Descriptor {
+        id: "blockchain.ethereum.derive",
+        category: "blockchain",
+        description: "Offline validated secp256k1 raw32/hex64 scalar -> 64 uncompressed x||y bytes (no 04 prefix) -> Ethereum Keccak-256 (not SHA3) -> final20 bytes. Exact lowercase or ERC-55/EIP-55 text; <=128 transport bytes. Public output only; no network, persistence or pipeline/capture adapter.",
+        input_type: "private.scalar",
+        output_type: "ethereum.public_address",
+        deterministic: true,
+        reversible: Some(false),
+        command: "blockchain ethereum",
+        example: "cube blockchain ethereum --format hex --checksum eip55 --json < public-test-scalar.hex",
+        parameters: &[
+            Parameter {
+                name: "format",
+                description: "Exact declared scalar representation.",
+                required: false,
+                default: Some(ParameterValue::Text("raw")),
+                constraints: ParameterType::Text {
+                    choices: &["raw", "hex"],
+                },
             },
-        },
-        Parameter {
-            name: "checksum",
-            description: "Lowercase hex or ERC-55/EIP-55 ASCII-hex checksum; no chain-specific checksum.",
-            required: false,
-            default: Some(ParameterValue::Text("eip55")),
-            constraints: ParameterType::Text {
-                choices: &["lowercase", "eip55"],
+            Parameter {
+                name: "checksum",
+                description: "Lowercase hex or ERC-55/EIP-55 ASCII-hex checksum; no chain-specific checksum.",
+                required: false,
+                default: Some(ParameterValue::Text("eip55")),
+                constraints: ParameterType::Text {
+                    choices: &["lowercase", "eip55"],
+                },
             },
-        },
-    ],
+        ],
+    };
+    crate::operations::metadata::Entry {
+        descriptor: DECLARATION,
+        metadata: Some(crate::operations::metadata::Metadata {
+            schema_version: 1,
+            canonical_name: "Ethereum public address derivation",
+            family: "public_address_derivation",
+            aliases: &[],
+            security: crate::operations::metadata::Security {
+                classification: crate::operations::metadata::Classification::PublicDerivation,
+                limitations: "Known private-key input; no logging/capture, hidden I/O, network validation, zeroization or certification promise. Outputs are public derivation or structural validation facts, not private material.",
+                private_input: true,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: crate::operations::metadata::Profile {
+                variant: DECLARATION.description,
+                alphabet: "Exactly 32 raw bytes or 64 ASCII hex digits; WIF rejected. No prefix, trimming, normalization or chain inference.",
+                key: "Nonzero 256-bit big-endian secp256k1 scalar strictly below the curve order; preserve leading zeros.",
+                key_advancement: "Not applicable.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[crate::operations::metadata::ResourceBound {
+                name: "material_bytes",
+                maximum: crate::blockchain::MAX_MATERIAL_BYTES as u64,
+                unit: "bytes",
+                scope: crate::operations::metadata::Scope::Core,
+            }],
+            resource_notes: "Bounds apply to direct Core calls and their CLI/native-Python wrappers. Output bounds may be mathematical upper bounds rather than independent budget options. Direct-only secret inputs. Actual private export still requires its existing explicit intent/capability controls; annotation grants no execution permission.",
+            rust_api: "cube_core::blockchain::ethereum::derive",
+            python_api: "derive_ethereum_address",
+            references: &[
+                "https://www.secg.org/sec2-v2.pdf",
+                "https://eips.ethereum.org/EIPS/eip-55",
+            ],
+        }),
+    }
 }];
+pub const OPERATIONS: &[crate::operations::Descriptor] =
+    &crate::operations::metadata::descriptors(&PROFILED);
+pub(crate) const MODULE: crate::operations::Module =
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
 #[cfg(test)]
 mod tests {
     use super::*;

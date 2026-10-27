@@ -212,6 +212,14 @@ descriptor layout and ordinary catalog APIs remain unchanged. There is no second
 adapter registry. Tests audit unique/known typed adapter references, catalog CLI
 routes, and native Python exports/stubs, including class methods.
 
+Optional [profile facts](discovery.md) are authored with descriptors in the owning
+modules and projected into their original public slices.
+`Descriptor::profiled_discovery()` adds these facts only when requested; legacy
+`Descriptor`/`Discovery` construction and serialization stay intact. The CLI and
+native Python share Core's bounded discovery writer. No algorithm, adapter or
+permission is enabled by an annotation. Full execution schemas and named ports
+are separate from these descriptive facts.
+
 ## Interface and error boundaries
 
 The CLI reads exact bytes unless an operation explicitly needs UTF-8. It controls

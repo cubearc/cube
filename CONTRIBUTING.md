@@ -76,6 +76,14 @@ Descriptors describe direct functions; they do not execute them. For example, an
 ASCII-only case operation would declare text input/output, document preservation
 of other Unicode, and keep its descriptor beside the function.
 
+In modules with optional [profile facts](docs/discovery.md), author the descriptor
+and its annotation together in the module's `PROFILED` rows; project the original
+public `OPERATIONS` slice from those rows. Register the module once with the
+existing catalog. Keep variant text sourced from the descriptor and bounds from
+the actual implementation constants. Do not add a second operation-ID map or
+infer execution support from annotations. Preserve default discovery JSON and
+verify both legacy and opted-in views within the shared discovery output budget.
+
 Add known-answer and edge-case unit tests, public API tests when needed, then
 expose the operation through the relevant CLI and Python APIs. Update command
 discovery, Python exports and type stubs, interface tests, and affected user

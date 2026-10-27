@@ -43,12 +43,77 @@ def text_grid(
     traversal: str = "row",
     colors: dict[str, list[int]] | None = None,
 ) -> dict[str, Any]: ...
-def operations(category: str | None = None) -> list[dict[str, Any]]:
-    """Sorted descriptors; pipeline is {\"version\": int} or None without an adapter."""
+
+class ProfileAlias(TypedDict):
+    name: str
+    usage: str
+
+class ProfileSecurity(TypedDict):
+    classification: Literal[
+        "historical_cipher",
+        "encoding",
+        "unkeyed_digest",
+        "legacy_digest",
+        "checksum",
+        "binary_transform",
+        "private_material",
+        "public_derivation",
+        "puzzle_code",
+    ]
+    limitations: str
+    private_input: bool
+    private_output: bool
+    sensitive_parameters: list[str]
+
+class ProfileVariant(TypedDict):
+    variant: str
+    alphabet: str
+    key: str
+    key_advancement: str
+    block_bits: int | None
+    output_bits: int | None
+
+class ProfileResourceBound(TypedDict):
+    name: str
+    maximum: int
+    unit: str
+    scope: Literal["core", "cli", "python", "pipeline"]
+
+class DiscoveryMetadata(TypedDict):
+    """Optional descriptive facts; not invocation/result schemas or permissions."""
+
+    schema_version: Literal[1]
+    canonical_name: str
+    family: str
+    aliases: list[ProfileAlias]
+    security: ProfileSecurity
+    profile: ProfileVariant
+    resources: list[ProfileResourceBound]
+    resource_notes: str
+    rust_api: str
+    python_api: str
+    references: list[str]
+
+def operations(
+    category: str | None = None,
+    *,
+    include_metadata: bool = False,
+    max_output_bytes: int | None = None,
+) -> list[dict[str, Any]]:
+    """Sorted descriptors; opt in to metadata: DiscoveryMetadata where annotated.
+
+    Legacy fields remain unchanged. pipeline is {"version": int} or None.
+    Encoded output <=1 MiB including newline; max_output_bytes only lowers it.
+    """
     ...
 
-def describe_operation(id: str) -> dict[str, Any]:
-    """One descriptor with pipeline availability; unknown IDs raise ValueError."""
+def describe_operation(
+    id: str, *, include_metadata: bool = False, max_output_bytes: int | None = None
+) -> dict[str, Any]:
+    """Exact ID with optional metadata: DiscoveryMetadata; aliases are not IDs.
+
+    Unknown IDs raise ValueError. Output budget semantics match operations().
+    """
     ...
 
 def base32_encode(data: bytes) -> str: ...

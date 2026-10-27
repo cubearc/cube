@@ -899,3 +899,162 @@ def brainfuck_compare(
     limits: BrainfuckLimits | None = None,
     aggregate: BrainfuckLimits | None = None,
 ) -> BrainfuckComparison: ...
+
+class CountLimits(TypedDict, total=False):
+    max_work: int
+    max_report_bytes: int
+
+class PascalLimits(TypedDict, total=False):
+    max_work: int
+    max_output_bytes: int
+
+class MultisetProfile(TypedDict, total=False):
+    normalization: Literal["none", "NFC", "NFD", "NFKC", "NFKD"]
+    case: Literal["preserve", "ascii_lower"]
+    filter: Literal["all", "ascii_letters"]
+
+class DiscreteLimits(TypedDict, total=False):
+    max_work: int
+    max_memory_bytes: int
+    max_report_bytes: int
+
+class ScalarCount(TypedDict):
+    scalar: str
+    count: int
+
+class MultisetReport(TypedDict):
+    profile: MultisetProfile
+    normalization_unicode_version: list[int]
+    equal: bool
+    contains: bool
+    source: list[ScalarCount]
+    requested: list[ScalarCount]
+    residual: list[ScalarCount]
+    deficits: list[ScalarCount]
+    work: int
+    memory_bytes_upper_bound: int
+    report_bytes_upper_bound: int
+
+class BooleanLimits(DiscreteLimits, total=False):
+    max_rows: int
+
+class BooleanModelRequired(TypedDict):
+    variables: list[str]
+    formula: dict[str, Any]
+
+class BooleanModel(BooleanModelRequired, total=False):
+    other: dict[str, Any] | None
+
+class BooleanBinding(TypedDict):
+    name: str
+    value: bool
+
+class DiscreteReportBounds(TypedDict):
+    work: int
+    memory_bytes_upper_bound: int
+    report_bytes_upper_bound: int
+
+class BooleanEvaluation(DiscreteReportBounds):
+    value: bool
+    other_value: bool | None
+
+class BooleanTruthRow(TypedDict):
+    assignment: list[BooleanBinding]
+    value: bool
+    other_value: bool | None
+
+class BooleanRelationship(TypedDict):
+    implies: bool
+    equivalent: bool
+    implication_counterexample: list[BooleanBinding] | None
+    equivalence_counterexample: list[BooleanBinding] | None
+
+class BooleanAnalysis(DiscreteReportBounds):
+    variables: list[str]
+    assignments: int
+    true_count: int
+    false_count: int
+    satisfiable: bool
+    tautology: bool
+    first_satisfying: list[BooleanBinding] | None
+    first_falsifying: list[BooleanBinding] | None
+    relationship: BooleanRelationship | None
+    rows: list[BooleanTruthRow]
+    listing_complete: bool
+
+# JSON input uses the literal key "from", which is a Python keyword; dict literals
+# express it directly. Functional TypedDict preserves the actual transport key.
+GraphEdge = TypedDict("GraphEdge", {"id": str, "from": str, "to": str})
+
+class GraphDefinition(TypedDict):
+    vertices: list[str]
+    directed: bool
+    edges: list[GraphEdge]
+
+class GraphPath(TypedDict):
+    vertices: list[str]
+    edges: list[str]
+
+class GraphComponents(DiscreteReportBounds):
+    result: list[list[str]]
+
+class GraphPathReport(DiscreteReportBounds):
+    result: GraphPath | None
+
+class EulerResult(TypedDict):
+    exists: bool
+    circuit: bool
+    path: GraphPath | None
+    reason: str | None
+
+class GraphEulerReport(DiscreteReportBounds):
+    result: EulerResult
+
+def permutations(n: int, k: int, *, limits: CountLimits | None = None) -> int: ...
+def binomial(n: int, k: int, *, limits: CountLimits | None = None) -> int: ...
+def multinomial(groups: list[int], *, limits: CountLimits | None = None) -> int: ...
+def pascal_triangle(
+    rows: int, *, limits: PascalLimits | None = None
+) -> list[list[int]]: ...
+def multiset_compare(
+    source: str,
+    requested: str,
+    *,
+    profile: MultisetProfile | None = None,
+    limits: DiscreteLimits | None = None,
+) -> MultisetReport: ...
+def multiset_subtract(
+    source: str,
+    requested: str,
+    *,
+    profile: MultisetProfile | None = None,
+    limits: DiscreteLimits | None = None,
+) -> MultisetReport: ...
+def boolean_evaluate(
+    model: BooleanModel | str,
+    assignment: list[BooleanBinding] | str,
+    *,
+    limits: BooleanLimits | None = None,
+) -> BooleanEvaluation: ...
+def boolean_analyze(
+    model: BooleanModel | str, *, limits: BooleanLimits | None = None
+) -> BooleanAnalysis: ...
+def graph_components(
+    graph: GraphDefinition | str, *, limits: DiscreteLimits | None = None
+) -> GraphComponents: ...
+def graph_shortest_path(
+    graph: GraphDefinition | str,
+    source: str,
+    target: str,
+    *,
+    limits: DiscreteLimits | None = None,
+) -> GraphPathReport: ...
+def graph_cycle(
+    graph: GraphDefinition | str, *, limits: DiscreteLimits | None = None
+) -> GraphPathReport: ...
+def graph_euler_trail(
+    graph: GraphDefinition | str,
+    *,
+    start: str | None = None,
+    limits: DiscreteLimits | None = None,
+) -> GraphEulerReport: ...

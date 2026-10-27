@@ -9,13 +9,17 @@ mod alphabetcmd;
 mod audiocmd;
 mod binarycmd;
 mod blockchaincmd;
+mod combinatoricscmd;
 mod constantcmd;
 mod digitalcmd;
 mod esolangcmd;
 mod filecmd;
+mod graphcmd;
 mod imagecmd;
 mod input;
 mod investigatecmd;
+mod logiccmd;
+mod multisetcmd;
 use input::Input;
 mod modularcmd;
 mod pipelinecmd;
@@ -46,6 +50,16 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Exact bounded caller-supplied multigraph queries
+    Graph {
+        #[command(subcommand)]
+        command: graphcmd::Command,
+    },
+    /// Explicit bounded propositional formulas and truth tables
+    Logic {
+        #[command(subcommand)]
+        command: logiccmd::Command,
+    },
     /// Execute bounded languages without host capabilities
     Esolang {
         #[command(subcommand)]
@@ -148,6 +162,14 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Exact ordered k-selections, n<=128, u128 result
+    Permutations(combinatoricscmd::Pair),
+    /// Exact C(n,k), cancellation avoids factorial overflow
+    Binomial(combinatoricscmd::Pair),
+    /// Exact count from explicit group sizes, total<=128
+    Multinomial(combinatoricscmd::Groups),
+    /// Bounded Pascal triangle, exact decimal JSON strings
+    Pascal(combinatoricscmd::Pascal),
     /// Decimal digital root of a signed 128-bit magnitude
     DigitalRoot(digitalcmd::Args),
     /// Exact u64 GCD, including gcd(0,0)=0
@@ -414,6 +436,20 @@ fn write_bytes(
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Graph { command } => graphcmd::run(command, &mut output)?,
+        Command::Logic { command } => logiccmd::run(command, &mut output)?,
+        Command::Number {
+            command: Number::Permutations(args),
+        } => combinatoricscmd::pair(args, true, &mut output)?,
+        Command::Number {
+            command: Number::Binomial(args),
+        } => combinatoricscmd::pair(args, false, &mut output)?,
+        Command::Number {
+            command: Number::Multinomial(args),
+        } => combinatoricscmd::groups(args, &mut output)?,
+        Command::Number {
+            command: Number::Pascal(args),
+        } => combinatoricscmd::pascal(args, &mut output)?,
         Command::Play(args) => playcmd::run(&args, cli.json_errors)?,
         Command::Number {
             command: Number::Gcd(args),

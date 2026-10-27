@@ -122,6 +122,68 @@ pub struct Statistics {
     pub index_of_coincidence: Option<f64>,
     pub shannon_entropy_bits: Option<f64>,
 }
+// Shared preparation/counter for complete inventories and statistics. The
+// optional visit ceiling bounds filtering work without changing legacy behavior.
+pub(crate) fn prepare(
+    input: &str,
+    normalization: Normalization,
+    case: CaseMode,
+    filter: TextFilter,
+    max_visits: usize,
+    op: &'static str,
+) -> Result<(Vec<char>, usize), OperationError> {
+    text::check_input(input, op)?;
+    let normalized = match normalization {
+        Normalization::None => Cow::Borrowed(input),
+        mode => Cow::Owned(text::normalize(input, mode.name()).map_err(|e| e.operation(op))?),
+    };
+    let mut scalars = Vec::new();
+    let mut visits = 0;
+    for c in normalized.chars() {
+        if visits == max_visits {
+            return Err(OperationError::new(
+                ErrorCode::ResourceLimit,
+                "text preparation visit budget exhausted",
+            )
+            .operation(op)
+            .parameter("max_work"));
+        }
+        visits += 1;
+        let c = match case {
+            CaseMode::Preserve => c,
+            CaseMode::AsciiLower => c.to_ascii_lowercase(),
+        };
+        if matches!(filter, TextFilter::AsciiLetters) && !c.is_ascii_alphabetic() {
+            continue;
+        }
+        if scalars.len() == MAX_SCALARS {
+            return Err(OperationError::new(
+                ErrorCode::ResourceLimit,
+                "normalized/filtered text exceeds 1 Mi scalars",
+            )
+            .operation(op));
+        }
+        scalars.push(c);
+    }
+    Ok((scalars, visits))
+}
+pub(crate) fn scalar_counts(
+    scalars: &[char],
+    op: &'static str,
+) -> Result<BTreeMap<char, u64>, OperationError> {
+    let mut counts = BTreeMap::new();
+    for c in scalars {
+        if counts.len() == MAX_DISTINCT && !counts.contains_key(c) {
+            return Err(OperationError::new(
+                ErrorCode::ResourceLimit,
+                "character frequencies exceed 10000 distinct scalars",
+            )
+            .operation(op));
+        }
+        *counts.entry(*c).or_default() += 1;
+    }
+    Ok(counts)
+}
 /// Normalize only when requested, then apply ASCII case and filtering choices.
 /// N-grams overlap and use Unicode scalars; counts sort descending, ties by text.
 /// IC and entropy use single-scalar frequencies regardless of n. IC is undefined
@@ -135,36 +197,18 @@ pub fn analyze(input: &str, options: Options) -> Result<Statistics, OperationErr
     if !(1..=MAX_DISTINCT).contains(&options.max_results) {
         return Err(invalid("max_results", "max_results must be in 1..=10000"));
     }
-    let normalized = match options.normalization {
-        Normalization::None => Cow::Borrowed(input),
-        mode => Cow::Owned(
-            text::normalize(input, mode.name()).map_err(|e| e.operation("text.statistics"))?,
-        ),
-    };
-    let mut scalars = Vec::new();
-    for c in normalized.chars() {
-        let c = match options.case {
-            CaseMode::Preserve => c,
-            CaseMode::AsciiLower => c.to_ascii_lowercase(),
-        };
-        if matches!(options.filter, TextFilter::AsciiLetters) && !c.is_ascii_alphabetic() {
-            continue;
-        }
-        if scalars.len() == MAX_SCALARS {
-            return Err(limit("normalized/filtered text exceeds 1 Mi scalars"));
-        }
-        scalars.push(c);
-    }
+    let (scalars, _) = prepare(
+        input,
+        options.normalization,
+        options.case,
+        options.filter,
+        usize::MAX,
+        "text.statistics",
+    )?;
     if scalars.len() * options.ngram_size > MAX_WORK {
         return Err(limit("statistics exceed 8 Mi scalar-window work units"));
     }
-    let mut counts = BTreeMap::<char, u64>::new();
-    for c in &scalars {
-        if counts.len() == MAX_DISTINCT && !counts.contains_key(c) {
-            return Err(limit("character frequencies exceed 10000 distinct scalars"));
-        }
-        *counts.entry(*c).or_default() += 1;
-    }
+    let counts = scalar_counts(&scalars, "text.statistics")?;
     let n = scalars.len() as u64;
     let index_of_coincidence = if n < 2 {
         None

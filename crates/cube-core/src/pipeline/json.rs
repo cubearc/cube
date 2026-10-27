@@ -10,12 +10,14 @@ pub const MAX_NODES: usize = 4096;
 struct Seed<'a> {
     depth: u8,
     nodes: &'a mut usize,
+    max_depth: u8,
+    max_nodes: usize,
 }
 impl<'de> DeserializeSeed<'de> for Seed<'_> {
     type Value = Value;
     fn deserialize<D: de::Deserializer<'de>>(self, d: D) -> Result<Value, D::Error> {
         *self.nodes += 1;
-        if self.depth > MAX_DEPTH || *self.nodes > MAX_NODES {
+        if self.depth > self.max_depth || *self.nodes > self.max_nodes {
             return Err(de::Error::custom("JSON budget exceeded"));
         }
         d.deserialize_any(self)
@@ -57,6 +59,8 @@ impl<'de> Visitor<'de> for Seed<'_> {
         while let Some(value) = seq.next_element_seed(Seed {
             depth: self.depth + 1,
             nodes: self.nodes,
+            max_depth: self.max_depth,
+            max_nodes: self.max_nodes,
         })? {
             values.push(value);
         }
@@ -71,6 +75,8 @@ impl<'de> Visitor<'de> for Seed<'_> {
             let value = map.next_value_seed(Seed {
                 depth: self.depth + 1,
                 nodes: self.nodes,
+                max_depth: self.max_depth,
+                max_nodes: self.max_nodes,
             })?;
             values.insert(key, value);
         }
@@ -78,15 +84,29 @@ impl<'de> Visitor<'de> for Seed<'_> {
     }
 }
 pub fn parse(document: &str) -> Result<Value, Error> {
-    if document.len() > MAX_DOCUMENT_BYTES {
+    parse_with_limits(document, MAX_DOCUMENT_BYTES, MAX_DEPTH, MAX_NODES)
+}
+// Explicit operation-specific callers may tighten or extend transport ceilings;
+// pipeline defaults and duplicate-key/error semantics remain unchanged.
+pub(crate) fn parse_with_limits(
+    document: &str,
+    max_bytes: usize,
+    max_depth: u8,
+    max_nodes: usize,
+) -> Result<Value, Error> {
+    if document.len() > max_bytes {
         return Err(Error::new(
             ErrorCode::ResourceLimit,
-            "JSON document exceeds 256 KiB",
+            if max_bytes == MAX_DOCUMENT_BYTES {
+                "JSON document exceeds 256 KiB"
+            } else {
+                "JSON document exceeds operation byte budget"
+            },
         ));
     }
     let mut deserializer = serde_json::Deserializer::from_str(document);
     let mut nodes = 0;
-    let value=Seed{depth:0,nodes:&mut nodes}.deserialize(&mut deserializer).map_err(|e|{
+    let value=Seed{depth:0,nodes:&mut nodes,max_depth,max_nodes}.deserialize(&mut deserializer).map_err(|e|{
         let code=if e.to_string().starts_with("JSON budget exceeded"){ErrorCode::ResourceLimit}else{ErrorCode::InvalidInput};
         Error::from_operation(OperationError::new(code,format!("invalid JSON at line {}, column {} (duplicate keys, invalid syntax and excessive nesting/nodes are rejected)",e.line(),e.column())).caused_by(e)).parameter("document")
     })?;
@@ -135,4 +155,16 @@ pub fn limits(document: &str) -> Result<super::Limits, Error> {
     let limits: super::Limits = schema(parse(document)?, "limits")?;
     limits.validate()?;
     Ok(limits)
+}
+
+/// Conservative UTF-8 JSON string size without allocating/serializing it.
+pub(crate) fn string_bytes(value: &str) -> usize {
+    2 + value
+        .chars()
+        .map(|c| match c {
+            '\"' | '\\' => 2,
+            c if c.is_control() && (c as u32) < 32 => 6,
+            c => c.len_utf8(),
+        })
+        .sum::<usize>()
 }

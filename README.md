@@ -25,6 +25,8 @@ is explicit.
 - Arrange Unicode scalars in exact grids and iterate bounded string combinations.
 - Traverse scalar/word positions, inspect Unicode differences and extract exact
   numeric text evidence; convert caller-defined positional digit alphabets.
+- Compare exact scalar inventories and evaluate bounded Boolean models; analyze
+  explicit graph paths/cycles/edge-once trails and exact combinatorial counts.
 - Compute exact bounded GCD/Bezout coefficients, modular inverses/powers and
   decimal digital roots through shared Rust, CLI and native Python APIs.
 - Inspect file signatures, EXIF, hex, strings and binary differences; validate
@@ -120,6 +122,7 @@ assert cube.caesar_encode("Attack at dawn!", 3) == "Dwwdfn dw gdzq!"
 - [CLI Guide](docs/cli.md): input, output, errors and practical workflows.
 - [Python Guide](docs/python.md): installation, data types and library examples.
 - [Operations Guide](docs/operations.md): choose a capability and understand its limits.
+- [Discrete Foundations](docs/discrete-foundations.md): inventories, logic, graphs and counts.
 - [Brainfuck](docs/brainfuck.md): strict execution, diagnostics and resource limits.
 - [Architecture](docs/architecture.md): core ownership, interfaces and extension contracts.
 - [Contributing](CONTRIBUTING.md): development setup, checks and contribution workflow.

@@ -4,6 +4,7 @@ pub mod combinations;
 pub mod grid;
 pub mod keyboard;
 pub(crate) mod mapping;
+pub mod multiset;
 pub mod positions;
 pub mod selection;
 pub mod statistics;

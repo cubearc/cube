@@ -13,6 +13,7 @@ Use the groups for the task at hand:
 - `inspect`, `file`, `image`, `audio`: inspect files or export selected data.
 - `pipeline`, `recipe`: compose operations into repeatable linear workflows.
 - `esolang`: run bounded Brainfuck and inspect execution/width comparisons.
+- `logic`, `graph`: analyze explicit Boolean formulas and finite multigraphs.
 - `investigate`: suggest inspections, record evidence and replay local analysis.
 - `ops`: discover operations and their descriptions.
 
@@ -1053,3 +1054,22 @@ cube number digital-root --text +000999 --radix 10 --json
 
 These return 2 and `{"value":9}`. Floats, prefixes and over-128-bit magnitudes
 error instead of being interpreted or rounded.
+
+
+## Lexical and discrete investigations
+
+```sh
+cube text multiset subtract --text ab --requested aab
+cube number binomial --n 128 --k 64 --json
+cube number multinomial --groups 2,1,1 --json
+cube number pascal --rows 4
+cube logic boolean analyze --text '{"variables":[],"formula":{"op":"const","value":true}}'
+cube graph euler-trail --text '{"vertices":["a"],"directed":false,"edges":[]}'
+```
+
+Multiset/logic/graph/Pascal commands print structured JSON. Scalar count commands
+print a decimal integer, or a decimal string in JSON with `--json`. Graph/Boolean
+model input accepts positional JSON, `--text`, `--file` or stdin through the normal
+bounded source convention. Inventories have a separate required `--requested` or
+`--requested-file`; Boolean evaluation requires `--assignment` as a JSON list of
+named Boolean records. See [schemas, semantics and budgets](discrete-foundations.md).

@@ -1526,3 +1526,13 @@ returns an explicitly completed/incomplete execution with optional final tape an
 bounded traces. `esolang.brainfuck.compare` runs a selected subset of 8/16/32-bit
 cells with aggregate budgets. These direct Rust/CLI/native Python operations have
 no pipeline adapters, host effects or arbitrary-width/nonwrapping mode.
+
+
+## Lexical and discrete analysis
+
+[Discrete Foundations](discrete-foundations.md) documents complete scalar multiset
+comparison/subtraction, bounded tagged propositional formulas, explicit finite
+graph queries and exact combinatorial counts/Pascal rows. These return typed
+structured evidence and leave pipeline availability null. Count results are u128
+in Rust/exact Python ints and decimal strings in CLI JSON. Work/memory/report
+exhaustion is an error, never mathematical impossibility.

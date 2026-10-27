@@ -1041,3 +1041,28 @@ budgets. Options default to 8-bit wrapping cells and EOF errors; explicit `eof`
 values `zero`/`unchanged` are available. Report `diagnostics` selects an exact final
 tape range and optional finite trace-record/byte/report limits. Comparison requires an explicit `options["widths"]` selection and runs it
 in ascending order. See [Brainfuck semantics and limits](brainfuck.md).
+
+
+## Lexical and discrete foundations
+
+```python
+assert cube.multiset_compare("listen", "silent")["equal"]
+assert cube.multiset_subtract("ab", "aab")["deficits"] == [{"scalar": "a", "count": 1}]
+assert cube.binomial(128, 64) == 23951146041928082866135587776380551750
+assert cube.permutations(5, 2) == 20
+assert cube.multinomial([2, 1, 1]) == 12
+assert cube.pascal_triangle(3) == [[1], [1, 1], [1, 2, 1]]
+r = cube.boolean_analyze({"variables": [], "formula": {"op": "const", "value": True}})
+assert r["tautology"] and r["assignments"] == 1
+assert cube.graph_euler_trail({"vertices": [], "directed": False, "edges": []})["result"]["exists"]
+```
+
+Count APIs reject bool/float/negative/coercing integers and preserve an exact u128
+ceiling. Inventories accept explicit `profile` and `limits` dictionaries. Boolean
+and graph calls accept builtin structured data or bounded raw JSON strings;
+string inputs preserve duplicate-key checks. Complete assignments are lists of
+`{"name": ..., "value": bool}` records. Limits never grow implicitly, listed truth
+rows carry a completeness flag, and exhausted work raises `ValueError` with typed
+context. All new operations are direct APIs with no pipeline adapter. The shipped
+stubs and [Discrete Foundations](discrete-foundations.md) define schemas, defaults,
+Unicode preparation, graph orientation/edge identities and exact budget behavior.

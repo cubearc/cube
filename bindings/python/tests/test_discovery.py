@@ -10,6 +10,18 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "number.permutations": "permutations",
+    "number.binomial": "binomial",
+    "number.multinomial": "multinomial",
+    "number.pascal": "pascal_triangle",
+    "text.multiset.compare": "multiset_compare",
+    "text.multiset.subtract": "multiset_subtract",
+    "logic.boolean.evaluate": "boolean_evaluate",
+    "logic.boolean.analyze": "boolean_analyze",
+    "graph.components": "graph_components",
+    "graph.shortest_path": "graph_shortest_path",
+    "graph.cycle": "graph_cycle",
+    "graph.euler_trail": "graph_euler_trail",
     **{
         f"binary.{name}": name
         for name in (

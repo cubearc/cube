@@ -79,6 +79,17 @@ transformations stay in their owning modules. Responsibilities include:
   traces and isolated width comparisons share the dispatch/error contract.
   Conservative memory/compact-JSON bounds include retained evidence; there is no
   interpreter pipeline adapter or generic VM. CLI/native Python only adapt it.
+- `text::statistics` owns shared scalar preparation/counting used by complete
+  multiset inventories; ranked statistics and their existing outputs are preserved.
+- `numbers::combinatorics` uses checked u128 cancellation/recurrences; no factorial
+  intermediate, arbitrary-precision runtime or arrangement generator is added.
+- `logic::boolean` validates a closed tagged formula model before complete bounded
+  truth scans. Reports keep full mathematical claims separate from listed rows.
+- `graph` owns the indexed directed/undirected multigraph, shared BFS, cycle
+  witnesses and Hierholzer construction. IDs, loops, parallel edges and limits
+  remain explicit. Typed JSON visitors cap graph arrays before retention; Boolean
+  transport reuses the existing unique-key JSON parser with private per-call bounds.
+  Structured discrete results have no pipeline adapters.
 - `numbers::constants`: explicit prefix/selection budgets surround maintained
   `num-bigint` integer arithmetic. Fixed-point series/root intervals certify exact
   truncation, with independent known-answer tests. Runtime generation supports an

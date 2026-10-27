@@ -102,6 +102,11 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Complete canonical scalar inventories and exact subtraction (JSON)
+    Multiset {
+        #[command(subcommand)]
+        command: crate::multisetcmd::Command,
+    },
     /// Versioned case/category observations with exact counts and bounded listings
     UnicodeInspect(crate::unicodecmd::Listing),
     /// Original and explicitly normalized scalar-index differences (JSON)
@@ -209,6 +214,7 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Multiset { command } => return crate::multisetcmd::run(command, output),
         TextCommand::UnicodeInspect(args) => return crate::unicodecmd::inspect(args, output),
         TextCommand::UnicodeCompare(args) => return crate::unicodecmd::compare(args, output),
         TextCommand::WordLengths(input) => return crate::valuescmd::lengths(input, output),

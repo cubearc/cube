@@ -1011,3 +1011,33 @@ assert cube.xor_exact(bytes.fromhex("00ff"), bytes.fromhex("ff0f")) == bytes.fro
 The existing `cube.xor` continues to repeat a nonempty key. New byte adapters use
 version 1 with the existing engine/recipe versions, nonnegative i64 counts and
 64 KiB operand-parameter limits.
+
+## Bounded Brainfuck
+
+```python
+assert cube.brainfuck_execute("++++++++[>++++++++<-]>+.") == b"A"
+assert cube.brainfuck_execute(",.", b"\x00") == b"\x00"
+r = cube.brainfuck_report(
+    "-.", options={"cell_bits": 32},
+    diagnostics={"tape_len": 1, "max_trace_records": 2, "max_trace_bytes": 1000},
+)
+assert r["completed"] and r["output"] == b"\xff"
+assert r["tape"] == [{"index": 0, "value": 4294967295}]
+c = cube.brainfuck_compare("-.", options={"widths": [8, 16, 32]})
+assert c["all_completed"] and c["equal_completed_outputs"] is True
+```
+
+`brainfuck_execute` returns `bytes` only on completion; typed failures raise
+`ValueError` with `code`, `operation`, `parameter` and `offset`. Report/comparison
+calls return dictionaries with explicitly incomplete runs instead of raising for
+runtime stops; syntax, invalid options and preflight failures still raise. Report
+`output` is always `bytes`, even on incomplete runs. The typed stubs describe all
+configuration dictionaries. Unknown fields, booleans, floats, negative or oversized
+integers are rejected rather than coerced.
+
+`limits` accepts lower `max_instructions`, `max_output_bytes` and
+`max_memory_bytes`; comparisons accept the same fields in `aggregate` for shared
+budgets. Options default to 8-bit wrapping cells and EOF errors; explicit `eof`
+values `zero`/`unchanged` are available. Report `diagnostics` selects an exact final
+tape range and optional finite trace-record/byte/report limits. Comparison requires an explicit `options["widths"]` selection and runs it
+in ascending order. See [Brainfuck semantics and limits](brainfuck.md).

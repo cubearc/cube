@@ -1338,8 +1338,10 @@ no silent truncation occurs. Mapping is lossy and has no inverse.
 
 Research decisions for configurable Abjad/alphabet operations and Ook!/Brainfuck
 notation are recorded in [#120](https://github.com/cubearc/cube/issues/120) and
-[#121](https://github.com/cubearc/cube/issues/121). They add no callable operation,
-interpreter or bundled language-specific table in this release.
+[#121](https://github.com/cubearc/cube/issues/121). These research issues added no
+callable operation. The separately implemented
+[bounded Brainfuck profile](brainfuck.md) now supplies execution and diagnostics;
+Ook notation conversion and bundled language-specific tables remain deferred.
 
 ## Custom numeric alphabets
 
@@ -1515,3 +1517,12 @@ remain deferred: no concrete workflow justifies another numeric interpretation
 or supported-range contract. Existing base conversion and its grammar remain
 unchanged. The root operation is discoverable directly and has no pipeline
 adapter; it does not change engine/recipe versions.
+
+## Bounded language execution
+
+`esolang.brainfuck.execute` runs the [strict Brainfuck profile](brainfuck.md) and
+returns exact bytes only after successful completion. `esolang.brainfuck.report`
+returns an explicitly completed/incomplete execution with optional final tape and
+bounded traces. `esolang.brainfuck.compare` runs a selected subset of 8/16/32-bit
+cells with aggregate budgets. These direct Rust/CLI/native Python operations have
+no pipeline adapters, host effects or arbitrary-width/nonwrapping mode.

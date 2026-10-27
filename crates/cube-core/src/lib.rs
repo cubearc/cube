@@ -10,6 +10,7 @@ pub mod blockchain;
 pub mod ciphers;
 pub mod encoding;
 pub mod errors;
+pub mod esolang;
 pub mod forensics;
 pub mod hashing;
 pub mod image;

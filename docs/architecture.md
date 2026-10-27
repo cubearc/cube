@@ -72,6 +72,13 @@ transformations stay in their owning modules. Responsibilities include:
   Byte transforms use fixed unsigned units and do not change repeating-key XOR.
   RustCrypto supplies SHA digests/legacy MD5; named CRC constants stay distinct
   from cryptographic hashes. New hash adapters retain explicit output bounds.
+- `esolang::brainfuck`: one strict parser/jump table and one bounded runtime for
+  unsigned wrapping 8/16/32-bit cells. The fixed tape uses u32 storage for every
+  width, accounted at 120,000 bytes. Source/input transport stays outside Core;
+  the runtime has no host capabilities. Concrete reports, optional bounded
+  traces and isolated width comparisons share the dispatch/error contract.
+  Conservative memory/compact-JSON bounds include retained evidence; there is no
+  interpreter pipeline adapter or generic VM. CLI/native Python only adapt it.
 - `numbers::constants`: explicit prefix/selection budgets surround maintained
   `num-bigint` integer arithmetic. Fixed-point series/root intervals certify exact
   truncation, with independent known-answer tests. Runtime generation supports an

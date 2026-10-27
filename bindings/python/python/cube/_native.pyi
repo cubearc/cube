@@ -802,3 +802,100 @@ def add_wrapping(
 def sub_wrapping(
     data: bytes, key: bytes, *, unit_bytes: int | None = None
 ) -> bytes: ...
+
+class BrainfuckOptions(TypedDict, total=False):
+    cell_bits: Literal[8, 16, 32]
+    eof: Literal["error", "zero", "unchanged"]
+
+class BrainfuckLimits(TypedDict, total=False):
+    max_instructions: int
+    max_output_bytes: int
+    max_memory_bytes: int
+
+class BrainfuckDiagnostics(TypedDict, total=False):
+    tape_start: int
+    tape_len: int
+    max_trace_records: int
+    max_trace_bytes: int
+    max_report_bytes: int
+
+class BrainfuckComparisonWidths(TypedDict):
+    widths: list[Literal[8, 16, 32]]
+
+class BrainfuckComparisonOptions(BrainfuckComparisonWidths, total=False):
+    eof: Literal["error", "zero", "unchanged"]
+
+class BrainfuckCell(TypedDict):
+    index: int
+    value: int
+
+class BrainfuckTraceRecord(TypedDict):
+    instruction: int
+    source_offset: int
+    command: str
+    pointer_before: int
+    pointer_after: int
+    cell_before: int
+    cell_after: int
+    output_byte: int | None
+    input_consumed: bool
+
+class BrainfuckReport(TypedDict):
+    completed: bool
+    budget_scope: Literal["per_run", "aggregate", "both"] | None
+    overflow_policy: Literal["wrapping"]
+    tape_cells: int
+    stop_reason: Literal[
+        "completed",
+        "instruction_limit",
+        "output_limit",
+        "input_exhausted",
+        "pointer_out_of_bounds",
+    ]
+    error: dict[str, Any] | None
+    options: BrainfuckOptions
+    limits: BrainfuckLimits
+    diagnostics: BrainfuckDiagnostics
+    instructions: int
+    input_consumed: int
+    final_pointer: int
+    tape: list[BrainfuckCell]
+    output: bytes
+    trace: list[BrainfuckTraceRecord]
+    trace_complete: bool
+    memory_bytes_upper_bound: int
+    report_bytes_upper_bound: int
+
+class BrainfuckComparison(TypedDict):
+    runs: list[BrainfuckReport]
+    all_completed: bool
+    equal_completed_outputs: bool | None
+    limits: BrainfuckLimits
+    per_run_limits: BrainfuckLimits
+    instructions: int
+    output_bytes: int
+    memory_bytes_upper_bound: int
+
+def brainfuck_execute(
+    source: str,
+    input: bytes = b"",
+    *,
+    options: BrainfuckOptions | None = None,
+    limits: BrainfuckLimits | None = None,
+) -> bytes: ...
+def brainfuck_report(
+    source: str,
+    input: bytes = b"",
+    *,
+    options: BrainfuckOptions | None = None,
+    limits: BrainfuckLimits | None = None,
+    diagnostics: BrainfuckDiagnostics | None = None,
+) -> BrainfuckReport: ...
+def brainfuck_compare(
+    source: str,
+    input: bytes = b"",
+    *,
+    options: BrainfuckComparisonOptions,
+    limits: BrainfuckLimits | None = None,
+    aggregate: BrainfuckLimits | None = None,
+) -> BrainfuckComparison: ...

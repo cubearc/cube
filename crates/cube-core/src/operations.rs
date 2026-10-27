@@ -285,6 +285,7 @@ pub fn catalog() -> Vec<&'static Descriptor> {
         crate::hashing::OPERATIONS,
         crate::binary::OPERATIONS,
         crate::binary::transform::OPERATIONS,
+        crate::esolang::brainfuck::OPERATIONS,
         crate::forensics::OPERATIONS,
         crate::forensics::signatures::OPERATIONS,
         crate::forensics::inspect::OPERATIONS,

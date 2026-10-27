@@ -20,6 +20,10 @@ SDK_BINDINGS = {
             "sub_wrapping",
         )
     },
+    **{
+        f"esolang.brainfuck.{name}": f"brainfuck_{name}"
+        for name in ("execute", "report", "compare")
+    },
     "number.digital_root": "digital_root",
     **{
         f"number.{name}": name

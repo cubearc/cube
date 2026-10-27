@@ -16,6 +16,8 @@ is explicit.
 ## What you can do
 
 - Encode/decode data, compare exact hashes/checksums and transform binary units.
+- Run bounded Brainfuck programs with byte I/O, wrapping 8/16/32-bit cells,
+  execution reports and explicit width comparisons.
 - Work with classical/book ciphers, Unicode selectors/statistics, A1Z26, Morse,
   Braille dot masks, flag Semaphore, directional clocks and integer base conversion.
 - Apply Bacon/Polybius/Tap alphabets, explicit keyboard/keypad mappings and
@@ -118,6 +120,7 @@ assert cube.caesar_encode("Attack at dawn!", 3) == "Dwwdfn dw gdzq!"
 - [CLI Guide](docs/cli.md): input, output, errors and practical workflows.
 - [Python Guide](docs/python.md): installation, data types and library examples.
 - [Operations Guide](docs/operations.md): choose a capability and understand its limits.
+- [Brainfuck](docs/brainfuck.md): strict execution, diagnostics and resource limits.
 - [Architecture](docs/architecture.md): core ownership, interfaces and extension contracts.
 - [Contributing](CONTRIBUTING.md): development setup, checks and contribution workflow.
 

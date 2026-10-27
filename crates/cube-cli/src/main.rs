@@ -11,6 +11,7 @@ mod binarycmd;
 mod blockchaincmd;
 mod constantcmd;
 mod digitalcmd;
+mod esolangcmd;
 mod filecmd;
 mod imagecmd;
 mod input;
@@ -45,6 +46,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Execute bounded languages without host capabilities
+    Esolang {
+        #[command(subcommand)]
+        command: esolangcmd::Command,
+    },
     /// Open a local investigation workspace with the separately installed Cube Play launcher
     Play(playcmd::PlayArgs),
     /// Bounded offline key formats; secret validation is separate from export
@@ -763,6 +769,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             };
             write_text(&mut output, &digest)?;
         }
+        Command::Esolang { command } => esolangcmd::run(command, &mut output)?,
         Command::Binary { command } => binarycmd::run(command, &mut output)?,
     }
     output.flush()?;

@@ -14,6 +14,7 @@ mod candidates;
 mod combinations;
 mod constants;
 mod digital;
+mod esolang;
 mod image;
 mod investigation;
 mod modular;
@@ -498,6 +499,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     video::register(module)?;
     web::register(module)?;
     binaryops::register(module)?;
+    esolang::register(module)?;
     textops::register(module)?;
     unicode::register(module)?;
     values::register(module)?;

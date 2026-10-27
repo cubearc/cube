@@ -12,6 +12,7 @@ Use the groups for the task at hand:
 - `encode`, `decode`, `cipher`, `hash`, `binary`, `text`, `number`: transform data.
 - `inspect`, `file`, `image`, `audio`: inspect files or export selected data.
 - `pipeline`, `recipe`: compose operations into repeatable linear workflows.
+- `esolang`: run bounded Brainfuck and inspect execution/width comparisons.
 - `investigate`: suggest inspections, record evidence and replay local analysis.
 - `ops`: discover operations and their descriptions.
 
@@ -329,6 +330,28 @@ cube binary xor-exact --key-hex ff0f --text AB
 `count` is a u64 reduced modulo the bit width. Paired operands must have equal
 lengths; there is no key repetition, cross-unit carry or borrow. Pipeline counts
 are restricted to nonnegative i64 and operand parameters to 64 KiB.
+
+## Run bounded Brainfuck
+
+Source and program input have separate explicit selectors. Omitted program input
+is empty; stdin never implicitly becomes source or program input:
+
+```sh
+cube esolang brainfuck run --code '++++++++[>++++++++<-]>+.' --output text
+# A (no appended newline)
+cube esolang brainfuck run --code ',.' --input-hex ff --output raw
+cube esolang brainfuck run --code-file program.bf --input-file input.bin
+cube esolang brainfuck report --code '-.' --cell-bits 16 --tape-len 1
+cube esolang brainfuck compare --code '-.' --widths 8,16,32
+```
+
+`run` defaults to hex plus a newline; raw is exact and text validates UTF-8.
+`report`/`compare` emit compact JSON (byte output as arrays). Incomplete execution
+still emits its labeled evidence but exits unsuccessfully; `--json-errors` adds
+a structured failure on stderr. Syntax/parameter/preflight failures emit no report.
+Use explicit `--max-instructions`/`--max-output-bytes` limits to lower budgets.
+Report tracing requires both `--max-trace-records` and `--max-trace-bytes`; tracing
+is disabled by default. See the [complete language/limit contract](brainfuck.md).
 
 ## Select mathematical constant digits
 

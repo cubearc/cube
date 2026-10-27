@@ -426,7 +426,7 @@ fn qr_json_raw_and_exclusive_output_preserve_binary_payloads() {
     let files = Files::new("qr");
     let path = files.path("symbol.png");
     let output = files.path("payload.bin");
-    let matrix: Vec<_> = include_str!("../../../tests/fixtures/qr-binary.matrix")
+    let matrix: Vec<_> = include_str!("../../cube-core/src/image/qr/known-binary.matrix")
         .lines()
         .collect();
     let side = (matrix.len() + 8) * 4;

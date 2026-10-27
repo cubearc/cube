@@ -53,7 +53,10 @@ def test_color_layers_have_exact_masks_and_bounded_canonical_manifests():
 
 def qr_image(scale=4):
     matrix = (
-        (Path(__file__).resolve().parents[3] / "tests/fixtures/qr-binary.matrix")
+        (
+            Path(__file__).resolve().parents[3]
+            / "crates/cube-core/src/image/qr/known-binary.matrix"
+        )
         .read_text()
         .splitlines()
     )

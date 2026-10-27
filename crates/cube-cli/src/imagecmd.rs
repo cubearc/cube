@@ -8,6 +8,7 @@ use std::{error::Error, io::Write, path::PathBuf};
 mod csv;
 mod output;
 mod pairs;
+mod spatial;
 
 #[derive(Args)]
 pub(crate) struct ViewOptions {
@@ -175,6 +176,8 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Exact overlap moments at explicit spatial lags (JSON)
+    Autocorrelation(spatial::Options),
     /// Exchange complete bounded exact-sample CSV v1 grids
     Csv {
         #[command(subcommand)]
@@ -444,6 +447,7 @@ pub(crate) enum ImageCommand {
 
 pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Autocorrelation(args) => spatial::run(args, output)?,
         ImageCommand::Csv { command } => csv::run(command, output)?,
         ImageCommand::Pairs(args) => pairs::run(args, output)?,
         ImageCommand::ColorLayers {

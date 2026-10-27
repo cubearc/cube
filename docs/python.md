@@ -1066,3 +1066,13 @@ rows carry a completeness flag, and exhausted work raises `ValueError` with type
 context. All new operations are direct APIs with no pipeline adapter. The shipped
 stubs and [Discrete Foundations](discrete-foundations.md) define schemas, defaults,
 Unicode preparation, graph orientation/edge identities and exact budget behavior.
+
+## Bounded lexical, probability and spatial analysis
+
+`anagram_search`, `word_ladder_validate` and `word_ladder_shortest` accept caller
+dictionaries and explicit preparation/budget options. `finite_probability`,
+`dice_sum` and `dice_compare` retain exact builtin integer fractions/masses from
+bounded models. `Image.autocorrelation` measures a required region and physical
+channel at explicit lags. See [examples and model contracts](puzzle-analysis.md);
+the native stubs define the input/report dictionaries. No corpus or external
+service is loaded by these calls.

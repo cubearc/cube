@@ -358,3 +358,15 @@ The root Docker context allowlist includes their Rust sources, the shared manife
 and lockfile, plus the Python member manifest/lib entry needed to resolve this
 workspace. It excludes history, credentials, SDK assets and tests. Runner isolation
 and terminal transport belong to Play; no algorithms are copied into that product.
+
+## Focused puzzle consumers
+
+`text::anagram` shares multiset residual subtraction and statistics preparation;
+`text::word_ladder` builds a bounded substitution index and calls `graph::Graph`
+BFS. The shared lexical helper retains caller aliases without owning a corpus.
+`probability` owns checked finite-mass normalization and dice convolution, keeping
+its small fraction implementation private to these reports. `image::spatial`
+reads existing immutable physical samples for exact overlap moments. CLI and
+PyO3 only adapt transports. The [puzzle analysis guide](puzzle-analysis.md) records
+contracts, work units, limits and provenance; these structured reports introduce
+no pipeline kinds, adapters, dependencies or recipe/engine contract changes.

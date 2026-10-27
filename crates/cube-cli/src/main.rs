@@ -18,8 +18,10 @@ mod graphcmd;
 mod imagecmd;
 mod input;
 mod investigatecmd;
+mod lexicalcmd;
 mod logiccmd;
 mod multisetcmd;
+mod probabilitycmd;
 use input::Input;
 mod modularcmd;
 mod pipelinecmd;
@@ -50,6 +52,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Exact finite probability and independent dice models (JSON)
+    Probability {
+        #[command(subcommand)]
+        command: probabilitycmd::Command,
+    },
     /// Exact bounded caller-supplied multigraph queries
     Graph {
         #[command(subcommand)]
@@ -436,6 +443,7 @@ fn write_bytes(
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Probability { command } => probabilitycmd::run(command, &mut output)?,
         Command::Graph { command } => graphcmd::run(command, &mut output)?,
         Command::Logic { command } => logiccmd::run(command, &mut output)?,
         Command::Number {

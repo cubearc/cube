@@ -337,6 +337,45 @@ impl PyImage {
             .map_err(super::file_error)?;
         pixel_data(py, &data)
     }
+    #[pyo3(signature=(channel,lags,*,region,expand_palette=false,limits=None))]
+    fn autocorrelation(
+        &self,
+        py: Python<'_>,
+        channel: &str,
+        lags: &Bound<'_, PyAny>,
+        region: (u32, u32, u32, u32),
+        expand_palette: bool,
+        limits: Option<&Bound<'_, pyo3::types::PyDict>>,
+    ) -> PyResult<Py<PyAny>> {
+        use super::discrete_transport as t;
+        use cube_core::image::spatial as s;
+        const OP: &str = "image.spatial.autocorrelation";
+        let l = t::config(
+            limits,
+            &["max_work", "max_memory_bytes", "max_report_bytes"],
+            OP,
+        )?;
+        let limits = s::Limits {
+            max_work: t::size(l, "max_work", s::MAX_WORK, OP)?,
+            max_memory_bytes: t::size(l, "max_memory_bytes", s::MAX_MEMORY, OP)?,
+            max_report_bytes: t::size(l, "max_report_bytes", s::MAX_REPORT, OP)?,
+        };
+        let lags = s::parse_lags(&t::document(py, lags, 64 * 1024, 1024, 3, OP)?)
+            .map_err(super::file_error)?;
+        let channel = cube_core::image::Channel::parse(channel).map_err(super::file_error)?;
+        let r = self
+            .inner
+            .view(expand_palette)
+            .map_err(super::file_error)?
+            .autocorrelation(
+                crate::image::region(Some(region)).expect("required region"),
+                channel,
+                &lags,
+                limits,
+            )
+            .map_err(super::file_error)?;
+        super::structured(py, &serde_json::json!(r))
+    }
     #[pyo3(signature = (*, region=None, channels=None, max_colors=1000, expand_palette=false))]
     fn histogram(
         &self,

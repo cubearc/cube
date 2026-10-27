@@ -145,6 +145,15 @@ def png_chunks(
 ) -> dict[str, Any]: ...
 
 class Image:
+    def autocorrelation(
+        self,
+        channel: str,
+        lags: list[SpatialLag] | str,
+        *,
+        region: tuple[int, int, int, int],
+        expand_palette: bool = False,
+        limits: DiscreteLimits | None = None,
+    ) -> SpatialReport: ...
     def to_csv(self) -> str: ...
     @staticmethod
     def from_csv(text: str) -> Image: ...
@@ -1058,3 +1067,175 @@ def graph_euler_trail(
     start: str | None = None,
     limits: DiscreteLimits | None = None,
 ) -> GraphEulerReport: ...
+
+class AnagramOptions(DiscreteLimits, total=False):
+    max_words: int
+    reuse: bool
+    max_results: int
+
+class DictionaryEntry(TypedDict):
+    text: str
+    aliases: list[int]
+
+class AnagramReport(DiscreteReportBounds):
+    profile: MultisetProfile
+    normalization_unicode_version: list[int]
+    options: AnagramOptions
+    dictionary: list[DictionaryEntry]
+    solutions: list[list[int]]
+    complete: bool
+    stop_reason: Literal["work_limit", "result_limit"] | None
+    nodes: int
+
+class LadderProfile(TypedDict, total=False):
+    normalization: Literal["none", "NFC", "NFD", "NFKC", "NFKD"]
+    case: Literal["preserve", "ascii_lower"]
+
+class LadderFailure(TypedDict):
+    position: int
+    step: int | None
+    reason: Literal["not_in_dictionary", "not_one_substitution"]
+
+class LadderReport(DiscreteReportBounds):
+    profile: MultisetProfile
+    normalization_unicode_version: list[int]
+    dictionary: list[DictionaryEntry]
+    path: list[int] | None
+    valid: bool
+    failure: LadderFailure | None
+    status: Literal["valid", "invalid", "found", "no_path"]
+    complete: bool
+    edge_count: int
+
+class ExactFraction(TypedDict):
+    numerator: int
+    denominator: int
+
+class SignedFraction(ExactFraction):
+    negative: bool
+
+class FiniteOutcomeRequired(TypedDict):
+    id: str
+    weight: int | str
+
+class FiniteOutcome(FiniteOutcomeRequired, total=False):
+    value: int | None
+
+class FiniteModelRequired(TypedDict):
+    outcomes: list[FiniteOutcome]
+    event_a: list[str]
+
+class FiniteModel(FiniteModelRequired, total=False):
+    event_b: list[str] | None
+
+class OutcomeProbability(TypedDict):
+    id: str
+    probability: ExactFraction
+
+class FiniteReport(DiscreteReportBounds):
+    assumptions: FiniteModel
+    total_mass: int
+    outcomes: list[OutcomeProbability]
+    probability_a: ExactFraction
+    probability_b: ExactFraction | None
+    intersection: ExactFraction | None
+    conditional_a_given_b: ExactFraction | None
+    posterior: list[OutcomeProbability] | None
+    expected_value: SignedFraction | None
+
+class DieFace(TypedDict):
+    value: int
+    weight: int | str
+
+class DiceModel(TypedDict):
+    dice: list[list[DieFace]]
+
+class DicePair(TypedDict):
+    left: DiceModel
+    right: DiceModel
+
+class DistributionPoint(TypedDict):
+    value: int
+    mass: int
+    probability: ExactFraction
+
+class DiceSumReport(DiscreteReportBounds):
+    assumptions: DiceModel
+    independence: str
+    distribution: list[DistributionPoint]
+    total_mass: int
+    expected_value: SignedFraction
+
+class DiceComparison(DiscreteReportBounds):
+    assumptions: DicePair
+    independence: str
+    win: ExactFraction
+    tie: ExactFraction
+    loss: ExactFraction
+    win_mass: int
+    tie_mass: int
+    loss_mass: int
+    total_mass: int
+
+class SpatialLag(TypedDict):
+    dx: int
+    dy: int
+
+class ImageRegion(TypedDict):
+    x: int
+    y: int
+    width: int
+    height: int
+
+class SpatialMeasurement(TypedDict):
+    lag: SpatialLag
+    source_overlap: ImageRegion
+    target_overlap: ImageRegion
+    count: int
+    sum_x: int
+    sum_y: int
+    sum_x_squared: int
+    sum_y_squared: int
+    sum_xy: int
+    squared_difference: int
+    population_covariance: float
+    correlation: float | None
+
+class SpatialReport(DiscreteReportBounds):
+    region: ImageRegion
+    channel: str
+    representation: str
+    source_format: str
+    measurements: list[SpatialMeasurement]
+
+def anagram_search(
+    source: str,
+    dictionary: list[str] | str,
+    *,
+    profile: MultisetProfile | None = None,
+    options: AnagramOptions | None = None,
+) -> AnagramReport: ...
+def word_ladder_validate(
+    dictionary: list[str] | str,
+    path: list[str] | str,
+    *,
+    profile: LadderProfile | None = None,
+    limits: DiscreteLimits | None = None,
+) -> LadderReport: ...
+def word_ladder_shortest(
+    dictionary: list[str] | str,
+    start: str,
+    end: str,
+    *,
+    profile: LadderProfile | None = None,
+    limits: DiscreteLimits | None = None,
+) -> LadderReport: ...
+def finite_probability(
+    model: FiniteModel | str, *, limits: DiscreteLimits | None = None
+) -> FiniteReport: ...
+def dice_sum(
+    model: DiceModel | str, *, limits: DiscreteLimits | None = None
+) -> DiceSumReport: ...
+def dice_compare(
+    model: DicePair | str, *, limits: DiscreteLimits | None = None
+) -> DiceComparison: ...

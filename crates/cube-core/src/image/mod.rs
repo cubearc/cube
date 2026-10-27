@@ -16,6 +16,7 @@ pub mod bits;
 pub mod decode;
 pub mod qr;
 pub mod raw;
+pub mod spatial;
 pub mod stream;
 pub mod traversal;
 pub use bits::{BitOrder, BitPlane, Incomplete, LsbOptions, LsbResult, Traversal};

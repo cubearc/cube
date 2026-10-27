@@ -102,6 +102,16 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Exact caller-dictionary multiword anagrams (JSON)
+    Anagram {
+        #[command(subcommand)]
+        command: crate::lexicalcmd::Anagram,
+    },
+    /// Exact substitution-only dictionary ladders (JSON)
+    WordLadder {
+        #[command(subcommand)]
+        command: crate::lexicalcmd::Ladder,
+    },
     /// Complete canonical scalar inventories and exact subtraction (JSON)
     Multiset {
         #[command(subcommand)]
@@ -214,6 +224,8 @@ pub(crate) enum TextCommand {
 }
 pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Anagram { command } => return crate::lexicalcmd::anagram(command, output),
+        TextCommand::WordLadder { command } => return crate::lexicalcmd::ladder(command, output),
         TextCommand::Multiset { command } => return crate::multisetcmd::run(command, output),
         TextCommand::UnicodeInspect(args) => return crate::unicodecmd::inspect(args, output),
         TextCommand::UnicodeCompare(args) => return crate::unicodecmd::compare(args, output),

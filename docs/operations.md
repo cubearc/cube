@@ -1537,3 +1537,11 @@ structured evidence and leave pipeline availability null. Count results are u128
 in Rust/exact Python ints and decimal strings in CLI JSON. Work/memory/report
 exhaustion is an error, never mathematical impossibility. Finite-domain CSP work
 is a [research decision](research/finite-domain-evaluation.md), not a shipped solver.
+
+## Bounded puzzle analysis
+
+Caller-dictionary anagrams and substitution-only word ladders reuse shared scalar
+inventories and graph BFS. Finite probability/dice reports preserve exact reduced
+fractions and supplied assumptions. Spatial lag analysis reports physical sample
+moments without recognition claims. See [contracts, budgets and examples](puzzle-analysis.md).
+All seven operations are direct-only; discovery reports no pipeline adapter.

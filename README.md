@@ -147,3 +147,6 @@ Contributions are welcome; read [Contributing](CONTRIBUTING.md) and the
 
 Cube uses the [Apache License 2.0](LICENSE). Dependency notices are in
 [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES) and included in Python distributions.
+
+[Bounded puzzle analysis](docs/puzzle-analysis.md) covers caller-dictionary anagrams and
+word ladders, exact finite probabilities/dice and explicit spatial lag measurements.

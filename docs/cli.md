@@ -1073,3 +1073,13 @@ model input accepts positional JSON, `--text`, `--file` or stdin through the nor
 bounded source convention. Inventories have a separate required `--requested` or
 `--requested-file`; Boolean evaluation requires `--assignment` as a JSON list of
 named Boolean records. See [schemas, semantics and budgets](discrete-foundations.md).
+
+## Caller-supplied puzzle models
+
+Use `text anagram search --dictionary JSON`, `text word-ladder shortest` or
+`text word-ladder validate` with explicit dictionary/path/endpoint arguments.
+`--dictionary-file` loads a bounded regular UTF-8 JSON string-array file.
+`probability finite analyze` and `probability dice sum|compare` accept ordinary
+JSON input selectors. `image autocorrelation` requires a region, physical channel
+and ordered signed lags. All return JSON; exact probability masses/fractions use
+decimal strings. See [verified examples and complete limits](puzzle-analysis.md).

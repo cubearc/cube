@@ -288,6 +288,14 @@ Session model, execution and record/replay modules keep those responsibilities a
 Strict loading validates versions, references and states; replay rejects missing
 identity or redaction gaps before operations execute.
 
+`session::typed_capture` validates bounded, opt-in exports of already-computed
+CLI results against canonical operation contracts. It reuses session input
+identities and digests, retains exact named outputs and declares missing replay
+sources. A capture is caller-controlled data, not execution attestation or a
+filesystem capability. The CLI owns local export; Play separately authorizes
+explicit import. This transport executes no operation and creates no second
+pipeline engine.
+
 Versioned profiles preflight a concrete metadata/preview allowlist and optional
 pipeline. One immutable bounded prefix feeds shared session execution; optional
 full-input identity is an explicit charged run. Safe profile context/counters

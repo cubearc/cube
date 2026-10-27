@@ -445,7 +445,11 @@ pub(crate) enum ImageCommand {
     },
 }
 
-pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+pub(crate) fn run(
+    command: ImageCommand,
+    output: &mut impl Write,
+    capture: Option<&crate::capture::Target>,
+) -> Result<(), Box<dyn Error>> {
     match command {
         ImageCommand::Autocorrelation(args) => spatial::run(args, output)?,
         ImageCommand::Csv { command } => csv::run(command, output)?,
@@ -646,10 +650,20 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
         } => {
             let image = Image::open(&path)?;
             let selected = selected(channels)?;
-            image
-                .view(expand_palette)?
-                .invert(selected.as_deref())?
-                .save_png(&output)?;
+            if let Some(target) = capture {
+                target.check_image(&image)?;
+            }
+            let result = image.view(expand_palette)?.invert(selected.as_deref())?;
+            let pending = capture.map(|target| {
+                target.check_image(&result)?;
+                let mut parameters = serde_json::json!({"expand_palette":expand_palette});
+                if let Some(channels) = &selected { parameters["channels"] = serde_json::json!(channels); }
+                target.prepare("image.invert", &serde_json::json!({"input":cube_core::operations::contracts::values::Image::from(&image)}), &parameters, &serde_json::json!({"output":cube_core::operations::contracts::values::Image::from(&result)}))
+            }).transpose()?;
+            result.save_png(&output)?;
+            if let Some(pending) = pending {
+                pending.publish()?;
+            }
         }
         ImageCommand::Reorder {
             path,
@@ -733,9 +747,19 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
             max_colors,
             json,
         } => {
-            let image = view.open(&path)?;
+            let original = Image::open(&path)?;
+            if let Some(target) = capture {
+                target.check_image(&original)?;
+            }
+            let image = original.view(view.expand_palette)?;
             let channels = selected(channels)?;
             let histogram = image.histogram(view.region(), channels.as_deref(), max_colors)?;
+            let pending = capture.map(|target| {
+                let mut parameters = serde_json::json!({"expand_palette":view.expand_palette,"max_colors":max_colors});
+                if let Some(channels) = &channels { parameters["channels"] = serde_json::json!(channels); }
+                if let Some(region) = view.region() { parameters["region"] = serde_json::json!([region.x,region.y,region.width,region.height]); }
+                target.prepare("image.histogram", &serde_json::json!({"input":cube_core::operations::contracts::values::Image::from(&original)}), &parameters, &serde_json::json!({"output":histogram}))
+            }).transpose()?;
             if json {
                 writeln!(output, "{}", serde_json::to_string_pretty(&histogram)?)?;
             } else {
@@ -747,6 +771,9 @@ pub(crate) fn run(command: ImageCommand, output: &mut impl Write) -> Result<(), 
                 for count in histogram.colors {
                     writeln!(output, "{:?}: {}", count.values, count.count)?;
                 }
+            }
+            if let Some(pending) = pending {
+                pending.publish()?;
             }
         }
         ImageCommand::Bitwise {

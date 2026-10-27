@@ -1,6 +1,7 @@
 //! Versioned in-memory provenance. No paths, automatic persistence or raw input retention.
 mod execute;
 mod record;
+pub mod typed_capture;
 use crate::{
     errors::ErrorCode,
     forensics::ByteRange,

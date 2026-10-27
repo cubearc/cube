@@ -9,6 +9,7 @@ mod alphabetcmd;
 mod audiocmd;
 mod binarycmd;
 mod blockchaincmd;
+mod capture;
 mod combinatoricscmd;
 mod constantcmd;
 mod digitalcmd;
@@ -50,6 +51,9 @@ struct Cli {
     /// Emit failures as schema-versioned JSON on stderr (including usage errors)
     #[arg(long, global = true)]
     json_errors: bool,
+    /// Save a bounded typed result; omit PATH only inside a configured Play Runner
+    #[arg(long, global = true, num_args = 0..=1, require_equals = true, value_name = "PATH")]
+    lab_capture: Option<Option<std::path::PathBuf>>,
     #[command(subcommand)]
     command: Command,
 }
@@ -584,6 +588,7 @@ fn write_bytes(
 }
 
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
+    let capture = capture::Target::requested(&cli)?;
     let mut output = io::stdout().lock();
     match cli.command {
         Command::Probability { command } => probabilitycmd::run(command, &mut output)?,
@@ -690,8 +695,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 to_base,
             )?,
         )?,
-        Command::Text { command } => textcmd::run(command, &mut output)?,
-        Command::Image { command } => imagecmd::run(command, &mut output)?,
+        Command::Text { command } => textcmd::run(command, &mut output, capture.as_ref())?,
+        Command::Image { command } => imagecmd::run(command, &mut output, capture.as_ref())?,
         Command::Inspect { path, json } => filecmd::info(path, json, &mut output)?,
         Command::File { command } => filecmd::run(command, &mut output)?,
         Command::Ops { command } => {
@@ -833,11 +838,25 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 &encoding::base64_decode(&String::from_utf8(args.input.read()?)?)?,
                 args.output,
             )?,
-            Decode::Hex(args) => write_bytes(
-                &mut output,
-                &encoding::hex_decode(&String::from_utf8(args.input.read()?)?)?,
-                args.output,
-            )?,
+            Decode::Hex(args) => {
+                let input = if capture.is_some() {
+                    args.input.read_text_limit(
+                        cube_core::investigation::session::MAX_INPUT_BYTES,
+                        "encoding.hex.decode",
+                    )?
+                } else {
+                    String::from_utf8(args.input.read()?)?
+                };
+                let bytes = encoding::hex_decode(&input)?;
+                let pending = capture.as_ref().map(|target| target.prepare(
+                    "encoding.hex.decode", &serde_json::json!({"input":input}),
+                    &serde_json::json!({}), &serde_json::json!({"output":cube_core::operations::contracts::values::Bytes{data:bytes.clone()}}),
+                )).transpose()?;
+                write_bytes(&mut output, &bytes, args.output)?;
+                if let Some(pending) = pending {
+                    pending.publish()?;
+                }
+            }
         },
         Command::Cipher { command } => {
             let text = match command {

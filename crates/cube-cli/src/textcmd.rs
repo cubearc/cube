@@ -226,7 +226,11 @@ pub(crate) enum TextCommand {
     /// Select scalar positions (not UTF-8 bytes); no normalization, <=1 MiB
     Extract(ExtractArgs),
 }
-pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+pub(crate) fn run(
+    command: TextCommand,
+    output: &mut impl Write,
+    capture: Option<&crate::capture::Target>,
+) -> Result<(), Box<dyn Error>> {
     let result = match command {
         TextCommand::Anagram { command } => return crate::lexicalcmd::anagram(command, output),
         TextCommand::WordLadder { command } => return crate::lexicalcmd::ladder(command, output),
@@ -402,7 +406,25 @@ pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), B
         TextCommand::FromBytes(input) => {
             text::from_utf8(&input.read_bounded(text::MAX_INPUT, "text.utf8.decode")?)?
         }
-        TextCommand::Reverse(input) => text::reverse(&input.read_text("text.reverse")?)?,
+        TextCommand::Reverse(input) => {
+            let input = input.read_text("text.reverse")?;
+            let result = text::reverse(&input)?;
+            let pending = capture
+                .map(|target| {
+                    target.prepare(
+                        "text.reverse",
+                        &serde_json::json!({"input":input}),
+                        &serde_json::json!({}),
+                        &serde_json::json!({"output":result}),
+                    )
+                })
+                .transpose()?;
+            crate::write_text(output, &result)?;
+            if let Some(pending) = pending {
+                pending.publish()?;
+            }
+            return Ok(());
+        }
         TextCommand::Normalize { input, form } => {
             text::normalize(&input.read_text("text.normalize")?, &form)?
         }

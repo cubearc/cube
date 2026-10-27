@@ -1082,3 +1082,17 @@ bounded models. `Image.autocorrelation` measures a required region and physical
 channel at explicit lags. See [examples and model contracts](puzzle-analysis.md);
 the native stubs define the input/report dictionaries. No corpus or external
 service is loaded by these calls.
+
+### Caller-owned puzzle definitions
+
+The native functions `book_encode(source, text, parameters)`,
+`keyboard_coordinates_encode(text, parameters)`,
+`keyboard_coordinates_decode(coordinates, parameters)`,
+`keyboard_shift_encode(text, parameters)`, `keyboard_shift_decode(text, parameters)`,
+`symbol_tokens_decode(text, parameters)` and `symbol_tokens_encode(text, parameters)`
+return the complete Core report as Python dictionaries. Parameters accept builtin
+JSON data or bounded JSON text. Coordinate decoding accepts a JSON-compatible
+list of `[row,column,layer]` tuples, with no float/string coercion beyond documented
+canonical integer strings. Rust performs every transformation. Existing
+`book_decode` and `keyboard_remap` remain compatible. See the verified book example,
+geometry, alias/bijection rules and [limits](ciphers.md#caller-owned-book-keyboard-and-symbolic-profiles).

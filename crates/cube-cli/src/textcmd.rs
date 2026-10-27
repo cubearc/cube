@@ -135,6 +135,10 @@ pub(crate) enum TextCommand {
     Josephus(crate::traversalcmd::Args),
     /// Remap exact scalars by physical key/layer positions
     Keyboard(crate::puzzlecmd::KeyboardArgs),
+    /// Explicit row,column,layer coordinates with exact position reports
+    KeyboardCoordinates(crate::puzzlecodescmd::Reversible),
+    /// Signed displacement on explicit geometry; inverse only if bijective
+    KeyboardShift(crate::puzzlecodescmd::Reversible),
     /// Map disjoint scalar classes with original positions and explicit filtering (JSON)
     Class(crate::puzzlecmd::ClassArgs),
     /// Position-dependent text transformations
@@ -236,6 +240,10 @@ pub(crate) fn run(command: TextCommand, output: &mut impl Write) -> Result<(), B
         TextCommand::KeyedSkip(args) => return crate::traversalcmd::run(args, false, output),
         TextCommand::Josephus(args) => return crate::traversalcmd::run(args, true, output),
         TextCommand::Keyboard(args) => crate::puzzlecmd::keyboard(args)?,
+        TextCommand::KeyboardCoordinates(args) => {
+            crate::puzzlecodescmd::keyboard_coordinates(args)?
+        }
+        TextCommand::KeyboardShift(args) => crate::puzzlecodescmd::keyboard_shift(args)?,
         TextCommand::Class(args) => return crate::puzzlecmd::classes(args, output),
         TextCommand::Transform {
             command: TransformCommand::Masked(args),

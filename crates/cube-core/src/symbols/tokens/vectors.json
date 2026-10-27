@@ -1,0 +1,148 @@
+[
+  {
+    "domain": "tokens",
+    "op": "symbol.tokens.decode",
+    "function": "symbol_tokens_decode",
+    "command": "decode tokens",
+    "ty": "Parameters",
+    "call": "transform(text,&p,false)?",
+    "inputs": {
+      "text": "triangle|○|△"
+    },
+    "parameters": {
+      "table": {
+        "source_id": "synthetic:original-v1",
+        "profile_id": "example-token-table",
+        "license_id": "original-fixture",
+        "entries": [
+          {
+            "token": "△",
+            "value": "A",
+            "aliases": [
+              "triangle"
+            ]
+          },
+          {
+            "token": "○",
+            "value": "B",
+            "aliases": []
+          }
+        ]
+      },
+      "boundaries": {
+        "kind": "separated",
+        "separator": "|"
+      },
+      "output_separator": "|"
+    },
+    "outputs": {
+      "text": "A|B|A",
+      "records": [
+        {
+          "input_token": "triangle",
+          "canonical_token": "△",
+          "output_token": "A",
+          "byte_offset": 0,
+          "scalar_offset": 0,
+          "alias_used": true
+        },
+        {
+          "input_token": "○",
+          "canonical_token": "○",
+          "output_token": "B",
+          "byte_offset": 9,
+          "scalar_offset": 9,
+          "alias_used": false
+        },
+        {
+          "input_token": "△",
+          "canonical_token": "△",
+          "output_token": "A",
+          "byte_offset": 13,
+          "scalar_offset": 11,
+          "alias_used": false
+        }
+      ],
+      "source_id": "synthetic:original-v1",
+      "profile_id": "example-token-table",
+      "license_id": "original-fixture",
+      "definition_sha256": "2186a62559b8280a2fc5b3c6e121e835b2fb11f348cf361ca94f94fa02fee2d7",
+      "bijective": false
+    },
+    "reporttype": "Report",
+    "description": "Caller-owned symbolic token map; exact boundaries, aliases and original source positions; no assets.",
+    "rev": false
+  },
+  {
+    "domain": "tokens",
+    "op": "symbol.tokens.encode",
+    "function": "symbol_tokens_encode",
+    "command": "encode tokens",
+    "ty": "Parameters",
+    "call": "transform(text,&p,true)?",
+    "inputs": {
+      "text": "A|B|A"
+    },
+    "parameters": {
+      "table": {
+        "source_id": "synthetic:original-v1",
+        "profile_id": "example-token-table",
+        "license_id": "original-fixture",
+        "entries": [
+          {
+            "token": "△",
+            "value": "A",
+            "aliases": []
+          },
+          {
+            "token": "○",
+            "value": "B",
+            "aliases": []
+          }
+        ]
+      },
+      "boundaries": {
+        "kind": "separated",
+        "separator": "|"
+      },
+      "output_separator": "|"
+    },
+    "outputs": {
+      "text": "△|○|△",
+      "records": [
+        {
+          "input_token": "A",
+          "canonical_token": "△",
+          "output_token": "△",
+          "byte_offset": 0,
+          "scalar_offset": 0,
+          "alias_used": false
+        },
+        {
+          "input_token": "B",
+          "canonical_token": "○",
+          "output_token": "○",
+          "byte_offset": 2,
+          "scalar_offset": 2,
+          "alias_used": false
+        },
+        {
+          "input_token": "A",
+          "canonical_token": "△",
+          "output_token": "△",
+          "byte_offset": 4,
+          "scalar_offset": 4,
+          "alias_used": false
+        }
+      ],
+      "source_id": "synthetic:original-v1",
+      "profile_id": "example-token-table",
+      "license_id": "original-fixture",
+      "definition_sha256": "703ea7ce8f303b5cf1bae7d837d904d025e859b9605adf60c9e0be4edbbf22cd",
+      "bijective": true
+    },
+    "reporttype": "Report",
+    "description": "Inverse of an explicitly bijective alias-free token table; no guessed glyphs or normalization.",
+    "rev": false
+  }
+]

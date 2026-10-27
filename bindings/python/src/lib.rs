@@ -29,6 +29,7 @@ mod multiset;
 mod pipeline;
 mod poly;
 mod probability;
+mod puzzlecodes;
 mod puzzles;
 mod recipe;
 mod textops;
@@ -583,6 +584,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     mono::register(module)?;
     poly::register(module)?;
     fraction::register(module)?;
+    puzzlecodes::register(module)?;
     combinations::register(module)?;
     constants::register(module)?;
     alphabet::register(module)?;

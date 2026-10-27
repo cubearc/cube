@@ -21,6 +21,20 @@ pub const MAX_INSTANCE_BYTES: usize = 64 * 1024 * 1024;
 pub fn schema<T: JsonSchema>() -> Schema {
     wire::schema(schemars::schema_for!(T))
 }
+/// Project a named report field from its actual Rust DTO, retaining local
+/// definitions. Owning modules use this for complete independently named ports.
+pub(crate) fn field<T: JsonSchema>(name: &str) -> Schema {
+    let root = schemars::schema_for!(T).to_value();
+    let mut field = root["properties"][name].clone();
+    assert!(
+        field.is_object(),
+        "report field must exist in its owning typed schema"
+    );
+    if let Some(definitions) = root.get("$defs") {
+        field["$defs"] = definitions.clone();
+    }
+    Schema::try_from(field).expect("typed field schema")
+}
 /// Reuse an owning descriptor's parameter declarations in a richer module entry.
 pub(crate) fn descriptor_parameters(descriptor: &Descriptor) -> Schema {
     parameters::schema(descriptor).expect("registered parameter declarations are valid")

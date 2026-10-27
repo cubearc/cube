@@ -148,3 +148,76 @@ HELP→HIAT is an independently calculated fixture for matrix [3,3,2,5] under
 the declared convention; short Trithemius/Running Key fixtures similarly check
 explicit formulas rather than attributing those examples to an ACA sheet.
 No historical book text or third-party implementation is bundled.
+
+## Caller-owned book, keyboard and symbolic profiles
+
+`cipher.book.encode` extends the existing decoder with exact caller source and
+plaintext inputs. Rust uses `ciphers::book::encode(source, text, &EncodeOptions)`;
+Python uses `book_encode(source, text, parameters)`. The required parameters are
+`scheme` (`word_character`, `line_character`, `line_word_character`), `index_base`
+(0 or 1) and `matching` (`first` or `round_robin`). No implicit source is selected.
+The report contains comma-separated coordinates, `source_sha256` of the exact
+UTF-8 source, coordinate count and indexed-unit count. Round-robin cycles through
+matching coordinates independently for each scalar in source order. The existing
+word/line tokenization and decoder are shared: whitespace splits words, line
+splitting follows Rust `str::lines`, and character indexes count Unicode scalars.
+Word initials use character index 1 (base 1), or the existing text selector.
+Unrepresentable scalars fail; repeated input coordinates need not be reproduced
+by re-encoding decoded text. Each source/text is at most 1 MiB, with at most
+65,536 indexed units and emitted coordinates; reports are at most 4 MiB.
+
+```python
+p = {"scheme": "word_character", "index_base": 1, "matching": "round_robin"}
+r = cube.book_encode("aa aa", "aaaaa", p)
+assert r["coordinates"] == "1:1,1:2,2:1,2:2,1:1"
+assert cube.book_decode("aa aa", r["coordinates"]) == "aaaaa"
+```
+
+`text.keyboard.coordinates.encode/decode` use an explicit `layout` object with
+`geometry` and `entries: [{key, layer, symbol, row, column}]`, plus required
+`index_base` 0 or 1. Coordinates are JSON tuples `[row,column,layer]`; layers are
+literal IDs, symbols are single exact Unicode scalars. Positions are zero-based
+`[byte_offset,scalar_offset]` pairs in the input text for encoding and reconstructed
+text for decoding. `definition_sha256` hashes compact serialized validated layout
+values; it does not hash the caller's JSON formatting. Geometry has 1..512 entries,
+rows/columns 0..511 and a 64 KiB serialized ceiling. Key/layer/geometry IDs are
+1..128 UTF-8 bytes. Duplicate symbols, key/layer pairs and coordinate/layer pairs
+fail; the same physical key must retain its row/column across layers. The Rust
+`text::keyboard::coordinates::Geometry::preset` helper extends existing US ANSI
+QWERTY/Dvorak/QWERTZ data without changing legacy `Layout` JSON or remapping.
+
+`text.keyboard.shift.encode/decode` take `layout`, signed exact `dx` and `dy`, and
+`edge` (`reject`, default, or `wrap`). Positive displacement moves right/down in
+the same layer; shift report coordinates always have origin zero. `reject` fails
+when a used symbol reaches a missing cell. `wrap` requires contiguous rows and
+columns from zero in each layer: move/wrap the row first, then move/wrap in the
+destination row's length. Ragged vertical shifts can collide. Forward reports
+`bijective`; reverse rejects every non-total or non-bijective mapping, even for an
+empty message. Full i64 displacements are normalized without overflow. Keyboard
+text/coordinate transport is at most 1 MiB and 65,536 scalars/coordinates; each
+report is at most 4 MiB. No OS keyboard detection or key events are involved.
+
+`symbol.tokens.decode/encode` apply caller-owned exact token tables. Parameters
+require `table: {source_id,profile_id,license_id,entries}`, explicit `boundaries`
+(`{"kind":"concatenated"}` or `{"kind":"separated","separator":"|"}`), and
+`output_separator`. Entries contain `token`, `value`, and optional `aliases`.
+Provenance IDs identify caller evidence; they confer no permission or network
+lookup. Inputs and tables are never normalized, case-folded or downloaded.
+
+Forward decoding reports each original/canonical token, alias use and byte/scalar
+offset, plus text, provenance, definition hash and bijectivity. Encoding requires
+unique values and no aliases. Duplicate ownership, unknown tokens and empty
+separated records fail. Concatenated input and separator-free output must have
+prefix-free alphabets; no greedy tokenization is guessed. Separators must not
+occur inside their tokens. Scalar bijections reuse Core's existing alphabet map.
+The table is at most 64 KiB, 4,096 canonical-plus-alias forms, 256 UTF-8 bytes per
+token/value and 1,024 bytes per provenance ID. Input is at most 1 MiB/65,536 tokens,
+output/report at most 4 MiB. These substitution/puzzle profiles provide no secrecy.
+No historical/fictional alphabet, font, score or puzzle solution is bundled.
+
+All seven operations have typed named ports in the generated operation reference,
+real conformance fixtures and direct CLI/native-Python/Play adapters. Their
+structured provenance does not introduce a pipeline adapter: engine API 1,
+recipe format 1 and existing adapters are unchanged. Strict parameters reject
+unknown/duplicate fields. Integer fields accept exact JSON numbers or canonical
+decimal strings; strings preserve full i64 values across JavaScript transport.

@@ -3055,6 +3055,74 @@ Example:
 cube cipher book --source source.txt --text '1:1,2:1'
 ```
 
+## cipher.book.encode
+
+Deterministic inverse book coordinates; exact source hash and existing word/line tokenization; no retrieval.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `source` | `text` |
+| Input | `text` | `text` |
+| Output | `coordinates` | `text` |
+| Output | `source_sha256` | `text` |
+| Output | `coordinate_count` | `json` |
+| Output | `indexed_units` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EncodeOptions",
+  "type": "object",
+  "properties": {
+    "index_base": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    },
+    "matching": {
+      "$ref": "#/$defs/MatchPolicy"
+    },
+    "scheme": {
+      "$ref": "#/$defs/CoordinateScheme"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "scheme",
+    "index_base",
+    "matching"
+  ],
+  "$defs": {
+    "CoordinateScheme": {
+      "type": "string",
+      "enum": [
+        "word_character",
+        "line_character",
+        "line_word_character"
+      ]
+    },
+    "MatchPolicy": {
+      "type": "string",
+      "enum": [
+        "first",
+        "round_robin"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
+```
+
 ## cipher.caesar.decode
 
 Decode ASCII letters with a signed Caesar shift; preserve other Unicode.
@@ -15388,6 +15456,328 @@ Example:
 cube encode semaphore --text 'A B'
 ```
 
+## symbol.tokens.decode
+
+Caller-owned symbolic token map; exact boundaries, aliases and original source positions; no assets.
+
+Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `records` | `json` |
+| Output | `source_id` | `text` |
+| Output | `profile_id` | `text` |
+| Output | `license_id` | `text` |
+| Output | `definition_sha256` | `text` |
+| Output | `bijective` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "boundaries": {
+      "$ref": "#/$defs/Boundaries"
+    },
+    "output_separator": {
+      "description": "Explicit separator between output tokens. Empty requires prefix-free output.",
+      "type": "string",
+      "maxLength": 64,
+      "x-cube-max-utf8-bytes": 64
+    },
+    "table": {
+      "$ref": "#/$defs/Table"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "table",
+    "boundaries",
+    "output_separator"
+  ],
+  "$defs": {
+    "Boundaries": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "separated"
+            },
+            "separator": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 64
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "separator"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "concatenated"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4096
+        },
+        "token": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 256
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 256
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "token",
+        "value"
+      ]
+    },
+    "Table": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Entry"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        },
+        "license_id": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 1024
+        },
+        "profile_id": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 1024
+        },
+        "source_id": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 1024
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "profile_id",
+        "license_id",
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 65536
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
+```
+
+## symbol.tokens.encode
+
+Inverse of an explicitly bijective alias-free token table; no guessed glyphs or normalization.
+
+Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `records` | `json` |
+| Output | `source_id` | `text` |
+| Output | `profile_id` | `text` |
+| Output | `license_id` | `text` |
+| Output | `definition_sha256` | `text` |
+| Output | `bijective` | `json` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "boundaries": {
+      "$ref": "#/$defs/Boundaries"
+    },
+    "output_separator": {
+      "description": "Explicit separator between output tokens. Empty requires prefix-free output.",
+      "type": "string",
+      "maxLength": 64,
+      "x-cube-max-utf8-bytes": 64
+    },
+    "table": {
+      "$ref": "#/$defs/Table"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "table",
+    "boundaries",
+    "output_separator"
+  ],
+  "$defs": {
+    "Boundaries": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "separated"
+            },
+            "separator": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1,
+              "x-cube-max-utf8-bytes": 64
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "separator"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "concatenated"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4096
+        },
+        "token": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 256
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 256
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "token",
+        "value"
+      ]
+    },
+    "Table": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Entry"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        },
+        "license_id": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 1024
+        },
+        "profile_id": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 1024
+        },
+        "source_id": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 1024
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "profile_id",
+        "license_id",
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 65536
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
+```
+
 ## text.anagram.search
 
 Exact caller-dictionary unordered anagrams; 10000 entries, 64 scalars/entry, 4 MiB dictionary, 1 MiB source; incomplete prefixes are explicit.
@@ -16048,6 +16438,234 @@ Example:
 cube text josephus --steps 2 --text ABCDE
 ```
 
+## text.keyboard.coordinates.decode
+
+Decode explicit row,column,layer tuples; no inferred origin, layer or OS locale.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `coordinates` | `json` |
+| Output | `text` | `text` |
+| Output | `positions` | `json` |
+| Output | `definition_sha256` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "index_base": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    },
+    "layout": {
+      "$ref": "#/$defs/Geometry"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "layout",
+    "index_base"
+  ],
+  "$defs": {
+    "Geometry": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Key"
+          },
+          "maxItems": 512,
+          "minItems": 1
+        },
+        "geometry": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "geometry",
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 65536
+    },
+    "Key": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "key": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "layer": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "row": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "layer",
+        "symbol",
+        "row",
+        "column"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
+```
+
+## text.keyboard.coordinates.encode
+
+Exact row,column,layer tuples and original byte/scalar positions on explicit geometry.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `coordinates` | `json` |
+| Output | `positions` | `json` |
+| Output | `definition_sha256` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "index_base": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    },
+    "layout": {
+      "$ref": "#/$defs/Geometry"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "layout",
+    "index_base"
+  ],
+  "$defs": {
+    "Geometry": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Key"
+          },
+          "maxItems": 512,
+          "minItems": 1
+        },
+        "geometry": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "geometry",
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 65536
+    },
+    "Key": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "key": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "layer": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "row": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "layer",
+        "symbol",
+        "row",
+        "column"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
+```
+
 ## text.keyboard.remap
 
 Map physical key/layer positions on identical explicit geometries; no locale guessing or normalization.
@@ -16096,6 +16714,368 @@ Example:
 
 ```sh
 cube text keyboard --source qwerty --target dvorak --text qwerty
+```
+
+## text.keyboard.shift.decode
+
+Explicit signed displacement; wrap follows destination row lengths; inverse requires a total bijection.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `source_coordinates` | `json` |
+| Output | `target_coordinates` | `json` |
+| Output | `positions` | `json` |
+| Output | `bijective` | `json` |
+| Output | `definition_sha256` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shift",
+  "type": "object",
+  "properties": {
+    "dx": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    },
+    "dy": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    },
+    "edge": {
+      "$ref": "#/$defs/EdgePolicy",
+      "default": "reject"
+    },
+    "layout": {
+      "$ref": "#/$defs/Geometry"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "layout",
+    "dx",
+    "dy"
+  ],
+  "$defs": {
+    "EdgePolicy": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "wrap"
+      ]
+    },
+    "Geometry": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Key"
+          },
+          "maxItems": 512,
+          "minItems": 1
+        },
+        "geometry": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "geometry",
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 65536
+    },
+    "Key": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "key": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "layer": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "row": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "layer",
+        "symbol",
+        "row",
+        "column"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
+```
+
+## text.keyboard.shift.encode
+
+Explicit signed displacement; wrap follows destination row lengths; inverse requires a total bijection.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `source_coordinates` | `json` |
+| Output | `target_coordinates` | `json` |
+| Output | `positions` | `json` |
+| Output | `bijective` | `json` |
+| Output | `definition_sha256` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shift",
+  "type": "object",
+  "properties": {
+    "dx": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    },
+    "dy": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "int64",
+          "maximum": 9007199254740991,
+          "minimum": -9007199254740991,
+          "x-cube-maximum-decimal": "9223372036854775807",
+          "x-cube-minimum-decimal": "-9223372036854775808"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "int64",
+            "type": "integer",
+            "x-cube-maximum-decimal": "9223372036854775807",
+            "x-cube-minimum-decimal": "-9223372036854775808"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "int64",
+        "type": "integer",
+        "x-cube-maximum-decimal": "9223372036854775807",
+        "x-cube-minimum-decimal": "-9223372036854775808"
+      }
+    },
+    "edge": {
+      "$ref": "#/$defs/EdgePolicy",
+      "default": "reject"
+    },
+    "layout": {
+      "$ref": "#/$defs/Geometry"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "layout",
+    "dx",
+    "dy"
+  ],
+  "$defs": {
+    "EdgePolicy": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "wrap"
+      ]
+    },
+    "Geometry": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Key"
+          },
+          "maxItems": 512,
+          "minItems": 1
+        },
+        "geometry": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "geometry",
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 65536
+    },
+    "Key": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "key": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "layer": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 128
+        },
+        "row": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 511,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "layer",
+        "symbol",
+        "row",
+        "column"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube --help
 ```
 
 ## text.multiset.compare

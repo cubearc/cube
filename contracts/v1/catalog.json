@@ -11861,6 +11861,205 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.book.encode",
+      "category": "ciphers",
+      "description": "Deterministic inverse book coordinates; exact source hash and existing word/line tokenization; no retrieval.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "source",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "InputText",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "ScalarText",
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "EncodeOptions",
+        "type": "object",
+        "properties": {
+          "index_base": {
+            "type": "integer",
+            "format": "uint8",
+            "maximum": 1,
+            "minimum": 0
+          },
+          "matching": {
+            "$ref": "#/$defs/MatchPolicy"
+          },
+          "scheme": {
+            "$ref": "#/$defs/CoordinateScheme"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "scheme",
+          "index_base",
+          "matching"
+        ],
+        "$defs": {
+          "CoordinateScheme": {
+            "type": "string",
+            "enum": [
+              "word_character",
+              "line_character",
+              "line_word_character"
+            ]
+          },
+          "MatchPolicy": {
+            "type": "string",
+            "enum": [
+              "first",
+              "round_robin"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "coordinates",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 2097152,
+            "x-cube-max-utf8-bytes": 2097152
+          }
+        },
+        {
+          "name": "source_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        {
+          "name": "coordinate_count",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 65536,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "indexed_units",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 65536,
+            "minimum": 0
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 2097152,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.caesar.decode",
       "category": "ciphers",
       "description": "Decode ASCII letters with a signed Caesar shift; preserve other Unicode.",
@@ -72881,6 +73080,1312 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "symbol.tokens.decode",
+      "category": "symbols",
+      "description": "Caller-owned symbolic token map; exact boundaries, aliases and original source positions; no assets.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "InputText",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "boundaries": {
+            "$ref": "#/$defs/Boundaries"
+          },
+          "output_separator": {
+            "description": "Explicit separator between output tokens. Empty requires prefix-free output.",
+            "type": "string",
+            "maxLength": 64,
+            "x-cube-max-utf8-bytes": 64
+          },
+          "table": {
+            "$ref": "#/$defs/Table"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "table",
+          "boundaries",
+          "output_separator"
+        ],
+        "$defs": {
+          "Boundaries": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "separated"
+                  },
+                  "separator": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "separator"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "concatenated"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind"
+                ]
+              }
+            ]
+          },
+          "Entry": {
+            "type": "object",
+            "properties": {
+              "aliases": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4096
+              },
+              "token": {
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "token",
+              "value"
+            ]
+          },
+          "Table": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Entry"
+                },
+                "maxItems": 4096,
+                "minItems": 1
+              },
+              "license_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 1024
+              },
+              "profile_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 1024
+              },
+              "source_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 1024
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "source_id",
+              "profile_id",
+              "license_id",
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 65536
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 4194304,
+            "x-cube-max-utf8-bytes": 4194304,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "records",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Record"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "source_id",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 1024,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "profile_id",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 1024,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "license_id",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 1024,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "bijective",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "description": "Exact whole-token bijection, including every accepted alias form.",
+            "type": "boolean",
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "symbol.tokens.encode",
+      "category": "symbols",
+      "description": "Inverse of an explicitly bijective alias-free token table; no guessed glyphs or normalization.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "InputText",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "boundaries": {
+            "$ref": "#/$defs/Boundaries"
+          },
+          "output_separator": {
+            "description": "Explicit separator between output tokens. Empty requires prefix-free output.",
+            "type": "string",
+            "maxLength": 64,
+            "x-cube-max-utf8-bytes": 64
+          },
+          "table": {
+            "$ref": "#/$defs/Table"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "table",
+          "boundaries",
+          "output_separator"
+        ],
+        "$defs": {
+          "Boundaries": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "separated"
+                  },
+                  "separator": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 64
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "separator"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "concatenated"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "kind"
+                ]
+              }
+            ]
+          },
+          "Entry": {
+            "type": "object",
+            "properties": {
+              "aliases": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4096
+              },
+              "token": {
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "token",
+              "value"
+            ]
+          },
+          "Table": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Entry"
+                },
+                "maxItems": 4096,
+                "minItems": 1
+              },
+              "license_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 1024
+              },
+              "profile_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 1024
+              },
+              "source_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 1024
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "source_id",
+              "profile_id",
+              "license_id",
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 65536
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 4194304,
+            "x-cube-max-utf8-bytes": 4194304,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "records",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Record"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "source_id",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 1024,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "profile_id",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 1024,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "license_id",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 1024,
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "bijective",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "description": "Exact whole-token bijection, including every accepted alias form.",
+            "type": "boolean",
+            "$defs": {
+              "Record": {
+                "type": "object",
+                "properties": {
+                  "alias_used": {
+                    "type": "boolean"
+                  },
+                  "byte_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  },
+                  "canonical_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "input_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "output_token": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 256
+                  },
+                  "scalar_offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048576,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "input_token",
+                  "canonical_token",
+                  "output_token",
+                  "byte_offset",
+                  "scalar_offset",
+                  "alias_used"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "text.anagram.search",
       "category": "text",
       "description": "Exact caller-dictionary unordered anagrams; 10000 entries, 64 scalars/entry, 4 MiB dictionary, 1 MiB source; incomplete prefixes are explicit.",
@@ -75508,6 +77013,591 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "text.keyboard.coordinates.decode",
+      "category": "text",
+      "description": "Decode explicit row,column,layer tuples; no inferred origin, layer or OS locale.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "coordinates",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "CoordinateInput",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Coordinate"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Options",
+        "type": "object",
+        "properties": {
+          "index_base": {
+            "type": "integer",
+            "format": "uint8",
+            "maximum": 1,
+            "minimum": 0
+          },
+          "layout": {
+            "$ref": "#/$defs/Geometry"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "layout",
+          "index_base"
+        ],
+        "$defs": {
+          "Geometry": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Key"
+                },
+                "maxItems": 512,
+                "minItems": 1
+              },
+              "geometry": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "geometry",
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 65536
+          },
+          "Key": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "layer": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "row": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "symbol": {
+                "type": "string",
+                "maxLength": 1,
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "layer",
+              "symbol",
+              "row",
+              "column"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 262144
+          }
+        },
+        {
+          "name": "positions",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "description": "Exact [UTF-8 byte offset, Unicode scalar offset] in the decoded output.",
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "maxItems": 65536
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "text.keyboard.coordinates.encode",
+      "category": "text",
+      "description": "Exact row,column,layer tuples and original byte/scalar positions on explicit geometry.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "ScalarText",
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Options",
+        "type": "object",
+        "properties": {
+          "index_base": {
+            "type": "integer",
+            "format": "uint8",
+            "maximum": 1,
+            "minimum": 0
+          },
+          "layout": {
+            "$ref": "#/$defs/Geometry"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "layout",
+          "index_base"
+        ],
+        "$defs": {
+          "Geometry": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Key"
+                },
+                "maxItems": 512,
+                "minItems": 1
+              },
+              "geometry": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "geometry",
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 65536
+          },
+          "Key": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "layer": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "row": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "symbol": {
+                "type": "string",
+                "maxLength": 1,
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "layer",
+              "symbol",
+              "row",
+              "column"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "coordinates",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Coordinate"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "positions",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "description": "Exact [UTF-8 byte offset, Unicode scalar offset] in the source text.",
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "text.keyboard.remap",
       "category": "text",
       "description": "Map physical key/layer positions on identical explicit geometries; no locale guessing or normalization.",
@@ -75633,6 +77723,1000 @@
         "max_items": null,
         "max_work": null,
         "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "text.keyboard.shift.decode",
+      "category": "text",
+      "description": "Explicit signed displacement; wrap follows destination row lengths; inverse requires a total bijection.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "ScalarText",
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Shift",
+        "type": "object",
+        "properties": {
+          "dx": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "format": "int64",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "x-cube-maximum-decimal": "9223372036854775807",
+                "x-cube-minimum-decimal": "-9223372036854775808"
+              },
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "x-cube-native-integer": {
+                  "format": "int64",
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "9223372036854775807",
+                  "x-cube-minimum-decimal": "-9223372036854775808"
+                }
+              }
+            ],
+            "x-cube-integer": {
+              "format": "int64",
+              "type": "integer",
+              "x-cube-maximum-decimal": "9223372036854775807",
+              "x-cube-minimum-decimal": "-9223372036854775808"
+            }
+          },
+          "dy": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "format": "int64",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "x-cube-maximum-decimal": "9223372036854775807",
+                "x-cube-minimum-decimal": "-9223372036854775808"
+              },
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "x-cube-native-integer": {
+                  "format": "int64",
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "9223372036854775807",
+                  "x-cube-minimum-decimal": "-9223372036854775808"
+                }
+              }
+            ],
+            "x-cube-integer": {
+              "format": "int64",
+              "type": "integer",
+              "x-cube-maximum-decimal": "9223372036854775807",
+              "x-cube-minimum-decimal": "-9223372036854775808"
+            }
+          },
+          "edge": {
+            "$ref": "#/$defs/EdgePolicy",
+            "default": "reject"
+          },
+          "layout": {
+            "$ref": "#/$defs/Geometry"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "layout",
+          "dx",
+          "dy"
+        ],
+        "$defs": {
+          "EdgePolicy": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "wrap"
+            ]
+          },
+          "Geometry": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Key"
+                },
+                "maxItems": 512,
+                "minItems": 1
+              },
+              "geometry": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "geometry",
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 65536
+          },
+          "Key": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "layer": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "row": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "symbol": {
+                "type": "string",
+                "maxLength": 1,
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "layer",
+              "symbol",
+              "row",
+              "column"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 262144,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "source_coordinates",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Coordinate"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "target_coordinates",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Coordinate"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "positions",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "bijective",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "boolean",
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "text.keyboard.shift.encode",
+      "category": "text",
+      "description": "Explicit signed displacement; wrap follows destination row lengths; inverse requires a total bijection.",
+      "example": "cube --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "ScalarText",
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Shift",
+        "type": "object",
+        "properties": {
+          "dx": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "format": "int64",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "x-cube-maximum-decimal": "9223372036854775807",
+                "x-cube-minimum-decimal": "-9223372036854775808"
+              },
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "x-cube-native-integer": {
+                  "format": "int64",
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "9223372036854775807",
+                  "x-cube-minimum-decimal": "-9223372036854775808"
+                }
+              }
+            ],
+            "x-cube-integer": {
+              "format": "int64",
+              "type": "integer",
+              "x-cube-maximum-decimal": "9223372036854775807",
+              "x-cube-minimum-decimal": "-9223372036854775808"
+            }
+          },
+          "dy": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "format": "int64",
+                "maximum": 9007199254740991,
+                "minimum": -9007199254740991,
+                "x-cube-maximum-decimal": "9223372036854775807",
+                "x-cube-minimum-decimal": "-9223372036854775808"
+              },
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "x-cube-native-integer": {
+                  "format": "int64",
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "9223372036854775807",
+                  "x-cube-minimum-decimal": "-9223372036854775808"
+                }
+              }
+            ],
+            "x-cube-integer": {
+              "format": "int64",
+              "type": "integer",
+              "x-cube-maximum-decimal": "9223372036854775807",
+              "x-cube-minimum-decimal": "-9223372036854775808"
+            }
+          },
+          "edge": {
+            "$ref": "#/$defs/EdgePolicy",
+            "default": "reject"
+          },
+          "layout": {
+            "$ref": "#/$defs/Geometry"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "layout",
+          "dx",
+          "dy"
+        ],
+        "$defs": {
+          "EdgePolicy": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "wrap"
+            ]
+          },
+          "Geometry": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Key"
+                },
+                "maxItems": 512,
+                "minItems": 1
+              },
+              "geometry": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "geometry",
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 65536
+          },
+          "Key": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "layer": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 128
+              },
+              "row": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 511,
+                "minimum": 0
+              },
+              "symbol": {
+                "type": "string",
+                "maxLength": 1,
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "layer",
+              "symbol",
+              "row",
+              "column"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 262144,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "source_coordinates",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Coordinate"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "target_coordinates",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Coordinate"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "positions",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "bijective",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "boolean",
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Coordinate": {
+                "description": "Wire order is always [row,column,layer]; the origin is explicitly 0 or 1.",
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 3,
+                "prefixItems": [
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "integer",
+                    "format": "uint16",
+                    "maximum": 512,
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "x-cube-max-utf8-bytes": 128
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": 134217728
       },
       "policy": {
         "private_input": false,

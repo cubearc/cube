@@ -1,0 +1,28 @@
+[
+  {
+    "domain": "book",
+    "op": "cipher.book.encode",
+    "function": "book_encode",
+    "command": "cipher book-encode",
+    "ty": "EncodeOptions",
+    "call": "encode(source,text,&p)?",
+    "inputs": {
+      "source": "aba cab\nA😀 a",
+      "text": "aaa😀"
+    },
+    "parameters": {
+      "scheme": "word_character",
+      "index_base": 1,
+      "matching": "round_robin"
+    },
+    "outputs": {
+      "coordinates": "1:1,1:3,2:2,3:2",
+      "source_sha256": "b66cd26f0139b0db53ffb85a65a095972bdd06fee0bc0c6dd6ceb271c313451f",
+      "coordinate_count": 4,
+      "indexed_units": 4
+    },
+    "reporttype": "EncodeReport",
+    "description": "Deterministic inverse book coordinates; exact source hash and existing word/line tokenization; no retrieval.",
+    "rev": false
+  }
+]

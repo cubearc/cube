@@ -75,7 +75,9 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
         let expected = matches!(
             d.category,
             "ciphers" | "encoding" | "hashing" | "binary" | "blockchain" | "symbols"
-        ) || d.id.starts_with("text.utf8.");
+        ) || d.id.starts_with("text.utf8.")
+            || d.id.starts_with("text.keyboard.coordinates.")
+            || d.id.starts_with("text.keyboard.shift.");
         assert_eq!(d.metadata().is_some(), expected, "{}", d.id);
         if let Some(m) = d.metadata() {
             annotated += 1;
@@ -116,8 +118,8 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 172);
-    assert_eq!(ids.len(), 288);
+    assert_eq!(annotated, 179);
+    assert_eq!(ids.len(), 295);
     assert_eq!(cube_core::pipeline::supported_adapters().len(), 53);
 }
 #[test]

@@ -6,6 +6,9 @@ use crate::{
 };
 use std::collections::BTreeMap;
 
+pub mod encoding;
+pub use encoding::{EncodeOptions, EncodeReport, MatchPolicy, encode};
+
 pub const MAX_COORDINATES: usize = 65_536;
 pub const MAX_UNITS: usize = 65_536;
 const OP: &str = "cipher.book.decode";
@@ -50,6 +53,21 @@ fn bounded_units<'a>(
     }
     Ok(result)
 }
+fn index_units(source: &str, scheme: Scheme) -> Result<Vec<Vec<&str>>, OperationError> {
+    let mut budget = MAX_UNITS;
+    let units = match scheme {
+        Scheme::WordCharacter => vec![bounded_units(selection::words(source), &mut budget)?],
+        Scheme::LineCharacter => vec![bounded_units(selection::lines(source), &mut budget)?],
+        Scheme::LineWordCharacter => {
+            let lines = bounded_units(selection::lines(source), &mut budget)?;
+            lines
+                .into_iter()
+                .map(|line| bounded_units(selection::words(line), &mut budget))
+                .collect::<Result<Vec<_>, _>>()?
+        }
+    };
+    Ok(units)
+}
 /// Extract Unicode scalars from comma-separated unsigned decimal coordinates.
 /// Pairs are word:character or line:character; triples are line:word:character.
 /// Index base is 0 or 1. ASCII whitespace around fields and leading zeroes are
@@ -75,18 +93,7 @@ pub fn decode(
             error(ErrorCode::InvalidParameter, "index_base must be 0 or 1").parameter("index_base"),
         );
     }
-    let mut budget = MAX_UNITS;
-    let units = match scheme {
-        Scheme::WordCharacter => vec![bounded_units(selection::words(source), &mut budget)?],
-        Scheme::LineCharacter => vec![bounded_units(selection::lines(source), &mut budget)?],
-        Scheme::LineWordCharacter => {
-            let lines = bounded_units(selection::lines(source), &mut budget)?;
-            lines
-                .into_iter()
-                .map(|line| bounded_units(selection::words(line), &mut budget))
-                .collect::<Result<Vec<_>, _>>()?
-        }
-    };
+    let units = index_units(source, scheme)?;
     let trim = |s: &str| s.trim_matches(|c: char| c.is_ascii_whitespace()).is_empty();
     if trim(coordinates) {
         return Ok(String::new());

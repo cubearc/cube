@@ -1088,3 +1088,21 @@ Use `text anagram search --dictionary JSON`, `text word-ladder shortest` or
 JSON input selectors. `image autocorrelation` requires a region, physical channel
 and ordered signed lags. All return JSON; exact probability masses/fractions use
 decimal strings. See [verified examples and complete limits](puzzle-analysis.md).
+
+### Caller-owned puzzle definitions
+
+Use `cube cipher book-encode --source SOURCE --parameters OPTIONS` with plaintext
+through the standard positional/text/file/stdin input selectors. The source is a
+regular UTF-8 file, read exactly with a 1 MiB ceiling. For example, source `aa aa`,
+plaintext `aaaaa`, and options `{"scheme":"word_character","index_base":1,
+"matching":"round_robin"}` produce coordinates `1:1,1:2,2:1,2:2,1:1` in a JSON
+report containing the exact source hash.
+
+`cube text keyboard-coordinates --parameters OPTIONS` encodes text; `--decode`
+reads a JSON array of `[row,column,layer]` tuples. `cube text keyboard-shift
+--parameters OPTIONS` uses required geometry and signed `dx`/`dy`; `--decode`
+requires a bijective displacement. `cube decode tokens --parameters OPTIONS`
+maps caller symbolic tokens to values; `cube encode tokens --parameters OPTIONS`
+requires an alias-free bijection. All return structured JSON. Parameter files are
+regular UTF-8 JSON, bounded at 2 MiB before strict Core parsing; geometry/table
+subdocuments have smaller 64 KiB bounds. See [exact semantics](ciphers.md#caller-owned-book-keyboard-and-symbolic-profiles).

@@ -30,6 +30,7 @@ mod pipelinecmd;
 mod playcmd;
 mod polycmd;
 mod puzzlecmd;
+mod puzzlecodescmd;
 mod recipecmd;
 mod textcmd;
 mod traversalcmd;
@@ -263,6 +264,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Exact caller-owned symbolic token table; no font or OCR
+    Tokens(puzzlecodescmd::Parameters),
     /// Explicit telephone or delimited multi-tap keypad mapping
     Keypad(puzzlecmd::KeypadArgs),
     /// Bounded single-byte-version Base58Check; <=1024 payload bytes, empty allowed
@@ -293,6 +296,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Exact caller-owned symbolic token table; preserve aliases/positions
+    Tokens(puzzlecodescmd::Parameters),
     /// Return canonical multi-tap text or telephone alternatives as JSON
     Keypad(puzzlecmd::KeypadArgs),
     /// Verify Base58Check and report its version plus exact payload hex; <=1421 text bytes
@@ -322,6 +327,8 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Deterministic inverse book coordinates with exact caller source provenance
+    BookEncode(puzzlecodescmd::Book),
     /// Explicit bounded scytale profile; JSON parameters required
     Scytale(polycmd::Parameters),
     /// Explicit bounded rail fence profile; JSON parameters required
@@ -754,6 +761,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Encode::A1z26(input) => {
                     cube_core::symbols::a1z26::encode(&input.read_text("symbol.a1z26.encode")?)?
                 }
+                Encode::Tokens(args) => puzzlecodescmd::tokens(args, true)?,
                 Encode::Morse(input) => {
                     cube_core::symbols::morse_encode(&input.read_text("symbol.morse.encode")?)?
                 }
@@ -798,6 +806,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     "symbol.a1z26.decode",
                 )?)?,
             )?,
+            Decode::Tokens(args) => write_text(&mut output, &puzzlecodescmd::tokens(args, false)?)?,
             Decode::Morse(input) => write_text(
                 &mut output,
                 &cube_core::symbols::morse_decode(&input.read_text("symbol.morse.decode")?)?,
@@ -903,6 +912,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 }
                 Cipher::Bacon(args) => puzzlecmd::bacon(args)?,
                 Cipher::Polybius(args) => puzzlecmd::polybius(args)?,
+                Cipher::BookEncode(args) => puzzlecodescmd::book_encode(args)?,
                 Cipher::Book {
                     input,
                     source,

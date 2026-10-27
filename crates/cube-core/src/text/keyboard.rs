@@ -1,4 +1,5 @@
 //! Physical key/layer remapping on an explicitly shared geometry.
+pub mod coordinates;
 use super::{MAX_OUTPUT, check_input};
 use crate::errors::{ErrorCode, OperationError};
 use serde::{Deserialize, Serialize};

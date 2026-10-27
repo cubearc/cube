@@ -1,0 +1,30 @@
+# Choose a task
+
+Install via [Installation](../installation.md) and begin with [your first operation](../getting-started.md).
+Each task links to exact formats and limits in the reference.
+
+- [Encode and decode data](encoding.md)
+- [Use an explicit classical cipher](ciphers.md)
+- [Compare a hash or checksum](hashes.md)
+- [Inspect a local file](files.md)
+- [Recover an embedded ZIP](recover-zip.md)
+- [Create original media fixtures](fixtures.md)
+- [Inspect and transform an image](images.md)
+- [Inspect audio samples and signals](audio.md)
+- [Inspect a saved video container](video.md)
+- [Inspect saved HTML and HAR](offline-web.md)
+- [Transform selected text positions](positions.md)
+- [Transform exact bytes](binary.md)
+- [Decode symbolic clues](symbols.md)
+- [Convert a custom digit alphabet](custom-digits.md)
+- [Traverse text in an explicit order](traversal.md)
+- [Select positions inside words](word-positions.md)
+- [Measure text and Unicode evidence](text-evidence.md)
+- [Compute exact modular arithmetic](arithmetic.md)
+- [Analyze inventories, logic and graphs](discrete.md)
+- [Analyze a supplied puzzle model](puzzles.md)
+- [Run a bounded Brainfuck program](brainfuck.md)
+- [Compose a pipeline or recipe](pipelines.md)
+- [Record and replay an investigation](investigations.md)
+- [Send a typed CLI result to the Lab](lab-captures.md)
+- [Open Cube Play](open-play.md)

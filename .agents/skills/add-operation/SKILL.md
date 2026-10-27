@@ -5,8 +5,8 @@ description: Add a Cube operation to the Rust core and expose it through the exi
 
 # Add an operation
 
-1. Read root AGENTS.md and nearby operations. Choose `encoding`, `ciphers`,
-   `hashing`, or `binary` in `crates/cube-core/src` according to responsibility.
+1. Read root AGENTS.md and nearby operations. Choose the owning module in
+   `crates/cube-core/src` by responsibility; keep interface adaptation separate.
 2. Implement a small public function in the core with rustdoc. Use bytes for
    binary data and a typed error for invalid input. Reuse maintained crates for
    cryptographic primitives. Add dependencies only when justified.
@@ -16,8 +16,10 @@ description: Add a Cube operation to the Rust core and expose it through the exi
 4. Expose the operation through the relevant existing Clap commands and PyO3
    functions. Update `ops list`, Python exports and type stubs, CLI integration
    tests, and native Python smoke tests. Keep algorithms solely in the core.
-5. Update README examples or architecture notes only where the new behavior
-   affects users. Do not describe future features as available.
+5. Follow the [Cube documentation workflow](../cube-docs/SKILL.md). Update the
+   canonical reference and affected task examples. Add a guide only for a new
+   reader task; change the README only for positioning or first use. Keep
+   architecture details in contributor docs and do not claim future features.
 6. Run Rust formatting, Clippy, workspace tests, native Python installation,
    Ruff, pytest, and the 80% core coverage check using CONTRIBUTING.md.
 

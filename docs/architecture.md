@@ -189,7 +189,7 @@ Position-aware text transformation keeps reusable bounded position sets in
 adapt parameters and reports. Every Unicode scalar counts and text is never
 implicitly normalized. Its version-1 text-to-text adapter returns mandatory,
 bounded reports alongside composable text; see
-[its contract](operations.md#position-aware-transformations).
+[its contract](reference/topics/position-aware-transformations.md#position-aware-transformations).
 
 ## Metadata and discovery
 

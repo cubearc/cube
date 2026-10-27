@@ -2,7 +2,7 @@
 
 ## Setup
 
-Complete [Python installation](docs/python.md#installation) to create and
+Complete [Python installation](docs/installation.md#python) to create and
 activate a virtual environment.
 `rust-toolchain.toml` requests Rustfmt, Clippy, and LLVM tools. Run these commands
 from the repository root:
@@ -140,18 +140,19 @@ fixtures belong in `cubearc/recipes`, using the public recipe check interface.
 
 ## Documentation
 
-Keep the [README](README.md) as a short entry point. Put the first-use tutorial in
-[Getting Started](docs/getting-started.md), interface workflows in the
-[CLI](docs/cli.md) and [Python](docs/python.md) guides, capability choices/limits in
-[Operations](docs/operations.md), and implementation boundaries in
-[Architecture](docs/architecture.md). Update the relevant guide when behavior changes;
-add README content only when it helps someone choose or start using Cube.
+Follow the [shared authoring guide](https://github.com/cubearc/docs/blob/main/content/contributing/documentation.md).
+Keep the README focused on first use, examples in [task guides](docs/guides/index.md),
+interface conventions in [CLI](docs/interfaces/cli.md)/[Python](docs/interfaces/python.md),
+and exact semantics in [reference](docs/reference/index.md).
+Update affected pages and [navigation](docs/SUMMARY.md) with behavior changes;
+link to the canonical explanation instead of copying it into every guide.
 
-The operation catalog owns operation metadata, Clap owns command arguments,
-Rustdoc owns the Rust API reference, and the Python stubs own SDK signatures.
-Do not copy full catalogs/signature lists into Markdown. Validate changed examples
-against the CLI and real Python extension, use original local fixtures, and check
-relative links/anchors. Documentation-only work should not change application APIs.
+Descriptors, Clap, Python stubs and Rustdoc own their respective reference data.
+Regenerate operation contracts/reference instead of editing them by hand.
+Validate changed examples with the real CLI/native extension and original fixtures.
+With a sibling docs checkout, check links using
+`python3 ../docs/tools/check_links.py .`. Preserve old paths/anchors when moving pages.
+Use the [documentation skill](.agents/skills/cube-docs/SKILL.md) for the workflow.
 
 ### Rust API reference
 

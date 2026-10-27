@@ -4,6 +4,10 @@ For installation and a first operation, follow [Getting Started](getting-started
 Examples below use a POSIX shell. Run file-producing examples in a scratch
 directory; Cube's destination options refuse existing files.
 
+On Windows, the CLI reserves an 8 MiB stack for the complete command parser,
+including unoptimized development builds. Operation input, work and output limits
+are unchanged.
+
 ## Find the right command
 
 Commands generally follow `cube <group> <operation> [arguments]`.

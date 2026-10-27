@@ -1989,6 +1989,564 @@ Example:
 cube cipher caesar --shift 3 --text Hello
 ```
 
+## cipher.grandpre.decode
+
+Decode repeated-letter 8/9/10-square coordinates with explicit digit labels; null represents each space.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.coordinate_tokens` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "column_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 8,
+          "pattern": "^[0-9]{8,10}$"
+        },
+        "row_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 8,
+          "pattern": "^[0-9]{8,10}$"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 8,
+            "pattern": "^[A-Z]{8,10}$"
+          },
+          "maxItems": 10,
+          "minItems": 8
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "rows",
+        "row_labels",
+        "column_labels"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher grandpre --help
+```
+
+## cipher.grandpre.encode
+
+Encode repeated-letter 8/9/10-square coordinates with explicit digit labels; null represents each space.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `tokens` | `cipher.coordinate_tokens` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "column_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 8,
+          "pattern": "^[0-9]{8,10}$"
+        },
+        "row_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 8,
+          "pattern": "^[0-9]{8,10}$"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 8,
+            "pattern": "^[A-Z]{8,10}$"
+          },
+          "maxItems": 10,
+          "minItems": 8
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "rows",
+        "row_labels",
+        "column_labels"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher grandpre --help
+```
+
+## cipher.homophonic.decode
+
+Decode exact owned tokens to canonical text.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "ascii_uppercase": {
+          "type": "boolean"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Entry"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ascii_uppercase",
+        "entries"
+      ]
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 256,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "tokens"
+      ]
+    },
+    "TokenText": {
+      "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 256
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher homophonic --help
+```
+
+## cipher.homophonic.encode
+
+Encode canonical scalars to explicit tokens using local per-symbol round robin.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HomophonicEncode",
+  "type": "object",
+  "properties": {
+    "counters": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Counter"
+      },
+      "maxItems": 4096
+    },
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Counter": {
+      "description": "Optional starting selection indexes; 0..65535, reduced modulo that symbol's list.\nThe bound is exact on every JSON/JavaScript transport; it is not hidden state.",
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "index"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "ascii_uppercase": {
+          "type": "boolean"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Entry"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ascii_uppercase",
+        "entries"
+      ]
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 256,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "symbol",
+        "tokens"
+      ]
+    },
+    "TokenText": {
+      "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 256
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher homophonic --help
+```
+
+## cipher.monome_dinome.decode
+
+Decode with an explicit monome_dinome digit table; reject unassigned/incomplete digit transport.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Alias": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Alias"
+          },
+          "maxItems": 26
+        },
+        "alphabet": {
+          "type": "string",
+          "maxLength": 28,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 28
+        },
+        "digit_escape": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "digits": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "prefixes": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[0-9]{0,2}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "digits",
+        "prefixes",
+        "alphabet"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher monome-dinome --help
+```
+
+## cipher.monome_dinome.encode
+
+Encode with an explicit monome_dinome digit table; reject unassigned/incomplete digit transport.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Alias": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Alias"
+          },
+          "maxItems": 26
+        },
+        "alphabet": {
+          "type": "string",
+          "maxLength": 28,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 28
+        },
+        "digit_escape": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "digits": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "prefixes": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[0-9]{0,2}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "digits",
+        "prefixes",
+        "alphabet"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher monome-dinome --help
+```
+
 ## cipher.polybius.decode
 
 Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536 tokens.
@@ -2152,6 +2710,690 @@ Example:
 
 ```sh
 cube cipher rot13 --text Hello
+```
+
+## cipher.rot18
+
+Self-inverse ASCII ROT13 letters and ROT5 digits; preserve other scalars, <=1 MiB.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher rot18 --help
+```
+
+## cipher.rot47
+
+Self-inverse printable ASCII U+0021..U+007E rotation by 47; preserve other scalars, <=1 MiB.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher rot47 --help
+```
+
+## cipher.rot5
+
+Self-inverse ASCII digit rotation by five; preserve other scalars, <=1 MiB.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher rot5 --help
+```
+
+## cipher.straddling.decode
+
+Decode with an explicit straddling digit table; reject unassigned/incomplete digit transport.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Alias": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Alias"
+          },
+          "maxItems": 26
+        },
+        "alphabet": {
+          "type": "string",
+          "maxLength": 28,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 28
+        },
+        "digit_escape": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "digits": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "prefixes": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[0-9]{0,2}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "digits",
+        "prefixes",
+        "alphabet"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher straddling --help
+```
+
+## cipher.straddling.encode
+
+Encode with an explicit straddling digit table; reject unassigned/incomplete digit transport.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Alias": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Alias"
+          },
+          "maxItems": 26
+        },
+        "alphabet": {
+          "type": "string",
+          "maxLength": 28,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 28
+        },
+        "digit_escape": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "digits": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "prefixes": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[0-9]{0,2}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "digits",
+        "prefixes",
+        "alphabet"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher straddling --help
+```
+
+## cipher.substitution.decode
+
+Decode exact Unicode scalars using a validated bijective alphabet; reject by default, <=1 MiB input/4 MiB output.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Substitution",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/Target"
+    },
+    {
+      "$ref": "#/$defs/Keyword"
+    }
+  ],
+  "$defs": {
+    "Keyword": {
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "type": "string",
+          "maxLength": 65536,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "unmapped": {
+          "$ref": "#/$defs/Unmapped",
+          "default": "reject"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "keyword"
+      ]
+    },
+    "Target": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "target": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "unmapped": {
+          "$ref": "#/$defs/Unmapped",
+          "default": "reject"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ]
+    },
+    "Unmapped": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "preserve"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher substitution --help
+```
+
+## cipher.substitution.encode
+
+Encode exact Unicode scalars using a validated bijective alphabet; reject by default, <=1 MiB input/4 MiB output.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Substitution",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/Target"
+    },
+    {
+      "$ref": "#/$defs/Keyword"
+    }
+  ],
+  "$defs": {
+    "Keyword": {
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "type": "string",
+          "maxLength": 65536,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "unmapped": {
+          "$ref": "#/$defs/Unmapped",
+          "default": "reject"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "keyword"
+      ]
+    },
+    "Target": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "target": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 65536
+        },
+        "unmapped": {
+          "$ref": "#/$defs/Unmapped",
+          "default": "reject"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "target"
+      ]
+    },
+    "Unmapped": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "preserve"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher substitution --help
+```
+
+## cipher.tridigital.decode
+
+Decode with an explicit tridigital digit table; return per-digit alternatives without guessing.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `alternatives` | `cipher.alternatives` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Alias": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Alias"
+          },
+          "maxItems": 26
+        },
+        "alphabet": {
+          "type": "string",
+          "maxLength": 28,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 28
+        },
+        "digit_escape": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "digits": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "prefixes": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[0-9]{0,2}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "digits",
+        "prefixes",
+        "alphabet"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher tridigital --help
+```
+
+## cipher.tridigital.encode
+
+Encode with an explicit tridigital digit table; reject unassigned/incomplete digit transport.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Definition",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Alias": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": {
+        "aliases": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Alias"
+          },
+          "maxItems": 26
+        },
+        "alphabet": {
+          "type": "string",
+          "maxLength": 28,
+          "minLength": 1,
+          "x-cube-max-utf8-bytes": 28
+        },
+        "digit_escape": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "digits": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "prefixes": {
+          "type": "string",
+          "maxLength": 2,
+          "pattern": "^[0-9]{0,2}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "digits",
+        "prefixes",
+        "alphabet"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher tridigital --help
 ```
 
 ## cipher.vigenere.decode

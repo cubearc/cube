@@ -1,0 +1,18 @@
+{
+  "ascii_uppercase": true,
+  "entries": [
+    {
+      "symbol": "A",
+      "tokens": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "symbol": "B",
+      "tokens": [
+        "3"
+      ]
+    }
+  ]
+}

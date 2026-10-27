@@ -24,6 +24,7 @@ mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
 mod modularcmd;
+mod monocmd;
 mod pipelinecmd;
 mod playcmd;
 mod puzzlecmd;
@@ -319,6 +320,24 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Exact Unicode alphabet or keyword permutation
+    Substitution(monocmd::Substitution),
+    /// Deterministic caller-owned homophonic token mapping
+    Homophonic(monocmd::Homophonic),
+    /// Explicit 10-column digit grammar with two row prefixes
+    Straddling(monocmd::TableArgs),
+    /// Explicit ACA 3x8 digit grammar and canonical aliases
+    MonomeDinome(monocmd::TableArgs),
+    /// Lossy ACA digit mapping; decode returns alternatives
+    Tridigital(monocmd::TableArgs),
+    /// Repeated-letter square with explicit coordinate labels
+    Grandpre(monocmd::TableArgs),
+    /// Rotate ASCII digits by five, preserving all other scalars
+    Rot5(Input),
+    /// Compose ASCII letter ROT13 with digit ROT5
+    Rot18(Input),
+    /// Rotate printable ASCII ! through ~ by 47
+    Rot47(Input),
     /// Five-symbol Bacon encoding with explicit alphabet and notation
     Bacon(puzzlecmd::BaconArgs),
     /// Shared Polybius/Tap square, explicit row,column pairs and word tokens
@@ -714,6 +733,27 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Cipher { command } => {
             let text = match command {
+                Cipher::Substitution(args) => monocmd::substitution(args)?,
+                Cipher::Homophonic(args) => monocmd::homophonic(args)?,
+                Cipher::Straddling(args) => {
+                    monocmd::digits(args, ciphers::mono::checkerboard::Profile::Straddling)?
+                }
+                Cipher::MonomeDinome(args) => {
+                    monocmd::digits(args, ciphers::mono::checkerboard::Profile::MonomeDinome)?
+                }
+                Cipher::Tridigital(args) => {
+                    monocmd::digits(args, ciphers::mono::checkerboard::Profile::Tridigital)?
+                }
+                Cipher::Grandpre(args) => monocmd::grandpre(args)?,
+                Cipher::Rot5(input) => {
+                    ciphers::mono::rotations::rot5(&input.read_text("cipher.rot5")?)?
+                }
+                Cipher::Rot18(input) => {
+                    ciphers::mono::rotations::rot18(&input.read_text("cipher.rot18")?)?
+                }
+                Cipher::Rot47(input) => {
+                    ciphers::mono::rotations::rot47(&input.read_text("cipher.rot47")?)?
+                }
                 Cipher::Bacon(args) => puzzlecmd::bacon(args)?,
                 Cipher::Polybius(args) => puzzlecmd::polybius(args)?,
                 Cipher::Book {

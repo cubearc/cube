@@ -3,6 +3,7 @@
 pub mod bacon;
 pub mod book;
 pub mod classical;
+pub mod mono;
 pub mod polybius;
 pub use classical::{
     affine_decode, affine_encode, atbash, beaufort, vigenere_decode, vigenere_encode,

@@ -1,0 +1,15 @@
+{
+  "digits": "6318927054",
+  "prefixes": "63",
+  "alphabet": "NOTARIESBCDFGHKLMPQUVWXY",
+  "aliases": [
+    {
+      "from": "J",
+      "to": "I"
+    },
+    {
+      "from": "Z",
+      "to": "Y"
+    }
+  ]
+}

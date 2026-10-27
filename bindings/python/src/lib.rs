@@ -23,6 +23,7 @@ mod image;
 mod investigation;
 mod lexical;
 mod modular;
+mod mono;
 mod multiset;
 mod pipeline;
 mod probability;
@@ -577,6 +578,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     word::register(module)?;
     traversal::register(module)?;
     puzzles::register(module)?;
+    mono::register(module)?;
     combinations::register(module)?;
     constants::register(module)?;
     alphabet::register(module)?;

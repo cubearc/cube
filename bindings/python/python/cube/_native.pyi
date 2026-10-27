@@ -1310,3 +1310,70 @@ def dice_sum(
 def dice_compare(
     model: DicePair | str, *, limits: DiscreteLimits | None = None
 ) -> DiceComparison: ...
+
+class HomophonicEntry(TypedDict):
+    symbol: str
+    tokens: list[str]
+
+class HomophonicDefinition(TypedDict):
+    ascii_uppercase: bool
+    entries: list[HomophonicEntry]
+
+class HomophonicCounter(TypedDict):
+    symbol: str
+    index: int
+
+DigitAlias = TypedDict("DigitAlias", {"from": str, "to": str})
+
+class DigitDefinitionRequired(TypedDict):
+    digits: str
+    prefixes: str
+    alphabet: str
+
+class DigitDefinition(DigitDefinitionRequired, total=False):
+    aliases: list[DigitAlias]
+    digit_escape: str | None
+
+class GrandpreDefinition(TypedDict):
+    rows: list[str]
+    row_labels: str
+    column_labels: str
+
+def substitution_encode(
+    text: str,
+    source: str,
+    *,
+    target: str | None = None,
+    keyword: str | None = None,
+    unmapped: Literal["reject", "preserve"] = "reject",
+) -> str: ...
+def substitution_decode(
+    text: str,
+    source: str,
+    *,
+    target: str | None = None,
+    keyword: str | None = None,
+    unmapped: Literal["reject", "preserve"] = "reject",
+) -> str: ...
+def rot5(text: str) -> str: ...
+def rot18(text: str) -> str: ...
+def rot47(text: str) -> str: ...
+def homophonic_encode(
+    text: str,
+    definition: HomophonicDefinition,
+    *,
+    counters: list[HomophonicCounter] | None = None,
+) -> list[str]: ...
+def homophonic_decode(tokens: list[str], definition: HomophonicDefinition) -> str: ...
+def straddling_encode(text: str, definition: DigitDefinition) -> str: ...
+def straddling_decode(text: str, definition: DigitDefinition) -> str: ...
+def monome_dinome_encode(text: str, definition: DigitDefinition) -> str: ...
+def monome_dinome_decode(text: str, definition: DigitDefinition) -> str: ...
+def tridigital_encode(text: str, definition: DigitDefinition) -> str: ...
+def tridigital_decode(text: str, definition: DigitDefinition) -> list[list[str]]: ...
+def grandpre_encode(
+    text: str, definition: GrandpreDefinition
+) -> list[list[int] | None]: ...
+def grandpre_decode(
+    tokens: list[list[int] | None], definition: GrandpreDefinition
+) -> str: ...

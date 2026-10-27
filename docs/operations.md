@@ -100,6 +100,10 @@ format remain 1; existing adapters retain their contracts.
 
 ## Classical ciphers
 
+[Monoalphabetic profiles](monoalphabetic.md) cover exact/keyword alphabets, ASCII
+rotations, deterministic homophones, digit grammars and Grandpré, with explicit
+canonicalization, token transport and bounds.
+
 Use the `ciphers` category when you have a classical letter substitution and a
 specified key/alphabet. These operations do not provide secure modern encryption.
 

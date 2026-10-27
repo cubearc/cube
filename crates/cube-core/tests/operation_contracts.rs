@@ -140,3 +140,29 @@ fn unregistered_or_modified_descriptors_cannot_publish_canonical_contracts() {
     changed.description = "Unregistered changed semantics";
     assert!(changed.contract().is_err());
 }
+
+#[test]
+fn hand_authored_composite_schemas_preserve_canonical_full_width_integers() {
+    use cube_core::investigation::session::{Export, Session};
+    let metadata = Session::new(u64::MAX, Default::default()).unwrap();
+    let record: serde_json::Value =
+        serde_json::from_str(&metadata.to_json(&Export::default()).unwrap()).unwrap();
+    let contract = operations::require("investigation.report")
+        .unwrap()
+        .contract()
+        .unwrap();
+    let output = operations::contracts::canonical_value(json!({"output":record}));
+    assert_eq!(
+        output["output"]["session"]["input"]["size"],
+        "18446744073709551615"
+    );
+    contract.validate_outputs(&output).unwrap();
+    let contract = operations::require("recipe.validate")
+        .unwrap()
+        .contract()
+        .unwrap();
+    let mut input = json!({"input":{"format_version":1,"engine_api":1,"input":{"source":"inline","value":{"type":"byte_range","offset":"18446744073709551615","length":null}},"output":{"type":"byte_range"},"steps":[]}});
+    contract.validate_inputs(&input).unwrap();
+    input["input"]["input"]["value"]["offset"] = json!("18446744073709551616");
+    assert!(contract.validate_inputs(&input).is_err());
+}

@@ -57516,6 +57516,7 @@
               "schema_version": {
                 "type": "integer",
                 "format": "uint32",
+                "maximum": 4294967295,
                 "minimum": 0
               },
               "session": {
@@ -57541,34 +57542,179 @@
                 "type": "object",
                 "properties": {
                   "max_elapsed_ms": {
-                    "type": "integer",
-                    "format": "uint64",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 5000,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 5000,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 5000,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 5000,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_input_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 1048576,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 1048576,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 1048576,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 1048576,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_inspected_bytes": {
-                    "type": "integer",
-                    "format": "uint64",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 4194304,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4194304,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 4194304,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 4194304,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_operations": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 16,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 16,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 16,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_retained_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 65536,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 65536,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 65536,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 65536,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false
@@ -57586,22 +57732,101 @@
                   "format_version": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "input_read_bytes": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "inspected_bytes": {
-                    "type": "integer",
-                    "format": "uint64",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "operation_units": {
-                    "type": "integer",
-                    "format": "uint",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false,
@@ -57662,11 +57887,13 @@
                   "id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "input_id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "kind": {
@@ -57683,6 +57910,7 @@
                   "run_id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   }
                 },
@@ -57710,12 +57938,14 @@
                     "items": {
                       "type": "integer",
                       "format": "uint32",
+                      "maximum": 4294967295,
                       "minimum": 0
                     }
                   },
                   "id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "text": {
@@ -57745,12 +57975,39 @@
                   "id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "size": {
-                    "type": "integer",
-                    "format": "uint64",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false,
@@ -57764,28 +58021,144 @@
                 "type": "object",
                 "properties": {
                   "max_capture_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 4194304,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4194304,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 4194304,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 4194304,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_steps": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 64,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 64,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 64,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 64,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_value_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 1048576,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 1048576,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 1048576,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 1048576,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_work_bytes": {
-                    "type": "integer",
-                    "format": "uint64",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 16777216,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16777216,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 16777216,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 16777216,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false
@@ -57794,8 +58167,33 @@
                 "description": "JSON parameter scalars preserve their actual types; binary keys need an\nexplicit {\"base64\":\"...\"} object. Concrete tagged list objects are additive:\n{\"unsigned_list\":[0,2]} and {\"text_list\":[\"1=X\"]}. Bare arrays, floats, null,\nmixed/nested lists and arbitrary objects remain invalid, including empty arrays.",
                 "anyOf": [
                   {
-                    "type": "integer",
-                    "format": "int64"
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "int64",
+                        "maximum": 9007199254740991,
+                        "minimum": -9007199254740991,
+                        "x-cube-maximum-decimal": "9223372036854775807",
+                        "x-cube-minimum-decimal": "-9223372036854775808"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "int64",
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "9223372036854775807",
+                          "x-cube-minimum-decimal": "-9223372036854775808"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "int64",
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "9223372036854775807",
+                      "x-cube-minimum-decimal": "-9223372036854775808"
+                    }
                   },
                   {
                     "type": "boolean"
@@ -57822,9 +58220,35 @@
                       "unsigned_list": {
                         "type": "array",
                         "items": {
-                          "type": "integer",
-                          "format": "uint64",
-                          "minimum": 0
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "format": "uint64",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            },
+                            {
+                              "type": "string",
+                              "maxLength": 40,
+                              "pattern": "^(0|-?[1-9][0-9]*)$",
+                              "x-cube-native-integer": {
+                                "format": "uint64",
+                                "minimum": 0,
+                                "type": "integer",
+                                "x-cube-maximum-decimal": "18446744073709551615",
+                                "x-cube-minimum-decimal": "0"
+                              }
+                            }
+                          ],
+                          "x-cube-integer": {
+                            "format": "uint64",
+                            "minimum": 0,
+                            "type": "integer",
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          }
                         }
                       }
                     },
@@ -57868,6 +58292,7 @@
                   "version": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   }
                 },
@@ -57893,11 +58318,13 @@
                   "id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "input_id": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "operation": {
@@ -57927,6 +58354,7 @@
                   "version": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "warning": {
@@ -57971,9 +58399,35 @@
                         "const": "triage"
                       },
                       "max_read_bytes": {
-                        "type": "integer",
-                        "format": "uint",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       }
                     },
                     "additionalProperties": false,
@@ -57990,19 +58444,97 @@
                         "const": "hex"
                       },
                       "length": {
-                        "type": "integer",
-                        "format": "uint",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "offset": {
-                        "type": "integer",
-                        "format": "uint64",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint64",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint64",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "width": {
-                        "type": "integer",
-                        "format": "uint",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       }
                     },
                     "additionalProperties": false,
@@ -58021,24 +58553,128 @@
                         "const": "strings"
                       },
                       "length": {
-                        "type": "integer",
-                        "format": "uint",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "max_results": {
-                        "type": "integer",
-                        "format": "uint",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "min_length": {
-                        "type": "integer",
-                        "format": "uint",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "offset": {
-                        "type": "integer",
-                        "format": "uint64",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint64",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint64",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       }
                     },
                     "additionalProperties": false,
@@ -58083,6 +58719,7 @@
                   "engine_api": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "engine_version": {
@@ -58097,6 +58734,7 @@
                   "format_version": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   },
                   "hypotheses": {
@@ -58145,34 +58783,179 @@
                 "type": "object",
                 "properties": {
                   "max_findings": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 128,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 128,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 128,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 128,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_hypotheses": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 32,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 32,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 32,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 32,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_record_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 131072,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 131072,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 131072,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 131072,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_retained_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 65536,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 65536,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 65536,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 65536,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_runs": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 64,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 64,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 64,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 64,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false
@@ -71357,11 +72140,13 @@
               "engine_api": {
                 "type": "integer",
                 "format": "uint32",
+                "maximum": 4294967295,
                 "minimum": 0
               },
               "format_version": {
                 "type": "integer",
                 "format": "uint32",
+                "maximum": 4294967295,
                 "minimum": 0
               },
               "input": {
@@ -71449,9 +72234,35 @@
                         "const": "strings"
                       },
                       "scanned_bytes": {
-                        "type": "integer",
-                        "format": "uint64",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint64",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint64",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "strings": {
                         "type": "array",
@@ -71485,9 +72296,35 @@
                     "type": "string"
                   },
                   "offset": {
-                    "type": "integer",
-                    "format": "uint64",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false,
@@ -71555,28 +72392,144 @@
                 "type": "object",
                 "properties": {
                   "max_capture_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 4194304,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4194304,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 4194304,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 4194304,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_steps": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 64,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 64,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 64,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 64,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_value_bytes": {
-                    "type": "integer",
-                    "format": "uint",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 1048576,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 1048576,
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 1048576,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 1048576,
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "max_work_bytes": {
-                    "type": "integer",
-                    "format": "uint64",
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "default": 16777216,
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16777216,
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
                     "default": 16777216,
-                    "minimum": 0
+                    "x-cube-integer": {
+                      "default": 16777216,
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   }
                 },
                 "additionalProperties": false
@@ -71597,8 +72550,33 @@
                 "description": "JSON parameter scalars preserve their actual types; binary keys need an\nexplicit {\"base64\":\"...\"} object. Concrete tagged list objects are additive:\n{\"unsigned_list\":[0,2]} and {\"text_list\":[\"1=X\"]}. Bare arrays, floats, null,\nmixed/nested lists and arbitrary objects remain invalid, including empty arrays.",
                 "anyOf": [
                   {
-                    "type": "integer",
-                    "format": "int64"
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "int64",
+                        "maximum": 9007199254740991,
+                        "minimum": -9007199254740991,
+                        "x-cube-maximum-decimal": "9223372036854775807",
+                        "x-cube-minimum-decimal": "-9223372036854775808"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "int64",
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "9223372036854775807",
+                          "x-cube-minimum-decimal": "-9223372036854775808"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "int64",
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "9223372036854775807",
+                      "x-cube-minimum-decimal": "-9223372036854775808"
+                    }
                   },
                   {
                     "type": "boolean"
@@ -71625,9 +72603,35 @@
                       "unsigned_list": {
                         "type": "array",
                         "items": {
-                          "type": "integer",
-                          "format": "uint64",
-                          "minimum": 0
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "format": "uint64",
+                              "maximum": 9007199254740991,
+                              "minimum": 0,
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            },
+                            {
+                              "type": "string",
+                              "maxLength": 40,
+                              "pattern": "^(0|-?[1-9][0-9]*)$",
+                              "x-cube-native-integer": {
+                                "format": "uint64",
+                                "minimum": 0,
+                                "type": "integer",
+                                "x-cube-maximum-decimal": "18446744073709551615",
+                                "x-cube-minimum-decimal": "0"
+                              }
+                            }
+                          ],
+                          "x-cube-integer": {
+                            "format": "uint64",
+                            "minimum": 0,
+                            "type": "integer",
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          }
                         }
                       }
                     },
@@ -71666,9 +72670,35 @@
                     "type": "string"
                   },
                   "offset": {
-                    "type": "integer",
-                    "format": "uint64",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "rule": {
                     "type": "string"
@@ -71700,6 +72730,7 @@
                   "version": {
                     "type": "integer",
                     "format": "uint32",
+                    "maximum": 4294967295,
                     "minimum": 0
                   }
                 },
@@ -71713,14 +72744,66 @@
                 "type": "object",
                 "properties": {
                   "length": {
-                    "type": "integer",
-                    "format": "uint64",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "offset": {
-                    "type": "integer",
-                    "format": "uint64",
-                    "minimum": 0
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
                   },
                   "text": {
                     "type": "string"
@@ -71782,9 +72865,35 @@
                         "minimum": 0
                       },
                       "offset": {
-                        "type": "integer",
-                        "format": "uint64",
-                        "minimum": 0
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint64",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint64",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
                       },
                       "type": {
                         "type": "string",

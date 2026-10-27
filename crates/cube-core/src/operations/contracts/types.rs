@@ -128,7 +128,7 @@ fn root(semantic: &str) -> Result<Schema, OperationError> {
             )));
         }
     };
-    Ok(value)
+    Ok(wire::schema(value))
 }
 fn schema_union(items: &[Schema]) -> Schema {
     let mut variants = items

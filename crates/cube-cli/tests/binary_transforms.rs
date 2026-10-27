@@ -86,3 +86,111 @@ fn new_transforms_preserve_raw_bytes_and_hex_conventions() {
         assert!(result.stdout.is_empty());
     }
 }
+
+#[test]
+fn arithmetic_widths_transports_and_invalid_counts() {
+    for width in [1, 2, 4, 8] {
+        let w = width.to_string();
+        let maximum = vec![255; width];
+        let one = format!("{}01", "00".repeat(width - 1));
+        let r = run(
+            &[
+                "binary",
+                "add-wrapping",
+                "--key-hex",
+                &one,
+                "--unit-bytes",
+                &w,
+                "--output",
+                "raw",
+            ],
+            &maximum,
+        );
+        assert!(r.status.success());
+        assert_eq!(r.stdout, vec![0; width]);
+        let r = run(
+            &[
+                "binary",
+                "sub-wrapping",
+                "--key-hex",
+                &one,
+                "--unit-bytes",
+                &w,
+                "--output",
+                "raw",
+            ],
+            &vec![0; width],
+        );
+        assert!(r.status.success());
+        assert_eq!(r.stdout, maximum);
+        let mut input = vec![0; width];
+        input[0] = 128;
+        input[width - 1] |= 1;
+        let r = run(
+            &[
+                "binary",
+                "rotate-left",
+                "--count",
+                "18446744073709551615",
+                "--unit-bytes",
+                &w,
+                "--output",
+                "raw",
+            ],
+            &input,
+        );
+        assert!(r.status.success());
+        let r = run(
+            &[
+                "binary",
+                "rotate-right",
+                "--count",
+                "18446744073709551615",
+                "--unit-bytes",
+                &w,
+                "--output",
+                "raw",
+            ],
+            &r.stdout,
+        );
+        assert!(r.status.success());
+        assert_eq!(r.stdout, input);
+    }
+    let r = run(&["binary", "xor-exact", "--key-hex", "ff0f"], &[0, 255]);
+    assert!(r.status.success());
+    assert_eq!(r.stdout, b"fff0\n");
+    assert_eq!(
+        run(
+            &[
+                "binary",
+                "rotate-left",
+                "--count",
+                "0",
+                "A",
+                "--output",
+                "text"
+            ],
+            &[]
+        )
+        .stdout,
+        b"A"
+    );
+    for args in [
+        vec!["binary", "rotate-left", "--count", "-1"],
+        vec!["binary", "rotate-right", "--count", "1.0"],
+        vec!["binary", "rotate-left", "--count", "18446744073709551616"],
+        vec![
+            "binary",
+            "add-wrapping",
+            "--unit-bytes",
+            "3",
+            "--key-hex",
+            "",
+        ],
+        vec!["binary", "xor-exact", "--key-hex", "00"],
+    ] {
+        let r = run(&args, &[]);
+        assert!(!r.status.success());
+        assert!(r.stdout.is_empty());
+    }
+}

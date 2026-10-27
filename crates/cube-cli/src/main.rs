@@ -374,17 +374,35 @@ struct CaesarArgs {
 enum Output {
     Hex,
     Raw,
+    /// Exact UTF-8, validated without replacement or an added newline
+    Text,
 }
 
 fn write_text(output: &mut impl Write, text: &str) -> io::Result<()> {
     writeln!(output, "{text}")
 }
 
-fn write_bytes(output: &mut impl Write, bytes: &[u8], format: Output) -> io::Result<()> {
+fn write_bytes(
+    output: &mut impl Write,
+    bytes: &[u8],
+    format: Output,
+) -> Result<(), Box<dyn Error>> {
     match format {
-        Output::Hex => write_text(output, &encoding::hex_encode(bytes)),
-        Output::Raw => output.write_all(bytes),
+        Output::Hex => write_text(output, &encoding::hex_encode(bytes))?,
+        Output::Raw => output.write_all(bytes)?,
+        Output::Text => {
+            let text = std::str::from_utf8(bytes).map_err(|e| {
+                cube_core::errors::OperationError::new(
+                    cube_core::errors::ErrorCode::InvalidInput,
+                    "text output requires valid UTF-8; select raw or hex for arbitrary bytes",
+                )
+                .parameter("output")
+                .offset(e.valid_up_to() as u64)
+            })?;
+            output.write_all(text.as_bytes())?;
+        }
     }
+    Ok(())
 }
 
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {

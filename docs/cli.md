@@ -309,8 +309,26 @@ cube binary shift-left --bits 1 --unit-bytes 2 --text AB
 cube binary swap-endian --unit-bytes 2 --text ABCD
 ```
 
-Use `--output raw` for exact stdout bytes. AND/OR operands must have equal length;
+Use `--output raw` for exact stdout bytes. `--output text` also writes without a
+newline and rejects invalid UTF-8. AND/OR operands must have equal length;
 shifts use independent unsigned big-endian units, with explicit zero-fill rules.
+
+Rotations and paired modular arithmetic use the same complete big-endian units:
+
+```sh
+cube binary rotate-left --count 1 --unit-bytes 2 --text AB
+# 8284
+cube binary add-wrapping --key-hex 0001 --unit-bytes 2 --text AB
+# 4143
+cube binary sub-wrapping --key-hex 0001 --unit-bytes 2 --text AB
+# 4141
+cube binary xor-exact --key-hex ff0f --text AB
+# be4d
+```
+
+`count` is a u64 reduced modulo the bit width. Paired operands must have equal
+lengths; there is no key repetition, cross-unit carry or borrow. Pipeline counts
+are restricted to nonnegative i64 and operand parameters to 64 KiB.
 
 ## Select mathematical constant digits
 

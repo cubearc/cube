@@ -48,10 +48,36 @@ pub(crate) struct ShiftArgs {
     #[arg(long)]
     bits: u8,
 }
+#[derive(Args)]
+pub(crate) struct RotateArgs {
+    #[command(flatten)]
+    unit: UnitArgs,
+    /// Unsigned u64 count, reduced modulo the unit bit width
+    #[arg(long)]
+    count: u64,
+}
+#[derive(Args)]
+pub(crate) struct ArithmeticArgs {
+    #[command(flatten)]
+    unit: UnitArgs,
+    /// Exact equally long operand, in hexadecimal
+    #[arg(long)]
+    key_hex: String,
+}
 #[derive(Subcommand)]
 pub(crate) enum BinaryCommand {
     /// XOR bytes with a repeating key (not secure encryption)
     Xor(XorArgs),
+    /// Rotate left within independent big-endian units
+    RotateLeft(RotateArgs),
+    /// Rotate right within independent big-endian units
+    RotateRight(RotateArgs),
+    /// XOR exact equally long operands without repetition
+    XorExact(MaskArgs),
+    /// Add paired unsigned units modulo the unit width
+    AddWrapping(ArithmeticArgs),
+    /// Subtract paired unsigned units modulo the unit width
+    SubWrapping(ArithmeticArgs),
     /// Per-byte AND of equal-length operands; <=16 MiB
     And(MaskArgs),
     /// Per-byte OR of equal-length operands; <=16 MiB
@@ -91,6 +117,41 @@ pub(crate) fn run(command: BinaryCommand, output: &mut impl Write) -> Result<(),
                 }
             };
             (binary::xor(&args.input.read()?, &key)?, args.output)
+        }
+        BinaryCommand::RotateLeft(args) => {
+            let (bytes, format) = data(args.unit.data, "binary.rotate_left")?;
+            (
+                t::rotate_left(&bytes, args.count, args.unit.unit_bytes)?,
+                format,
+            )
+        }
+        BinaryCommand::RotateRight(args) => {
+            let (bytes, format) = data(args.unit.data, "binary.rotate_right")?;
+            (
+                t::rotate_right(&bytes, args.count, args.unit.unit_bytes)?,
+                format,
+            )
+        }
+        BinaryCommand::XorExact(args) => {
+            let operand = key(&args.key_hex)?;
+            let (bytes, format) = data(args.data, "binary.xor_exact")?;
+            (t::xor_exact(&bytes, &operand)?, format)
+        }
+        BinaryCommand::AddWrapping(args) => {
+            let operand = key(&args.key_hex)?;
+            let (bytes, format) = data(args.unit.data, "binary.add_wrapping")?;
+            (
+                t::add_wrapping(&bytes, &operand, args.unit.unit_bytes)?,
+                format,
+            )
+        }
+        BinaryCommand::SubWrapping(args) => {
+            let operand = key(&args.key_hex)?;
+            let (bytes, format) = data(args.unit.data, "binary.sub_wrapping")?;
+            (
+                t::sub_wrapping(&bytes, &operand, args.unit.unit_bytes)?,
+                format,
+            )
         }
         BinaryCommand::And(args) => {
             let key = key(&args.key_hex)?;

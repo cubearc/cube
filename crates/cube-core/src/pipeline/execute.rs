@@ -72,6 +72,20 @@ impl Prepared {
                 "A1Z26 pipeline input exceeds its text budget",
             ));
         }
+        if matches!(
+            self.adapter.action,
+            Action::RotateLeft
+                | Action::RotateRight
+                | Action::XorExact
+                | Action::AddWrapping
+                | Action::SubWrapping
+        ) && size > binary::transform::MAX_INPUT
+        {
+            return Err(Error::new(
+                ErrorCode::ResourceLimit,
+                "binary input exceeds 16 MiB",
+            ));
+        }
         if let Arguments::Forensic {
             range,
             width,
@@ -158,6 +172,25 @@ impl Prepared {
             }
             (Action::HarAsset, Value::Text { data }, Arguments::WebAsset { index, .. }) => {
                 crate::web::assets::har(&data, *index)?.into_value()
+            }
+            (
+                Action::RotateLeft,
+                Value::Bytes { data },
+                Arguments::Rotation { count, unit_bytes },
+            ) => bytes(binary::transform::rotate_left(&data, *count, *unit_bytes)?),
+            (
+                Action::RotateRight,
+                Value::Bytes { data },
+                Arguments::Rotation { count, unit_bytes },
+            ) => bytes(binary::transform::rotate_right(&data, *count, *unit_bytes)?),
+            (Action::XorExact, Value::Bytes { data }, Arguments::Bytes(key)) => {
+                bytes(binary::transform::xor_exact(&data, key)?)
+            }
+            (Action::AddWrapping, Value::Bytes { data }, Arguments::Paired { key, unit_bytes }) => {
+                bytes(binary::transform::add_wrapping(&data, key, *unit_bytes)?)
+            }
+            (Action::SubWrapping, Value::Bytes { data }, Arguments::Paired { key, unit_bytes }) => {
+                bytes(binary::transform::sub_wrapping(&data, key, *unit_bytes)?)
             }
             (Action::And, Value::Bytes { data }, Arguments::Bytes(key)) => {
                 bytes(binary::transform::and(&data, key)?)

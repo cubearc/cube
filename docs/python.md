@@ -990,3 +990,24 @@ assert cube.digital_root(-(2**128 - 1)) == 3
 
 This lossy arithmetic operation is repeated decimal digit summation, not a plain
 sum, checksum or persistence API.
+
+
+## Fixed-width binary arithmetic
+
+All implementations run in Rust and preserve exact bytes. Units are independent
+unsigned big-endian 1/2/4/8-byte integers; omitted `unit_bytes` (or `None` in these
+new functions) selects one byte. Rotations accept builtin integers in 0..2^64-1,
+reduced modulo the unit bit width. Booleans/floats are rejected. Both arithmetic
+operands must have equal complete lengths and be <=16 MiB; empty/empty succeeds.
+
+```python
+assert cube.rotate_left(bytes.fromhex("8001"), 1, unit_bytes=2) == b"\x00\x03"
+assert cube.rotate_right(b"\x03", 1) == b"\x81"
+assert cube.add_wrapping(bytes.fromhex("ffff0001"), bytes.fromhex("00010001"), unit_bytes=2) == bytes.fromhex("00000002")
+assert cube.sub_wrapping(b"\x00", b"\x01") == b"\xff"
+assert cube.xor_exact(bytes.fromhex("00ff"), bytes.fromhex("ff0f")) == bytes.fromhex("fff0")
+```
+
+The existing `cube.xor` continues to repeat a nonempty key. New byte adapters use
+version 1 with the existing engine/recipe versions, nonnegative i64 counts and
+64 KiB operand-parameter limits.

@@ -141,6 +141,124 @@ pub fn swap_endian(data: &[u8], unit_bytes: usize) -> Result<Vec<u8>, OperationE
         .flat_map(|u| u.iter().rev().copied())
         .collect())
 }
+/// XOR equally long buffers without repeating, padding or truncating either operand.
+/// Each operand is limited to 16 MiB; empty/empty succeeds.
+pub fn xor_exact(data: &[u8], key: &[u8]) -> Result<Vec<u8>, OperationError> {
+    let op = "binary.xor_exact";
+    paired(data, key, 1, op)?;
+    Ok(data.iter().zip(key).map(|(a, b)| a ^ b).collect())
+}
+fn complete(data: &[u8], unit_bytes: usize, op: &'static str) -> Result<(), OperationError> {
+    check(data, op)?;
+    validate_unit(unit_bytes, op)?;
+    if !data.len().is_multiple_of(unit_bytes) {
+        return Err(invalid(
+            op,
+            "unit_bytes",
+            "input must contain complete big-endian units",
+        ));
+    }
+    Ok(())
+}
+fn paired(
+    data: &[u8],
+    key: &[u8],
+    unit_bytes: usize,
+    op: &'static str,
+) -> Result<(), OperationError> {
+    complete(data, unit_bytes, op)?;
+    check(key, op)?;
+    if data.len() != key.len() {
+        return Err(invalid(op, "key", "operands must have equal byte lengths"));
+    }
+    Ok(())
+}
+fn unsigned(unit: &[u8]) -> u64 {
+    let mut bytes = [0; 8];
+    bytes[8 - unit.len()..].copy_from_slice(unit);
+    u64::from_be_bytes(bytes)
+}
+fn rotate(
+    data: &[u8],
+    count: u64,
+    unit_bytes: usize,
+    left: bool,
+) -> Result<Vec<u8>, OperationError> {
+    let op = if left {
+        "binary.rotate_left"
+    } else {
+        "binary.rotate_right"
+    };
+    complete(data, unit_bytes, op)?;
+    let width = (unit_bytes * 8) as u32;
+    let count = (count % u64::from(width)) as u32;
+    let mut output = Vec::with_capacity(data.len());
+    for unit in data.chunks_exact(unit_bytes) {
+        let n = unsigned(unit);
+        let rotated = if count == 0 {
+            n
+        } else if left {
+            (n << count) | (n >> (width - count))
+        } else {
+            (n >> count) | n.wrapping_shl(width - count)
+        };
+        output.extend_from_slice(&rotated.to_be_bytes()[8 - unit_bytes..]);
+    }
+    Ok(output)
+}
+/// Rotate independent unsigned big-endian 1/2/4/8-byte units left.
+/// The full u64 count is reduced modulo the unit bit width. At most 16 MiB.
+///
+/// ```
+/// use cube_core::binary::transform::{rotate_left, rotate_right};
+/// let rotated = rotate_left(&[0x80, 1], 1, 2)?;
+/// assert_eq!(rotated, [0, 3]);
+/// assert_eq!(rotate_right(&rotated, 1, 2)?, [0x80, 1]);
+/// # Ok::<(), cube_core::errors::OperationError>(())
+/// ```
+pub fn rotate_left(data: &[u8], count: u64, unit_bytes: usize) -> Result<Vec<u8>, OperationError> {
+    rotate(data, count, unit_bytes, true)
+}
+/// Rightward counterpart of [`rotate_left`], with identical bounds and byte order.
+pub fn rotate_right(data: &[u8], count: u64, unit_bytes: usize) -> Result<Vec<u8>, OperationError> {
+    rotate(data, count, unit_bytes, false)
+}
+fn arithmetic(
+    data: &[u8],
+    key: &[u8],
+    unit_bytes: usize,
+    subtract: bool,
+) -> Result<Vec<u8>, OperationError> {
+    let op = if subtract {
+        "binary.sub_wrapping"
+    } else {
+        "binary.add_wrapping"
+    };
+    paired(data, key, unit_bytes, op)?;
+    let mut output = Vec::with_capacity(data.len());
+    for (a, b) in data
+        .chunks_exact(unit_bytes)
+        .zip(key.chunks_exact(unit_bytes))
+    {
+        let n = if subtract {
+            unsigned(a).wrapping_sub(unsigned(b))
+        } else {
+            unsigned(a).wrapping_add(unsigned(b))
+        };
+        output.extend_from_slice(&n.to_be_bytes()[8 - unit_bytes..]);
+    }
+    Ok(output)
+}
+/// Add paired unsigned big-endian units modulo 2^(unit_bytes*8), discarding carry
+/// independently. Equal lengths, complete 1/2/4/8-byte units, <=16 MiB per operand.
+pub fn add_wrapping(data: &[u8], key: &[u8], unit_bytes: usize) -> Result<Vec<u8>, OperationError> {
+    arithmetic(data, key, unit_bytes, false)
+}
+/// Subtract paired units with the same bounds as [`add_wrapping`]; no borrow
+/// crosses a unit boundary, including for unsigned 64-bit underflow.
+pub fn sub_wrapping(data: &[u8], key: &[u8], unit_bytes: usize) -> Result<Vec<u8>, OperationError> {
+    arithmetic(data, key, unit_bytes, true)
+}
 const KEY: Parameter = Parameter {
     name: "key",
     description: "Exact equally long byte operand, including empty/empty. Never repeat or pad.",
@@ -163,6 +281,16 @@ const BITS: Parameter = Parameter {
     required: true,
     default: None,
     constraints: ParameterType::Unsigned { min: 0, max: 64 },
+};
+const COUNT: Parameter = Parameter {
+    name: "count",
+    description: "Unsigned u64 count, reduced modulo unit_bytes*8; pipeline integers are limited to i64::MAX.",
+    required: true,
+    default: None,
+    constraints: ParameterType::Unsigned {
+        min: 0,
+        max: u64::MAX,
+    },
 };
 pub const OPERATIONS: &[Descriptor] = &[
     Descriptor {
@@ -248,5 +376,65 @@ pub const OPERATIONS: &[Descriptor] = &[
         reversible: Some(true),
         command: "binary swap-endian",
         example: "cube binary swap-endian --unit-bytes 2 --text ABCD",
+    },
+    Descriptor {
+        id: "binary.rotate_left",
+        category: "binary",
+        description: "Rotate left per independent big-endian unit; u64 count modulo width; <=16 MiB.",
+        input_type: "bytes",
+        output_type: "bytes",
+        parameters: &[COUNT, UNIT],
+        deterministic: true,
+        reversible: Some(true),
+        command: "binary rotate-left",
+        example: "cube binary rotate-left --count 1 --text A",
+    },
+    Descriptor {
+        id: "binary.rotate_right",
+        category: "binary",
+        description: "Rotate right per independent big-endian unit; u64 count modulo width; <=16 MiB.",
+        input_type: "bytes",
+        output_type: "bytes",
+        parameters: &[COUNT, UNIT],
+        deterministic: true,
+        reversible: Some(true),
+        command: "binary rotate-right",
+        example: "cube binary rotate-right --count 1 --text A",
+    },
+    Descriptor {
+        id: "binary.xor_exact",
+        category: "binary",
+        description: "Exact equal-length byte XOR; no key repetition; <=16 MiB per operand.",
+        input_type: "bytes",
+        output_type: "bytes",
+        parameters: &[KEY],
+        deterministic: true,
+        reversible: Some(true),
+        command: "binary xor-exact",
+        example: "cube binary xor-exact --key-hex ff --text A",
+    },
+    Descriptor {
+        id: "binary.add_wrapping",
+        category: "binary",
+        description: "Add paired big-endian unsigned units modulo their width; <=16 MiB per operand.",
+        input_type: "bytes",
+        output_type: "bytes",
+        parameters: &[KEY, UNIT],
+        deterministic: true,
+        reversible: Some(true),
+        command: "binary add-wrapping",
+        example: "cube binary add-wrapping --key-hex 01 --text A",
+    },
+    Descriptor {
+        id: "binary.sub_wrapping",
+        category: "binary",
+        description: "Subtract paired big-endian unsigned units modulo their width; <=16 MiB per operand.",
+        input_type: "bytes",
+        output_type: "bytes",
+        parameters: &[KEY, UNIT],
+        deterministic: true,
+        reversible: Some(true),
+        command: "binary sub-wrapping",
+        example: "cube binary sub-wrapping --key-hex 01 --text A",
     },
 ];

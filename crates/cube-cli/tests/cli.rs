@@ -560,7 +560,7 @@ fn invalid_cli_usage_exits_two() {
         vec!["cipher", "caesar", "--shift", "2147483648"],
         vec!["binary", "xor"],
         vec!["binary", "xor", "--key", "k", "--key-hex", "ff"],
-        vec!["decode", "base64", "--output", "text"],
+        vec!["decode", "base64", "--output", "lossy"],
         vec!["hash", "crc32", "--output", "raw"],
     ] {
         let output = cube(&args, b"");
@@ -621,7 +621,7 @@ fn structured_discovery_and_descriptions() {
     success(
         &["ops", "list", "--category", "binary"],
         b"",
-        b"binary xor\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\n",
+        b"binary xor\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\n",
     );
     for args in [
         vec!["ops", "list", "--category", "missing"],

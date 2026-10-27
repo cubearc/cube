@@ -11,6 +11,11 @@ pub(super) enum Action {
     SemaphoreDecode,
     HtmlAsset,
     HarAsset,
+    RotateLeft,
+    RotateRight,
+    XorExact,
+    AddWrapping,
+    SubWrapping,
     And,
     Or,
     Not,
@@ -59,6 +64,31 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "binary.sub_wrapping",
+        version: 1,
+        action: Action::SubWrapping,
+    },
+    Adapter {
+        id: "binary.add_wrapping",
+        version: 1,
+        action: Action::AddWrapping,
+    },
+    Adapter {
+        id: "binary.xor_exact",
+        version: 1,
+        action: Action::XorExact,
+    },
+    Adapter {
+        id: "binary.rotate_right",
+        version: 1,
+        action: Action::RotateRight,
+    },
+    Adapter {
+        id: "binary.rotate_left",
+        version: 1,
+        action: Action::RotateLeft,
+    },
     Adapter {
         id: "text.transform.masked",
         version: 1,
@@ -308,6 +338,14 @@ pub(super) enum Arguments {
         index: usize,
         selector: crate::web::assets::HtmlSelector,
     },
+    Rotation {
+        count: u64,
+        unit_bytes: usize,
+    },
+    Paired {
+        key: Vec<u8>,
+        unit_bytes: usize,
+    },
     Units {
         bits: u8,
         unit_bytes: usize,
@@ -404,6 +442,44 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
             Arguments::WebAsset { index, selector }
         }
 
+        Action::RotateLeft | Action::RotateRight | Action::AddWrapping | Action::SubWrapping => {
+            let unit_bytes = match step.parameters.get("unit_bytes") {
+                Some(Parameter::Integer(n)) => {
+                    usize::try_from(*n).map_err(|_| invalid("invalid unit width"))?
+                }
+                None => 1,
+                _ => return Err(invalid("expected integer unit width").parameter("unit_bytes")),
+            };
+            crate::binary::transform::validate_unit(unit_bytes, adapter.id)
+                .map_err(Error::from_operation)?;
+            if matches!(adapter.action, Action::RotateLeft | Action::RotateRight) {
+                let Some(Parameter::Integer(count)) = step.parameters.get("count") else {
+                    return Err(invalid("required nonnegative integer count").parameter("count"));
+                };
+                Arguments::Rotation {
+                    count: *count as u64,
+                    unit_bytes,
+                }
+            } else {
+                let Some(Parameter::Bytes { data }) = step.parameters.get("key") else {
+                    return Err(invalid("explicit byte operand required").parameter("key"));
+                };
+                if data.len() > 65536 {
+                    return Err(Error::new(
+                        ErrorCode::ResourceLimit,
+                        "operand exceeds pipeline's 64 KiB parameter limit",
+                    )
+                    .parameter("key"));
+                }
+                if !data.len().is_multiple_of(unit_bytes) {
+                    return Err(invalid("operand must contain complete units").parameter("key"));
+                }
+                Arguments::Paired {
+                    key: data.clone(),
+                    unit_bytes,
+                }
+            }
+        }
         Action::ShiftLeft | Action::ShiftRight | Action::SwapEndian => {
             let unit_bytes = match step.parameters.get("unit_bytes") {
                 Some(Parameter::Integer(n)) => usize::try_from(*n)
@@ -477,7 +553,7 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
                 .map_err(Error::from_operation)?;
             Arguments::Affine(a, b)
         }
-        Action::Xor | Action::And | Action::Or => {
+        Action::Xor | Action::XorExact | Action::And | Action::Or => {
             let Some(Parameter::Bytes { data }) = step.parameters.get("key") else {
                 return Err(invalid("explicit binary key required").parameter("key"));
             };

@@ -7,7 +7,11 @@ use pyo3::{
     prelude::*,
     types::{PyDict, PyInt},
 };
-fn operand(value: &Bound<'_, PyAny>, op: &'static str, parameter: &'static str) -> PyResult<u64> {
+pub(super) fn operand(
+    value: &Bound<'_, PyAny>,
+    op: &'static str,
+    parameter: &'static str,
+) -> PyResult<u64> {
     let invalid = |code| {
         super::file_error(
             OperationError::new(

@@ -293,14 +293,19 @@ def test_operation_discovery_uses_core_metadata():
     assert ids == sorted(set(ids))
     assert len(ids) >= 14
     binary_ids = [
+        "binary.add_wrapping",
         "binary.and",
         "binary.not",
         "binary.or",
         "binary.reverse",
+        "binary.rotate_left",
+        "binary.rotate_right",
         "binary.shift_left",
         "binary.shift_right",
+        "binary.sub_wrapping",
         "binary.swap_endian",
         "binary.xor",
+        "binary.xor_exact",
     ]
     assert cube.operations("binary") == [
         cube.describe_operation(id) for id in binary_ids

@@ -10,6 +10,16 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    **{
+        f"binary.{name}": name
+        for name in (
+            "rotate_left",
+            "rotate_right",
+            "xor_exact",
+            "add_wrapping",
+            "sub_wrapping",
+        )
+    },
     "number.digital_root": "digital_root",
     **{
         f"number.{name}": name

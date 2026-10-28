@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: cubearc/play
-          ref: dae1ff975a14f4bb00375f206cbddfb376ee3832
+          ref: ee64516f0c912d2ba15270f775457f7716556a5a
           path: play
           persist-credentials: false
       - name: Test the real CLI in the Docker Runner

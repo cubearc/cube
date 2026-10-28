@@ -1,5 +1,11 @@
 # Cube
 
+> [!WARNING]
+> **Beta software.** CubeArc projects are under active development and are not yet
+> stable. Features, APIs, file formats and workflows may change without backward
+> compatibility. Bugs and incomplete features are expected. Keep backups of
+> important data and independently verify results before relying on them.
+
 [![CI](https://github.com/cubearc/cube/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/cubearc/cube/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/cubearc/cube/branch/main/graph/badge.svg)](https://codecov.io/gh/cubearc/cube)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)

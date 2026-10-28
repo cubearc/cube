@@ -152,7 +152,7 @@ pub struct Redefence {
     #[serde(deserialize_with = "wire::indices")]
     pub order: Vec<usize>,
 }
-fn rail_order(
+pub(crate) fn rail_order(
     n: usize,
     p: &Rails,
     readout: &[usize],

@@ -1,9 +1,16 @@
 //! Bounded classical-cipher evidence. Scores are heuristics, never probabilities
 //! of correctness. Models, keys and configurations are always caller-owned.
+pub mod candidates;
 mod catalog;
+pub mod classical;
+pub mod crib;
 mod fixtures;
+pub mod homophonic;
 pub mod period;
 pub mod scoring;
+pub mod transposition;
+pub mod vigenere;
+use crate::ciphers::transposition::wire;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
@@ -21,8 +28,10 @@ pub const MAX_REQUEST: usize = 4 << 20;
 #[serde(default, deny_unknown_fields)]
 pub struct Limits {
     #[schemars(range(min = 0, max = 16777216))]
+    #[serde(deserialize_with = "wire::integer")]
     pub max_work: usize,
     #[schemars(range(min = 1, max = 4096))]
+    #[serde(deserialize_with = "wire::integer")]
     pub max_results: usize,
 }
 impl Default for Limits {
@@ -111,6 +120,11 @@ pub(crate) fn json_bound<T: Serialize>(value: &T, max: usize) -> Result<(), Oper
 }
 pub(crate) fn finish<T: Serialize>(report: T) -> Result<T, OperationError> {
     json_bound(&report, MAX_REPORT)?;
+    let value = serde_json::to_value(&report).map_err(|_| invalid("invalid structured report"))?;
+    json_bound(
+        &crate::operations::contracts::canonical_value(value),
+        MAX_REPORT,
+    )?;
     Ok(report)
 }
 /// Bounded strict JSON transport. No duplicate keys, unknown fields or references.

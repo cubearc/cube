@@ -97,8 +97,9 @@ reversible, are not modern cipher breaking and do not establish authenticity.
 - [AIMA CSP source](https://aima.cs.berkeley.edu/python/csp.html) documents forward
   checking, backtracking and seeded/min-conflict alternatives. The maintained
   [aima-python repository](https://github.com/aimacode/aima-python) has an
-  [MIT license](https://github.com/aimacode/aima-python/blob/master/LICENSE).
-  It is a reference implementation, not a qualified Rust dependency: Python runtime,
+  [MIT license](https://github.com/aimacode/aima-python/blob/f104e03fdc1582f014b3a4c93f1a9b7d2da70114/LICENSE).
+  Revision `f104e03fdc1582f014b3a4c93f1a9b7d2da70114` (2026-06-30)
+  was inspected on the decision date. It is a reference implementation, not a qualified Rust dependency: Python runtime,
   broad dynamic predicates and different accounting/explanation semantics would
   change Cube's native packaging and contract. No code is copied or dependency added.
 - [Michigan Tech IC derivation](https://pages.mtu.edu/~shene/NSF-4/Tutorial/VIG/Vig-IOC.html)

@@ -28,12 +28,14 @@ pub struct Weight {
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum Model {
     Counts {
+        #[serde(deserialize_with = "wire::integer")]
         n: usize,
         entries: Vec<Weight>,
         smoothing: f64,
         normalization: Normalization,
     },
     Probabilities {
+        #[serde(deserialize_with = "wire::integer")]
         n: usize,
         entries: Vec<Weight>,
         unseen_probability: f64,
@@ -58,13 +60,21 @@ pub struct Score {
     pub input_index: usize,
     pub samples: usize,
     /// Sum of per-sample values rounded to 1e-9; None means no scored samples.
+    #[schemars(schema_with = "optional_nanos")]
     pub total_nanos: Option<i64>,
     /// Arithmetic mean in the same units, truncated toward zero.
+    #[schemars(schema_with = "optional_nanos")]
     pub mean_nanos: Option<i64>,
+}
+// An explicit union lets the existing contract integer transport retain its
+// decimal-string branch alongside null, without changing legacy contracts.
+fn optional_nanos(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
+    schemars::json_schema!({"anyOf":[schemars::schema_for!(i64).to_value(),{"type":"null"}]})
 }
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 pub struct Report {
     pub method: String,
+    pub normalization: Normalization,
     pub model_sha256: String,
     pub status: Status,
     pub scores: Vec<Score>,
@@ -75,7 +85,7 @@ pub(crate) struct Prepared {
     pub identity: String,
     pub method: String,
     n: usize,
-    normalization: Normalization,
+    pub normalization: Normalization,
     weights: BTreeMap<String, i64>,
     unseen: i64,
 }
@@ -122,7 +132,10 @@ impl Prepared {
             } => {
                 let total = entries.iter().map(|e| e.weight).sum::<f64>() + unseen_probability;
                 if !positive(*unseen_probability)
-                    || entries.iter().any(|e| !positive(e.weight))
+                    || *unseen_probability > 1.0
+                    || entries
+                        .iter()
+                        .any(|e| !positive(e.weight) || e.weight > 1.0)
                     || (total - 1.0).abs() > 1e-9
                 {
                     return Err(invalid(
@@ -223,6 +236,7 @@ impl Prepared {
 /// Score ordered candidates against the explicit model. Cancellation/work limits
 /// return a marked prefix; invalid models reject before evaluating candidates.
 pub fn score(r: &Request, cancel: Option<&AtomicBool>) -> Result<Report, OperationError> {
+    json_bound(r, MAX_REQUEST)?;
     bound(r.candidates.len(), 4096)?;
     let mut bytes = 0usize;
     for text in &r.candidates {
@@ -247,6 +261,7 @@ pub fn score(r: &Request, cancel: Option<&AtomicBool>) -> Result<Report, Operati
     ranking.sort_by_key(|&i| std::cmp::Reverse(scores[i].mean_nanos));
     finish(Report {
         method: p.method,
+        normalization: p.normalization,
         model_sha256: p.identity,
         status: budget.status,
         scores,

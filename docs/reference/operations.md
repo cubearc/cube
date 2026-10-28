@@ -4,6 +4,146 @@ Generated from Core descriptors and typed schemas. Edit their owning Rust declar
 
 Schemas: [versioned catalog](../../contracts/v1/catalog.json). Structural contracts do not grant capabilities or replace operation runtime validation.
 
+## analysis.affine.rank
+
+Finite Affine candidate ranking
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
+## analysis.caesar.rank
+
+Finite Caesar candidate ranking
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
+## analysis.crib.verify
+
+Explicit known-plaintext verification
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
+## analysis.homophonic.inspect
+
+Exact homophonic token evidence
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
 ## analysis.language.score
 
 Caller-owned language-model scoring
@@ -42,6 +182,76 @@ cube cryptanalysis --help
 ## analysis.period.estimate
 
 Explicit classical key-length evidence
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
+## analysis.transposition.rank
+
+Explicit transposition candidates
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
+## analysis.vigenere.rank
+
+Explicit Vigenere beam search
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 

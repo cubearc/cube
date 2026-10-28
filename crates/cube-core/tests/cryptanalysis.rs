@@ -19,6 +19,10 @@ fn caller_model_scores_are_fixed_point_stable_and_empty_is_undefined() {
     assert_eq!(report.scores[1].samples, 1);
     assert_eq!(report.scores[2].total_nanos, None);
     assert_eq!(report.model_sha256.len(), 64);
+    assert_eq!(
+        serde_json::to_value(report).unwrap()["normalization"],
+        "ascii_letters"
+    );
 }
 
 #[test]
@@ -75,4 +79,37 @@ fn period_evidence_uses_ascii_positions_exact_counts_and_bounded_pairs() {
     assert_eq!(r.friedman, None);
     let limited=serde_json::from_value(json!({"text":"AAAAAAAAAA","periods":[1],"ngram":2,"expected_ic":0.065,"limits":{"max_work":20}})).unwrap();
     assert!(!a::period::estimate(&limited, None).unwrap().status.complete);
+}
+
+#[test]
+fn a_uniform_language_model_cannot_supply_a_friedman_length() {
+    let r = serde_json::from_value(
+        json!({"text":"AAAA","periods":[1],"ngram":2,"expected_ic":1.0/26.0}),
+    )
+    .unwrap();
+    assert_eq!(a::period::estimate(&r, None).unwrap().friedman, None);
+}
+
+#[test]
+fn canonical_decimal_integer_inputs_match_the_published_schema() {
+    let r:a::period::Request=a::parse_request(r#"{"text":"ABAB","periods":["2"],"ngram":"2","expected_ic":0.5,"limits":{"max_work":"100","max_results":"2"}}"#).unwrap();
+    assert_eq!(a::period::estimate(&r, None).unwrap().periods[0].period, 2);
+    for value in ["01", "+1", "1.0"] {
+        let doc = json!({"text":"AB","periods":[value],"ngram":2,"expected_ic":0.5}).to_string();
+        assert!(a::parse_request::<a::period::Request>(&doc).is_err());
+    }
+}
+
+#[test]
+fn wide_fixed_point_scores_validate_in_the_lossless_contract_wire_format() {
+    let request=serde_json::from_value(json!({"candidates":["A".repeat(32768)],"model":{"kind":"probabilities","n":1,"entries":[{"text":"A","weight":1e-300}],"unseen_probability":1.0,"normalization":"exact"}})).unwrap();
+    let r = scoring::score(&request, None).unwrap();
+    assert_eq!(r.scores[0].total_nanos, Some(-690775527898_i64 * 32768));
+    let output = cube_core::operations::contracts::canonical_value(json!({"report":r}));
+    cube_core::operations::require("analysis.language.score")
+        .unwrap()
+        .contract()
+        .unwrap()
+        .validate_outputs(&output)
+        .unwrap();
 }

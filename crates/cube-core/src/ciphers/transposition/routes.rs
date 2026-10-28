@@ -92,7 +92,7 @@ fn path(rows: usize, cols: usize, spec: Route) -> Vec<usize> {
         }
     }
 }
-fn order(n: usize, p: &Routes, op: &'static str) -> Result<Vec<usize>, OperationError> {
+pub(crate) fn order(n: usize, p: &Routes, op: &'static str) -> Result<Vec<usize>, OperationError> {
     if p.rows == 0 || p.columns == 0 || p.rows.checked_mul(p.columns) != Some(n) {
         return Err(invalid(
             op,

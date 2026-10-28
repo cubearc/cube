@@ -16,6 +16,15 @@ def test_native_analysis_matches_reviewed_contracts():
     mapping = {
         "analysis.language.score": "language_score",
         "analysis.period.estimate": "period_estimate",
+        "analysis.caesar.rank": "caesar_rank",
+        "analysis.affine.rank": "affine_rank",
+        "analysis.vigenere.rank": "vigenere_rank",
+        "analysis.transposition.rank": "transposition_rank",
+        "analysis.homophonic.inspect": "homophonic_inspect",
+        "analysis.crib.verify": "crib_verify",
+    }
+    assert set(mapping) == {
+        v["operation"] for v in vectors if v["operation"].startswith("analysis.")
     }
     for v in vectors:
         if v["operation"] in mapping:
@@ -28,3 +37,37 @@ def test_native_analysis_matches_reviewed_contracts():
 def test_model_validation_reaches_native_typed_errors():
     with pytest.raises(ValueError):
         cube.language_score({"candidates": ["A"], "model": {"kind": "unknown"}})
+
+
+def test_existing_cancellation_token_stops_native_analysis():
+    token = cube.CancellationToken()
+    token.cancel()
+    report = cube.caesar_rank(
+        {
+            "text": "B",
+            "model": {
+                "kind": "dictionary",
+                "entries": [{"text": "A", "weight": 1}],
+                "unseen_weight": 0,
+            },
+        },
+        cancellation=token,
+    )
+    assert report["status"]["stop"] == "cancelled"
+    assert report["attempted"] == 0
+
+
+def test_probability_mass_cannot_exceed_one_even_inside_sum_tolerance():
+    with pytest.raises(ValueError):
+        cube.language_score(
+            {
+                "candidates": ["A"],
+                "model": {
+                    "kind": "probabilities",
+                    "n": 1,
+                    "entries": [{"text": "A", "weight": 1.0000000005}],
+                    "unseen_probability": 1e-300,
+                    "normalization": "exact",
+                },
+            }
+        )

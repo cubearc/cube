@@ -82,7 +82,7 @@ const fn row(s: Spec) -> Row {
         },
     }
 }
-static ROWS: [Row; 2] = [
+static ROWS: [Row; 8] = [
     row(Spec {
         id: "analysis.language.score",
         name: "Caller-owned language-model scoring",
@@ -123,27 +123,147 @@ static ROWS: [Row; 2] = [
         }],
         fixture: fixtures::period_estimate,
     }),
+    row(Spec {
+        id: "analysis.caesar.rank",
+        name: "Finite Caesar candidate ranking",
+        command: "cryptanalysis caesar",
+        python: "caesar_rank",
+        rust: "cube_core::cryptanalysis::classical::caesar",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<classical::Caesar>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<candidates::Report>,
+            required: true,
+        }],
+        fixture: fixtures::caesar_rank,
+    }),
+    row(Spec {
+        id: "analysis.affine.rank",
+        name: "Finite Affine candidate ranking",
+        command: "cryptanalysis affine",
+        python: "affine_rank",
+        rust: "cube_core::cryptanalysis::classical::affine",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<classical::Affine>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<candidates::Report>,
+            required: true,
+        }],
+        fixture: fixtures::affine_rank,
+    }),
+    row(Spec {
+        id: "analysis.vigenere.rank",
+        name: "Explicit Vigenere beam search",
+        command: "cryptanalysis vigenere",
+        python: "vigenere_rank",
+        rust: "cube_core::cryptanalysis::vigenere::rank",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<vigenere::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<vigenere::Report>,
+            required: true,
+        }],
+        fixture: fixtures::vigenere_rank,
+    }),
+    row(Spec {
+        id: "analysis.transposition.rank",
+        name: "Explicit transposition candidates",
+        command: "cryptanalysis transposition",
+        python: "transposition_rank",
+        rust: "cube_core::cryptanalysis::transposition::rank",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<transposition::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<candidates::Report>,
+            required: true,
+        }],
+        fixture: fixtures::transposition_rank,
+    }),
+    row(Spec {
+        id: "analysis.homophonic.inspect",
+        name: "Exact homophonic token evidence",
+        command: "cryptanalysis homophonic",
+        python: "homophonic_inspect",
+        rust: "cube_core::cryptanalysis::homophonic::inspect",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<homophonic::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<homophonic::Report>,
+            required: true,
+        }],
+        fixture: fixtures::homophonic_inspect,
+    }),
+    row(Spec {
+        id: "analysis.crib.verify",
+        name: "Explicit known-plaintext verification",
+        command: "cryptanalysis crib",
+        python: "crib_verify",
+        rust: "cube_core::cryptanalysis::crib::verify",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<crib::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<crib::Report>,
+            required: true,
+        }],
+        fixture: fixtures::crib_verify,
+    }),
 ];
-const fn profiles() -> [m::Entry; 2] {
-    let mut out = [ROWS[0].profile; 2];
+const fn profiles() -> [m::Entry; 8] {
+    let mut out = [ROWS[0].profile; 8];
     let mut i = 0;
-    while i < 2 {
+    while i < 8 {
         out[i] = ROWS[i].profile;
         i += 1;
     }
     out
 }
-const fn contracts() -> [c::Entry; 2] {
-    let mut out = [ROWS[0].contract; 2];
+const fn contracts() -> [c::Entry; 8] {
+    let mut out = [ROWS[0].contract; 8];
     let mut i = 0;
-    while i < 2 {
+    while i < 8 {
         out[i] = ROWS[i].contract;
         i += 1;
     }
     out
 }
-const PROFILES: [m::Entry; 2] = profiles();
-const CONTRACTS: [c::Entry; 2] = contracts();
+const PROFILES: [m::Entry; 8] = profiles();
+const CONTRACTS: [c::Entry; 8] = contracts();
 pub static OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
 pub(crate) const MODULE: o::Module =
     o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);

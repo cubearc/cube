@@ -6,8 +6,10 @@ use std::collections::BTreeMap;
 pub struct Request {
     pub text: String,
     #[schemars(length(min = 1, max = 4096))]
+    #[serde(deserialize_with = "wire::indices")]
     pub periods: Vec<usize>,
     #[schemars(range(min = 2, max = 8))]
+    #[serde(deserialize_with = "wire::integer")]
     pub ngram: usize,
     pub expected_ic: f64,
     #[serde(default)]
@@ -130,7 +132,8 @@ pub fn estimate(r: &Request, cancel: Option<&AtomicBool>) -> Result<Report, Oper
     let friedman = observed.and_then(|i| {
         let n = bytes.len() as f64;
         let denominator = (n - 1.0) * i - uniform * n + r.expected_ic;
-        (denominator > 0.0).then_some((r.expected_ic - uniform) * n / denominator)
+        (denominator > 0.0 && r.expected_ic > uniform)
+            .then_some((r.expected_ic - uniform) * n / denominator)
     });
     let mut periods = Vec::new();
     if budget.status.complete {

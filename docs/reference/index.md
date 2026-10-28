@@ -3,6 +3,11 @@
 [Operation contracts](operations.md) are generated from the actual Rust definitions.
 Use `cube ops describe <id>` to inspect your installed build.
 
+For shared terminology, read [Unicode and text preparation](../concepts/text.md),
+[resource limits](../concepts/resource-limits.md) and
+[complete and partial results](../concepts/results.md). Exact values and behavior
+remain in each operation's reference.
+
 ## Formats and semantics
 
 - [Encoding and decoding](topics/encoding-and-decoding.md)
@@ -11,6 +16,7 @@ Use `cube ops describe <id>` to inspect your installed build.
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)
 - [Text operations](topics/text-operations.md)
+- [Shared text preparation profile](text-preparation.md)
 - [File forensics](topics/file-forensics.md)
 - [Image analysis and steganography](topics/image-analysis-and-steganography.md)
 - [Offline key formats](topics/offline-key-formats.md)

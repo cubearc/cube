@@ -1,15 +1,29 @@
 # Investigation profiles and records
 
-Use `investigation` to decide what to inspect next and record reproducible checks.
-Triage reads up to 12 header bytes and cites stable rules, evidence/offsets and
-suggested available operations. PNG suggests chunks, JPEG/TIFF suggests EXIF,
-WAVE suggests stream metadata and unknown bytes suggest hex/strings. Suggestions
-are not automatically executed and never establish concealed content.
+Investigations suggest inspections and record reproducible checks. Suggestions
+cite evidence and available operations; they are not automatically executed and
+do not establish concealed content.
 
-Profiles have two depths: metadata performs triage; preview adds a 256-byte hex
-view and strings from the first 4096 bytes (minimum length 4, at most 32 results).
-Optional identity hashes the complete input; only an admitted prefix is otherwise
-buffered. For a reusable profile, save this as `preview.json`:
+## Triage and profile depth
+
+Triage reads up to 12 header bytes and reports stable rules, evidence and offsets.
+
+| Header | Suggested inspection |
+| --- | --- |
+| PNG | Chunks |
+| JPEG or TIFF | EXIF |
+| WAVE | Stream metadata |
+| Unknown | Hex and strings |
+
+Profiles select how much to inspect:
+
+| Setting | Behavior |
+| --- | --- |
+| `depth: "metadata"` (default) | Triage only |
+| `depth: "preview"` | Triage, 256-byte hex view, and strings from the first 4,096 bytes; minimum length 4, at most 32 results |
+| `identify: true` | Hash the complete input; otherwise only an admitted prefix is buffered |
+
+Save this example as `preview.json` for a reusable profile:
 
 ```json
 {
@@ -20,43 +34,79 @@ buffered. For a reusable profile, save this as `preview.json`:
 }
 ```
 
-Only `format_version` is required. The default depth is metadata; identity is off.
-Default budgets allow 1 MiB source buffering, 4 MiB charged inspected ranges,
-16 operation units, 64 KiB retained results and 5000 ms cooperative time.
-Hard operation/time ceilings are 64 units and 60000 ms; other limits can only be
-lowered from those defaults. Budget fields are `max_input_bytes`,
-`max_inspected_bytes`, `max_operations`, `max_retained_bytes`, `max_elapsed_ms`.
-Repeated source ranges are charged again; a pipeline wrapper and each step consume
-operation units, while pipeline value/work limits still apply. `plan` exposes the
-allowlist, ranges, budgets, capture bounds and skipped reasons without content reads.
+Only `format_version` is required. Identity hashing is off by default.
 
-Optional `pipeline` contains `steps` and lowered `limits` from the composition
-contract. `retain_results:[2]` selects in-memory results by session-local run ID;
-`record_parameters:true` opts into pipeline parameter retention. Captures use
-conservative bounds, so a small actual result can still be skipped. Deadlines and
-cancellation are checked around reads/operations, without preemption; elapsed time
-is diagnostic and excluded from deterministic records. Read partial/skipped/failed
-outcomes rather than treating budget exhaustion as a complete investigation.
+## Profile budgets
 
-Session records use `schema_version:1`, `status`, `replay_gaps`, `uncertainty` and
-`session`. The session has format/engine versions, input identity, limits, runs,
-findings, separately labeled hypotheses and optional profile context/counters.
-Findings trace to an input/run/offset. Raw input contents, paths and timestamps are
-not saved. Default export also omits selected result contents, nonempty parameters
-and hypotheses; retention and export are independent explicit choices.
+| Field | Default | Hard ceiling |
+| --- | --- | --- |
+| `max_input_bytes` | 1 MiB source buffering | Default; can only be lowered |
+| `max_inspected_bytes` | 4 MiB charged ranges | Default; can only be lowered |
+| `max_operations` | 16 units | 64 units |
+| `max_retained_bytes` | 64 KiB results | Default; can only be lowered |
+| `max_elapsed_ms` | 5,000 ms | 60,000 ms |
 
-Records cap at 128 KiB, retained result JSON at 64 KiB, runs at 64, findings at 128,
-and hypotheses at 32 (1024 UTF-8 bytes each). Direct session/replay input is at most
-1 MiB. Loading validates IDs, references, states and retained-result digests.
-Human reports escape untrusted strings. Saving requires a caller-selected new
-file; remove it with normal filesystem tools. No hidden session database or copies
-are created. Omitted/redacted data cannot be recovered from a saved record.
+Repeated ranges are charged again. A pipeline wrapper and each step consume
+operation units; pipeline value and work limits also apply.
 
-Replay validates all contracts and required parameters, checks caller-supplied
-size/SHA-256 identity, then compares reproduced typed result digests/states. Size
-alone cannot establish identity; missing digests, redactions, incompatible versions
-or changed inputs are explicit failures. Skipped runs stay skipped. Hypotheses are
-not replayed as machine evidence. Digests identify content, not trust, and reports
-are not signed attestations. See [record and replay an investigation](../../guides/investigations.md)
-for a walkthrough. Python exposes these workflows through `InvestigationSession`;
-see the [SDK guide](../../interfaces/python.md#discover-operations).
+`plan` shows the allowlist, ranges, budgets, capture bounds and skipped reasons
+without reading content. Deadlines and cancellation are checked around reads
+and operations, without preemption. Elapsed time is diagnostic and excluded
+from deterministic records.
+
+Check partial, skipped and failed outcomes. Budget exhaustion does not mean an
+investigation is complete.
+
+### Optional pipeline and retention
+
+| Field | Purpose |
+| --- | --- |
+| `pipeline` | Steps and lowered limits from the [composition contract](compose-operations.md) |
+| `retain_results:[2]` | Retain selected in-memory results by session-local run ID |
+| `record_parameters:true` | Opt into pipeline parameter retention |
+
+Captures use conservative bounds; a small actual result can still be skipped.
+
+## Session records
+
+Records use `schema_version:1` with `status`, `replay_gaps`, `uncertainty` and
+`session`. The session includes format/engine versions, input identity, limits,
+runs, findings, separately labeled hypotheses and optional profile context/counters.
+
+Findings trace to an input, run and offset. Raw input, paths and timestamps are
+not saved. Default export also omits result contents, nonempty parameters and
+hypotheses. Retention and export are separate explicit choices.
+
+### Record limits
+
+| Resource | Maximum |
+| --- | --- |
+| Record | 128 KiB |
+| Retained result JSON | 64 KiB |
+| Runs | 64 |
+| Findings | 128 |
+| Hypotheses | 32, each at most 1,024 UTF-8 bytes |
+| Direct session/replay input | 1 MiB |
+
+Loading validates IDs, references, states and retained-result digests. Human
+reports escape untrusted strings.
+
+Saving requires a caller-selected new file. There is no hidden session database;
+delete records with normal filesystem tools. Omitted or redacted data cannot be
+recovered from a saved record.
+
+## Replay
+
+Replay performs these checks in order:
+
+1. Validate contracts and required parameters.
+2. Verify caller-supplied input size and SHA-256.
+3. Reproduce runs and compare typed result digests and states.
+
+Size alone cannot establish identity. Missing digests, redactions, incompatible
+versions and changed input produce explicit failures. Skipped runs remain skipped;
+hypotheses are not replayed as machine evidence.
+
+Digests identify content, not trust. Reports are not signed attestations.
+See [Record and replay an investigation](../../guides/investigations.md) for a
+walkthrough, or [InvestigationSession in the SDK](../../interfaces/python.md#discover-operations).

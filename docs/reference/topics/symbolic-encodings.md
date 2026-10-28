@@ -1,7 +1,30 @@
 # Symbolic encodings
 
-Use `symbols` for textual International Morse or reversible Unicode Braille cells.
-These operations do not detect symbols from audio or images.
+Encode text as Morse, Braille masks, A1Z26 or Semaphore, or interpret a
+caller-supplied clock direction. These operations do not detect symbols in
+audio or images.
+
+## Morse, Braille and A1Z26
+
+| Encoding | Mapping | Text and round-trip rules |
+| --- | --- | --- |
+| International Morse | A–Z and 0–9 | Fold ASCII case; canonicalize ASCII spaces; decode to uppercase |
+| Eight-dot Braille | Byte mask to U+2800 + mask | Bit `n-1` is dot `n`; all bytes round-trip; not language transcription |
+| A1Z26 | A–Z to decimal 1–26, with hyphens within words | Fold ASCII case; preserve ASCII space/TAB/LF/VT/FF/CR exactly; decode to uppercase |
+
+### Token rules and limits
+
+| Encoding | Grammar | Limits |
+| --- | --- | --- |
+| Morse | One space between tokens, ` / ` between words; reject unsupported punctuation, noncanonical spacing and trailing newlines | 1 MiB input |
+| Braille | Unicode eight-dot cells representing raw masks | 1 MiB input |
+| A1Z26 | Canonical decimal tokens; reject punctuation, non-ASCII, signs, leading zeros, empty hyphen tokens and values outside 1–26 | Encode: 1 MiB input, 3 MiB output; decode: 3 MiB input |
+
+A1Z26 errors include the byte offset. Uppercase supported inputs round-trip;
+lowercase case is lost. Its text pipeline adapters use the smaller pipeline
+value and work budgets.
+
+For example, encode a Morse message or recover bytes from Braille cells:
 
 ```sh
 cube encode morse --text 'SOS 2'
@@ -10,50 +33,60 @@ cube decode braille --text '⠀⠁⣿'
 # 0001ff
 ```
 
-Morse supports A–Z/0–9; encoding accepts lowercase and canonicalizes ASCII spaces.
-Decoding returns uppercase, with one space between tokens and ` / ` between words.
-Unsupported punctuation, noncanonical spacing and trailing newlines fail.
-Braille represents raw eight-dot masks, not natural-language Braille transcription:
-bit `n-1` is dot `n`, and a byte maps to U+2800 plus its mask. Every byte round trips.
-Both accept at most 1 MiB input; canonicalized Morse case/spacing does not round-trip.
-
-A1Z26 maps ASCII A–Z to canonical decimal 1–26 tokens joined by hyphens within
-each word: `Hi Cube` becomes `8-9 3-21-2-5`. Space and ASCII control whitespace
-TAB/LF/VT/FF/CR are preserved exactly, including repeated or boundary whitespace.
-Decoding returns uppercase. Punctuation, non-ASCII, signs, leading zeros, empty
-hyphen tokens and numbers outside 1–26 fail at their byte offset. Encoding accepts
-1 MiB and produces at most 3 MiB; decoding accepts 3 MiB. Uppercase supported
-inputs round trip; lowercase case is deliberately lost. Both have bounded text
-pipeline adapters, subject to the existing smaller pipeline value/work budgets.
+A1Z26 encodes `Hi Cube` as `8-9 3-21-2-5`.
 
 ## Semaphore and directional clocks
 
-`symbol.clock.directions` is a separate caller-selected convention, not official
-Semaphore or clock recognition. Select H:MM (ASCII hour 0..12, 0=12, minute 0..59;
-no seconds/fractional minutes) or two signed i64 millidegree angles, never both.
-Hours move 500 millidegrees/minute, minutes 6000. Bearings normalize modulo 360000
-before arithmetic, so signed extremes are safe. Zero axis defaults N, positive
-angles clockwise; E/S/W and reversed sense are explicit. Eight sector centers are
-45000 apart; within +/-1 millidegree of a 22500-offset boundary, return both
-directions as ambiguous rather than breaking a tie. Integer arithmetic makes
-these boundaries reproducible. Each call is one reading with fixed work/storage
-and output below 1 KiB. Optional decoding uses the separate Semaphore decoder with
-hour=sender LH and minute=sender RH, rejecting ambiguity/unsupported pairs. This
-structured result has no pipeline adapter.
+Semaphore encodes letters as flag positions. Clock directions use a separate,
+explicit convention.
 
-Letter-only flag Semaphore follows the anatomical LH/RH positions in the
-[Marine Corps Museum chart](https://www.usmcmuseum.com/uploads/6/0/3/6/60364049/nmmc_semaphore_flag_booklet_final_1.pdf)
+### Semaphore alphabet
+
+Directions are `N,NE,E,SE,S,SW,W,NW`. A token is `LH,RH` using the sender's
+anatomical left and right arms, viewed by the receiver. The sender's left arm
+points toward screen-right when extended outward.
+
+| Rule | Behavior |
+| --- | --- |
+| Letters | A–Z; ASCII case canonicalized; J means literal J |
+| Spaces | Each literal ASCII space becomes `/` |
+| Token separator | Exactly one ASCII space |
+| D | Encodes as `S,N`; also accepts `N,S` when decoding |
+| I / K | `SW,NW` / `N,SW` |
+| Other reversed arms | Not inferred |
+| Unsupported input | Digits, other whitespace, procedural and numeric modes |
+| Empty input | Empty output |
+
+The alphabet follows the [Marine Corps Museum chart](https://www.usmcmuseum.com/uploads/6/0/3/6/60364049/nmmc_semaphore_flag_booklet_final_1.pdf)
 and [Scout Association chart](https://prod-cms.scouts.org.uk/media/5508/generic-resources-semaphore-signals.pdf).
-The [ANBG text](https://www.cpbr.gov.au/flags/semaphore.html) differs for I (RH up);
-both charts show RH high, so I is `SW,NW`, distinct from K `N,SW`.
-No artwork is bundled. Coordinates are receiver-facing: sender LH points toward
-screen-right when extended outward. `N,NE,E,SE,S,SW,W,NW` denote eight directions.
-Tokens are `LH,RH`, separated by exactly one ASCII space; `/` represents each
-literal ASCII space. A-Z letters canonicalize case; digits, other whitespace and
-procedural/numeric modes are excluded. J is literal J; D encodes canonically as
-`S,N` and also decodes `N,S`. Reversed arms are otherwise not inferred.
-Empty input is empty output. Limits are 1 MiB transport and 16384 symbols/tokens;
-encoding expands to less than 96 KiB. Two version-1 text pipeline adapters preflight
-16384 input bytes for encoding, 98304 for decoding and a 6x/1x output bound.
-Existing engine/adapter versions retain their behavior. Clock interpretation is
-a separate operation, not part of this alphabet.
+Both place I's right arm high; the [ANBG text](https://www.cpbr.gov.au/flags/semaphore.html)
+differs. No chart artwork is bundled.
+
+### Semaphore limits
+
+| Resource | Maximum |
+| --- | --- |
+| Transport | 1 MiB |
+| Symbols / tokens | 16,384 |
+| Encoded output | Less than 96 KiB |
+| Version-1 adapter encoding input / output expansion | 16,384 bytes / 6× |
+| Version-1 adapter decoding input / output expansion | 98,304 bytes / 1× |
+
+### Clock directions
+
+`symbol.clock.directions` accepts either `H:MM` or two signed `i64` millidegree
+angles. It does not recognize clock images or define official Semaphore.
+
+| Setting or rule | Behavior |
+| --- | --- |
+| Time | ASCII hour 0–12, with 0=12; minute 0–59; no seconds or fractions |
+| Hour movement | 500 millidegrees per minute |
+| Minute movement | 6,000 millidegrees per minute |
+| Angle normalization | Modulo 360,000 before arithmetic, including signed extremes |
+| Zero axis / positive direction | North / clockwise; other cardinal axes and reversed sense are explicit |
+| Eight sector centers | 45,000 millidegrees apart |
+| Boundary ambiguity | Within ±1 millidegree of a 22,500-offset boundary, return both directions |
+
+Each call handles one reading with fixed work/storage and output below 1 KiB.
+Optional Semaphore decoding maps hour to LH and minute to RH; ambiguity and
+unsupported pairs fail. This structured result has no pipeline adapter.

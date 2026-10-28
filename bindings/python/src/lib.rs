@@ -15,6 +15,7 @@ mod candidates;
 mod combinations;
 mod combinatorics;
 mod constants;
+mod cryptanalysis;
 mod digital;
 mod discrete_transport;
 mod enigma;
@@ -584,6 +585,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     puzzles::register(module)?;
     mono::register(module)?;
     poly::register(module)?;
+    cryptanalysis::register(module)?;
     enigma::register(module)?;
     fraction::register(module)?;
     puzzlecodes::register(module)?;

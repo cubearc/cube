@@ -1,5 +1,639 @@
 [
   {
+    "contract_sha256": "6045b94027a5735a371ea8f0548b8b38958f3d06e18de4be37b08a099eedac40",
+    "inputs": {
+      "request": {
+        "keys": [
+          {
+            "a": 2,
+            "b": 0
+          },
+          {
+            "a": 5,
+            "b": 8
+          }
+        ],
+        "model": {
+          "entries": [
+            {
+              "text": "AFFINECIPHER",
+              "weight": 2.0
+            }
+          ],
+          "kind": "dictionary",
+          "unseen_weight": -1.0
+        },
+        "text": "IHHWVCSWFRCP"
+      }
+    },
+    "operation": "analysis.affine.rank",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "attempted": 2,
+        "candidates": [
+          {
+            "aliases": [
+              {
+                "input_index": 1,
+                "key": {
+                  "a": 5,
+                  "b": 8,
+                  "kind": "affine"
+                },
+                "source_positions": []
+              }
+            ],
+            "plaintext": "AFFINECIPHER",
+            "score": {
+              "input_index": 1,
+              "mean_nanos": 2000000000,
+              "samples": 1,
+              "total_nanos": 2000000000
+            }
+          }
+        ],
+        "method": "dictionary-weight-nanos-v1",
+        "model_sha256": "b162087b897ee7a50cfe8dab05388ed3423d8845b9b44411bf88eef91a2b1501",
+        "normalization": "exact",
+        "rejected": [
+          {
+            "input_index": 0,
+            "reason": "invalid explicit cipher key/configuration"
+          }
+        ],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 36
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "6416d05857e6a9b995cf6e70b01e5063c3c7eb6093a91f489b2fca6ddcab7cfe",
+    "inputs": {
+      "request": {
+        "model": {
+          "entries": [
+            {
+              "text": "A",
+              "weight": 2.0
+            }
+          ],
+          "kind": "dictionary",
+          "unseen_weight": -1.0
+        },
+        "shifts": [
+          0,
+          1,
+          1
+        ],
+        "text": "B"
+      }
+    },
+    "operation": "analysis.caesar.rank",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "attempted": 3,
+        "candidates": [
+          {
+            "aliases": [
+              {
+                "input_index": 1,
+                "key": {
+                  "kind": "caesar",
+                  "shift": 1
+                },
+                "source_positions": []
+              },
+              {
+                "input_index": 2,
+                "key": {
+                  "kind": "caesar",
+                  "shift": 1
+                },
+                "source_positions": []
+              }
+            ],
+            "plaintext": "A",
+            "score": {
+              "input_index": 1,
+              "mean_nanos": 2000000000,
+              "samples": 1,
+              "total_nanos": 2000000000
+            }
+          },
+          {
+            "aliases": [
+              {
+                "input_index": 0,
+                "key": {
+                  "kind": "caesar",
+                  "shift": 0
+                },
+                "source_positions": []
+              }
+            ],
+            "plaintext": "B",
+            "score": {
+              "input_index": 0,
+              "mean_nanos": -1000000000,
+              "samples": 1,
+              "total_nanos": -1000000000
+            }
+          }
+        ],
+        "method": "dictionary-weight-nanos-v1",
+        "model_sha256": "bbf2bfb9302ea08695ba9175dd9494b45413286742da9c3329c1773365d0208b",
+        "normalization": "exact",
+        "rejected": [],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 6
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "be736b8d253914854d2f8a32e3b39c24b817fe5071e14554e0239c59b7073e7b",
+    "inputs": {
+      "request": {
+        "candidates": [
+          {
+            "data": {
+              "kind": "text",
+              "text": "é Aa!"
+            },
+            "key": {
+              "kind": "caesar",
+              "shift": 1
+            }
+          }
+        ],
+        "ciphertext": {
+          "kind": "text",
+          "text": "é Bb!"
+        },
+        "crib": {
+          "kind": "text",
+          "text": "aa"
+        },
+        "offset": 0,
+        "view": "ascii_letters"
+      }
+    },
+    "operation": "analysis.crib.verify",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "candidates": [
+          {
+            "all_match": true,
+            "input_index": 0,
+            "positions": [
+              {
+                "actual": 65,
+                "candidate_offset": 0,
+                "crib_index": 0,
+                "expected": 65,
+                "matched": true,
+                "original_byte_offset": 3
+              },
+              {
+                "actual": 65,
+                "candidate_offset": 1,
+                "crib_index": 1,
+                "expected": 65,
+                "matched": true,
+                "original_byte_offset": 4
+              }
+            ],
+            "reencode_error": null,
+            "reencode_matches": true
+          }
+        ],
+        "scope": "Only listed crib positions and explicit reencoding are evidence; no key identity or authenticity claim.",
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 21
+        },
+        "view": "ascii_letters"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "888bb0805596a88001dd285598057594d3f8375ee16fe7da4a03e4d05de814fb",
+    "inputs": {
+      "request": {
+        "groups": [
+          {
+            "symbol": "A",
+            "tokens": [
+              "12",
+              "雪"
+            ]
+          }
+        ],
+        "tokens": [
+          "12",
+          "雪",
+          "12",
+          "éé"
+        ]
+      }
+    },
+    "operation": "analysis.homophonic.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "adjacency": [
+          {
+            "count": 1,
+            "left": "12",
+            "right": "éé"
+          },
+          {
+            "count": 1,
+            "left": "12",
+            "right": "雪"
+          },
+          {
+            "count": 1,
+            "left": "雪",
+            "right": "12"
+          }
+        ],
+        "group_definition_sha256": "037391efbf8170bfdbe960fdc30cb2ff5ef12f3830a976fea14cb0c6abf52400",
+        "grouped_ic": {
+          "denominator": 6,
+          "numerator": 6
+        },
+        "hypotheses": [
+          {
+            "count": 3,
+            "symbol": "A"
+          }
+        ],
+        "observed": [
+          {
+            "count": 2,
+            "token": "12"
+          },
+          {
+            "count": 1,
+            "token": "éé"
+          },
+          {
+            "count": 1,
+            "token": "雪"
+          }
+        ],
+        "processed": 4,
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 11
+        },
+        "token_ic": {
+          "denominator": 12,
+          "numerator": 2
+        },
+        "unmapped": 1
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "19a685c917065d61dd7b688b75b677e676b860410de75ddf2357c24548493ff3",
+    "inputs": {
+      "request": {
+        "candidates": [
+          "B",
+          "A",
+          ""
+        ],
+        "model": {
+          "entries": [
+            {
+              "text": "A",
+              "weight": 2.0
+            }
+          ],
+          "kind": "dictionary",
+          "unseen_weight": -1.0
+        }
+      }
+    },
+    "operation": "analysis.language.score",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "method": "dictionary-weight-nanos-v1",
+        "model_sha256": "bbf2bfb9302ea08695ba9175dd9494b45413286742da9c3329c1773365d0208b",
+        "normalization": "exact",
+        "ranking": [
+          1,
+          0,
+          2
+        ],
+        "scores": [
+          {
+            "input_index": 0,
+            "mean_nanos": -1000000000,
+            "samples": 1,
+            "total_nanos": -1000000000
+          },
+          {
+            "input_index": 1,
+            "mean_nanos": 2000000000,
+            "samples": 1,
+            "total_nanos": 2000000000
+          },
+          {
+            "input_index": 2,
+            "mean_nanos": null,
+            "samples": 0,
+            "total_nanos": null
+          }
+        ],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 3
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3f1b1b8c13f4369903fcaa1953743e82d67877cf83be5949f3946087af46b138",
+    "inputs": {
+      "request": {
+        "expected_ic": 0.5,
+        "ngram": "2",
+        "periods": [
+          "2",
+          "1"
+        ],
+        "text": "ABABAB"
+      }
+    },
+    "operation": "analysis.period.estimate",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "distances": [
+          {
+            "distance": 2,
+            "pairs": 3
+          },
+          {
+            "distance": 4,
+            "pairs": 1
+          }
+        ],
+        "expected_ic": 0.5,
+        "friedman": 1.2203389830508475,
+        "ic": 0.4,
+        "letters": 6,
+        "method": "ascii-kasiski-column-ic-friedman-v1",
+        "periods": [
+          {
+            "divisor_hits": 4,
+            "mean_column_ic": 1.0,
+            "period": 2,
+            "valid_columns": 2
+          },
+          {
+            "divisor_hits": 4,
+            "mean_column_ic": 0.4,
+            "period": 1,
+            "valid_columns": 1
+          }
+        ],
+        "ranking": [
+          1,
+          0
+        ],
+        "repeats": [
+          {
+            "ngram": "AB",
+            "original_byte_offsets": [
+              0,
+              2,
+              4
+            ],
+            "positions": [
+              0,
+              2,
+              4
+            ]
+          },
+          {
+            "ngram": "BA",
+            "original_byte_offsets": [
+              1,
+              3
+            ],
+            "positions": [
+              1,
+              3
+            ]
+          }
+        ],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 43
+        },
+        "uniform_ic": 0.038461538461538464
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "f8491aced588178ef970794a75a7af939e2bd8e3b3501b964573871368d1882e",
+    "inputs": {
+      "request": {
+        "configurations": [
+          {
+            "kind": "columnar",
+            "order": [
+              0,
+              1
+            ]
+          },
+          {
+            "kind": "columnar",
+            "order": [
+              0,
+              1
+            ]
+          }
+        ],
+        "model": {
+          "entries": [
+            {
+              "text": "ABCDEF",
+              "weight": 2.0
+            }
+          ],
+          "kind": "dictionary",
+          "unseen_weight": -1.0
+        },
+        "text": "ACEBDF"
+      }
+    },
+    "operation": "analysis.transposition.rank",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "attempted": 2,
+        "candidates": [
+          {
+            "aliases": [
+              {
+                "input_index": 0,
+                "key": {
+                  "configuration": {
+                    "kind": "columnar",
+                    "order": [
+                      0,
+                      1
+                    ]
+                  },
+                  "kind": "transposition"
+                },
+                "source_positions": [
+                  0,
+                  3,
+                  1,
+                  4,
+                  2,
+                  5
+                ]
+              },
+              {
+                "input_index": 1,
+                "key": {
+                  "configuration": {
+                    "kind": "columnar",
+                    "order": [
+                      0,
+                      1
+                    ]
+                  },
+                  "kind": "transposition"
+                },
+                "source_positions": [
+                  0,
+                  3,
+                  1,
+                  4,
+                  2,
+                  5
+                ]
+              }
+            ],
+            "plaintext": "ABCDEF",
+            "score": {
+              "input_index": 0,
+              "mean_nanos": 2000000000,
+              "samples": 1,
+              "total_nanos": 2000000000
+            }
+          }
+        ],
+        "method": "dictionary-weight-nanos-v1",
+        "model_sha256": "e982d8e6d9933c0ea940031d0453e7d63aecf1171546045964d4c21618c27471",
+        "normalization": "exact",
+        "rejected": [],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 160
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "4dd20c042f94273e7485b38a6169b9234f5f4c0b184811957609cae726312f87",
+    "inputs": {
+      "request": {
+        "beam_width": 1,
+        "lengths": [
+          2
+        ],
+        "model": {
+          "entries": [
+            {
+              "text": "A",
+              "weight": 26.0
+            }
+          ],
+          "kind": "counts",
+          "n": 1,
+          "normalization": "ascii_letters",
+          "smoothing": 1.0
+        },
+        "text": "BCBC"
+      }
+    },
+    "operation": "analysis.vigenere.rank",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "attempted": 1,
+        "candidates": [
+          {
+            "aliases": [
+              {
+                "input_index": 0,
+                "key": {
+                  "key": "BC",
+                  "kind": "vigenere"
+                },
+                "source_positions": []
+              }
+            ],
+            "plaintext": "AAAA",
+            "score": {
+              "input_index": 0,
+              "mean_nanos": -36367644,
+              "samples": 4,
+              "total_nanos": -145470576
+            }
+          }
+        ],
+        "method": "ngram-log-nanos-v1",
+        "model_sha256": "2f8b038d77c72564868e50fb055649183d94e81391891bbde3b56b5f7ecd26c8",
+        "normalization": "ascii_letters",
+        "original_byte_offsets": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "pruned_states": 50,
+        "rejected": [],
+        "status": {
+          "complete": false,
+          "stop": "pruned",
+          "work": 423
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
     "inputs": {
       "input": {
         "channels": [
@@ -9013,5 +9647,82 @@
     },
     "parameters": {},
     "contract_sha256": "df9f58e8d31024a29e5c94c5d41b8dfff61e5b55ecb83605ddc8620cfd22f9bf"
+  },
+  {
+    "contract_sha256": "dc2573b9ec958ae9a90f4fb5215a266b292678f54d1f6e9bb60a4189e8d76178",
+    "inputs": {
+      "request": {
+        "bins": [
+          {
+            "expected": 25.0,
+            "label": "A",
+            "observed": "20"
+          },
+          {
+            "expected": 25.0,
+            "label": "B",
+            "observed": 30
+          },
+          {
+            "expected": 50.0,
+            "label": "C",
+            "observed": 50
+          }
+        ],
+        "expected_policy": "counts"
+      }
+    },
+    "operation": "analysis.frequency.compare",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "bins": [
+          {
+            "distance": {
+              "kind": "finite",
+              "value": 1.0
+            },
+            "expected": 25.0,
+            "label": "A",
+            "observed": 20
+          },
+          {
+            "distance": {
+              "kind": "finite",
+              "value": 1.0
+            },
+            "expected": 25.0,
+            "label": "B",
+            "observed": 30
+          },
+          {
+            "distance": {
+              "kind": "finite",
+              "value": 0.0
+            },
+            "expected": 50.0,
+            "label": "C",
+            "observed": 50
+          }
+        ],
+        "degrees_of_freedom": 2,
+        "distance": {
+          "kind": "finite",
+          "value": 2.0
+        },
+        "expected_policy": "counts",
+        "expected_total": 100.0,
+        "method": "pearson-chi-square-f64-v1",
+        "model_sha256": "59ddc38b9827f87dace3531d63b3d13520c430f6e31b1a935326c95231708e8f",
+        "observed_total": 100,
+        "scope": "Raw frequency distance for supplied aligned bins and a fixed model; no logarithm, fitted parameters, p-value, posterior, identity or authenticity claim. Incomplete results cover only the returned prefix.",
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 100
+        }
+      }
+    },
+    "parameters": {}
   }
 ]

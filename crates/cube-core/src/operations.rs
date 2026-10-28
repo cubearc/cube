@@ -462,6 +462,7 @@ const MODULES: &[Module] = &[
     crate::blockchain::candidates::MODULE,
     crate::blockchain::ethereum::MODULE,
     crate::blockchain::private::MODULE,
+    crate::cryptanalysis::MODULE,
     crate::ciphers::enigma::MODULE,
 ];
 pub fn catalog() -> Vec<&'static Descriptor> {

@@ -74,7 +74,13 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
         assert!(ids.insert(d.id));
         let expected = matches!(
             d.category,
-            "ciphers" | "encoding" | "hashing" | "binary" | "blockchain" | "symbols"
+            "cryptanalysis"
+                | "ciphers"
+                | "encoding"
+                | "hashing"
+                | "binary"
+                | "blockchain"
+                | "symbols"
         ) || d.id.starts_with("text.utf8.")
             || d.id.starts_with("text.keyboard.coordinates.")
             || d.id.starts_with("text.keyboard.shift.");
@@ -118,8 +124,8 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 180);
-    assert_eq!(ids.len(), 296);
+    assert_eq!(annotated, 189);
+    assert_eq!(ids.len(), 305);
     assert_eq!(cube_core::pipeline::supported_adapters().len(), 53);
 }
 #[test]

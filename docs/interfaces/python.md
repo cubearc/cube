@@ -77,6 +77,47 @@ Ordinary Python file writes follow Python's own rules. For example,
 `Path.write_bytes(...)` overwrites an existing file. Choose the destination
 deliberately when saving returned bytes.
 
+## Rank classical candidates
+
+Supply a model and an explicit key list to keep the experiment reproducible:
+
+```python
+import cube
+
+model = {
+    "kind": "dictionary",
+    "entries": [{"text": "A", "weight": 1}],
+    "unseen_weight": 0,
+}
+report = cube.caesar_rank({"text": "B", "shifts": [0, 1], "model": model})
+print(report["candidates"][0]["plaintext"], report["status"]["complete"])
+# A True
+```
+
+The score reflects this caller model; it is not a probability of correctness.
+Reports retain key aliases and completion status. Python keeps fixed-point scores
+as exact integers. The optional `cancellation=` keyword accepts the existing
+`cube.CancellationToken`; analysis releases the GIL so another thread can cancel.
+See [classical cryptanalysis](../reference/topics/cryptanalysis.md) for model
+semantics, period evidence, transposition search, token observations and crib checks.
+For already counted symbols, `cube.frequency_compare` accepts aligned bins and
+an explicit expectation policy:
+
+```python
+report = cube.frequency_compare({
+    "bins": [
+        {"label": "A", "observed": 20, "expected": 25},
+        {"label": "B", "observed": 30, "expected": 25},
+        {"label": "C", "observed": 50, "expected": 50},
+    ],
+    "expected_policy": "counts",
+})
+print(report["distance"])
+# {'kind': 'finite', 'value': 2.0}
+```
+
+This is a frequency distance, not a probability of correctness.
+
 ## Discover operations
 
 ```python

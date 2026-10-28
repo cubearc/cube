@@ -16,6 +16,7 @@ provide secure encryption.
 Check the selected profile before interpreting punctuation, letter case or padding:
 
 - [Classical cipher rules](../reference/topics/classical-ciphers.md)
+- [Score classical candidates](../reference/topics/cryptanalysis.md)
 - [Monoalphabetic profiles](../monoalphabetic.md)
 - [Historical ciphers](../ciphers.md)
 - [Transposition and fractionation](../cipher-permutations.md)

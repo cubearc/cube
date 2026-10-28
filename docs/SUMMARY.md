@@ -40,6 +40,7 @@
     - [Encoding and decoding](reference/topics/encoding-and-decoding.md)
     - [Position-aware transformations](reference/topics/position-aware-transformations.md)
     - [Classical ciphers](reference/topics/classical-ciphers.md)
+    - [Classical cryptanalysis](reference/topics/cryptanalysis.md)
     - [Enigma I and M3](reference/topics/enigma.md)
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)
     - [Binary transformations](reference/topics/binary-transformations.md)
@@ -76,3 +77,4 @@
     - [Architecture](architecture.md)
     - [Contract internals](contracts.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
+    - [Classical analysis research](research/classical-analysis-evaluation.md)

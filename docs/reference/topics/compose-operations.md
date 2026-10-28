@@ -1,105 +1,146 @@
 # Compose operations
 
-Pipelines are implemented linear sequences over explicit bytes, UTF-8 text and an
-inert structured byte range. Direct Rust/Python functions keep their normal types.
-`cube ops list --json`, `cube ops describe` and the Python discovery functions
-report `pipeline`: an adapter contract version object when supported, or null
-(`None` in Python) otherwise. `cube pipeline adapters` /
-`cube.pipeline_adapters()` lists the same executable subset. Current adapters cover
-bounded encodings, classical ciphers, hashes/checksums, XOR and UTF-8 conversion.
-Selected in-memory file inspections also have adapters: `file.signature.detect`,
-`file.hex.inspect` and `file.strings.extract`. They accept bytes and return a
-`forensic_report` with a concrete `signatures`, `hex` or `strings` result. Adapter
-listings declare their pipeline input/output types separately from the direct
-reader API's descriptor. Hex and strings reuse checked offsets/lengths; omitted
-length selects through the end of the buffer (unlike the CLI file hex preview).
-Other file operations and image/audio APIs require direct calls.
+Pipelines run a linear sequence of operations over typed values. Each step names
+an operation, its exact contract `version` and optional parameters. See
+[Build a pipeline](../../guides/pipelines.md) for a walkthrough.
 
-Reports preserve numeric offsets, signature evidence, completeness and exact
-bytes. JSON hex rows encode their `bytes` field as canonical base64; native Python
-uses `bytes`. They are inert observations, not file-validation proofs. No transform
-currently consumes reports; compatible byte transformations can precede them and
-captures can retain any selected step. Report input supports identity; JSON inputs
-retain the existing document-size limit. Use JSON output for reports; raw output
-is rejected. Conservative budgets include record overhead and may reject a result
-that would be smaller for particular data.
+## Adapter discovery
 
-The current catalog's operations are available through direct Rust functions or
-methods, CLI commands, and native Python functions or methods. The descriptor's
-`command` identifies its CLI route; Python stubs describe SDK entry points.
-This includes orchestration such as recipe execution and investigation sessions,
-which is available directly but cannot itself be nested as a pipeline adapter.
-Read-only file APIs still require caller-selected I/O; discovery grants no file
-permission. Signature detection, hex rows and printable strings can also inspect caller-supplied
-buffers in a pipeline without acquiring file access.
+An operation can be called directly without supporting pipelines. Check
+`pipeline` in `cube ops list --json` or `cube ops describe`: an adapter version
+object means supported; `null` means direct-only. `cube pipeline adapters` lists
+the executable subset.
 
-Every step declares an operation identifier, exact contract `version`, and optional
-parameters. The entire plan validates before transformation. Adjacent types must
-match: a hash's text output is not silently converted to bytes for the next step.
-Use explicit UTF-8 conversion operations when that is intended. Errors stop at the
-first failing step and identify its zero-based index. An empty pipeline is identity.
+Adapters include bounded encodings, classical ciphers, hashes, checksums, XOR,
+UTF-8 conversions and selected file inspections. Each adapter declares its own
+input and output types. Image and audio operations require direct calls.
 
-JSON values use explicit tags: `{"type":"bytes","base64":"AP8="}`,
-`{"type":"text","data":"Hello"}`, or
-`{"type":"byte_range","offset":3,"length":4}`. Binary parameters use
-`{"key":{"base64":"/w=="}}`. Range length may be omitted/null, checked offsets
-cannot overflow, and a range grants no file access. Only identity currently accepts
-range values. Parameter scalar types are not silently coerced.
+All catalog operations have direct Rust, CLI and native Python entry points.
+The descriptor's `command` identifies the CLI route; Python stubs describe SDK
+entry points. Orchestration such as recipe execution and investigation sessions
+cannot itself be nested as an adapter.
 
-List parameters are concrete tagged objects: `{"unsigned_list":[0,2]}` or
-`{"text_list":["1=X"]}`. Tags distinguish even empty lists (`{"unsigned_list":[]}`
-versus `{"text_list":[]}`). Bare arrays, mixed/nested lists, floats, null, negative
-unsigned values, unknown/duplicate fields and integer overflow fail. Unsigned
-list transport preserves all u64 values and checks conversion to platform positions;
-scalar parameters retain signed i64 transport. Descriptor constraints validate
-lengths and element values. Tags add parameter types without changing engine API 1,
-recipe format 1, any existing adapter version, or legacy execution JSON.
+## Values and type checking
 
-`text.transform.masked` version 1 stays text-to-text and always returns its full
-direct-operation report in `masked_audits[step]` alongside the composable output.
-This includes original input/configuration, selected positions, deterministic text,
-every explicit override and final text. Audits are mandatory even without captures;
-`recipe check` returns them too. Python uses integer step keys; JSON uses object
-keys. Existing executions/checks omit the field when no masked step is present.
-CLI pipeline/recipe runs require `--format json` for masked steps so an ordinary
-or raw output mode cannot silently discard their evidence. Investigation sessions
-currently record only a final typed value, so they reject masked pipelines before
-execution; use the direct pipeline/recipe interfaces to retain these reports.
+Adjacent step types must match. Convert UTF-8 explicitly when a text result must
+become bytes; the engine does not coerce values or scalar parameters.
 
-Hard pipeline bounds are 64 steps, 1 MiB per value, 256 KiB parameter data,
-16 MiB conservative work and 4 MiB shared captured-intermediate/masked-audit retention. Lower these with
-`max_steps`, `max_value_bytes`, `max_work_bytes` and `max_capture_bytes` in the
-limits object. Work counts initial input and each step's input/output upper bounds; ranges count
-as 16 logical bytes. Conservative bounds can reject a data-specific smaller result.
-Base58 adapters additionally cap step input at 4096 bytes. Captures are explicit,
-unique zero-based step indexes. Cancellation is cooperative between bounded steps,
-not a hard timeout. No shell, network, native loading or arbitrary file capability
-is granted. See the [pipeline guide](../../guides/pipelines.md) or
-[Python SDK](../../interfaces/python.md#compose-operations) for examples.
+| Value | JSON representation | Use |
+| --- | --- | --- |
+| Bytes | `{"type":"bytes","base64":"AP8="}` | Exact byte input |
+| Text | `{"type":"text","data":"Hello"}` | UTF-8 text |
+| Byte range | `{"type":"byte_range","offset":3,"length":4}` | Inert coordinates; identity only |
+| Forensic report | Concrete signatures, hex or strings result | Inspection output; identity accepts report input |
 
-List storage counts toward the 256 KiB aggregate parameter budget: unsigned lists
-charge 16 header bytes plus 8 per entry; text lists charge 16 plus 24 per entry and
-exact UTF-8 bytes. Each list also has a hard 65,536-entry limit. The unchanged
-256 KiB/depth-16/4096-node JSON bounds apply before decoding, so practical list
-limits are smaller and depend on the entire document. The eight-bindings-per-step
-limit remains; mutually exclusive selectors allow even a full masked request.
+Range length can be omitted or `null`. Offsets are checked for overflow; a range
+grants no file access.
 
-Masked output is bounded by input bytes plus three bytes per possible replaced
-scalar. Each audit charges a 512-byte header, its three UTF-8 text fields, 8 bytes
-per selected/configured index and 48 bytes per override. Captures and all audits
-share `max_capture_bytes`. Conservative bounds may charge more than the actual
-result, especially with repeated overrides or multibyte input. Masked work also
-charges 32 times input bytes, 16 times selector entries times (floor(log2(max(1,
-entries))) + 2), 64 per override and the audit bound, in addition to the normal
-input/output work charges. All estimates precede transformation. Input-dependent
-positions validate inside the step before its ciphers run; static later-step errors
-reject the whole plan before earlier steps execute. These bounds can reject large
-requests that a direct single-operation call accepts.
+The entire plan validates before transformation. Static errors in later steps
+prevent earlier steps from running. Runtime errors stop at the first failing
+step and identify its zero-based index. An empty pipeline is identity.
+
+### Parameters
+
+| Parameter kind | Example | Rules |
+| --- | --- | --- |
+| Binary | `{"key":{"base64":"/w=="}}` | Canonical Base64 |
+| Unsigned list | `{"unsigned_list":[0,2]}` | Full `u64` transport; checked conversion to platform positions |
+| Text list | `{"text_list":["1=X"]}` | Exact UTF-8 strings |
+| Scalar integer | A signed integer value | Signed `i64` transport |
+
+List tags distinguish empty lists. Bare arrays, mixed or nested lists, floats,
+`null`, negative unsigned values, unknown or duplicate fields and overflow fail.
+Descriptor constraints check list lengths and element values.
+
+## File inspection reports
+
+These adapters inspect caller-supplied bytes without acquiring file access:
+
+| Adapter | Report |
+| --- | --- |
+| `file.signature.detect` | Signature evidence and offsets |
+| `file.hex.inspect` | Hex rows with exact bytes |
+| `file.strings.extract` | Printable strings and completeness |
+
+Hex and strings use checked offsets and lengths. Omitted length means through
+the buffer's end, unlike the CLI file-hex preview.
+
+Reports preserve numeric offsets, evidence, completeness and bytes. JSON hex rows
+encode `bytes` as canonical Base64; Python uses byte objects. They are observations,
+not proof of format validity.
+
+Only identity accepts report input. Compatible byte transforms can precede an
+inspection, and explicit captures can retain results. Reports require JSON output;
+raw output is rejected. Record overhead counts toward conservative budgets.
+
+## Limits
+
+Limits can be lowered in the `limits` object; they cannot exceed the hard bounds.
+
+| Resource | Hard bound | Setting |
+| --- | --- | --- |
+| Steps | 64 | `max_steps` |
+| Each value | 1 MiB | `max_value_bytes` |
+| Aggregate parameter data | 256 KiB | Fixed |
+| Conservative work | 16 MiB | `max_work_bytes` |
+| Shared captures and masked audits | 4 MiB | `max_capture_bytes` |
+| Parameter bindings per step | 8 | Fixed |
+| Entries per list | 65,536 | Fixed |
+| Base58 adapter input per step | 4,096 bytes | Fixed |
+
+Work includes initial input and each step's input/output upper bounds. A byte
+range counts as 16 logical bytes. Captures are explicit, unique zero-based step
+indexes. Conservative estimates can reject a request whose actual result would
+be smaller.
+
+### Parameter and transport accounting
+
+| Resource | Accounting or limit |
+| --- | --- |
+| Unsigned-list storage | 16 header bytes + 8 per entry |
+| Text-list storage | 16 header bytes + 24 per entry + exact UTF-8 bytes |
+| JSON document | 256 KiB |
+| JSON depth | 16 |
+| JSON value nodes | 4,096 |
+
+JSON bounds apply before decoding. Practical list sizes depend on the entire
+document and can be smaller than the per-list hard limit.
+
+Cancellation is cooperative between bounded steps, not a hard timeout. Pipelines
+grant no shell, network, native loading or arbitrary file access.
+
+## Masked transformation audits
+
+`text.transform.masked` version 1 returns composable text plus a mandatory report
+in `masked_audits[step]`. The audit contains original input/configuration, selected
+positions, deterministic text, every explicit override and final text.
+
+- Audits are retained even without captures, including in `recipe check`.
+- Python uses integer step keys; JSON uses object keys.
+- Executions without a masked step omit `masked_audits`.
+- CLI pipeline and recipe runs with masked steps require `--format json`.
+- Investigation sessions reject masked pipelines before execution because their
+  final-value records cannot retain these audits.
+
+### Masked budget calculations
+
+| Component | Conservative charge |
+| --- | --- |
+| Output | Input bytes + 3 bytes per possible replaced scalar |
+| Audit | 512-byte header + three UTF-8 text fields + 8 bytes per selected/configured index + 48 bytes per override |
+| Additional work | `32 × input bytes` + `16 × selector entries × (floor(log2(max(1, entries))) + 2)` + `64 × overrides` + audit bound |
+
+Captures and all audits share `max_capture_bytes`. Estimates precede transformation;
+repeated overrides and multibyte text can increase charges. Input-dependent
+positions validate inside the step before its ciphers run.
+
+A direct call may accept a request that exceeds these combined pipeline budgets.
+See [Position-aware transformations](position-aware-transformations.md).
 
 ## Recipe files
 
-Recipes make a validated pipeline reusable. Save this original round-trip example
-as `roundtrip.json` in your working directory:
+Recipes save a pipeline with an explicit input and output contract. This example
+round-trips bytes through hex:
 
 ```json
 {
@@ -114,22 +155,33 @@ as `roundtrip.json` in your working directory:
 }
 ```
 
-Format 1 uses JSON, one symbolic input slot or one tagged inline input, an explicit
-output type and ordered steps. Slots use 1..64 ASCII letters/digits/underscores/
-hyphens. Missing/extra bindings are errors; inline recipes accept none. An inline
-input instead looks like `{"source":"inline","value":{"type":"bytes","base64":"AP8="}}`.
-Bindings are caller-supplied values, never implicit paths, stdin or environment reads.
+### Recipe contract
 
-Format version, engine API and each adapter version are exact compatibility
-contracts, independent of package versions. Matching operation identifiers alone
-is insufficient. Unsupported versions are rejected; there is no automatic migration.
-Optional `limits` uses the pipeline's lowered budgets.
+| Field or rule | Requirement |
+| --- | --- |
+| Format | JSON, `format_version: 1`, `engine_api: 1` |
+| Input | One symbolic slot or one tagged inline value |
+| Slot name | 1–64 ASCII letters, digits, underscores or hyphens |
+| Bindings | Exact match; missing or extra bindings fail; inline recipes accept none |
+| Output | Explicit type |
+| Steps | Ordered operations with exact adapter versions |
+| Limits | Optional lowered pipeline budgets |
 
-Recipe/JSON transport is limited to 256 KiB, depth 16 and 4096 value nodes. Inline
-bytes and parameters count toward the document limit. Duplicate keys, unknown
-fields, noncanonical base64 and invalid types fail; there are no includes,
-expressions, executable tags or privileged capabilities. Validation never executes
-algorithms. `recipe check` / `check_recipe` compares exact typed output so community
-recipes can test compatibility independently. A different expected value must fail.
-The engine owns contracts; community definitions/examples live in
-[cubearc/recipes](https://github.com/cubearc/recipes), without duplicated algorithms.
+An inline input can be
+`{"source":"inline","value":{"type":"bytes","base64":"AP8="}}`.
+Bindings are supplied values, never implicit paths, stdin or environment reads.
+
+Format, engine and adapter versions are independent of package versions.
+Unsupported versions fail without automatic migration.
+
+### Validation and compatibility
+
+The shared JSON limits apply to recipes, including inline bytes and parameters.
+Duplicate keys, unknown fields, noncanonical Base64 and invalid types fail.
+Recipes have no includes, expressions or executable tags.
+
+Validation does not execute algorithms. `recipe check` / `check_recipe` does
+execute the recipe and compares exact typed output; a different expected value
+must fail. Community definitions and examples live in
+[cubearc/recipes](https://github.com/cubearc/recipes). For embedding pipelines, see
+the [Python SDK](../../interfaces/python.md#compose-operations).

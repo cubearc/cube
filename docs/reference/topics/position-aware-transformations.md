@@ -1,45 +1,80 @@
 # Position-aware transformations
 
-`text.transform.masked` selects scalar positions and applies existing Atbash,
-Caesar, ROT13 or identity independently to that set and its complement. It
-preserves character ordering and ASCII case; non-ASCII scalars remain unchanged
-by the ciphers. There is no implicit normalization, trimming or letter filtering.
-All scalars count, including whitespace, punctuation, NUL and combining marks;
-a grapheme can span multiple positions. Try [transforming selected positions](../../guides/positions.md).
+`text.transform.masked` applies a cipher to selected scalar positions and another
+to the remaining positions. It preserves order and ASCII case; non-ASCII scalars
+are unchanged by the ciphers. See [Transform selected positions](../../guides/positions.md)
+for an example.
 
-- Explicit indices form a sorted unique set. Duplicate positions transform once;
-  this does not change `text.extract`, which preserves requested order/duplicates.
-- Every Nth selects the Nth, 2Nth, ... scalar with positive N, regardless of base.
-  For N=2 the reported labels are 1,3,5 in base 0 or 2,4,6 in base 1.
-- Fibonacci uses numeric values 0,1,2,3,5,8,... as position labels, deduplicating
-  the repeated 1. Base 0 includes position 0; base 1 omits it. Generation stops
-  at the last input position and uses checked arithmetic. Exclusions remove
-  Fibonacci **values**, not sequence ordinals: excluding 3 removes label 3,
-  not the third sequence term. Only Fibonacci values are valid exclusions;
-  valid values beyond the input length have no effect. Exclusion duplicates
-  have no additional effect. Exclusion of 13 and 21 sends those positions to
-  the `otherwise` transformation; it does not remove characters from the text.
+## Position rules
 
-Base 0 is the default; explicit base 1 applies to indices, reported positions
-and overrides alike. Out-of-range explicit indices fail rather than being
-ignored. Empty input/selection is valid. Each selector accepts only its own
-parameters; Caesar requires an explicit signed i32 shift (normalized modulo 26),
-and other transformations reject a shift.
+All scalars count, including whitespace, punctuation, NUL and combining marks.
+There is no implicit normalization, trimming or letter filtering; a grapheme can
+span several positions.
 
-Optional manual overrides specify exactly one replacement scalar at an exact
-position. They run after deterministic transformation, in caller order, with
-repeated positions recorded separately. The report preserves original input,
-configuration, selected positions, deterministic text, every edit's previous
-and replacement scalar, and final text. An override expresses a caller choice;
-it is not cryptographic evidence. No automatic guesses or substitutions occur.
+| Setting | Rule |
+| --- | --- |
+| Position base | 0 by default; explicit base 1 applies to indices, reports and overrides |
+| Empty input or selection | Valid |
+| Explicit out-of-range index | Fail |
+| Selector parameters | Only parameters belonging to that selector are accepted |
 
-Input is limited to 1 MiB UTF-8. Each explicit index/exclusion/override list and
-the selected position set is limited to 65,536 entries, including duplicates in
-caller lists. Over-budget selections fail in full, without silent truncation.
-One-for-one scalar replacement bounds final output by 4 MiB, within the existing
-8 MiB output ceiling. Selector validation is reusable independently of ciphers.
+## Selectors
 
-A version-1 text-to-text pipeline adapter calls this same operation. Tagged list
-parameters and mandatory per-step audits let it compose without losing explicit
-edits; see [composition contracts](compose-operations.md#compose-operations). The engine API and recipe
-format remain 1; existing adapters retain their contracts.
+| Selector | Selected positions | Duplicate behavior |
+| --- | --- | --- |
+| Explicit indices | Sorted unique set of valid indices | Transform each position once |
+| Every Nth | Nth, 2Nth, … scalar for positive N, independent of base | Not applicable |
+| Fibonacci | Numeric labels 0, 1, 2, 3, 5, 8, … through the last input position | Deduplicate the repeated 1 |
+
+For every Nth with N=2, reported labels are 1,3,5 in base 0 or 2,4,6 in base 1.
+Explicit selection differs from `text.extract`, which preserves requested order
+and duplicates.
+
+### Fibonacci exclusions
+
+Base 0 includes label 0; base 1 omits it. Generation uses checked arithmetic.
+
+Exclusions remove Fibonacci **values**, not sequence ordinals: excluding 3 removes
+label 3. Only Fibonacci values are accepted. Repeated exclusions have no additional
+effect; valid values beyond the input length have no effect.
+
+Excluded positions use the `otherwise` transformation. Excluding 13 and 21 does
+not delete those characters.
+
+## Transformations and overrides
+
+Choose Atbash, Caesar, ROT13 or identity for each position set. Caesar requires
+an explicit signed `i32` shift, normalized modulo 26. Other transformations reject
+a shift parameter.
+
+Manual overrides replace exactly one scalar at an exact position. They run after
+deterministic transformation, in caller order. Repeated positions are separate
+edits; each records the previous and replacement scalar.
+
+The report contains:
+
+- Original input and configuration.
+- Selected positions and deterministic text.
+- Every manual override.
+- Final text.
+
+An override records a caller choice, not cryptographic evidence. No guesses or
+automatic substitutions occur.
+
+## Limits
+
+| Resource | Maximum |
+| --- | --- |
+| UTF-8 input | 1 MiB |
+| Each index, exclusion or override list | 65,536 entries, counting duplicates |
+| Selected position set | 65,536 entries |
+| Final output | At most 4 MiB from one-for-one replacement, within the 8 MiB output ceiling |
+
+Over-budget selections fail in full without truncation. Selector validation is
+also available independently of cipher execution.
+
+## Pipeline support
+
+The version-1 text-to-text adapter uses tagged list parameters and mandatory
+per-step audits. See [Masked transformation audits](compose-operations.md#masked-transformation-audits)
+for retention, output requirements and combined pipeline budgets.

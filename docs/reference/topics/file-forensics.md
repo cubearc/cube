@@ -1,83 +1,127 @@
 # File forensics
 
-Start with facts about the file, then select a bounded range to inspect or copy.
-Use the `file` category for metadata, signatures, hex, strings and differences.
+Inspect file metadata, find signatures and strings, compare bytes, or recover an
+explicit range. Inputs must be stable regular files. Byte offsets start at zero;
+a range ends exclusively at `offset + length`.
+
+## Inspection and comparison
+
+| Operation | Result | Interpretation |
+| --- | --- | --- |
+| Inspect | Size, timestamps and up to 12 header bytes | EXIF is read only when requested |
+| Signature | Supported format candidates at the header or embedded offsets | A match does not prove validity or hidden content; unknown headers have no match |
+| Strings | Runs of ASCII bytes `0x20–0x7e` | No Unicode detection |
+| Compare | Exact difference count and a bounded listing | Missing tail bytes are `null`/`None`, not zero; differences are not errors |
+| EXIF | Typed, repeated and unknown tags from JPEG/classic TIFF | Absent EXIF succeeds; malformed metadata fails |
+
+Signature rules recognize common PNG, JPEG, GIF, PDF, ZIP, gzip, WAVE and
+classic-TIFF markers. Embedded scans identify candidates without extracting them.
+
+For example, inspect signatures and printable strings in your own file:
 
 ```sh
 cube file signature sample.bin --json
 cube file strings sample.bin --min-length 4 --json
 ```
 
-A file signature is a candidate, not proof of format validity or hidden content.
-Header rules recognize common PNG/JPEG/GIF/PDF/ZIP/gzip/WAVE/classic-TIFF markers;
-embedded scans find candidates at offsets and do not recursively extract them.
-An unknown header simply has no supported match. `inspect` reads size/timestamps
-and up to 12 header bytes; EXIF requires an explicit request.
+### Inspection limits
 
-Byte offsets start at zero; ranges end exclusively at `offset + length`. Input
-must be a stable regular file. Important limits and result meanings:
+| Resource | Maximum |
+| --- | --- |
+| Embedded-signature or string scan | 64 MiB |
+| One string run | 1 MiB |
+| Accumulated string text | 16 MiB |
+| EXIF metadata prefix | 1 MiB |
+| Byte-returning extraction | 16 MiB |
+| Streaming extraction | 1 GiB |
 
-- Embedded/string scans inspect at most 64 MiB; result listings are bounded.
-  Read `complete` rather than assuming all candidates were returned.
-- Strings are ASCII bytes 0x20–0x7e, not guessed Unicode. One run is at most 1 MiB;
-  accumulated text is bounded to 16 MiB.
-- Binary comparisons keep exact difference counts even when a listing is capped.
-  Missing tail bytes are absent (`null`/`None`), not zero; differences are not errors.
-- Explicit extraction can stream up to 1 GiB; byte-returning APIs cap allocation
-  at 16 MiB. Destinations are new files and source aliases are rejected.
-- EXIF image metadata (such as camera settings) supports JPEG/classic TIFF with
-  a 1 MiB metadata prefix. Tags preserve
-  original types and repeated/unknown values; absent EXIF succeeds, malformed
-  input fails. Tags may contain sensitive information already in the input.
-- Appended-data detection reports exact boundaries for PNG framing/CRCs, baseline
-  sequential Huffman JPEG with one or three components, and GIF raster framing.
-  JPEG checks segment/table/frame/scan relationships, stuffing and restart-marker
-  order; GIF checks palettes, raster rectangles, extensions and sub-block lengths.
-  End-marker bytes inside framed payloads do not establish a boundary. JPEG
-  progressive/arithmetic processes, GIF plain-text rendering, APNG and unknown
-  critical PNG chunks are unsupported. Compressed pixels/entropy codes are not
-  decoded. Work to the logical end is capped at 64 MiB/10000 framing records;
-  trailing bytes are counted without scanning them and do not establish hidden data.
-  The existing PNG report fields and legacy `file.png_boundary` semantic type name
-  remain compatible; `validated_chunks` counts framing records for other formats.
+Listings can stop before all results are returned. Check `complete`. EXIF tags
+may contain sensitive information already present in the source.
+
+## Appended data
+
+Appended-data detection finds a validated logical boundary, then counts trailing
+bytes without scanning them. Trailing bytes alone do not establish hidden data.
+
+| Format | Boundary validation | Unsupported cases |
+| --- | --- | --- |
+| PNG | Chunk framing and CRCs | APNG; unknown critical chunks |
+| JPEG | Baseline sequential Huffman, one or three components; segment/table/frame/scan relationships, stuffing and restart order | Progressive or arithmetic processes |
+| GIF | Palettes, raster rectangles, extensions and sub-block lengths | Plain-text rendering |
+| ZIP | Classic archive validation described below | Incomplete candidate searches |
+
+End-marker bytes inside framed payloads do not establish a boundary. Pixel and
+entropy data are not decoded. Work to the logical end is limited to 64 MiB and
+10,000 framing records.
+
+For compatibility, reports retain the `file.png_boundary` semantic type and PNG
+field names. For other formats, `validated_chunks` counts framing records.
 
 ## Validate a ZIP candidate
 
-`file zip` / `validate_zip` validates a caller-selected classic ZIP origin. Local
-headers, central-directory records, EOCD counts/offsets, names, CRC/size fields and
-entry extents must agree. Offsets inside the archive are relative to the selected
-origin. Records must be contiguous and nonoverlapping. Stored and deflate methods,
-UTF-8 names/comments and signed 32-bit data descriptors are supported. Encrypted,
-ZIP64, multi-disk, unsigned-descriptor and alternate self-extracting offset variants
-fail explicitly. Names remain inert exact `name_hex` data; nothing is unpacked.
+`file zip` / `validate_zip` validates a classic ZIP at a caller-selected origin.
+Local headers, central directory, EOCD counts and offsets, names, CRC/size fields
+and entry extents must agree. Records must be contiguous and nonoverlapping;
+archive offsets are relative to the selected origin.
 
-Validation admits at most 16 MiB beyond the selected origin, 64 EOCD candidates,
-1000 entries, 10000 cumulative local/central header visits, 1 MiB metadata and
-64 MiB total declared uncompressed data. `scanned_bytes` and
-`candidate_scan_complete` expose whether the candidate suffix was fully searched;
-competing interpretations outside that prefix are not ruled out. `payload_verified`
-is always false: compressed content, actual CRC integrity and authenticity are not
-verified. `file appended` reuses this same validator for a ZIP at offset zero.
-Boundary/carving requests reject incomplete ZIP searches instead of choosing a
-potentially ambiguous extent. ZIP is available through direct APIs rather than
-the current pipeline report subset.
+### ZIP support
+
+| Supported | Rejected |
+| --- | --- |
+| Stored and deflate methods | Encryption and ZIP64 |
+| UTF-8 names and comments | Multi-disk archives |
+| Signed 32-bit data descriptors | Unsigned descriptors |
+| Origin-relative offsets | Alternate self-extracting offset variants |
+
+Names remain inert `name_hex` data. Nothing is unpacked.
+
+### ZIP limits and result meaning
+
+| Resource | Maximum |
+| --- | --- |
+| Suffix searched after the origin | 16 MiB |
+| EOCD candidates | 64 |
+| Entries | 1,000 |
+| Cumulative local/central header visits | 10,000 |
+| Metadata | 1 MiB |
+| Total declared uncompressed data | 64 MiB |
+
+- `scanned_bytes` and `candidate_scan_complete` describe the searched suffix.
+  Interpretations outside that prefix are not ruled out.
+- `payload_verified` is always false. Compressed content, actual CRC integrity
+  and authenticity are not verified.
+- Boundary detection and carving require a complete search, rather than choosing
+  a potentially ambiguous extent.
+- `file appended` uses this validator for ZIP at offset zero. ZIP validation is
+  available through direct APIs, without a pipeline adapter.
 
 ## Recover selected embedded bytes
 
 `file carve` / `carve_file` requires an explicit offset and a new destination.
-Omit length to revalidate a supported PNG/JPEG/GIF/ZIP candidate at that origin;
-supply length to copy an exact raw range without claiming format validation.
-Candidate validation uses relative reader coordinates, while the report keeps
-absolute source offsets. ZIP candidate carving requires a complete bounded suffix
-search; if that is not possible, choose an explicit known range instead.
 
-The output budget defaults to 16 MiB and can be lowered or raised to the existing
-1 GiB streaming-copy hard limit. Range/size/format checks happen before output
-creation; existing destinations and source aliases are rejected. Copying reuses
-the 64 KiB streaming range API. A new partial output is removed on failure.
+| Length setting | Selection |
+| --- | --- |
+| Omitted | Revalidate a supported PNG, JPEG, GIF or ZIP at that origin |
+| Explicit | Copy the exact raw range without claiming format validation |
+
+Validation uses coordinates relative to the candidate; reports retain absolute
+source offsets. If a ZIP suffix cannot be searched completely within the budget,
+select an explicit known range.
+
+### Output and failure behavior
+
+The output budget defaults to 16 MiB and can be adjusted up to the 1 GiB streaming
+hard limit. Copying uses 64 KiB chunks.
+
+- Validate range, size and format before creating output.
+- Reject existing destinations and aliases of the source.
+- Remove a newly created partial output on failure.
+- Fail if the source size or modification time changes. Keep input stable;
+  recovery is not an atomic filesystem snapshot.
+
 The report includes source size, selected range, bytes written, selection mode,
-format/evidence when validated, and SHA-256 of the exact recovered bytes. This
-identifies content, not trust. Source size/mtime changes during recovery fail;
-callers must keep inputs stable because this is not an atomic filesystem snapshot.
-No paths or bytes are automatically retained in investigation sessions. Nothing is
-decompressed or executed, and source files are opened read-only.
+format evidence when validated, and SHA-256 of recovered bytes. The digest
+identifies content, not trust.
+
+Sources are read-only. Carving does not decompress or execute content, and does
+not automatically retain paths or bytes in investigation sessions.

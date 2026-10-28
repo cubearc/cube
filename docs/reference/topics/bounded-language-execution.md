@@ -1,8 +1,15 @@
 # Bounded language execution
 
-`esolang.brainfuck.execute` runs the [strict Brainfuck profile](../../brainfuck.md) and
-returns exact bytes only after successful completion. `esolang.brainfuck.report`
-returns an explicitly completed/incomplete execution with optional final tape and
-bounded traces. `esolang.brainfuck.compare` runs a selected subset of 8/16/32-bit
-cells with aggregate budgets. These direct Rust/CLI/native Python operations have
-no pipeline adapters, host effects or arbitrary-width/nonwrapping mode.
+Run Brainfuck with explicit resource limits and no host effects.
+The [strict execution profile](../../brainfuck.md) defines the grammar and budgets.
+
+## Operations
+
+| Operation | Result | Completion behavior |
+| --- | --- | --- |
+| Execute | Exact output bytes | Returns bytes only after successful completion |
+| Report | Completion status, optional final tape and bounded traces | Distinguishes completed from incomplete execution |
+| Compare | Results for selected 8/16/32-bit cell widths | Applies aggregate budgets across the runs |
+
+These operations have no pipeline adapters, arbitrary-width cells or nonwrapping mode.
+See [Run a Brainfuck program](../../guides/brainfuck.md) for an example.

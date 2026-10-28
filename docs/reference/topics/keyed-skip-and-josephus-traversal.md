@@ -1,25 +1,50 @@
 # Keyed skip and Josephus traversal
 
-Both operate on stored Unicode scalar order, without normalization. Supply a
-nonempty cyclic list of positive u64 steps; default start is the first scalar,
-origin 0, direction forward. Origin 1 and reverse direction are explicit. The
-first selection advances step-1 from the start; a step of 1 selects that anchor.
-After each selection the anchor advances to the next scalar in the chosen
-direction. Keyed skip retains the ring and requires count; Josephus removes the
-selected scalar and resumes at the next remaining scalar, defaulting to all.
-For ABCDE and step 2, keyed count 5 yields BDACE, Josephus yields BDAEC.
-Keyed nonwrapping traversal errors if any next selection leaves the source;
-Josephus requires wrapping. Explicit Josephus count can stop early; `remaining`
-reports unselected source scalars. Output records keep original zero-based scalar
-indexes and UTF-8 byte offsets, independently of the input origin.
+Visit positions in a circular sequence of Unicode scalars.
+Input stays in stored order, without normalization.
 
-Input <=1 MiB; step lists/counts <=65,536. Scratch memory <=8 MiB and serialized
-reports <=8 MiB are independent bounds, excluding caller-owned input. Exact
-source arrays cost eight bytes per scalar, plus four bytes per Fenwick cell for
-Josephus; extraction releases these before reusing `text.extract`. Thus Josephus
-can reject a large ASCII source below the byte limit. Work <=16,777,216 units
-charges input bytes, step-list validation, source indexing, tree initialization, each selection/tree
-visit, extraction visits and a conservative bound for serialized evidence. Rust
-options and CLI/native Python limits can only lower ceilings. Any exhausted
-budget fails without a partial success. These structured direct APIs have no
-pipeline adapters and leave existing stride/recipe contracts unchanged.
+## Traversal behavior
+
+Both methods use a nonempty cyclic list of positive `u64` step sizes.
+The first selection advances `step − 1` positions from the starting scalar.
+After selection, the anchor advances to the next scalar in the chosen direction.
+
+| Method | After a selection | Count | `ABCDE` with step 2 |
+| --- | --- | --- | --- |
+| Keyed skip | Keeps the selected scalar in the ring | Required | Count 5 gives `BDACE` |
+| Josephus | Removes the selected scalar | Defaults to all scalars | `BDAEC` |
+
+The default start is the first scalar, with origin 0 and forward direction.
+Origin 1 and reverse direction must be selected explicitly.
+
+Keyed skip can disable wrapping; it fails if the next selection leaves the input.
+Josephus requires wrapping. An explicit Josephus count can stop early, with
+unselected scalars returned in `remaining`.
+
+## Result positions
+
+Records retain original zero-based scalar indexes and UTF-8 byte offsets,
+regardless of the input origin.
+
+## Limits
+
+Limits apply independently:
+
+| Resource | Maximum |
+| --- | --- |
+| Input | 1 MiB |
+| Step-list entries and selection count | 65,536 |
+| Scratch memory, excluding caller input | 8 MiB |
+| Serialized report | 8 MiB |
+| Work | 16,777,216 units |
+
+Source arrays use eight bytes per scalar; Josephus also uses four bytes per
+Fenwick-tree cell. A large ASCII input can therefore fail below the byte limit.
+Extraction releases these arrays before reusing the text-extraction routine.
+
+Work includes input validation, indexing, tree setup and visits, selections,
+extraction and a conservative serialization estimate. Interface options can lower
+the limits. Exhausting a budget fails without a partial result.
+
+These operations have no pipeline adapters.
+See [Read text in a different order](../../guides/traversal.md).

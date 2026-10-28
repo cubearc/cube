@@ -1,8 +1,20 @@
 # Encoding and decoding
 
-Use encodings to represent bytes as text, or decoding to recover the original
-bytes. Encoding is reversible and provides no confidentiality. Base32, Bitcoin
-Base58, standard Base64 and hex are available through the `encoding` category.
+Encoding represents bytes as text; decoding recovers the bytes. These formats
+are reversible and provide no confidentiality.
+
+## Supported formats
+
+Decoders require exact input and reject whitespace.
+
+| Format | Encoding | Decoding rules |
+| --- | --- | --- |
+| Base32 | Uppercase with padding | Uppercase and canonical padding |
+| Base58 | Bitcoin alphabet; each leading zero byte becomes `1` | Case-sensitive; no Base58Check checksum |
+| Base64 | Standard alphabet with padding | Standard alphabet, padding and canonical unused bits |
+| Hex | Hexadecimal byte pairs | Either letter case; no prefix |
+
+For example, encode text as Base32 or decode Base64 to bytes:
 
 ```sh
 cube encode base32 --text 'foo'
@@ -11,30 +23,42 @@ cube decode base64 --text 'AP8='
 # 00ff
 ```
 
-Decoders reject whitespace rather than trim it. Base32 requires uppercase and
-canonical padding; Base64 requires the standard alphabet, padding and canonical
-unused bits. Base58 preserves leading zero bytes as `1`, is case-sensitive and
-does not add/verify Base58Check. Hex accepts either letter case but no prefix.
-Use `encoding.base64.decode` to inspect the maintained descriptor. Decoding outputs
-bytes; explicitly select raw output when passing them to another operation.
+Decoded output is bytes; `00ff` is its hexadecimal display. Select raw output
+when passing those bytes to another operation. See
+[Encode and decode data](../../guides/encoding.md).
 
 ## Versioned Base58Check
 
-`encoding.base58check.encode` accepts one explicit version byte and 0..1024 payload
-bytes, appends the first four raw bytes of SHA-256(SHA-256(version || payload)),
-and reuses Bitcoin-alphabet Base58. Empty payloads are valid; leading zeros remain
-exact. The checksum detects corruption and does not authenticate a sender.
-`encoding.base58check.decode` strictly verifies at most 1421 encoded bytes and
-returns the exact version and payload. It rejects whitespace, absent versions,
-frames below five/above 1029 bytes and bad checksums. Working decoded storage is
-bounded by input length before conversion; conversion work is quadratic but capped.
-These generic codecs infer no network or wallet structure and leave plain Base58
-behavior unchanged. Rules/vectors follow [Bitcoin Core](https://github.com/bitcoin/bitcoin/blob/master/src/base58.cpp).
+Base58Check adds a version byte and checksum to a payload. The checksum detects
+corruption; it does not authenticate a sender or identify a network or wallet.
 
-Rust returns `Decoded { version, payload, checksum_verified }`; native Python adds
-raw `payload` bytes, and CLI JSON uses `version`, exact `payload_hex` and
-`checksum_verified`. Encoding has a version-1 bytes-to-text adapter with an explicit
-`version` data parameter, conservative output bounds and quadratic work charging.
-Decoding's structured result has no adapter; no new pipeline value is introduced.
-Generic codec output/capture contains caller-supplied data: this does not establish
-safe automatic capture of private-key formats.
+### Frame and limits
+
+The frame is `version || payload || checksum`. The checksum is the first four
+bytes of `SHA-256(SHA-256(version || payload))`. The complete frame uses the
+Bitcoin Base58 alphabet and preserves leading zeros.
+
+| Field or limit | Rule |
+| --- | --- |
+| Version | One explicit byte |
+| Payload | 0–1,024 bytes; empty is valid |
+| Decoded frame | 5–1,029 bytes |
+| Encoded input | At most 1,421 bytes |
+| Validation | Reject whitespace, missing version and checksum mismatch |
+| Conversion work | Quadratic in input length, bounded by the input cap |
+| Working storage | Bounded by input length before conversion |
+
+The format and test vectors follow
+[Bitcoin Core](https://github.com/bitcoin/bitcoin/blob/master/src/base58.cpp).
+
+### Results and pipeline support
+
+Decoding returns the version, exact payload and `checksum_verified`. Rust and
+Python expose payload bytes; CLI JSON uses `payload_hex`.
+
+Encoding has a version-1 bytes-to-text adapter with an explicit `version`
+parameter. Its output and work bounds are checked before execution. Decoding
+returns a structured result and has no pipeline adapter.
+
+Payloads and captures contain the caller's data. A valid checksum does not make
+private-key material safe to capture; see [Offline key formats](offline-key-formats.md).

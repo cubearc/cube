@@ -113,6 +113,7 @@ from ._native import (
     four_square_encode,
     fractionated_morse_decode,
     fractionated_morse_encode,
+    frequency_compare,
     gcd,
     grandpre_decode,
     grandpre_encode,
@@ -297,6 +298,7 @@ from ._native import (
 
 __all__ = [
     "crib_verify",
+    "frequency_compare",
     "homophonic_inspect",
     "transposition_rank",
     "vigenere_rank",

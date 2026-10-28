@@ -202,6 +202,31 @@ fn crib_verify(
             .map_err(|_| pyo3::exceptions::PyValueError::new_err("invalid report"))?,
     )
 }
+#[pyfunction]
+#[pyo3(signature=(request, *, cancellation=None))]
+fn frequency_compare(
+    py: Python<'_>,
+    request: &Bound<'_, PyDict>,
+    cancellation: Option<&CancellationToken>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        request.as_any(),
+        a::MAX_REQUEST,
+        "analysis.frequency.compare",
+        "request",
+    )?;
+    let r: a::frequency::Request = a::parse_request(&document).map_err(super::file_error)?;
+    let token = cancellation.map(|c| &c.flag);
+    let report = py
+        .detach(|| a::frequency::compare(&r, token))
+        .map_err(|e| super::file_error(e.operation("analysis.frequency.compare")))?;
+    super::structured(
+        py,
+        &serde_json::to_value(report)
+            .map_err(|_| pyo3::exceptions::PyValueError::new_err("invalid report"))?,
+    )
+}
 pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(language_score, module)?)?;
     module.add_function(wrap_pyfunction!(period_estimate, module)?)?;
@@ -211,5 +236,6 @@ pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(transposition_rank, module)?)?;
     module.add_function(wrap_pyfunction!(homophonic_inspect, module)?)?;
     module.add_function(wrap_pyfunction!(crib_verify, module)?)?;
+    module.add_function(wrap_pyfunction!(frequency_compare, module)?)?;
     Ok(())
 }

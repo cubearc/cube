@@ -42,6 +42,33 @@ consume one unit. A limit or cooperative Rust cancellation returns a marked pref
 Serialized reports are capped at 4 MiB; exceeding that ceiling is a typed resource
 error, never a silently truncated result. No model, input or report is uploaded.
 
+## Frequency distance
+
+`analysis.frequency.compare` (`cryptanalysis frequency`, `frequency_compare`)
+computes the [Pearson statistic](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35f.htm)
+`sum((O-E)^2/E)` from aligned `bins` containing unique exact `label`, nonnegative
+integer `observed` and finite `expected` mass. The required `expected_policy` is
+`counts` (totals must agree within `1e-9 * max(1, observed_total)`) or
+`normalize_proportions` (rescale supplied masses to the observed total).
+Positive masses lie in [1e-300,1e12]; zero is permitted. A zero/zero bin is omitted,
+while a positive observation with zero expectation reports `zero_expected_mismatch`
+(infinite distance). A distance beyond finite f64 range reports `out_of_range`.
+Empty observations are `undefined`; normalization requires positive total mass.
+
+Lower distance means closer agreement. The raw distance has no logarithm applied;
+compare finite calculations with relative tolerance 1e-12. Each report retains
+per-bin contributions, processed expected total, full observed total, normalization
+policy and SHA-256 of the ordered labels/expected masses/policy. For a complete
+finite result, degrees of freedom are positive expected bins minus one, assuming
+the supplied fixed model has no fitted parameters. This operation does not assess
+sample adequacy or infer a p-value, posterior probability or cipher identity.
+
+The request is capped at 1 MiB and 10000 bins; labels use 1–256 UTF-8 bytes and
+observed counts sum to at most 16 Mi. Each bin charges `max(1, observed)` units
+without expanding counts. The shared work/result limits and cancellation retain
+an incomplete prefix, with degrees of freedom undefined. At most 4096 bin results
+and 4 MiB of serialized evidence are retained. No caller data is acquired online.
+
 ## Period evidence
 
 `analysis.period.estimate` / `cube cryptanalysis period` / `cube.period_estimate`

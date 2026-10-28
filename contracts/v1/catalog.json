@@ -3448,6 +3448,566 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "analysis.frequency.compare",
+      "category": "cryptanalysis",
+      "description": "Explicit Pearson frequency distance",
+      "example": "cube cryptanalysis --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "request",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Request",
+            "type": "object",
+            "properties": {
+              "bins": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Bin"
+                },
+                "maxItems": 10000
+              },
+              "expected_policy": {
+                "$ref": "#/$defs/ExpectedPolicy"
+              },
+              "limits": {
+                "$ref": "#/$defs/Limits",
+                "default": {
+                  "max_results": 4096,
+                  "max_work": 16777216
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "bins",
+              "expected_policy"
+            ],
+            "$defs": {
+              "Bin": {
+                "type": "object",
+                "properties": {
+                  "expected": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "minLength": 1
+                  },
+                  "observed": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 16777216,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "maximum": 16777216,
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "maximum": 16777216,
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "label",
+                  "observed",
+                  "expected"
+                ]
+              },
+              "ExpectedPolicy": {
+                "oneOf": [
+                  {
+                    "description": "Expected counts must sum to the observed total within relative 1e-9.",
+                    "type": "string",
+                    "const": "counts"
+                  },
+                  {
+                    "description": "Rescale supplied nonnegative masses to the observed total.",
+                    "type": "string",
+                    "const": "normalize_proportions"
+                  }
+                ]
+              },
+              "Limits": {
+                "description": "A caller can lower, but cannot raise, these ceilings.",
+                "type": "object",
+                "properties": {
+                  "max_results": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 4096,
+                        "maximum": 4096,
+                        "minimum": 1,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4096,
+                          "format": "uint",
+                          "maximum": 4096,
+                          "minimum": 1,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 4096,
+                    "x-cube-integer": {
+                      "default": 4096,
+                      "format": "uint",
+                      "maximum": 4096,
+                      "minimum": 1,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_work": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 16777216,
+                        "maximum": 16777216,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16777216,
+                          "format": "uint",
+                          "maximum": 16777216,
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 16777216,
+                    "x-cube-integer": {
+                      "default": 16777216,
+                      "format": "uint",
+                      "maximum": 16777216,
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "report",
+          "semantic_type": "analysis.report",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Report",
+            "type": "object",
+            "properties": {
+              "bins": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Evidence"
+                }
+              },
+              "degrees_of_freedom": {
+                "description": "Positive expected bins minus one; no fitted parameters. Undefined for\nincomplete evaluation, no observations or a nonfinite distance.",
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "format": "uint",
+                "minimum": 0
+              },
+              "distance": {
+                "$ref": "#/$defs/Distance"
+              },
+              "expected_policy": {
+                "$ref": "#/$defs/ExpectedPolicy"
+              },
+              "expected_total": {
+                "type": "number",
+                "format": "double"
+              },
+              "method": {
+                "type": "string"
+              },
+              "model_sha256": {
+                "type": "string"
+              },
+              "observed_total": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "scope": {
+                "type": "string"
+              },
+              "status": {
+                "$ref": "#/$defs/Status"
+              }
+            },
+            "required": [
+              "method",
+              "expected_policy",
+              "model_sha256",
+              "observed_total",
+              "expected_total",
+              "distance",
+              "bins",
+              "status",
+              "scope"
+            ],
+            "$defs": {
+              "Distance": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "finite"
+                      },
+                      "value": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind",
+                      "value"
+                    ]
+                  },
+                  {
+                    "description": "Positive observation with zero expected mass gives infinite distance.",
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "zero_expected_mismatch"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind"
+                    ]
+                  },
+                  {
+                    "description": "A positive finite mass produces a distance beyond finite f64 range.",
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "out_of_range"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind"
+                    ]
+                  },
+                  {
+                    "description": "No observations or an omitted 0/0 bin.",
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "undefined"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind"
+                    ]
+                  }
+                ]
+              },
+              "Evidence": {
+                "type": "object",
+                "properties": {
+                  "distance": {
+                    "$ref": "#/$defs/Distance"
+                  },
+                  "expected": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "observed": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "required": [
+                  "label",
+                  "observed",
+                  "expected",
+                  "distance"
+                ]
+              },
+              "ExpectedPolicy": {
+                "oneOf": [
+                  {
+                    "description": "Expected counts must sum to the observed total within relative 1e-9.",
+                    "type": "string",
+                    "const": "counts"
+                  },
+                  {
+                    "description": "Rescale supplied nonnegative masses to the observed total.",
+                    "type": "string",
+                    "const": "normalize_proportions"
+                  }
+                ]
+              },
+              "Status": {
+                "type": "object",
+                "properties": {
+                  "complete": {
+                    "type": "boolean"
+                  },
+                  "stop": {
+                    "$ref": "#/$defs/Stop"
+                  },
+                  "work": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "required": [
+                  "complete",
+                  "stop",
+                  "work"
+                ]
+              },
+              "Stop": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "work_limit",
+                  "result_limit",
+                  "cancelled",
+                  "pruned"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4194304,
+        "max_output_bytes": 4194304,
+        "max_items": 4096,
+        "max_work": 16777216,
+        "max_memory_bytes": 67108864
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "analysis.homophonic.inspect",
       "category": "cryptanalysis",
       "description": "Exact homophonic token evidence",

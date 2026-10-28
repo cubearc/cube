@@ -7,6 +7,24 @@ import cube
 import pytest
 
 
+def test_native_frequency_distance_and_invalid_totals():
+    request = {
+        "bins": [
+            {"label": "A", "observed": "20", "expected": 25.0},
+            {"label": "B", "observed": 30, "expected": 25.0},
+            {"label": "C", "observed": 50, "expected": 50.0},
+        ],
+        "expected_policy": "counts",
+    }
+    report = cube.frequency_compare(request)
+    assert report["distance"] == {"kind": "finite", "value": 2.0}
+    assert report["degrees_of_freedom"] == 2
+    request["bins"][0]["expected"] = 20.0
+    with pytest.raises(ValueError) as error:
+        cube.frequency_compare(request)
+    assert error.value.operation == "analysis.frequency.compare"
+
+
 def test_native_analysis_matches_reviewed_contracts():
     source = (
         Path(__file__).parents[3]
@@ -22,6 +40,7 @@ def test_native_analysis_matches_reviewed_contracts():
         "analysis.transposition.rank": "transposition_rank",
         "analysis.homophonic.inspect": "homophonic_inspect",
         "analysis.crib.verify": "crib_verify",
+        "analysis.frequency.compare": "frequency_compare",
     }
     assert set(mapping) == {
         v["operation"] for v in vectors if v["operation"].startswith("analysis.")

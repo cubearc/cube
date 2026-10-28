@@ -115,3 +115,18 @@ pub(crate) fn language_score() -> Result<Fixture, OperationError> {
     }
     Ok(fixture(request, r))
 }
+
+pub(crate) fn frequency_compare() -> Result<Fixture, OperationError> {
+    let request = json!({"bins":[{"label":"A","observed":"20","expected":25.0},{"label":"B","observed":30,"expected":25.0},{"label":"C","observed":50,"expected":50.0}],"expected_policy":"counts"});
+    let r = frequency::compare(
+        &serde_json::from_value(request.clone()).expect("typed fixture"),
+        None,
+    )?;
+    if r.distance != (frequency::Distance::Finite { value: 2.0 })
+        || r.degrees_of_freedom != Some(2)
+        || r.status.work != 100
+    {
+        return Err(invalid("frequency known answer mismatch"));
+    }
+    Ok(fixture(request, r))
+}

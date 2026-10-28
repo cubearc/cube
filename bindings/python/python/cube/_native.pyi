@@ -1646,3 +1646,8 @@ def homophonic_inspect(
 def crib_verify(
     request: dict[str, object], *, cancellation: CancellationToken | None = None
 ) -> dict[str, object]: ...
+def frequency_compare(
+    request: dict[str, object], *, cancellation: CancellationToken | None = None
+) -> dict[str, object]:
+    """Compare caller frequencies with explicit counts/proportions; no p-value."""
+    ...

@@ -109,6 +109,41 @@ Example:
 cube cryptanalysis --help
 ```
 
+## analysis.frequency.compare
+
+Explicit Pearson frequency distance
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
 ## analysis.homophonic.inspect
 
 Exact homophonic token evidence

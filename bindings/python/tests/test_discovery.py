@@ -18,6 +18,7 @@ SDK_BINDINGS = {
     "analysis.transposition.rank": "transposition_rank",
     "analysis.homophonic.inspect": "homophonic_inspect",
     "analysis.crib.verify": "crib_verify",
+    "analysis.frequency.compare": "frequency_compare",
     "cipher.book.encode": "book_encode",
     "text.keyboard.coordinates.encode": "keyboard_coordinates_encode",
     "text.keyboard.coordinates.decode": "keyboard_coordinates_decode",

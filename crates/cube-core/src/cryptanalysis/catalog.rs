@@ -82,7 +82,7 @@ const fn row(s: Spec) -> Row {
         },
     }
 }
-static ROWS: [Row; 8] = [
+static ROWS: [Row; 9] = [
     row(Spec {
         id: "analysis.language.score",
         name: "Caller-owned language-model scoring",
@@ -243,27 +243,47 @@ static ROWS: [Row; 8] = [
         }],
         fixture: fixtures::crib_verify,
     }),
+    row(Spec {
+        id: "analysis.frequency.compare",
+        name: "Explicit Pearson frequency distance",
+        command: "cryptanalysis frequency",
+        python: "frequency_compare",
+        rust: "cube_core::cryptanalysis::frequency::compare",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<frequency::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<frequency::Report>,
+            required: true,
+        }],
+        fixture: fixtures::frequency_compare,
+    }),
 ];
-const fn profiles() -> [m::Entry; 8] {
-    let mut out = [ROWS[0].profile; 8];
+const fn profiles() -> [m::Entry; 9] {
+    let mut out = [ROWS[0].profile; 9];
     let mut i = 0;
-    while i < 8 {
+    while i < 9 {
         out[i] = ROWS[i].profile;
         i += 1;
     }
     out
 }
-const fn contracts() -> [c::Entry; 8] {
-    let mut out = [ROWS[0].contract; 8];
+const fn contracts() -> [c::Entry; 9] {
+    let mut out = [ROWS[0].contract; 9];
     let mut i = 0;
-    while i < 8 {
+    while i < 9 {
         out[i] = ROWS[i].contract;
         i += 1;
     }
     out
 }
-const PROFILES: [m::Entry; 8] = profiles();
-const CONTRACTS: [c::Entry; 8] = contracts();
+const PROFILES: [m::Entry; 9] = profiles();
+const CONTRACTS: [c::Entry; 9] = contracts();
 pub static OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
 pub(crate) const MODULE: o::Module =
     o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);

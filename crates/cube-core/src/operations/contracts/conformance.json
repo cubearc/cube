@@ -9618,5 +9618,82 @@
     },
     "parameters": {},
     "contract_sha256": "df9f58e8d31024a29e5c94c5d41b8dfff61e5b55ecb83605ddc8620cfd22f9bf"
+  },
+  {
+    "contract_sha256": "dc2573b9ec958ae9a90f4fb5215a266b292678f54d1f6e9bb60a4189e8d76178",
+    "inputs": {
+      "request": {
+        "bins": [
+          {
+            "expected": 25.0,
+            "label": "A",
+            "observed": "20"
+          },
+          {
+            "expected": 25.0,
+            "label": "B",
+            "observed": 30
+          },
+          {
+            "expected": 50.0,
+            "label": "C",
+            "observed": 50
+          }
+        ],
+        "expected_policy": "counts"
+      }
+    },
+    "operation": "analysis.frequency.compare",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "bins": [
+          {
+            "distance": {
+              "kind": "finite",
+              "value": 1.0
+            },
+            "expected": 25.0,
+            "label": "A",
+            "observed": 20
+          },
+          {
+            "distance": {
+              "kind": "finite",
+              "value": 1.0
+            },
+            "expected": 25.0,
+            "label": "B",
+            "observed": 30
+          },
+          {
+            "distance": {
+              "kind": "finite",
+              "value": 0.0
+            },
+            "expected": 50.0,
+            "label": "C",
+            "observed": 50
+          }
+        ],
+        "degrees_of_freedom": 2,
+        "distance": {
+          "kind": "finite",
+          "value": 2.0
+        },
+        "expected_policy": "counts",
+        "expected_total": 100.0,
+        "method": "pearson-chi-square-f64-v1",
+        "model_sha256": "59ddc38b9827f87dace3531d63b3d13520c430f6e31b1a935326c95231708e8f",
+        "observed_total": 100,
+        "scope": "Raw frequency distance for supplied aligned bins and a fixed model; no logarithm, fitted parameters, p-value, posterior, identity or authenticity claim. Incomplete results cover only the returned prefix.",
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 100
+        }
+      }
+    },
+    "parameters": {}
   }
 ]

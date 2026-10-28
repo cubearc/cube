@@ -20,6 +20,8 @@ pub(crate) enum Command {
     Homophonic(crate::Input),
     /// Explicit known-plaintext verification
     Crib(crate::Input),
+    /// Explicit Pearson frequency distance
+    Frequency(crate::Input),
 }
 pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
@@ -85,6 +87,14 @@ pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn 
             write_report(
                 &mut *out,
                 serde_json::to_value(a::crib::verify(&request, None)?)?,
+            )?;
+        }
+        Command::Frequency(input) => {
+            let doc = input.read_text_limit(a::MAX_REQUEST, "analysis.frequency.compare")?;
+            let request: a::frequency::Request = a::parse_request(&doc)?;
+            write_report(
+                &mut *out,
+                serde_json::to_value(a::frequency::compare(&request, None)?)?,
             )?;
         }
     }

@@ -5,6 +5,7 @@ mod catalog;
 pub mod classical;
 pub mod crib;
 mod fixtures;
+pub mod frequency;
 pub mod homophonic;
 pub mod period;
 pub mod scoring;

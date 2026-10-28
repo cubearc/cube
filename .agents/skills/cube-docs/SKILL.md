@@ -30,17 +30,12 @@ For behavior changes, inspect the implementation and affected examples. Regenera
 contract reference from its owning Rust definitions when required. Update
 `docs/SUMMARY.md`, preserve old links and run relevant example/link/reference checks.
 
-Product Markdown is published through the separate
-[`cubearc/docs` repository](https://github.com/cubearc/docs), using the exact
-product commits in `sources.lock.json`. For an implementation delivery that
-changes published documentation, inspect that manifest and
-[site maintenance](https://github.com/cubearc/docs/blob/main/content/contributing/site.md).
-After the product changes are committed, adopt the reviewed revisions there,
-add any required reader-facing operation/category titles in `tools/navigation.py`,
-and run its tool tests, link checks and locked site build. Keep product prose in
-its owning repository; update shared policy or portal assembly only when needed.
-Report product validation and portal publication separately, including any
-remaining CI or deployment gap.
+Include the sibling `cubearc/docs` repository in product-documentation delivery.
+Follow the shared guide's portal-delivery section: adopt the validated Cube
+commit in `sources.lock.json`, update affected shared pages and readable operation
+navigation names, and verify the locked portal build and authorized publication.
+Product Markdown changes alone do not update the published portal. Report the
+reason when no portal update is required.
 
 When a change crosses Cube and Play execution, verify the relevant Play Docker
 Runner/Lab/runtime checks in Actions against the delivered Core revision. Reuse

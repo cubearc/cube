@@ -1,5 +1,6 @@
-//! Classical ciphers for text challenges. These do not provide secure encryption.
+//! Classical challenge ciphers and explicitly hazardous raw modern primitives.
 
+pub mod aes_blocks;
 pub mod bacon;
 pub mod book;
 pub mod classical;

@@ -134,6 +134,14 @@ Core limits apply in addition to Python transport checks. Read
 [complete and partial results](../concepts/results.md) before interpreting a
 resource stop; the operation reference defines its fields and failure policy.
 
+## Raw AES blocks
+
+For raw AES interoperability, `cube.aes_encrypt_blocks(data, key)` and
+`cube.aes_decrypt_blocks(data, key)` accept and return `bytes`; the key contains
+16, 24 or 32 bytes. They do not authenticate data or define an encrypted message
+format. Caller-owned Python key/input/output objects remain in Python memory.
+See [raw AES blocks](../reference/topics/aes-blocks.md) for bounds and semantics.
+
 ## Errors
 
 ```python

@@ -20,6 +20,8 @@ SDK_BINDINGS = {
     "analysis.crib.verify": "crib_verify",
     "analysis.frequency.compare": "frequency_compare",
     "cipher.enigma": "enigma",
+    "cipher.aes.encrypt_blocks": "aes_encrypt_blocks",
+    "cipher.aes.decrypt_blocks": "aes_decrypt_blocks",
     "cipher.chacha8": "stream_transform",
     "cipher.chacha12": "stream_transform",
     "cipher.chacha20": "stream_transform",

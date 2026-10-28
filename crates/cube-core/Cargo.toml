@@ -7,6 +7,8 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+aes = { version = "=0.9.3", features = ["zeroize"] }
+zeroize = "1.9"
 base64 = "0.23"
 bs58 = "0.5"
 crc32fast = "1.5"
@@ -36,7 +38,6 @@ schemars = "=1.2.3"
 jsonschema = { version = "=0.60.2", default-features = false }
 chacha20 = { version = "=0.10.2", features = ["xchacha", "zeroize"] }
 salsa20 = { path = "../../vendor/salsa20", version = "=0.11.0", features = ["zeroize"] }
-zeroize = "1.8"
 
 [lints]
 workspace = true

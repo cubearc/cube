@@ -11,7 +11,7 @@ def test_optional_profiles_preserve_legacy_descriptors_and_real_availability():
     legacy = cube.operations()
     extended = cube.operations(include_metadata=True)
     adapters = {a["operation"]: a for a in cube.pipeline_adapters()["adapters"]}
-    assert len(legacy) == len(extended) == 312
+    assert len(legacy) == len(extended) == 314
     annotated = 0
     for old, new in zip(legacy, extended, strict=True):
         assert "metadata" not in old
@@ -37,7 +37,7 @@ def test_optional_profiles_preserve_legacy_descriptors_and_real_availability():
         for alias in profile["aliases"]:
             with pytest.raises(ValueError, match="unknown operation ID"):
                 cube.describe_operation(alias["name"], include_metadata=True)
-    assert annotated == 196
+    assert annotated == 198
     assert "metadata" not in cube.describe_operation(
         "file.info.inspect", include_metadata=True
     )
@@ -48,6 +48,10 @@ def test_profile_facts_distinguish_legacy_security_variants_and_private_material
         return cube.describe_operation(operation, include_metadata=True)["metadata"]
 
     assert metadata("hash.md5")["security"]["classification"] == "legacy_digest"
+    assert (
+        metadata("cipher.aes.encrypt_blocks")["security"]["classification"]
+        == "binary_transform"
+    )
     assert metadata("hash.crc32")["security"]["classification"] == "checksum"
     assert metadata("hash.sha256")["profile"]["block_bits"] == 512
     assert metadata("hash.sha256")["profile"]["output_bits"] == 256

@@ -24,6 +24,7 @@ mod logiccmd;
 mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
+mod aescmd;
 mod cryptanalysiscmd;
 mod enigmacmd;
 mod fractioncmd;
@@ -166,7 +167,7 @@ enum Command {
         #[command(subcommand)]
         command: Decode,
     },
-    /// Apply a classical text cipher
+    /// Apply historical ciphers or unauthenticated AES and stream transforms
     Cipher {
         #[command(subcommand)]
         command: Cipher,
@@ -417,6 +418,11 @@ enum Cipher {
     Gronsfeld(polycmd::Parameters),
     /// Historical Enigma I/M3; reciprocal transform with final windows and optional trace
     Enigma(enigmacmd::Parameters),
+    /// Hazardous raw AES blocks; key file only, no padding or authentication
+    Aes {
+        #[command(subcommand)]
+        command: aescmd::Command,
+    },
     /// Explicit bounded historical profile; typed JSON parameters
     Trithemius(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
@@ -895,6 +901,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             let text = match command {
                 Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
                 Cipher::Enigma(args) => enigmacmd::run(args)?,
+                Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(
                         Some(ciphers::stream::Profile::ChaCha8),

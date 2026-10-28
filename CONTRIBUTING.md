@@ -41,6 +41,12 @@ python -m pytest bindings/python/tests
 The wheel glob is POSIX shell syntax; on PowerShell, pass the wheel path from
 `Get-ChildItem dist/*.whl` to pip. This builds and installs locally without publishing.
 
+The [Play integration workflow](.github/workflows/play-integration.yml) builds the
+current Core with a reviewed Cube Play revision and runs its Docker Runner and
+Lab test targets. Keep that revision compatible with changed operation contracts
+and typed Play adapters. The full Compose and browser runtime smoke tests also
+run in Play's CI.
+
 ## Core coverage
 
 ```sh

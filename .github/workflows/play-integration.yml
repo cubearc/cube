@@ -1,0 +1,55 @@
+name: Cube Play Docker integration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - "crates/**"
+      - "bindings/python/Cargo.toml"
+      - ".github/workflows/play-integration.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - "crates/**"
+      - "bindings/python/Cargo.toml"
+      - ".github/workflows/play-integration.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: play-docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  play-docker:
+    name: Runner and typed Lab with the current Core
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: play
+    steps:
+      - name: Check out the Core revision under test
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: cube
+          persist-credentials: false
+      - name: Check out the reviewed Play integration
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: cubearc/play
+          ref: dae1ff975a14f4bb00375f206cbddfb376ee3832
+          path: play
+          persist-credentials: false
+      - name: Test the real CLI in the Docker Runner
+        run: docker build --progress=plain --target runner-tests --build-context cube_engine=../cube .
+      - name: Test all typed operation contracts through the Docker Lab
+        run: docker build --progress=plain --target lab-tests --build-context cube_engine=../cube .

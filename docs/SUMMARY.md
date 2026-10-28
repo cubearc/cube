@@ -14,6 +14,7 @@
     - [Inspect audio samples and signals](guides/audio.md)
     - [Inspect a saved video container](guides/video.md)
     - [Inspect saved HTML and HAR](guides/offline-web.md)
+    - [Inspect offline key material](guides/keys.md)
     - [Transform selected text positions](guides/positions.md)
     - [Transform exact bytes](guides/binary.md)
     - [Decode symbolic clues](guides/symbols.md)

@@ -146,6 +146,8 @@ interface conventions in [CLI](docs/interfaces/cli.md)/[Python](docs/interfaces/
 and exact semantics in [reference](docs/reference/index.md).
 Update affected pages and [navigation](docs/SUMMARY.md) with behavior changes;
 link to the canonical explanation instead of copying it into every guide.
+Choose one main interface for each task. Put Python integration patterns in the
+SDK guide; add a second interface example only when it teaches a distinct workflow.
 
 Descriptors, Clap, Python stubs and Rustdoc own their respective reference data.
 Regenerate operation contracts/reference instead of editing them by hand.

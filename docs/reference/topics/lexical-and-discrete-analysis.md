@@ -1,4 +1,4 @@
-### Lexical and discrete analysis
+# Lexical and discrete analysis
 
 [Discrete Foundations](../../discrete-foundations.md) documents complete scalar multiset
 comparison/subtraction, bounded tagged propositional formulas, explicit finite

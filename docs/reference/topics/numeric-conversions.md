@@ -1,4 +1,4 @@
-### Numeric conversions
+# Numeric conversions
 
 Use `numbers` to change an integer's textual base, separately from byte encodings
 and byte order.

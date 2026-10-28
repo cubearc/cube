@@ -1,6 +1,6 @@
-### Offline key formats
+# Offline key formats
 
-### WIF and scalar validation
+## WIF and scalar validation
 
 `blockchain.wif.validate` uses Base58Check, supports mainnet 0x80 and shared
 0xef test-family versions, and requires 32 scalar bytes or 32 followed by 0x01.
@@ -24,7 +24,7 @@ stdin; using `--text` instead puts material in argv. Core/SDK calls perform no I
 or persistence. Interface strings/buffers can retain copies: no process-wide or
 Python memory-zeroization guarantee is made. Validation does not export material.
 
-### Bitcoin public keys and P2PKH
+## Bitcoin public keys and P2PKH
 
 `blockchain.bitcoin.derive` accepts declared raw32/hex64/WIF and requires explicit
 `mainnet`/`testnet` and compressed/uncompressed encoding. WIF network/compression
@@ -42,7 +42,7 @@ Reusable `hash.ripemd160` returns 40 lowercase hex digits of exact bytes with a
 smaller engine budgets; it is separate from private-input derivation. It uses
 [RustCrypto RIPEMD](https://docs.rs/ripemd/0.2.0/ripemd/), not a custom primitive.
 
-### Explicit private conversion
+## Explicit private conversion
 
 `blockchain.private.export` deliberately returns plaintext private material.
 Declared raw32/hex64/WIF input uses the same scalar/WIF validators. Output is
@@ -61,7 +61,7 @@ partial files. Inputs/existing destinations are never overwritten. Transport/out
 is capped at 128 bytes. No automatic persistence, logging, pipeline/capture adapter
 or process-wide/Python memory-zeroization guarantee is introduced.
 
-### Ethereum public addresses and Keccak-256
+## Ethereum public addresses and Keccak-256
 
 `blockchain.ethereum.derive` accepts exact raw32/hex64 scalars through the shared
 secp256k1 validation/public-key implementation. It hashes the 64 uncompressed
@@ -83,7 +83,7 @@ persistence. Scalar input handling has the same limits and privacy caveats as
 Bitcoin derivation.
 
 
-### Bounded key candidates
+## Bounded key candidates
 
 `blockchain.candidates.validate` checks **caller-supplied**, ordered WIF or strict
 hex64 entries. Unknown format labels produce a fixed `unsupported` classification;

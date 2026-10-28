@@ -33,6 +33,8 @@ Use `cube ops describe <id>` to inspect your installed build.
 - [Lexical and discrete analysis](topics/lexical-and-discrete-analysis.md)
 - [Bounded puzzle analysis](topics/bounded-puzzle-analysis.md)
 
+[Lab capture format](lab-captures.md) describes exported command results and their limits.
+
 ## Profiles and models
 
 - [Monoalphabetic profiles](../monoalphabetic.md)

@@ -1,4 +1,4 @@
-### Investigation profiles and records
+# Investigation profiles and records
 
 Use `investigation` to decide what to inspect next and record reproducible checks.
 Triage reads up to 12 header bytes and cites stable rules, evidence/offsets and
@@ -57,5 +57,6 @@ size/SHA-256 identity, then compares reproduced typed result digests/states. Siz
 alone cannot establish identity; missing digests, redactions, incompatible versions
 or changed inputs are explicit failures. Skipped runs stay skipped. Hypotheses are
 not replayed as machine evidence. Digests identify content, not trust, and reports
-are not signed attestations. See [CLI](../../guides/investigations.md#record-an-investigation) and
-[Python](../../guides/investigations.md#keep-an-investigation-record) for executable workflows.
+are not signed attestations. See [record and replay an investigation](../../guides/investigations.md)
+for a walkthrough. Python exposes these workflows through `InvestigationSession`;
+see the [SDK guide](../../interfaces/python.md#discover-operations).

@@ -1,52 +1,43 @@
 # Record and replay an investigation
 
-Choose a local input and a bounded inspection profile. Suggestions remain observations; recording and replay require explicit actions and available input evidence.
-
-## CLI
-
-### Record an investigation
+Save an inspection record so you can review its findings and repeat the checks.
+Create a small input in a scratch directory:
 
 ```sh
+printf 'Cube' > sample.bin
 cube investigate triage sample.bin --json
 cube investigate plan sample.bin --depth preview --json
+```
+
+Triage suggests inspections based on the header. The plan shows which checks
+would run and the ranges they would read; suggestions are not findings.
+
+## Save the results
+
+```sh
 cube investigate run sample.bin --depth preview --identify --save session.json --json
 cube investigate report session.json
+```
+
+`preview` inspects a short hex view and printable strings. `--identify` also
+hashes the complete input so replay can check its identity. Saving requires a new
+path; the record does not include the original file contents.
+
+## Replay the checks
+
+```sh
 cube investigate replay session.json sample.bin --json
 ```
 
+Replay checks the input identity and compares the reproduced results.
+Changed input, unavailable parameters or incompatible contracts cause an explicit
+failure. Review skipped or partial checks before treating the record as complete.
 
-## Python
+See [investigation records](../reference/topics/investigation-profiles-and-records.md)
+for profiles, retained results and replay requirements.
 
-### Keep an investigation record
-
-```python
-import json
-import cube
-
-profile = json.dumps({"format_version": 1, "depth": "preview", "identify": True})
-data = b"\x00original synthetic text\x00\xff"
-plan = cube.plan_investigation(len(data), profile)
-result = cube.investigate(data, profile)
-session = result["session"]
-record = session.to_json()
-assert cube.InvestigationSession.from_json(record).replay(data)
-```
-
-
-```python
-import cube
-
-session = cube.InvestigationSession(b"\x00\xff", identify=True)
-run_id = session.execute_pipeline(
-    b"\x00\xff", [{"operation": "encoding.hex.encode", "version": 1}],
-    retain_result=True,
-)
-session.add_hypothesis("A candidate worth inspecting")
-selected = session.to_json(include_results=[run_id], include_hypotheses=True)
-session.discard_result(run_id)
-```
-
-
-## Reference
-
-- [Investigation profiles and records](../reference/topics/investigation-profiles-and-records.md)
+<a id="cli"></a>
+<a id="keep-an-investigation-record"></a>
+<a id="python"></a>
+<a id="record-an-investigation"></a>
+<a id="reference"></a>

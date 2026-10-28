@@ -1,4 +1,4 @@
-### Hashing and checksums
+# Hashing and checksums
 
 Use SHA-256 or SHA-512 for one-way content digests. Neither is password hashing
 or message authentication. MD5 and SHA-1 are legacy compatibility tools, unsuitable

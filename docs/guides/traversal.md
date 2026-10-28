@@ -1,30 +1,25 @@
-# Traverse text in an explicit order
+# Read text in a different order
 
-Choose the traversal and its parameters explicitly. These operations visit scalar positions; they do not guess a cipher or normalize the text.
-
-## CLI
-
-### Explicit text traversal
+Choose a step size to visit positions in a circular string:
 
 ```sh
 cube text keyed-skip --steps 2 --count 5 --text ABCDE
+# BDACE
 cube text josephus --steps 2 --text ABCDE
+# BDAEC
 ```
 
+Both start by selecting `B`. Keyed skip keeps every character in the circle;
+Josephus removes each selected character before continuing. That difference
+changes the later selections.
 
-## Python
+Positions count Unicode scalars. The operations keep the original text order
+and do not normalize it. See [traversal rules](../reference/topics/keyed-skip-and-josephus-traversal.md)
+for start positions, direction and multiple step sizes.
 
-### Explicit text traversal
-
-```python
-import cube
-
-assert cube.keyed_skip("ABCDE", [2], 5)["extracted"] == "BDACE"
-assert cube.josephus_extract("ABCDE", [2])["extracted"] == "BDAEC"
-assert cube.keyed_skip("ABCDE", [1], 3, options={"start": 2, "index_base": 1})["extracted"] == "BCD"
-```
-
-
-## Reference
-
-- [Keyed skip and Josephus traversal](../reference/topics/keyed-skip-and-josephus-traversal.md)
+<a id="cli"></a>
+<a id="explicit-text-traversal"></a>
+<a id="explicit-text-traversal-1"></a>
+<a id="python"></a>
+<a id="reference"></a>
+<a id="traverse-text-in-an-explicit-order"></a>

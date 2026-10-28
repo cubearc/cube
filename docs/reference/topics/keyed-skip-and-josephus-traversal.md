@@ -1,4 +1,4 @@
-### Keyed skip and Josephus traversal
+# Keyed skip and Josephus traversal
 
 Both operate on stored Unicode scalar order, without normalization. Supply a
 nonempty cyclic list of positive u64 steps; default start is the first scalar,

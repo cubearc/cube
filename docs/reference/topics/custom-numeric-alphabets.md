@@ -1,4 +1,4 @@
-### Custom numeric alphabets
+# Custom numeric alphabets
 
 `number.alphabet.convert` uses explicit ordered Unicode-scalar alphabets and bases
 (2..256, not exceeding the corresponding alphabet length). Only the first base

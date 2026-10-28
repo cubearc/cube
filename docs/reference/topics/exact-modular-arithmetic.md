@@ -1,4 +1,4 @@
-### Exact modular arithmetic
+# Exact modular arithmetic
 
 `number.gcd`, `number.extended_gcd`, `number.mod_inverse` and `number.mod_pow`
 operate on nonnegative u64 values. CLI operands are required flags with 1..20

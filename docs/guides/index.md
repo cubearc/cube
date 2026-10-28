@@ -1,31 +1,33 @@
 # Choose a task
 
-Install via [Installation](../installation.md) and begin with [your first operation](../getting-started.md).
-Each task links to exact formats and limits in the reference.
+Start with [installation](../installation.md) and [your first operation](../getting-started.md).
+These guides use the CLI. To use Cube in an application, see the
+[Python SDK](../interfaces/python.md) or [Rust API](../interfaces/rust.md).
+Formats and limits are in the [reference](../reference/index.md).
 
 - [Encode and decode data](encoding.md)
-- [Use an explicit classical cipher](ciphers.md)
+- [Use a classical cipher](ciphers.md)
 - [Compare a hash or checksum](hashes.md)
 - [Inspect a local file](files.md)
 - [Recover an embedded ZIP](recover-zip.md)
-- [Create original media fixtures](fixtures.md)
+- [Create sample files](fixtures.md)
 - [Inspect and transform an image](images.md)
 - [Inspect audio samples and signals](audio.md)
-- [Inspect a saved video container](video.md)
+- [Inspect a video file](video.md)
 - [Inspect saved HTML and HAR](offline-web.md)
-- [Inspect offline key material](keys.md)
+- [Validate offline key formats](keys.md)
 - [Transform selected text positions](positions.md)
-- [Transform exact bytes](binary.md)
-- [Decode symbolic clues](symbols.md)
+- [Transform bytes](binary.md)
+- [Read directional symbols and grids](symbols.md)
 - [Convert a custom digit alphabet](custom-digits.md)
-- [Traverse text in an explicit order](traversal.md)
-- [Select positions inside words](word-positions.md)
-- [Measure text and Unicode evidence](text-evidence.md)
-- [Compute exact modular arithmetic](arithmetic.md)
-- [Analyze inventories, logic and graphs](discrete.md)
-- [Analyze a supplied puzzle model](puzzles.md)
-- [Run a bounded Brainfuck program](brainfuck.md)
+- [Read text in a different order](traversal.md)
+- [Select letters from words](word-positions.md)
+- [Inspect text and Unicode](text-evidence.md)
+- [Work with numbers](arithmetic.md)
+- [Count combinations and analyze simple models](discrete.md)
+- [Decode puzzle symbols](puzzles.md)
+- [Run a Brainfuck program](brainfuck.md)
 - [Compose a pipeline or recipe](pipelines.md)
 - [Record and replay an investigation](investigations.md)
-- [Send a typed CLI result to the Lab](lab-captures.md)
+- [Send a command result to the Lab](lab-captures.md)
 - [Open Cube Play](open-play.md)

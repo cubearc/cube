@@ -1,4 +1,4 @@
-### Text operations
+# Text operations
 
 `text.combinations` is a bounded incremental Cartesian product of ordered string
 groups, with rightmost index varying fastest. It preserves duplicates, empty

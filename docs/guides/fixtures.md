@@ -1,7 +1,6 @@
-# Create original media fixtures
+# Create sample files
 
-
-These original fixtures need only Python's standard library. The PNG has eight
+Create a small PNG and WAVE file with Python's standard library in a scratch directory. The PNG has eight
 RGB pixels whose red-channel low bits spell the byte `A`. The WAVE file contains
 four mono 16-bit PCM samples at 8000 frames/second.
 
@@ -25,5 +24,6 @@ PY
 ```
 
 
-
 Use these inputs in the [image](images.md) and [audio](audio.md) tasks.
+
+<a id="create-original-media-fixtures"></a>

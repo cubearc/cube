@@ -1,4 +1,4 @@
-### Image analysis and steganography
+# Image analysis and steganography
 
 Use `image` operations to inspect PNG structure, compare exact samples or extract
 selected channels/bits. The [CLI fixture](../../guides/fixtures.md)
@@ -153,7 +153,7 @@ exactly one decoded symbol. No payload URL is followed or content executed.
 Selections must be nonempty and distinct; output is capped at 16 MiB.
 An extracted bit stream is a deterministic candidate, not proof of a hidden message.
 
-### Pixel CSV v1
+## Pixel CSV v1
 
 `image.csv.export` / `image.csv.import` exchange complete, small exact sample grids.
 The first record is `cube_pixels,1,width,height,model,8`; the second fixes channel

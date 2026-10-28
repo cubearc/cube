@@ -1,4 +1,4 @@
-### Signed positions inside words
+# Signed positions inside words
 
 `text.word.extract` reuses Unicode-whitespace tokenization and the book cipher's
 origin resolver. Punctuation is data; positions count scalars, not graphemes.

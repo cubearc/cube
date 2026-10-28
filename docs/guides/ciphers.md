@@ -1,9 +1,6 @@
-# Use an explicit classical cipher
+# Use a classical cipher
 
-Choose the documented cipher and provide its key or shift. Classical ciphers are
-useful for challenges and education; they do not provide secure encryption.
-
-## CLI
+Choose the cipher and provide its shift or key:
 
 ```sh
 cube cipher caesar --shift 3 'Attack at dawn!'
@@ -12,17 +9,17 @@ cube cipher vigenere 'ATTACKATDAWN' -k LEMON
 # LXFOPVEFRNHR
 ```
 
-## Python
+Caesar moves each letter by a fixed shift. Vigenère uses the supplied key to vary
+the shift. Classical ciphers are useful for challenges and education, but do not
+provide secure encryption.
 
-```python
-import cube
+Check the selected profile before interpreting punctuation, letter case or padding:
 
-assert cube.caesar_encode("Attack at dawn!", 3) == "Dwwdfn dw gdzq!"
-assert cube.vigenere_decode("LXFOPVEFRNHR", "LEMON") == "ATTACKATDAWN"
-```
+- [Classical cipher rules](../reference/topics/classical-ciphers.md)
+- [Monoalphabetic profiles](../monoalphabetic.md)
+- [Historical ciphers](../ciphers.md)
+- [Transposition and fractionation](../cipher-permutations.md)
 
-Use [cipher semantics](../reference/topics/classical-ciphers.md),
-[monoalphabetic profiles](../monoalphabetic.md),
-[keyed historical profiles](../ciphers.md) and
-[transposition/fractionation profiles](../cipher-permutations.md)
-for exact alphabets, canonicalization, schedules and visible padding.
+<a id="cli"></a>
+<a id="python"></a>
+<a id="use-an-explicit-classical-cipher"></a>

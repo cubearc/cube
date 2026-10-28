@@ -1,10 +1,7 @@
 # Transform selected text positions
 
-Select explicit, periodic or Fibonacci scalar positions, then apply a documented transform. Positions refer to Unicode scalars; review the reference before using combining characters or overrides.
-
-## CLI
-
-### Transform by scalar position
+Apply one transformation at selected positions and another to the remaining text.
+This example selects Fibonacci positions, excluding 13 and 21:
 
 ```sh
 cube text transform masked --text ABCDEFGHIJKLMNOPQRSTUVWXYZ \
@@ -13,25 +10,15 @@ cube text transform masked --text ABCDEFGHIJKLMNOPQRSTUVWXYZ \
 # ZYXGVIJSLMNOPQRSTUVWXYZABC
 ```
 
+Positions 1, 2, 3, 5 and 8 use Atbash. The other letters use a Caesar shift of 3.
 
-## Python
+Positions count Unicode scalars, which can differ from visible characters:
+an accented letter written with a combining mark occupies two positions.
+See [position selection and overrides](../reference/topics/position-aware-transformations.md)
+for selectors, result records and limits.
 
-### Transform by scalar position
-
-```python
-import cube
-
-result = cube.transform_masked(
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    selector="fibonacci", exclude=[13, 21], index_base=1,
-    selected="atbash", otherwise="caesar", otherwise_shift=3,
-)
-assert result["selected_positions"] == [1, 2, 3, 5, 8]
-assert result["deterministic_text"] == "ZYXGVIJSLMNOPQRSTUVWXYZABC"
-assert result["final_text"] == result["deterministic_text"]
-```
-
-
-## Reference
-
-- [Position-aware transformations](../reference/topics/position-aware-transformations.md)
+<a id="cli"></a>
+<a id="python"></a>
+<a id="reference"></a>
+<a id="transform-by-scalar-position"></a>
+<a id="transform-by-scalar-position-1"></a>

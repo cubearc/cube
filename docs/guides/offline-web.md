@@ -1,71 +1,60 @@
 # Inspect saved HTML and HAR
 
-Inspect saved artifacts without opening referenced resources. For a first input, save the literal HTML below in a scratch directory; use caller-selected assets for subsequent transformations.
+Read links and response metadata from files saved on your computer.
+Cube does not run page scripts or fetch referenced URLs.
+
+## Read links from HTML
 
 ```sh
 printf '<a href="assets/challenge.png">Saved link</a>' > saved.html
 cube web html saved.html --json
 ```
 
-## CLI
+The report includes the link `assets/challenge.png` and the text `Saved link`.
+The linked file is not opened.
 
-### Inspect saved HTML and HAR
+## Extract a response from a HAR file
+
+This small HAR contains one response body: the two bytes `00 ff`, encoded as Base64.
+Create it with Python's standard library:
 
 ```sh
-python - <<'PYTHON'
+python3 - <<'PYTHON'
 import json
 from pathlib import Path
-Path("saved.html").write_text("<a href='../not-opened'>Link</a><script>fetch('https://invalid.example')</script>")
-artifact = {"log": {"version": "1.2", "entries": [{"request": {"method": "GET", "url": "https://invalid.example/asset"}, "response": {"status": 200, "content": {"mimeType": "application/octet-stream", "text": "AP8=", "encoding": "base64", "size": 2}}}]}}
-Path("saved.har").write_text(json.dumps(artifact))
+
+artifact = {
+    "log": {
+        "version": "1.2",
+        "entries": [{
+            "request": {"method": "GET", "url": "https://invalid.example/asset"},
+            "response": {
+                "status": 200,
+                "content": {
+                    "mimeType": "application/octet-stream",
+                    "text": "AP8=",
+                    "encoding": "base64",
+                    "size": 2,
+                },
+            },
+        }],
+    },
+}
+Path("saved.har").write_text(json.dumps(artifact), encoding="utf-8")
 PYTHON
-cube web html saved.html --json
 cube web har saved.har --json
-```
-
-
-```sh
-cube web asset har saved.har --index 0 --json
 cube web asset har saved.har --index 0 --output selected.bin
-cube web asset har saved.har --index 0 --stdout | cube pipeline run --steps '[{"operation":"encoding.hex.encode","version":1}]' --format raw
-# 00ff (without an added newline)
+cube file hex selected.bin
 ```
 
+Entry 0 returns status 200. Extraction writes a new file containing `00 ff`;
+it does not make the recorded HTTP request.
 
-## Python
+See [offline web formats and limits](../reference/topics/offline-web-artifacts.md)
+for data URLs, missing bodies and extraction rules.
 
-### Inspect offline HTML and HAR
-
-```python
-import json
-import cube
-
-html = cube.inspect_html("<a href='../not-opened'>A &amp; B</a><script>inert()</script>")
-assert html["references"][0]["value"] == "../not-opened"
-assert html["text"] == "A & B"
-artifact = {"log": {"version": "1.2", "entries": [{"request": {"method": "GET", "url": "https://invalid.example/asset"}, "response": {"status": 200}}]}}
-har = cube.inspect_har(json.dumps(artifact))
-assert har["entries"][0]["status"] == 200
-assert har["entries"][0]["body_text_bytes"] is None
-```
-
-
-```python
-import cube
-
-document = "<img src='data:application/octet-stream;base64,AP8='>"
-asset = cube.extract_html_asset(document, 0, selector="data_url")
-assert asset["data"] == b"\x00\xff"
-assert asset["provenance"]["bytes"] == 2
-steps = [{"operation": "encoding.hex.encode", "version": 1}]
-assert cube.execute_pipeline(steps, asset["data"])["output"] == "00ff"
-
-steps.insert(0, {"operation": "web.html.asset", "version": 1,
-                 "parameters": {"index": 0, "selector": "data_url"}})
-assert cube.execute_pipeline(steps, document, capture=[0])["intermediates"][0] == b"\x00\xff"
-```
-
-
-## Reference
-
-- [Offline web artifacts](../reference/topics/offline-web-artifacts.md)
+<a id="cli"></a>
+<a id="inspect-offline-html-and-har"></a>
+<a id="inspect-saved-html-and-har-1"></a>
+<a id="python"></a>
+<a id="reference"></a>

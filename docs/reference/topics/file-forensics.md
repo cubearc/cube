@@ -1,4 +1,4 @@
-### File forensics
+# File forensics
 
 Start with facts about the file, then select a bounded range to inspect or copy.
 Use the `file` category for metadata, signatures, hex, strings and differences.
@@ -41,7 +41,7 @@ must be a stable regular file. Important limits and result meanings:
   The existing PNG report fields and legacy `file.png_boundary` semantic type name
   remain compatible; `validated_chunks` counts framing records for other formats.
 
-### Validate a ZIP candidate
+## Validate a ZIP candidate
 
 `file zip` / `validate_zip` validates a caller-selected classic ZIP origin. Local
 headers, central-directory records, EOCD counts/offsets, names, CRC/size fields and
@@ -62,7 +62,7 @@ Boundary/carving requests reject incomplete ZIP searches instead of choosing a
 potentially ambiguous extent. ZIP is available through direct APIs rather than
 the current pipeline report subset.
 
-### Recover selected embedded bytes
+## Recover selected embedded bytes
 
 `file carve` / `carve_file` requires an explicit offset and a new destination.
 Omit length to revalidate a supported PNG/JPEG/GIF/ZIP candidate at that origin;

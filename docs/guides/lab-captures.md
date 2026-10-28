@@ -1,37 +1,35 @@
-# Send a typed CLI result to the Lab
+# Send a command result to the Lab
 
-
-Request `--lab-capture=PATH` for `text reverse`, `decode hex`, `image invert` or
-`image histogram`. The command exports its already-computed named result and
-keeps its ordinary stdout representation. It never reruns or parses terminal
-output. Other commands reject the flag before execution.
+Save a command's result as a capture file, then import it into Cube Play:
 
 ```sh
-cube --lab-capture=reverse.json text reverse --text 'CUBE'
-cube --lab-capture=bytes.json decode hex --text '00ff80' --output raw
-cube --lab-capture=invert.json image invert sample.png --channels red --output inverted.png
-cube --lab-capture=histogram.json image histogram sample.png --max-colors 100 --json
+cube --lab-capture=reverse.json text reverse --text CUBE
+# EBUC
 ```
 
-The new local JSON file contains operation/contract/adapter versions, effective
-non-sensitive parameters, typed outputs, schema/content SHA-256 digests and
-input content identities. Binary values use exact Base64; images retain logical
-samples and shape. Content hashes and byte sizes describe the canonical JSON wire
-values; schema hashes describe the installed named-port schemas. Original inputs,
-source paths, command lines and terminal
-history are not retained. Input identities cannot locate a source or authorize
-replay; the record includes those replay gaps explicitly. Hashes establish
-content consistency, not proof that a command executed.
+The command prints `EBUC` and creates `reverse.json` with the typed result.
+Choose a new filename; existing destinations are rejected.
 
-Captures are explicit local exports, limited to 128 KiB, 4,096 JSON nodes and
-16 levels of nesting; serialized inputs are limited to one MiB. Captured logical
-images are limited to 64 KiB before Base64/JSON allocation. Oversized or
-invalid results fail clearly. Private/sensitive operations are outside this
-initial cohort. A destination is never overwritten, including a symlink. File
-write errors return failure; an incomplete file is not a valid capture. On Unix,
-new files have owner-only permissions. There is no upload or automatic import.
+In Play, select the capture file in Files, then choose **Import selected CLI capture**
+in Explorations. The file must be inside an authorized source or import location.
 
-Inside a configured Play Runner, bare `--lab-capture` writes a new JSON file into
-the trusted `CUBE_PLAY_CAPTURE_DIR`. Outside that environment, supply `=PATH`.
-This flag is separate from `pipeline run --capture INDEX`, which retains its
-existing pipeline behavior.
+## Capture from the Play terminal
+
+Inside Play, omit the path to stage the capture for the current terminal session:
+
+```sh
+cube --lab-capture text reverse --text CUBE
+```
+
+Select **Refresh staged captures**, then **Send to Lab**. Save the imported result
+as a named artifact if you want to reuse it. Ended terminal sessions lose unpublished
+captures; published artifacts persist.
+
+Captures are supported for `text reverse`, `decode hex`, `image invert` and
+`image histogram`. Other commands reject the option.
+
+A capture records a result, not the original input or proof that the command ran.
+See the [capture format and limits](../reference/lab-captures.md) and
+[Play terminal guide](https://github.com/cubearc/play/blob/main/docs/terminal.md#send-a-computed-result-to-the-lab).
+
+<a id="send-a-typed-cli-result-to-the-lab"></a>

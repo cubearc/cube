@@ -1,11 +1,10 @@
 # Recover an embedded ZIP
 
-
 Run this example in a new scratch directory. Python's standard library creates
-an original ZIP fixture; Cube performs the investigation and recovery:
+a small ZIP file; Cube performs the investigation and recovery:
 
 ```sh
-python - <<'PYTHON'
+python3 - <<'PYTHON'
 import io
 import zipfile
 from pathlib import Path
@@ -39,42 +38,7 @@ returns provenance including SHA-256; the explicit range copy produces the same
 Nothing is decompressed or executed.
 
 
-
 Use [pipelines](pipelines.md) to compose byte transformations before inspection.
 See the [file reference](../reference/topics/file-forensics.md) for formats and limits.
 
-## Python
-
-
-
-Use the original `mystery.bin` from the
-[fixture above](#recover-an-embedded-zip):
-
-```python
-from pathlib import Path
-import cube
-
-source = Path("mystery.bin")
-candidates = cube.scan_file(source, format="zip")
-assert any(item["offset"] == 8 for item in candidates["candidates"])
-archive = cube.validate_zip_file(source, offset=8)
-assert archive["length"] == 120
-assert archive["payload_verified"] is False
-recovered = Path("python-recovered.zip")
-report = cube.carve_file(source, recovered, 8, max_bytes=archive["length"])
-assert recovered.read_bytes() == source.read_bytes()[8:128]
-assert report["sha256"] == cube.sha256(recovered.read_bytes())
-```
-
-The core revalidates the candidate before copying. Supply `length` only when you
-intend an exact raw range without a format-validation claim. Existing outputs
-raise `OSError`; invalid candidates/ranges/budgets raise `ValueError` with
-`operation == "file.carve"`. Reports contain source size, range and recovered
-content identity without automatically saving source paths in sessions.
-`validate_zip(data, offset=8)` supports caller-owned buffers with the same report.
-Read `scanned_bytes`, `candidate_scan_complete` and `evidence`; payloads are not
-expanded or verified, and entry names stay inert exact hex data.
-
-`appended_data(path)` also reports supported PNG/JPEG/GIF/ZIP structural
-boundaries. JPEG/GIF compressed pixels are not decoded. These direct file APIs
-perform explicit caller-selected local I/O, outside recipe steps.
+<a id="python"></a>

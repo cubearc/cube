@@ -1,42 +1,42 @@
-# Analyze inventories, logic and graphs
+# Count combinations and analyze simple models
 
-Supply the exact inventory, Boolean formula or finite graph. The reference explains the accepted model and what each result establishes.
+Use a character inventory, formula or graph to ask a specific question.
 
-## CLI
-
-### Lexical and discrete investigations
+## Check missing characters
 
 ```sh
 cube text multiset subtract --text ab --requested aab
-cube number binomial --n 128 --k 64 --json
+```
+
+The requested text needs two copies of `a`, but the input has one.
+The report identifies a deficit of one `a`.
+
+## Count arrangements
+
+```sh
 cube number multinomial --groups 2,1,1 --json
 cube number pascal --rows 4
+```
+
+The multinomial result is 12: the number of arrangements of four items when two
+are identical. The second command returns the first four rows of Pascal's triangle.
+
+## Evaluate a formula or graph
+
+```sh
 cube logic boolean analyze --text '{"variables":[],"formula":{"op":"const","value":true}}'
 cube graph euler-trail --text '{"vertices":["a"],"directed":false,"edges":[]}'
 ```
 
+The formula is true for its single assignment. The graph has one vertex and no
+edges, so it has an empty Euler trail.
 
-## Python
+For larger inputs, start with the [model definitions](../discrete-foundations.md)
+and [limits](../reference/topics/lexical-and-discrete-analysis.md).
 
-### Lexical and discrete foundations
-
-```python
-import cube
-
-assert cube.multiset_compare("listen", "silent")["equal"]
-assert cube.multiset_subtract("ab", "aab")["deficits"] == [{"scalar": "a", "count": 1}]
-assert cube.binomial(128, 64) == 23951146041928082866135587776380551750
-assert cube.permutations(5, 2) == 20
-assert cube.multinomial([2, 1, 1]) == 12
-assert cube.pascal_triangle(3) == [[1], [1, 1], [1, 2, 1]]
-r = cube.boolean_analyze({"variables": [], "formula": {"op": "const", "value": True}})
-assert r["tautology"] and r["assignments"] == 1
-assert cube.graph_euler_trail({"vertices": [], "directed": False, "edges": []})["result"]["exists"]
-```
-
-
-## Reference
-
-- [Lexical and discrete analysis](../reference/topics/lexical-and-discrete-analysis.md)
-
-- [Detailed models and limits](../discrete-foundations.md)
+<a id="analyze-inventories-logic-and-graphs"></a>
+<a id="cli"></a>
+<a id="lexical-and-discrete-foundations"></a>
+<a id="lexical-and-discrete-investigations"></a>
+<a id="python"></a>
+<a id="reference"></a>

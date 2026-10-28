@@ -1,12 +1,11 @@
-### Position-aware transformations
+# Position-aware transformations
 
 `text.transform.masked` selects scalar positions and applies existing Atbash,
 Caesar, ROT13 or identity independently to that set and its complement. It
 preserves character ordering and ASCII case; non-ASCII scalars remain unchanged
 by the ciphers. There is no implicit normalization, trimming or letter filtering.
 All scalars count, including whitespace, punctuation, NUL and combining marks;
-a grapheme can span multiple positions. See the [CLI](../../guides/positions.md#transform-by-scalar-position)
-and [Python](../../guides/positions.md#transform-by-scalar-position) examples.
+a grapheme can span multiple positions. Try [transforming selected positions](../../guides/positions.md).
 
 - Explicit indices form a sorted unique set. Duplicate positions transform once;
   this does not change `text.extract`, which preserves requested order/duplicates.

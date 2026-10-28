@@ -1,48 +1,92 @@
-# Python interface
+# Python SDK
 
-[Install the native SDK](../installation.md#python) before using these examples.
-It calls Rust directly; no CLI subprocess is required.
+Use Cube from Python scripts and applications. The native SDK calls the Rust
+engine directly, without starting a CLI process. It supports the operations in
+the [operation reference](../reference/operations.md).
+
+[Install the SDK](../installation.md#python), then import `cube`.
 
 ## Bytes and text
 
 ```python
 import cube
 
-encoded = cube.base64_encode(b"Hello")
-assert encoded == "SGVsbG8="
-decoded = cube.base64_decode(encoded)
-assert decoded == b"Hello"
-assert cube.utf8_decode(decoded) == "Hello"
+decoded = cube.base64_decode("SGVsbG8=")
+print(decoded)
+# b'Hello'
+print(cube.utf8_decode(decoded))
+# Hello
 ```
 
-Use `bytes` for binary data and `str` for encoded representations and text.
-Conversion is explicit; binary results have no hexadecimal display layer or
-added newline. See [the data model](../concepts/data.md).
+Use `bytes` for binary data and `str` for text. Binary results are returned as bytes,
+without the CLI's hexadecimal display or an added newline.
+See [bytes and text](../concepts/data.md) for the data model.
+
+## Work with images in memory
+
+You can create an image from a byte buffer and inspect it without a temporary file:
 
 ```python
-from pathlib import Path
+import cube
 
-Path("decoded.bin").write_bytes(cube.base64_decode("AP8="))
+image = cube.Image.from_samples(2, 1, "rgb", b"\xff\x00\x00\x00\x00\xff")
+rotated = image.rotate(90)
+print(rotated.width, rotated.height)
+# 1 2
 ```
 
-`Path.write_bytes` is a Python filesystem action and overwrites an existing path.
-Choose a new destination. Cube extraction/image-save methods create files exclusively.
+The original image stays 2 × 1; rotation returns a new image. Use `Image.open(path)` to read a file and
+`image.save_png(path)` to save one.
+
+## Compose operations
+
+Pipelines can pass typed values between supported operations and retain selected
+intermediate results:
+
+```python
+import cube
+
+steps = [
+    {"operation": "encoding.hex.encode", "version": 1},
+    {"operation": "encoding.hex.decode", "version": 1},
+]
+result = cube.execute_pipeline(steps, b"\x00\xff", capture=[0])
+print(result["output"])
+# b'\x00\xff'
+print(result["intermediates"])
+# {0: '00ff'}
+```
+
+Direct API support does not imply pipeline support. Use `cube.pipeline_adapters()`
+to list compatible operations. See [pipeline rules](../reference/topics/compose-operations.md)
+for types, versions and limits.
+
+## Read and write files
+
 File APIs accept strings or `Path` objects and require authorized regular files;
-they reject symbolic links.
+they reject symbolic links. Cube extraction and image-save methods create new
+files and reject existing destinations.
+
+Ordinary Python file writes follow Python's own rules. For example,
+`Path.write_bytes(...)` overwrites an existing file. Choose the destination
+deliberately when saving returned bytes.
 
 ## Discover operations
 
 ```python
-operations = cube.operations()
-description = cube.describe_operation("encoding.base64.decode")
-assert description["id"] == "encoding.base64.decode"
+import cube
+
+description = cube.describe_operation("encoding.base64.decode", include_metadata=True)
+print(description["metadata"]["python_api"])
+# base64_decode
 ```
 
-The installed metadata and [Python stubs](../../bindings/python/python/cube/_native.pyi)
-describe available entry points. See [task guides](../guides/index.md) for examples.
+`cube.operations()` lists the installed operations. Where available, optional
+metadata identifies the Python entry point. The [Python API signatures](../../bindings/python/python/cube/_native.pyi)
+list functions, classes, arguments and return types. Use the
+[operation reference](../reference/operations.md) for formats and limits.
 
 ## Errors
-
 
 ```python
 import cube
@@ -50,19 +94,16 @@ import cube
 try:
     cube.hex_decode("zz")
 except ValueError as error:
-    assert error.code == "invalid_input"
-    assert error.operation == "encoding.hex.decode"
-
-try:
-    cube.inspect_file("missing-cube-example.bin")
-except OSError as error:
-    assert error.code == "io"
+    print(error.code, error.operation)
+# invalid_input encoding.hex.decode
 ```
 
 Operation validation errors use `ValueError` with `code`, `operation`, `parameter`
 and `offset` attributes where available. Pipeline errors add `step` context.
-File I/O failures use `OSError` in the file APIs. Incorrect Python argument types
-raise `TypeError`; integers outside a binding's numeric range raise `OverflowError`
-(for example a Caesar shift outside signed 32-bit range). These Python argument
-errors need not have operation-context attributes. Correct invalid input or choose
-a smaller selection when a resource limit is reported.
+File I/O failures use `OSError`.
+
+Incorrect argument types raise `TypeError`; values outside a binding's numeric
+range raise `OverflowError`, such as a Caesar shift outside the signed 32-bit range.
+Those argument errors may have no operation-context attributes.
+
+<a id="python-interface"></a>

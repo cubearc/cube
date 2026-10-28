@@ -1,4 +1,4 @@
-### Classical ciphers
+# Classical ciphers
 
 [Monoalphabetic profiles](../../monoalphabetic.md) cover exact/keyword alphabets, ASCII
 rotations, deterministic homophones, digit grammars and Grandpré, with explicit

@@ -13,6 +13,11 @@ Find the existing canonical page for the reader task. Keep operation semantics i
 reference, interface-specific behavior in its interface page, and working examples
 in task guides. Update the README only for positioning or first use.
 
+Choose one main interface for a task. Keep Python integration in its SDK guide;
+add a second interface example only when it solves a different need. Explain what
+the reader does and what the result means. Do not turn guides into test assertions
+or repeat contributor process instructions in product pages.
+
 For behavior changes, inspect the implementation and affected examples. Regenerate
 contract reference from its owning Rust definitions when required. Update
 `docs/SUMMARY.md`, preserve old links and run relevant example/link/reference checks.

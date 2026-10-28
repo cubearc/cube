@@ -1,4 +1,4 @@
-### Audio analysis
+# Audio analysis
 
 `audio.spectrum` analyzes exactly N selected integer PCM frames with a power-of-two
 FFT in 8..16,384. It never truncates or pads implicitly. Each selected channel is
@@ -13,8 +13,8 @@ they are not guaranteed bit-identical across platforms.
 At most 65,536 channel/bin cells and 4 Mi `channels*N*log2(N)` work units are
 allowed. Existing PCM input/range/sample limits apply first. RustFFT is used without
 optional SIMD features or a native backend. Results are structured Rust/Python
-numeric arrays and CLI JSON. No pipeline adapter or new pipeline value is added
-for sample blocks; existing audio APIs and recipes remain unchanged.
+numeric arrays and CLI JSON. Sample-block operations require direct calls;
+they have no pipeline adapter.
 
 
 `audio.spectrogram` reuses these FFT/window/amplitude rules. Its matrix is
@@ -122,5 +122,7 @@ Sample extraction caps selections at 1048576 frames, 300 seconds and 64 MiB sour
 bytes, with 8 MiB raw output. Structured value listings cap at 10000 samples.
 Waveform buckets contain exact min/max signed amplitudes, absolute start frames
 and the final partial bucket; the sample rate supplies the time base. Budgets
-bound channel/bucket pairs. This is data, not a plot, spectrogram, FFT, Morse/DTMF
-detector or playback feature. Video container inspection is described below.
+bound channel/bucket pairs. The waveform operation returns data rather than
+a plot or playback.
+Use the separate spectrum, spectrogram, Morse or DTMF operations for signal analysis.
+For video, see [video container metadata](video-container-metadata.md).

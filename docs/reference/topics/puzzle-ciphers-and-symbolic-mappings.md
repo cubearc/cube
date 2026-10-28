@@ -1,11 +1,11 @@
-### Puzzle ciphers and symbolic mappings
+# Puzzle ciphers and symbolic mappings
 
 These direct operations share Rust implementations with CLI and native Python.
 They do not add pipeline adapters; discovery reports `pipeline: null`. Existing
 engine API 1, recipe format 1 and adapter contracts keep their behavior. Text
 input is bounded at 1 MiB; errors do not return partial results.
 
-### Bacon and coordinate squares
+## Bacon and coordinate squares
 
 Bacon requires `classical24` (`ABCDEFGHIKLMNOPQRSTUWXYZ`, J→I and V→U) or
 `extended26` (`ABCDEFGHIJKLMNOPQRSTUVWXYZ`). A letter's zero-based index is its
@@ -37,7 +37,7 @@ alias-free squares round-trip exactly; presets/aliases return canonical cells.
 There are no separate Tap operation IDs because this release uses the same
 coordinate grammar with an explicit preset, without tap detection or timing.
 
-### Keyboard and keypad
+## Keyboard and keypad
 
 Keyboard remapping requires source and target layouts. `qwerty` and `dvorak`
 cover the 47 US ANSI printable positions on base and shift layers, checked
@@ -65,7 +65,7 @@ Custom Mapping objects specify `ascii_fold` and `keys` with unique `digit` and
 ordered `symbols`. Limits are ten digit keys, 256 disjoint scalars, 64 KiB
 serialized definitions, 65,536 groups/results, and 8 MiB output/serialized report.
 
-### Character classes
+## Character classes
 
 The default maps ASCII vowels AEIOU to `0` and the remaining ASCII letters,
 excluding Y, to `1`, folding ASCII case. If Y occurs, explicitly choose `vowel`,

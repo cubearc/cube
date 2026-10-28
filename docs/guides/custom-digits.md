@@ -1,10 +1,7 @@
 # Convert a custom digit alphabet
 
-Supply the positional alphabet and base explicitly. Review the reference for sign, token and canonical representation rules.
-
-## CLI
-
-### Custom positional digits
+Use a chosen set of symbols as positional digits.
+Here, `abcdefghij` stands for decimal digits 0 through 9:
 
 ```sh
 cube number alphabet --source-alphabet 01 --target-alphabet abcdefghij \
@@ -12,19 +9,14 @@ cube number alphabet --source-alphabet 01 --target-alphabet abcdefghij \
 # ba
 ```
 
+Binary `1010` is decimal 10. In the target alphabet, `b` means 1 and `a` means 0,
+so the result is `ba`.
 
-## Python
+See [custom numeric alphabets](../reference/topics/custom-numeric-alphabets.md)
+for signs, token rules and valid bases.
 
-### Custom positional digits
-
-```python
-import cube
-
-assert cube.convert_alphabet("1010", "01", "abcdefghij", 2, 10) == "ba"
-assert cube.convert_alphabet("-٠٠١٠", "٠١٢٣٤٥٦٧٨٩", "01", 10, 2) == "-1010"
-```
-
-
-## Reference
-
-- [Custom numeric alphabets](../reference/topics/custom-numeric-alphabets.md)
+<a id="cli"></a>
+<a id="custom-positional-digits"></a>
+<a id="custom-positional-digits-1"></a>
+<a id="python"></a>
+<a id="reference"></a>

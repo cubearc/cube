@@ -1,4 +1,4 @@
-### Bounded puzzle analysis
+# Bounded puzzle analysis
 
 Caller-dictionary anagrams and substitution-only word ladders reuse shared scalar
 inventories and graph BFS. Finite probability/dice reports preserve exact reduced

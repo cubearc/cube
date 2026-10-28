@@ -1,4 +1,4 @@
-### Symbolic encodings
+# Symbolic encodings
 
 Use `symbols` for textual International Morse or reversible Unicode Braille cells.
 These operations do not detect symbols from audio or images.
@@ -26,7 +26,7 @@ hyphen tokens and numbers outside 1–26 fail at their byte offset. Encoding acc
 inputs round trip; lowercase case is deliberately lost. Both have bounded text
 pipeline adapters, subject to the existing smaller pipeline value/work budgets.
 
-### Semaphore and directional clocks
+## Semaphore and directional clocks
 
 `symbol.clock.directions` is a separate caller-selected convention, not official
 Semaphore or clock recognition. Select H:MM (ASCII hour 0..12, 0=12, minute 0..59;

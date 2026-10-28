@@ -1,4 +1,4 @@
-### Decimal digital root
+# Decimal digital root
 
 `number.digital_root` returns 0 for zero and 1+((magnitude-1) mod 9) otherwise.
 The sign is ignored, including negative magnitudes beyond the signed i128 range;

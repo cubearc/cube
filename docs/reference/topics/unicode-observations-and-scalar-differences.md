@@ -1,4 +1,4 @@
-### Unicode observations and scalar differences
+# Unicode observations and scalar differences
 
 `text.unicode.inspect` records original scalars/code points/offsets, case labels,
 non-ASCII/control/whitespace/format flags and named zero-width candidates. Derived

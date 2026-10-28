@@ -1,4 +1,4 @@
-### Bounded language execution
+# Bounded language execution
 
 `esolang.brainfuck.execute` runs the [strict Brainfuck profile](../../brainfuck.md) and
 returns exact bytes only after successful completion. `esolang.brainfuck.report`

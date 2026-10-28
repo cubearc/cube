@@ -1,4 +1,4 @@
-### Offline web artifacts
+# Offline web artifacts
 
 `web.html.inspect` accepts UTF-8 HTML as inert data. A maintained tokenizer reports
 selected src/href/poster/data/action references, event-handler counts, tokenized

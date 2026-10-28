@@ -1,4 +1,4 @@
-### Encoding and decoding
+# Encoding and decoding
 
 Use encodings to represent bytes as text, or decoding to recover the original
 bytes. Encoding is reversible and provides no confidentiality. Base32, Bitcoin
@@ -18,7 +18,7 @@ does not add/verify Base58Check. Hex accepts either letter case but no prefix.
 Use `encoding.base64.decode` to inspect the maintained descriptor. Decoding outputs
 bytes; explicitly select raw output when passing them to another operation.
 
-### Versioned Base58Check
+## Versioned Base58Check
 
 `encoding.base58check.encode` accepts one explicit version byte and 0..1024 payload
 bytes, appends the first four raw bytes of SHA-256(SHA-256(version || payload)),

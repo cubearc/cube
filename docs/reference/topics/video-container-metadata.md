@@ -1,4 +1,4 @@
-### Video container metadata
+# Video container metadata
 
 `video.container.inspect` reads declared metadata from unfragmented MP4/MOV and
 WebM without a decoder. Track/codec IDs, coded dimensions, time bases and durations

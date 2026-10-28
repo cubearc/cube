@@ -1,4 +1,4 @@
-### Compose operations
+# Compose operations
 
 Pipelines are implemented linear sequences over explicit bytes, UTF-8 text and an
 inert structured byte range. Direct Rust/Python functions keep their normal types.
@@ -74,8 +74,8 @@ as 16 logical bytes. Conservative bounds can reject a data-specific smaller resu
 Base58 adapters additionally cap step input at 4096 bytes. Captures are explicit,
 unique zero-based step indexes. Cancellation is cooperative between bounded steps,
 not a hard timeout. No shell, network, native loading or arbitrary file capability
-is granted. See [CLI](../../guides/pipelines.md#run-a-pipeline-or-recipe) and
-[Python](../../guides/pipelines.md#compose-a-pipeline-or-recipe) examples.
+is granted. See the [pipeline guide](../../guides/pipelines.md) or
+[Python SDK](../../interfaces/python.md#compose-operations) for examples.
 
 List storage counts toward the 256 KiB aggregate parameter budget: unsigned lists
 charge 16 header bytes plus 8 per entry; text lists charge 16 plus 24 per entry and
@@ -96,7 +96,7 @@ positions validate inside the step before its ciphers run; static later-step err
 reject the whole plan before earlier steps execute. These bounds can reject large
 requests that a direct single-operation call accepts.
 
-### Recipe files
+## Recipe files
 
 Recipes make a validated pipeline reusable. Save this original round-trip example
 as `roundtrip.json` in your working directory:

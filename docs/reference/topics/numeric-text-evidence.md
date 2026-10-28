@@ -1,4 +1,4 @@
-### Numeric text evidence
+# Numeric text evidence
 
 `text.word.lengths` reports Unicode-scalar lengths and original word boundaries.
 `text.codepoints` includes every source scalar, including whitespace, as an exact

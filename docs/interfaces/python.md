@@ -1,5 +1,11 @@
 # Python SDK
 
+For historical machine messages, `cube.enigma(text, parameters)` returns a dict
+with `text`, `final_windows` and `trace`. To process consecutive in-memory chunks,
+replace `parameters["windows"]` with the preceding `final_windows`; keep all
+other settings. Reset to the original windows for reciprocal decoding. See
+[Enigma settings and limits](../reference/topics/enigma.md).
+
 Use Cube from Python scripts and applications. The native SDK calls the Rust
 engine directly, without starting a CLI process. It supports the operations in
 the [operation reference](../reference/operations.md).

@@ -3,6 +3,7 @@
 pub mod bacon;
 pub mod book;
 pub mod classical;
+pub mod enigma;
 pub mod mono;
 pub mod poly;
 pub mod polybius;

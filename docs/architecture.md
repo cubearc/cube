@@ -1,5 +1,9 @@
 # Architecture
 
+Historical Enigma simulation is a pure, bounded function in `ciphers::enigma`.
+Its typed settings and reports own validation, wiring and stepping; CLI, native
+Python and Play only transport them. Machine state is local to each invocation.
+
 Cube is a Cargo workspace with one Rust implementation shared by its interfaces.
 User workflows belong in the [CLI](cli.md), [Python](python.md) and
 [Operations](operations.md) guides. This document describes contributor-facing

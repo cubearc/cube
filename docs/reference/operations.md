@@ -5858,6 +5858,139 @@ Example:
 cube cipher --help
 ```
 
+## cipher.enigma
+
+Reciprocal historical Enigma I/M3 with explicit settings, final windows and optional bounded state trace.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `final_windows` | `text` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "description": "Required historical key settings; no guessed machine, rotor order or key.\nArrays and windows run left-to-right, with the rightmost rotor fastest.\nRing 1 corresponds to A. Notches are on the index ring: visible turnover\nletters do not change with ring settings. M4/thin reflectors are unsupported.",
+  "type": "object",
+  "properties": {
+    "plugboard": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$"
+      },
+      "maxItems": 10
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "reflector": {
+      "$ref": "#/$defs/Reflector"
+    },
+    "rings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Ring"
+      },
+      "maxItems": 3,
+      "minItems": 3
+    },
+    "rotors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Rotor"
+      },
+      "maxItems": 3,
+      "minItems": 3
+    },
+    "text_mode": {
+      "$ref": "#/$defs/TextMode",
+      "default": "strict"
+    },
+    "trace": {
+      "type": "boolean",
+      "default": false
+    },
+    "windows": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "rotors",
+    "reflector",
+    "rings",
+    "windows",
+    "plugboard"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "enigma_i",
+        "m3"
+      ]
+    },
+    "Reflector": {
+      "type": "string",
+      "enum": [
+        "B",
+        "C"
+      ]
+    },
+    "Ring": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 26,
+      "minimum": 1
+    },
+    "Rotor": {
+      "type": "string",
+      "enum": [
+        "I",
+        "II",
+        "III",
+        "IV",
+        "V",
+        "VI",
+        "VII",
+        "VIII"
+      ]
+    },
+    "TextMode": {
+      "description": "Strict accepts only A-Z. Preserve is an explicit text wrapper: ASCII case and\nall other scalars are retained, and only ASCII letters advance the machine.",
+      "type": "string",
+      "enum": [
+        "strict",
+        "preserve"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher enigma --parameters settings.json --text AAAAA
+```
+
 ## cipher.four_square.decode
 
 I/J Four-square with fixed straight plaintext squares and explicit keyed top-right/bottom-left squares.

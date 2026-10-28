@@ -311,3 +311,5 @@ mod tests {
 
 pub mod fractionation;
 pub mod transposition;
+
+pub mod stream;

@@ -35,6 +35,7 @@ mod polycmd;
 mod puzzlecmd;
 mod puzzlecodescmd;
 mod recipecmd;
+mod streamcmd;
 mod textcmd;
 mod traversalcmd;
 mod unicodecmd;
@@ -338,6 +339,28 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "chacha8")]
+    ChaCha8(streamcmd::Parameters),
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "chacha12")]
+    ChaCha12(streamcmd::Parameters),
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "chacha20")]
+    ChaCha20(streamcmd::Parameters),
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "xchacha20")]
+    XChaCha20(streamcmd::Parameters),
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "salsa20-12")]
+    Salsa12(streamcmd::Parameters),
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "salsa20")]
+    Salsa20(streamcmd::Parameters),
+    /// Exact private raw transform; requires explicit key file and destination
+    #[command(name = "vernam")]
+    Vernam(streamcmd::Parameters),
+
     /// Deterministic inverse book coordinates with exact caller source provenance
     BookEncode(puzzlecodescmd::Book),
     /// Explicit bounded scytale profile; JSON parameters required
@@ -872,6 +895,49 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             let text = match command {
                 Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
                 Cipher::Enigma(args) => enigmacmd::run(args)?,
+                Cipher::ChaCha8(args) => {
+                    return streamcmd::run(
+                        Some(ciphers::stream::Profile::ChaCha8),
+                        args,
+                        &mut output,
+                    );
+                }
+                Cipher::ChaCha12(args) => {
+                    return streamcmd::run(
+                        Some(ciphers::stream::Profile::ChaCha12),
+                        args,
+                        &mut output,
+                    );
+                }
+                Cipher::ChaCha20(args) => {
+                    return streamcmd::run(
+                        Some(ciphers::stream::Profile::ChaCha20),
+                        args,
+                        &mut output,
+                    );
+                }
+                Cipher::XChaCha20(args) => {
+                    return streamcmd::run(
+                        Some(ciphers::stream::Profile::XChaCha20),
+                        args,
+                        &mut output,
+                    );
+                }
+                Cipher::Salsa12(args) => {
+                    return streamcmd::run(
+                        Some(ciphers::stream::Profile::Salsa12),
+                        args,
+                        &mut output,
+                    );
+                }
+                Cipher::Salsa20(args) => {
+                    return streamcmd::run(
+                        Some(ciphers::stream::Profile::Salsa20),
+                        args,
+                        &mut output,
+                    );
+                }
+                Cipher::Vernam(args) => return streamcmd::run(None, args, &mut output),
                 Cipher::Scytale(args) => fractioncmd::scytale(args)?,
                 Cipher::RailFence(args) => fractioncmd::rail_fence(args)?,
                 Cipher::Redefence(args) => fractioncmd::redefence(args)?,

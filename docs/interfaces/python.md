@@ -154,3 +154,10 @@ range raise `OverflowError`, such as a Caesar shift outside the signed 32-bit ra
 Those argument errors may have no operation-context attributes.
 
 <a id="python-interface"></a>
+
+## Raw stream transforms
+
+Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit
+ChaCha/Salsa interoperability and `cube.vernam(data, pad)` for educational
+exact-pad XOR. Inputs and results are bytes. See [profiles and limits](../reference/topics/stream-ciphers.md)
+for required nonce/counter sizes, privacy and backend qualification.

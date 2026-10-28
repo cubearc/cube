@@ -22066,6 +22066,555 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.chacha12",
+      "category": "ciphers",
+      "description": "ChaCha12 IETF",
+      "example": "cube cipher chacha12 --key-file key.bin --nonce-hex 000000000000000000000000 --counter 0 --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Key",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 44,
+                "minLength": 44
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "ChaChaParameters",
+        "type": "object",
+        "properties": {
+          "counter": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "nonce": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 12,
+            "minItems": 12
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "nonce",
+          "counter"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.chacha20",
+      "category": "ciphers",
+      "description": "ChaCha20 IETF",
+      "example": "cube cipher chacha20 --key-file key.bin --nonce-hex 000000000000000000000000 --counter 0 --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Key",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 44,
+                "minLength": 44
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "ChaChaParameters",
+        "type": "object",
+        "properties": {
+          "counter": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "nonce": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 12,
+            "minItems": 12
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "nonce",
+          "counter"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.chacha8",
+      "category": "ciphers",
+      "description": "ChaCha8 IETF",
+      "example": "cube cipher chacha8 --key-file key.bin --nonce-hex 000000000000000000000000 --counter 0 --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Key",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 44,
+                "minLength": 44
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "ChaChaParameters",
+        "type": "object",
+        "properties": {
+          "counter": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "nonce": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 12,
+            "minItems": 12
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "nonce",
+          "counter"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.chaocipher.decode",
       "category": "ciphers",
       "description": "Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset each call.",
@@ -33589,6 +34138,422 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.salsa20",
+      "category": "ciphers",
+      "description": "Salsa20/20",
+      "example": "cube cipher salsa20 --key-file key.bin --nonce-hex 0000000000000000 --counter 0 --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Key",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 44,
+                "minLength": 44
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "SalsaParameters",
+        "type": "object",
+        "properties": {
+          "counter": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "format": "uint64",
+                "maximum": 9007199254740991,
+                "minimum": 0,
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              },
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "x-cube-native-integer": {
+                  "format": "uint64",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              }
+            ],
+            "x-cube-integer": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          },
+          "nonce": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 8,
+            "minItems": 8
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "nonce",
+          "counter"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.salsa20_12",
+      "category": "ciphers",
+      "description": "Salsa20/12",
+      "example": "cube cipher salsa20-12 --key-file key.bin --nonce-hex 0000000000000000 --counter 0 --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Key",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 44,
+                "minLength": 44
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "SalsaParameters",
+        "type": "object",
+        "properties": {
+          "counter": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "format": "uint64",
+                "maximum": 9007199254740991,
+                "minimum": 0,
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              },
+              {
+                "type": "string",
+                "maxLength": 40,
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "x-cube-native-integer": {
+                  "format": "uint64",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              }
+            ],
+            "x-cube-integer": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer",
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            }
+          },
+          "nonce": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 8,
+            "minItems": 8
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "nonce",
+          "counter"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.scytale.decode",
       "category": "ciphers",
       "description": "Scytale: explicit bounded decode; see typed profile guide for conventions.",
@@ -38892,6 +39857,165 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.vernam",
+      "category": "ciphers",
+      "description": "Educational exact-pad Vernam",
+      "example": "cube cipher vernam --key-file pad.bin --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.vigenere.decode",
       "category": "ciphers",
       "description": "Vigenère P=(C-K) mod 26 with the same key advancement; <=1 MiB.",
@@ -39138,6 +40262,189 @@
         "sensitive_parameters": [
           "key"
         ],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.xchacha20",
+      "category": "ciphers",
+      "description": "XChaCha20 IETF counter",
+      "example": "cube cipher xchacha20 --key-file key.bin --nonce-hex 000000000000000000000000000000000000000000000000 --counter 0 --input message.bin --stdout",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "key",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Key",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 44,
+                "minLength": 44
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "XChaChaParameters",
+        "type": "object",
+        "properties": {
+          "counter": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "nonce": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 24,
+            "minItems": 24
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "nonce",
+          "counter"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 33554432,
+        "max_output_bytes": 16777216,
+        "max_items": null,
+        "max_work": 16777216,
+        "max_memory_bytes": 50332672
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
         "automatic_capture": false,
         "grants_filesystem_access": false,
         "grants_network_access": false

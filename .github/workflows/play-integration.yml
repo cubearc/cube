@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - ".dockerignore"
+      - ".github/scripts/check-build-context.sh"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -14,6 +16,8 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - ".dockerignore"
+      - ".github/scripts/check-build-context.sh"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -51,6 +55,8 @@ jobs:
           ref: 3e3e22f4c6bc1f3e77fce9281c86ed59f194d131
           path: play
           persist-credentials: false
+      - name: Verify the Core build context excludes unrelated and private files
+        run: ../cube/.github/scripts/check-build-context.sh
       - name: Test the real CLI in the Docker Runner
         run: docker build --progress=plain --target runner-tests --build-context cube_engine=../cube .
       - name: Test all typed operation contracts through the Docker Lab

@@ -76,3 +76,4 @@
     - [Architecture](architecture.md)
     - [Contract internals](contracts.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
+    - [Classical analysis research](research/classical-analysis-evaluation.md)

@@ -9724,5 +9724,238 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "e17d92e0779fa1ffe3f003cb982abe6528cc81afae6b11c5ef56d38702e3a11c",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "key": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      }
+    },
+    "operation": "cipher.chacha12",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "m/SaagdV+VOBH84SXyaD1Q=="
+      }
+    },
+    "parameters": {
+      "counter": 0,
+      "nonce": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "contract_sha256": "3e399cf8d63be7d9f8d37943430a6237b0da957533bcf38e3aa1e8583d49669c",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "key": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      }
+    },
+    "operation": "cipher.chacha20",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "drjgraDxPZBAXWrlU4a9KA=="
+      }
+    },
+    "parameters": {
+      "counter": 0,
+      "nonce": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "contract_sha256": "4e8b6db001c3820ad422860e1d157ebb125710070596566f5fb2e12706df91fd",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "key": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      }
+    },
+    "operation": "cipher.chacha8",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "PgDvL4lfQNZ/W7joHwmloQ=="
+      }
+    },
+    "parameters": {
+      "counter": 0,
+      "nonce": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "contract_sha256": "efefe7e2f2587b18661a0acc09e5f57d0a1ad2018b7e6b4e2904fd0b472e30af",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "key": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      }
+    },
+    "operation": "cipher.salsa20",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "mpf2W5tMchuWCmchRfyo1A=="
+      }
+    },
+    "parameters": {
+      "counter": 0,
+      "nonce": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "contract_sha256": "413c5a3ebcf93ffefc1ab0e0cc53c15c056ee1f62a67f96ef5b83ee810f126e3",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "key": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      }
+    },
+    "operation": "cipher.salsa20_12",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "vXii+BGKVjx2HbTy++BV2g=="
+      }
+    },
+    "parameters": {
+      "counter": 0,
+      "nonce": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  {
+    "contract_sha256": "1106d823d7491e6970329aa7597ab87256ce884ad6d97b973392181243200096",
+    "inputs": {
+      "input": {
+        "base64": "AP8="
+      },
+      "key": {
+        "base64": "/w8="
+      }
+    },
+    "operation": "cipher.vernam",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "//A="
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "c0bb6bd9bfb7dd1963535bbe70a80174ae16a2771323d5e5bde4aab6b6c05d34",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAA=="
+      },
+      "key": {
+        "base64": "gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp8="
+      }
+    },
+    "operation": "cipher.xchacha20",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "ETHOmiogrg1nyJNcd4n6EA=="
+      }
+    },
+    "parameters": {
+      "counter": 0,
+      "nonce": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88
+      ]
+    }
   }
 ]

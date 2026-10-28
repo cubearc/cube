@@ -42,6 +42,7 @@
     - [Classical ciphers](reference/topics/classical-ciphers.md)
     - [Classical cryptanalysis](reference/topics/cryptanalysis.md)
     - [Enigma I and M3](reference/topics/enigma.md)
+    - [Raw stream ciphers](reference/topics/stream-ciphers.md)
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)
     - [Binary transformations](reference/topics/binary-transformations.md)
     - [Text operations](reference/topics/text-operations.md)

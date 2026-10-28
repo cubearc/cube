@@ -1660,3 +1660,22 @@ def frequency_compare(
 ) -> dict[str, object]:
     """Compare caller frequencies with explicit counts/proportions; no p-value."""
     ...
+
+def stream_transform(
+    profile: str, data: bytes, key: bytes, nonce: bytes, counter: int
+) -> bytes:
+    """Apply an exact raw stream profile (<=16 MiB), with required nonce/counter.
+
+    Profiles: chacha8, chacha12, chacha20, xchacha20, salsa20_12, salsa20.
+    Key is exactly 32 bytes. Nonce is 12/24/8 bytes; counter is a block index.
+    Unauthenticated, malleable; caller prevents nonce/position reuse.
+    Reduced rounds are experimental; Salsa backend lacks an independent audit.
+    """
+    ...
+
+def vernam(data: bytes, pad: bytes) -> bytes:
+    """Educational exact-pad XOR (<=16 MiB each), including empty/empty.
+
+    Uniform independent one-use pad delivery is external; no pad management.
+    """
+    ...

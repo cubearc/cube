@@ -8,6 +8,7 @@ on:
       - "Cargo.lock"
       - "rust-toolchain.toml"
       - "crates/**"
+      - "vendor/**"
       - "bindings/python/Cargo.toml"
       - ".github/workflows/play-integration.yml"
   pull_request:
@@ -17,6 +18,7 @@ on:
       - "Cargo.lock"
       - "rust-toolchain.toml"
       - "crates/**"
+      - "vendor/**"
       - "bindings/python/Cargo.toml"
       - ".github/workflows/play-integration.yml"
   workflow_dispatch:
@@ -46,7 +48,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: cubearc/play
-          ref: ee64516f0c912d2ba15270f775457f7716556a5a
+          ref: ec757de8581abca329636c4a9bd7bf233de22277
           path: play
           persist-credentials: false
       - name: Test the real CLI in the Docker Runner

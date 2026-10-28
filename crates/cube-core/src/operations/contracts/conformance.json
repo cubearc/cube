@@ -2260,6 +2260,35 @@
     }
   },
   {
+    "contract_sha256": "362515d281ab0483f4fbed477e15cfbfc337a8e9009950900d832686ec66e92a",
+    "inputs": {
+      "text": "AAAAA"
+    },
+    "operation": "cipher.enigma",
+    "operation_version": 1,
+    "outputs": {
+      "final_windows": "AAF",
+      "text": "BDZGO",
+      "trace": []
+    },
+    "parameters": {
+      "plugboard": [],
+      "profile": "enigma_i",
+      "reflector": "B",
+      "rings": [
+        1,
+        1,
+        1
+      ],
+      "rotors": [
+        "I",
+        "II",
+        "III"
+      ],
+      "windows": "AAA"
+    }
+  },
+  {
     "contract_sha256": "cf09c4f8d4729c443c400f3d8c05e36e53d0beb29bb91ba8bde418a659bb64d3",
     "inputs": {
       "text": "LEWIXAFNEXCUDXUVDPGXHZ"

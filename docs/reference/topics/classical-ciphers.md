@@ -3,6 +3,8 @@
 Use classical ciphers for letter substitutions with a known key or alphabet.
 They do not provide secure modern encryption.
 
+[Enigma I and M3](enigma.md) covers configured rotor-machine messages and state.
+
 ## Letter substitutions
 
 | Cipher | Key or parameters | Behavior |

@@ -25,6 +25,7 @@ mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
 mod cryptanalysiscmd;
+mod enigmacmd;
 mod fractioncmd;
 mod modularcmd;
 mod monocmd;
@@ -391,6 +392,8 @@ enum Cipher {
     CardanOverlay(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
     Gronsfeld(polycmd::Parameters),
+    /// Historical Enigma I/M3; reciprocal transform with final windows and optional trace
+    Enigma(enigmacmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
     Trithemius(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
@@ -868,6 +871,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Cipher { command } => {
             let text = match command {
                 Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
+                Cipher::Enigma(args) => enigmacmd::run(args)?,
                 Cipher::Scytale(args) => fractioncmd::scytale(args)?,
                 Cipher::RailFence(args) => fractioncmd::rail_fence(args)?,
                 Cipher::Redefence(args) => fractioncmd::redefence(args)?,

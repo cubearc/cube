@@ -24,6 +24,7 @@ mod logiccmd;
 mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
+mod cryptanalysiscmd;
 mod fractioncmd;
 mod modularcmd;
 mod monocmd;
@@ -60,6 +61,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Bounded classical-cipher evidence using caller-owned models
+    Cryptanalysis {
+        #[command(subcommand)]
+        command: cryptanalysiscmd::Command,
+    },
     /// Exact finite probability and independent dice models (JSON)
     Probability {
         #[command(subcommand)]
@@ -591,6 +597,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let capture = capture::Target::requested(&cli)?;
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Cryptanalysis { command } => cryptanalysiscmd::run(command, &mut output)?,
         Command::Probability { command } => probabilitycmd::run(command, &mut output)?,
         Command::Graph { command } => graphcmd::run(command, &mut output)?,
         Command::Logic { command } => logiccmd::run(command, &mut output)?,

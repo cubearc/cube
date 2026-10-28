@@ -149,6 +149,7 @@ from ._native import (
     keyed_skip,
     keypad_decode,
     keypad_encode,
+    language_score,
     map_character_classes,
     md5,
     mod_inverse,
@@ -173,6 +174,7 @@ from ._native import (
     operations,
     or_bytes,
     pascal_triangle,
+    period_estimate,
     periodic_gromark_decode,
     periodic_gromark_encode,
     permutations,
@@ -288,6 +290,8 @@ from ._native import (
 )
 
 __all__ = [
+    "period_estimate",
+    "language_score",
     "anagram_search",
     "word_ladder_validate",
     "word_ladder_shortest",

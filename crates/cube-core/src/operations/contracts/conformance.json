@@ -1,5 +1,152 @@
 [
   {
+    "contract_sha256": "033ce14b775c10919e409dc208ecf298662bd3c794cd866e1319c13cd9d1470b",
+    "inputs": {
+      "request": {
+        "candidates": [
+          "B",
+          "A",
+          ""
+        ],
+        "model": {
+          "entries": [
+            {
+              "text": "A",
+              "weight": 2.0
+            }
+          ],
+          "kind": "dictionary",
+          "unseen_weight": -1.0
+        }
+      }
+    },
+    "operation": "analysis.language.score",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "method": "dictionary-weight-nanos-v1",
+        "model_sha256": "bbf2bfb9302ea08695ba9175dd9494b45413286742da9c3329c1773365d0208b",
+        "ranking": [
+          1,
+          0,
+          2
+        ],
+        "scores": [
+          {
+            "input_index": 0,
+            "mean_nanos": -1000000000,
+            "samples": 1,
+            "total_nanos": -1000000000
+          },
+          {
+            "input_index": 1,
+            "mean_nanos": 2000000000,
+            "samples": 1,
+            "total_nanos": 2000000000
+          },
+          {
+            "input_index": 2,
+            "mean_nanos": null,
+            "samples": 0,
+            "total_nanos": null
+          }
+        ],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 3
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3f1b1b8c13f4369903fcaa1953743e82d67877cf83be5949f3946087af46b138",
+    "inputs": {
+      "request": {
+        "expected_ic": 0.5,
+        "ngram": 2,
+        "periods": [
+          2,
+          1
+        ],
+        "text": "ABABAB"
+      }
+    },
+    "operation": "analysis.period.estimate",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "distances": [
+          {
+            "distance": 2,
+            "pairs": 3
+          },
+          {
+            "distance": 4,
+            "pairs": 1
+          }
+        ],
+        "expected_ic": 0.5,
+        "friedman": 1.2203389830508475,
+        "ic": 0.4,
+        "letters": 6,
+        "method": "ascii-kasiski-column-ic-friedman-v1",
+        "periods": [
+          {
+            "divisor_hits": 4,
+            "mean_column_ic": 1.0,
+            "period": 2,
+            "valid_columns": 2
+          },
+          {
+            "divisor_hits": 4,
+            "mean_column_ic": 0.4,
+            "period": 1,
+            "valid_columns": 1
+          }
+        ],
+        "ranking": [
+          1,
+          0
+        ],
+        "repeats": [
+          {
+            "ngram": "AB",
+            "original_byte_offsets": [
+              0,
+              2,
+              4
+            ],
+            "positions": [
+              0,
+              2,
+              4
+            ]
+          },
+          {
+            "ngram": "BA",
+            "original_byte_offsets": [
+              1,
+              3
+            ],
+            "positions": [
+              1,
+              3
+            ]
+          }
+        ],
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 43
+        },
+        "uniform_ic": 0.038461538461538464
+      }
+    },
+    "parameters": {}
+  },
+  {
     "inputs": {
       "input": {
         "channels": [

@@ -6,6 +6,1346 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "analysis.language.score",
+      "category": "cryptanalysis",
+      "description": "Caller-owned language-model scoring",
+      "example": "cube cryptanalysis --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "request",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Request",
+            "type": "object",
+            "properties": {
+              "candidates": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4096
+              },
+              "limits": {
+                "$ref": "#/$defs/Limits",
+                "default": {
+                  "max_results": 4096,
+                  "max_work": 16777216
+                }
+              },
+              "model": {
+                "$ref": "#/$defs/Model"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "candidates",
+              "model"
+            ],
+            "$defs": {
+              "Limits": {
+                "description": "A caller can lower, but cannot raise, these ceilings.",
+                "type": "object",
+                "properties": {
+                  "max_results": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 4096,
+                        "maximum": 4096,
+                        "minimum": 1,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4096,
+                          "format": "uint",
+                          "maximum": 4096,
+                          "minimum": 1,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 4096,
+                    "x-cube-integer": {
+                      "default": 4096,
+                      "format": "uint",
+                      "maximum": 4096,
+                      "minimum": 1,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_work": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 16777216,
+                        "maximum": 16777216,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16777216,
+                          "format": "uint",
+                          "maximum": 16777216,
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 16777216,
+                    "x-cube-integer": {
+                      "default": 16777216,
+                      "format": "uint",
+                      "maximum": 16777216,
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "Model": {
+                "description": "Counts use one aggregate unseen bucket. Probabilities supply its mass directly.\nDictionary tokens use Rust Unicode whitespace; punctuation is retained.",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "entries": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/$defs/Weight"
+                        }
+                      },
+                      "kind": {
+                        "type": "string",
+                        "const": "counts"
+                      },
+                      "n": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      },
+                      "normalization": {
+                        "$ref": "#/$defs/Normalization"
+                      },
+                      "smoothing": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind",
+                      "n",
+                      "entries",
+                      "smoothing",
+                      "normalization"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "entries": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/$defs/Weight"
+                        }
+                      },
+                      "kind": {
+                        "type": "string",
+                        "const": "probabilities"
+                      },
+                      "n": {
+                        "anyOf": [
+                          {
+                            "type": "integer",
+                            "format": "uint",
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          },
+                          {
+                            "type": "string",
+                            "maxLength": 40,
+                            "pattern": "^(0|-?[1-9][0-9]*)$",
+                            "x-cube-native-integer": {
+                              "format": "uint",
+                              "minimum": 0,
+                              "type": "integer",
+                              "x-cube-maximum-decimal": "18446744073709551615",
+                              "x-cube-minimum-decimal": "0"
+                            }
+                          }
+                        ],
+                        "x-cube-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      },
+                      "normalization": {
+                        "$ref": "#/$defs/Normalization"
+                      },
+                      "unseen_probability": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind",
+                      "n",
+                      "entries",
+                      "unseen_probability",
+                      "normalization"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "entries": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/$defs/Weight"
+                        }
+                      },
+                      "kind": {
+                        "type": "string",
+                        "const": "dictionary"
+                      },
+                      "unseen_weight": {
+                        "type": "number",
+                        "format": "double"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "kind",
+                      "entries",
+                      "unseen_weight"
+                    ]
+                  }
+                ]
+              },
+              "Normalization": {
+                "type": "string",
+                "enum": [
+                  "exact",
+                  "ascii_letters"
+                ]
+              },
+              "Weight": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "weight": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "text",
+                  "weight"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "report",
+          "semantic_type": "analysis.report",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Report",
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string"
+              },
+              "model_sha256": {
+                "type": "string"
+              },
+              "ranking": {
+                "description": "Input indices sorted by descending mean score, then caller order; empty last.",
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "format": "uint",
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    },
+                    {
+                      "type": "string",
+                      "maxLength": 40,
+                      "pattern": "^(0|-?[1-9][0-9]*)$",
+                      "x-cube-native-integer": {
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer",
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      }
+                    }
+                  ],
+                  "x-cube-integer": {
+                    "format": "uint",
+                    "minimum": 0,
+                    "type": "integer",
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  }
+                }
+              },
+              "scores": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Score"
+                }
+              },
+              "status": {
+                "$ref": "#/$defs/Status"
+              }
+            },
+            "required": [
+              "method",
+              "model_sha256",
+              "status",
+              "scores",
+              "ranking"
+            ],
+            "$defs": {
+              "Score": {
+                "type": "object",
+                "properties": {
+                  "input_index": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "mean_nanos": {
+                    "description": "Arithmetic mean in the same units, truncated toward zero.",
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "format": "int64"
+                  },
+                  "samples": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "total_nanos": {
+                    "description": "Sum of per-sample values rounded to 1e-9; None means no scored samples.",
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "format": "int64"
+                  }
+                },
+                "required": [
+                  "input_index",
+                  "samples"
+                ]
+              },
+              "Status": {
+                "type": "object",
+                "properties": {
+                  "complete": {
+                    "type": "boolean"
+                  },
+                  "stop": {
+                    "$ref": "#/$defs/Stop"
+                  },
+                  "work": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "required": [
+                  "complete",
+                  "stop",
+                  "work"
+                ]
+              },
+              "Stop": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "work_limit",
+                  "result_limit",
+                  "cancelled",
+                  "pruned"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4194304,
+        "max_output_bytes": 4194304,
+        "max_items": 4096,
+        "max_work": 16777216,
+        "max_memory_bytes": 67108864
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "analysis.period.estimate",
+      "category": "cryptanalysis",
+      "description": "Explicit classical key-length evidence",
+      "example": "cube cryptanalysis --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "request",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Request",
+            "type": "object",
+            "properties": {
+              "expected_ic": {
+                "type": "number",
+                "format": "double"
+              },
+              "limits": {
+                "$ref": "#/$defs/Limits",
+                "default": {
+                  "max_results": 4096,
+                  "max_work": 16777216
+                }
+              },
+              "ngram": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 8,
+                    "minimum": 2,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "maximum": 8,
+                      "minimum": 2,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "maximum": 8,
+                  "minimum": 2,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "periods": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "format": "uint",
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    },
+                    {
+                      "type": "string",
+                      "maxLength": 40,
+                      "pattern": "^(0|-?[1-9][0-9]*)$",
+                      "x-cube-native-integer": {
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer",
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      }
+                    }
+                  ],
+                  "x-cube-integer": {
+                    "format": "uint",
+                    "minimum": 0,
+                    "type": "integer",
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  }
+                },
+                "maxItems": 4096,
+                "minItems": 1
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "periods",
+              "ngram",
+              "expected_ic"
+            ],
+            "$defs": {
+              "Limits": {
+                "description": "A caller can lower, but cannot raise, these ceilings.",
+                "type": "object",
+                "properties": {
+                  "max_results": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 4096,
+                        "maximum": 4096,
+                        "minimum": 1,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 4096,
+                          "format": "uint",
+                          "maximum": 4096,
+                          "minimum": 1,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 4096,
+                    "x-cube-integer": {
+                      "default": 4096,
+                      "format": "uint",
+                      "maximum": 4096,
+                      "minimum": 1,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "max_work": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "default": 16777216,
+                        "maximum": 16777216,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "default": 16777216,
+                          "format": "uint",
+                          "maximum": 16777216,
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "default": 16777216,
+                    "x-cube-integer": {
+                      "default": 16777216,
+                      "format": "uint",
+                      "maximum": 16777216,
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "report",
+          "semantic_type": "analysis.report",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Report",
+            "type": "object",
+            "properties": {
+              "distances": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Distance"
+                }
+              },
+              "expected_ic": {
+                "type": "number",
+                "format": "double"
+              },
+              "friedman": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "format": "double"
+              },
+              "ic": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "format": "double"
+              },
+              "letters": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "format": "uint",
+                    "maximum": 9007199254740991,
+                    "minimum": 0,
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 40,
+                    "pattern": "^(0|-?[1-9][0-9]*)$",
+                    "x-cube-native-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                ],
+                "x-cube-integer": {
+                  "format": "uint",
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-cube-maximum-decimal": "18446744073709551615",
+                  "x-cube-minimum-decimal": "0"
+                }
+              },
+              "method": {
+                "type": "string"
+              },
+              "periods": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Period"
+                }
+              },
+              "ranking": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "format": "uint",
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    },
+                    {
+                      "type": "string",
+                      "maxLength": 40,
+                      "pattern": "^(0|-?[1-9][0-9]*)$",
+                      "x-cube-native-integer": {
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer",
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      }
+                    }
+                  ],
+                  "x-cube-integer": {
+                    "format": "uint",
+                    "minimum": 0,
+                    "type": "integer",
+                    "x-cube-maximum-decimal": "18446744073709551615",
+                    "x-cube-minimum-decimal": "0"
+                  }
+                }
+              },
+              "repeats": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Repeat"
+                }
+              },
+              "status": {
+                "$ref": "#/$defs/Status"
+              },
+              "uniform_ic": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "method",
+              "status",
+              "letters",
+              "uniform_ic",
+              "expected_ic",
+              "repeats",
+              "distances",
+              "periods",
+              "ranking"
+            ],
+            "$defs": {
+              "Distance": {
+                "type": "object",
+                "properties": {
+                  "distance": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "pairs": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "required": [
+                  "distance",
+                  "pairs"
+                ]
+              },
+              "Period": {
+                "type": "object",
+                "properties": {
+                  "divisor_hits": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "mean_column_ic": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "format": "double"
+                  },
+                  "period": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "valid_columns": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "required": [
+                  "period",
+                  "valid_columns",
+                  "divisor_hits"
+                ]
+              },
+              "Repeat": {
+                "type": "object",
+                "properties": {
+                  "ngram": {
+                    "type": "string"
+                  },
+                  "original_byte_offsets": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "format": "uint",
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 40,
+                          "pattern": "^(0|-?[1-9][0-9]*)$",
+                          "x-cube-native-integer": {
+                            "format": "uint",
+                            "minimum": 0,
+                            "type": "integer",
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          }
+                        }
+                      ],
+                      "x-cube-integer": {
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer",
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      }
+                    }
+                  },
+                  "positions": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "format": "uint",
+                          "maximum": 9007199254740991,
+                          "minimum": 0,
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        },
+                        {
+                          "type": "string",
+                          "maxLength": 40,
+                          "pattern": "^(0|-?[1-9][0-9]*)$",
+                          "x-cube-native-integer": {
+                            "format": "uint",
+                            "minimum": 0,
+                            "type": "integer",
+                            "x-cube-maximum-decimal": "18446744073709551615",
+                            "x-cube-minimum-decimal": "0"
+                          }
+                        }
+                      ],
+                      "x-cube-integer": {
+                        "format": "uint",
+                        "minimum": 0,
+                        "type": "integer",
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "ngram",
+                  "positions",
+                  "original_byte_offsets"
+                ]
+              },
+              "Status": {
+                "type": "object",
+                "properties": {
+                  "complete": {
+                    "type": "boolean"
+                  },
+                  "stop": {
+                    "$ref": "#/$defs/Stop"
+                  },
+                  "work": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  }
+                },
+                "required": [
+                  "complete",
+                  "stop",
+                  "work"
+                ]
+              },
+              "Stop": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "work_limit",
+                  "result_limit",
+                  "cancelled",
+                  "pruned"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4194304,
+        "max_output_bytes": 4194304,
+        "max_items": 4096,
+        "max_work": 16777216,
+        "max_memory_bytes": 67108864
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "audio.bits.extract",
       "category": "audio",
       "description": "Exact raw bit extraction from native PCM storage; frame/channel/bit order, optional reverse frames, shared MSB/LSB and reject/drop/pad semantics; <=16 Mi bits.",

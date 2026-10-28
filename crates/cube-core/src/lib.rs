@@ -8,6 +8,7 @@
 pub mod binary;
 pub mod blockchain;
 pub mod ciphers;
+pub mod cryptanalysis;
 pub mod encoding;
 pub mod errors;
 pub mod esolang;

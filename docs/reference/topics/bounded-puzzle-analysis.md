@@ -1,7 +1,15 @@
 # Bounded puzzle analysis
 
-Caller-dictionary anagrams and substitution-only word ladders reuse shared scalar
-inventories and graph BFS. Finite probability/dice reports preserve exact reduced
-fractions and supplied assumptions. Spatial lag analysis reports physical sample
-moments without recognition claims. See [contracts, budgets and examples](../../puzzle-analysis.md).
-All seven operations are direct-only; discovery reports no pipeline adapter.
+Analyze a supplied dictionary, probability model or spatial input.
+The [puzzle model reference](../../puzzle-analysis.md) defines the contracts,
+budgets and examples.
+
+## Supported analysis
+
+| Family | Method | Interpretation |
+| --- | --- | --- |
+| Anagrams and word ladders | Scalar inventories and breadth-first graph search | Uses the supplied dictionary; word ladders allow substitutions only |
+| Finite probability and dice | Exact reduced fractions | Retains the supplied assumptions |
+| Spatial lag | Moments of physical samples | Makes no recognition claim |
+
+All seven operations are direct APIs without pipeline adapters.

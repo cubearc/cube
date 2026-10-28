@@ -1,7 +1,21 @@
 # Numeric conversions
 
-Use `numbers` to change an integer's textual base, separately from byte encodings
-and byte order.
+Convert an integer between textual bases or select exact digits of a mathematical
+constant. Integer bases are separate from byte encodings and byte order.
+
+## Integer bases
+
+| Rule | Behavior |
+| --- | --- |
+| Bases | Explicit source and destination, each from 2 to 36 |
+| Digits | ASCII 0–9/A–Z |
+| Sign | One optional leading `+` or `-` |
+| Magnitude | At most `2^128 - 1`, with exact arithmetic |
+| Input length | At most 4,096 digits |
+| Invalid input | Whitespace, radix prefixes, separators, fractions and floats |
+| Output | Canonical case, sign and leading zeros; value preserved |
+
+For example, convert hexadecimal to binary or a signed base-36 integer to decimal:
 
 ```sh
 cube number base --from-base 16 --to-base 2 --text FF
@@ -10,48 +24,60 @@ cube number base --from-base 36 --to-base 10 --text=-Z
 # -35
 ```
 
-Bases are explicit 2..36. Digits use ASCII 0–9/A–Z; a leading sign is allowed,
-while whitespace, radix prefixes, separators, fractions and floats are rejected.
-Magnitudes up to `2^128-1` are exact, with at most 4096 input digits. Output
-canonicalizes case, sign and leading zeros; the integer value is preserved.
+For other integer operations, see [Modular arithmetic](exact-modular-arithmetic.md)
+and [Digital root](decimal-digital-root.md).
 
-The v0.11.0 numeric evaluation is recorded in [issue #77](https://github.com/cubearc/cube/issues/77).
-Its prime/Fibonacci proposals remain deferred; the 0.18.0 scope extends its
-fixed-width approach with the [modular utilities](exact-modular-arithmetic.md#exact-modular-arithmetic) and
-[decimal digital root](decimal-digital-root.md#decimal-digital-root). Research decisions in
-[#129](https://github.com/cubearc/cube/issues/129) and
-[#131](https://github.com/cubearc/cube/issues/131) retain explicit prime/candidate
-engine deferrals and reuse existing composition. Proposed operations are not
-advertised through discovery.
+## Constant digits
 
 `number.constant_digits` selects exact fractional decimal digits of `pi`, `e`,
-`phi` (the golden ratio) or `sqrt2`. Index 0 excludes the integer part/decimal point;
-results return the integer part separately, exact selected text and the entire
-prefix's SHA-256. Range defaults are start 0/count 16; an explicit index list
-preserves order/repeats and may be empty. Ranges and lists are exclusive. A
-zero-count range may start at the prefix's end; other out-of-range positions fail.
+`phi` (the golden ratio) or `sqrt2`. Index 0 is the first digit after the decimal
+point. Results include the integer part separately, selected text and a SHA-256
+of the complete generated prefix.
 
-The explicit `max_digits` budget defaults to 256 and accepts 1..4096. It controls
-the complete generated/certified prefix, even when a small selection is requested.
-Increasing it permits additional positions while retaining the hard cap. Range
-addition is checked; lists have at most 1024 entries and CLI selector text is
-capped at 8 KiB. Inputs are integers, not fractional positions or precision guesses.
-Structured output is below 16 KiB; no partial prefix or silent truncation of an
-invalid selection is returned.
+### Selection and budgets
 
-The [original research](https://github.com/cubearc/cube/issues/107#issuecomment-6398938938)
-proposed a fixed offline reference. The [approved override follow-up](https://github.com/cubearc/cube/issues/134)
-instead uses bounded runtime generation in the Rust core, with maintained pure
-Rust `num-bigint` arithmetic and no native backend/reference dataset. pi uses
-`16 atan(1/5)-4 atan(1/239)` with alternating-series intervals; e uses factorial
-terms and a strict tail bound; sqrt2/phi use exact integer-root intervals. Sixteen
-fixed guard places support these bounds, but only agreement of both endpoints'
-truncated integers certifies a result. Uncertainty fails explicitly. No binary
-floating approximation or caller-controlled guard precision is used.
+| Setting | Default | Rule |
+| --- | --- | --- |
+| Range start | 0 | Zero-based fractional position |
+| Range count | 16 | Zero permits a start at the prefix's end |
+| Index list | None | Preserves order and repeats; an empty list is valid |
+| `max_digits` | 256 | 1–4,096; controls the full generated prefix |
+| Index-list length | — | At most 1,024 |
+| CLI selector text | — | At most 8 KiB |
+| Structured output | — | Less than 16 KiB |
 
-Validated prefix lengths bound scale/root construction before allocation;
-integers are capped at 32768 bits and series work at 8192 steps. One integer root
-operates on a bounded radicand. These are deterministic work/size limits, not a
-wall-clock timeout. All four maximum prefixes match independent Fraction/Decimal
-checks. Rust, CLI and native Python share the implementation. No pipeline adapter
-is advertised for this structured parameter-only operation.
+Ranges and index lists are mutually exclusive. Out-of-range positions and range
+overflow fail; there is no partial prefix or silent truncation. A small selection
+still generates and certifies the full `max_digits` prefix.
+
+### Exactness and computation
+
+Generation uses pure Rust `num-bigint` arithmetic, without a reference dataset or
+native backend.
+
+| Constant | Certification method |
+| --- | --- |
+| `pi` | Alternating-series intervals for `16 atan(1/5) - 4 atan(1/239)` |
+| `e` | Factorial terms with a strict tail bound |
+| `sqrt2`, `phi` | Exact integer-root intervals |
+
+Sixteen fixed guard places support the bounds. A result is returned only when
+both interval endpoints truncate to the same integer. Uncertainty fails
+explicitly; binary floating approximations and caller-selected guard precision
+are not used.
+
+Computation is limited to 32,768-bit integers and 8,192 series steps. Scale and
+root sizes are checked before allocation. These are work and size limits, not a
+wall-clock timeout. All four maximum prefixes are checked against independent
+Fraction/Decimal calculations.
+
+This structured, parameter-only operation has no pipeline adapter.
+
+### Design background
+
+Runtime generation is documented in [#134](https://github.com/cubearc/cube/issues/134),
+following the [original evaluation](https://github.com/cubearc/cube/issues/107#issuecomment-6398938938).
+Prime and Fibonacci proposals remain deferred; see
+[#77](https://github.com/cubearc/cube/issues/77),
+[#129](https://github.com/cubearc/cube/issues/129) and
+[#131](https://github.com/cubearc/cube/issues/131).

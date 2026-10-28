@@ -1,19 +1,42 @@
 # Numeric text evidence
 
-`text.word.lengths` reports Unicode-scalar lengths and original word boundaries.
-`text.codepoints` includes every source scalar, including whitespace, as an exact
-u32 value with scalar/UTF-8 byte offsets. Its decimal/hex/unicode presentation
-field changes only display (unicode means U+XXXX), never the numeric value.
-`text.word.values` retains per-character records inside each whitespace-delimited
-word, defaulting to Unicode code points. Punctuation remains data; there is no
-normalization, implicit A1Z26, case folding or concatenation of decimal values.
+Measure words and code points without normalizing, folding case or interpreting
+the text as a numeric encoding.
 
-Custom value tables contain <=4,096 unique exact scalar/u64 pairs and <=64 KiB
-serialized JSON. Unmapped scalars default to errors; explicit skip retains null
-values and omitted counts. Optional checked u64 sums include mapped values only,
-retain all character provenance and obey an inclusive max_sum (default u64::MAX).
-Overflow is an error; non-default max_sum requires sums. JSON writes exact integer
-digits and the native SDK returns exact Python ints, including u64::MAX.
-Input <=1 MiB, word/code-point/total-value records <=65,536, source index <8 MiB,
-and serialized report <=8 MiB. Report bounds can reject requests within record
-bounds. All three are direct structured APIs without pipeline adapters.
+## Operations
+
+The operations retain source positions:
+
+| Operation | Measurement | Position information |
+| --- | --- | --- |
+| `text.word.lengths` | Unicode-scalar count per word | Original word boundaries |
+| `text.codepoints` | Exact `u32` value of every scalar, including whitespace | Scalar indexes and UTF-8 byte offsets |
+| `text.word.values` | Value records inside whitespace-delimited words; defaults to code points | Per-character source positions |
+
+Punctuation remains data. Decimal, hex and Unicode (`U+XXXX`) presentation changes
+only the display, not the numeric code-point value. Cube does not infer A1Z26 or
+concatenate decimal values.
+
+## Custom values and sums
+
+Custom tables contain unique, exact scalar/`u64` pairs.
+
+- Unmapped scalars fail by default. Explicit skip retains null values and omitted counts.
+- Optional sums include mapped values only and retain character provenance.
+- `max_sum` is inclusive and defaults to `u64::MAX`. A non-default value requires sums.
+- Overflow fails. CLI JSON writes exact integer digits; Python returns exact integers.
+
+## Limits
+
+| Resource | Maximum |
+| --- | --- |
+| Input | 1 MiB |
+| Custom table | 4,096 pairs and 64 KiB of JSON |
+| Word, code-point or total-value records | 65,536 |
+| Source index | Less than 8 MiB |
+| Serialized report | 8 MiB |
+
+A report can reach its size limit before its record limit.
+All three operations are direct APIs without pipeline adapters.
+
+See [Inspect text and Unicode](../../guides/text-evidence.md).

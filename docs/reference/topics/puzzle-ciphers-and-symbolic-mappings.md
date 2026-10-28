@@ -1,92 +1,140 @@
 # Puzzle ciphers and symbolic mappings
 
-These direct operations share Rust implementations with CLI and native Python.
-They do not add pipeline adapters; discovery reports `pipeline: null`. Existing
-engine API 1, recipe format 1 and adapter contracts keep their behavior. Text
-input is bounded at 1 MiB; errors do not return partial results.
+Apply explicit alphabets, coordinate squares, keyboard layouts or character
+classes. Text input is limited to 1 MiB; errors return no partial result.
+These operations have no pipeline adapters.
 
 ## Bacon and coordinate squares
 
-Bacon requires `classical24` (`ABCDEFGHIKLMNOPQRSTUWXYZ`, J→I and V→U) or
-`extended26` (`ABCDEFGHIJKLMNOPQRSTUVWXYZ`). A letter's zero-based index is its
-five-bit code, most significant bit first: A=`AAAAA`, B=`AAAAB`; classical Z is
-`BABBB`, extended Z is `BBAAB`. This matches the classical endpoints in the
+### Bacon alphabets
+
+Select an alphabet explicitly. Each letter's zero-based index becomes a
+five-bit code, most significant bit first.
+
+| Alphabet | Letters and aliases | Z |
+| --- | --- | --- |
+| `classical24` | `ABCDEFGHIKLMNOPQRSTUWXYZ`; J→I, V→U | `BABBB` |
+| `extended26` | `ABCDEFGHIJKLMNOPQRSTUVWXYZ` | `BBAAB` |
+
+A is `AAAAA` and B is `AAAAB`. Classical endpoints follow the
 [Folger exhibition](https://folgerpedia.folger.edu/Decoding_the_Renaissance_exhibition_material#Bacon.27s_Biliteral_Cipher_.28case_9.29).
-Notation `ab` is the default; `binary` explicitly means A=0/B=1 and
-`binary_inverted` means A=1/B=0. Encoding folds ASCII letter case, collapses ASCII
-space runs and removes edge spaces. Exactly one space separates groups and
-` / ` separates nonempty words. Decode accepts only that grammar; unsupported
-letters, punctuation, whitespace, incomplete and unused codes fail with byte
-offsets. Output is bounded by six times input bytes (at most 6 MiB).
 
-One `polybius::Square` implements both coordinate conventions. The 5×5
-`polybius` rows are ABCDE/FGHIK/LMNOP/QRSTU/VWXYZ, with J→I; `tap` rows are
-ABCDE/FGHIJ/LMNOP/QRSTU/VWXYZ, with K→C. The
-[NSA Tap Code material](https://www.nsa.gov/Puzzles/View/Article/3860720/no-such-puzzle-tap-codes/)
-provides the latter convention. Both presets fold ASCII case; custom alphabets
-match exact unique Unicode scalars. Supply side 1..64 and exactly side² cells;
-ASCII space is reserved for word tokens. Explicit aliases point directly to
-canonical cells, never another alias. Definitions are limited to 64 KiB
-(alphabet bytes plus eight bytes per alias) and 4,096 aliases.
+| Notation | Mapping |
+| --- | --- |
+| `ab` (default) | A and B |
+| `binary` | A=0, B=1 |
+| `binary_inverted` | A=1, B=0 |
 
-Coordinates are row then column; origin is 1 by default, optionally 0. Each
-literal ASCII space becomes a separate `null` token in JSON/native Python, so
-repeated and edge spaces survive. CLI tokens are `ROW,COLUMN` or `/`, separated
-by exactly one ASCII space. At most 65,536 tokens include spaces. Custom
-alias-free squares round-trip exactly; presets/aliases return canonical cells.
-There are no separate Tap operation IDs because this release uses the same
-coordinate grammar with an explicit preset, without tap detection or timing.
+Encoding folds ASCII case, collapses ASCII space runs and removes edge spaces.
+The grammar uses one space between groups and ` / ` between nonempty words.
+Decoding accepts only that grammar.
+
+Unsupported letters, punctuation, whitespace, incomplete codes and unused codes
+fail with byte offsets. Output is at most six times input bytes, up to 6 MiB.
+
+### Coordinate-square presets
+
+| Preset | Rows | Alias |
+| --- | --- | --- |
+| `polybius` | ABCDE / FGHIK / LMNOP / QRSTU / VWXYZ | J→I |
+| `tap` | ABCDE / FGHIJ / LMNOP / QRSTU / VWXYZ | K→C |
+
+Presets fold ASCII case. The Tap convention follows the
+[NSA material](https://www.nsa.gov/Puzzles/View/Article/3860720/no-such-puzzle-tap-codes/).
+Both use the same coordinate operation and grammar; Tap detection and timing are
+not included.
+
+### Custom squares and coordinates
+
+| Setting | Rule |
+| --- | --- |
+| Side | 1–64 |
+| Alphabet | Exactly side² unique Unicode scalars; ASCII space reserved |
+| Aliases | Point directly to canonical cells, never other aliases |
+| Definition size | At most 64 KiB: alphabet bytes plus eight bytes per alias |
+| Aliases | At most 4,096 |
+| Coordinates | Row, then column; base 1 by default, optionally 0 |
+| Tokens | At most 65,536, including spaces |
+
+Every literal ASCII space becomes a separate `null` token in structured results.
+CLI tokens are `ROW,COLUMN` or `/`, separated by one ASCII space. Repeated and
+edge spaces survive. Alias-free custom squares round-trip exactly; presets and
+aliases return canonical cells.
 
 ## Keyboard and keypad
 
-Keyboard remapping requires source and target layouts. `qwerty` and `dvorak`
-cover the 47 US ANSI printable positions on base and shift layers, checked
-against [libxkbcommon's XKB fixtures](https://github.com/xkbcommon/libxkbcommon/blob/master/test/data/symbols/us).
-`qwertz` swaps only Y/Z on that geometry; it is not a complete German layout.
-Spaces/control keys and additional modifier layers are outside these presets.
-Unmapped scalars default to `preserve`; `error` includes their UTF-8 byte offset.
-Custom Layout objects contain `geometry` and `entries`, each with `key`, `layer`
-and one-scalar `symbol`. Both layouts need the exact same geometry and key/layer
-set. Duplicate positions or symbols are rejected, including cross-layer
-ambiguity. Limits are 512 entries and 64 KiB serialized per layout, 128-byte
-geometry/key/layer IDs and 8 MiB output. Use an explicitly smaller common
-geometry for partial mappings; no implicit intersection or case folding occurs.
+### Keyboard remapping
 
-Keypad requires `telephone` or `multi_tap`. The standard
-[ITU E.161](https://www.itu.int/rec/T-REC-E.161-200102-I/en) groups are
-ABC=2, DEF=3, GHI=4, JKL=5, MNO=6, PQRS=7, TUV=8, WXYZ=9.
-ASCII letters fold to uppercase; spaces/digits require a custom disjoint mapping.
-Telephone encoding emits contiguous digits. Decode returns `text: null`, ordered
-per-digit `alternatives` and `reversible: false`, without expanding combinations.
-Multi-tap uses one `|`-delimited repeated-digit group per character; HELLO is
-`44|33|555|555|666`. Decode returns canonical `text`, empty `alternatives` and
-`reversible: true` for token inversion; original letter case is not restored.
-Custom Mapping objects specify `ascii_fold` and `keys` with unique `digit` and
-ordered `symbols`. Limits are ten digit keys, 256 disjoint scalars, 64 KiB
-serialized definitions, 65,536 groups/results, and 8 MiB output/serialized report.
+Select source and target layouts. Mapping uses the same physical key and layer
+in each layout; it does not infer an intersection or fold case.
+
+| Preset | Coverage |
+| --- | --- |
+| `qwerty`, `dvorak` | 47 US ANSI printable positions, base and shift layers |
+| `qwertz` | Y/Z swap on that geometry; not a complete German layout |
+
+Presets follow [libxkbcommon's XKB fixtures](https://github.com/xkbcommon/libxkbcommon/blob/master/test/data/symbols/us).
+Spaces, control keys and other modifier layers are outside the presets.
+
+| Custom layout rule | Requirement |
+| --- | --- |
+| Structure | `geometry` and `entries` with `key`, `layer` and one-scalar `symbol` |
+| Compatibility | Exact same geometry and key/layer set |
+| Uniqueness | No duplicate positions or symbols, including cross-layer ambiguity |
+| Unmapped input | `preserve` by default; `error` reports the UTF-8 byte offset |
+| Limits | 512 entries, 64 KiB serialized per layout; 128-byte geometry/key/layer IDs |
+| Output | At most 8 MiB |
+
+Use an explicitly smaller common geometry for partial mappings.
+
+### Keypad modes
+
+The standard [ITU E.161](https://www.itu.int/rec/T-REC-E.161-200102-I/en) groups are
+ABC=2, DEF=3, GHI=4, JKL=5, MNO=6, PQRS=7, TUV=8 and WXYZ=9.
+ASCII letters fold to uppercase; spaces and digits require a custom mapping.
+
+| Mode | Encoding | Decoding |
+| --- | --- | --- |
+| `telephone` | Contiguous digits | `text: null`, ordered per-digit `alternatives`, `reversible: false`; no combination expansion |
+| `multi_tap` | One `\|`-delimited repeated-digit group per character | Canonical `text`, empty `alternatives`, `reversible: true` for token inversion |
+
+Multi-tap encodes HELLO as `44|33|555|555|666`. Neither mode restores original
+letter case.
+
+Custom mappings contain `ascii_fold` and `keys`, each with a unique `digit` and
+ordered `symbols`. Limits are ten keys, 256 disjoint scalars, 64 KiB serialized
+definitions, 65,536 groups/results, and 8 MiB output or serialized report.
 
 ## Character classes
 
-The default maps ASCII vowels AEIOU to `0` and the remaining ASCII letters,
-excluding Y, to `1`, folding ASCII case. If Y occurs, explicitly choose `vowel`,
-`consonant` or `unmapped`. The unmapped policy defaults to `error`, with explicit
-`preserve` and `filter` alternatives. Custom Definition objects supply
-`ascii_fold` and `classes`, each with unique nonempty `name`, disjoint
-`characters` and distinct nonempty, prefix-free output `symbol`. Duplicate scalars after
-folding and conflicting preset/custom options fail. No Unicode normalization or
-linguistic vowel classification is implied.
+The default maps ASCII vowels AEIOU to `0` and remaining ASCII letters, excluding
+Y, to `1`. ASCII case is folded; no Unicode normalization or linguistic
+classification is implied.
 
-Reports contain `mapped_text`, mapped `records` (class/emitted symbol and original
-zero-based scalar index/UTF-8 byte offset), separate `preserved` records, and
-`filtered` positions with `filtered_count`. Preserved scalars appear in text but
-are not class symbols. Bounds are 4,096 definition scalars/64 KiB serialized,
-65,536 original positions, and 8 MiB text/report. Incremental retention accounting
-may reject an expansion conservatively before the final serialized report limit;
-no silent truncation occurs. Mapping is lossy and has no inverse.
+| Setting | Rule |
+| --- | --- |
+| Y | If present, explicitly choose `vowel`, `consonant` or `unmapped` |
+| Unmapped input | `error` by default; `preserve` and `filter` are explicit alternatives |
+| Custom definition | `ascii_fold` and `classes` with unique nonempty `name`, disjoint `characters` and distinct nonempty, prefix-free output `symbol` |
+| Conflicts | Reject duplicate scalars after folding and preset/custom option conflicts |
 
-Research decisions for configurable Abjad/alphabet operations and Ook!/Brainfuck
-notation are recorded in [#120](https://github.com/cubearc/cube/issues/120) and
-[#121](https://github.com/cubearc/cube/issues/121). These research issues added no
-callable operation. The separately implemented
-[bounded Brainfuck profile](../../brainfuck.md) now supplies execution and diagnostics;
-Ook notation conversion and bundled language-specific tables remain deferred.
+### Results and limits
+
+| Result field | Meaning |
+| --- | --- |
+| `mapped_text` | Class symbols plus preserved input |
+| `records` | Class and emitted symbol, with original scalar index and UTF-8 byte offset |
+| `preserved` | Unmapped scalars retained as text, not class symbols |
+| `filtered`, `filtered_count` | Removed positions and their count |
+
+Definitions allow 4,096 scalars and 64 KiB serialized data. Input positions are
+limited to 65,536; text and reports to 8 MiB. Retention accounting can reject an
+expansion before the final serialized limit. Results are never silently
+truncated. This mapping is lossy and has no inverse.
+
+## Related formats
+
+[Bounded Brainfuck](../../brainfuck.md) provides execution and diagnostics.
+Ook notation conversion and bundled language-specific tables remain deferred;
+see research [#120](https://github.com/cubearc/cube/issues/120) and
+[#121](https://github.com/cubearc/cube/issues/121).

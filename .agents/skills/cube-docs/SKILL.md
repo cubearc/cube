@@ -18,6 +18,14 @@ add a second interface example only when it solves a different need. Explain wha
 the reader does and what the result means. Do not turn guides into test assertions
 or repeat contributor process instructions in product pages.
 
+For reference, use the shared guide's reference pattern: a short overview,
+descriptive sentence-case headings and concise tables for operations, defaults
+and limits. Separate behavior, boundaries and result interpretation; regroup dense
+prose rather than putting headings over it. Verify exact facts against code when
+rewriting, preserve old anchors, and keep implementation history out of the lookup
+path. Review the rendered outline and mobile tables; a reader should find a
+default, limit or error rule without reading the entire page.
+
 For behavior changes, inspect the implementation and affected examples. Regenerate
 contract reference from its owning Rust definitions when required. Update
 `docs/SUMMARY.md`, preserve old links and run relevant example/link/reference checks.

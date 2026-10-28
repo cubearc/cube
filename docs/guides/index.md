@@ -13,6 +13,7 @@ Each task links to exact formats and limits in the reference.
 - [Inspect audio samples and signals](audio.md)
 - [Inspect a saved video container](video.md)
 - [Inspect saved HTML and HAR](offline-web.md)
+- [Inspect offline key material](keys.md)
 - [Transform selected text positions](positions.md)
 - [Transform exact bytes](binary.md)
 - [Decode symbolic clues](symbols.md)

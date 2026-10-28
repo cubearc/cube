@@ -4,6 +4,7 @@ mod catalog;
 mod fixtures;
 pub mod geometry;
 pub mod hill;
+pub mod key_profiles;
 pub mod schedules;
 pub mod stateful;
 pub mod tableaux;

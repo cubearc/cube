@@ -19,6 +19,10 @@ They do not provide secure modern encryption.
 Vigenère, Beaufort and affine inputs are limited to 1 MiB. Vigenère and Beaufort
 keys are limited to 64 KiB.
 
+[Explicit key schedules](../../ciphers.md#letter-preserving-schedules) cover
+Interrupted Key, Progressive Key and the specified Vigenère–Multiplicative
+composition, including reset offsets, progression and inverse rules.
+
 For example, encrypt with Vigenère or decode an affine substitution:
 
 ```sh

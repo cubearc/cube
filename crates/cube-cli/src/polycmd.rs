@@ -46,6 +46,41 @@ pub(crate) fn transport(
     })?;
     Ok((text, document, args.decode))
 }
+pub(crate) fn interrupted_key(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.interrupted_key.decode"
+    } else {
+        "cipher.interrupted_key.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: poly::key_profiles::InterruptedKey =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    Ok(poly::key_profiles::interrupted_key(&text, &p, decode)?)
+}
+
+pub(crate) fn progressive_key(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.progressive_key.decode"
+    } else {
+        "cipher.progressive_key.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: poly::key_profiles::ProgressiveKey =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    Ok(poly::key_profiles::progressive_key(&text, &p, decode)?)
+}
+
+pub(crate) fn vigenere_multiplicative(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.vigenere_multiplicative.decode"
+    } else {
+        "cipher.vigenere_multiplicative.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: poly::key_profiles::Multiplicative =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    Ok(poly::key_profiles::multiplicative(&text, &p, decode)?)
+}
 pub(crate) fn gronsfeld(args: Parameters) -> Result<String, Box<dyn Error>> {
     let op = if args.decode {
         "cipher.gronsfeld.decode"

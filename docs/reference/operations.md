@@ -7838,6 +7838,186 @@ Example:
 cube cipher homophonic --help
 ```
 
+## cipher.interrupted_key.decode
+
+ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; preserve case and nonletters.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "HYIFQZPUKVQRBSEIJEQKZTVOBPOSZVSGSIICUIPY"
+  },
+  "parameters": {
+    "key": "ORANGE",
+    "resets": [
+      4,
+      10,
+      12,
+      15,
+      19,
+      22,
+      23,
+      24,
+      29,
+      30,
+      32,
+      35
+    ]
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InterruptedKey",
+  "description": "Restart the keyword before each specified zero-based ASCII-letter offset.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "resets": {
+      "description": "Strictly increasing offsets, each smaller than the number of input ASCII letters.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LetterOffset"
+      },
+      "maxItems": 65536
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "resets"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "LetterOffset": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1048575,
+      "minimum": 0
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.interrupted_key.encode
+
+ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; preserve case and nonletters.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS"
+  },
+  "parameters": {
+    "key": "ORANGE",
+    "resets": [
+      4,
+      10,
+      12,
+      15,
+      19,
+      22,
+      23,
+      24,
+      29,
+      30,
+      32,
+      35
+    ]
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InterruptedKey",
+  "description": "Restart the keyword before each specified zero-based ASCII-letter offset.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "resets": {
+      "description": "Strictly increasing offsets, each smaller than the number of input ASCII letters.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LetterOffset"
+      },
+      "maxItems": 65536
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "resets"
+  ],
+  "x-cube-max-serialized-bytes": 2097152,
+  "$defs": {
+    "LetterOffset": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1048575,
+      "minimum": 0
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.monome_dinome.decode
 
 Decode with an explicit monome_dinome digit table; reject unassigned/incomplete digit transport.
@@ -9461,6 +9641,140 @@ Parameters:
   "additionalProperties": false,
   "required": [
     "key"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.progressive_key.decode
+
+ACA Vigenere plus explicit signed increment per key-length group, beginning with zero extra shift.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ZYIHGNGBMKJSORJAKZMQQMJRTFHBDCNJHJPWXFNO"
+  },
+  "parameters": {
+    "increment": 1,
+    "key": "GRAPEFRUIT"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProgressiveKey",
+  "description": "Add increment * floor(letter_offset / key_length), modulo 26; the first group adds zero.",
+  "type": "object",
+  "properties": {
+    "increment": {
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "increment"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.progressive_key.encode
+
+ACA Vigenere plus explicit signed increment per key-length group, beginning with zero extra shift.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS"
+  },
+  "parameters": {
+    "increment": 1,
+    "key": "GRAPEFRUIT"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProgressiveKey",
+  "description": "Add increment * floor(letter_offset / key_length), modulo 26; the first group adds zero.",
+  "type": "object",
+  "properties": {
+    "increment": {
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "increment"
   ],
   "x-cube-max-serialized-bytes": 2097152
 }
@@ -14425,6 +14739,168 @@ Example:
 
 ```sh
 cube cipher vigenere --key LEMON --text ATTACKATDAWN
+```
+
+## cipher.vigenere_multiplicative.decode
+
+Research Square rs-58356/v1: C=a*(P+K) mod26, A=0; explicit unit multiplier and repeating additive key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "KUNACMBGLRP"
+  },
+  "parameters": {
+    "key": "MOBILE",
+    "multiplier": 7
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Multiplicative",
+  "description": "Biswas/Sakeef/Siddique, Research Square rs-58356/v1, section VI.B: a * (P + K).\nThis classical composition supplies no modern confidentiality or authentication.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "multiplier": {
+      "type": "integer",
+      "format": "uint8",
+      "enum": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        15,
+        17,
+        19,
+        21,
+        23,
+        25
+      ],
+      "maximum": 25,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "multiplier"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.vigenere_multiplicative.encode
+
+Research Square rs-58356/v1: C=a*(P+K) mod26, A=0; explicit unit multiplier and repeating additive key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "IAMSTUDYING"
+  },
+  "parameters": {
+    "key": "MOBILE",
+    "multiplier": 7
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Multiplicative",
+  "description": "Biswas/Sakeef/Siddique, Research Square rs-58356/v1, section VI.B: a * (P + K).\nThis classical composition supplies no modern confidentiality or authentication.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[A-Za-z]+$"
+    },
+    "multiplier": {
+      "type": "integer",
+      "format": "uint8",
+      "enum": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        15,
+        17,
+        19,
+        21,
+        23,
+        25
+      ],
+      "maximum": 25,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "multiplier"
+  ],
+  "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.xchacha20

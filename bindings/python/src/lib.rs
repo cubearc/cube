@@ -41,6 +41,7 @@ mod traversal;
 mod unicode;
 mod values;
 mod video;
+mod vigenere_keys;
 mod web;
 mod word;
 
@@ -587,6 +588,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     puzzles::register(module)?;
     mono::register(module)?;
     poly::register(module)?;
+    vigenere_keys::register(module)?;
     cryptanalysis::register(module)?;
     enigma::register(module)?;
     aes_blocks::register(module)?;

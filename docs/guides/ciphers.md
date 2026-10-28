@@ -21,6 +21,24 @@ Check the selected profile before interpreting punctuation, letter case or paddi
 - [Historical ciphers](../ciphers.md)
 - [Transposition and fractionation](../cipher-permutations.md)
 
+## Progress the Vigenère key
+
+To increase the shift after each repetition of the key, save the key and
+increment in a parameter file:
+
+```sh
+printf '%s' '{"key":"BC","increment":1}' > progressive.json
+cube cipher progressive-key --parameters progressive.json --text AAAAA
+# BCCDD
+cube cipher progressive-key --parameters progressive.json --decode --text BCCDD
+# AAAAA
+```
+
+The first two letters use `BC`, the next two use one additional shift, and the
+last letter uses two. Case and non-ASCII characters are preserved. See
+[key schedule rules](../ciphers.md#letter-preserving-schedules) for explicit
+interruptions and the qualified multiplicative composition.
+
 ## Reproduce an Enigma message
 
 Save these explicit settings as `settings.json`:

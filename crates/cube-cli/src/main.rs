@@ -416,6 +416,12 @@ enum Cipher {
     CardanOverlay(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
     Gronsfeld(polycmd::Parameters),
+    /// Vigenere with explicit ASCII-letter reset positions
+    InterruptedKey(polycmd::Parameters),
+    /// Vigenere with a signed increment per key-length group
+    ProgressiveKey(polycmd::Parameters),
+    /// Qualified rs-58356/v1 Vigenere then multiplicative composition
+    VigenereMultiplicative(polycmd::Parameters),
     /// Historical Enigma I/M3; reciprocal transform with final windows and optional trace
     Enigma(enigmacmd::Parameters),
     /// Hazardous raw AES blocks; key file only, no padding or authentication
@@ -900,6 +906,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Cipher { command } => {
             let text = match command {
                 Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
+                Cipher::InterruptedKey(args) => polycmd::interrupted_key(args)?,
+                Cipher::ProgressiveKey(args) => polycmd::progressive_key(args)?,
+                Cipher::VigenereMultiplicative(args) => polycmd::vigenere_multiplicative(args)?,
                 Cipher::Enigma(args) => enigmacmd::run(args)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {

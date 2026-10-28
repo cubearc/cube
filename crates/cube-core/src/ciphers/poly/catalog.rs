@@ -107,6 +107,9 @@ struct Spec {
     references: &'static [&'static str],
 }
 const fn row(s: Spec) -> Row {
+    classified_row(s, m::Classification::HistoricalCipher)
+}
+const fn classified_row(s: Spec, classification: m::Classification) -> Row {
     let Spec {
         name,
         description,
@@ -165,7 +168,7 @@ const fn row(s: Spec) -> Row {
                 family: "polyalphabetic_polygraphic",
                 aliases: &[],
                 security: m::Security {
-                    classification: m::Classification::HistoricalCipher,
+                    classification,
                     limitations: "Historical/challenge use only; no modern confidentiality or authentication. Fillers and aliases can make original spelling unrecoverable.",
                     private_input: !sensitive.is_empty(),
                     private_output: !sensitive.is_empty(),
@@ -188,7 +191,182 @@ const fn row(s: Spec) -> Row {
         },
     }
 }
-static ROWS: [Row; 44] = [
+const COUNT: usize = 50;
+static ROWS: [Row; COUNT] = [
+    row(Spec {
+        name: "Interrupted Key",
+        description: "ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; preserve case and nonletters.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.interrupted_key.encode",
+        python: "interrupted_key_encode",
+        rust: "cube_core::ciphers::poly::key_profiles::interrupted_key",
+        command: "cipher interrupted-key",
+        parameters: c::schema::<key_profiles::InterruptedKey>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: fixtures::interrupted_key_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/InterruptedKey.pdf"],
+    }),
+    row(Spec {
+        name: "Interrupted Key",
+        description: "ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; preserve case and nonletters.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.interrupted_key.decode",
+        python: "interrupted_key_decode",
+        rust: "cube_core::ciphers::poly::key_profiles::interrupted_key",
+        command: "cipher interrupted-key",
+        parameters: c::schema::<key_profiles::InterruptedKey>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: fixtures::interrupted_key_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/InterruptedKey.pdf"],
+    }),
+    row(Spec {
+        name: "Progressive Key",
+        description: "ACA Vigenere plus explicit signed increment per key-length group, beginning with zero extra shift.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.progressive_key.encode",
+        python: "progressive_key_encode",
+        rust: "cube_core::ciphers::poly::key_profiles::progressive_key",
+        command: "cipher progressive-key",
+        parameters: c::schema::<key_profiles::ProgressiveKey>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: fixtures::progressive_key_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/ProgressiveKey.pdf"],
+    }),
+    row(Spec {
+        name: "Progressive Key",
+        description: "ACA Vigenere plus explicit signed increment per key-length group, beginning with zero extra shift.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.progressive_key.decode",
+        python: "progressive_key_decode",
+        rust: "cube_core::ciphers::poly::key_profiles::progressive_key",
+        command: "cipher progressive-key",
+        parameters: c::schema::<key_profiles::ProgressiveKey>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: fixtures::progressive_key_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/ProgressiveKey.pdf"],
+    }),
+    classified_row(
+        Spec {
+            name: "Vigenere Multiplicative (rs-58356/v1)",
+            description: "Research Square rs-58356/v1: C=a*(P+K) mod26, A=0; explicit unit multiplier and repeating additive key.",
+            reversible: true,
+            output_type: "text",
+            id: "cipher.vigenere_multiplicative.encode",
+            python: "vigenere_multiplicative_encode",
+            rust: "cube_core::ciphers::poly::key_profiles::multiplicative",
+            command: "cipher vigenere-multiplicative",
+            parameters: c::schema::<key_profiles::Multiplicative>,
+            inputs: &[c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            }],
+            outputs: &[c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            }],
+            fixture: fixtures::vigenere_multiplicative_encode,
+            input_max: 1048576,
+            output_max: 1048576,
+            sensitive: &[],
+            references: &["https://doi.org/10.21203/rs.3.rs-58356/v1"],
+        },
+        m::Classification::PuzzleCode,
+    ),
+    classified_row(
+        Spec {
+            name: "Vigenere Multiplicative (rs-58356/v1)",
+            description: "Research Square rs-58356/v1: C=a*(P+K) mod26, A=0; explicit unit multiplier and repeating additive key.",
+            reversible: true,
+            output_type: "text",
+            id: "cipher.vigenere_multiplicative.decode",
+            python: "vigenere_multiplicative_decode",
+            rust: "cube_core::ciphers::poly::key_profiles::multiplicative",
+            command: "cipher vigenere-multiplicative",
+            parameters: c::schema::<key_profiles::Multiplicative>,
+            inputs: &[c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            }],
+            outputs: &[c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            }],
+            fixture: fixtures::vigenere_multiplicative_decode,
+            input_max: 1048576,
+            output_max: 1048576,
+            sensitive: &[],
+            references: &["https://doi.org/10.21203/rs.3.rs-58356/v1"],
+        },
+        m::Classification::PuzzleCode,
+    ),
     row(Spec {
         name: "Gronsfeld",
         description: "Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII letters only.",
@@ -1526,26 +1704,26 @@ static ROWS: [Row; 44] = [
         references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/TriSquare.pdf"],
     }),
 ];
-const fn profiles() -> [m::Entry; 44] {
-    let mut out = [ROWS[0].profile; 44];
+const fn profiles() -> [m::Entry; COUNT] {
+    let mut out = [ROWS[0].profile; COUNT];
     let mut i = 0;
-    while i < 44 {
+    while i < COUNT {
         out[i] = ROWS[i].profile;
         i += 1;
     }
     out
 }
-const fn contracts() -> [c::Entry; 44] {
-    let mut out = [ROWS[0].contract; 44];
+const fn contracts() -> [c::Entry; COUNT] {
+    let mut out = [ROWS[0].contract; COUNT];
     let mut i = 0;
-    while i < 44 {
+    while i < COUNT {
         out[i] = ROWS[i].contract;
         i += 1;
     }
     out
 }
-static PROFILES: [m::Entry; 44] = profiles();
-const CONTRACTS: [c::Entry; 44] = contracts();
+static PROFILES: [m::Entry; COUNT] = profiles();
+const CONTRACTS: [c::Entry; COUNT] = contracts();
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
 pub(crate) const MODULE: o::Module =
     o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);

@@ -2,6 +2,122 @@
 use super::*;
 use crate::operations::contracts::Fixture;
 use serde_json::{Value, json};
+fn verified_key_text(
+    op: &'static str,
+    input: &str,
+    parameters: Value,
+    actual: String,
+    expected: &str,
+) -> Result<Fixture, OperationError> {
+    if actual != expected {
+        return Err(OperationError::new(
+            ErrorCode::InvalidInput,
+            "published key-profile answer mismatch",
+        )
+        .operation(op));
+    }
+    Ok(Fixture {
+        inputs: json!({"text":input}),
+        parameters,
+        outputs: json!({"text":actual}),
+    })
+}
+
+pub(crate) fn interrupted_key_encode() -> Result<Fixture, OperationError> {
+    let p = key_profiles::InterruptedKey {
+        key: "ORANGE".into(),
+        resets: vec![4, 10, 12, 15, 19, 22, 23, 24, 29, 30, 32, 35],
+    };
+    let text = "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS";
+    let actual = key_profiles::interrupted_key(text, &p, false)?;
+    verified_key_text(
+        "cipher.interrupted_key.encode",
+        text,
+        serde_json::to_value(&p).expect("typed static parameters"),
+        actual,
+        "HYIFQZPUKVQRBSEIJEQKZTVOBPOSZVSGSIICUIPY",
+    )
+}
+
+pub(crate) fn interrupted_key_decode() -> Result<Fixture, OperationError> {
+    let p = key_profiles::InterruptedKey {
+        key: "ORANGE".into(),
+        resets: vec![4, 10, 12, 15, 19, 22, 23, 24, 29, 30, 32, 35],
+    };
+    let text = "HYIFQZPUKVQRBSEIJEQKZTVOBPOSZVSGSIICUIPY";
+    let actual = key_profiles::interrupted_key(text, &p, true)?;
+    verified_key_text(
+        "cipher.interrupted_key.decode",
+        text,
+        serde_json::to_value(&p).expect("typed static parameters"),
+        actual,
+        "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS",
+    )
+}
+
+pub(crate) fn progressive_key_encode() -> Result<Fixture, OperationError> {
+    let p = key_profiles::ProgressiveKey {
+        key: "GRAPEFRUIT".into(),
+        increment: 1,
+    };
+    let text = "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS";
+    let actual = key_profiles::progressive_key(text, &p, false)?;
+    verified_key_text(
+        "cipher.progressive_key.encode",
+        text,
+        serde_json::to_value(&p).expect("typed static parameters"),
+        actual,
+        "ZYIHGNGBMKJSORJAKZMQQMJRTFHBDCNJHJPWXFNO",
+    )
+}
+
+pub(crate) fn progressive_key_decode() -> Result<Fixture, OperationError> {
+    let p = key_profiles::ProgressiveKey {
+        key: "GRAPEFRUIT".into(),
+        increment: 1,
+    };
+    let text = "ZYIHGNGBMKJSORJAKZMQQMJRTFHBDCNJHJPWXFNO";
+    let actual = key_profiles::progressive_key(text, &p, true)?;
+    verified_key_text(
+        "cipher.progressive_key.decode",
+        text,
+        serde_json::to_value(&p).expect("typed static parameters"),
+        actual,
+        "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS",
+    )
+}
+
+pub(crate) fn vigenere_multiplicative_encode() -> Result<Fixture, OperationError> {
+    let p = key_profiles::Multiplicative {
+        key: "MOBILE".into(),
+        multiplier: 7,
+    };
+    let text = "IAMSTUDYING";
+    let actual = key_profiles::multiplicative(text, &p, false)?;
+    verified_key_text(
+        "cipher.vigenere_multiplicative.encode",
+        text,
+        serde_json::to_value(&p).expect("typed static parameters"),
+        actual,
+        "KUNACMBGLRP",
+    )
+}
+
+pub(crate) fn vigenere_multiplicative_decode() -> Result<Fixture, OperationError> {
+    let p = key_profiles::Multiplicative {
+        key: "MOBILE".into(),
+        multiplier: 7,
+    };
+    let text = "KUNACMBGLRP";
+    let actual = key_profiles::multiplicative(text, &p, true)?;
+    verified_key_text(
+        "cipher.vigenere_multiplicative.decode",
+        text,
+        serde_json::to_value(&p).expect("typed static parameters"),
+        actual,
+        "IAMSTUDYING",
+    )
+}
 pub(crate) fn gronsfeld_encode() -> Result<Fixture, OperationError> {
     let parameters: Value =
         serde_json::from_str(r##"{"key":"9321492"}"##).expect("static parameters");

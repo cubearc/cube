@@ -9993,5 +9993,121 @@
     "parameters": {
       "key_hex": "000102030405060708090a0b0c0d0e0f"
     }
+  },
+  {
+    "contract_sha256": "240f60d28d9879e24aaed12a301ed956b3fd4dfd05014af8d2cd393dd4f8b91d",
+    "inputs": {
+      "text": "HYIFQZPUKVQRBSEIJEQKZTVOBPOSZVSGSIICUIPY"
+    },
+    "operation": "cipher.interrupted_key.decode",
+    "operation_version": 1,
+    "outputs": {
+      "text": "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS"
+    },
+    "parameters": {
+      "key": "ORANGE",
+      "resets": [
+        4,
+        10,
+        12,
+        15,
+        19,
+        22,
+        23,
+        24,
+        29,
+        30,
+        32,
+        35
+      ]
+    }
+  },
+  {
+    "contract_sha256": "2f269eed2903bda76cab73ea70b436adb7f1aa7e6a1d4dc4e5478740df7d4d28",
+    "inputs": {
+      "text": "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS"
+    },
+    "operation": "cipher.interrupted_key.encode",
+    "operation_version": 1,
+    "outputs": {
+      "text": "HYIFQZPUKVQRBSEIJEQKZTVOBPOSZVSGSIICUIPY"
+    },
+    "parameters": {
+      "key": "ORANGE",
+      "resets": [
+        4,
+        10,
+        12,
+        15,
+        19,
+        22,
+        23,
+        24,
+        29,
+        30,
+        32,
+        35
+      ]
+    }
+  },
+  {
+    "contract_sha256": "f1a671f53d76e6c134d780fbea0c727b6df40ea53a96b1499129cb6319d7ffd0",
+    "inputs": {
+      "text": "ZYIHGNGBMKJSORJAKZMQQMJRTFHBDCNJHJPWXFNO"
+    },
+    "operation": "cipher.progressive_key.decode",
+    "operation_version": 1,
+    "outputs": {
+      "text": "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS"
+    },
+    "parameters": {
+      "increment": 1,
+      "key": "GRAPEFRUIT"
+    }
+  },
+  {
+    "contract_sha256": "dec81a0e144a04184aeda5c476b787c2596689fdc9479933fdd0f1a4017588d2",
+    "inputs": {
+      "text": "THISCIPHERCANBEUSEDWITHANYOFTHEPERIODICS"
+    },
+    "operation": "cipher.progressive_key.encode",
+    "operation_version": 1,
+    "outputs": {
+      "text": "ZYIHGNGBMKJSORJAKZMQQMJRTFHBDCNJHJPWXFNO"
+    },
+    "parameters": {
+      "increment": 1,
+      "key": "GRAPEFRUIT"
+    }
+  },
+  {
+    "contract_sha256": "2245b258a29c744643658331e56c422b7ffb9a28e32881611ecab183e5cf0932",
+    "inputs": {
+      "text": "KUNACMBGLRP"
+    },
+    "operation": "cipher.vigenere_multiplicative.decode",
+    "operation_version": 1,
+    "outputs": {
+      "text": "IAMSTUDYING"
+    },
+    "parameters": {
+      "key": "MOBILE",
+      "multiplier": 7
+    }
+  },
+  {
+    "contract_sha256": "58c5f4662bf296ec717288568d135aeba74a3a8ce1c1ecb1a8362e129318fe88",
+    "inputs": {
+      "text": "IAMSTUDYING"
+    },
+    "operation": "cipher.vigenere_multiplicative.encode",
+    "operation_version": 1,
+    "outputs": {
+      "text": "KUNACMBGLRP"
+    },
+    "parameters": {
+      "key": "MOBILE",
+      "multiplier": 7
+    }
   }
 ]

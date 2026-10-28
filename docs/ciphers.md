@@ -52,6 +52,9 @@ Only transformed letters advance the key. Indexes are zero-based modulo 26.
 | autokey | Seed: 1 through 65,536 ASCII letters; feedback: plaintext or ciphertext |
 | running_key | Key: 0 through 1,048,576 ASCII letters |
 | porta | Key: 1 through 65,536 ASCII letters |
+| interrupted_key | ASCII-letter `key` (1–65,536 bytes), explicit `resets` list |
+| progressive_key | ASCII-letter `key` (1–65,536 bytes), signed i32 `increment` |
+| vigenere_multiplicative | ASCII-letter `key` (1–65,536 bytes), explicit unit `multiplier` |
 
 Gronsfeld adds repeated key digits and subtracts them for decode.
 Trithemius adds `start+step*i`, reducing signed endpoints before multiplication.
@@ -67,6 +70,61 @@ exchanging A–M and cyclic N–Z.
 
 For Variant Beaufort, Vigenère decode computes C=P-K; Vigenère encode
 is its inverse, using the same advancement and preservation.
+
+### Interrupted Key
+
+`cube cipher interrupted-key` restarts Vigenère's keyword before each offset in
+`resets`. Offsets count only ASCII letters from zero; spaces, punctuation, NUL
+and other Unicode scalars neither consume key letters nor affect the offsets.
+The list is required, strictly increasing, and contains at most 65,536 entries.
+Each offset must address an existing input letter. Zero is allowed; an empty
+list performs ordinary repeated-key Vigenère. Text with no ASCII letters requires
+an empty list, and even empty text requires a valid key.
+
+This implements the deterministic transform described by the
+[ACA Interrupted Key sheet](https://www.cryptogram.org/downloads/aca.info/ciphers/InterruptedKey.pdf).
+The caller supplies the interruption schedule; the operation does not infer word
+boundaries, generate random interruptions or require a full keyword occurrence.
+Decode uses the same key and offsets.
+
+### Progressive Key
+
+`cube cipher progressive-key` adds an explicit progression to repeated-key
+Vigenère. For ASCII-letter offset `i`, key length `L` and `A=0`:
+
+```text
+C[i] = (P[i] + K[i mod L] + increment * floor(i/L)) mod 26
+```
+
+The first group adds zero. Increment 1 adds A, B, C, … to successive groups;
+increment 2 adds A, C, E, …. Zero and negative increments are supported, including
+the full signed i32 range; reduction modulo 26 precedes multiplication.
+The last partial group uses its actual letters. Decode subtracts both shifts.
+The convention follows the
+[ACA Progressive Key sheet](https://www.cryptogram.org/downloads/aca.info/ciphers/ProgressiveKey.pdf).
+
+### Vigenère–Multiplicative
+
+`cube cipher vigenere-multiplicative` fixes the composition from
+[Biswas, Sakeef and Siddique, rs-58356/v1, section VI.B](https://doi.org/10.21203/rs.3.rs-58356/v1).
+It first adds the repeating letter key, then multiplies each result, with A=0:
+
+```text
+C[i] = multiplier * (P[i] + K[i mod L]) mod 26
+P[i] = inverse(multiplier) * C[i] - K[i mod L] mod 26
+```
+
+The required integer multiplier is one of `1, 3, 5, 7, 9, 11, 15, 17, 19, 21,
+23, 25`; other values reject, including for empty text. The additive letter key
+and numeric multiplier are separate parameters. With key `MOBILE` and multiplier
+7, `IAMSTUDYING` becomes `KUNACMBGLRP`.
+
+This is the specified classical composition, not a claim that every similarly
+named variant has the same equation or that the preprint establishes modern
+security. It has the same preservation and byte limits as the schedules above.
+All three key profiles use linear bounded work, validate parameters before output
+and return exactly as many UTF-8 bytes as their input. Key and interruption
+storage are bounded separately; no stream state persists between calls.
 
 ## Canonical schedules and evolving alphabets
 

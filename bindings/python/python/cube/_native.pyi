@@ -1386,6 +1386,37 @@ class HillPadding(TypedDict):
 class PolyKeyParameters(TypedDict):
     key: str
 
+class PolyInterruptedKeyParameters(TypedDict):
+    key: str
+    resets: list[int]
+
+class PolyProgressiveKeyParameters(TypedDict):
+    key: str
+    increment: int
+
+class PolyVigenereMultiplicativeParameters(TypedDict):
+    key: str
+    multiplier: int
+
+def interrupted_key_encode(
+    text: str, parameters: PolyInterruptedKeyParameters
+) -> str: ...
+def interrupted_key_decode(
+    text: str, parameters: PolyInterruptedKeyParameters
+) -> str: ...
+def progressive_key_encode(
+    text: str, parameters: PolyProgressiveKeyParameters
+) -> str: ...
+def progressive_key_decode(
+    text: str, parameters: PolyProgressiveKeyParameters
+) -> str: ...
+def vigenere_multiplicative_encode(
+    text: str, parameters: PolyVigenereMultiplicativeParameters
+) -> str: ...
+def vigenere_multiplicative_decode(
+    text: str, parameters: PolyVigenereMultiplicativeParameters
+) -> str: ...
+
 class PolyGronsfeldParameters(TypedDict):
     key: str
 

@@ -30,5 +30,12 @@ For behavior changes, inspect the implementation and affected examples. Regenera
 contract reference from its owning Rust definitions when required. Update
 `docs/SUMMARY.md`, preserve old links and run relevant example/link/reference checks.
 
+Include the sibling `cubearc/docs` repository in product-documentation delivery.
+Follow the shared guide's portal-delivery section: adopt the validated Cube
+commit in `sources.lock.json`, update affected shared pages and readable operation
+navigation names, and verify the locked portal build and authorized publication.
+Product Markdown changes alone do not update the published portal. Report the
+reason when no portal update is required.
+
 Respect review-only and planning-only requests. Report the pages and validation
 actually changed or performed.

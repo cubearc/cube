@@ -35,6 +35,7 @@ mod probability;
 mod puzzlecodes;
 mod puzzles;
 mod recipe;
+mod stream;
 mod textops;
 mod traversal;
 mod unicode;
@@ -589,6 +590,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     cryptanalysis::register(module)?;
     enigma::register(module)?;
     aes_blocks::register(module)?;
+    stream::register(module)?;
     fraction::register(module)?;
     puzzlecodes::register(module)?;
     combinations::register(module)?;

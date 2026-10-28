@@ -36,6 +36,8 @@ sha3 = { version = "0.12.0", default-features = false }
 ripemd = { version = "0.2.0", default-features = false }
 schemars = "=1.2.3"
 jsonschema = { version = "=0.60.2", default-features = false }
+chacha20 = { version = "=0.10.2", features = ["xchacha", "zeroize"] }
+salsa20 = { path = "../../vendor/salsa20", version = "=0.11.0", features = ["zeroize"] }
 
 [lints]
 workspace = true

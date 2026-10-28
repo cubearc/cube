@@ -4955,6 +4955,183 @@ Example:
 cube cipher --help
 ```
 
+## cipher.chacha12
+
+ChaCha12 IETF
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChaChaParameters",
+  "type": "object",
+  "properties": {
+    "counter": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "nonce": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 12,
+      "minItems": 12
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "nonce",
+    "counter"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher chacha12 --key-file key.bin --nonce-hex 000000000000000000000000 --counter 0 --input message.bin --stdout
+```
+
+## cipher.chacha20
+
+ChaCha20 IETF
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChaChaParameters",
+  "type": "object",
+  "properties": {
+    "counter": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "nonce": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 12,
+      "minItems": 12
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "nonce",
+    "counter"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher chacha20 --key-file key.bin --nonce-hex 000000000000000000000000 --counter 0 --input message.bin --stdout
+```
+
+## cipher.chacha8
+
+ChaCha8 IETF
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ChaChaParameters",
+  "type": "object",
+  "properties": {
+    "counter": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "nonce": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 12,
+      "minItems": 12
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "nonce",
+    "counter"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher chacha8 --key-file key.bin --nonce-hex 000000000000000000000000 --counter 0 --input message.bin --stdout
+```
+
 ## cipher.chaocipher.decode
 
 Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset each call.
@@ -10862,6 +11039,174 @@ Example:
 cube cipher --help
 ```
 
+## cipher.salsa20
+
+Salsa20/20
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SalsaParameters",
+  "type": "object",
+  "properties": {
+    "counter": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint64",
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "nonce": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 8,
+      "minItems": 8
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "nonce",
+    "counter"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher salsa20 --key-file key.bin --nonce-hex 0000000000000000 --counter 0 --input message.bin --stdout
+```
+
+## cipher.salsa20_12
+
+Salsa20/12
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SalsaParameters",
+  "type": "object",
+  "properties": {
+    "counter": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint64",
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "nonce": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 8,
+      "minItems": 8
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "nonce",
+    "counter"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher salsa20-12 --key-file key.bin --nonce-hex 0000000000000000 --counter 0 --input message.bin --stdout
+```
+
 ## cipher.scytale.decode
 
 Scytale: explicit bounded decode; see typed profile guide for conventions.
@@ -13958,6 +14303,42 @@ Example:
 cube cipher --help
 ```
 
+## cipher.vernam
+
+Educational exact-pad Vernam
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher vernam --key-file pad.bin --input message.bin --stdout
+```
+
 ## cipher.vigenere.decode
 
 Vigenère P=(C-K) mod 26 with the same key advancement; <=1 MiB.
@@ -14044,6 +14425,65 @@ Example:
 
 ```sh
 cube cipher vigenere --key LEMON --text ATTACKATDAWN
+```
+
+## cipher.xchacha20
+
+XChaCha20 IETF counter
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XChaChaParameters",
+  "type": "object",
+  "properties": {
+    "counter": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "nonce": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 24,
+      "minItems": 24
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "nonce",
+    "counter"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher xchacha20 --key-file key.bin --nonce-hex 000000000000000000000000000000000000000000000000 --counter 0 --input message.bin --stdout
 ```
 
 ## encoding.base32.decode

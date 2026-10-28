@@ -1,5 +1,10 @@
 # Cube repository instructions
 
+- Apply the local [ub-mode](.agents/skills/ub-mode/SKILL.md) by default when
+  implementing or changing code. Read it before the first edit; no separate user
+  invocation is required. Explicit user scope and repository instructions take
+  precedence. The copy matches `unclebob/ub-mode` revision
+  `57a8bdd28e45ed41900ace0bafa2ff76dd9ed70f`.
 - `crates/cube-core` owns all algorithms in modules grouped by responsibility.
   Keep byte transformations byte-oriented and errors typed.
 - `crates/cube-cli` adapts core operations to Clap commands.

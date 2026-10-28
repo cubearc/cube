@@ -24,7 +24,7 @@ pub(crate) struct Parameters {
     #[arg(short = 'f', long, visible_alias = "input")]
     file: Option<PathBuf>,
 }
-pub(crate) fn run(command: Command) -> Result<(), Box<dyn Error>> {
+pub(crate) fn run(command: Command, writer: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let (args, operation, decrypt) = match command {
         Command::Encrypt(args) => (args, aes::ENCRYPT, false),
         Command::Decrypt(args) => (args, aes::DECRYPT, true),
@@ -43,6 +43,6 @@ pub(crate) fn run(command: Command) -> Result<(), Box<dyn Error>> {
     } else {
         aes::encrypt(&input, &key)?
     });
-    std::io::stdout().lock().write_all(&output)?;
+    writer.write_all(&output)?;
     Ok(())
 }

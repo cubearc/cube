@@ -27,7 +27,7 @@ The version 1 contracts name their byte input `input` and byte result `output`.
 Their JSON byte representation is `{"base64":"..."}` with canonical Base64;
 `key_hex` is a required parameter containing exactly 32, 48 or 64 hexadecimal
 digits, without a prefix or separators. Hexadecimal letter case is accepted.
-Unknown and duplicate parameter fields are rejected. Rust and Python accept raw
+The Core parameter-document parser rejects unknown and duplicate fields. Rust and Python accept raw
 key bytes instead of this JSON representation.
 
 The public FIPS test input `00112233445566778899aabbccddeeff` under the public key

@@ -36,7 +36,7 @@ const fn row(
             family: "modern_block",
             aliases: &[],
             security: m::Security {
-                classification: m::Classification::RawBlockCipher,
+                classification: m::Classification::BinaryTransform,
                 limitations: "Unauthenticated low-level interoperability only. Equal blocks reveal repetition. Decryption never verifies a key or integrity. No secure message-encryption claim.",
                 private_input: true,
                 private_output: true,

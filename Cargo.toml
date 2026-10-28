@@ -1,6 +1,7 @@
 [workspace]
 members = ["crates/cube-core", "crates/cube-cli", "bindings/python"]
 resolver = "3"
+exclude = ["vendor/salsa20"]
 
 [workspace.package]
 version = "0.18.0"

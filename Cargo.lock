@@ -145,6 +145,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2f6c7dbe95a6ed67ad9f18e57daf93a2f034c524b99fd2b76d18fdfeb6660aa"
 dependencies = [
  "hybrid-array",
+ "zeroize",
 ]
 
 [[package]]
@@ -199,13 +200,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
+name = "chacha20"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06"
+dependencies = [
+ "cfg-if",
+ "cipher",
+ "cpufeatures",
+ "zeroize",
+]
+
+[[package]]
 name = "cipher"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8cf2a2c93cd704877c0858356ed03480ff301ee950b43f1cbe4573b088bfa6c"
 dependencies = [
+ "block-buffer",
  "crypto-common",
  "inout",
+ "zeroize",
 ]
 
 [[package]]
@@ -372,6 +387,7 @@ dependencies = [
  "aes",
  "base64",
  "bs58",
+ "chacha20",
  "crc",
  "crc32fast",
  "csv-core",
@@ -389,6 +405,7 @@ dependencies = [
  "quircs",
  "ripemd",
  "rustfft",
+ "salsa20",
  "schemars",
  "serde",
  "serde_json",
@@ -1295,6 +1312,14 @@ name = "rustversion"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
+
+[[package]]
+name = "salsa20"
+version = "0.11.0"
+dependencies = [
+ "cfg-if",
+ "cipher",
+]
 
 [[package]]
 name = "schemars"

@@ -20,6 +20,8 @@ SDK_BINDINGS = {
     "analysis.crib.verify": "crib_verify",
     "analysis.frequency.compare": "frequency_compare",
     "cipher.enigma": "enigma",
+    "cipher.aes.encrypt_blocks": "aes_encrypt_blocks",
+    "cipher.aes.decrypt_blocks": "aes_decrypt_blocks",
     "cipher.book.encode": "book_encode",
     "text.keyboard.coordinates.encode": "keyboard_coordinates_encode",
     "text.keyboard.coordinates.decode": "keyboard_coordinates_decode",

@@ -9724,5 +9724,41 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "10c05665f846a0f835b6fe758a87c14f2c7f4e214cb7661269c8aeb81bf2daf7",
+    "inputs": {
+      "input": {
+        "base64": "acTg2Gp7BDDYzbeAcLTFWg=="
+      }
+    },
+    "operation": "cipher.aes.decrypt_blocks",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "ABEiM0RVZneImaq7zN3u/w=="
+      }
+    },
+    "parameters": {
+      "key_hex": "000102030405060708090a0b0c0d0e0f"
+    }
+  },
+  {
+    "contract_sha256": "e2bb93f1924f33bcac82fbdacd0f3470a359f8b956edd07d9ab05060a4b8b098",
+    "inputs": {
+      "input": {
+        "base64": "ABEiM0RVZneImaq7zN3u/w=="
+      }
+    },
+    "operation": "cipher.aes.encrypt_blocks",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "acTg2Gp7BDDYzbeAcLTFWg=="
+      }
+    },
+    "parameters": {
+      "key_hex": "000102030405060708090a0b0c0d0e0f"
+    }
   }
 ]

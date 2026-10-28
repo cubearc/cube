@@ -2881,6 +2881,94 @@ Example:
 cube cipher --help
 ```
 
+## cipher.aes.decrypt_blocks
+
+Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message format.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key_hex"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher aes decrypt --key-file key.bin --file blocks.bin
+```
+
+## cipher.aes.encrypt_blocks
+
+Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message format.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key_hex"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher aes encrypt --key-file key.bin --file blocks.bin
+```
+
 ## cipher.affine.decode
 
 Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB.

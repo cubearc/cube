@@ -23,6 +23,12 @@ pub(crate) struct Input {
     file: Option<PathBuf>,
 }
 impl Input {
+    pub(crate) fn file_or_stdin(file: Option<PathBuf>) -> Self {
+        Self {
+            file,
+            ..Self::default()
+        }
+    }
     fn read_with_limit(
         self,
         limit: Option<usize>,

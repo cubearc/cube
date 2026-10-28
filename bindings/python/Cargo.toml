@@ -15,6 +15,7 @@ test = false
 doctest = false
 
 [dependencies]
+zeroize = "1.9"
 cube-core.workspace = true
 pyo3 = "0.30"
 serde_json = "1.0.154"

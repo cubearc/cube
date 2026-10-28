@@ -8,6 +8,7 @@ Use `cube ops describe <id>` to inspect your installed build.
 - [Encoding and decoding](topics/encoding-and-decoding.md)
 - [Position-aware transformations](topics/position-aware-transformations.md)
 - [Classical ciphers](topics/classical-ciphers.md)
+- [Raw AES blocks](topics/aes-blocks.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)
 - [Text operations](topics/text-operations.md)

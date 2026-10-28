@@ -18420,6 +18420,312 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.aes.decrypt_blocks",
+      "category": "ciphers",
+      "description": "Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message format.",
+      "example": "cube cipher aes decrypt --key-file key.bin --file blocks.bin",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624,
+                "pattern": "^(?:[A-Za-z0-9+/]{64})*(?:[A-Za-z0-9+/]{21}[AQgw]==|[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=)?$",
+                "x-cube-max-decoded-bytes": 16777216
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "key_hex"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624,
+                "pattern": "^(?:[A-Za-z0-9+/]{64})*(?:[A-Za-z0-9+/]{21}[AQgw]==|[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=)?$",
+                "x-cube-max-decoded-bytes": 16777216
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 16777216,
+        "max_output_bytes": 16777216,
+        "max_items": 1048576,
+        "max_work": 1048576,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [
+          "key_hex"
+        ],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.aes.encrypt_blocks",
+      "category": "ciphers",
+      "description": "Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message format.",
+      "example": "cube cipher aes encrypt --key-file key.bin --file blocks.bin",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624,
+                "pattern": "^(?:[A-Za-z0-9+/]{64})*(?:[A-Za-z0-9+/]{21}[AQgw]==|[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=)?$",
+                "x-cube-max-decoded-bytes": 16777216
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "key_hex"
+        ]
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 22369624,
+                "pattern": "^(?:[A-Za-z0-9+/]{64})*(?:[A-Za-z0-9+/]{21}[AQgw]==|[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=)?$",
+                "x-cube-max-decoded-bytes": 16777216
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 16777216,
+        "max_output_bytes": 16777216,
+        "max_items": 1048576,
+        "max_work": 1048576,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [
+          "key_hex"
+        ],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.affine.decode",
       "category": "ciphers",
       "description": "Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB.",

@@ -133,6 +133,14 @@ metadata identifies the Python entry point. The [Python API signatures](../../bi
 list functions, classes, arguments and return types. Use the
 [operation reference](../reference/operations.md) for formats and limits.
 
+## Raw AES blocks
+
+For raw AES interoperability, `cube.aes_encrypt_blocks(data, key)` and
+`cube.aes_decrypt_blocks(data, key)` accept and return `bytes`; the key contains
+16, 24 or 32 bytes. They do not authenticate data or define an encrypted message
+format. Caller-owned Python key/input/output objects remain in Python memory.
+See [raw AES blocks](../reference/topics/aes-blocks.md) for bounds and semantics.
+
 ## Errors
 
 ```python

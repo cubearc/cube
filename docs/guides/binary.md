@@ -40,6 +40,21 @@ it does not carry into the next unit.
 See [binary transformations](../reference/topics/binary-transformations.md)
 for supported widths, shifts and input limits.
 
+## Transform raw AES blocks
+
+For low-level interoperability with already specified raw AES blocks, provide a
+16-, 24- or 32-byte raw key file and an input file whose length is a multiple of
+16 bytes. This is unauthenticated and does not define a secure encryption format.
+
+```sh
+cube cipher aes encrypt --key-file key.bin --file blocks.bin > encrypted.bin
+cube cipher aes decrypt --key-file key.bin --file encrypted.bin > restored.bin
+```
+
+Use binary-preserving shell redirection; stdout contains bytes, not hexadecimal.
+No padding is added or removed. See [raw AES blocks](../reference/topics/aes-blocks.md)
+for limits, the public test vector and key privacy.
+
 <a id="cli"></a>
 <a id="fixed-width-binary-arithmetic"></a>
 <a id="python"></a>

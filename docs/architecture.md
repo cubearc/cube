@@ -1,5 +1,10 @@
 # Architecture
 
+`ciphers::aes_blocks` adapts the pinned RustCrypto backend for bounded raw blocks.
+The owning module declares typed key transport, private policy, named ports and
+real fixtures. CLI/PyO3/Play only adapt bytes. No mode, authenticated format, RNG,
+generic crypto registry or key-management framework is introduced.
+
 Historical Enigma simulation is a pure, bounded function in `ciphers::enigma`.
 Its typed settings and reports own validation, wiring and stepping; CLI, native
 Python and Play only transport them. Machine state is local to each invocation.

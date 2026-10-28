@@ -88,8 +88,8 @@ assert_eq!(brainfuck::execute("++++++++[>++++++++<-]>+.", &[], Limits::default()
 ```
 
 `Program::parse` allows reuse across `execute` and `report`; `compare` parses once
-for all selected widths. See the [CLI](cli.md#run-bounded-brainfuck) and
-[Python](python.md#bounded-brainfuck) guides for transport examples.
+for all selected widths. See the [CLI](guides/brainfuck.md#run-bounded-brainfuck) and
+[Python](guides/brainfuck.md#bounded-brainfuck) guides for transport examples.
 
 ## Compatibility decisions
 

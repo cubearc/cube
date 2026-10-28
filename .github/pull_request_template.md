@@ -7,6 +7,11 @@ Describe the problem and resulting behavior. Link a related issue when relevant.
 - [ ] Keep algorithms in cube-core; reuse them in the CLI and Python SDK.
 - [ ] Update public API documentation and affected examples.
 
+## Documentation impact
+
+Identify the canonical pages and examples affected, or explain why no documentation
+change is needed. Follow the shared authoring guide and update navigation when moving pages.
+
 ## Operation contracts
 
 For every operation added or changed:

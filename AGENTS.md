@@ -1,7 +1,7 @@
 # Cube repository instructions
 
-- `crates/cube-core` owns all algorithms, grouped into `encoding`, `ciphers`,
-  `hashing`, and `binary`. Keep byte transformations byte-oriented and errors typed.
+- `crates/cube-core` owns all algorithms in modules grouped by responsibility.
+  Keep byte transformations byte-oriented and errors typed.
 - `crates/cube-cli` adapts core operations to Clap commands.
   `bindings/python` adapts them to PyO3 functions with Python stubs and pytest tests.
   Never duplicate an algorithm in an interface or SDK.
@@ -19,6 +19,10 @@
   Rust APIs, CLI/Python examples, setup instructions, and brief architecture notes
   accurate. Explain internal-only changes in the commit or PR description.
   Recipes belong in `cubearc/recipes`.
+- Follow the [shared documentation guide](https://github.com/cubearc/docs/blob/main/content/contributing/documentation.md).
+  Keep README content focused on first use; update the canonical task/reference
+  page and affected examples instead of repeating a feature across guides.
+  Maintain `docs/SUMMARY.md` and preserve old links when moving content.
 - Every new or changed operation must have a complete canonical versioned contract:
   named input/output ports, typed parameter/result/error schemas, limits and privacy
   policy. Regenerate `contracts/v1/catalog.json` and `docs/reference/operations.md`,

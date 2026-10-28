@@ -45,3 +45,14 @@ Report vulnerabilities through [Security](SECURITY.md).
 
 Licensed under [Apache-2.0](LICENSE). Dependency notices are in
 [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES).
+
+## Support CubeArc
+
+Help support CubeArc development with a cryptocurrency donation.
+Send only the listed currency on its native network.
+
+| Currency | Donation address |
+| --- | --- |
+| <img src="assets/donations/btc.svg" width="24" height="24" alt="Bitcoin"> **Bitcoin (BTC)** | `bc1q7lw966p5069wr6z3czhdkua6e6ym52kgqe8qhr` |
+| <img src="assets/donations/eth.svg" width="24" height="24" alt="Ethereum"> **Ethereum (ETH)** | `0x0Da7C21897aDC34a0A91B1de802385d845D48858` |
+| <img src="assets/donations/zec.svg" width="24" height="24" alt="Zcash"> **Zcash (ZEC)** | `t1LbSr9K1v7Du5DVeQY9HxRJqB3cc7Pa9QP` |

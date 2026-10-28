@@ -1,11 +1,16 @@
 # Bounded Brainfuck
 
-The direct Rust, CLI and native Python interfaces share one strict interpreter.
-It executes only `> < + - . , [ ]` and accepts ASCII space, tab, CR and LF as
-separators. Other characters, including prose and other Unicode whitespace, fail
+Run a strict Brainfuck program with explicit input bytes and resource budgets.
+The direct Rust, CLI and native Python interfaces share the same behavior.
+
+## Program syntax
+
+The interpreter executes only `> < + - . , [ ]`. ASCII space, tab, CR and LF
+are accepted separators. Other characters, including prose and other Unicode whitespace, fail
 at their original UTF-8 byte offset. Every bracket is validated before execution,
-including unreachable code. Parsing is linear, iterative and stores command
-positions and paired jumps without retaining another source copy.
+including unreachable code. Unknown options and overflow-policy fields fail.
+
+## Cells and byte I/O
 
 Cells are unsigned wrapping integers: 8 bits by default, explicitly 16 or 32 bits.
 The tape always has 30,000 initially zero cells; the pointer starts at zero.
@@ -14,6 +19,8 @@ Movement outside 0..29999 fails without wrapping, growth or changing the pointer
 input-exhaustion error; `zero` and `unchanged` require explicit selection. `.` emits
 exactly the low eight bits, so `-.` emits ff at every width while diagnostics show
 255, 65535 or 4294967295. No wider word I/O is inferred.
+
+## Loops and instruction counts
 
 `[` on zero jumps after its paired `]`; otherwise it advances. `]` on nonzero
 jumps after its paired `[`; otherwise it advances. Every dispatched command costs
@@ -39,18 +46,14 @@ byte. Input failures do not consume a byte.
 | Comparison | 1..3 unique supported widths; ascending order |
 | Aggregate comparison dispatch / output / memory | 1,000,000 / 1 MiB / 8 MiB |
 
-MiB means 1,048,576 bytes. Limits never grow implicitly. The Core preflight
-conservatively charges source/input, actual instruction-vector capacity, parser
-stack, the fixed 120,000-byte u32 tape, output capacity, trace capacity, selected
-tape records and compact JSON serialization. The report bound is 4,096 bytes of
-framing/headroom plus four bytes per permitted output byte, 48 per selected cell
-and 320 per permitted trace record. A small actual output does not override a
-failed conservative preflight; lower the output budget to reduce the bound.
-Host CLI/CPython object and allocator overhead is outside the Core allocation
-model. Both transports stay bounded by the same cardinality/report ceilings.
+Caller budgets can lower the hard ceilings, including to zero where shown.
+The [conservative memory and report reservation](resource-accounting.md#brainfuck)
+can reject a request before execution. A smaller requested output allowance can
+reduce that reservation. See [resource limits](concepts/resource-limits.md) for
+units, scope and the difference between Core memory and process memory.
 
-Trace capacity is the smaller of the record limit and byte budget divided by
-Rust's `size_of::<TraceRecord>()`; ABI padding is therefore charged explicitly.
+## Traces
+
 Both trace limits must be zero or both positive. A byte budget smaller than one
 record is valid and produces an explicitly incomplete trace on the first dispatch.
 Trace exhaustion continues execution and sets `trace_complete=false`; it never
@@ -61,6 +64,8 @@ input-consumption flag. `cell_after` belongs to `pointer_after`. Disabled traces
 allocate no records. `completed` qualifies the execution separately from trace
 completeness.
 
+## Reports and completion
+
 Reports retain exact partial bytes, effective options/limits, stop reason, safe
 error context, instruction/input counts, final pointer and explicitly selected
 tape indices/values. Syntax/parameter/preflight errors occur before a report
@@ -69,11 +74,11 @@ Python `bytes` preserve all values. CLI report/comparison commands exit nonzero
 when any run is incomplete; Python report/comparison callers inspect the explicit
 completion flags. Budget stops identify `per_run`, `aggregate` or `both` scope.
 
-Comparisons share source/parser and use independent tapes with the same requested
-policies and per-run budgets. `per_run_limits` records those requests; each run
-shows effective budgets lowered by aggregate dispatch/output remainders. Retained
-outputs are reduced to their exact length. Conservative shared memory includes
-one live tape, retained outputs/reports and their compact JSON bound. Exhausted
+## Comparing cell widths
+
+Comparisons use independent tapes with the same requested policies and per-run
+budgets. `per_run_limits` records those requests; each run
+shows effective budgets lowered by aggregate dispatch/output remainders. Exhausted
 shared budgets may leave later runs with zero effective instruction/output budget.
 A zero-budget empty program still completes. `equal_completed_outputs` is null
 when any run is incomplete. Equal completed output bytes do not prove semantic
@@ -93,15 +98,7 @@ for all selected widths. See the [CLI](guides/brainfuck.md#run-bounded-brainfuck
 
 ## Compatibility decisions
 
-The strict profile and dispatch/EOF defaults follow the recorded design in
-[#121](https://github.com/cubearc/cube/issues/121); implementation is separately
-scoped by [#139](https://github.com/cubearc/cube/issues/139) and
-[#140](https://github.com/cubearc/cube/issues/140). Existing research history is
-preserved. Wrapping 8-bit execution remains the default when diagnostics or wider
-cells are selected. Nonwrapping/checked overflow is deferred: the accepted use case
-requires exact modular widths and supplies no nonwrapping compatibility fixture;
-adding another policy without such a consumer would create an unverified language
-profile. Unknown overflow/options fields fail. Ook notation, arbitrary widths,
-arbitrary precision, JIT, host filesystem/network/process effects, implicit stdin,
-interactive debugging and interpreter pipeline adapters are outside this profile.
-No fetched or historical SHA-256 program is used as a known-answer fixture.
+The supported profile has 8/16/32-bit wrapping cells, explicit input bytes and no
+pipeline adapter or host effects. Other widths, nonwrapping overflow and implicit
+stdin are unsupported. See the [profile and verification decisions](resource-accounting.md#profile-and-verification-decisions)
+for contributor rationale and design history.

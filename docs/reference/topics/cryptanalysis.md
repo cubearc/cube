@@ -6,6 +6,14 @@ Use the typed request schema in [operation contracts](../operations.md) for ever
 field. CLI commands read one JSON request from stdin or `--file`; native Python
 functions accept a dictionary and return a structured dictionary.
 
+## Resource stops
+
+Work limits, result limits, cancellation and search pruning can return an explicitly
+incomplete prefix. Exceeding the serialized report cap raises a resource error.
+The subsections below define the charged work and evidence retained in each case.
+Read [complete and partial results](../../concepts/results.md) before treating
+missing candidates as a negative conclusion.
+
 ## Language scoring
 
 `analysis.language.score` / `cube cryptanalysis score` / `cube.language_score`
@@ -36,7 +44,7 @@ printf '%s' '{"candidates":["B","A",""],"model":{"kind":"dictionary","entries":[
 
 The input texts collectively use at most 1 MiB, the model at most 1 MiB and 10000
 entries, and the candidate list at most 4096 items. `limits.max_work` can lower
-16 Mi scalar visits, and `limits.max_results` can lower 4096 retained results.
+16,777,216 scalar visits, and `limits.max_results` can lower 4096 retained results.
 Every source scalar, including filtered punctuation, consumes work; empty attempts
 consume one unit. A limit or cooperative Rust cancellation returns a marked prefix.
 Serialized reports are capped at 4 MiB; exceeding that ceiling is a typed resource
@@ -115,10 +123,13 @@ duplicate. Transposition reserves a conservative 12 scalar visits plus explicit
 readout/permutation items for every attempt. Exact plaintext deduplication retains
 all attempted key/configuration aliases, including duplicate list positions.
 Results sort by descending mean score, with first-observed candidate order for
-ties. All data and aliases count toward a conservative 3 MiB retention reserve
+ties.
+
+All data and aliases count toward a conservative 3 MiB retention reserve
 inside the 4 MiB report ceiling. Reaching a retention/work limit or cancellation
-marks a prefix incomplete; omitted candidates are not failures. No modern cipher
-or key material discovery is supported.
+marks a prefix incomplete; omitted candidates are not failures.
+
+No modern cipher or key material discovery is supported.
 
 ## Vigenere beam search
 
@@ -134,7 +145,7 @@ Final surviving keys decrypt the original text with the existing letter-only key
 advancement and are rescored on the complete plaintext. Reports retain original
 UTF-8 byte offsets of eligible letters, model identity, key aliases, total pruned
 states and final candidate scores. Every column extraction, transform, score and
-partial-key copy and bounded insertion comparison consumes work. The 16 Mi visit ceiling applies across all lengths,
+partial-key copy and bounded insertion comparison consumes work. The 16,777,216-visit ceiling applies across all lengths,
 including duplicate lengths and discarded partial keys. Any pruning sets
 `complete=false` and `stop=pruned` unless another limit or cancellation stopped the
 search first. A beam is never advertised as exhaustive when it discarded states.
@@ -178,10 +189,14 @@ identity, authenticity, or the rest of the plaintext.
 
 Limits are <=4096 candidates, <=1 MiB aggregate candidate/crib/ciphertext data,
 <=65536 crib positions and retained comparison records, <=16 Mi comparison/work
-visits, strict <=4 MiB JSON transport and <=4 MiB serialized report. Work/retention
+visits, strict <=4 MiB JSON transport and <=4 MiB serialized report.
+
+Work/retention
 or cancellation returns explicit partial evidence; a serialized report exceeding
 its hard ceiling is a typed resource error. Rust operations accept an optional
-atomic cancellation flag. Native Python accepts the existing optional keyword
+atomic cancellation flag.
+
+Native Python accepts the existing optional keyword
 `cancellation=CancellationToken()` and releases the GIL during analysis so another
 thread can cancel. CLI and native Python use the same typed Core calls;
 Play uses its existing killable worker and safe structured report viewer.

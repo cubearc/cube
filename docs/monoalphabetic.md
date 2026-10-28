@@ -44,7 +44,8 @@ unmapped scalar. `--unmapped preserve` / `unmapped="preserve"` leaves it untouch
 Preserve can lose invertibility when source and target sets differ: mapping `a`
 to `x` transforms `ax` to `xx`, whose inverse mapping yields `aa`. The bijection
 is guaranteed on the declared alphabet; disjoint preserved symbols also round-trip.
-ASCII Caesar, Atbash, Affine and their existing signed-shift rules are unchanged.
+For ASCII Caesar, Atbash, Affine and signed shifts, see
+[classical ciphers](reference/topics/classical-ciphers.md).
 
 Aristocrat and Patristocrat describe simple-substitution presentation conventions,
 with word divisions retained or removed. Prepare that formatting explicitly;
@@ -195,25 +196,43 @@ without imposing Polybius's unique-cell requirement.
 
 ## Bounds, errors and contracts
 
-| Profile | Input/data ceiling | Table ceiling | Output ceiling |
-| --- | --- | --- | --- |
-| Exact/keyword substitution | 1 MiB UTF-8 | 4096 scalars/alphabet; 64 KiB combined definition | 4 MiB UTF-8 |
-| ROT5/18/47 | 1 MiB UTF-8 | No table/key | Same UTF-8 byte length |
-| Homophonic | 1 MiB text or token JSON; 65536 source scalars/tokens | 4096 tokens total; 256 tokens/source; 256 UTF-8 bytes/token; 64 KiB JSON | 1 MiB text/serialized token JSON |
-| Digit grammars | 1 MiB UTF-8; 65536 logical tokens | 64 KiB JSON; explicit finite cells | 4 MiB text/alternatives JSON |
-| Grandpré | 1 MiB text/token JSON; 65536 tokens | At most 100 cells; 64 KiB JSON | 1 MiB text/serialized coordinates |
+All profiles accept at most 1 MiB of UTF-8 input. Homophonic and Grandpré also
+accept token JSON within that byte limit. Homophonic, digit grammars and Grandpré
+have a separate 65,536 source-scalar/logical-token ceiling.
 
-These are Core ceilings. CLI and native Python also validate their JSON
-transports. Play applies separate limits to complete named input, parameter and
-output JSON, where wrappers and escaping count; those interface ceilings can be
-stricter than the raw Core limits above.
+### Definition limits
+
+Each supplied definition is at most 64 KiB; substitution counts its combined
+alphabet definition. ROT profiles need no table or key.
+
+| Profile | Definition contents |
+| --- | --- |
+| Exact/keyword substitution | At most 4,096 scalars per alphabet |
+| Homophonic | At most 4,096 tokens total, 256 per source and 256 UTF-8 bytes per token |
+| Digit grammars | Explicit finite cells as defined by the profile |
+| Grandpré | At most 100 cells |
+
+### Output limits
+
+| Profile | Maximum |
+| --- | --- |
+| Exact/keyword substitution | 4 MiB UTF-8 |
+| ROT5/18/47 | Same UTF-8 byte length as input |
+| Homophonic | 1 MiB text or serialized token JSON |
+| Digit grammars | 4 MiB text or alternatives JSON |
+| Grandpré | 1 MiB text or serialized coordinates |
+
+These are Core ceilings. CLI and native Python validate JSON transport too;
+Play applies separate named-input, parameter and output budgets. See
+[Core and interface limits](concepts/resource-limits.md#core-and-interface-limits).
 
 Algorithms check input/table/token limits and output growth or serialized-byte
 budgets; escaped JSON bytes count. Work and temporary memory are bounded by these
 finite caps and mapping sizes, without a separate caller-adjustable work/heap
-counter. Caller-owned and Python/Play object overhead is separate. No operation
-reads files or uses a network in Core. No pipeline adapter or capture permission
-is granted by a descriptor.
+counter. Caller-owned and Python/Play object overhead is separate. Core does not
+read files or use a network. These operations have no pipeline adapters;
+[execution permissions](concepts/data.md#operations-pipelines-and-play) are separate
+from catalog discovery.
 
 Typed Core errors distinguish `invalid_parameter`, `invalid_input` and
 `resource_limit`, retaining the operation and parameter; source-text errors carry
@@ -221,4 +240,4 @@ original UTF-8 byte offsets. The CLI's `--json-errors` preserves empty stdout on
 failure. Existing module-owned discovery, native stubs and canonical contracts
 provide the stable IDs, exact parameter/result shapes, defaults and availability.
 The research-only names ROT8000, Malespín, Vatsyayana and historical codebooks are
-not advertised as newly implemented algorithms.
+research topics rather than available algorithms.

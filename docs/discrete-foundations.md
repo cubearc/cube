@@ -1,214 +1,244 @@
 # Lexical and discrete foundations
 
-All operations in this guide are implemented once in `cube-core`, with CLI and
-native Python adapters. Reports are structured results, not text-pipeline values.
-No new pipeline adapters, engine versions or recipe formats are introduced.
+Compare character inventories, count arrangements, evaluate Boolean formulas or
+query a finite graph. These operations return structured reports through direct
+Rust, CLI and native Python calls; they have no pipeline adapters.
+
+See [complete and partial results](concepts/results.md) for result interpretation
+and [resource limits](concepts/resource-limits.md) for budget terminology.
 
 ## Exact scalar multisets
 
-`text.multiset.compare` and `text.multiset.subtract` return the same full evidence:
-canonical source/requested inventories, source-minus-requested residuals,
-requested-minus-source deficits, `contains` and `equal`. Records contain one
-`scalar` and exact `count`, ordered by Unicode code point. Empty inputs and NUL
-are valid. Nothing is silently trimmed or clipped.
+`text.multiset.compare` and `text.multiset.subtract` return the same evidence:
 
-Preparation and counting are shared with `text.statistics`. Defaults preserve all
-Unicode scalars; explicit normalization is none/NFC/NFD/NFKC/NFKD, case handling
-is preserve/ASCII-lower and filtering is all/ASCII-letters. Normalization runs
-first, then ASCII case handling and filtering. This is not linguistic case folding,
-grapheme analysis or dictionary lookup. Reports include the normalization data
-version, matching existing statistics behavior.
+| Field | Meaning |
+| --- | --- |
+| `source`, `requested` | Complete prepared inventories |
+| `residual` | Source counts left after subtracting requested counts |
+| `deficits` | Requested counts missing from the source |
+| `contains` | Every requested count is available |
+| `equal` | Both inventories have identical counts |
+
+Each record has a `scalar` and exact `count`, ordered by Unicode code point.
+Empty inputs and NUL are valid. Preparation follows the
+[shared text profile](reference/text-preparation.md); defaults preserve every
+scalar without normalization, case changes or filtering.
 
 ```sh
 cube text multiset compare --text listen --requested silent
 cube text multiset subtract --text ab --requested aab
-cube text multiset compare --file source.txt --requested-file requested.txt --normalization NFC
 ```
 
-```python
-import cube
-assert cube.multiset_compare("listen", "silent")["equal"]
-r = cube.multiset_subtract("ab", "aab")
-assert not r["contains"]
-assert r["deficits"] == [{"scalar": "a", "count": 1}]
-assert cube.multiset_compare("é", "e\u0301", profile={"normalization": "NFC"})["equal"]
-```
+The first report has `equal=true`. The second has `contains=false` and a deficit
+of one `a`. Counts are always complete; a resource failure returns an error.
 
-Each raw input is <=1 MiB, normalized output <=8 MiB, prepared input <=1 Mi
-scalars and each inventory <=10,000 distinct scalars. Combined Core memory is
-<=32 MiB and compact reports <=8 MiB. Work <=16 Mi units charges raw bytes, every
-normalized scalar visited (including filtered-out scalars), retained scalar counts
-and conservative tree/merge visits. `limits`/CLI flags may lower `max_work`,
-`max_memory_bytes` and `max_report_bytes`. Core preflight charges vector growth,
-both counting trees, at most one live normalization temporary, retained records
-and the report buffer. Counts remain complete; a lower cap raises a typed error.
+### Multiset limits
+
+The shared profile defines the per-input preparation ceilings. The budgets below
+cover the complete operation, including **both inputs**; defaults equal the hard
+maxima.
+
+| Resource | Maximum |
+| --- | --- |
+| Combined Core memory | 32 MiB |
+| Compact JSON report | 8 MiB |
+| Work | 16,777,216 units |
+
+Work counts original bytes, every normalized scalar visited (including discarded
+scalars), retained scalars counted, and conservative counting-tree/merge visits.
+
+Use `max_work`, `max_memory_bytes` and `max_report_bytes` in `limits`, or CLI flags
+`--max-work`, `--max-memory-bytes` and `--max-report-bytes`, to lower the budgets.
+
+Memory and report bounds are checked before processing; see the
+[allocation accounting](resource-accounting.md#scalar-multisets) for included storage.
 
 ## Exact combinatorial counts
 
-`number.permutations` is P(n,k), `number.binomial` is C(n,k), and
-`number.multinomial` counts an explicit list of group sizes. They accept builtin
-unsigned integers with n<=128, k<=n, at most 128 groups and checked total<=128.
-Bool, float, signed text, prefixes and coercions are rejected. Zero-sized and
-empty groups are valid; empty selections count as one.
+| Operation | Result |
+| --- | --- |
+| `number.permutations` | Ordered selections, P(n,k) |
+| `number.binomial` | Unordered selections, C(n,k) |
+| `number.multinomial` | Arrangements for explicit group sizes |
 
-Results must fit u128. Overflow is a resource/range error, not saturation,
-wrapping or approximation. Cancellation happens before multiplication for binomial
-coefficients, so fitting results never fail just because a factorial would overflow.
-All C(128,k) fit, while 52! does not. No arrangements or general factorial API
-are generated.
+Inputs are builtin unsigned integers: `n` is at most 128, `k` is at most `n`,
+and there are at most 128 groups with a checked total of at most 128. Booleans,
+floats, signed text, prefixes and coercions are rejected. Zero-sized and empty
+groups are valid; an empty selection counts as one.
+
+Results must fit `u128`. Overflow is a resource/range error. Binomial cancellation
+happens before multiplication, so a fitting result does not fail because an
+intermediate factorial would overflow. All C(128,k) fit; 52! does not.
+These APIs return counts without generating arrangements or providing a general
+factorial operation.
 
 ```sh
 cube number permutations --n 5 --k 2
 # 20
-cube number binomial --n 128 --k 64 --json
 cube number multinomial --groups 2,1,1 --json
-cube number multinomial --groups '' --json
+```
+
+The multinomial count is 12. Rust's `Count.value` is `u128`; CLI count JSON uses
+decimal strings and Python returns exact builtin integers.
+
+### Count limits
+
+| Resource | Maximum or bound |
+| --- | --- |
+| Arithmetic and cancellation work | 65,536 operations |
+| Scratch memory | 64 KiB |
+| Count report bound | 128 bytes reserved |
+| Caller report cap | At most 4 KiB |
+
+Count limits expose `max_work` and `max_report_bytes`. The scalar count APIs
+retain no large scratch allocation.
+
+### Pascal rows
+
+Pascal takes a **row count**: zero returns no rows; 129 includes row indexes
+0 through 128. The recurrence uses the same exact binomial coefficients.
+
+```sh
 cube number pascal --rows 4
 ```
 
-```python
-assert cube.permutations(5, 2) == 20
-assert cube.binomial(5, 2) == 10
-assert cube.multinomial([2, 1, 1]) == 12
-assert cube.pascal_triangle(4) == [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]]
-```
+The report's `rows` field contains `[[1], [1,1], [1,2,1], [1,3,3,1]]`, with
+decimal strings in CLI JSON. Python returns the rows as exact integers.
 
-Rust `Count.value` is u128; CLI count JSON and Pascal rows use decimal strings.
-Python returns exact builtin ints and lists of ints. Count reports require a
-conservative 128-byte bound, with a caller cap <=4 KiB; arithmetic/cancellation
-work is <=65,536 charged operations and scratch <=64 KiB. Lower `max_work` and
-`max_report_bytes` through count limits. Scalar APIs retain no large scratch.
+| Resource | Maximum or bound |
+| --- | --- |
+| Rows | 129 |
+| Coefficients | 8,385 |
+| Work | 8,514 units: coefficients plus 129 row visits |
+| Active row scratch | Less than 4 KiB; excludes retained triangle |
+| Compact JSON output | 1 MiB |
 
-Pascal takes a **row count**: zero is empty, and 129 includes row indices 0..128.
-It uses the same exact binomial coefficients through the Pascal recurrence;
-its maximum 8,385 coefficients plus 129 row visits cost 8,514 work units.
-Retained triangle output is separate from <4 KiB active row scratch. A compact
-JSON cap <=1 MiB is preflighted as `128 + 4*rows + 42*coefficients` bytes.
-Python Pascal limits use `max_work`/`max_output_bytes`; CLI uses matching flags.
+The output reservation is `128 + 4*rows + 42*coefficients` bytes. Python Pascal
+limits use `max_work` and `max_output_bytes`; CLI uses matching hyphenated flags.
 
 ## Tagged Boolean formulas
 
-A model contains `variables` in caller order, one `formula` and optional `other`
-for comparison. Supported tagged forms are:
+A model declares `variables` in caller order, one `formula` and optional `other`
+for comparison. Both formulas use the same declared variable order.
 
-| Tag `op` | Required fields | Meaning |
-| --- | --- | --- |
-| `const` | Boolean `value` | Constant truth value |
-| `var` | `name` | Declared variable |
-| `not` | `operand` | Negation |
-| `and`, `or`, `xor` | `left`, `right` | Conjunction, disjunction, exclusive OR |
-| `implies` | `left`, `right` | False only for true -> false |
-| `iff` | `left`, `right` | Equal truth values |
+| Tag `op` | Fields and meaning |
+| --- | --- |
+| `const` | Boolean `value`; constant truth value |
+| `var` | `name`; declared variable |
+| `not` | `operand`; negation |
+| `and`, `or`, `xor` | `left`, `right`; AND, OR, exclusive OR |
+| `implies` | `left`, `right`; false only for true → false |
+| `iff` | `left`, `right`; equal truth values |
 
-There is no textual expression parser or natural-language evaluator. Unknown or
-duplicate fields, malformed arities, non-Boolean constants, duplicate declarations
-and undeclared variables fail. IDs are nonempty UTF-8 strings <=64 bytes.
-Evaluation requires exactly one `{name,value}` binding per declared variable;
-the assignment is a list, so duplicate names cannot be erased by map conversion.
-Both formulas share the declared union variable order.
+There is no textual expression parser. Unknown or duplicate fields, malformed
+arities, non-Boolean constants, duplicate variable declarations and undeclared
+variables fail. IDs are nonempty UTF-8 strings of at most 64 bytes.
+
+Evaluation takes a list with exactly one `{name,value}` binding per variable.
+Duplicate names remain detectable because the assignment is a list.
+Native Python accepts builtin model/list data or raw JSON text; text input also
+preserves duplicate-key rejection.
 
 ```sh
-cube logic boolean analyze --text '{"variables":["A"],"formula":{"op":"or","left":{"op":"var","name":"A"},"right":{"op":"not","operand":{"op":"var","name":"A"}}}}'
-cube logic boolean evaluate --text '{"variables":["A"],"formula":{"op":"var","name":"A"}}' --assignment '[{"name":"A","value":true}]'
+cube logic boolean analyze --text '{"variables":[],"formula":{"op":"const","value":true}}'
 ```
 
-```python
-model = {
-    "variables": ["A", "B"],
-    "formula": {"op": "implies", "left": {"op": "var", "name": "A"},
-                "right": {"op": "var", "name": "B"}},
-    "other": {"op": "var", "name": "B"},
-}
-r = cube.boolean_analyze(model, limits={"max_rows": 1})
-assert r["true_count"] == 3 and r["false_count"] == 1
-assert not r["listing_complete"]
-witness = r["relationship"]["implication_counterexample"]
-e = cube.boolean_evaluate(model, witness)
-assert e["value"] and not e["other_value"]
-```
+A constant-only model has one empty assignment, so this analysis counts one true
+assignment. For declared variables, analysis enumerates false before true, with
+the last variable changing fastest.
 
-Analysis enumerates false before true, with the last declared variable changing
-fastest. A constant-only model has one empty assignment. Counts, satisfiability,
-tautology and first true/false witnesses always reflect the **entire** bounded
-scan. A row cap affects listing only. Comparisons return implication/equivalence
-flags and first counterexamples; implication counterexamples have left=true and
-right=false. Work exhaustion raises a resource error before evaluation rather than
-returning an unsatisfiable/equivalent conclusion.
+### Boolean results
 
-Limits: <=12 variables, <=256 combined nodes across both trees, depth <=32,
-<=4,096 assignments, <=2 Mi charged node visits, <=1 MiB raw JSON and <=8 MiB each
-for conservative combined allocation and compact report bounds. Every formula
-node is evaluated, without short circuit; work is exactly combined nodes times
-assignments for analysis, or combined nodes for one evaluation. Row listing defaults
-to 32 and permits 0..4096. Report preflight uses actual ID escape/retention sizes;
-full tables with long IDs can exceed the report/memory budget and fail explicitly.
-Raw JSON parsing reuses duplicate-key/node/depth bounds before typed AST allocation.
-Native Python accepts builtin model/list data or raw JSON strings, preserving
-strict duplicate-key checks for string inputs.
+Counts, satisfiability, tautology and first true/false witnesses describe the
+**entire scan**. `max_rows` changes only the listed assignments. Comparisons also
+return implication/equivalence flags and first counterexamples; implication
+counterexamples have left=true and right=false.
+
+Work exhaustion raises a resource error before evaluation. It cannot produce an
+unsatisfiable or equivalent conclusion from an incomplete scan.
+
+### Boolean limits
+
+| Resource | Maximum or default |
+| --- | --- |
+| Variables | 12 |
+| Combined nodes across both formulas | 256 |
+| Formula depth | 32 |
+| Assignments | 4,096 |
+| Raw JSON | 1 MiB |
+| Combined allocation | 8 MiB |
+| Compact JSON report | 8 MiB |
+| Work | 2,097,152 node visits |
+| Listed assignments | Default 32; accepts 0 through 4,096 |
+
+Every node is evaluated without short circuit. Analysis charges combined nodes
+multiplied by assignments; single evaluation charges combined nodes.
+Long IDs can make a full listing exceed memory or report budgets even within
+the row cap. See [Boolean allocation accounting](resource-accounting.md#boolean-formulas).
 
 ## Explicit finite multigraphs
 
-A graph is `{vertices: [id,...], directed: bool, edges: [{id,from,to},...]}`.
-Vertex and edge IDs are unique, nonempty UTF-8 strings <=64 bytes. Endpoints must
-already exist; vertices/weights are never inferred. Edges are ordered and retain
-their identities, including loops and parallel edges. JSON duplicate/unknown fields
-and malformed types fail before a query. Typed bounded decoding avoids retaining
-a second untyped graph object tree.
+Supply `{vertices: [id,...], directed: bool, edges: [{id,from,to},...]}`.
+Vertex and edge IDs are unique nonempty UTF-8 strings of at most 64 bytes.
+Every endpoint must already exist. Vertices and weights are never inferred.
+Edges retain input order and identity, including loops and parallel edges.
+Duplicate/unknown JSON fields and malformed types fail before a query.
 
-```python
-graph = {
-    "vertices": ["a", "b", "isolated"], "directed": False,
-    "edges": [{"id": "x", "from": "a", "to": "b"},
-              {"id": "y", "from": "a", "to": "b"}],
-}
-assert cube.graph_components(graph)["result"] == [["a", "b"], ["isolated"]]
-assert cube.graph_shortest_path(graph, "a", "b")["result"]["edges"] == ["x"]
-assert cube.graph_cycle(graph)["result"]["edges"] == ["x", "y"]
-assert cube.graph_euler_trail(graph, start="b")["result"]["circuit"]
-```
+### Components, paths and cycles
 
-Save that explicit graph as `graph.json` for CLI use:
+| Query | Result and ordering |
+| --- | --- |
+| `components` | Ignores direction; includes isolates; components follow their first input vertex and members follow input order |
+| `shortest-path` | Unweighted shortest path with vertex and edge IDs; edge input order breaks ties |
+| `cycle` | Closed witness or null; preserves directed orientation |
+
+A path from a vertex to itself has zero edges. No route returns JSON null or
+Python `None`. In an undirected graph, one loop is a cycle, and two parallel edges
+form a two-edge cycle.
+
+### Euler trails
+
+An Euler trail covers every edge exactly once. Undirected non-isolated vertices
+must form one weak component and have zero or two odd degrees; a loop contributes
+degree two. If two vertices have odd degrees, either can be the start.
+
+A directed graph needs one vertex with out-degree minus in-degree equal to +1
+and one with -1, or all vertices balanced. Non-isolated vertices must be weakly
+connected. An open directed trail starts at the +1 vertex.
+
+An incompatible requested start is a parameter error. A degree or connectivity
+failure returns `exists=false` with a reason. Isolates do not invalidate the trail.
+With no edges, an existing requested start or the first input vertex gives a
+trivial circuit; with no vertices, the evidence is empty.
 
 ```sh
-cube graph components --file graph.json
-cube graph shortest-path --file graph.json --source a --target b
-cube graph cycle --file graph.json
-cube graph euler-trail --file graph.json --start b
+cube graph euler-trail --text '{"vertices":["a"],"directed":false,"edges":[]}'
 ```
 
-`components` ignores direction, includes isolates, orders components by their
-first input vertex and lists members in input order. `shortest-path` uses shared
-unweighted BFS, returning vertex and edge IDs; adjacency edge input order resolves
-route ties. Source=target is a zero-edge path; no route is JSON null/Python None.
-`cycle` returns a closed witness or null; an undirected loop is a one-edge cycle,
-and two parallel undirected edges form a two-edge cycle. Directed orientation is
-preserved. DFS is internal to cycle witnessing, not a general traversal API.
+This graph has a trivial circuit at `a` with no edges.
 
-`euler-trail` uses Hierholzer to cover every edge once. Undirected non-isolated
-vertices must form one weak component and have zero or two odd degrees; loops
-contribute degree two. With two odd vertices the start must be either odd vertex.
-Directed graphs need one +1 out-in and one -1 vertex, or all balanced, and weak
-connectivity of non-isolates. The directed open trail starts at the +1 vertex.
-A requested incompatible start is a parameter error. Degree/connectivity failure
-is an explicit `exists=false` result with a reason. Isolates do not invalidate an
-edge-covering trail. With no edges, an existing requested start or the first input
-vertex gives a trivial circuit; no vertices gives empty evidence.
+### Graph limits
 
-Graph ceilings: 4,096 vertices, 32,768 edges, 2 MiB raw/compact transport, 32 MiB
-combined allocation, 8 MiB complete compact report and 4 Mi charged visits per
-query. Reports include construction work (vertices + four visits per edge), query
-vertex/edge visits and conservative component-ordering comparisons. Preflight
-counts lookup/adjacency/traversal/report storage with actual ID encoding sizes.
-Lower `max_work`, `max_memory_bytes` and `max_report_bytes` through limits/flags;
-exhaustion raises a resource error, never no-route/no-cycle/no-trail evidence.
-Core allocation bounds do not include the baseline/object overhead of CPython or
-other host runtimes. Native object transport is separately prewalked before JSON
-encoding to cap cardinality, bytes and depth.
+| Resource | Maximum |
+| --- | --- |
+| Vertices | 4,096 |
+| Edges | 32,768 |
+| Raw or compact input transport | 2 MiB |
+| Combined allocation | 32 MiB |
+| Complete compact report | 8 MiB |
+| Work per query | 4,194,304 visits |
+
+Work includes construction (vertices plus four visits per edge), query visits
+and conservative component-ordering comparisons.
+
+Lower `max_work`,
+`max_memory_bytes` and `max_report_bytes` through limits or CLI flags.
+
+Exhaustion raises a resource error; it never returns no-path, no-cycle or no-trail
+evidence. See [graph allocation accounting](resource-accounting.md#finite-graphs).
 
 ## Finite-domain research boundary
 
-[#145's evaluation](research/finite-domain-evaluation.md) records a concrete
-feasibility decision, original independently checked fixtures, AC-3/backtracking
-measurements, dependency evidence and a proposed finite model/limit contract.
-It adds no production solver, dictionary, generic framework or placeholder
-operation. Boolean truth scans and graph traversals remain distinct algorithms.
+Finite-domain constraint solving remains
+[research](research/finite-domain-evaluation.md), with an evaluation of AC-3 and
+backtracking. It is not a production solver or an available dictionary service.

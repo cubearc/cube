@@ -36,7 +36,8 @@ Custom tables contain unique, exact scalar/`u64` pairs.
 | Source index | Less than 8 MiB |
 | Serialized report | 8 MiB |
 
-A report can reach its size limit before its record limit.
+A report can reach its size limit before its record limit; see
+[report and memory budgets](../../concepts/resource-limits.md#memory-and-report-size).
 All three operations are direct APIs without pipeline adapters.
 
 See [Inspect text and Unicode](../../guides/text-evidence.md).

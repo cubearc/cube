@@ -31,8 +31,10 @@ cube graph euler-trail --text '{"vertices":["a"],"directed":false,"edges":[]}'
 The formula is true for its single assignment. The graph has one vertex and no
 edges, so it has an empty Euler trail.
 
-For larger inputs, start with the [model definitions](../discrete-foundations.md)
-and [limits](../reference/topics/lexical-and-discrete-analysis.md).
+For larger inputs, read the [model definitions](../discrete-foundations.md) and
+the limits for [multisets](../discrete-foundations.md#multiset-limits),
+[Boolean formulas](../discrete-foundations.md#boolean-limits) or
+[graphs](../discrete-foundations.md#graph-limits).
 
 <a id="analyze-inventories-logic-and-graphs"></a>
 <a id="cli"></a>

@@ -2,6 +2,7 @@
 
 Inspect character properties or compare text by stored scalar position.
 The results describe code points, not rendered visibility or a security verdict.
+See [Unicode units and positions](../../concepts/text.md) for shared terminology.
 
 ## Character inspection
 
@@ -40,7 +41,8 @@ differences remain available.
 
 Counts and equality remain exact when the listing is truncated.
 `complete=false` identifies omitted records; exhausting a processing budget
-instead fails the operation.
+instead fails the operation. See [complete and partial results](../../concepts/results.md)
+for the distinction between listing and computation.
 
 | Resource | Default or maximum |
 | --- | --- |

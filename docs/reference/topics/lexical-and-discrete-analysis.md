@@ -10,5 +10,12 @@ multisets, tagged Boolean formulas, finite graphs, combinatorial counts and Pasc
 - Counts use `u128` in Rust, exact integers in Python, and decimal strings in CLI JSON.
 - Exhausting a work, memory or report limit is an error. It does not mean the mathematical problem is impossible.
 
+See [multiset limits](../../discrete-foundations.md#multiset-limits),
+[count limits](../../discrete-foundations.md#count-limits),
+[Boolean limits](../../discrete-foundations.md#boolean-limits) and
+[graph limits](../../discrete-foundations.md#graph-limits) for exact budgets.
+The shared [resource terminology](../../concepts/resource-limits.md) explains
+units and conservative estimates.
+
 Finite-domain constraint solving remains [research](../../research/finite-domain-evaluation.md),
 not an available solver.

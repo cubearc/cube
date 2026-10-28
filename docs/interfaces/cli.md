@@ -41,8 +41,7 @@ Unknown categories or identifiers are errors. `pipeline adapters` lists the same
 executable subset; parameter, type and resource validation still applies.
 
 Use `--json --metadata` for optional canonical names, qualified aliases, security
-limitations and exact profile/resource facts. Existing JSON is unchanged by
-default. Discovery output is capped at 1 MiB; `--max-output-bytes` can lower it.
+limitations and exact profile/resource facts. Metadata is omitted by default. Discovery output is capped at 1 MiB; `--max-output-bytes` can lower it.
 See [profile discovery](../discovery.md) for compatibility, bounds and examples.
 
 
@@ -152,3 +151,10 @@ Fields include `code`, `message`, `operation`, `parameter` and byte `offset`;
 unavailable context is `null`. Pipeline errors also identify the zero-based
 `step`. Codes include `invalid_input`, `invalid_parameter`, `unsupported_format`,
 `resource_limit`, `cancelled`, `io`, and CLI-only `invalid_usage`.
+
+## Resource limits and completion
+
+Use the operation's help and contract for exact flags, defaults and ceilings.
+[Resource limits](../concepts/resource-limits.md) explains units and reservations;
+[complete and partial results](../concepts/results.md) explains how to interpret
+budget errors and incomplete reports. Each operation defines its own policy.

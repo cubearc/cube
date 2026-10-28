@@ -1,11 +1,5 @@
 # Python SDK
 
-For historical machine messages, `cube.enigma(text, parameters)` returns a dict
-with `text`, `final_windows` and `trace`. To process consecutive in-memory chunks,
-replace `parameters["windows"]` with the preceding `final_windows`; keep all
-other settings. Reset to the original windows for reciprocal decoding. See
-[Enigma settings and limits](../reference/topics/enigma.md).
-
 Use Cube from Python scripts and applications. The native SDK calls the Rust
 engine directly, without starting a CLI process. It supports the operations in
 the [operation reference](../reference/operations.md).
@@ -133,6 +127,13 @@ metadata identifies the Python entry point. The [Python API signatures](../../bi
 list functions, classes, arguments and return types. Use the
 [operation reference](../reference/operations.md) for formats and limits.
 
+## Limits and report completeness
+
+Core limits apply in addition to Python transport checks. Read
+[resource budgets](../concepts/resource-limits.md) and
+[complete and partial results](../concepts/results.md) before interpreting a
+resource stop; the operation reference defines its fields and failure policy.
+
 ## Errors
 
 ```python
@@ -154,6 +155,14 @@ range raise `OverflowError`, such as a Caesar shift outside the signed 32-bit ra
 Those argument errors may have no operation-context attributes.
 
 <a id="python-interface"></a>
+
+## Continue an Enigma message
+
+For historical machine messages, `cube.enigma(text, parameters)` returns a dict
+with `text`, `final_windows` and `trace`. To process consecutive in-memory chunks,
+replace `parameters["windows"]` with the preceding `final_windows`; keep all
+other settings. Reset to the original windows for reciprocal decoding. See
+[Enigma settings and limits](../reference/topics/enigma.md).
 
 ## Raw stream transforms
 

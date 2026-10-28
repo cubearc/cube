@@ -1,8 +1,7 @@
 # Text operations
 
-Normalize, reverse, select, count or arrange Unicode text. Positions count Unicode
-scalars, not UTF-8 bytes or grapheme clusters. Combining marks and emoji sequences
-can span multiple positions.
+Normalize, reverse, select, count or arrange Unicode text. Positions count
+[Unicode scalars](../../concepts/text.md#bytes-scalars-and-visible-characters).
 
 ## Reversal and positional extraction
 
@@ -49,8 +48,8 @@ The SDK exposes the data version as `cube.UNICODE_VERSION`.
 ## Text statistics
 
 Statistics count scalars and overlapping n-grams, with `n` from 1 to 16.
-Defaults preserve case and all scalars without normalization. ASCII lowercasing
-and letter filtering are explicit options.
+Preparation uses the [shared text profile](../text-preparation.md): defaults
+preserve case and every scalar without normalization.
 
 | Result | Definition |
 | --- | --- |
@@ -68,8 +67,8 @@ not identify a cipher.
 | --- | --- |
 | UTF-8 input | 1 MiB |
 | Normalized text | 8 MiB |
-| Retained sample | 1 Mi scalars |
-| Work | 8 Mi scalar-window units |
+| Retained sample | 1,048,576 scalars |
+| Work | 8,388,608 scalar-window units |
 | Distinct character values / n-grams | 10,000 per map |
 
 Exceeding a resource cap fails. `max_results` bounds only the sorted listing;
@@ -99,11 +98,12 @@ control characters are preserved.
 | Separator | 4,096 bytes |
 | Results | 1,000 by default; hard limit 10,000 |
 | Aggregate raw and escaped JSONL output | 16 MiB |
-| Work | 32 Mi units |
+| Work | 33,554,432 units |
 
 Preflight checks count overflow, exact lengths and JSON escaping costs.
 Work includes validation, output bytes and fragment/concatenation units.
 Excessive plans fail before yielding a prefix. JSON transport limits still apply.
+See [resource limits](../../concepts/resource-limits.md) for units and reservations.
 
 ## Text grids
 

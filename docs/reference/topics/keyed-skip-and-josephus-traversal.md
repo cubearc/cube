@@ -38,9 +38,9 @@ Limits apply independently:
 | Serialized report | 8 MiB |
 | Work | 16,777,216 units |
 
-Source arrays use eight bytes per scalar; Josephus also uses four bytes per
-Fenwick-tree cell. A large ASCII input can therefore fail below the byte limit.
-Extraction releases these arrays before reusing the text-extraction routine.
+A large ASCII input can exceed scratch memory before reaching its byte limit.
+See [traversal allocation accounting](../../resource-accounting.md#scalar-traversal)
+for the storage bound.
 
 Work includes input validation, indexing, tree setup and visits, selections,
 extraction and a conservative serialization estimate. Interface options can lower

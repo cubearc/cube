@@ -621,7 +621,7 @@ fn structured_discovery_and_descriptions() {
     success(
         &["ops", "list", "--category", "binary"],
         b"",
-        b"binary xor\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\n",
+        b"binary xor\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\ncompose bytes\n",
     );
     for args in [
         vec!["ops", "list", "--category", "missing"],
@@ -664,7 +664,7 @@ fn optional_profile_discovery_preserves_json_and_enforces_complete_output_limits
             .iter()
             .filter(|d| d.get("metadata").is_some())
             .count(),
-        204
+        206
     );
     let args = [
         "ops",

@@ -2317,6 +2317,57 @@ Example:
 cube blockchain wif --expected-network mainnet --json < public-test-key.wif
 ```
 
+## bytes.concat
+
+Concatenate left bytes then right bytes exactly; empty operands valid, no implicit encoding/separator, combined <=1 MiB.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `bytes` |
+| Input | `right` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "base64": "AP8="
+    },
+    "right": {
+      "base64": "gAo="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose bytes --left-hex 00ff --right-hex 800a
+```
+
 ## cipher.adfgvx.decode
 
 Adfgvx: explicit bounded decode; see typed profile guide for conventions.
@@ -23180,6 +23231,62 @@ Example:
 
 ```sh
 cube text combinations --text '[["a","b"],["1","2"]]'
+```
+
+## text.concat
+
+Concatenate left text, one explicit separator and right text in order; preserve all Unicode/NUL/line endings, combined <=1 MiB.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `text` |
+| Input | `right` | `text` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": "é\u0000",
+    "right": "世界\r\n"
+  },
+  "parameters": {
+    "separator": " | "
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "separator": {
+      "description": "Included once between operands, including when either is empty; default empty text.",
+      "type": "string",
+      "default": "",
+      "maxLength": 1048576
+    }
+  },
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose text --left The --right key --separator ' '
 ```
 
 ## text.extract

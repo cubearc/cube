@@ -190,7 +190,7 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
             descriptor: DECLARATION,
             metadata: Some(crate::operations::metadata::Metadata {
                 schema_version: 1,
-                canonical_name: "UTF-8",
+                canonical_name: "Encode UTF-8",
                 family: "character_encodings",
                 aliases: &[],
                 security: crate::operations::metadata::Security {
@@ -248,7 +248,7 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
             descriptor: DECLARATION,
             metadata: Some(crate::operations::metadata::Metadata {
                 schema_version: 1,
-                canonical_name: "UTF-8",
+                canonical_name: "Decode UTF-8",
                 family: "character_encodings",
                 aliases: &[],
                 security: crate::operations::metadata::Security {

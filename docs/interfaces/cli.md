@@ -92,6 +92,8 @@ bindings; see [recipe files](../reference/topics/compose-operations.md#recipe-fi
 ## Choose an output format
 
 - Ordinary text results have a final newline.
+- `compose text` writes the exact joined text without adding a newline; see
+  [ordered composition](../reference/composition.md).
 - Decoding, XOR and `text to-bytes` default to hexadecimal plus a newline;
   `--output raw` writes exact bytes without a newline.
 - Inspection commands offer human-readable output and, where listed in help,

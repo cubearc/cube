@@ -15,6 +15,7 @@ mod boolean;
 mod candidates;
 mod combinations;
 mod combinatorics;
+mod composition;
 mod constants;
 mod cryptanalysis;
 mod digital;
@@ -581,6 +582,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     graph::register(module)?;
     esolang::register(module)?;
     textops::register(module)?;
+    composition::register(module)?;
     unicode::register(module)?;
     values::register(module)?;
     word::register(module)?;

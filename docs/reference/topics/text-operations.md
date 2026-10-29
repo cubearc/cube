@@ -13,6 +13,9 @@ Normalize, reverse, select, count or arrange Unicode text. Positions count
 
 No text is implicitly trimmed, clipped or normalized.
 
+For ordered operands and an explicit separator, see
+[ordered composition](../composition.md).
+
 ```sh
 cube text reverse --text 'Cube 🧊'
 # 🧊 ebuC

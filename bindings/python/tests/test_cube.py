@@ -306,6 +306,7 @@ def test_operation_discovery_uses_core_metadata():
         "binary.swap_endian",
         "binary.xor",
         "binary.xor_exact",
+        "bytes.concat",
     ]
     assert cube.operations("binary") == [
         cube.describe_operation(id) for id in binary_ids

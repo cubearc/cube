@@ -10109,5 +10109,39 @@
       "key": "MOBILE",
       "multiplier": 7
     }
+  },
+  {
+    "contract_sha256": "04844e55b82bd9c35e639c7a078f05f27bfc788ab621e17033e2b48d80855ae5",
+    "inputs": {
+      "left": "é\u0000",
+      "right": "世界\r\n"
+    },
+    "operation": "text.concat",
+    "operation_version": 1,
+    "outputs": {
+      "output": "é\u0000 | 世界\r\n"
+    },
+    "parameters": {
+      "separator": " | "
+    }
+  },
+  {
+    "contract_sha256": "14a6bb4205a2dd315a70db963c1029b134599e1ddef22dc0666b3b6bea5c8257",
+    "inputs": {
+      "left": {
+        "base64": "AP8="
+      },
+      "right": {
+        "base64": "gAo="
+      }
+    },
+    "operation": "bytes.concat",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "AP+ACg=="
+      }
+    },
+    "parameters": {}
   }
 ]

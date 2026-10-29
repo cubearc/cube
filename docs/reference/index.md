@@ -17,6 +17,7 @@ remain in each operation's reference.
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)
 - [Text operations](topics/text-operations.md)
+- [Ordered composition](composition.md)
 - [Shared text preparation profile](text-preparation.md)
 - [File forensics](topics/file-forensics.md)
 - [Image analysis and steganography](topics/image-analysis-and-steganography.md)

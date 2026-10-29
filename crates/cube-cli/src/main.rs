@@ -11,6 +11,7 @@ mod binarycmd;
 mod blockchaincmd;
 mod capture;
 mod combinatoricscmd;
+mod composecmd;
 mod constantcmd;
 mod digitalcmd;
 mod esolangcmd;
@@ -64,6 +65,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
+    /// Compose explicitly ordered text or byte operands with bounded Core operations
+    Compose {
+        #[command(subcommand)]
+        command: composecmd::Command,
+    },
     /// Bounded classical-cipher evidence using caller-owned models
     Cryptanalysis {
         #[command(subcommand)]
@@ -635,6 +641,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     let capture = capture::Target::requested(&cli)?;
     let mut output = io::stdout().lock();
     match cli.command {
+        Command::Compose { command } => composecmd::run(command, &mut output)?,
         Command::Cryptanalysis { command } => cryptanalysiscmd::run(command, &mut output)?,
         Command::Probability { command } => probabilitycmd::run(command, &mut output)?,
         Command::Graph { command } => graphcmd::run(command, &mut output)?,

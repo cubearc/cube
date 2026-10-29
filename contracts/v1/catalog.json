@@ -17568,6 +17568,166 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "bytes.concat",
+      "category": "binary",
+      "description": "Concatenate left bytes then right bytes exactly; empty operands valid, no implicit encoding/separator, combined <=1 MiB.",
+      "example": "cube compose bytes --left-hex 00ff --right-hex 800a",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "left",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        },
+        {
+          "name": "right",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": null,
+        "max_work": 1048576,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.adfgvx.decode",
       "category": "ciphers",
       "description": "Adfgvx: explicit bounded decode; see typed profile guide for conventions.",
@@ -89331,6 +89491,140 @@
         "max_output_bytes": null,
         "max_items": null,
         "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "text.concat",
+      "category": "text",
+      "description": "Concatenate left text, one explicit separator and right text in order; preserve all Unicode/NUL/line endings, combined <=1 MiB.",
+      "example": "cube compose text --left The --right key --separator ' '",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "left",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "description": "Exact Unicode text. Combined UTF-8 operand/separator bytes are also bounded by the operation.",
+            "type": "string",
+            "maxLength": 1048576
+          }
+        },
+        {
+          "name": "right",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "description": "Exact Unicode text. Combined UTF-8 operand/separator bytes are also bounded by the operation.",
+            "type": "string",
+            "maxLength": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "separator": {
+            "description": "Included once between operands, including when either is empty; default empty text.",
+            "type": "string",
+            "default": "",
+            "maxLength": 1048576
+          }
+        },
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "description": "Exact Unicode text. Combined UTF-8 operand/separator bytes are also bounded by the operation.",
+            "type": "string",
+            "maxLength": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": null,
+        "max_work": 1048576,
         "max_memory_bytes": null
       },
       "policy": {

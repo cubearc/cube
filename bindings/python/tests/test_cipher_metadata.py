@@ -11,7 +11,7 @@ def test_optional_profiles_preserve_legacy_descriptors_and_real_availability():
     legacy = cube.operations()
     extended = cube.operations(include_metadata=True)
     adapters = {a["operation"]: a for a in cube.pipeline_adapters()["adapters"]}
-    assert len(legacy) == len(extended) == 320
+    assert len(legacy) == len(extended) == 322
     annotated = 0
     for old, new in zip(legacy, extended, strict=True):
         assert "metadata" not in old
@@ -37,7 +37,7 @@ def test_optional_profiles_preserve_legacy_descriptors_and_real_availability():
         for alias in profile["aliases"]:
             with pytest.raises(ValueError, match="unknown operation ID"):
                 cube.describe_operation(alias["name"], include_metadata=True)
-    assert annotated == 204
+    assert annotated == 206
     assert "metadata" not in cube.describe_operation(
         "file.info.inspect", include_metadata=True
     )

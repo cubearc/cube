@@ -82,4 +82,7 @@ Booleans and floats. `image_dimensions` takes a `cube.Image`.
 
 These are direct Core operations with [named contracts](operations.md), not
 additional adapters for the [linear Core pipeline](../guides/pipelines.md).
+The CLI's `maximum --values` parses a JSON document first: the array root counts
+as one value, leaving room for at most **4,095 integers** under the document's
+4,096-value ceiling. Direct Rust/Python `maximum` calls accept 4,096 integers.
 Play applies its smaller per-Run input/output budgets independently.

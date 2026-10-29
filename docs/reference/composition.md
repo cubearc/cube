@@ -54,3 +54,5 @@ binds each operand to a chosen node output through its own tested native adapter
 See the generated [operation contracts](operations.md) for complete named schemas
 and the [text reference](topics/text-operations.md#normalization-and-utf-8) for
 explicit UTF-8 conversion.
+
+For structured values and arithmetic, see [fields and exact integer composition](structured-composition.md).

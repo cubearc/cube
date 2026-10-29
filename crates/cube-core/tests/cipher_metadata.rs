@@ -81,8 +81,17 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
                 | "binary"
                 | "blockchain"
                 | "symbols"
-        ) || d.id == "text.concat"
-            || d.id.starts_with("text.utf8.")
+        ) || matches!(
+            d.id,
+            "text.concat"
+                | "text.integer"
+                | "json.parse"
+                | "json.select"
+                | "json.text"
+                | "number.maximum"
+                | "number.add"
+                | "image.dimensions"
+        ) || d.id.starts_with("text.utf8.")
             || d.id.starts_with("text.keyboard.coordinates.")
             || d.id.starts_with("text.keyboard.shift.");
         assert_eq!(d.metadata().is_some(), expected, "{}", d.id);
@@ -125,8 +134,8 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 206);
-    assert_eq!(ids.len(), 322);
+    assert_eq!(annotated, 213);
+    assert_eq!(ids.len(), 329);
     assert_eq!(cube_core::pipeline::supported_adapters().len(), 53);
 }
 #[test]

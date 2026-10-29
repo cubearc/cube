@@ -18474,6 +18474,62 @@ Example:
 cube image inspect sample.png --json
 ```
 
+## image.dimensions
+
+Read exact image width and height in pixels as an ordered dimensions array; no resizing or OCR.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 3,
+      "palette": [],
+      "samples": {
+        "base64": "AAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube image dimensions sample.png
+```
+
 ## image.encode
 
 Encode exact PNG8 samples, preserving palette/tRNS and dropping other metadata.
@@ -20357,6 +20413,159 @@ Example:
 cube investigate triage sample.bin --json
 ```
 
+## json.parse
+
+Parse bounded inert JSON; reject duplicate keys, trailing data and excessive bytes/depth/nodes.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "{\"dimensions\":[3,5],\"caption\":\"é\",\"absent\":null}"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose parse-json --text '{"dimensions":[3,5]}'
+```
+
+## json.select
+
+Select a field or array index by JSON Pointer, preserving its JSON type and distinguishing null from an absent field.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `json` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "a/b": {
+        "~key": [
+          null,
+          {
+            "size": 7
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "pointer": "/a~1b/~0key/1/size"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "pointer": {
+      "description": "JSON Pointer: / separates tokens; ~0 means ~ and ~1 means /. Empty selects the root.",
+      "type": "string",
+      "default": "",
+      "maxLength": 1024
+    }
+  },
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose select --json '{"dimensions":[3,5]}' --pointer /dimensions
+```
+
+## json.text
+
+Use an actual JSON string as text; reject numbers, null, arrays and objects without coercion.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `json` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "é\u0000世界\r\n"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose json-text --json '"Gur xrl."'
+```
+
 ## logic.boolean.analyze
 
 Full bounded truth scan, exact counts/witnesses and optional implication/equivalence comparison; limited row listing is explicitly qualified.
@@ -20546,6 +20755,53 @@ Example:
 
 ```sh
 cube logic boolean evaluate --text '{"variables":[],"formula":{"op":"const","value":true}}' --assignment '[]'
+```
+
+## number.add
+
+Add two exact signed JSON integers; reject invalid operands and sums outside the exact range without coercion or wrapping.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `json` |
+| Input | `right` | `json` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": 5,
+    "right": 7
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose add --left 5 --right 7
 ```
 
 ## number.alphabet.convert
@@ -20994,6 +21250,55 @@ Example:
 
 ```sh
 cube number gcd --a 48 --b 18
+```
+
+## number.maximum
+
+Find the maximum of 1..4096 exact signed JSON integers; empty lists, non-integers and values outside the exact range fail.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `json` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": [
+      -7,
+      5,
+      3
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose maximum --values '[3,5]'
 ```
 
 ## number.mod_inverse
@@ -23618,6 +23923,51 @@ Example:
 
 ```sh
 cube text grid --text ABCDEF --width 3
+```
+
+## text.integer
+
+Parse exact signed decimal integer text; reject spaces, plus signs, leading zeros, fractions, exponents and out-of-range values.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "-17"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube compose integer --text 7
 ```
 
 ## text.josephus.extract

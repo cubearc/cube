@@ -10,6 +10,13 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "json.parse": "parse_json",
+    "json.select": "select_field",
+    "json.text": "json_text",
+    "text.integer": "parse_integer",
+    "number.maximum": "maximum",
+    "number.add": "add_integers",
+    "image.dimensions": "image_dimensions",
     "text.concat": "concat_text",
     "bytes.concat": "concat_bytes",
     "analysis.language.score": "language_score",

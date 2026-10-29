@@ -176,6 +176,8 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Read exact width/height facts for numeric composition
+    Dimensions { path: PathBuf },
     /// Exact overlap moments at explicit spatial lags (JSON)
     Autocorrelation(spatial::Options),
     /// Exchange complete bounded exact-sample CSV v1 grids
@@ -451,6 +453,11 @@ pub(crate) fn run(
     capture: Option<&crate::capture::Target>,
 ) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::Dimensions { path } => writeln!(
+            output,
+            "{}",
+            serde_json::to_string(&image::dimensions::inspect(&Image::open(&path)?))?
+        )?,
         ImageCommand::Autocorrelation(args) => spatial::run(args, output)?,
         ImageCommand::Csv { command } => csv::run(command, output)?,
         ImageCommand::Pairs(args) => pairs::run(args, output)?,

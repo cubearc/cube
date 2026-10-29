@@ -6,6 +6,7 @@
 
 pub mod analyze;
 pub mod bitwise;
+pub mod dimensions;
 pub use bitwise::BitwiseOperation;
 pub mod colors;
 pub mod csv;

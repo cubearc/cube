@@ -1,5 +1,6 @@
 //! Ordered, bounded composition without implicit encoding or normalization.
 mod contracts;
+pub mod structured;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use contracts::CONTRACTS;
 

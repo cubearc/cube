@@ -52,3 +52,5 @@ remain in each operation's reference.
 - [Lexical, Boolean and graph models](../discrete-foundations.md)
 - [Puzzle analysis](../puzzle-analysis.md)
 - [Profile metadata](../discovery.md)
+
+Use [fields and integer composition](structured-composition.md) to select JSON values, parse numeric text, inspect image dimensions and add exact integers.

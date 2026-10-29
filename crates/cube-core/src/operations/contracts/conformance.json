@@ -10143,5 +10143,128 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "66c132363ee6e5831735dddc8c54fcf7ac2174caf24f9b9ebea8b3d9ef3b96ff",
+    "inputs": {
+      "input": "{\"dimensions\":[3,5],\"caption\":\"é\",\"absent\":null}"
+    },
+    "operation": "json.parse",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "absent": null,
+        "caption": "é",
+        "dimensions": [
+          3,
+          5
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "6034511f3b34a547726786db4feea1c4e2ac551ce7bfc73a47e4c44be22a52fe",
+    "inputs": {
+      "input": {
+        "a/b": {
+          "~key": [
+            null,
+            {
+              "size": 7
+            }
+          ]
+        }
+      }
+    },
+    "operation": "json.select",
+    "operation_version": 1,
+    "outputs": {
+      "output": 7
+    },
+    "parameters": {
+      "pointer": "/a~1b/~0key/1/size"
+    }
+  },
+  {
+    "contract_sha256": "7530242051f0ba48a6712150ae45df9ae09d7c6a18e26619aaf90eb628c9ea2e",
+    "inputs": {
+      "input": "é\u0000世界\r\n"
+    },
+    "operation": "json.text",
+    "operation_version": 1,
+    "outputs": {
+      "output": "é\u0000世界\r\n"
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "f767eb6bcb6c91adb0e078ba8ed92922e7bd7ee60d3b7aaf847b8b8189b88b34",
+    "inputs": {
+      "input": "-17"
+    },
+    "operation": "text.integer",
+    "operation_version": 1,
+    "outputs": {
+      "output": -17
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "5d375550fe0c455c8ce9d5c17a2ebce04164575491becb4d9c6e814ebc5e8fbf",
+    "inputs": {
+      "input": [
+        -7,
+        5,
+        3
+      ]
+    },
+    "operation": "number.maximum",
+    "operation_version": 1,
+    "outputs": {
+      "output": 5
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3115bb66b667ab254ae4ee46f753cf5ebc22c4bb44bf9c462a37fd695fcc53b7",
+    "inputs": {
+      "left": 5,
+      "right": 7
+    },
+    "operation": "number.add",
+    "operation_version": 1,
+    "outputs": {
+      "output": 12
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3141a515ba0721a1e6f6f9b3c1dccb52600a7fadd121f4654bfdaec18de5453f",
+    "inputs": {
+      "input": {
+        "color_model": "rgb",
+        "height": 3,
+        "palette": [],
+        "samples": {
+          "base64": "AAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "transparency": {
+          "base64": ""
+        },
+        "width": 2
+      }
+    },
+    "operation": "image.dimensions",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "dimensions": [
+          2,
+          3
+        ]
+      }
+    },
+    "parameters": {}
   }
 ]

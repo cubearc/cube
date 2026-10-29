@@ -37,6 +37,7 @@ mod puzzlecodes;
 mod puzzles;
 mod recipe;
 mod stream;
+mod structured_composition;
 mod textops;
 mod traversal;
 mod unicode;
@@ -583,6 +584,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     esolang::register(module)?;
     textops::register(module)?;
     composition::register(module)?;
+    structured_composition::register(module)?;
     unicode::register(module)?;
     values::register(module)?;
     word::register(module)?;

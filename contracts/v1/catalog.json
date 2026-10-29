@@ -55026,6 +55026,214 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "image.dimensions",
+      "category": "image",
+      "description": "Read exact image width and height in pixels as an ordered dimensions array; no resizing or OCR.",
+      "example": "cube image dimensions sample.png",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "image.samples",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Image",
+            "type": "object",
+            "properties": {
+              "color_model": {
+                "$ref": "#/$defs/ColorModel"
+              },
+              "height": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              },
+              "palette": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 255,
+                    "minimum": 0
+                  },
+                  "maxItems": 3,
+                  "minItems": 3
+                }
+              },
+              "samples": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "transparency": {
+                "$ref": "#/$defs/Bytes"
+              },
+              "width": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 4294967295,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "width",
+              "height",
+              "color_model",
+              "samples",
+              "palette",
+              "transparency"
+            ],
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              },
+              "ColorModel": {
+                "description": "Supported physical sample layouts; indexed samples are palette indices.",
+                "type": "string",
+                "enum": [
+                  "gray",
+                  "gray_alpha",
+                  "rgb",
+                  "rgba",
+                  "indexed"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Dimensions",
+            "description": "Exact width and height of a decoded image.",
+            "type": "object",
+            "properties": {
+              "dimensions": {
+                "description": "Exact [width, height] in pixels; neither value is inferred from a preview.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 4294967295,
+                  "minimum": 0
+                },
+                "maxItems": 2,
+                "minItems": 2
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "dimensions"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": null,
+        "max_output_bytes": 64,
+        "max_items": 2,
+        "max_work": 2,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "image.encode",
       "category": "image",
       "description": "Encode exact PNG8 samples, preserving palette/tRNS and dropping other metadata.",
@@ -73631,6 +73839,494 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "json.parse",
+      "category": "text",
+      "description": "Parse bounded inert JSON; reject duplicate keys, trailing data and excessive bytes/depth/nodes.",
+      "example": "cube compose parse-json --text '{\"dimensions\":[3,5]}'",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 262144
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/value",
+            "$defs": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 262144
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxItems": 4096
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxProperties": 4096
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 262144,
+        "max_output_bytes": 262144,
+        "max_items": 4096,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "json.select",
+      "category": "text",
+      "description": "Select a field or array index by JSON Pointer, preserving its JSON type and distinguishing null from an absent field.",
+      "example": "cube compose select --json '{\"dimensions\":[3,5]}' --pointer /dimensions",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/value",
+            "$defs": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 262144
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxItems": 4096
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxProperties": 4096
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "pointer": {
+            "description": "JSON Pointer: / separates tokens; ~0 means ~ and ~1 means /. Empty selects the root.",
+            "type": "string",
+            "default": "",
+            "maxLength": 1024
+          }
+        },
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/value",
+            "$defs": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 262144
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxItems": 4096
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxProperties": 4096
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 262144,
+        "max_output_bytes": 262144,
+        "max_items": 4096,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "json.text",
+      "category": "text",
+      "description": "Use an actual JSON string as text; reject numbers, null, arrays and objects without coercion.",
+      "example": "cube compose json-text --json '\"Gur xrl.\"'",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/value",
+            "$defs": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 9007199254740991,
+                    "minimum": -9007199254740991
+                  },
+                  {
+                    "type": "string",
+                    "maxLength": 262144
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxItems": 4096
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "maxProperties": 4096
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 262144
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 262144,
+        "max_output_bytes": 262144,
+        "max_items": 4096,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "logic.boolean.analyze",
       "category": "logic",
       "description": "Full bounded truth scan, exact counts/witnesses and optional implication/equivalence comparison; limited row listing is explicitly qualified.",
@@ -74752,6 +75448,133 @@
         "max_input_bytes": null,
         "max_output_bytes": null,
         "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "number.add",
+      "category": "numbers",
+      "description": "Add two exact signed JSON integers; reject invalid operands and sums outside the exact range without coercion or wrapping.",
+      "example": "cube compose add --left 5 --right 7",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "left",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991
+          }
+        },
+        {
+          "name": "right",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 262144,
+        "max_output_bytes": 262144,
+        "max_items": 4096,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -76014,6 +76837,128 @@
         "max_input_bytes": null,
         "max_output_bytes": null,
         "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "number.maximum",
+      "category": "numbers",
+      "description": "Find the maximum of 1..4096 exact signed JSON integers; empty lists, non-integers and values outside the exact range fail.",
+      "example": "cube compose maximum --values '[3,5]'",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "maximum": 9007199254740991,
+              "minimum": -9007199254740991
+            },
+            "maxItems": 4096,
+            "minItems": 1
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 262144,
+        "max_output_bytes": 262144,
+        "max_items": 4096,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -90431,6 +91376,123 @@
         "max_input_bytes": 1048576,
         "max_output_bytes": null,
         "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "text.integer",
+      "category": "numbers",
+      "description": "Parse exact signed decimal integer text; reject spaces, plus signs, leading zeros, fractions, exponents and out-of-range values.",
+      "example": "cube compose integer --text 7",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 17,
+            "pattern": "^-?(0|[1-9][0-9]*)$"
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "maximum": 9007199254740991,
+            "minimum": -9007199254740991
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 262144,
+        "max_output_bytes": 262144,
+        "max_items": 4096,
         "max_work": null,
         "max_memory_bytes": null
       },

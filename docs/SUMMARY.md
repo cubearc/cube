@@ -51,6 +51,7 @@
     - [Binary transformations](reference/topics/binary-transformations.md)
     - [Text operations](reference/topics/text-operations.md)
     - [Ordered composition](reference/composition.md)
+    - [Fields and integer composition](reference/structured-composition.md)
     - [Shared text preparation](reference/text-preparation.md)
     - [File forensics](reference/topics/file-forensics.md)
     - [Image analysis and steganography](reference/topics/image-analysis-and-steganography.md)

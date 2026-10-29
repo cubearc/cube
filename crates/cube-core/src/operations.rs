@@ -467,6 +467,8 @@ const MODULES: &[Module] = &[
     crate::ciphers::aes_blocks::MODULE,
     crate::ciphers::stream::MODULE,
     crate::composition::MODULE,
+    crate::composition::structured::MODULE,
+    crate::image::dimensions::MODULE,
 ];
 pub fn catalog() -> Vec<&'static Descriptor> {
     MODULES

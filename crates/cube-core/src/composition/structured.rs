@@ -1,5 +1,6 @@
 //! Bounded JSON selection and exact integer composition; no expression evaluator.
 mod contracts;
+pub(crate) mod execution;
 mod metadata;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use metadata::MODULE;

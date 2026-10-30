@@ -1,5 +1,6 @@
 //! Cryptographic hashes and non-cryptographic checksums through maintained crates.
 
+pub(crate) mod execution;
 use sha2::{Digest, Sha256, Sha512};
 pub mod protocol;
 pub use protocol::{keccak256, ripemd160};
@@ -461,7 +462,7 @@ const PROFILED: [crate::operations::metadata::Entry; 7] = [
 pub const OPERATIONS: &[crate::operations::Descriptor] =
     &crate::operations::metadata::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_executors(execution::ENTRIES);
 
 #[cfg(test)]
 mod tests {

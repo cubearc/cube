@@ -1,4 +1,4 @@
-//! Static operation metadata; direct Rust functions remain the execution API.
+//! Operation metadata and explicit, bounded named-port executors.
 //!
 //! IDs and type names are compatibility contracts. Add fields compatibly and do
 //! not reuse an ID for different semantics. Categories are strings, so extending
@@ -6,6 +6,7 @@
 
 pub mod contracts;
 mod discovery;
+pub mod execution;
 pub mod metadata;
 pub use discovery::{
     DiscoveryFormat, DiscoveryRequest, MAX_DISCOVERY_BYTES, MAX_DISCOVERY_QUERY_BYTES,
@@ -229,14 +230,18 @@ pub struct ContractDiscovery<'a> {
     pub profiled: ProfiledDiscovery<'a>,
     pub contract: contracts::Contract,
 }
-/// Only the existing catalog registration combines descriptor slices and their
-/// optional owning-module annotations. This is not an execution registry.
+/// Owning modules register metadata, contracts and optional pure executors together.
 pub(crate) struct Module {
     descriptors: &'static [Descriptor],
     profiles: &'static [metadata::Entry],
     contracts: &'static [contracts::Entry],
+    executors: &'static [execution::Entry],
 }
 impl Module {
+    pub(crate) const fn with_executors(mut self, executors: &'static [execution::Entry]) -> Self {
+        self.executors = executors;
+        self
+    }
     pub(crate) const fn with_contracts(mut self, contracts: &'static [contracts::Entry]) -> Self {
         self.contracts = contracts;
         self
@@ -246,6 +251,7 @@ impl Module {
             descriptors,
             profiles: &[],
             contracts: &[],
+            executors: &[],
         }
     }
     pub(crate) const fn profiled(
@@ -256,6 +262,7 @@ impl Module {
             descriptors,
             profiles,
             contracts: &[],
+            executors: &[],
         }
     }
 }
@@ -368,7 +375,8 @@ const MODULES: &[Module] = &[
     crate::binary::MODULE,
     crate::binary::transform::MODULE,
     Module::plain(crate::esolang::brainfuck::OPERATIONS)
-        .with_contracts(crate::esolang::brainfuck::CONTRACTS),
+        .with_contracts(crate::esolang::brainfuck::CONTRACTS)
+        .with_executors(crate::esolang::brainfuck::execution::ENTRIES),
     Module::plain(crate::forensics::OPERATIONS),
     Module::plain(crate::forensics::signatures::OPERATIONS),
     Module::plain(crate::forensics::inspect::OPERATIONS),
@@ -386,7 +394,8 @@ const MODULES: &[Module] = &[
     Module::plain(crate::image::pairs::OPERATIONS),
     Module::plain(crate::image::qr::OPERATIONS).with_contracts(crate::image::qr::CONTRACTS),
     Module::plain(crate::image::analyze::OPERATIONS)
-        .with_contracts(crate::image::analyze::CONTRACTS),
+        .with_contracts(crate::image::analyze::CONTRACTS)
+        .with_executors(crate::image::execution::ENTRIES),
     Module::plain(crate::image::bitwise::OPERATIONS),
     Module::plain(crate::image::transform::OPERATIONS),
     Module::plain(crate::image::bits::OPERATIONS),

@@ -7,6 +7,7 @@
 pub mod analyze;
 pub mod bitwise;
 pub mod dimensions;
+pub(crate) mod execution;
 pub use bitwise::BitwiseOperation;
 pub mod colors;
 pub mod csv;

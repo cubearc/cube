@@ -408,3 +408,32 @@ adding only the small 3x3x3 helper required by Trifid. Their module-owned rows
 project descriptors, historical metadata and typed canonical contracts. Native
 SDK/CLI/Play are thin adapters; named padding/source evidence survives the full
 path. See [exact profiles and examples](cipher-permutations.md).
+
+## Named-port host execution
+
+`operations::execution` is an opt-in registry for pure transformations of supplied
+logical values. Each owning `Module` registers its executor beside its descriptor
+and contract. Algorithms remain ordinary Rust functions; the registration adapts
+named values without a second implementation. A descriptor or CLI command alone
+never becomes executable.
+
+A registration declares each input/output representation (`text`, `bytes`,
+`byte_array`, `json` or `image_samples`). Discovery returns the canonical contract,
+these capabilities and effective parameter defaults for the host's budget.
+`execute` checks the installed version, named inputs, parameters, resource policy
+and complete named outputs. Optional owner preflight validates input-dependent
+conditions. No filename, network or subprocess authority is accepted.
+
+Play consumes this registry rather than selecting operation IDs. Adding an
+executor for an existing representation requires changes in its Core owner and
+real conformance tests; it requires no Play dispatcher or form case. A different
+representation, retention rule or host capability needs explicit host support
+before it can be offered. Image pixel export is one registration: clockwise and
+counterclockwise spirals are traversal parameter values, and its metadata and
+byte ports remain distinct.
+
+Hosts retain independent admission, retention and process enforcement. The
+registry's input/output/image-sample ceilings do not replace OS limits. Native
+Play can impose lower budgets than direct Core functions, and operations without
+registrations remain direct-only. The linear `pipeline` adapters are a separate
+public execution format; their presence does not grant named-port host execution.

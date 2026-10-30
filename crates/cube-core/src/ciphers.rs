@@ -5,6 +5,7 @@ pub mod bacon;
 pub mod book;
 pub mod classical;
 pub mod enigma;
+pub(crate) mod execution;
 pub mod mono;
 pub mod poly;
 pub mod polybius;
@@ -237,7 +238,7 @@ const PROFILED: [crate::operations::metadata::Entry; 3] = [
 pub const OPERATIONS: &[crate::operations::Descriptor] =
     &crate::operations::metadata::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_executors(execution::ENTRIES);
 
 #[cfg(test)]
 mod tests {

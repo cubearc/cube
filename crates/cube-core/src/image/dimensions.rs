@@ -1,4 +1,5 @@
 //! Width/height facts from an already validated image, without pixel processing.
+pub(crate) mod execution;
 use super::Image;
 use crate::{
     errors::OperationError,
@@ -107,4 +108,6 @@ const CONTRACTS: &[Entry] = &[Entry {
     fixture,
 }];
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED)
+        .with_contracts(CONTRACTS)
+        .with_executors(execution::ENTRIES);

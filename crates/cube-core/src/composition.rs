@@ -1,5 +1,6 @@
 //! Ordered, bounded composition without implicit encoding or normalization.
 mod contracts;
+pub(crate) mod execution;
 pub mod structured;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use contracts::CONTRACTS;
@@ -134,4 +135,6 @@ const PROFILED: [m::Entry; 2] = [
 ];
 pub const OPERATIONS: &[Descriptor] = &crate::operations::metadata::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED)
+        .with_contracts(CONTRACTS)
+        .with_executors(execution::ENTRIES);

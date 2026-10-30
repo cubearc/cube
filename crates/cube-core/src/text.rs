@@ -2,6 +2,7 @@
 pub mod anagram;
 pub mod classes;
 pub mod combinations;
+pub(crate) mod execution;
 pub mod grid;
 pub mod keyboard;
 pub mod lexical;
@@ -399,4 +400,4 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
 pub const OPERATIONS: &[crate::operations::Descriptor] =
     &crate::operations::metadata::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_executors(execution::ENTRIES);

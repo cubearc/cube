@@ -1,6 +1,7 @@
 //! Strict Brainfuck: eight commands and ASCII space/tab/CR/LF only. All brackets
 //! are validated before dispatch, including unreachable code. Cells wrap; the
 //! fixed tape never wraps or grows. Wider cells retain byte input/low-byte output.
+pub(crate) mod execution;
 use crate::errors::{ErrorCode, OperationError};
 use serde::Serialize;
 mod comparison;

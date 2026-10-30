@@ -148,4 +148,6 @@ const PROFILED: [m::Entry; 6] = [
 ];
 pub(super) const OPERATIONS: &[Descriptor] = &m::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_contracts(contracts::CONTRACTS);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED)
+        .with_contracts(contracts::CONTRACTS)
+        .with_executors(execution::ENTRIES);

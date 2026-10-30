@@ -191,3 +191,20 @@ fn image_selection_and_output_budgets_apply_to_the_same_registered_export() {
         .is_err()
     );
 }
+
+#[test]
+fn host_defaults_do_not_make_required_contract_parameters_optional() {
+    assert!(
+        execution::validate_parameters("image.pixels.read", 1, &json!({}), Budget::default())
+            .is_err()
+    );
+    assert!(
+        execution::validate_parameters(
+            "text.reverse",
+            1,
+            &json!({"shell":true}),
+            Budget::default()
+        )
+        .is_err()
+    );
+}

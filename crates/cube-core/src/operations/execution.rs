@@ -193,6 +193,9 @@ pub fn validate_parameters(
     if c.operation_version != version {
         return Err(Failure("contract_mismatch"));
     }
+    // Host form defaults initialize controls; they cannot weaken required fields.
+    c.validate_parameters(parameters)
+        .map_err(|_| Failure("invalid_parameters"))?;
     let p = effective(operation, parameters, budget)?;
     c.validate_parameters(&p)
         .map_err(|_| Failure("invalid_parameters"))?;

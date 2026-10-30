@@ -437,3 +437,14 @@ registry's input/output/image-sample ceilings do not replace OS limits. Native
 Play can impose lower budgets than direct Core functions, and operations without
 registrations remain direct-only. The linear `pipeline` adapters are a separate
 public execution format; their presence does not grant named-port host execution.
+
+### Attached Play control client
+
+`cube-cli::play` owns a closed, versioned stdin/stdout protocol for the real CLI
+when started by trusted Play main. It transports scoped Asset/Pipeline reads and
+Run intents; Play owns authorization, graph planning, persistence and cancellation.
+The client refuses absent or incompatible context before emitting a request and
+never opens a database, resolves host paths or invokes a shell. Operation workers
+and their enforcement remain Play responsibilities. Aggregate evidence uses the
+strict JSON parser with explicit transport budgets; operation and Pipeline limits
+are unchanged. See [attached native commands](guides/open-play.md#attached-native-commands).

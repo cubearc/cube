@@ -15,6 +15,8 @@ const PROTOCOL: &[u8] = b"cube-play-launcher 1\n";
 
 #[derive(Args)]
 pub struct PlayArgs {
+    #[command(subcommand)]
+    pub command: Option<cube_cli::play::Command>,
     /// Local directory, file or challenge; defaults to the current directory
     pub path: Option<PathBuf>,
     /// Stop this workspace's runtime without deleting investigation data

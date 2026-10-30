@@ -95,7 +95,7 @@ enum Command {
         #[command(subcommand)]
         command: esolangcmd::Command,
     },
-    /// Open a local investigation workspace with the separately installed Cube Play launcher
+    /// Open Cube Play or control an attached native session
     Play(playcmd::PlayArgs),
     /// Bounded offline key formats; secret validation is separate from export
     Blockchain {
@@ -638,6 +638,23 @@ fn write_bytes(
 }
 
 fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
+    if let Command::Play(args) = &cli.command
+        && let Some(command) = &args.command
+    {
+        if cli.lab_capture.is_some()
+            || args.path.is_some()
+            || args.stop
+            || args.no_browser
+            || args.offline
+        {
+            return Err(cube_core::errors::OperationError::new(
+                cube_core::errors::ErrorCode::InvalidInput,
+                "context_options_unavailable",
+            )
+            .into());
+        }
+        return cube_cli::play::run(command).map_err(Into::into);
+    }
     let capture = capture::Target::requested(&cli)?;
     let mut output = io::stdout().lock();
     match cli.command {

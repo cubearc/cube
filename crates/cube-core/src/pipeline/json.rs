@@ -86,9 +86,13 @@ impl<'de> Visitor<'de> for Seed<'_> {
 pub fn parse(document: &str) -> Result<Value, Error> {
     parse_with_limits(document, MAX_DOCUMENT_BYTES, MAX_DEPTH, MAX_NODES)
 }
-// Explicit operation-specific callers may tighten or extend transport ceilings;
-// pipeline defaults and duplicate-key/error semantics remain unchanged.
-pub(crate) fn parse_with_limits(
+/// Parse a non-executable JSON document with explicit transport budgets.
+///
+/// Adapters carrying aggregate evidence may need different envelope limits from
+/// a single pipeline document. This does not change [`parse`] defaults or the
+/// limits applied when validating or executing a pipeline. Duplicate keys,
+/// trailing data and non-finite numbers are always rejected.
+pub fn parse_with_limits(
     document: &str,
     max_bytes: usize,
     max_depth: u8,

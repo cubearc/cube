@@ -33,5 +33,20 @@ launcher, shell or network fallback for contextual commands. The existing
 `cube play [path]` launcher delegation is a separate interface.
 
 See the [attached command reference](https://github.com/cubearc/play/blob/main/docs/reference/desktop-runtime.md#attached-cube-cli-commands)
-for exact syntax, context and transport limits. External terminal attachment and
-native PTYs are not implemented by this client.
+for exact syntax, context and transport limits. External terminal attachment is not provided by this client.
+
+## Interactive terminal in Play
+
+In the macOS Electron preview, open a Trail and choose **Toggle Cube terminal**.
+The real CLI runs as `cube play session` in a native PTY with a fixed Stage and
+optional Pipeline selection. Type `help` for contextual commands, or choose
+**Insert selected Run** and press Enter to execute that saved selection. `selected`
+uses the same coordinator and records a fresh Run each time.
+
+Use `run status ID` to inspect evidence and `run cancel ID` to stop an active Run.
+Ctrl+C clears the command draft; it does not cancel accepted work. Closing the
+terminal leaves accepted Runs supervised by the engine. **Reconnect** selects the
+current Trail and starts an empty transcript. This terminal accepts contextual
+Cube commands, not arbitrary executables or shell expressions. See
+[Play's terminal guide](https://github.com/cubearc/play/blob/main/docs/terminal.md)
+for the walkthrough and session limits.

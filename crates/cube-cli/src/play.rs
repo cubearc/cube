@@ -9,12 +9,16 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::io::{BufRead, IsTerminal, Read, Write};
 
+mod session;
+
 pub const PROTOCOL: u32 = 1;
 pub const FRAME_BYTES: usize = 262_144;
 pub const CLI_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Subcommand, Debug)]
 pub enum Command {
+    /// Open the app-attached contextual terminal (requires native inherited channels)
+    Session,
     /// Inspect an exact Asset revision in the attached Stage
     Asset {
         #[command(subcommand)]
@@ -189,6 +193,7 @@ fn authorize(bootstrap: &Bootstrap) -> Result<(), OperationError> {
 }
 fn action(command: &Command, bootstrap: &Bootstrap) -> Result<Action, OperationError> {
     Ok(match command {
+        Command::Session => return Err(error("invalid_command")),
         Command::Asset {
             command: Asset::Show { id, revision },
         } => Action::Asset {
@@ -271,6 +276,9 @@ pub fn exchange(
 /// Contextual commands have no discovery or launcher fallback. A terminal alone
 /// does not supply an application-authorized inherited session.
 pub fn run(command: &Command) -> Result<(), OperationError> {
+    if matches!(command, Command::Session) {
+        return session::run();
+    }
     if std::io::stdin().is_terminal() {
         return Err(error("context_unavailable"));
     }

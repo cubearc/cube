@@ -240,8 +240,8 @@ Linux, macOS and Windows with Node 22/24, then Chromium, Firefox and WebKit. It
 contains no npm publication command. A successful engine check qualifies the
 recorded engine/version only; Playwright WebKit does not qualify native Safari.
 
-The complete development Wasm matrix passed for all 329 direct operations.
-Release builds, packaged consumers, browser matrices, native conformance and
-clean documentation adoption remain required delivery gates for a changed
-revision. Refer to the issue/PR and retained CI reports for exact source, package,
+The complete direct matrix covers all 329 canonical operations. Release builds,
+packaged consumers, browser matrices, native conformance and clean documentation
+adoption remain required delivery gates for each changed revision.
+Refer to the issue/PR and retained CI reports for exact source, package,
 runtime and test identities rather than inferring delivery from this guide.

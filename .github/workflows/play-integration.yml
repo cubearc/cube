@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: cubearc/play
-          ref: e8976e3fd2c40991b59361b98aab00153f3533ea
+          ref: bb53389e430bc32405b8031105939998b64c65c6
           path: play
           persist-credentials: false
       - name: Verify the Core build context excludes unrelated and private files

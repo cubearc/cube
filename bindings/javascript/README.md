@@ -1,9 +1,9 @@
 # Cube JavaScript SDK
 
-Development adapter over the shared Rust/Wasm runtime. Algorithms and canonical
-contracts remain in `cube-core`. This package is not yet release-qualified or
-published. See [the interface guide](../../docs/interfaces/javascript.md) for
-actual supported paths, build/test commands, limits and remaining milestone gates.
+Source-built adapter over the shared Rust/Wasm runtime. Algorithms and canonical
+contracts remain in `cube-core`. This package has not been published to npm.
+See [the interface guide](../../docs/interfaces/javascript.md) for supported
+paths, build/test commands, limits and revision-specific qualification evidence.
 
 Install a locally produced artifact with `npm install /path/to/cubearc-cube-0.18.0.tgz`.
 Use `createCube` from `@cubearc/cube` in Node.js, `@cubearc/cube/browser` in browser

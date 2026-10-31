@@ -92,9 +92,14 @@ infer execution support from annotations. Preserve default discovery JSON and
 verify both legacy and opted-in views within the shared discovery output budget.
 
 Add known-answer and edge-case unit tests, public API tests when needed, then
-expose the operation through the relevant CLI and Python APIs. Update command
-discovery, Python exports and type stubs, interface tests, and affected user
-examples. SDKs must call Rust rather than reimplement algorithms. The concise
+expose the operation through the CLI and every supported SDK: native Python and
+JavaScript/TypeScript/WebAssembly. Update command and executable SDK discovery,
+bindings, exports, type declarations, interface tests and affected examples in
+the same logical change. Verify the installed native extension and actual packed
+Node.js/browser package against canonical fixtures, including errors and limits.
+Catalog presence alone does not prove SDK execution support. SDKs must call Rust
+rather than reimplement algorithms. This requirement also applies to changes to
+existing operations. The concise
 [add-operation skill](.agents/skills/add-operation/SKILL.md) records this workflow.
 
 ### Operation contract Definition of Done

@@ -180,7 +180,7 @@ pub fn masked(input: &str, config: &Config) -> Result<Report, OperationError> {
 
 const LIST: ParameterType = ParameterType::UnsignedList {
     min: 0,
-    max: usize::MAX as u64,
+    max: u64::MAX,
     min_length: 0,
     max_length: super::MAX_INDICES,
     unique: false,
@@ -222,7 +222,7 @@ pub const OPERATIONS: &[Descriptor] = &[Descriptor {
             default: None,
             constraints: ParameterType::Unsigned {
                 min: 1,
-                max: usize::MAX as u64,
+                max: u64::MAX,
             },
         },
         Parameter {

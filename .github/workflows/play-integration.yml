@@ -12,6 +12,7 @@ on:
       - "crates/**"
       - "vendor/**"
       - "bindings/python/Cargo.toml"
+      - "bindings/javascript/wasm/**"
       - ".github/workflows/play-integration.yml"
   pull_request:
     branches: [main]
@@ -24,6 +25,7 @@ on:
       - "crates/**"
       - "vendor/**"
       - "bindings/python/Cargo.toml"
+      - "bindings/javascript/wasm/**"
       - ".github/workflows/play-integration.yml"
   workflow_dispatch:
 
@@ -52,7 +54,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: cubearc/play
-          ref: 35dcd1bfec0b55fef023f9663cb5712bb69a9a87
+          ref: e8976e3fd2c40991b59361b98aab00153f3533ea
           path: play
           persist-credentials: false
       - name: Verify the Core build context excludes unrelated and private files

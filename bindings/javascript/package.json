@@ -1,0 +1,38 @@
+{
+  "name": "@cubearc/cube",
+  "version": "0.18.0",
+  "description": "Cube operations through the shared Rust WebAssembly runtime",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "examples"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "node": "./dist/node.mjs",
+      "default": "./dist/browser.mjs"
+    },
+    "./browser": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/browser.mjs"
+    },
+    "./worker": {
+      "types": "./dist/worker-client.d.mts",
+      "default": "./dist/worker-client.mjs"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test:qualification": "node --test --test-concurrency=1 tests/qualification.test.mjs tests/pipeline-qualification.test.mjs tests/direct-qualification.test.mjs tests/sdk.test.mjs tests/initialization.test.mjs tests/memory.test.mjs tests/worker-failure.test.mjs tests/transport-budget.test.mjs tests/qualification-report.test.mjs",
+    "test:types": "tsc -p tests/types/tsconfig.json"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "typescript": "7.0.2"
+  }
+}

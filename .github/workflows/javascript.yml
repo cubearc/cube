@@ -1,0 +1,110 @@
+name: JavaScript SDK qualification
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: javascript-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bindings/javascript
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          key: javascript-wasm
+      - run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Check canonical contracts and reviewed fixture identities
+        run: cargo run --locked -p cube-core --example operation_contracts -- --check
+      - run: npm run build
+      - run: npm run test:qualification
+      - run: npm run test:types
+      - run: node scripts/qualification-report.mjs qualification.json
+      - run: npm pack --ignore-scripts
+      - run: node scripts/verify-package.mjs cubearc-cube-0.18.0.tgz
+      - name: Preserve the tested package and qualification inventory
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: javascript-sdk
+          path: |
+            bindings/javascript/cubearc-cube-*.tgz
+            bindings/javascript/qualification.json
+          if-no-files-found: error
+  # The same packed bytes, without a Rust source checkout in the consumer.
+  # No npm publish command or registry credential is part of this workflow.
+  runtimes:
+    needs: package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - name: Download tested SDK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download ${{ github.run_id }} --name javascript-sdk --dir sdk-artifact
+      - run: npm ci --ignore-scripts --no-audit --no-fund --prefix bindings/javascript
+      - run: node bindings/javascript/scripts/verify-package.mjs sdk-artifact/cubearc-cube-0.18.0.tgz
+  browsers:
+    needs: package
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    defaults:
+      run:
+        working-directory: bindings/javascript
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Download tested SDK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download ${{ github.run_id }} --name javascript-sdk --dir sdk-artifact
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm install --offline --ignore-scripts --no-audit --no-fund --prefix .consumer "$PWD/sdk-artifact/cubearc-cube-0.18.0.tgz"
+      - run: cp -R .consumer/node_modules/@cubearc/cube/dist ./dist
+      - run: npx --no-install playwright install --with-deps ${{ matrix.browser }}
+      - run: node --test --test-concurrency=1 tests/browser-qualification.test.mjs tests/browser-sdk.test.mjs
+        env:
+          BROWSER_ENGINE: ${{ matrix.browser }}
+          CUBE_QUALIFICATION_REPORT: browser-qualification.json
+      - name: Retain actual browser per-operation evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: javascript-${{ matrix.browser }}-qualification
+          path: bindings/javascript/browser-qualification.json
+          if-no-files-found: error

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cube SDK static worker example</title>
+<main>
+  <h1>Decode Base64 locally</h1>
+  <p>This minimal SDK example uses a dedicated worker and the packaged Wasm asset.</p>
+  <label for="input">Base64 text</label>
+  <textarea id="input" rows="6" maxlength="131072">AP8=</textarea>
+  <button id="run" type="button">Decode to bytes</button>
+  <button id="stop" type="button">End worker</button>
+  <a id="download" hidden>Download exact bytes</a>
+  <p id="status" role="status" aria-live="polite">Loading the local runtime…</p>
+</main>
+<style>
+  body{font:1rem system-ui;margin:2rem auto;padding:0 1rem;max-width:44rem;line-height:1.5}
+  textarea{display:block;box-sizing:border-box;width:100%;font:1rem monospace;margin:.5rem 0}
+  button,a{min-height:44px;padding:.5rem;margin:.25rem}
+  :focus-visible{outline:3px solid #005fcc;outline-offset:3px}
+</style>
+<script type="module">
+import { createWorkerCube } from '../../dist/worker-client.mjs';
+const input = document.querySelector('#input');
+const status = document.querySelector('#status');
+const download = document.querySelector('#download');
+let worker;
+let initialization;
+let stopRequested = false;
+async function initialize() {
+  if (initialization) return initialization;
+  status.textContent = 'Loading the local runtime…';
+  initialization = createWorkerCube().then(value => {
+    worker = value;
+    if (stopRequested) { worker.terminate(); status.textContent = 'Worker ended. Run to start a fresh worker.'; }
+    else status.textContent = 'Ready. Input stays on this device.';
+    return worker;
+  }).catch(error => { initialization = undefined; throw error; });
+  return initialization;
+}
+let revision = 0;
+let controller;
+let objectUrl;
+initialize().catch(error => { status.textContent = `${error.code}: ${error.message} Run again to retry.`; });
+function clearResult() {
+  if (objectUrl) URL.revokeObjectURL(objectUrl);
+  download.hidden = true;
+  objectUrl = undefined;
+}
+input.addEventListener('input', () => {
+  revision++;
+  controller?.abort();
+  clearResult();
+  status.textContent = 'Input changed. Run again for this input.';
+});
+document.querySelector('#run').addEventListener('click', async () => {
+  stopRequested = false;
+  controller?.abort();
+  controller = new AbortController();
+  const capturedRevision = ++revision;
+  const capturedInput = input.value;
+  clearResult();
+  status.textContent = 'Running…';
+  try {
+    if (!worker) await initialize();
+    if (revision !== capturedRevision) return;
+    const result = await worker.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: capturedInput } },
+      { signal: controller.signal, context: { revision: capturedRevision } });
+    if (revision !== capturedRevision) return;
+    objectUrl = URL.createObjectURL(new Blob([result.value.output]));
+    download.href = objectUrl;
+    download.download = 'decoded.bin';
+    download.hidden = false;
+    status.textContent = `${result.value.output.byteLength} exact bytes ready.`;
+  } catch (error) {
+    if (revision === capturedRevision) status.textContent = `${error.code}: ${error.message}`;
+  }
+});
+document.querySelector('#stop').addEventListener('click', () => {
+  stopRequested = true;
+  revision++;
+  controller?.abort();
+  worker?.terminate();
+  status.textContent = 'Worker ended. Another run will initialize a fresh worker.';
+});
+</script>
+</html>

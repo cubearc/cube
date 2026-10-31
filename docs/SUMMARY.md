@@ -36,6 +36,7 @@
     - [Complete and partial results](concepts/results.md)
   - [Interfaces](interfaces/cli.md)
     - [Python SDK](interfaces/python.md)
+    - [JavaScript SDK qualification](interfaces/javascript.md)
     - [Rust](interfaces/rust.md)
   - [Reference](reference/index.md)
     - [Operation contracts](reference/operations.md)

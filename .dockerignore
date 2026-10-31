@@ -22,6 +22,14 @@ bindings/python/**
 !bindings/python/src/
 bindings/python/src/**
 !bindings/python/src/lib.rs
+!bindings/javascript/
+bindings/javascript/**
+!bindings/javascript/wasm/
+bindings/javascript/wasm/**
+!bindings/javascript/wasm/Cargo.toml
+!bindings/javascript/wasm/build.rs
+!bindings/javascript/wasm/src/
+!bindings/javascript/wasm/src/**
 !vendor/
 vendor/**
 !vendor/salsa20/

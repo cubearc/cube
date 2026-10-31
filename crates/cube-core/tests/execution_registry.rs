@@ -7,6 +7,53 @@ use cube_core::{
 };
 use serde_json::json;
 #[test]
+fn registered_base64_codecs_preserve_exact_named_bytes_and_host_budgets() {
+    let budget = Budget::default();
+    let encoded = execution::execute(
+        "encoding.base64.encode",
+        1,
+        &json!({"input":{"base64":"AP+A"}}),
+        &json!({}),
+        budget,
+    )
+    .unwrap();
+    assert_eq!(encoded, json!({"output":"AP+A"}));
+    assert_eq!(
+        execution::execute(
+            "encoding.base64.decode",
+            1,
+            &json!({"input":"AP+A"}),
+            &json!({}),
+            budget
+        )
+        .unwrap(),
+        json!({"output":{"base64":"AP+A"}})
+    );
+    assert!(
+        execution::execute(
+            "encoding.base64.decode",
+            1,
+            &json!({"input":"!"}),
+            &json!({}),
+            budget
+        )
+        .is_err()
+    );
+    assert!(
+        execution::execute(
+            "encoding.base64.encode",
+            1,
+            &json!({"input":{"base64":"AP+A"}}),
+            &json!({}),
+            Budget {
+                output_bytes: 3,
+                ..budget
+            }
+        )
+        .is_err()
+    );
+}
+#[test]
 fn registered_executors_use_real_named_contracts_and_reject_unregistered_operations() {
     let budget = Budget::default();
     let catalog = execution::catalog(budget).unwrap();

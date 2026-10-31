@@ -34,7 +34,7 @@ test('discovery metadata from a different artifact is rejected with the real Was
   } finally {await rm(temporary,{recursive:true,force:true});}
 });
 
-test('changed capability data is rejected even when its declared build identities are unchanged', async () => {
+test('changed discovery data is rejected even when its declared build identities are unchanged', async () => {
   const temporary=await mkdtemp(join(tmpdir(),'cube-capability-data-'));
   try {
     await cp(new URL('../dist/',import.meta.url),temporary,{recursive:true});

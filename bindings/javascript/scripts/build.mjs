@@ -69,7 +69,7 @@ if (snapshot.sha256 !== build.catalogSha256 || snapshot.json.trim() !== (await r
   throw new Error('Actual Wasm catalog differs from canonical Core declarations.');
 }
 const executors=JSON.parse(wasm.executors_json());
-const metadataJson=JSON.stringify({formatVersion:1,sourceSha256:build.sourceSha256,wasmSha256:build.wasmSha256,catalogSha256:build.catalogSha256,catalogJson:snapshot.json,executors});
+const metadataJson=JSON.stringify({formatVersion:1,sourceSha256:build.sourceSha256,wasmSha256:build.wasmSha256,catalogSha256:build.catalogSha256,catalogJson:snapshot.json,contracts:snapshot.contracts,executors});
 build.metadataSha256=sha256(metadataJson);
 await writeFile(join(packageRoot,'dist/runtime-metadata.mjs'),`// Generated from this exact Wasm artifact; never edit.\nexport const metadata = ${metadataJson};\n`);
 await writeFile(join(packageRoot,'dist/build-info.mjs'),`export const build = ${JSON.stringify(build)};\n`);

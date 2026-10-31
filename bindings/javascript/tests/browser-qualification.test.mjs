@@ -21,6 +21,7 @@ for (const name of ['browser.mjs','canonical-input.mjs','errors.mjs','transport.
 const html = `<!doctype html><meta charset="utf-8"><title>Cube Wasm qualification</title>
 <script type="module">
 import init, * as wasm from './wasm/cube_wasm.js';
+import {metadata} from './runtime-metadata.mjs';
 globalThis.qualification = (async () => {
   await init();
   const {createWorkerCube}=await import('./worker-client.mjs');
@@ -32,8 +33,8 @@ globalThis.qualification = (async () => {
   try { wasm.decode_base64('not-valid!'); }
   catch (error) { failure = JSON.parse(error); }
   const canonicalJson = await fetch('./catalog.json').then(response => response.text());
-  const snapshot = JSON.parse(wasm.catalog_snapshot_json());
-  const actualJson = snapshot.json;
+  const actualJson = (await globalThis.qualificationWorker.catalogJson()).value;
+  const snapshot = {json:actualJson,sha256:globalThis.qualificationWorker.build.catalogSha256,contracts:metadata.contracts};
   const actual = JSON.parse(actualJson);
   const recipe = {
     format_version: 1, engine_api: 1,
@@ -45,14 +46,14 @@ globalThis.qualification = (async () => {
     ],
   };
   const result = JSON.parse(wasm.run_recipe_json(JSON.stringify(recipe), '{}', Uint32Array.of(0)));
-  const adapters = JSON.parse(wasm.pipeline_adapters_json());
-  const executors = JSON.parse(wasm.executors_json());
+  const adapters = globalThis.qualificationWorker.pipelineAdapters;
+  const executors = globalThis.qualificationWorker.executors;
   return {encoded, bytes, original: Array.from(original), failure, result,
     exactCatalog: actualJson.trim() === canonicalJson.trim(),
     adapters,
     executors,
     snapshot,
-    limits: JSON.parse(wasm.runtime_limits_json()),
+    limits: globalThis.qualificationWorker.limits,
     operationIds: actual.operations.map(operation => operation.operation)};
 })();
 </script>`;
@@ -102,13 +103,15 @@ test('actual browser initializes a packaged SDK worker under a non-root path and
   assert.deepEqual(actual.result.output, { type: 'text', data: 'Café' });
   assert.deepEqual(actual.result.intermediates['0'], { type: 'bytes', base64: 'Q2Fmw6k=' });
   const fixtures = JSON.parse(await readFile(files.get('/docs/playground/fixtures.json')[1], 'utf8'));
+  let completedDirect = 0;
   const report = await qualificationReport({
     snapshot: actual.snapshot,
     canonicalJson: await readFile(files.get('/docs/playground/catalog.json')[1], 'utf8'),
     fixtures, build, executors: actual.executors, adapters: actual.adapters, limits: actual.limits,
-    runtime: { kind: 'browser-wasm', transport: 'public-sdk-worker', engine: process.env.BROWSER_ENGINE ?? 'chromium', version: browser.version(), platform: process.platform, architecture: process.arch },
+    runtime: { kind: 'browser-wasm', transport: 'public-sdk-worker', identityEvidence: 'Live Core contract identities generated from these exact Wasm bytes during packaging; browser verifies both metadata and Wasm digests and executes every advertised path', engine: process.env.BROWSER_ENGINE ?? 'chromium', version: browser.version(), platform: process.platform, architecture: process.arch },
     driver: {
-      executeDirect: (request,binding) => page.evaluate(async ({request,binding}) => {
+      executeDirect: async (request,binding) => {
+        const output = await page.evaluate(async ({request,binding}) => {
         const wasm=await import('./wasm/cube_wasm.js');
         const inputs=Object.fromEntries(Object.entries(request.inputs).map(([name,value])=>[name,
           binding.inputs[name]==='bytes'?wasm.decode_base64(value.base64):
@@ -117,7 +120,10 @@ test('actual browser initializes a packaged SDK worker under a non-root path and
         return Object.fromEntries(Object.entries(actual).map(([name,value])=>[name,
           binding.outputs[name]==='bytes'?{base64:wasm.encode_base64(value)}:
           binding.outputs[name]==='byte_array'?Array.from(value):value]));
-      }, {request,binding}),
+        }, {request,binding});
+        if (++completedDirect % 50 === 0) console.log(`Executed ${completedDirect} direct known answers in the actual browser SDK worker.`);
+        return output;
+      },
       runRecipe: definition => page.evaluate(async definition => {
         const wasm=await import('./wasm/cube_wasm.js');
         const {value}=await globalThis.qualificationWorker.runRecipe(definition,{}, {captures:[0]});

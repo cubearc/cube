@@ -254,17 +254,30 @@ impl Image {
     /// shared strict framing/CRC validation; text/ICC decompression stays disabled.
     /// Additional codecs expose decoded pixels, explicitly labeled by provenance.
     pub fn decode(encoded: &[u8]) -> Result<Self, OperationError> {
+        Self::decode_with_sample_limit(encoded, MAX_SAMPLES)
+    }
+    /// Decode with a caller-lowered sample ceiling, checked before allocating
+    /// raster samples. Codec scratch limits and hard geometry ceilings also apply.
+    pub fn decode_with_sample_limit(
+        encoded: &[u8],
+        max_samples: usize,
+    ) -> Result<Self, OperationError> {
+        if max_samples > MAX_SAMPLES {
+            return Err(
+                invalid("sample ceiling may only lower the hard limit").operation("image.decode")
+            );
+        }
         if encoded.len() > MAX_ENCODED {
             return Err(limit("encoded image exceeds 32 MiB").operation("image.decode"));
         }
         if encoded.starts_with(b"\x89PNG\r\n\x1a\n") {
-            Self::decode_png(encoded)
+            Self::decode_png(encoded, max_samples)
         } else {
-            decode::raster(encoded).map_err(|e| e.operation("image.decode"))
+            decode::raster(encoded, max_samples).map_err(|e| e.operation("image.decode"))
         }
     }
 
-    fn decode_png(encoded: &[u8]) -> Result<Self, OperationError> {
+    fn decode_png(encoded: &[u8], max_samples: usize) -> Result<Self, OperationError> {
         let result = (|| {
             if encoded.len() > MAX_ENCODED {
                 return Err(limit("encoded PNG exceeds 32 MiB"));
@@ -298,7 +311,10 @@ impl Image {
                     "only 8-bit PNG samples are supported; no downsampling is performed",
                 ));
             }
-            sample_count(header.width, header.height, header.color_type.samples())?;
+            if sample_count(header.width, header.height, header.color_type.samples())? > max_samples
+            {
+                return Err(limit("decoded samples exceed the caller ceiling"));
+            }
             let mut reader = decoder.read_info().map_err(decode_error)?;
             let info = reader.info();
             let model = match info.color_type {

@@ -15,8 +15,11 @@ function run(command, args) {
 try {
   await writeFile(join(directory, 'package.json'), '{"private":true,"type":"module"}');
   run('npm', ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', tarball]);
+  await writeFile(join(directory, 'fixtures.json'), await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url)));
   await writeFile(join(directory, 'consumer.mjs'), `
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { isDeepStrictEqual } from 'node:util';
 import { createCube, CubeError } from '@cubearc/cube';
 const cube = await createCube();
 assert.equal(await createCube(), cube);
@@ -26,17 +29,32 @@ const definition = {format_version:1,engine_api:1,input:{source:'slot',name:'mes
 const run = cube.runRecipe(cube.recipeJson(definition),{message:{type:'text',data:'Q2Fmw6k='}},{captures:[0]});
 assert.equal(run.output.data,'Café');
 assert.deepEqual(run.intermediates['0'].data,Uint8Array.of(67,97,102,195,169));
-assert.equal(JSON.parse(cube.catalogJson()).operations.length,329);
+const fixtures=JSON.parse(await readFile('./fixtures.json','utf8'));
+assert.equal(JSON.parse(cube.catalogJson()).operations.length,fixtures.length);
+assert.equal(cube.executors.length,fixtures.length);
+for (const fixture of fixtures) {
+  const binding=cube.executors.find(row=>row.operation===fixture.operation);
+  assert.ok(binding,fixture.operation);
+  const inputs=Object.fromEntries(Object.entries(fixture.inputs).map(([name,value])=>[name,
+    binding.inputs[name]==='bytes'?Uint8Array.from(Buffer.from(value.base64,'base64')):
+    binding.inputs[name]==='byte_array'?Uint8Array.from(value):value]));
+  const outputs=cube.execute({operation:fixture.operation,version:fixture.operation_version,inputs,parameters:fixture.parameters});
+  const wire=Object.fromEntries(Object.entries(outputs).map(([name,value])=>[name,
+    binding.outputs[name]==='bytes'?{base64:Buffer.from(value).toString('base64')}:
+    binding.outputs[name]==='byte_array'?Array.from(value):value]));
+  assert.ok(isDeepStrictEqual(wire,fixture.outputs),fixture.operation+' packaged known answer');
+}
 assert.ok(CubeError.prototype instanceof Error);
 await import('@cubearc/cube/browser');
 await import('@cubearc/cube/worker');
-console.log('Installed package: Node '+process.version+'; exact bytes, recipe, catalog and public exports passed.');
+console.log('Installed package: Node '+process.version+'; all '+fixtures.length+' direct known answers, bytes, recipe and exports passed.');
 `);
   run(process.execPath, ['consumer.mjs']);
-  await writeFile(join(directory, 'consumer.mts'), `import { createCube } from '@cubearc/cube';\nconst cube = await createCube();\nconst value: Uint8Array = cube.execute({operation:'encoding.base64.decode',version:1,inputs:{input:'AP8='}}).output;\nvoid value;\n`);
+  await writeFile(join(directory, 'consumer.mts'), `import { createCube } from '@cubearc/cube';\nconst cube = await createCube();\nconst value: Uint8Array = cube.execute({operation:'encoding.base64.decode',version:1,inputs:{input:'AP8='}}).output;\nconst book: string = cube.execute({operation:'cipher.book.decode',version:1,inputs:{input:'1:1,2:1'},parameters:{source:'another book',scheme:'word_character',index_base:1}}).output;\nif(book !== 'ab') throw new Error('Compiled TypeScript Book cipher mismatch');\nconst info=cube.execute({operation:'file.info.inspect',version:2,inputs:{input:value}}).output;\nif(info.size !== 2 || info.regular_file !== null) throw new Error('Compiled TypeScript artifact inspection mismatch');\n`);
   const compiler = resolve(dirname(fileURLToPath(import.meta.url)), '../node_modules/typescript/bin/tsc');
   await readFile(compiler);
-  run(process.execPath, [compiler, '--strict', '--noEmit', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', 'consumer.mts']);
+  run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 'consumer.mts']);
+  run(process.execPath, [join(directory, 'compiled-consumer/consumer.mjs')]);
   const assets = join(directory, 'node_modules/@cubearc/cube');
   for (const file of ['dist/wasm/cube_wasm_bg.wasm', 'dist/LICENSE', 'dist/THIRD_PARTY_NOTICES', 'examples/static/index.html', 'examples/node.mjs', 'examples/node.mts']) await readFile(join(assets, file));
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));

@@ -15,11 +15,16 @@ const files = new Map([
   ['/docs/playground/catalog.json', ['application/json', new URL('../../../contracts/v1/catalog.json', import.meta.url)]],
   ['/docs/playground/fixtures.json', ['application/json', new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url)]],
 ]);
+for (const name of ['browser.mjs','canonical-input.mjs','errors.mjs','transport.mjs','loading.mjs','build-info.mjs','runtime-metadata.mjs','worker.mjs','worker-client.mjs']) {
+  files.set(`/docs/playground/${name}`,['text/javascript',new URL(`../dist/${name}`,import.meta.url)]);
+}
 const html = `<!doctype html><meta charset="utf-8"><title>Cube Wasm qualification</title>
 <script type="module">
 import init, * as wasm from './wasm/cube_wasm.js';
 globalThis.qualification = (async () => {
   await init();
+  const {createWorkerCube}=await import('./worker-client.mjs');
+  globalThis.qualificationWorker=await createWorkerCube();
   const original = Uint8Array.of(0, 255, 128, 1);
   const encoded = wasm.encode_base64(original);
   const bytes = Array.from(wasm.decode_base64(encoded));
@@ -52,7 +57,7 @@ globalThis.qualification = (async () => {
 })();
 </script>`;
 
-test('actual browser initializes Wasm under a non-root static path and runs Core', async (t) => {
+test('actual browser initializes a packaged SDK worker under a non-root path and runs every Core binding', {timeout:240000}, async (t) => {
   const destination = process.env.CUBE_QUALIFICATION_REPORT;
   if (destination) await rm(destination, { force: true });
   const wasmBytes = await readFile(files.get('/docs/playground/wasm/cube_wasm_bg.wasm')[1]);
@@ -101,15 +106,23 @@ test('actual browser initializes Wasm under a non-root static path and runs Core
     snapshot: actual.snapshot,
     canonicalJson: await readFile(files.get('/docs/playground/catalog.json')[1], 'utf8'),
     fixtures, build, executors: actual.executors, adapters: actual.adapters, limits: actual.limits,
-    runtime: { kind: 'browser-wasm', engine: process.env.BROWSER_ENGINE ?? 'chromium', version: browser.version(), platform: process.platform, architecture: process.arch },
+    runtime: { kind: 'browser-wasm', transport: 'public-sdk-worker', engine: process.env.BROWSER_ENGINE ?? 'chromium', version: browser.version(), platform: process.platform, architecture: process.arch },
     driver: {
-      executeDirect: request => page.evaluate(async request => {
-        const wasm = await import('./wasm/cube_wasm.js');
-        return JSON.parse(wasm.execute_json(JSON.stringify(request)));
-      }, request),
+      executeDirect: (request,binding) => page.evaluate(async ({request,binding}) => {
+        const wasm=await import('./wasm/cube_wasm.js');
+        const inputs=Object.fromEntries(Object.entries(request.inputs).map(([name,value])=>[name,
+          binding.inputs[name]==='bytes'?wasm.decode_base64(value.base64):
+          binding.inputs[name]==='byte_array'?Uint8Array.from(value):value]));
+        const {value:actual}=await globalThis.qualificationWorker.execute({...request,inputs});
+        return Object.fromEntries(Object.entries(actual).map(([name,value])=>[name,
+          binding.outputs[name]==='bytes'?{base64:wasm.encode_base64(value)}:
+          binding.outputs[name]==='byte_array'?Array.from(value):value]));
+      }, {request,binding}),
       runRecipe: definition => page.evaluate(async definition => {
-        const wasm = await import('./wasm/cube_wasm.js');
-        return JSON.parse(wasm.run_recipe_json(JSON.stringify(definition), '{}', Uint32Array.of(0)));
+        const wasm=await import('./wasm/cube_wasm.js');
+        const {value}=await globalThis.qualificationWorker.runRecipe(definition,{}, {captures:[0]});
+        const wire=v=>v.type==='bytes'?{type:'bytes',base64:wasm.encode_base64(v.data)}:v;
+        return {output:wire(value.output),intermediates:{'0':wire(value.intermediates['0'])}};
       }, definition),
     },
   });

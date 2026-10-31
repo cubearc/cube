@@ -6,7 +6,7 @@ import test from 'node:test';
 
 const require = createRequire(import.meta.url);
 const browserType = require(process.env.PLAYWRIGHT_MODULE ?? 'playwright')[process.env.BROWSER_ENGINE ?? 'chromium'];
-const modules = ['browser.mjs', 'errors.mjs', 'transport.mjs', 'loading.mjs', 'build-info.mjs', 'worker.mjs', 'worker-client.mjs', 'wasm/cube_wasm.js', 'wasm/cube_wasm_bg.wasm'];
+const modules = ['browser.mjs', 'errors.mjs', 'transport.mjs', 'canonical-input.mjs', 'loading.mjs', 'build-info.mjs','runtime-metadata.mjs', 'worker.mjs', 'worker-client.mjs', 'wasm/cube_wasm.js', 'wasm/cube_wasm_bg.wasm'];
 
 test('browser SDK verifies static assets and dedicated workers terminate and restart honestly', { timeout: 60000 }, async t => {
   let exampleMissing = true;
@@ -59,7 +59,7 @@ test('browser SDK verifies static assets and dedicated workers terminate and res
     const controller = new AbortController();
     const slow = worker.catalogJson({ signal: controller.signal }).then(() => 'completed', error => error.code);
     const busy = await worker.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: '' } }).then(() => 'unexpected-success', error => error.code);
-    setTimeout(() => controller.abort(), 100);
+    controller.abort();
     const stopped = await slow;
     const decoded = await worker.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: encoded.value.output } });
     worker.terminate();

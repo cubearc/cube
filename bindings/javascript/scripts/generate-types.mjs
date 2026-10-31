@@ -26,8 +26,10 @@ function schemaType(schema, output = false, root = schema, seen = new Set()) {
         : `readonly (${schemaType(schema.items, output, root, seen)})[]`;
     case 'object': {
       const properties = Object.entries(schema.properties ?? {}).map(([name, value]) => `readonly ${JSON.stringify(name)}${schema.required?.includes(name) ? '' : '?'}: ${schemaType(value, output, root, seen)}`);
-      if (schema.additionalProperties !== false) properties.push('readonly [key: string]: JsonValue');
-      return properties.length ? `{ ${properties.join('; ')} }` : 'Record<string, never>';
+      const fields = properties.length ? `{ ${properties.join('; ')} }` : undefined;
+      const extra = schema.additionalProperties === false ? undefined
+        : `{ readonly [key: string]: ${typeof schema.additionalProperties === 'object' ? schemaType(schema.additionalProperties, output, root, seen) : 'JsonValue'} }`;
+      return fields && extra ? `(${fields} & ${extra})` : fields ?? extra ?? 'Record<string, never>';
     }
     default: return 'JsonValue';
   }

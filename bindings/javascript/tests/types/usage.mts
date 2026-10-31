@@ -18,8 +18,12 @@ void text;
 cube.execute({ operation: 'encoding.base64.encode', version: 1, inputs: { input: 'text' } });
 // @ts-expect-error Unknown ports are not silently dropped.
 cube.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: '', extra: '' } });
-// @ts-expect-error The complete catalog is not the direct invocation union.
-cube.execute({ operation: 'image.decode', version: 1, inputs: { input: bytes } });
+const image = cube.execute({ operation: 'image.decode', version: 1, inputs: { input: bytes } });
+void image;
+const artifact = cube.execute({ operation: 'file.info.inspect', version: 2, inputs: { input: bytes } });
+void artifact;
+// @ts-expect-error Unknown identities are not executable operations.
+cube.execute({ operation: 'not.a.cube.operation', version: 1, inputs: { input: bytes } });
 // @ts-expect-error Bytes require an explicitly typed buffer.
 cube.runRecipe('', { message: { type: 'bytes', data: [0, 255] } });
 // @ts-expect-error Named multi-input ports are required together.

@@ -5,11 +5,6 @@ import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { pipelineCases } from '../tests/support/pipeline-cases.mjs';
 
-const hostRequirements = new Map([
-  ['file.info.inspect', 'Requires a real regular-file handle and filesystem metadata; browser File fields cannot establish these facts.'],
-  ['file.carve', 'Current Core carving output uses a filesystem destination capability; a bounded owned-output adapter is required.'],
-  ['investigation.profile.run', 'Current runner calls std::time::Instant; a portable monotonic-clock adapter and preserved timeout semantics are required.'],
-]);
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 function ordered(value) {
   if (Array.isArray(value)) return value.map(ordered);
@@ -101,9 +96,9 @@ export async function qualificationReport({ snapshot, canonicalJson, fixtures, b
       operation: contract.operation, operationVersion: contract.operation_version,
       contractSha256: identities.get(contract.operation).contract_sha256,
       direct: binding ?? null, pipeline: adapter ?? null, evidence: covered,
-      assessment: supported ? 'qualified-in-memory' : hostRequirements.has(contract.operation) ? 'requires-host-adapter' : 'requires-binding-and-qualification',
+      assessment: supported ? 'qualified-in-memory' : 'requires-binding-and-qualification',
       reason: supported ? 'The advertised paths passed actual Wasm known answers in this recorded runtime; input compatibility still requires Core prevalidation.'
-        : hostRequirements.get(contract.operation) ?? `No module-owned pure executor is registered for its canonical named ports (${contract.inputs.map(port => port.semantic_type).join(', ')}). Native conformance and catalog presence do not qualify browser execution.`,
+        : `No installed typed binding is registered for its canonical named ports (${contract.inputs.map(port => port.semantic_type).join(', ')}). Native conformance and catalog presence do not qualify browser execution.`,
     });
   }
   return {

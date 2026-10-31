@@ -1,4 +1,5 @@
 //! Thin ABI qualification over actual Core APIs; algorithms remain in Core.
+mod bindings;
 use cube_core::{
     errors::{ErrorCode, OperationError},
     operations::{contracts, execution},
@@ -81,7 +82,7 @@ fn empty_parameters() -> serde_json::Value {
 #[wasm_bindgen]
 pub fn executors_json() -> Result<String, String> {
     let entries = execution::catalog(budget()).map_err(execution_error)?;
-    let values = entries
+    let mut values = entries
         .into_iter()
         .map(|entry| {
             serde_json::json!({
@@ -94,6 +95,20 @@ pub fn executors_json() -> Result<String, String> {
             })
         })
         .collect::<Vec<_>>();
+    for contract in contracts::document().map_err(error)?.operations {
+        if bindings::supports(&contract.operation)
+            && !values
+                .iter()
+                .any(|entry| entry["operation"] == contract.operation)
+        {
+            values.push(
+                bindings::describe(
+                    &serde_json::to_value(contract).expect("canonical contract serializes"),
+                )
+                .map_err(error)?,
+            );
+        }
+    }
     Ok(contracts::canonical_value(serde_json::json!(values)).to_string())
 }
 
@@ -112,7 +127,28 @@ pub fn execute_json(document: &str) -> Result<String, String> {
             "use an exact named operation invocation",
         ))
     })?;
-    let entry = execution::describe(&request.operation, budget()).map_err(execution_error)?;
+    let entry = match execution::describe(&request.operation, budget()) {
+        Ok(entry) => entry,
+        Err(_) if bindings::supports(&request.operation) => {
+            let contract = cube_core::operations::require(&request.operation)
+                .map_err(error)?
+                .contract()
+                .map_err(error)?;
+            if request.version != contract.operation_version {
+                return Err(serde_json::json!({"code":"incompatible_version", "message":"operation version differs from the installed executor", "operation":request.operation}).to_string());
+            }
+            return bindings::execute(
+                &request.operation,
+                request.version,
+                request.inputs,
+                request.parameters,
+                MAX_CODEC_INPUT,
+            )
+            .map(|value| value.to_string())
+            .map_err(error);
+        }
+        Err(failure) => return Err(execution_error(failure)),
+    };
     if request.version != entry.contract.operation_version {
         return Err(serde_json::json!({
             "code": "incompatible_version",
@@ -178,7 +214,6 @@ fn serialize_catalog(document: &contracts::Document) -> Result<String, String> {
 pub fn catalog_json() -> Result<String, String> {
     serialize_catalog(&contracts::document().map_err(error)?)
 }
-
 #[wasm_bindgen]
 pub fn catalog_snapshot_json() -> Result<String, String> {
     let document = contracts::document().map_err(error)?;
@@ -259,4 +294,76 @@ pub fn run_recipe_json(
         .map_err(|value| value.diagnostic().to_string())?;
     let value = serde_json::to_value(result).expect("typed execution is serializable");
     Ok(contracts::canonical_value(value).to_string())
+}
+
+#[cfg(test)]
+mod binding_tests {
+    use super::*;
+    use serde_json::{Value, json};
+
+    #[test]
+    fn book_cipher_executes_arbitrary_named_inputs() {
+        let output = execute_json(
+            &json!({
+                "operation":"cipher.book.decode", "version":1,
+                "inputs":{"input":"1:1,2:1"},
+                "parameters":{"source":"another book", "scheme":"word_character", "index_base":1}
+            })
+            .to_string(),
+        )
+        .unwrap();
+        assert_eq!(
+            serde_json::from_str::<Value>(&output).unwrap(),
+            json!({"output":"ab"})
+        );
+    }
+    #[test]
+    fn canonical_decimal_fields_in_nested_inputs_keep_their_types() {
+        let fixtures: Vec<Value> = serde_json::from_str(include_str!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../../crates/cube-core/src/operations/contracts/conformance.json"
+        )))
+        .unwrap();
+        let fixture = fixtures
+            .iter()
+            .find(|f| f["operation"] == "investigation.profile.run")
+            .unwrap();
+        let mut inputs = fixture["inputs"].clone();
+        inputs["profile"]["budgets"]["max_elapsed_ms"] = json!("5000");
+        let request = json!({"operation":fixture["operation"],"version":fixture["operation_version"],"inputs":inputs,"parameters":fixture["parameters"]});
+        let output: Value =
+            serde_json::from_str(&execute_json(&request.to_string()).unwrap()).unwrap();
+        assert_eq!(output, fixture["outputs"]);
+    }
+    #[test]
+    fn every_canonical_binding_matches_independent_known_answers() {
+        let fixtures: Vec<Value> = serde_json::from_str(include_str!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../../crates/cube-core/src/operations/contracts/conformance.json"
+        )))
+        .unwrap();
+        let advertised: Vec<Value> = serde_json::from_str(&executors_json().unwrap()).unwrap();
+        let mut failures = Vec::new();
+        for fixture in fixtures {
+            let op = fixture["operation"].as_str().unwrap();
+            if !advertised.iter().any(|entry| entry["operation"] == op) {
+                failures.push(format!("{op}: no binding"));
+                continue;
+            }
+            let request = json!({"operation":op,"version":fixture["operation_version"],"inputs":fixture["inputs"],"parameters":fixture["parameters"]});
+            match execute_json(&request.to_string()) {
+                Ok(value) => {
+                    let actual: Value = serde_json::from_str(&value).unwrap();
+                    if actual != fixture["outputs"] {
+                        failures.push(format!(
+                            "{op}: actual {actual} != expected {}",
+                            fixture["outputs"]
+                        ));
+                    }
+                }
+                Err(error) => failures.push(format!("{op}: {error}")),
+            }
+        }
+        assert!(failures.is_empty(), "{}", failures.join("\n"));
+    }
 }

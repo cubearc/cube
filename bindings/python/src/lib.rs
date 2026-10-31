@@ -24,6 +24,7 @@ mod enigma;
 mod esolang;
 mod fraction;
 mod graph;
+mod historical;
 mod image;
 mod investigation;
 mod lexical;
@@ -591,6 +592,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     traversal::register(module)?;
     puzzles::register(module)?;
     mono::register(module)?;
+    historical::register(module)?;
     poly::register(module)?;
     vigenere_keys::register(module)?;
     cryptanalysis::register(module)?;

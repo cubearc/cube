@@ -259,3 +259,14 @@ pub(crate) fn grandpre_decode() -> Result<Fixture, OperationError> {
         "\"A \"",
     )
 }
+
+pub(crate) fn rot8000() -> Result<Fixture, OperationError> {
+    answer(
+        "cipher.rot8000",
+        json!({"text":"A 😀"}),
+        json!({}),
+        "text",
+        json!(rotations::rot8000("A 😀")?),
+        "\"籊 😀\"",
+    )
+}

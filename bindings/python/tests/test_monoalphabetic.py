@@ -189,3 +189,72 @@ def test_homophonic_exact_serialized_output_ceiling():
         with pytest.raises(ValueError) as error:
             function(data, mapping)
         assert error.value.code == "resource_limit"
+
+
+def test_rot8000_fixed_bmp_and_limits():
+    assert cube.rot8000("A 😀\0\u1680") == "籊 😀\0\u1680"
+    assert cube.rot8000(cube.rot8000("abc é 😀")) == "abc é 😀"
+    assert cube.rot8000("") == ""
+    with pytest.raises(ValueError):
+        cube.rot8000("A" * (1024 * 1024 + 1))
+
+
+def test_named_historical_profiles_and_codebook_provenance():
+    assert cube.malespin("bueno Amigo áéíóú") == "tuani Epofi áéíóú"
+    pairs = [["Q", "W"], ["O", "I"], ["E", "S"], ["U", "H"]]
+    assert cube.vatsyayana("QOEU", pairs) == "WISH"
+    with pytest.raises(ValueError):
+        cube.vatsyayana("A", [["A", "B"], ["B", "C"]])
+    definition = {
+        "entries": [
+            {"alternatives": ["OR"], "codes": ["10"]},
+            {"alternatives": ["D"], "codes": ["05"]},
+        ],
+        "null_codes": ["99"],
+        "cancel_codes": ["27"],
+    }
+    assert cube.nomenclator_encode(["OR", "D"], definition) == ["10", "05"]
+    report = cube.nomenclator_decode(["10", "05", "27", "99"], definition)
+    assert report == {
+        "units": [{"token_index": 0, "alternatives": ["OR"]}],
+        "null_indices": [3],
+        "canceled_indices": [1],
+        "cancel_indices": [2],
+    }
+    assert cube.great_cipher_encode(["Les", "En", "Ne", "Mi", "S"]) == [
+        "124",
+        "22",
+        "125",
+        "46",
+        "120",
+    ]
+    assert cube.great_cipher_decode(["55", "502"])["units"] == [
+        {"token_index": 0, "alternatives": ["I", "J"]},
+        {"token_index": 1, "alternatives": ["Bien"]},
+    ]
+    with pytest.raises(ValueError):
+        cube.great_cipher_decode(["6"])
+
+
+def test_native_syllabary_matches_the_aca_worked_example():
+    import json
+    from pathlib import Path
+
+    vectors = json.loads(
+        (
+            Path(__file__).parents[3]
+            / "crates/cube-core/src/operations/contracts/conformance.json"
+        ).read_text()
+    )
+    fixture = next(
+        row for row in vectors if row["operation"] == "cipher.syllabary.encode"
+    )
+    definition = fixture["parameters"]["definition"]
+    tokens = cube.syllabary_encode(fixture["inputs"]["units"], definition)
+    assert tokens == ["10", "26", "67", "65", "69", "56", "44", "05"]
+    assert [
+        row["alternatives"][0]
+        for row in cube.syllabary_decode(tokens, definition)["units"]
+    ] == fixture["inputs"]["units"]
+    with pytest.raises(ValueError):
+        cube.syllabary_decode(["1"], definition)

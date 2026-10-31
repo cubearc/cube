@@ -157,9 +157,13 @@ pub fn describe(operation: &str, budget: Budget) -> Result<Executable> {
 pub fn defaults(operation: &str, budget: Budget) -> Result<Value> {
     let e = entry(operation)?;
     let c = contract(operation)?;
-    let properties = c.parameters.as_value()["properties"]
-        .as_object()
-        .ok_or(Failure("contract_mismatch"))?;
+    let schema = c.parameters.as_value();
+    let empty = serde_json::Map::new();
+    let properties = match schema.get("properties") {
+        Some(value) => value.as_object().ok_or(Failure("contract_mismatch"))?,
+        None if schema["type"] == "object" => &empty,
+        None => return Err(Failure("contract_mismatch")),
+    };
     let mut p = Value::Object(
         properties
             .iter()

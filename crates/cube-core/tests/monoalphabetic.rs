@@ -414,3 +414,44 @@ fn homophonic_definition_token_ownership_and_serialized_output_have_adjacent_lim
         ErrorCode::ResourceLimit
     );
 }
+
+#[test]
+fn rot8000_matches_the_complete_pinned_bmp_mapping() {
+    use cube_core::ciphers::mono::rotations::rot8000;
+    let ranges = [
+        (0x21, 0x7e),
+        (0xa1, 0x167f),
+        (0x1681, 0x1fff),
+        (0x200b, 0x2027),
+        (0x202a, 0x202e),
+        (0x2030, 0x205e),
+        (0x2060, 0x2fff),
+        (0x3001, 0xd7ff),
+        (0xe000, 0xffff),
+    ];
+    let eligible: Vec<u32> = ranges.into_iter().flat_map(|(a, b)| a..=b).collect();
+    assert_eq!(eligible.len(), 63404);
+    let input: String = (0..=0xffff).filter_map(char::from_u32).collect();
+    let expected: String = input
+        .chars()
+        .map(|c| match eligible.binary_search(&(c as u32)) {
+            Ok(i) => char::from_u32(eligible[(i + 31702) % eligible.len()]).unwrap(),
+            Err(_) => c,
+        })
+        .collect();
+    assert_eq!(rot8000(&input).unwrap(), expected);
+    assert_eq!(rot8000(&expected).unwrap(), input);
+    assert_eq!(
+        rot8000("A 😀\0\u{1680}\u{2028}").unwrap(),
+        "籊 😀\0\u{1680}\u{2028}"
+    );
+    assert_eq!(rot8000("").unwrap(), "");
+    assert_eq!(
+        rot8000(&"A".repeat(1024 * 1024)).unwrap().len(),
+        3 * 1024 * 1024
+    );
+    assert_eq!(
+        rot8000(&"A".repeat(1024 * 1024 + 1)).unwrap_err().code,
+        cube_core::errors::ErrorCode::ResourceLimit
+    );
+}

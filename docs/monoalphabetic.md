@@ -218,6 +218,7 @@ alphabet definition. ROT profiles need no table or key.
 | --- | --- |
 | Exact/keyword substitution | 4 MiB UTF-8 |
 | ROT5/18/47 | Same UTF-8 byte length as input |
+| ROT8000 | 3 MiB UTF-8 |
 | Homophonic | 1 MiB text or serialized token JSON |
 | Digit grammars | 4 MiB text or alternatives JSON |
 | Grandpré | 1 MiB text or serialized coordinates |
@@ -239,5 +240,117 @@ Typed Core errors distinguish `invalid_parameter`, `invalid_input` and
 original UTF-8 byte offsets. The CLI's `--json-errors` preserves empty stdout on
 failure. Existing module-owned discovery, native stubs and canonical contracts
 provide the stable IDs, exact parameter/result shapes, defaults and availability.
-The research-only names ROT8000, Malespín, Vatsyayana and historical codebooks are
-research topics rather than available algorithms.
+## ROT8000 and paired profiles
+
+`cube cipher rot8000 'A 😀'` returns `籊 😀`. The fixed
+[ROT8000 profile](https://github.com/rottytooth/rot8000/tree/c47905631615173e51ac88e0901c4be642a1c8aa)
+rotates an ordered set of 63,404 BMP units by 31,702 positions. Excluded BMP
+units and non-BMP scalars remain exact. It accepts valid UTF-8, performs no
+normalization and is its own inverse. The input ceiling is 1 MiB and the output
+ceiling is 3 MiB. This profile has its own compact implementation; it does not
+use the caller-defined alphabet limit.
+
+`cube cipher malespin 'bueno Amigo á'` returns `tuani Epofi á`. The written
+Malespín profile exchanges `a/e`, `i/o`, `b/t`, `f/g` and `p/m`, retaining ASCII
+case. Accented vowels and all other scalars are preserved. The ten-letter
+mechanism follows Sorbet's [original study, section 5](https://doi.org/10.4000/bulletinhispanique.16749).
+This exact orthographic profile does not apply regional phonetic changes,
+accent exchange, silent-letter deletion or contemporary slang reconstruction.
+Input and output are at most 1 MiB.
+
+Vatsyayana uses required disjoint scalar pairs. Supply each pair once, with two
+different scalars; every scalar may belong to only one pair. There is no default
+historical alphabet. The same operation decodes its output. Unmapped scalars
+reject by default; `--unmapped preserve` retains them without folding or
+normalization. At most 2,048 pairs use the existing 4,096-symbol and 64 KiB
+combined-alphabet limits; input is at most 1 MiB and output at most 4 MiB.
+
+```sh
+cube cipher vatsyayana QOEU --pairs '[["Q","W"],["O","I"],["E","S"],["U","H"]]'
+```
+
+The result is `WISH`, using the pairs in the [Waterloo 2020 challenge](https://cemc.uwaterloo.ca/sites/default/files/documents/2020/2020BCCContestSolutions7_8.pdf).
+This is an explicit modern pairing convention, without attributing a fixed
+Latin key to the ancient text.
+
+## Words, syllables and historical codebooks
+
+Nomenclator accepts an explicit table whose entries contain `alternatives` and
+`codes` arrays, plus optional `null_codes` and `cancel_codes` arrays. Units and
+codes are exact nonempty strings. Encoding takes a JSON array of already
+segmented units and chooses the first listed matching code. It never infers
+word boundaries or a longest match. For example, save this as `codebook.json`:
+
+```json
+{"entries":[{"alternatives":["OR"],"codes":["10"]},{"alternatives":["D"],"codes":["05"]}],"null_codes":["99"],"cancel_codes":["27"]}
+```
+
+```sh
+cube cipher nomenclator '["OR","D"]' --definition codebook.json
+cube cipher nomenclator '["10","05","27","99"]' --definition codebook.json --decode
+```
+
+The first command returns `["10","05"]`. The second returns the `OR` reading
+at token index 0, null index 3, canceled index 1 and cancellation index 2.
+Cancellation removes the last surviving whole group, including a null or an
+unknown group. A cancel with no preceding surviving group fails. Unknown
+surviving codes fail. Codes are globally unique across table entries, nulls
+and cancellation instructions. Alternative readings remain explicit, with
+original zero-based token indices; no joined plaintext is guessed.
+
+Syllabary uses the same segmented-unit behavior with an explicit ACA 10×10
+keysquare: `cells` contains exactly 100 row-major strings; `row_labels` and
+`column_labels` are permutations of `0123456789`. Cells may contain letters,
+syllables or words. Coordinates are exact two-character tokens, including
+leading zeros. Repeated plaintext units choose their first row-major code.
+Use `cube cipher syllabary --definition square.json` and pass a JSON unit
+array, or add `--decode` for code tokens. The [ACA worked example](https://www.cryptogram.org/downloads/aca.info/ciphers/Syllabary.pdf)
+has multiple legal segmentations; the API preserves the caller's selection.
+
+### Great Cipher of 1691
+
+The fixed profile uses the second deciphering table in Burgaud and Bazeries,
+[*Le Masque de fer* (1893), pp. 280–289](https://gallica.bnf.fr/ark:/12148/bpt6k1523532j).
+It exposes the 587 numbered positions exactly through a documented ASCII
+transcription: accents are omitted, capitalization retained, and `Geneve?`
+retains the printed question mark. Empty table entries are unknown and reject;
+they are never treated as nulls. Group `27` cancels a preceding whole group.
+Only explicitly marked nulls are omitted. Printed I/J, U/V and other alternatives
+remain separate readings. No word segmentation or historical identity claim is
+inferred from a decipherment.
+
+```sh
+cube cipher great-cipher '["Les","En","Ne","Mi","S"]'
+cube cipher great-cipher '["55","502"]' --decode
+```
+
+Encoding returns `["124","22","125","46","120"]`; decoding retains `I/J`
+at index 0 and `Bien` at index 1. This profile uses the deciphering table as
+printed, including group 502, rather than silently substituting an inferred
+historical correction. See [data provenance](../THIRD_PARTY_NOTICES).
+
+### Codebook limits
+
+All direct Rust and SDK callers enforce these ceilings:
+
+| Resource | Maximum |
+| --- | --- |
+| Table, input array or output report, compact UTF-8 JSON | 1 MiB each |
+| Input units/code tokens | 65,536 |
+| Nomenclator entries and total owned codes, including null/cancel codes | 4,096 each |
+| Individual unit/code | 256 UTF-8 bytes |
+| Alternatives per entry | 16 |
+| Codes per entry | 256 |
+
+Overlapping plaintext units are legal because segmentation is explicit.
+Duplicate code ownership, empty units, unknown fields and duplicate JSON keys
+reject. Reports check their exact escaped serialized size before copying table
+strings into output. Processing uses bounded lookup and a stack of token indices;
+it performs no exponential segmentation search. Native Play additionally enforces
+its own input, output and literal budgets. The operations expose pure named-port
+execution; they do not enable a linear Core pipeline adapter.
+
+Python exports `rot8000`, `malespin`, `vatsyayana`, `nomenclator_encode/decode`,
+`syllabary_encode/decode` and `great_cipher_encode/decode`. JavaScript/TypeScript
+uses the same version-1 operation IDs and named ports in `cube.execute`; its
+types and runtime availability derive from the actual packaged Wasm.

@@ -1367,6 +1367,7 @@ def substitution_decode(
 def rot5(text: str) -> str: ...
 def rot18(text: str) -> str: ...
 def rot47(text: str) -> str: ...
+def rot8000(text: str) -> str: ...
 def homophonic_encode(
     text: str,
     definition: HomophonicDefinition,
@@ -1727,3 +1728,46 @@ def vernam(data: bytes, pad: bytes) -> bytes:
     Uniform independent one-use pad delivery is external; no pad management.
     """
     ...
+
+class CodebookEntry(TypedDict):
+    alternatives: list[str]
+    codes: list[str]
+
+class CodebookDefinition(TypedDict):
+    entries: list[CodebookEntry]
+    null_codes: NotRequired[list[str]]
+    cancel_codes: NotRequired[list[str]]
+
+class SyllabaryDefinition(TypedDict):
+    cells: list[str]
+    row_labels: str
+    column_labels: str
+
+class CodebookUnit(TypedDict):
+    token_index: int
+    alternatives: list[str]
+
+class CodebookReport(TypedDict):
+    units: list[CodebookUnit]
+    null_indices: list[int]
+    canceled_indices: list[int]
+    cancel_indices: list[int]
+
+def malespin(text: str) -> str: ...
+def vatsyayana(
+    text: str, pairs: list[tuple[str, str]] | list[list[str]], unmapped: str = "reject"
+) -> str: ...
+def nomenclator_encode(
+    units: list[str], definition: CodebookDefinition
+) -> list[str]: ...
+def nomenclator_decode(
+    tokens: list[str], definition: CodebookDefinition
+) -> CodebookReport: ...
+def syllabary_encode(
+    units: list[str], definition: SyllabaryDefinition
+) -> list[str]: ...
+def syllabary_decode(
+    tokens: list[str], definition: SyllabaryDefinition
+) -> CodebookReport: ...
+def great_cipher_encode(units: list[str]) -> list[str]: ...
+def great_cipher_decode(tokens: list[str]) -> CodebookReport: ...

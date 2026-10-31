@@ -46,7 +46,9 @@ byte. Input failures do not consume a byte.
 | Comparison | 1..3 unique supported widths; ascending order |
 | Aggregate comparison dispatch / output / memory | 1,000,000 / 1 MiB / 8 MiB |
 
-Caller budgets can lower the hard ceilings, including to zero where shown.
+Core uses portable conservative reservations for memory and reports rather than
+measured heap usage. The same reservations apply on 32-bit Wasm and 64-bit native
+runtimes. Caller budgets can lower the hard ceilings, including to zero where shown.
 The [conservative memory and report reservation](resource-accounting.md#brainfuck)
 can reject a request before execution. A smaller requested output allowance can
 reduce that reservation. See [resource limits](concepts/resource-limits.md) for

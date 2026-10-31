@@ -52,8 +52,13 @@ permitted output byte, 48 per selected cell and 320 per permitted trace record.
 CLI/CPython object and allocator overhead is outside this Core model; both
 transports retain the same cardinality/report ceilings.
 
-Trace capacity is the smaller of the requested record count and the trace byte
-budget divided by Rust's `size_of::<TraceRecord>()`, including ABI padding.
+The ledger reserves 12 bytes per parsed instruction, eight bytes per parser
+index, 48 bytes per trace record and 16 bytes per selected cell. These charges
+cover the supported 32/64-bit layouts, including padding; compile-time checks
+reject a layout that would exceed them. They keep admission and reported upper
+bounds consistent across native and Wasm runtimes and do not claim measured
+allocator usage. Trace capacity is the smaller of the requested record count
+and the trace byte budget divided by the 48-byte charge.
 Comparison shares one parsed program and at most one live tape, while retaining
 prior outputs/reports and their JSON bound. Retained outputs shrink to exact length.
 

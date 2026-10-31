@@ -11,6 +11,21 @@ use std::{
     sync::atomic::{AtomicBool, Ordering},
     time::{Duration, Instant},
 };
+struct Elapsed<'a> {
+    read: &'a mut dyn FnMut() -> Result<Duration>,
+    previous: Duration,
+}
+impl Elapsed<'_> {
+    fn sample(&mut self) -> Result<Duration> {
+        let current = (self.read)()?;
+        if current < self.previous {
+            return Err(invalid("elapsed clock must be monotonic"));
+        }
+        self.previous = current;
+        Ok(current)
+    }
+}
+
 #[derive(
     Clone, Copy, Debug, Default, Serialize, Deserialize, PartialEq, Eq, schemars::JsonSchema,
 )]
@@ -344,6 +359,22 @@ impl Profile {
         cancel: Option<&AtomicBool>,
     ) -> Result<Investigation> {
         let started = Instant::now();
+        self.run_reader_with_clock(reader, cancel, || Ok(started.elapsed()))
+    }
+    /// Run with an interface-supplied monotonic elapsed clock. The clock includes
+    /// preflight and reads, may fail explicitly, and must never move backwards.
+    /// Native callers normally use run_reader; portable hosts supply their real
+    /// monotonic clock rather than disabling the elapsed-time budget.
+    pub fn run_reader_with_clock(
+        &self,
+        reader: &mut (impl Read + Seek),
+        cancel: Option<&AtomicBool>,
+        mut elapsed: impl FnMut() -> Result<Duration>,
+    ) -> Result<Investigation> {
+        let mut clock = Elapsed {
+            read: &mut elapsed,
+            previous: Duration::ZERO,
+        };
         let size = reader
             .seek(SeekFrom::End(0))
             .map_err(crate::errors::OperationError::from)
@@ -357,7 +388,7 @@ impl Profile {
         let mut reason = None;
         let mut buffer = [0u8; 64 * 1024];
         while data.len() < plan.input_read_bytes {
-            if let Some(stop) = self.interruption(started, cancel) {
+            if let Some(stop) = self.interruption(&mut clock, cancel)? {
                 reason = Some(stop);
                 break;
             }
@@ -368,25 +399,38 @@ impl Profile {
                 .map_err(pipeline::Error::from_operation)?;
             data.extend_from_slice(&buffer[..count]);
         }
-        self.run_buffer(&data, plan, started, cancel, reason)
+        self.run_buffer(&data, plan, &mut clock, cancel, reason)
     }
     pub fn run_bytes(&self, data: &[u8], cancel: Option<&AtomicBool>) -> Result<Investigation> {
         self.run_reader(&mut std::io::Cursor::new(data), cancel)
     }
-    fn interruption(&self, started: Instant, cancel: Option<&AtomicBool>) -> Option<&'static str> {
-        if cancel.is_some_and(|c| c.load(Ordering::Relaxed)) {
+    /// Byte-slice equivalent of run_reader_with_clock; the caller owns the data.
+    pub fn run_bytes_with_clock(
+        &self,
+        data: &[u8],
+        cancel: Option<&AtomicBool>,
+        elapsed: impl FnMut() -> Result<Duration>,
+    ) -> Result<Investigation> {
+        self.run_reader_with_clock(&mut std::io::Cursor::new(data), cancel, elapsed)
+    }
+    fn interruption(
+        &self,
+        clock: &mut Elapsed<'_>,
+        cancel: Option<&AtomicBool>,
+    ) -> Result<Option<&'static str>> {
+        Ok(if cancel.is_some_and(|c| c.load(Ordering::Relaxed)) {
             Some("cooperative cancellation requested; further analysis suppressed")
-        } else if started.elapsed() >= Duration::from_millis(self.budgets.max_elapsed_ms) {
+        } else if clock.sample()? >= Duration::from_millis(self.budgets.max_elapsed_ms) {
             Some("cooperative elapsed-time budget exhausted; further analysis suppressed")
         } else {
             None
-        }
+        })
     }
     fn run_buffer(
         &self,
         data: &[u8],
         plan: DryRun,
-        started: Instant,
+        clock: &mut Elapsed<'_>,
         cancel: Option<&AtomicBool>,
         mut stopped: Option<&str>,
     ) -> Result<Investigation> {
@@ -395,7 +439,7 @@ impl Profile {
         let mut operation_units = 0;
         for run in &plan.runs {
             if stopped.is_none() {
-                stopped = self.interruption(started, cancel);
+                stopped = self.interruption(clock, cancel)?;
             }
             if let Some(reason) = stopped {
                 session.skip(run.spec.clone(), reason)?;
@@ -447,7 +491,7 @@ impl Profile {
             input_read_bytes: data.len(),
             inspected_bytes,
             operation_units,
-            elapsed_ms: started.elapsed().as_millis(),
+            elapsed_ms: clock.sample()?.as_millis(),
         })
     }
 }

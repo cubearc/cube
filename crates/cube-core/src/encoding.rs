@@ -15,6 +15,7 @@ use data_encoding::BASE32;
 
 use crate::Error;
 pub mod base58check;
+mod execution;
 
 pub(crate) fn serialize_hex<S: serde::Serializer>(
     data: &[u8],
@@ -496,7 +497,7 @@ const PROFILED: [crate::operations::metadata::Entry; 8] = [
 pub const OPERATIONS: &[crate::operations::Descriptor] =
     &crate::operations::metadata::descriptors(&PROFILED);
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_executors(execution::ENTRIES);
 
 #[cfg(test)]
 mod tests {

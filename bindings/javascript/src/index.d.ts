@@ -66,12 +66,13 @@ export interface BuildIdentity {
   readonly sourceSha256: string;
   readonly catalogSha256: string;
   readonly wasmSha256: string;
+  readonly metadataSha256: string;
 }
 export interface Cube {
   readonly build: BuildIdentity;
   readonly limits: { readonly linearMemoryBytes: number; readonly direct: Readonly<Record<string, number>>; readonly recipe: Readonly<Record<string, number>> };
   readonly pipelineAdapters: readonly { readonly operation: PipelineOperationId; readonly version: number; readonly input_type: Kind; readonly output_type: Kind; readonly parameters: readonly { readonly name: string; readonly description: string; readonly required: boolean; readonly default: JsonValue; readonly constraints: { readonly type: string; readonly [key: string]: JsonValue } }[] }[];
-  readonly executors: readonly { readonly operation: string; readonly version: number; readonly effects: 'pure'; readonly inputs: Readonly<Record<string, string>>; readonly outputs: Readonly<Record<string, string>>; readonly parameters: JsonValue }[];
+  readonly executors: readonly { readonly operation: string; readonly version: number; readonly effects: 'pure' | 'monotonic_clock'; readonly inputs: Readonly<Record<string, string>>; readonly outputs: Readonly<Record<string, string>>; readonly parameters: JsonValue }[];
   execute(request: { readonly operation: 'encoding.base64.encode'; readonly version: 1; readonly inputs: { readonly input: Uint8Array }; readonly parameters?: Record<string, never> }): { output: string };
   execute(request: { readonly operation: 'encoding.base64.decode'; readonly version: 1; readonly inputs: { readonly input: string }; readonly parameters?: Record<string, never> }): { output: Uint8Array };
   execute<Id extends OtherDirectOperationId>(request: { readonly operation: Id; readonly version: DirectVersions[Id]; readonly inputs: DirectInputs[Id] } & DirectConfiguration[Id]): DirectOutputs[Id];

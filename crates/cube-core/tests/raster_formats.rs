@@ -30,6 +30,28 @@ fn encoded(format: &str) -> Vec<u8> {
     bytes
 }
 #[test]
+fn each_additional_codec_enforces_a_lowered_sample_ceiling() {
+    for format in ["jpeg", "gif", "bmp", "webp"] {
+        let bytes = encoded(format);
+        let samples = if format == "gif" { 8 } else { 6 };
+        assert_eq!(
+            Image::decode_with_sample_limit(&bytes, samples - 1)
+                .unwrap_err()
+                .code,
+            ErrorCode::ResourceLimit,
+            "{format}"
+        );
+        assert_eq!(
+            Image::decode_with_sample_limit(&bytes, samples)
+                .unwrap()
+                .samples()
+                .len(),
+            samples,
+            "{format}"
+        );
+    }
+}
+#[test]
 fn constructed_and_transformed_samples_do_not_claim_an_encoded_source() {
     let constructed = Image::from_bytes(
         1,

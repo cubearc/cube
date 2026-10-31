@@ -20,7 +20,7 @@ fn limits() -> Limits {
     limits.max_alloc = Some(64 * 1024 * 1024);
     limits
 }
-fn read(mut decoder: impl ImageDecoder) -> Result<Image, OperationError> {
+fn read(mut decoder: impl ImageDecoder, max_samples: usize) -> Result<Image, OperationError> {
     decoder.set_limits(limits()).map_err(error)?;
     let model = match decoder.color_type() {
         ColorType::L8 => ColorModel::Gray,
@@ -35,6 +35,9 @@ fn read(mut decoder: impl ImageDecoder) -> Result<Image, OperationError> {
     };
     let (width, height) = decoder.dimensions();
     let count = sample_count(width, height, model.channels())?;
+    if count > max_samples {
+        return Err(super::limit("decoded samples exceed the caller ceiling"));
+    }
     if decoder.total_bytes() != count as u64 {
         return Err(malformed("inconsistent decoded raster layout"));
     }
@@ -43,13 +46,16 @@ fn read(mut decoder: impl ImageDecoder) -> Result<Image, OperationError> {
     Image::from_samples(width, height, model, samples, vec![], vec![])
 }
 
-pub(super) fn raster(encoded: &[u8]) -> Result<Image, OperationError> {
+pub(super) fn raster(encoded: &[u8], max_samples: usize) -> Result<Image, OperationError> {
     let input = Cursor::new(encoded);
     let (mut image, format) = if encoded.starts_with(b"\xff\xd8") {
         // Reject incomplete framing even when a permissive codec can recover pixels.
         forensics::boundaries::inspect(&mut Cursor::new(encoded))?;
         (
-            read(codecs::jpeg::JpegDecoder::new(input).map_err(error)?)?,
+            read(
+                codecs::jpeg::JpegDecoder::new(input).map_err(error)?,
+                max_samples,
+            )?,
             "jpeg",
         )
     } else if encoded.starts_with(b"GIF87a") || encoded.starts_with(b"GIF89a") {
@@ -57,7 +63,9 @@ pub(super) fn raster(encoded: &[u8]) -> Result<Image, OperationError> {
         let mut decoder = codecs::gif::GifDecoder::new(input).map_err(error)?;
         decoder.set_limits(limits()).map_err(error)?;
         let (width, height) = decoder.dimensions();
-        sample_count(width, height, 4)?;
+        if sample_count(width, height, 4)? > max_samples {
+            return Err(super::limit("decoded samples exceed the caller ceiling"));
+        }
         let mut frames = decoder.into_frames();
         let first = frames
             .next()
@@ -86,7 +94,10 @@ pub(super) fn raster(encoded: &[u8]) -> Result<Image, OperationError> {
         )
     } else if encoded.starts_with(b"BM") {
         (
-            read(codecs::bmp::BmpDecoder::new(input).map_err(error)?)?,
+            read(
+                codecs::bmp::BmpDecoder::new(input).map_err(error)?,
+                max_samples,
+            )?,
             "bmp",
         )
     } else if encoded.starts_with(b"RIFF") && encoded.get(8..12) == Some(b"WEBP") {
@@ -101,7 +112,7 @@ pub(super) fn raster(encoded: &[u8]) -> Result<Image, OperationError> {
                 "animated WebP is unsupported; exactly one frame is required",
             ));
         }
-        (read(decoder)?, "webp")
+        (read(decoder, max_samples)?, "webp")
     } else {
         return Err(unsupported(
             "supported images are PNG8, baseline JPEG, single-frame GIF, BMP and static WebP",

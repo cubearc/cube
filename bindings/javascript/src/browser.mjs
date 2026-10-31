@@ -1,17 +1,24 @@
 import init, * as wasm from './wasm/cube_wasm.js';
 import { CubeError, coreCall, requireText } from './errors.mjs';
 import { boundedDocument, captureIndices, executionFromWire, immutable, stringifyExact } from './transport.mjs';
+import { canonicalIntegers } from './canonical-input.mjs';
 import { verifiedBytes } from './loading.mjs';
 import { build } from './build-info.mjs';
+import { metadata } from './runtime-metadata.mjs';
 export { CubeError } from './errors.mjs';
 
 let initialization;
 let initializationSource;
 let executors;
 let limits;
+let contracts;
+function operationContract(operation) {
+  contracts ??= new Map(coreCall(() => JSON.parse(metadata.catalogJson)).operations.map(c => [c.operation, c]));
+  return contracts.get(operation);
+}
 
 function directExecutors() {
-  executors ??= immutable(coreCall(() => JSON.parse(wasm.executors_json())));
+  executors ??= immutable(metadata.executors);
   return executors;
 }
 
@@ -40,6 +47,7 @@ function execute(request) {
     throw new CubeError('invalid_input', 'Use exact named inputs and parameters.', { operation });
   }
   const bounds = runtimeLimits().direct;
+  const contract = operationContract(operation);
   const wireInputs = Object.fromEntries(Object.entries(inputs).map(([name, value]) => {
     const representation = executor.inputs[name];
     if (value instanceof Uint8Array && value.byteLength > bounds.inputBytes) throw new CubeError('resource_limit', 'Named input exceeds the direct byte budget.', { operation });
@@ -49,9 +57,9 @@ function execute(request) {
     }
     if (representation === 'byte_array' && value instanceof Uint8Array) return [name, Array.from(value)];
     if (representation === 'text') requireText(value);
-    return [name, value];
+    return [name, canonicalIntegers(value, contract.inputs.find(p => p.name === name)?.schema, bounds)];
   }));
-  const invocation = stringifyExact({ operation, version, inputs: wireInputs, parameters },
+  const invocation = stringifyExact({ operation, version, inputs: wireInputs, parameters: canonicalIntegers(parameters, contract.parameters, bounds, 'invalid_parameter') },
     bytes => coreCall(() => wasm.encode_base64(bytes)), { maxBytes: bounds.documentBytes, maxDepth: bounds.documentDepth, maxNodes: bounds.documentNodes });
   const output = coreCall(() => JSON.parse(wasm.execute_json(invocation)));
   return Object.fromEntries(Object.entries(output).map(([name, value]) => [name,
@@ -61,7 +69,6 @@ function execute(request) {
 }
 
 function api() {
-  let catalog;
   const pipelineAdapters = immutable(coreCall(() => JSON.parse(wasm.pipeline_adapters_json())));
   return Object.freeze({
     build: Object.freeze(build),
@@ -70,14 +77,7 @@ function api() {
     get executors() { return directExecutors(); },
     recipeJson(definition) { return document(definition); },
     pipelineAdapters,
-    catalogJson() {
-      if (catalog === undefined) {
-        const snapshot = coreCall(() => JSON.parse(wasm.catalog_snapshot_json()));
-        if (snapshot.sha256 !== build.catalogSha256) throw new CubeError('incompatible_runtime', 'The runtime catalog differs from this SDK build.');
-        catalog = snapshot.json;
-      }
-      return catalog;
-    },
+    catalogJson() { return metadata.catalogJson; },
     validateRecipe(definition) { return coreCall(() => JSON.parse(wasm.validate_recipe_json(document(definition)))); },
     runRecipe(definition, bindings = {}, { captures = [] } = {}) {
       const indices = captureIndices(captures);
@@ -103,6 +103,13 @@ export function createCube(options = {}) {
   const snapshot = source instanceof Uint8Array ? new Uint8Array(source) : source;
   initialization = (async () => {
     const bytes = await verifiedBytes(snapshot);
+    if (metadata.formatVersion !== 1 || metadata.wasmSha256 !== build.wasmSha256 || metadata.sourceSha256 !== build.sourceSha256 || metadata.catalogSha256 !== build.catalogSha256) {
+      throw new CubeError('incompatible_runtime', 'Discovery metadata differs from this verified SDK/Wasm build.');
+    }
+    const metadataBytes = new TextEncoder().encode(JSON.stringify(metadata));
+    const metadataDigest = new Uint8Array(await crypto.subtle.digest('SHA-256',metadataBytes));
+    const metadataHash = Array.from(metadataDigest,value=>value.toString(16).padStart(2,'0')).join('');
+    if (metadataHash !== build.metadataSha256) throw new CubeError('incompatible_runtime','Discovery metadata content differs from the verified SDK build.');
     try { await init({ module_or_path: bytes }); }
     catch { throw new CubeError('initialization_failed', 'Could not load Cube Wasm; check its URL, response, MIME type and package version.'); }
     return api();

@@ -64,8 +64,13 @@ for (const entry of ['node', 'browser']) {
 }
 const wasm = await import(pathToFileURL(join(output, 'cube_wasm.js')));
 await wasm.default({ module_or_path: await readFile(join(output, 'cube_wasm_bg.wasm')) });
-if (!development) {
-  const snapshot = JSON.parse(wasm.catalog_snapshot_json());
-  if (snapshot.sha256 !== build.catalogSha256) throw new Error('Release Wasm catalog differs from the canonical artifact.');
+const snapshot = JSON.parse(wasm.catalog_snapshot_json());
+if (snapshot.sha256 !== build.catalogSha256 || snapshot.json.trim() !== (await readFile(join(workspace,'contracts/v1/catalog.json'),'utf8')).trim()) {
+  throw new Error('Actual Wasm catalog differs from canonical Core declarations.');
 }
-await generateDirectTypes(join(packageRoot, 'dist/direct-operations.d.ts'), JSON.parse(wasm.executors_json()), catalog);
+const executors=JSON.parse(wasm.executors_json());
+const metadataJson=JSON.stringify({formatVersion:1,sourceSha256:build.sourceSha256,wasmSha256:build.wasmSha256,catalogSha256:build.catalogSha256,catalogJson:snapshot.json,contracts:snapshot.contracts,executors});
+build.metadataSha256=sha256(metadataJson);
+await writeFile(join(packageRoot,'dist/runtime-metadata.mjs'),`// Generated from this exact Wasm artifact; never edit.\nexport const metadata = ${metadataJson};\n`);
+await writeFile(join(packageRoot,'dist/build-info.mjs'),`export const build = ${JSON.stringify(build)};\n`);
+await generateDirectTypes(join(packageRoot, 'dist/direct-operations.d.ts'), executors, catalog);

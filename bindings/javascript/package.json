@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test:qualification": "node --test --test-concurrency=1 tests/qualification.test.mjs tests/pipeline-qualification.test.mjs tests/direct-qualification.test.mjs tests/sdk.test.mjs tests/initialization.test.mjs tests/memory.test.mjs tests/worker-failure.test.mjs tests/transport-budget.test.mjs tests/qualification-report.test.mjs",
+    "test:qualification": "node --test --test-concurrency=1 tests/qualification.test.mjs tests/pipeline-qualification.test.mjs tests/direct-qualification.test.mjs tests/complete-bindings.test.mjs tests/binding-limits.test.mjs tests/sdk.test.mjs tests/initialization.test.mjs tests/memory.test.mjs tests/worker-failure.test.mjs tests/transport-budget.test.mjs tests/qualification-report.test.mjs",
     "test:types": "tsc -p tests/types/tsconfig.json"
   },
   "devDependencies": {

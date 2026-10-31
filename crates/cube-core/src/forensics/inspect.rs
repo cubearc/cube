@@ -56,6 +56,46 @@ pub struct FileInfo {
     pub signatures: Vec<signatures::Signature>,
 }
 
+/// Evidence from an owned byte artifact. Filesystem-only facts stay unknown.
+#[derive(Debug, Serialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ArtifactInfo {
+    pub source_kind: ArtifactKind,
+    pub size: u64,
+    pub regular_file: (),
+    pub modified: (),
+    pub created: (),
+    pub signatures: Vec<signatures::Signature>,
+}
+#[derive(Debug, Serialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ArtifactKind {
+    Artifact,
+}
+/// Inspect supplied bytes without resolving paths or claiming OS metadata.
+pub fn artifact_info(data: &[u8]) -> ArtifactInfo {
+    ArtifactInfo {
+        source_kind: ArtifactKind::Artifact,
+        size: data.len() as u64,
+        regular_file: (),
+        modified: (),
+        created: (),
+        signatures: signatures::detect(&data[..data.len().min(12)]),
+    }
+}
+#[derive(schemars::JsonSchema)]
+#[serde(untagged)]
+pub enum FileSource {
+    Reference(crate::operations::contracts::values::FileReference),
+    Bytes(crate::operations::contracts::values::Bytes),
+}
+#[derive(schemars::JsonSchema)]
+#[serde(untagged)]
+pub enum Inspection {
+    File(FileInfo),
+    Artifact(ArtifactInfo),
+}
+
 /// Read basic metadata and up to 12 header bytes. Symlinks, directories and special
 /// files are rejected; no recursive traversal or sensitive EXIF inspection occurs.
 pub fn file_info(path: &Path) -> Result<FileInfo, OperationError> {
@@ -93,7 +133,7 @@ pub fn file_info_reader(file: &mut std::fs::File) -> Result<FileInfo, OperationE
 pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::Descriptor {
     id: "file.info.inspect",
     category: "file",
-    description: "Inspect basic filesystem facts and bounded header evidence; no EXIF.",
+    description: "Inspect file or supplied byte-artifact size and bounded header evidence; artifact filesystem facts remain unknown; no EXIF.",
     input_type: "file_path",
     output_type: "file.info",
     command: "inspect",
@@ -102,6 +142,41 @@ pub const OPERATIONS: &[crate::operations::Descriptor] = &[crate::operations::De
     deterministic: false,
     reversible: None,
 }];
+
+fn fixture() -> Result<crate::operations::contracts::Fixture, OperationError> {
+    use serde_json::json;
+    Ok(crate::operations::contracts::Fixture {
+        inputs: json!({"input":{"base64":"AA=="}}),
+        parameters: json!({}),
+        outputs: json!({"output":artifact_info(&[0])}),
+    })
+}
+pub(crate) const CONTRACTS: &[crate::operations::contracts::Entry] =
+    &[crate::operations::contracts::Entry {
+        operation_version: 2,
+        descriptor: OPERATIONS[0],
+        inputs: &[crate::operations::contracts::Port {
+            name: "input",
+            semantic_type: "file.source",
+            required: true,
+            schema: crate::operations::contracts::schema::<FileSource>,
+        }],
+        parameters: || crate::operations::contracts::descriptor_parameters(&OPERATIONS[0]),
+        outputs: &[crate::operations::contracts::Port {
+            name: "output",
+            semantic_type: "file.info",
+            required: true,
+            schema: crate::operations::contracts::schema::<Inspection>,
+        }],
+        limits: crate::operations::contracts::Limits {
+            max_input_bytes: None,
+            max_output_bytes: None,
+            max_items: None,
+            max_work: Some(12),
+            max_memory_bytes: None,
+        },
+        fixture,
+    }];
 
 #[cfg(test)]
 mod tests {

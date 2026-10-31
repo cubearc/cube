@@ -47450,10 +47450,10 @@
     },
     {
       "schema_version": 1,
-      "operation_version": 1,
+      "operation_version": 2,
       "operation": "file.info.inspect",
       "category": "file",
-      "description": "Inspect basic filesystem facts and bounded header evidence; no EXIF.",
+      "description": "Inspect file or supplied byte-artifact size and bounded header evidence; artifact filesystem facts remain unknown; no EXIF.",
       "example": "cube inspect sample.bin",
       "deterministic": false,
       "reversible": null,
@@ -47461,22 +47461,47 @@
       "inputs": [
         {
           "name": "input",
-          "semantic_type": "file_path",
+          "semantic_type": "file.source",
           "required": true,
           "schema": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "FileReference",
-            "description": "A caller-supplied reference grants no authority. Each interface resolves it\nonly through its already authorized filesystem or artifact capability.",
-            "type": "object",
-            "properties": {
-              "reference": {
-                "type": "string"
+            "title": "FileSource",
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FileReference"
+              },
+              {
+                "$ref": "#/$defs/Bytes"
               }
-            },
-            "additionalProperties": false,
-            "required": [
-              "reference"
-            ]
+            ],
+            "$defs": {
+              "Bytes": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "type": "string",
+                    "contentEncoding": "base64"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "base64"
+                ]
+              },
+              "FileReference": {
+                "description": "A caller-supplied reference grants no authority. Each interface resolves it\nonly through its already authorized filesystem or artifact capability.",
+                "type": "object",
+                "properties": {
+                  "reference": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "reference"
+                ]
+              }
+            }
           }
         }
       ],
@@ -47494,54 +47519,143 @@
           "required": true,
           "schema": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "title": "FileInfo",
-            "description": "Basic file facts; unavailable filesystem times are null rather than zero.",
-            "type": "object",
-            "properties": {
-              "created": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/Timestamp"
-                  },
-                  {
+            "title": "Inspection",
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FileInfo"
+              },
+              {
+                "$ref": "#/$defs/ArtifactInfo"
+              }
+            ],
+            "$defs": {
+              "ArtifactInfo": {
+                "description": "Evidence from an owned byte artifact. Filesystem-only facts stay unknown.",
+                "type": "object",
+                "properties": {
+                  "created": {
                     "type": "null"
+                  },
+                  "modified": {
+                    "type": "null"
+                  },
+                  "regular_file": {
+                    "type": "null"
+                  },
+                  "signatures": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Signature"
+                    }
+                  },
+                  "size": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
+                      "format": "uint64",
+                      "minimum": 0,
+                      "type": "integer",
+                      "x-cube-maximum-decimal": "18446744073709551615",
+                      "x-cube-minimum-decimal": "0"
+                    }
+                  },
+                  "source_kind": {
+                    "$ref": "#/$defs/ArtifactKind"
                   }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "source_kind",
+                  "size",
+                  "regular_file",
+                  "modified",
+                  "created",
+                  "signatures"
                 ]
               },
-              "modified": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/Timestamp"
-                  },
-                  {
-                    "type": "null"
-                  }
+              "ArtifactKind": {
+                "type": "string",
+                "enum": [
+                  "artifact"
                 ]
               },
-              "regular_file": {
-                "type": "boolean"
-              },
-              "signatures": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/Signature"
-                }
-              },
-              "size": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "format": "uint64",
-                    "maximum": 9007199254740991,
-                    "minimum": 0,
-                    "x-cube-maximum-decimal": "18446744073709551615",
-                    "x-cube-minimum-decimal": "0"
+              "FileInfo": {
+                "description": "Basic file facts; unavailable filesystem times are null rather than zero.",
+                "type": "object",
+                "properties": {
+                  "created": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/Timestamp"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
-                  {
-                    "type": "string",
-                    "maxLength": 40,
-                    "pattern": "^(0|-?[1-9][0-9]*)$",
-                    "x-cube-native-integer": {
+                  "modified": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/Timestamp"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "regular_file": {
+                    "type": "boolean"
+                  },
+                  "signatures": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Signature"
+                    }
+                  },
+                  "size": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "format": "uint64",
+                        "maximum": 9007199254740991,
+                        "minimum": 0,
+                        "x-cube-maximum-decimal": "18446744073709551615",
+                        "x-cube-minimum-decimal": "0"
+                      },
+                      {
+                        "type": "string",
+                        "maxLength": 40,
+                        "pattern": "^(0|-?[1-9][0-9]*)$",
+                        "x-cube-native-integer": {
+                          "format": "uint64",
+                          "minimum": 0,
+                          "type": "integer",
+                          "x-cube-maximum-decimal": "18446744073709551615",
+                          "x-cube-minimum-decimal": "0"
+                        }
+                      }
+                    ],
+                    "x-cube-integer": {
                       "format": "uint64",
                       "minimum": 0,
                       "type": "integer",
@@ -47549,22 +47663,13 @@
                       "x-cube-minimum-decimal": "0"
                     }
                   }
-                ],
-                "x-cube-integer": {
-                  "format": "uint64",
-                  "minimum": 0,
-                  "type": "integer",
-                  "x-cube-maximum-decimal": "18446744073709551615",
-                  "x-cube-minimum-decimal": "0"
-                }
-              }
-            },
-            "required": [
-              "size",
-              "regular_file",
-              "signatures"
-            ],
-            "$defs": {
+                },
+                "required": [
+                  "size",
+                  "regular_file",
+                  "signatures"
+                ]
+              },
               "Signature": {
                 "description": "Matched public signature rule and its exact evidence; this does not validate a file.",
                 "type": "object",
@@ -47740,7 +47845,7 @@
         "max_input_bytes": null,
         "max_output_bytes": null,
         "max_items": null,
-        "max_work": null,
+        "max_work": 12,
         "max_memory_bytes": null
       },
       "policy": {

@@ -93,7 +93,7 @@ export async function createWorkerCube({
     const deadline = setTimeout(() => stop('worker_timeout'), initializationTimeoutMs);
     readiness = exchange(id, { id, method: 'initialize', wasmUrl: wasmUrl?.href })
       .then(value => {
-        if (value.build.wasmSha256 !== build.wasmSha256 || value.build.sourceSha256 !== build.sourceSha256) {
+        if (value.build.wasmSha256 !== build.wasmSha256 || value.build.sourceSha256 !== build.sourceSha256 || value.build.metadataSha256 !== build.metadataSha256) {
           throw new CubeError('incompatible_runtime', 'Worker and SDK build identities differ.');
         }
         identity = immutable(value.build);

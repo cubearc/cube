@@ -10,14 +10,21 @@ test('all module-owned direct executors retain canonical named inputs, outputs a
   const executors = JSON.parse(wasm.executors_json());
   assert.ok(executors.some(row => row.operation === 'image.pixels.export'));
   assert.ok(executors.some(row => row.operation === 'text.concat'));
-  assert.ok(!executors.some(row => row.operation === 'file.info.inspect'));
+  assert.equal(executors.length, fixtures.length);
+  assert.ok(executors.some(row => row.operation === 'file.info.inspect'));
+  const failures = [];
   for (const executor of executors) {
     const fixture = fixtures.find(row => row.operation === executor.operation);
     assert.ok(fixture, executor.operation);
     const request = { operation: executor.operation, version: fixture.operation_version, inputs: fixture.inputs, parameters: fixture.parameters };
     let actual;
-    assert.doesNotThrow(() => { actual = JSON.parse(wasm.execute_json(JSON.stringify(request))); }, executor.operation);
-    assert.deepEqual(actual, fixture.outputs, executor.operation);
-    assert.deepEqual(Object.keys(executor.outputs).sort(), Object.keys(actual).sort());
+    try {
+      actual = JSON.parse(wasm.execute_json(JSON.stringify(request)));
+      assert.deepEqual(actual, fixture.outputs);
+      assert.deepEqual(Object.keys(executor.outputs).sort(), Object.keys(actual).sort());
+    } catch (error) {
+      failures.push(`${executor.operation}: ${String(error.message ?? error).slice(0, 1600)}`);
+    }
   }
+  assert.deepEqual(failures, []);
 });

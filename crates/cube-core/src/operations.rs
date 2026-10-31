@@ -379,7 +379,8 @@ const MODULES: &[Module] = &[
         .with_executors(crate::esolang::brainfuck::execution::ENTRIES),
     Module::plain(crate::forensics::OPERATIONS),
     Module::plain(crate::forensics::signatures::OPERATIONS),
-    Module::plain(crate::forensics::inspect::OPERATIONS),
+    Module::plain(crate::forensics::inspect::OPERATIONS)
+        .with_contracts(crate::forensics::inspect::CONTRACTS),
     Module::plain(crate::forensics::ranges::OPERATIONS),
     Module::plain(crate::forensics::boundaries::OPERATIONS),
     Module::plain(crate::forensics::png::OPERATIONS),

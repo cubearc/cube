@@ -33,7 +33,7 @@ test('public Node API shares initialization and preserves exact named binary res
   assert.deepEqual(original, Buffer.from([0, 255, 128, 1]));
   assert.throws(() => cube.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: '!', extra: 'private' } }), { code: 'invalid_input' });
   assert.throws(() => cube.execute({ operation: 'encoding.base64.decode', version: 2, inputs: { input: '' } }), { code: 'incompatible_version' });
-  assert.throws(() => cube.execute({ operation: 'image.decode', version: 1, inputs: {} }), { code: 'unsupported_operation' });
+  assert.throws(() => cube.execute({ operation: 'not.a.cube.operation', version: 1, inputs: {} }), { code: 'unsupported_operation' });
 });
 
 test('public recipe API uses Core preflight and preserves bytes and exact integer transport', () => {

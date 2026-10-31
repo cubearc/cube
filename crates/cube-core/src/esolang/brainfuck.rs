@@ -27,6 +27,17 @@ pub const MAX_TRACE_BYTES: usize = 1024 * 1024;
 pub const MAX_REPORT_BYTES: usize = 8 * 1024 * 1024;
 const OP: &str = "esolang.brainfuck.execute";
 
+// A portable conservative ledger, rather than target-dependent allocator sizes.
+// Charges cover the supported 32/64-bit layouts and keep budgets/reports stable.
+const INSTRUCTION_BYTES: usize = 12;
+const INDEX_BYTES: usize = 8;
+const TRACE_RECORD_BYTES: usize = 48;
+const CELL_BYTES: usize = 16;
+const _: () = assert!(size_of::<Instruction>() <= INSTRUCTION_BYTES);
+const _: () = assert!(size_of::<usize>() <= INDEX_BYTES);
+const _: () = assert!(size_of::<TraceRecord>() <= TRACE_RECORD_BYTES);
+const _: () = assert!(size_of::<Cell>() <= CELL_BYTES);
+
 fn error(code: ErrorCode, message: &str) -> OperationError {
     OperationError::new(code, message).operation(OP)
 }
@@ -171,7 +182,7 @@ impl Program {
         }
         let trace_capacity = diagnostics
             .max_trace_records
-            .min(diagnostics.max_trace_bytes / size_of::<TraceRecord>());
+            .min(diagnostics.max_trace_bytes / TRACE_RECORD_BYTES);
         let report_bound = 4096usize
             .checked_add(
                 limits
@@ -191,15 +202,13 @@ impl Program {
         let memory = self
             .source_bytes
             .checked_add(input.len())
-            .and_then(|n| n.checked_add(self.instructions.capacity() * size_of::<Instruction>()))
-            .and_then(|n| {
-                n.checked_add(size_of::<[usize; MAX_DEPTH]>() + TAPE_CELLS * size_of::<u32>())
-            })
+            .and_then(|n| n.checked_add(self.instructions.capacity() * INSTRUCTION_BYTES))
+            .and_then(|n| n.checked_add(MAX_DEPTH * INDEX_BYTES + TAPE_CELLS * size_of::<u32>()))
             .and_then(|n| {
                 n.checked_add(
                     limits.max_output_bytes
-                        + trace_capacity * size_of::<TraceRecord>()
-                        + diagnostics.tape_len * size_of::<Cell>(),
+                        + trace_capacity * TRACE_RECORD_BYTES
+                        + diagnostics.tape_len * CELL_BYTES,
                 )
             })
             .and_then(|n| n.checked_add(report_bound))

@@ -10,6 +10,15 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "cipher.rot8000": "rot8000",
+    "cipher.malespin": "malespin",
+    "cipher.vatsyayana": "vatsyayana",
+    "cipher.nomenclator.encode": "nomenclator_encode",
+    "cipher.nomenclator.decode": "nomenclator_decode",
+    "cipher.syllabary.encode": "syllabary_encode",
+    "cipher.syllabary.decode": "syllabary_decode",
+    "cipher.great_cipher.encode": "great_cipher_encode",
+    "cipher.great_cipher.decode": "great_cipher_decode",
     "json.parse": "parse_json",
     "json.select": "select_field",
     "json.text": "json_text",

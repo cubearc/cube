@@ -32,3 +32,12 @@ cube.execute({ operation: 'text.concat', version: 1, inputs: { left: 'Cube' } })
 cube.execute({ operation: 'text.concat', version: 1, inputs: { left: '', right: '' }, parameters: { shell: true } });
 // @ts-expect-error The Brainfuck operation requires its actual contract version.
 cube.execute({ operation: 'esolang.brainfuck.execute', version: 1, inputs: { source: ',.', input: bytes } });
+const rot8000: string = cube.execute({ operation: 'cipher.rot8000', version: 1, inputs: { text: 'A 😀' } }).text;
+const paired: string = cube.execute({ operation: 'cipher.vatsyayana', version: 1, inputs: { text: 'Q' }, parameters: { pairs: [['Q','W']] } }).text;
+const historical = cube.execute({ operation: 'cipher.great_cipher.decode', version: 1, inputs: { tokens: ['55','502'] } }).report;
+const alternatives: readonly string[] = historical.units[0].alternatives;
+void rot8000; void paired; void alternatives;
+// @ts-expect-error A codebook uses explicitly segmented units, not joined plaintext.
+cube.execute({ operation: 'cipher.great_cipher.encode', version: 1, inputs: { text: 'LesEnnemis' } });
+// @ts-expect-error Vatsyayana requires an explicit pairing key.
+cube.execute({ operation: 'cipher.vatsyayana', version: 1, inputs: { text: 'A' }, parameters: {} });

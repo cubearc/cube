@@ -71,6 +71,7 @@ fn substitutions_rotations_and_default_rejection_have_exact_transport() {
         ("rot5", "A123", "A678\n"),
         ("rot18", "Hello 123!", "Uryyb 678!\n"),
         ("rot47", "Hello, World!", "w6==@[ (@C=5P\n"),
+        ("rot8000", "A 😀", "籊 😀\n"),
     ] {
         assert_eq!(success(&["cipher", profile, "--text", input]), expected);
     }
@@ -224,4 +225,52 @@ fn definition_file_and_exact_stdin_support_nul_alphabets() {
     );
     assert_eq!(result.stdout, b"x\0\n");
     assert!(result.stderr.is_empty());
+}
+
+#[test]
+fn historical_pairs_and_fixed_codebook_use_exact_cli_transport() {
+    assert_eq!(
+        success(&["cipher", "malespin", "bueno Amigo á"]),
+        "tuani Epofi á\n"
+    );
+    assert_eq!(
+        success(&[
+            "cipher",
+            "vatsyayana",
+            "QOEU",
+            "--pairs",
+            r#"[["Q","W"],["O","I"],["E","S"],["U","H"]]"#
+        ]),
+        "WISH\n"
+    );
+    assert_eq!(
+        success(&["cipher", "great-cipher", r#"["Les","En","Ne","Mi","S"]"#]),
+        "[\"124\",\"22\",\"125\",\"46\",\"120\"]\n"
+    );
+    let report: serde_json::Value = serde_json::from_str(&success(&[
+        "cipher",
+        "great-cipher",
+        "--decode",
+        r#"["55","502"]"#,
+    ]))
+    .unwrap();
+    assert_eq!(
+        report["units"][0]["alternatives"],
+        serde_json::json!(["I", "J"])
+    );
+    assert_eq!(
+        report["units"][1]["alternatives"],
+        serde_json::json!(["Bien"])
+    );
+    let output = run(&[
+        "--json-errors",
+        "cipher",
+        "great-cipher",
+        "--decode",
+        r#"["6"]"#,
+    ]);
+    assert!(!output.status.success());
+    assert!(output.stdout.is_empty());
+    let error: serde_json::Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(error["error"]["code"], "invalid_input");
 }

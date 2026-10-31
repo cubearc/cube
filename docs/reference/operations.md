@@ -10,7 +10,7 @@ Finite Affine candidate ranking
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ Finite Caesar candidate ranking
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -80,7 +80,7 @@ Explicit known-plaintext verification
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -115,7 +115,7 @@ Explicit Pearson frequency distance
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -150,7 +150,7 @@ Exact homophonic token evidence
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -185,7 +185,7 @@ Caller-owned language-model scoring
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -220,7 +220,7 @@ Explicit classical key-length evidence
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -255,7 +255,7 @@ Explicit transposition candidates
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -290,7 +290,7 @@ Explicit Vigenere beam search
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -325,7 +325,7 @@ Exact raw bit extraction from native PCM storage; frame/channel/bit order, optio
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -434,7 +434,7 @@ Bounded timed DTMF candidates with nominal-band, level, dominance, twist, purity
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -518,7 +518,7 @@ Native FLAC metadata only: STREAMINFO and bounded Vorbis comments; unknown durat
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -565,7 +565,7 @@ Detect bounded tone/silence/uncertain intervals at an explicit nominal frequency
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -629,7 +629,7 @@ Separately interpret bounded explicit intervals using caller dot-unit/tolerance,
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -717,7 +717,7 @@ Extract exact channel/range PCM bytes and signed values; no resampling, <=8 MiB 
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -808,7 +808,7 @@ Reverse selected PCM frames without changing sample bytes/channel grouping; gene
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -842,7 +842,7 @@ Bounded channel/window/bin numeric spectra using shared FFT, absolute window-sta
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -943,7 +943,7 @@ Bounded one-sided FFT of selected integer PCM; actual sample-rate frequencies, p
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1026,7 +1026,7 @@ Inspect bounded PCM RIFF/WAVE metadata and chunks without decoding samples; <=1 
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1060,7 +1060,7 @@ Stream exact integer min/max envelopes per selected channel; preserve frame posi
 
 Category: `audio`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1165,7 +1165,7 @@ Add paired big-endian unsigned units modulo their width; <=16 MiB per operand.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1226,7 +1226,7 @@ Bounded per-byte AND of equal-length operands; no repetition/padding; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1276,7 +1276,7 @@ Invert all eight bits per byte; preserve byte length, <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1323,7 +1323,7 @@ Bounded per-byte OR of equal-length operands; no repetition/padding; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1373,7 +1373,7 @@ Reverse byte positions, not bits or Unicode scalars; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1420,7 +1420,7 @@ Rotate left per independent big-endian unit; u64 count modulo width; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1518,7 +1518,7 @@ Rotate right per independent big-endian unit; u64 count modulo width; <=16 MiB.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1616,7 +1616,7 @@ Zero-filled left shifts within independent unsigned big-endian units; overflow b
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1686,7 +1686,7 @@ Logical right shifts within independent unsigned big-endian units; no signed ari
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1756,7 +1756,7 @@ Subtract paired big-endian unsigned units modulo their width; <=16 MiB per opera
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1817,7 +1817,7 @@ Reverse byte order per complete 1/2/4/8-byte unit; unit order unchanged; <=16 Mi
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1878,7 +1878,7 @@ XOR exact bytes with a nonempty repeating key; not secure encryption.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1928,7 +1928,7 @@ Exact equal-length byte XOR; no key repetition; <=16 MiB per operand.
 
 Category: `binary`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -1978,7 +1978,7 @@ Derive SEC1 public keys and legacy P2PKH using validated secp256k1, RIPEMD160(SH
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2040,7 +2040,7 @@ Ordered caller-supplied WIF/hex64 candidates; <=256 entries, <=128 bytes each, <
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2107,7 +2107,7 @@ Offline validated secp256k1 raw32/hex64 scalar -> 64 uncompressed x||y bytes (no
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2162,7 +2162,7 @@ Explicit private export between exact raw32, hex64 and supported WIF. WIF output
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2232,7 +2232,7 @@ Validate exactly 32 big-endian raw bytes or 64 strict hex digits using maintaine
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2278,7 +2278,7 @@ Validate <=128 WIF bytes via Base58Check, supported 0x80/0xef version, 32-byte n
 
 Category: `blockchain`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2323,7 +2323,7 @@ Concatenate left bytes then right bytes exactly; empty operands valid, no implic
 
 Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2374,7 +2374,7 @@ Adfgvx: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2515,7 +2515,7 @@ Adfgvx: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2656,7 +2656,7 @@ Adfgx: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2797,7 +2797,7 @@ Adfgx: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2938,7 +2938,7 @@ Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message form
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -2982,7 +2982,7 @@ Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message form
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3026,7 +3026,7 @@ Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3102,7 +3102,7 @@ Affine C=(aP+b) mod 26; preserve case and other Unicode, <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3178,7 +3178,7 @@ Amsco: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3368,7 +3368,7 @@ Amsco: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3558,7 +3558,7 @@ Reverse ASCII alphabets; preserve case and other Unicode, <=1 MiB; not secure en
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3603,7 +3603,7 @@ Seeded Vigenere with explicit plaintext/ciphertext feedback and local bounded st
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3675,7 +3675,7 @@ Seeded Vigenere with explicit plaintext/ciphertext feedback and local bounded st
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3747,7 +3747,7 @@ Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB inpu
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3816,7 +3816,7 @@ Five-symbol Bacon alphabet; ASCII case/word-space canonicalization, <=1 MiB inpu
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3885,7 +3885,7 @@ Bazeries: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -3951,7 +3951,7 @@ Bazeries: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4017,7 +4017,7 @@ Standard reciprocal Beaufort C=(K-P) mod 26, ASCII letters only; <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4061,7 +4061,7 @@ Bifid: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4152,7 +4152,7 @@ Bifid: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4243,7 +4243,7 @@ Decode caller-supplied book coordinates to exact Unicode scalars; source/coordin
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4314,7 +4314,7 @@ Deterministic inverse book coordinates; exact source hash and existing word/line
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4403,7 +4403,7 @@ Decode ASCII letters with a signed Caesar shift; preserve other Unicode.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4459,7 +4459,7 @@ Encode ASCII letters with a signed Caesar shift; preserve other Unicode.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4515,7 +4515,7 @@ Caesar Box: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4599,7 +4599,7 @@ Caesar Box: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4683,7 +4683,7 @@ Static explicit row-major mask; caller cover provenance retained; extract is sou
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -4843,7 +4843,7 @@ Static explicit row-major mask; caller cover provenance retained; overlay is sou
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5012,7 +5012,7 @@ ChaCha12 IETF
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5071,7 +5071,7 @@ ChaCha20 IETF
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5130,7 +5130,7 @@ ChaCha8 IETF
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5189,7 +5189,7 @@ Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5253,7 +5253,7 @@ Byrne/Rubin evolving left/right alphabets; exact zenith/nadir permutations reset
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5317,7 +5317,7 @@ Columnar: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5451,7 +5451,7 @@ Columnar: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5585,7 +5585,7 @@ Complete Columnar: explicit bounded decode; see typed profile guide for conventi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5742,7 +5742,7 @@ Complete Columnar: explicit bounded encode; see typed profile guide for conventi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5899,7 +5899,7 @@ Keyed alphabet feedback from recovered plaintext one-based position; explicit in
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -5964,7 +5964,7 @@ Keyed alphabet feedback from recovered plaintext one-based position; explicit in
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6029,7 +6029,7 @@ Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and vi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6120,7 +6120,7 @@ Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and vi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6211,7 +6211,7 @@ Double Columnar: explicit bounded decode; see typed profile guide for convention
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6353,7 +6353,7 @@ Double Columnar: explicit bounded encode; see typed profile guide for convention
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6495,7 +6495,7 @@ Reciprocal historical Enigma I/M3 with explicit settings, final windows and opti
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6628,7 +6628,7 @@ I/J Four-square with fixed straight plaintext squares and explicit keyed top-rig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6692,7 +6692,7 @@ I/J Four-square with fixed straight plaintext squares and explicit keyed top-rig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6756,7 +6756,7 @@ Fractionated Morse: explicit bounded decode; see typed profile guide for convent
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6828,7 +6828,7 @@ Fractionated Morse: explicit bounded encode; see typed profile guide for convent
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -6899,7 +6899,7 @@ Decode repeated-letter 8/9/10-square coordinates with explicit digit labels; nul
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7010,7 +7010,7 @@ Encode repeated-letter 8/9/10-square coordinates with explicit digit labels; nul
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7109,13 +7109,118 @@ Example:
 cube cipher grandpre --help
 ```
 
+## cipher.great_cipher.decode
+
+Decode Bazeries' 1691 table with explicit I/J, U/V and other alternatives, null positions and group-27 cancellation; unknown surviving entries reject.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `report` | `cipher.codebook_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "124",
+      "22",
+      "125",
+      "46",
+      "345",
+      "27",
+      "120",
+      "14",
+      "55",
+      "502"
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.great_cipher.encode
+
+Encode exact presegmented ASCII transcription units from Bazeries' 1893 Grand Chiffre de 1691 deciphering table; deterministic first code.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `units` | `cipher.plain_units` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "units": [
+      "Les",
+      "En",
+      "Ne",
+      "Mi",
+      "S"
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.gromark.decode
 
 Explicit mixed alphabet and five decimal primer digits; exclude printed primer/check digit.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7180,7 +7285,7 @@ Explicit mixed alphabet and five decimal primer digits; exclude printed primer/c
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7245,7 +7350,7 @@ Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7303,7 +7408,7 @@ Repeated decimal-digit additive key; preserve case/nonletters, advance on ASCII 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7361,7 +7466,7 @@ Exact modular row-major Hill matrix and column vectors over caller-owned Unicode
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7483,7 +7588,7 @@ Exact modular row-major Hill matrix and column vectors over caller-owned Unicode
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7605,7 +7710,7 @@ Decode exact owned tokens to canonical text.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7736,7 +7841,7 @@ Encode canonical scalars to explicit tokens using local per-symbol round robin.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7895,7 +8000,7 @@ ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; prese
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -7985,7 +8090,7 @@ ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; prese
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8069,13 +8174,57 @@ Example:
 cube cipher --help
 ```
 
+## cipher.malespin
+
+Reciprocal ASCII a/e, i/o, b/t, f/g, p/m swaps; retain case and preserve other scalars, including accents.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "bueno Amigo á"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.monome_dinome.decode
 
 Decode with an explicit monome_dinome digit table; reject unassigned/incomplete digit transport.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8213,7 +8362,7 @@ Encode with an explicit monome_dinome digit table; reject unassigned/incomplete 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8351,7 +8500,7 @@ Morbit: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8423,7 +8572,7 @@ Morbit: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8494,7 +8643,7 @@ Myszkowski: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8551,7 +8700,7 @@ Myszkowski: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8608,7 +8757,7 @@ Vigenere columns emitted by stable key order in explicit depth blocks, retaining
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8673,7 +8822,7 @@ Vigenere columns emitted by stable key order in explicit depth blocks, retaining
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8738,7 +8887,7 @@ Nihilist Substitution: explicit bounded decode; see typed profile guide for conv
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8814,7 +8963,7 @@ Nihilist Substitution: explicit bounded encode; see typed profile guide for conv
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8871,13 +9020,323 @@ Example:
 cube cipher --help
 ```
 
+## cipher.nomenclator.decode
+
+Decode explicit code tokens with alternative readings and original positions; apply declared nulls and previous-group cancellation.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `report` | `cipher.codebook_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "10",
+      "05",
+      "27",
+      "99"
+    ]
+  },
+  "parameters": {
+    "definition": {
+      "cancel_codes": [
+        "27"
+      ],
+      "entries": [
+        {
+          "alternatives": [
+            "OR"
+          ],
+          "codes": [
+            "10"
+          ]
+        },
+        {
+          "alternatives": [
+            "D"
+          ],
+          "codes": [
+            "05"
+          ]
+        }
+      ],
+      "null_codes": [
+        "99"
+      ]
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BookParameters",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Definition": {
+      "description": "Exact presegmented units and globally unique code ownership, <=4096 entries\nand total codes, <=1 MiB compact JSON, <=256 UTF-8 bytes per unit/code.\nNulls are omitted; cancel codes erase the last surviving group, including a\nnull/unknown group, never a Unicode scalar or guessed word.",
+      "type": "object",
+      "properties": {
+        "cancel_codes": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 4096
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Entry"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        },
+        "null_codes": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 4096
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 1048576,
+      "x-cube-max-total-codes": 4096
+    },
+    "Entry": {
+      "description": "One code may preserve multiple explicitly listed readings; encoding selects\nthe first declared code for an exact supplied unit. No concatenation/splitting.",
+      "type": "object",
+      "properties": {
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 256,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alternatives",
+        "codes"
+      ]
+    },
+    "TokenText": {
+      "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 256
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.nomenclator.encode
+
+Encode explicit plaintext units using a caller-owned codebook; select the first matching code deterministically.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `units` | `cipher.plain_units` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "units": [
+      "OR",
+      "D"
+    ]
+  },
+  "parameters": {
+    "definition": {
+      "cancel_codes": [
+        "27"
+      ],
+      "entries": [
+        {
+          "alternatives": [
+            "OR"
+          ],
+          "codes": [
+            "10"
+          ]
+        },
+        {
+          "alternatives": [
+            "D"
+          ],
+          "codes": [
+            "05"
+          ]
+        }
+      ],
+      "null_codes": [
+        "99"
+      ]
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BookParameters",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Definition"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Definition": {
+      "description": "Exact presegmented units and globally unique code ownership, <=4096 entries\nand total codes, <=1 MiB compact JSON, <=256 UTF-8 bytes per unit/code.\nNulls are omitted; cancel codes erase the last surviving group, including a\nnull/unknown group, never a Unicode scalar or guessed word.",
+      "type": "object",
+      "properties": {
+        "cancel_codes": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 4096
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Entry"
+          },
+          "maxItems": 4096,
+          "minItems": 1
+        },
+        "null_codes": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 4096
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "entries"
+      ],
+      "x-cube-max-serialized-bytes": 1048576,
+      "x-cube-max-total-codes": 4096
+    },
+    "Entry": {
+      "description": "One code may preserve multiple explicitly listed readings; encoding selects\nthe first declared code for an exact supplied unit. No concatenation/splitting.",
+      "type": "object",
+      "properties": {
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 256,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alternatives",
+        "codes"
+      ]
+    },
+    "TokenText": {
+      "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 256
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.periodic_gromark.decode
 
 ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alphabet offsets; qualified widths 2..9.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -8944,7 +9403,7 @@ ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9011,7 +9470,7 @@ Explicit Phillips rows/columns/rows_columns eight-state five-letter square sched
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9083,7 +9542,7 @@ Explicit Phillips rows/columns/rows_columns eight-state five-letter square sched
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9155,7 +9614,7 @@ I/J-square adjacent digraphs with explicit filler evidence; decode keeps prepare
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9226,7 +9685,7 @@ I/J-square adjacent digraphs with explicit filler evidence; decode keeps prepare
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9297,7 +9756,7 @@ Pollux: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9358,7 +9817,7 @@ Pollux: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9419,7 +9878,7 @@ Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9506,7 +9965,7 @@ Shared Polybius/Tap scalar square; row,column and explicit space tokens, <=65536
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9593,7 +10052,7 @@ Reciprocal ACA 13-tableau letter schedule with AB/CD/.../YZ key pairing.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9651,7 +10110,7 @@ Reciprocal ACA Portax vertical pairs with exact even short-group handling and no
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9709,7 +10168,7 @@ ACA Vigenere plus explicit signed increment per key-length group, beginning with
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9776,7 +10235,7 @@ ACA Vigenere plus explicit signed increment per key-length group, beginning with
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9843,7 +10302,7 @@ Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -9938,7 +10397,7 @@ Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10033,7 +10492,7 @@ Explicit 24-letter alphabet, optional J/I X/W merges, word+letter-1 schedule and
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10096,7 +10555,7 @@ Explicit 24-letter alphabet, optional J/I X/W merges, word+letter-1 schedule and
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10159,7 +10618,7 @@ Rail Fence: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10292,7 +10751,7 @@ Rail Fence: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10425,7 +10884,7 @@ Redefence: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10600,7 +11059,7 @@ Redefence: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10775,7 +11234,7 @@ Rotate ASCII letters by 13; preserve other Unicode.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10820,7 +11279,7 @@ Self-inverse ASCII ROT13 letters and ROT5 digits; preserve other scalars, <=1 Mi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10864,7 +11323,7 @@ Self-inverse printable ASCII U+0021..U+007E rotation by 47; preserve other scala
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10908,7 +11367,7 @@ Self-inverse ASCII digit rotation by five; preserve other scalars, <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -10946,13 +11405,57 @@ Example:
 cube cipher rot5 --help
 ```
 
+## cipher.rot8000
+
+Fixed ROT8000 BMP mapping: 63404 eligible units, half-cycle 31702; <=1 MiB input/3 MiB output.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A 😀"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher rot8000 --help
+```
+
 ## cipher.route.decode
 
 Route: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11123,7 +11626,7 @@ Route: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11294,7 +11797,7 @@ Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11352,7 +11855,7 @@ Nonrepeating caller-owned Vigenere material; reject insufficient key letters.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11410,7 +11913,7 @@ Salsa20/20
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11494,7 +11997,7 @@ Salsa20/12
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11578,7 +12081,7 @@ Scytale: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11662,7 +12165,7 @@ Scytale: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11746,7 +12249,7 @@ Sequence Transposition: explicit bounded decode; see typed profile guide for con
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11837,7 +12340,7 @@ Sequence Transposition: explicit bounded encode; see typed profile guide for con
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -11928,7 +12431,7 @@ I/J-square vertical pairs in explicit periods; inserted fillers retain scalar-po
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12007,7 +12510,7 @@ I/J-square vertical pairs in explicit periods; inserted fillers retain scalar-po
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12086,7 +12589,7 @@ Skip: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12197,7 +12700,7 @@ Skip: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12308,7 +12811,7 @@ Even canonical ACA Vigenere Slidefair digraphs; rectangle or equal-column right/
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12366,7 +12869,7 @@ Even canonical ACA Vigenere Slidefair digraphs; rectangle or equal-column right/
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12424,7 +12927,7 @@ Original Schneier Solitaire/Pontifex with explicit private deck, optional passph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12499,7 +13002,7 @@ Original Schneier Solitaire/Pontifex with explicit private deck, optional passph
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12574,7 +13077,7 @@ Spiral: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12745,7 +13248,7 @@ Spiral: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -12916,7 +13419,7 @@ Decode with an explicit straddling digit table; reject unassigned/incomplete dig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13045,7 +13548,7 @@ Encode with an explicit straddling digit table; reject unassigned/incomplete dig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13174,7 +13677,7 @@ Decode exact Unicode scalars using a validated bijective alphabet; reject by def
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13292,7 +13795,7 @@ Encode exact Unicode scalars using a validated bijective alphabet; reject by def
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13404,13 +13907,423 @@ Example:
 cube cipher substitution --help
 ```
 
+## cipher.syllabary.decode
+
+Decode exact ACA syllabary coordinate pairs; retain unit boundaries and original token positions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `report` | `cipher.codebook_report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "10",
+      "26"
+    ]
+  },
+  "parameters": {
+    "definition": {
+      "cells": [
+        "C",
+        "3",
+        "H",
+        "8",
+        "AR",
+        "M",
+        "ING",
+        "P",
+        "RI",
+        "N",
+        "CE",
+        "A",
+        "1",
+        "AL",
+        "AN",
+        "AND",
+        "ARE",
+        "AS",
+        "AT",
+        "ATE",
+        "ATI",
+        "B",
+        "2",
+        "BE",
+        "CA",
+        "CO",
+        "COM",
+        "D",
+        "4",
+        "DA",
+        "DE",
+        "E",
+        "5",
+        "EA",
+        "ED",
+        "EN",
+        "ENT",
+        "ER",
+        "ERE",
+        "ERS",
+        "ES",
+        "EST",
+        "F",
+        "6",
+        "G",
+        "7",
+        "HAS",
+        "HE",
+        "I",
+        "9",
+        "IN",
+        "ION",
+        "IS",
+        "IT",
+        "IVE",
+        "J",
+        "0",
+        "K",
+        "L",
+        "LA",
+        "LE",
+        "ME",
+        "ND",
+        "NE",
+        "NT",
+        "O",
+        "OF",
+        "ON",
+        "OR",
+        "OU",
+        "Q",
+        "R",
+        "RA",
+        "RE",
+        "RED",
+        "RES",
+        "RO",
+        "S",
+        "SE",
+        "SH",
+        "ST",
+        "STO",
+        "T",
+        "TE",
+        "TED",
+        "TER",
+        "TH",
+        "THE",
+        "THI",
+        "THR",
+        "TI",
+        "TO",
+        "U",
+        "V",
+        "VE",
+        "W",
+        "WE",
+        "X",
+        "Y",
+        "Z"
+      ],
+      "column_labels": "6719432508",
+      "row_labels": "8502341679"
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SyllabaryParameters",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Syllabary"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Syllabary": {
+      "description": "Explicit ACA 10x10 multi-character keysquare, row-major cells and required\nrow/column permutations of 0..9. Units are already segmented by the caller.",
+      "type": "object",
+      "properties": {
+        "cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 100,
+          "minItems": 100
+        },
+        "column_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10
+        },
+        "row_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "cells",
+        "row_labels",
+        "column_labels"
+      ],
+      "x-cube-max-serialized-bytes": 1048576
+    },
+    "TokenText": {
+      "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 256
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.syllabary.encode
+
+Encode caller-segmented units with an explicit ACA 10x10 keysquare and digit coordinate permutations.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `units` | `cipher.plain_units` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "units": [
+      "OR",
+      "DE",
+      "R",
+      "S",
+      "RE",
+      "CE",
+      "IVE",
+      "D"
+    ]
+  },
+  "parameters": {
+    "definition": {
+      "cells": [
+        "C",
+        "3",
+        "H",
+        "8",
+        "AR",
+        "M",
+        "ING",
+        "P",
+        "RI",
+        "N",
+        "CE",
+        "A",
+        "1",
+        "AL",
+        "AN",
+        "AND",
+        "ARE",
+        "AS",
+        "AT",
+        "ATE",
+        "ATI",
+        "B",
+        "2",
+        "BE",
+        "CA",
+        "CO",
+        "COM",
+        "D",
+        "4",
+        "DA",
+        "DE",
+        "E",
+        "5",
+        "EA",
+        "ED",
+        "EN",
+        "ENT",
+        "ER",
+        "ERE",
+        "ERS",
+        "ES",
+        "EST",
+        "F",
+        "6",
+        "G",
+        "7",
+        "HAS",
+        "HE",
+        "I",
+        "9",
+        "IN",
+        "ION",
+        "IS",
+        "IT",
+        "IVE",
+        "J",
+        "0",
+        "K",
+        "L",
+        "LA",
+        "LE",
+        "ME",
+        "ND",
+        "NE",
+        "NT",
+        "O",
+        "OF",
+        "ON",
+        "OR",
+        "OU",
+        "Q",
+        "R",
+        "RA",
+        "RE",
+        "RED",
+        "RES",
+        "RO",
+        "S",
+        "SE",
+        "SH",
+        "ST",
+        "STO",
+        "T",
+        "TE",
+        "TED",
+        "TER",
+        "TH",
+        "THE",
+        "THI",
+        "THR",
+        "TI",
+        "TO",
+        "U",
+        "V",
+        "VE",
+        "W",
+        "WE",
+        "X",
+        "Y",
+        "Z"
+      ],
+      "column_labels": "6719432508",
+      "row_labels": "8502341679"
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SyllabaryParameters",
+  "type": "object",
+  "properties": {
+    "definition": {
+      "$ref": "#/$defs/Syllabary"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "definition"
+  ],
+  "$defs": {
+    "Syllabary": {
+      "description": "Explicit ACA 10x10 multi-character keysquare, row-major cells and required\nrow/column permutations of 0..9. Units are already segmented by the caller.",
+      "type": "object",
+      "properties": {
+        "cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TokenText"
+          },
+          "maxItems": 100,
+          "minItems": 100
+        },
+        "column_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10
+        },
+        "row_labels": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "cells",
+        "row_labels",
+        "column_labels"
+      ],
+      "x-cube-max-serialized-bytes": 1048576
+    },
+    "TokenText": {
+      "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 256
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.tri_square.decode
 
 Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13506,7 +14419,7 @@ Explicit three I/J squares with deterministic cycles or caller-owned row/column 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13626,7 +14539,7 @@ Decode with an explicit tridigital digit table; return per-digit alternatives wi
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13755,7 +14668,7 @@ Encode with an explicit tridigital digit table; reject unassigned/incomplete dig
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13884,7 +14797,7 @@ Trifid: explicit bounded decode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -13976,7 +14889,7 @@ Trifid: explicit bounded encode; see typed profile guide for conventions.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14068,7 +14981,7 @@ Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14135,7 +15048,7 @@ Add start+step*i modulo 26; preserve case/nonletters and accept full signed i32 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14202,7 +15115,7 @@ Turning Grille: explicit bounded decode; see typed profile guide for conventions
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14374,7 +15287,7 @@ Turning Grille: explicit bounded encode; see typed profile guide for conventions
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14546,7 +15459,7 @@ Horizontal I/J Two-square with opposite ciphertext square order and no padding.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14610,7 +15523,7 @@ Horizontal I/J Two-square with opposite ciphertext square order and no padding.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14668,13 +15581,109 @@ Example:
 cube cipher --help
 ```
 
+## cipher.vatsyayana
+
+Reciprocal exact caller-defined disjoint scalar pairs; reject unmatched symbols by default, without a guessed historical alphabet.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "QOEU"
+  },
+  "parameters": {
+    "pairs": [
+      [
+        "Q",
+        "W"
+      ],
+      [
+        "O",
+        "I"
+      ],
+      [
+        "E",
+        "S"
+      ],
+      [
+        "U",
+        "H"
+      ]
+    ]
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pairs",
+  "type": "object",
+  "properties": {
+    "pairs": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 1,
+          "minLength": 1
+        },
+        "maxItems": 2,
+        "minItems": 2
+      },
+      "maxItems": 2048,
+      "minItems": 1
+    },
+    "unmapped": {
+      "$ref": "#/$defs/Unmapped",
+      "default": "reject"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "pairs"
+  ],
+  "$defs": {
+    "Unmapped": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "preserve"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.vernam
 
 Educational exact-pad Vernam
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14710,7 +15719,7 @@ Vigenère P=(C-K) mod 26 with the same key advancement; <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14754,7 +15763,7 @@ Vigenère C=(P+K) mod 26; ASCII letters only, preserve other Unicode; <=1 MiB.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14798,7 +15807,7 @@ Research Square rs-58356/v1: C=a*(P+K) mod26, A=0; explicit unit multiplier and 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14879,7 +15888,7 @@ Research Square rs-58356/v1: C=a*(P+K) mod26, A=0; explicit unit multiplier and 
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -14960,7 +15969,7 @@ XChaCha20 IETF counter
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15019,7 +16028,7 @@ Decode base32 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15064,7 +16073,7 @@ Encode base32 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15111,7 +16120,7 @@ Decode base58 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15156,7 +16165,7 @@ Encode base58 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15203,7 +16212,7 @@ Verify bounded Bitcoin Base58Check text and return exact version/payload. <=1421
 
 Category: `encoding`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15247,7 +16256,7 @@ Single-byte version plus <=1024 payload bytes, raw double-SHA256 four-byte check
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15306,7 +16315,7 @@ Decode base64 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15351,7 +16360,7 @@ Encode base64 with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15398,7 +16407,7 @@ Decode hex with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15443,7 +16452,7 @@ Encode hex with strict documented alphabet rules.
 
 Category: `encoding`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15490,7 +16499,7 @@ Compare isolated 8/16/32-bit runs with shared aggregate work/output/memory budge
 
 Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15612,7 +16621,7 @@ Strict bounded Brainfuck, <=1 MiB source/input/output, 65536 commands, depth 256
 
 Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15703,7 +16712,7 @@ Bounded execution summary, exact tape range and optional post-dispatch traces; i
 
 Category: `esolang`. Contract: 2. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15829,7 +16838,7 @@ Find trailing bytes after supported PNG, baseline JPEG, GIF or classic ZIP frami
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -15876,7 +16885,7 @@ Compare corresponding byte offsets; missing tail bytes remain distinct from zero
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16010,7 +17019,7 @@ Recover an explicit range or freshly validated framing candidate to a new file w
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16140,7 +17149,7 @@ Inspect typed JPEG/TIFF EXIF metadata under explicit resource budgets.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16187,7 +17196,7 @@ Display exact bytes as bounded hex rows with absolute offsets.
 
 Category: `file`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16318,7 +17327,7 @@ Inspect file or supplied byte-artifact size and bounded header evidence; artifac
 
 Category: `file`. Contract: 2. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16365,7 +17374,7 @@ Copy an explicit byte range to a new destination; never overwrite.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16459,7 +17468,7 @@ Detect header signatures as evidence, not structural validity.
 
 Category: `file`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16506,7 +17515,7 @@ Locate bounded embedded signature candidates with absolute offsets.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16651,7 +17660,7 @@ Extract ASCII printable runs and exact byte offsets.
 
 Category: `file`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16789,7 +17798,7 @@ Validate bounded classic ZIP structure at an explicit candidate origin; no decom
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16877,7 +17886,7 @@ Weak components of explicit ordered directed/undirected multigraph; includes iso
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -16967,7 +17976,7 @@ Cycle presence with exact ordered edge/vertex witness; loops and parallel undire
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17057,7 +18066,7 @@ Hierholzer edge-once trail/circuit with exact orientation, degree/connectivity r
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17152,7 +18161,7 @@ Unweighted BFS path with vertex/edge ID evidence, edge input order ties; null me
 
 Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17255,7 +18264,7 @@ CRC-16/IBM-3740 checksum, poly 0x1021, init 0xFFFF, xor 0, unreflected; not cryp
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17302,7 +18311,7 @@ CRC-32/ISO-HDLC checksum, not a cryptographic hash.
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17349,7 +18358,7 @@ CRC-32/ISCSI (CRC32C) checksum, poly 0x1EDC6F41, init/xor 0xFFFFFFFF, reflected;
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17396,7 +18405,7 @@ Ethereum Keccak-256 (not standardized SHA3-256), exact bytes as 64 lowercase hex
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17443,7 +18452,7 @@ Legacy MD5 (32 lowercase hex digits); unsuitable for collision-resistant securit
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17490,7 +18499,7 @@ RIPEMD-160 exact-byte digest as 40 lowercase hex digits for protocol compatibili
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17537,7 +18546,7 @@ Legacy SHA-1 (40 lowercase hex digits); unsuitable for collision-resistant secur
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17584,7 +18593,7 @@ SHA-256 digest of exact bytes, not password hashing.
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17631,7 +18640,7 @@ SHA-512 exact-byte digest (128 lowercase hex digits), not password hashing.
 
 Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17678,7 +18687,7 @@ Extract one row-major sample bit as 0/1 values and MSB-first zero-padded bytes.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17778,7 +18787,7 @@ Combine exact 8-bit image samples with XOR/AND/OR, including alpha or native ind
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17861,7 +18870,7 @@ Extract one exact channel as bytes and optional grayscale PNG.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -17953,7 +18962,7 @@ Export sorted exact-color masks/layers as PNG bytes and a manifest; <=64 outputs
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18049,7 +19058,7 @@ Isolate exact native colors as a coordinate-preserving 0/255 mask or RGBA layer 
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18139,7 +19148,7 @@ Compare exact image/channel samples, with bounded differences and an optional bi
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18254,7 +19263,7 @@ Extract a checked rectangle without resampling; unselected pixels are discarded.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18332,7 +19341,7 @@ Export CSV v1 exact 8-bit gray/gray_alpha/rgb/rgba samples without palette/tRNS;
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18388,7 +19397,7 @@ Import a complete CSV v1 grid, validating explicit shape/model/depth, zero-based
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18433,7 +19442,7 @@ Decode bounded PNG8, baseline JPEG, single-frame GIF, BMP or static WebP; preser
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18480,7 +19489,7 @@ Read exact image width and height in pixels as an ordered dimensions array; no r
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18536,7 +19545,7 @@ Encode exact PNG8 samples, preserving palette/tRNS and dropping other metadata.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18592,7 +19601,7 @@ Compare declared header dimensions with an explicit checked raw-layout hypothesi
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18685,7 +19694,7 @@ Lossy color reduction using (77R+150G+29B+128)>>8 without gamma conversion; pres
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18749,7 +19758,7 @@ Count exact selected channel tuples without blending, approximation or quantizat
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18851,7 +19860,7 @@ Invert selected 8-bit samples as 255-value, preserving alpha by default.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -18933,7 +19942,7 @@ Extract raw bytes under explicit pixel/channel/bit ordering and incomplete-byte 
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19099,7 +20108,7 @@ Mirror exact samples left/right or top/bottom.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19168,7 +20177,7 @@ Plan/execute lexicographic unordered pairs over <=8 explicit image objects; reus
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19276,7 +20285,7 @@ Explicitly expand indexed PNG8 samples to unpremultiplied RGBA8.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19343,7 +20352,7 @@ Export selected samples with explicit shape/channel metadata or bounded coordina
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19465,7 +20474,7 @@ Read exact native pixel samples at top-left coordinates.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19546,7 +20555,7 @@ Inspect PNG chunks, exact offsets and CRC evidence without pixel decoding.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19609,7 +20618,7 @@ Decode bounded QR symbols as raw bytes, separating no detection, undecodable can
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19652,7 +20661,7 @@ Interpret exact unsigned 8-bit raw layouts, with explicit channel order, stride 
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19745,7 +20754,7 @@ Apply a full sample channel permutation; moving alpha must be explicit.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19834,7 +20843,7 @@ Rotate exact samples clockwise by 0/90/180/270; no interpolation.
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -19905,7 +20914,7 @@ Ordered signed lag overlaps on one physical channel; exact moments and populatio
 
 Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20010,7 +21019,7 @@ Preflight a versioned bounded profile and expose exact ranges, operation units, 
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20072,7 +21081,7 @@ Run an explicit local metadata/preview profile through shared core operations an
 
 Category: `investigation`. Contract: 2. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20135,7 +21144,7 @@ Verify input identity and all contracts before replaying supported deterministic
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20236,7 +21245,7 @@ Export versioned JSON or escaped text with explicit redactions and per-run resul
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20301,7 +21310,7 @@ Record bounded operation provenance and separate observations from user hypothes
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20362,7 +21371,7 @@ Recommend available inspections from bounded header evidence using explainable r
 
 Category: `investigation`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20419,7 +21428,7 @@ Parse bounded inert JSON; reject duplicate keys, trailing data and excessive byt
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20464,7 +21473,7 @@ Select a field or array index by JSON Pointer, preserving its JSON type and dist
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20527,7 +21536,7 @@ Use an actual JSON string as text; reject numbers, null, arrays and objects with
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20572,7 +21581,7 @@ Full bounded truth scan, exact counts/witnesses and optional implication/equival
 
 Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20669,7 +21678,7 @@ Tagged const/var/not/and/or/xor/implies/iff; explicit variable order and complet
 
 Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20763,7 +21772,7 @@ Add two exact signed JSON integers; reject invalid operands and sums outside the
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20810,7 +21819,7 @@ Exact positional integers over explicit unique scalar alphabets/bases; u128 magn
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20886,7 +21895,7 @@ Convert signed ASCII integers between bases 2..36; <=4096 input digits, <=128-bi
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -20950,7 +21959,7 @@ Exact C(n,k), n<=128, cancellation before multiplication; no factorial overflow.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21015,7 +22024,7 @@ Certified decimal fractional digits of pi/e/phi/sqrt2; index 0 excludes integer 
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21108,7 +22117,7 @@ Decimal digital root of a signed 128-bit magnitude; <=4096 ASCII input digits, n
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21164,7 +22173,7 @@ Exact GCD and signed i128 Bezout coefficients; deterministic Euclid; JSON decima
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21211,7 +22220,7 @@ Exact u64 GCD, including gcd(0,0)=0; fixed storage, <=256 Euclidean rounds.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21258,7 +22267,7 @@ Find the maximum of 1..4096 exact signed JSON integers; empty lists, non-integer
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21307,7 +22316,7 @@ Canonical u64 modular inverse; noncoprime input errors; <=256 Euclidean rounds.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21354,7 +22363,7 @@ Exact u64 modular power with u128 products, <=64 bit rounds; exponent zero gives
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21403,7 +22412,7 @@ Exact multinomial count, <=128 groups with total<=128, checked u128 result.
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21469,7 +22478,7 @@ Exact Pascal rows 0..rows-1; <=129 rows including row 128; decimal strings, <=1 
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21532,7 +22541,7 @@ Exact P(n,k), n<=128, u128 result; overflow is an error, <=64 Ki arithmetic step
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21597,7 +22606,7 @@ Execute a prevalidated bounded linear plan; explicit typed values and optional b
 
 Category: `pipelines`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21662,7 +22671,7 @@ Validate all bounded linear step IDs, contract versions, parameters and adjacent
 
 Category: `pipelines`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21721,7 +22730,7 @@ Strict left-win, tie and loss exact masses across two independent dice sum distr
 
 Category: `probability`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21813,7 +22822,7 @@ Exact bounded independent weighted dice convolution; 8 dice, 64 faces each, 4096
 
 Category: `probability`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21897,7 +22906,7 @@ Exact supplied finite masses, events, conditioning and signed expectation; 4096 
 
 Category: `probability`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -21984,7 +22993,7 @@ Check an independent community recipe against an exact typed expected output wit
 
 Category: `recipes`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22056,7 +23065,7 @@ Execute a validated recipe with exact caller-supplied typed bindings and bounded
 
 Category: `recipes`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22126,7 +23135,7 @@ Validate strict versioned JSON recipe contracts without executing operations or 
 
 Category: `recipes`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22188,7 +23197,7 @@ Strict canonical 1..26 hyphen tokens to uppercase ASCII; preserve ASCII whitespa
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22233,7 +23242,7 @@ ASCII A-Z to canonical 1..26 hyphen tokens; preserve ASCII whitespace; lowercase
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22278,7 +23287,7 @@ Decode U+2800..U+28FF cells to exact mask bytes; reject other characters; <=1 Mi
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22323,7 +23332,7 @@ Encode bytes as Unicode Braille dot masks, bit n-1=dot n; no language transcript
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22370,7 +23379,7 @@ Map one exact H:MM reading or two signed millidegree angles to eight receiver-fa
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22511,7 +23520,7 @@ Explicit telephone or multi-tap groups; decode telephone alternatives without wo
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22573,7 +23582,7 @@ Explicit telephone or multi-tap groups; decode telephone alternatives without wo
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22635,7 +23644,7 @@ Canonical dot/dash tokens with one space; slash separates words; uppercase A-Z/0
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22680,7 +23689,7 @@ International Morse A-Z/0-9; collapse ASCII spaces, normalize decoded case; <=1 
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22725,7 +23734,7 @@ Decode exact LH,RH tokens or /, separated by one ASCII space; <=16384 tokens, li
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22770,7 +23779,7 @@ Letter-only flag Semaphore: sender anatomical LH,RH, receiver-facing N/NE/E/SE/S
 
 Category: `symbols`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -22815,7 +23824,7 @@ Caller-owned symbolic token map; exact boundaries, aliases and original source p
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23017,7 +24026,7 @@ Inverse of an explicitly bijective alias-free token table; no guessed glyphs or 
 
 Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23217,7 +24226,7 @@ Exact caller-dictionary unordered anagrams; 10000 entries, 64 scalars/entry, 4 M
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23345,7 +24354,7 @@ Map disjoint scalar sets with source positions and explicit preserved/filtered r
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23416,7 +24425,7 @@ Exact u32 scalar code points with original offsets and decimal/hex/U+ presentati
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23474,7 +24483,7 @@ Incremental ordered Cartesian strings; rightmost group fastest, duplicates retai
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23544,7 +24553,7 @@ Concatenate left text, one explicit separator and right text in order; preserve 
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23600,7 +24609,7 @@ Select Unicode scalar positions (not UTF-8 bytes); preserve list order/duplicate
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23790,7 +24799,7 @@ Enumerate ascending-width factors of 1..=65536 retained Unicode scalars; sides <
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23851,7 +24860,7 @@ Place exact scalars using existing image traversal; quoted-cell text or explicit
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23931,7 +24940,7 @@ Parse exact signed decimal integer text; reject spaces, plus signs, leading zero
 
 Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -23976,7 +24985,7 @@ Bounded removal-based scalar traversal, resume next remaining in chosen directio
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -24156,7 +25165,7 @@ Decode explicit row,column,layer tuples; no inferred origin, layer or OS locale.
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -24351,7 +25360,7 @@ Exact row,column,layer tuples and original byte/scalar positions on explicit geo
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -24530,7 +25539,7 @@ Map physical key/layer positions on identical explicit geometries; no locale gue
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -24599,7 +25608,7 @@ Explicit signed displacement; wrap follows destination row lengths; inverse requ
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -24847,7 +25856,7 @@ Explicit signed displacement; wrap follows destination row lengths; inverse requ
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25095,7 +26104,7 @@ Exact sorted scalar inventories with equality, containment, residuals and defici
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25206,7 +26215,7 @@ Exact complete scalar subtraction and deficits; no underflow, hidden normalizati
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25317,7 +26326,7 @@ Explicit UAX #15 normalization; Unicode data version exposed by UNICODE_VERSION;
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25377,7 +26386,7 @@ Reverse Unicode scalar values, including combining marks/CRLF; not grapheme or b
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25422,7 +26431,7 @@ First/last Unicode scalar per word or nonempty LF/CRLF line; punctuation/line sp
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25482,7 +26491,7 @@ Bounded cyclic-step retained scalar ring with mandatory count and original posit
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25663,7 +26672,7 @@ Bounded Unicode-scalar frequencies, overlapping n-grams, IC and entropy under ex
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25759,7 +26768,7 @@ Apply existing ASCII ciphers to bounded scalar position sets and their complemen
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -25984,7 +26993,7 @@ Exact scalar-index comparison plus optional separately labeled normalized-view d
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26070,7 +27079,7 @@ Versioned scalar case/category/control/space/format observations and finite zero
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26141,7 +27150,7 @@ Explicit UTF-8 decoding, reject invalid bytes without replacement; <=1 MiB.
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26188,7 +27197,7 @@ Explicit text-to-UTF-8 bytes, no normalization/newline; <=1 MiB.
 
 Category: `text`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26233,7 +27242,7 @@ Ordered signed positions per Unicode-whitespace word, exact original scalar/byte
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26309,7 +27318,7 @@ Exact Unicode-scalar lengths of whitespace-delimited words with original boundar
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26354,7 +27363,7 @@ Ordered per-word scalar/u64 values with original positions, explicit optional ta
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26460,7 +27469,7 @@ Indexed substitution adjacency and shared graph BFS; lexicographic ties, 32768 e
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26558,7 +27567,7 @@ Validate exact single-scalar substitutions and caller dictionary membership; 409
 
 Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26654,7 +27663,7 @@ Remux one explicit self-contained MOV raw-PCM8 mono/stereo track to bounded WAV 
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26713,7 +27722,7 @@ Bounded declared MP4/MOV or WebM container/track/codec/dimension/time metadata; 
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26760,7 +27769,7 @@ Compare <=8 explicit MOV/JPEG frame pairs through existing Image comparison, ret
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26863,7 +27872,7 @@ Extract 1..=8 explicitly indexed independent baseline JPEG frames from bounded s
 
 Category: `video`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26939,7 +27948,7 @@ Explicit embedded HAR response body to bytes with logical-text/base64 provenance
 
 Category: `web`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -26995,7 +28004,7 @@ Bounded inert HAR 1.2 metadata observations, explicit missing values/body availa
 
 Category: `web`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -27040,7 +28049,7 @@ Explicit inline source or strict base64 data-URL asset to bounded bytes with sou
 
 Category: `web`. Contract: 1. Pipeline adapter: 1.
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
@@ -27106,7 +28115,7 @@ Bounded inert UTF-8 HTML token/reference/text/inline-range observations; no DOM/
 
 Category: `web`. Contract: 1. Pipeline adapter: none (direct API).
 
-Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |

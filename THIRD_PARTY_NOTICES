@@ -2251,3 +2251,25 @@ unicode-general-category-1.1.0
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+Grand Chiffre de 1691 numerical correspondence data
+Source: Emile Burgaud and Etienne Bazeries, Le Masque de fer (Paris, 1893),
+second deciphering table, printed pp. 280-289; Gallica bpt6k1523532j f305-f314.
+https://gallica.bnf.fr/ark:/12148/bpt6k1523532j
+Public-domain historical numerical correspondences; scans are not distributed.
+The ASCII transcription was cross-checked with Daniel Bourdeau's transcription:
+https://github.com/dbourdeau/cyphersolver/blob/main/targets/feuquieres/grand_chiffre_1691.tsv
+Git blob 45156e42dcda980c0f7bc1c6fc594c2328980ec3 (retrieved 2026-10-31).
+Attribution: Daniel Bourdeau, Unsolved Historical Ciphers, September 2026.
+https://dbourdeau.github.io/cyphersolver/catinat1691.html (CC BY 4.0 text).
+https://creativecommons.org/licenses/by/4.0/
+Cube changes verified against primary scans: group 502 reads Bien in f312
+(replacing Rien); alternative capitalization at 164 (Ie-Je, f307) and 215
+(Iu-Ju, f308) follows the printed deciphering table. Accents are omitted explicitly; blanks, nulls, cancellation,
+printed alternatives and Geneve? are distinguished. No inference fills blanks.
+No modern solver code, dictionary, scan or historical message is bundled.
+
+ROT8000 numerical profile facts
+Specification: rottytooth/rot8000 revision c47905631615173e51ac88e0901c4be642a1c8aa.
+Cube independently implements the fixed ranges and half-cycle using range
+arithmetic. No upstream GPL implementation or generated mapping table is bundled.

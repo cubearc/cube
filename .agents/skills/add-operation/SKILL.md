@@ -1,6 +1,6 @@
 ---
 name: add-operation
-description: Add a Cube operation to the Rust core and expose it through the existing CLI and Python SDK.
+description: Add a Cube operation to the Rust core and expose it through the existing CLI and all supported SDKs.
 ---
 
 # Add an operation
@@ -13,9 +13,13 @@ description: Add a Cube operation to the Rust core and expose it through the exi
 3. Add known-answer, empty-input, invalid-input, and relevant Unicode tests near
    the implementation. Exercise round trips and determinism where applicable;
    use `crates/cube-core/tests` for public API behavior.
-4. Expose the operation through the relevant existing Clap commands and PyO3
-   functions. Update `ops list`, Python exports and type stubs, CLI integration
-   tests, and native Python smoke tests. Keep algorithms solely in the core.
+4. Expose the operation through the relevant existing Clap commands, PyO3
+   functions and JavaScript/TypeScript/WebAssembly bindings. Update `ops list`,
+   SDK exports/type declarations and executable discovery/availability. Test the
+   installed native Python extension and actual packaged Node.js/browser SDK,
+   including known answers, errors and limits. Catalog presence does not prove
+   runtime support. Apply this parity rule to changed operations too. Keep
+   algorithms solely in the core.
 5. Follow the [Cube documentation workflow](../cube-docs/SKILL.md). Update the
    canonical reference and affected task examples. Add a guide only for a new
    reader task; change the README only for positioning or first use. Keep

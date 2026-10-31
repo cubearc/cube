@@ -134,7 +134,7 @@ const fn row(s: Spec) -> Row {
     }
 }
 
-const ROWS: [Row; 15] = [
+const ROWS: [Row; 16] = [
     row(Spec {
         name: "Explicit/keyword substitution",
         rust: "cube_core::ciphers::mono::alphabet::Mapping::encode",
@@ -361,6 +361,53 @@ const ROWS: [Row; 15] = [
         },
         fixture: super::fixtures::rot47,
         references: &["https://www.cryptogram.org/resource-area/cipher-types/"],
+    }),
+    row(Spec {
+        name: "ROT8000",
+        rust: "cube_core::ciphers::mono::rotations::rot8000",
+        python: "rot8000",
+        alphabet: "Fixed eligible BMP ranges; excluded units and non-BMP scalars preserved, no normalization.",
+        key: "No key.",
+        descriptor: o::Descriptor {
+            id: "cipher.rot8000",
+            category: "ciphers",
+            description: "Fixed ROT8000 BMP mapping: 63404 eligible units, half-cycle 31702; <=1 MiB input/3 MiB output.",
+            input_type: "text",
+            output_type: "text",
+            parameters: &[],
+            deterministic: true,
+            reversible: Some(true),
+            command: "cipher rot8000",
+            example: "cube cipher rot8000 --help",
+        },
+        resources: &[
+            resource("input_utf8_bytes", MAX_INPUT),
+            resource("output_utf8_bytes", 3145728),
+        ],
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<super::params::Text>,
+            required: true,
+        }],
+        parameters: c::schema::<super::params::Empty>,
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<super::params::Rot8000Text>,
+            required: true,
+        }],
+        limits: c::Limits {
+            max_input_bytes: Some(MAX_INPUT as u64),
+            max_output_bytes: Some(3145728),
+            max_items: None,
+            max_work: None,
+            max_memory_bytes: None,
+        },
+        fixture: super::fixtures::rot8000,
+        references: &[
+            "https://github.com/rottytooth/rot8000/tree/c47905631615173e51ac88e0901c4be642a1c8aa",
+        ],
     }),
     row(Spec {
         name: "Deterministic homophonic substitution",
@@ -823,29 +870,30 @@ const ROWS: [Row; 15] = [
         references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Grandpre.pdf"],
     }),
 ];
-const fn profiles() -> [m::Entry; 15] {
-    let mut a = [ROWS[0].profile; 15];
+const fn profiles() -> [m::Entry; 16] {
+    let mut a = [ROWS[0].profile; 16];
     let mut i = 0;
-    while i < 15 {
+    while i < 16 {
         a[i] = ROWS[i].profile;
         i += 1;
     }
     a
 }
-const fn contracts() -> [c::Entry; 15] {
-    let mut a = [ROWS[0].contract; 15];
+const fn contracts() -> [c::Entry; 16] {
+    let mut a = [ROWS[0].contract; 16];
     let mut i = 0;
-    while i < 15 {
+    while i < 16 {
         a[i] = ROWS[i].contract;
         i += 1;
     }
     a
 }
-const PROFILED: [m::Entry; 15] = profiles();
-const CONTRACTS: [c::Entry; 15] = contracts();
+const PROFILED: [m::Entry; 16] = profiles();
+const CONTRACTS: [c::Entry; 16] = contracts();
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
-pub(crate) const MODULE: o::Module =
-    o::Module::profiled(OPERATIONS, &PROFILED).with_contracts(&CONTRACTS);
+pub(crate) const MODULE: o::Module = o::Module::profiled(OPERATIONS, &PROFILED)
+    .with_contracts(&CONTRACTS)
+    .with_executors(super::execution::ENTRIES);
 
 #[cfg(test)]
 mod tests {

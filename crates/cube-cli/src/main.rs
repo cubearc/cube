@@ -29,6 +29,7 @@ mod aescmd;
 mod cryptanalysiscmd;
 mod enigmacmd;
 mod fractioncmd;
+mod historicalcmd;
 mod modularcmd;
 mod monocmd;
 mod pipelinecmd;
@@ -498,6 +499,19 @@ enum Cipher {
     Rot18(Input),
     /// Rotate printable ASCII ! through ~ by 47
     Rot47(Input),
+    /// Apply the fixed self-inverse ROT8000 BMP mapping; preserve non-BMP text
+    Rot8000(Input),
+    /// Apply the reciprocal ten-letter written Malespin profile
+    Malespin(Input),
+    /// Apply caller-defined reciprocal scalar pairs
+    Vatsyayana(historicalcmd::Pairs),
+    /// Encode/decode exact presegmented units with an explicit codebook
+    Nomenclator(historicalcmd::Table),
+    /// Use an explicit ACA 10x10 syllabary keysquare
+    Syllabary(historicalcmd::Table),
+    /// Use the fixed Bazeries Grand Chiffre de 1691 table
+    #[command(name = "great-cipher")]
+    Great(historicalcmd::Great),
     /// Five-symbol Bacon encoding with explicit alphabet and notation
     Bacon(puzzlecmd::BaconArgs),
     /// Shared Polybius/Tap square, explicit row,column pairs and word tokens
@@ -1042,6 +1056,16 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 }
                 Cipher::Rot18(input) => {
                     ciphers::mono::rotations::rot18(&input.read_text("cipher.rot18")?)?
+                }
+                Cipher::Malespin(input) => {
+                    ciphers::mono::historical::malespin(&input.read_text("cipher.malespin")?)?
+                }
+                Cipher::Vatsyayana(args) => historicalcmd::paired(args)?,
+                Cipher::Nomenclator(args) => historicalcmd::table(args, false)?,
+                Cipher::Syllabary(args) => historicalcmd::table(args, true)?,
+                Cipher::Great(args) => historicalcmd::great(args)?,
+                Cipher::Rot8000(input) => {
+                    ciphers::mono::rotations::rot8000(&input.read_text("cipher.rot8000")?)?
                 }
                 Cipher::Rot47(input) => {
                     ciphers::mono::rotations::rot47(&input.read_text("cipher.rot47")?)?

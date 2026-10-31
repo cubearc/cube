@@ -13,9 +13,16 @@ use cube_core::{
 };
 use serde_json::{Value, json};
 pub(super) fn supports(op: &str) -> bool {
-    mono::OPERATIONS.iter().any(|d| d.id == op) || op == "cipher.enigma"
+    mono::OPERATIONS
+        .iter()
+        .chain(mono::historical::OPERATIONS)
+        .any(|d| d.id == op)
+        || op == "cipher.enigma"
 }
 pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationError> {
+    if mono::historical::OPERATIONS.iter().any(|d| d.id == op) {
+        return mono::historical::execute(op, &i, &p);
+    }
     let decode = op.ends_with(".decode");
     if op == "cipher.enigma" {
         return serde_json::to_value(enigma::transform(
@@ -27,6 +34,9 @@ pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationEr
     match op {
         "cipher.rot5" => Ok(json!({"text":mono::rotations::rot5(&field::<String>(&i,"text")?)?})),
         "cipher.rot18" => Ok(json!({"text":mono::rotations::rot18(&field::<String>(&i,"text")?)?})),
+        "cipher.rot8000" => {
+            Ok(json!({"text":mono::rotations::rot8000(&field::<String>(&i,"text")?)?}))
+        }
         "cipher.rot47" => Ok(json!({"text":mono::rotations::rot47(&field::<String>(&i,"text")?)?})),
         "cipher.substitution.encode" | "cipher.substitution.decode" => {
             let params = params::Substitution::parse(&p.to_string())?;

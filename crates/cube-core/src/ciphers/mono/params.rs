@@ -121,3 +121,9 @@ pub struct Coordinates(#[schemars(length(max = 65536))] pub Vec<grandpre::Token>
 pub struct Alternatives(
     #[schemars(length(max = 65536), inner(length(min = 1, max = 3)))] pub Vec<Vec<char>>,
 );
+
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
+#[serde(transparent)]
+pub struct Rot8000Text(
+    #[schemars(length(max=3145728),extend("x-cube-max-utf8-bytes"=3145728))] pub String,
+);

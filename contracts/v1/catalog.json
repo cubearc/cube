@@ -26878,6 +26878,361 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.great_cipher.decode",
+      "category": "ciphers",
+      "description": "Decode Bazeries' 1691 table with explicit I/J, U/V and other alternatives, null positions and group-27 cancellation; unknown surviving entries reject.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "report",
+          "semantic_type": "cipher.codebook_report",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "DecodeReport",
+            "description": "Readings retain original zero-based token indices. No word spacing, accent\nrestoration or historical interpretation is inferred. Lists are in scan order.",
+            "type": "object",
+            "properties": {
+              "cancel_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "canceled_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "null_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "units": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Unit"
+                },
+                "maxItems": 65536
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "units",
+              "null_indices",
+              "canceled_indices",
+              "cancel_indices"
+            ],
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Unit": {
+                "type": "object",
+                "properties": {
+                  "alternatives": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 16,
+                    "minItems": 1
+                  },
+                  "token_index": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 65535,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "token_index",
+                  "alternatives"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.great_cipher.encode",
+      "category": "ciphers",
+      "description": "Encode exact presegmented ASCII transcription units from Bazeries' 1893 Grand Chiffre de 1691 deciphering table; deterministic first code.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "units",
+          "semantic_type": "cipher.plain_units",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.gromark.decode",
       "category": "ciphers",
       "description": "Explicit mixed alphabet and five decimal primer digits; exclude printed primer/check digit.",
@@ -28452,6 +28807,126 @@
             "minimum": 0
           }
         }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.malespin",
+      "category": "ciphers",
+      "description": "Reciprocal ASCII a/e, i/o, b/t, f/g, p/m swaps; retain case and preserve other scalars, including accents.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
       },
       "outputs": [
         {
@@ -30231,6 +30706,521 @@
         "max_input_bytes": 1048576,
         "max_output_bytes": 2097152,
         "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.nomenclator.decode",
+      "category": "ciphers",
+      "description": "Decode explicit code tokens with alternative readings and original positions; apply declared nulls and previous-group cancellation.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "BookParameters",
+        "type": "object",
+        "properties": {
+          "definition": {
+            "$ref": "#/$defs/Definition"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "definition"
+        ],
+        "$defs": {
+          "Definition": {
+            "description": "Exact presegmented units and globally unique code ownership, <=4096 entries\nand total codes, <=1 MiB compact JSON, <=256 UTF-8 bytes per unit/code.\nNulls are omitted; cancel codes erase the last surviving group, including a\nnull/unknown group, never a Unicode scalar or guessed word.",
+            "type": "object",
+            "properties": {
+              "cancel_codes": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 4096
+              },
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Entry"
+                },
+                "maxItems": 4096,
+                "minItems": 1
+              },
+              "null_codes": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 4096
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 1048576,
+            "x-cube-max-total-codes": 4096
+          },
+          "Entry": {
+            "description": "One code may preserve multiple explicitly listed readings; encoding selects\nthe first declared code for an exact supplied unit. No concatenation/splitting.",
+            "type": "object",
+            "properties": {
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 16,
+                "minItems": 1
+              },
+              "codes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 256,
+                "minItems": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "alternatives",
+              "codes"
+            ]
+          },
+          "TokenText": {
+            "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 256
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "report",
+          "semantic_type": "cipher.codebook_report",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "DecodeReport",
+            "description": "Readings retain original zero-based token indices. No word spacing, accent\nrestoration or historical interpretation is inferred. Lists are in scan order.",
+            "type": "object",
+            "properties": {
+              "cancel_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "canceled_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "null_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "units": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Unit"
+                },
+                "maxItems": 65536
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "units",
+              "null_indices",
+              "canceled_indices",
+              "cancel_indices"
+            ],
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Unit": {
+                "type": "object",
+                "properties": {
+                  "alternatives": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 16,
+                    "minItems": 1
+                  },
+                  "token_index": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 65535,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "token_index",
+                  "alternatives"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.nomenclator.encode",
+      "category": "ciphers",
+      "description": "Encode explicit plaintext units using a caller-owned codebook; select the first matching code deterministically.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "units",
+          "semantic_type": "cipher.plain_units",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "BookParameters",
+        "type": "object",
+        "properties": {
+          "definition": {
+            "$ref": "#/$defs/Definition"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "definition"
+        ],
+        "$defs": {
+          "Definition": {
+            "description": "Exact presegmented units and globally unique code ownership, <=4096 entries\nand total codes, <=1 MiB compact JSON, <=256 UTF-8 bytes per unit/code.\nNulls are omitted; cancel codes erase the last surviving group, including a\nnull/unknown group, never a Unicode scalar or guessed word.",
+            "type": "object",
+            "properties": {
+              "cancel_codes": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 4096
+              },
+              "entries": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Entry"
+                },
+                "maxItems": 4096,
+                "minItems": 1
+              },
+              "null_codes": {
+                "type": "array",
+                "default": [],
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 4096
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "entries"
+            ],
+            "x-cube-max-serialized-bytes": 1048576,
+            "x-cube-max-total-codes": 4096
+          },
+          "Entry": {
+            "description": "One code may preserve multiple explicitly listed readings; encoding selects\nthe first declared code for an exact supplied unit. No concatenation/splitting.",
+            "type": "object",
+            "properties": {
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 16,
+                "minItems": 1
+              },
+              "codes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 256,
+                "minItems": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "alternatives",
+              "codes"
+            ]
+          },
+          "TokenText": {
+            "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 256
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -34432,6 +35422,126 @@
       "limits": {
         "max_input_bytes": 1048576,
         "max_output_bytes": 1048576,
+        "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.rot8000",
+      "category": "ciphers",
+      "description": "Fixed ROT8000 BMP mapping: 63404 eligible units, half-cycle 31702; <=1 MiB input/3 MiB output.",
+      "example": "cube cipher rot8000 --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Empty",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Rot8000Text",
+            "type": "string",
+            "maxLength": 3145728,
+            "x-cube-max-utf8-bytes": 3145728
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 3145728,
         "max_items": null,
         "max_work": null,
         "max_memory_bytes": null
@@ -38807,6 +39917,457 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.syllabary.decode",
+      "category": "ciphers",
+      "description": "Decode exact ACA syllabary coordinate pairs; retain unit boundaries and original token positions.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "SyllabaryParameters",
+        "type": "object",
+        "properties": {
+          "definition": {
+            "$ref": "#/$defs/Syllabary"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "definition"
+        ],
+        "$defs": {
+          "Syllabary": {
+            "description": "Explicit ACA 10x10 multi-character keysquare, row-major cells and required\nrow/column permutations of 0..9. Units are already segmented by the caller.",
+            "type": "object",
+            "properties": {
+              "cells": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 100,
+                "minItems": 100
+              },
+              "column_labels": {
+                "type": "string",
+                "maxLength": 10,
+                "minLength": 10
+              },
+              "row_labels": {
+                "type": "string",
+                "maxLength": 10,
+                "minLength": 10
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "cells",
+              "row_labels",
+              "column_labels"
+            ],
+            "x-cube-max-serialized-bytes": 1048576
+          },
+          "TokenText": {
+            "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 256
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "report",
+          "semantic_type": "cipher.codebook_report",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "DecodeReport",
+            "description": "Readings retain original zero-based token indices. No word spacing, accent\nrestoration or historical interpretation is inferred. Lists are in scan order.",
+            "type": "object",
+            "properties": {
+              "cancel_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "canceled_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "null_indices": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint32",
+                  "maximum": 65535,
+                  "minimum": 0
+                },
+                "maxItems": 65536
+              },
+              "units": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Unit"
+                },
+                "maxItems": 65536
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "units",
+              "null_indices",
+              "canceled_indices",
+              "cancel_indices"
+            ],
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Unit": {
+                "type": "object",
+                "properties": {
+                  "alternatives": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 16,
+                    "minItems": 1
+                  },
+                  "token_index": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 65535,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "token_index",
+                  "alternatives"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.syllabary.encode",
+      "category": "ciphers",
+      "description": "Encode caller-segmented units with an explicit ACA 10x10 keysquare and digit coordinate permutations.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "units",
+          "semantic_type": "cipher.plain_units",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "SyllabaryParameters",
+        "type": "object",
+        "properties": {
+          "definition": {
+            "$ref": "#/$defs/Syllabary"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "definition"
+        ],
+        "$defs": {
+          "Syllabary": {
+            "description": "Explicit ACA 10x10 multi-character keysquare, row-major cells and required\nrow/column permutations of 0..9. Units are already segmented by the caller.",
+            "type": "object",
+            "properties": {
+              "cells": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 100,
+                "minItems": 100
+              },
+              "column_labels": {
+                "type": "string",
+                "maxLength": 10,
+                "minLength": 10
+              },
+              "row_labels": {
+                "type": "string",
+                "maxLength": 10,
+                "minLength": 10
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "cells",
+              "row_labels",
+              "column_labels"
+            ],
+            "x-cube-max-serialized-bytes": 1048576
+          },
+          "TokenText": {
+            "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "x-cube-max-utf8-bytes": 256
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.tri_square.decode",
       "category": "ciphers",
       "description": "Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.",
@@ -40887,6 +42448,159 @@
       "limits": {
         "max_input_bytes": 1048576,
         "max_output_bytes": 1048576,
+        "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.vatsyayana",
+      "category": "ciphers",
+      "description": "Reciprocal exact caller-defined disjoint scalar pairs; reject unmatched symbols by default, without a guessed historical alphabet.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Pairs",
+        "type": "object",
+        "properties": {
+          "pairs": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 1,
+                "minLength": 1
+              },
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "maxItems": 2048,
+            "minItems": 1
+          },
+          "unmapped": {
+            "$ref": "#/$defs/Unmapped",
+            "default": "reject"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "pairs"
+        ],
+        "$defs": {
+          "Unmapped": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "preserve"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "ExpandedText",
+            "type": "string",
+            "maxLength": 4194304,
+            "x-cube-max-utf8-bytes": 4194304
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
         "max_items": null,
         "max_work": null,
         "max_memory_bytes": null

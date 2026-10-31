@@ -43,7 +43,7 @@ fn root(semantic: &str) -> Result<Schema, OperationError> {
         "file.carving" => simple::<forensics::carving::Extraction>(),
         "file.signatures" => simple::<Vec<forensics::signatures::Signature>>(),
         "file.signature_scan" => simple::<forensics::signatures::Scan>(),
-        "file.info" => simple::<forensics::inspect::FileInfo>(),
+        "file.info" => simple::<forensics::inspect::Inspection>(),
         "file.zip_structure" => simple::<forensics::zip::Archive>(),
         "file.exif" => simple::<forensics::exif::Metadata>(),
         "file.hex_rows" => simple::<Vec<forensics::ranges::HexRow>>(),

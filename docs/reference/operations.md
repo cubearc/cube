@@ -16314,15 +16314,15 @@ cube file hex sample.bin --length 256
 
 ## file.info.inspect
 
-Inspect basic filesystem facts and bounded header evidence; no EXIF.
+Inspect file or supplied byte-artifact size and bounded header evidence; artifact filesystem facts remain unknown; no EXIF.
 
-Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `file`. Contract: 2. Pipeline adapter: none (direct API).
 
 Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.
 
 | Direction | Port | Semantic type |
 | --- | --- | --- |
-| Input | `input` | `file_path` |
+| Input | `input` | `file.source` |
 | Output | `output` | `file.info` |
 
 Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
@@ -16333,7 +16333,7 @@ Typed example (validated by the complete conformance matrix):
 {
   "inputs": {
     "input": {
-      "reference": "fixture:one-zero-byte"
+      "base64": "AA=="
     }
   },
   "parameters": {}

@@ -1,7 +1,7 @@
 # File forensics
 
 Inspect file metadata, find signatures and strings, compare bytes, or recover an
-explicit range. Inputs must be stable regular files. Byte offsets start at zero;
+explicit range. Path-based inputs must be stable regular files. Byte offsets start at zero;
 a range ends exclusively at `offset + length`.
 
 ## Inspection and comparison
@@ -23,6 +23,15 @@ For example, inspect signatures and printable strings in your own file:
 cube file signature sample.bin --json
 cube file strings sample.bin --min-length 4 --json
 ```
+
+### Supplied byte artifacts
+
+The Rust `artifact_info` API and JavaScript `file.info.inspect` version 2 can inspect
+owned bytes without a filesystem reference. Size and up to 12 header bytes come
+from those bytes. The result identifies `source_kind: "artifact"`; `regular_file`,
+`modified` and `created` are null because OS facts are unknown. Native `file_info`
+and `file_info_reader` retain their regular-file checks and available timestamps.
+A reference string alone never grants filesystem access.
 
 ### Inspection limits
 

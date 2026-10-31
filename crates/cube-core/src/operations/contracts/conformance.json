@@ -4437,23 +4437,24 @@
   },
   {
     "operation": "file.info.inspect",
-    "operation_version": 1,
+    "operation_version": 2,
     "inputs": {
       "input": {
-        "reference": "fixture:one-zero-byte"
+        "base64": "AA=="
       }
     },
     "parameters": {},
     "outputs": {
       "output": {
         "size": 1,
-        "regular_file": true,
+        "source_kind": "artifact",
+        "regular_file": null,
         "modified": null,
         "created": null,
         "signatures": []
       }
     },
-    "contract_sha256": "9d224019ea8edde921065ef75c618b7fc0f39613317d035ab6ee1ef6de6bd596"
+    "contract_sha256": "257b3d09646a3ba5fcca4c5f05a8f8991ab91393d3b462ec85cdc6fb19832652"
   },
   {
     "inputs": {

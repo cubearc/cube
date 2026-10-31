@@ -95,7 +95,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh run download ${{ github.run_id }} --name javascript-sdk --dir sdk-artifact
       - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm install --offline --ignore-scripts --no-audit --no-fund --prefix .consumer sdk-artifact/cubearc-cube-0.18.0.tgz
+      - run: npm install --offline --ignore-scripts --no-audit --no-fund --prefix .consumer "$PWD/sdk-artifact/cubearc-cube-0.18.0.tgz"
       - run: cp -R .consumer/node_modules/@cubearc/cube/dist ./dist
       - run: npx --no-install playwright install --with-deps ${{ matrix.browser }}
       - run: node --test --test-concurrency=1 tests/browser-qualification.test.mjs tests/browser-sdk.test.mjs

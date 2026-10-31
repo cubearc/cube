@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/cube-core", "crates/cube-cli", "bindings/python"]
+members = ["crates/cube-core", "crates/cube-cli", "bindings/python", "bindings/javascript/wasm"]
 resolver = "3"
 exclude = ["vendor/salsa20"]
 

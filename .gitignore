@@ -10,4 +10,13 @@
 /lcov.info
 /htmlcov/
 /dist/
+/bindings/javascript/dist/
+/bindings/javascript/node_modules/
 .DS_Store
+
+/bindings/javascript/*.tgz
+/bindings/javascript/qualification.json
+/bindings/javascript/.consumer/
+/bindings/javascript/sdk-artifact/
+
+/bindings/javascript/browser-qualification.json

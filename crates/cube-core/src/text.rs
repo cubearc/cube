@@ -349,7 +349,7 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
                     default: None,
                     constraints: ParameterType::UnsignedList {
                         min: 0,
-                        max: usize::MAX as u64,
+                        max: u64::MAX,
                         min_length: 0,
                         max_length: MAX_INDICES,
                         unique: false,
@@ -362,7 +362,7 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
                     default: None,
                     constraints: ParameterType::Unsigned {
                         min: 0,
-                        max: usize::MAX as u64,
+                        max: u64::MAX,
                     },
                 },
                 Parameter {
@@ -372,7 +372,7 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
                     default: None,
                     constraints: ParameterType::Unsigned {
                         min: 1,
-                        max: usize::MAX as u64,
+                        max: u64::MAX,
                     },
                 },
                 Parameter {
@@ -382,7 +382,7 @@ const PROFILED: [crate::operations::metadata::Entry; 5] = [
                     default: None,
                     constraints: ParameterType::Unsigned {
                         min: 0,
-                        max: usize::MAX as u64,
+                        max: u64::MAX,
                     },
                 },
             ],

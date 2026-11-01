@@ -1,52 +1,67 @@
 # Open Cube Play
 
-Install the [Play host launcher](https://github.com/cubearc/play/blob/main/docs/installation.md)
-beside Cube. The CLI delegates to that separately installed application:
+Install the [Electron desktop app](https://github.com/cubearc/play/blob/main/docs/installation.md)
+and open it from Cube:
 
 ```sh
 cube play
-cube play ./investigation
-cube play sample.mp4
-cube play rabbit.cube
+cube play ./puzzle
+cube play clue.png
+cube play challenge.json
 ```
 
-The optional path defaults to the current directory. A file opens its parent
-workspace and selects that file. A challenge intent does not execute its contents.
-Read [Play's first steps](https://github.com/cubearc/play/blob/main/docs/getting-started.md).
+A folder uses a managed private Workspace separate from the source directory.
+Files enter the selected local notebook; a canonical Challenge package imports an
+independent Exploration. Opening an item never executes its contents. With no
+path, Play resumes its saved Workspace. Read [Play's first steps](https://github.com/cubearc/play/blob/main/docs/getting-started.md).
 
-If the launcher is installed elsewhere, set `CUBE_PLAY_LAUNCHER` to its trusted
-absolute executable path. Cube checks the `cube-play-launcher 1` protocol before
-delegation. The launcher owns Docker setup, readiness, browser opening and shutdown.
+Place the `cube-play` desktop executable beside Cube, or set `CUBE_PLAY_APP` to
+its trusted absolute executable path. Cube verifies the `cube-play 1` desktop
+protocol before delegation. The desktop owns windows, private storage and native
+execution. Its standalone preview does not require a container runtime.
 
-## Attached native commands
+## Use an external terminal
 
-The Electron preview can start the bundled Cube CLI for a selected saved Pipeline
-using **Run with Cube CLI** in its Trail canvas. The result appears inline and the
-Run's evidence records **Started by: Cube CLI**. This uses the same local
-coordinator as **Run cell**; Cube does not read Play's private database.
+In Play, open **Toggle Cube terminal**, then choose **Use external terminal**.
+Copy the displayed `cube play --context '/absolute/path/context.json'` prefix into
+your own terminal and append a contextual command:
 
-The attached client supports `cube play asset show ID --revision N`,
-`cube play pipeline show ID --revision N`, and `cube play run start`, `status`
-and `cancel`. These commands require an inherited session supplied by Play; typing
-them in an unrelated terminal returns `context_unavailable`. There is no automatic
-launcher, shell or network fallback for contextual commands. The existing
-`cube play [path]` launcher delegation is a separate interface.
+```sh
+cube play --context /absolute/path/context.json asset show ASSET_ID --revision 1
+cube play --context /absolute/path/context.json pipeline show PIPELINE_ID --revision 1
+cube play --context /absolute/path/context.json run status RUN_ID
+cube play --context /absolute/path/context.json run cancel RUN_ID
+```
 
-See the [attached command reference](https://github.com/cubearc/play/blob/main/docs/reference/desktop-runtime.md#attached-cube-cli-commands)
-for exact syntax, context and transport limits. External terminal attachment is not provided by this client.
+Replace the uppercase identities with the exact IDs shown in Play. `run start
+--pipeline ID --revision N --target NODE_ID` requires the saved selection pinned
+when the connection was issued. Each accepted invocation gets a new Run; the
+engine checks its exact Stage, Trail, Asset and Pipeline revisions.
 
-## Interactive terminal in Play
+The private context file expires after ten minutes and stays bound to its original
+Stage. It uses an authenticated local socket on macOS/Linux; the client receives
+no database or general filesystem authority. **Disconnect external terminal** or
+**File → Disconnect External Terminals** revokes it. App quit also disconnects it;
+a missing, expired or unsafe file fails without ambient discovery or a shell
+fallback. External attachment on Windows requires its separate native policy.
 
-In the macOS Electron preview, open a Trail and choose **Toggle Cube terminal**.
-The real CLI runs as `cube play session` in a native PTY with a fixed Stage and
-optional Pipeline selection. Type `help` for contextual commands, or choose
-**Insert selected Run** and press Enter to execute that saved selection. `selected`
-uses the same coordinator and records a fresh Run each time.
+<a id="attached-native-commands"></a>
 
-Use `run status ID` to inspect evidence and `run cancel ID` to stop an active Run.
-Ctrl+C clears the command draft; it does not cancel accepted work. Closing the
-terminal leaves accepted Runs supervised by the engine. **Reconnect** selects the
-current Trail and starts an empty transcript. This terminal accepts contextual
-Cube commands, not arbitrary executables or shell expressions. See
-[Play's terminal guide](https://github.com/cubearc/play/blob/main/docs/terminal.md)
-for the walkthrough and session limits.
+## Attached commands inside Play
+
+**Run with Cube CLI** in a Trail canvas starts the bundled CLI through the same
+coordinator as **Run cell**. Its inline evidence records **Started by: Cube CLI**.
+Without an issued context file or an inherited app session, contextual commands
+return `context_unavailable`.
+
+The in-app terminal runs the real `cube play session` client in a native PTY. Type
+`help` for contextual commands, or choose **Insert selected Run** and press Enter.
+`selected` invokes the saved selection with a fresh Run identity. Ctrl+C clears the
+command draft; use `run cancel ID` to cancel accepted work. Closing the terminal
+leaves accepted Runs supervised by the engine. **Reconnect** selects the current
+Trail and starts an empty transcript.
+
+The in-app console accepts contextual Cube commands. It does not interpret shell
+expressions or launch arbitrary executables. See [Play's terminal guide](https://github.com/cubearc/play/blob/main/docs/terminal.md)
+and the [command reference](https://github.com/cubearc/play/blob/main/docs/reference/desktop-runtime.md#attached-cube-cli-commands)
+for exact context, syntax and limits.

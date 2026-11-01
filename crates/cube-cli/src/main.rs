@@ -641,19 +641,19 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
     if let Command::Play(args) = &cli.command
         && let Some(command) = &args.command
     {
-        if cli.lab_capture.is_some()
-            || args.path.is_some()
-            || args.stop
-            || args.no_browser
-            || args.offline
-        {
+        if cli.lab_capture.is_some() || args.path.is_some() {
             return Err(cube_core::errors::OperationError::new(
                 cube_core::errors::ErrorCode::InvalidInput,
                 "context_options_unavailable",
             )
             .into());
         }
-        return cube_cli::play::run(command).map_err(Into::into);
+        return if let Some(path) = &args.context {
+            cube_cli::play::run_external(command, path)
+        } else {
+            cube_cli::play::run(command)
+        }
+        .map_err(Into::into);
     }
     let capture = capture::Target::requested(&cli)?;
     let mut output = io::stdout().lock();
@@ -675,7 +675,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Number {
             command: Number::Pascal(args),
         } => combinatoricscmd::pascal(args, &mut output)?,
-        Command::Play(args) => playcmd::run(&args, cli.json_errors)?,
+        Command::Play(args) => playcmd::run(&args)?,
         Command::Number {
             command: Number::Gcd(args),
         } => modularcmd::pair(args, false, &mut output)?,
@@ -1173,7 +1173,7 @@ fn main() -> ExitCode {
     match run(cli) {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
-            if let Some(status) = error.downcast_ref::<playcmd::LauncherExit>() {
+            if let Some(status) = error.downcast_ref::<playcmd::DesktopExit>() {
                 return ExitCode::from(status.0);
             }
             let mut cause: Option<&(dyn Error + 'static)> = Some(error.as_ref());

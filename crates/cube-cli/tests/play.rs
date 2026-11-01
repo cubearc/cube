@@ -18,20 +18,20 @@ fn cube(root: &Path) -> Command {
     );
     command
         .current_dir(root.join("investigation 空 space"))
-        .env_remove("CUBE_PLAY_LAUNCHER")
+        .env_remove("CUBE_PLAY_APP")
         .env_remove("CUBE_PLAY_FIXTURE_MODE")
         .env("CUBE_PLAY_RECORD", root.join("record.txt"));
     command
 }
 
 #[test]
-fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
+fn delegates_only_to_the_trusted_desktop_and_preserves_the_contract() {
     let root =
         Fixture(std::env::temp_dir().join(format!("cube-play-contract-{}", std::process::id())));
     fs::create_dir_all(root.0.join("installed")).unwrap();
     fs::create_dir_all(root.0.join("investigation 空 space")).unwrap();
     let binary = format!("cube{}", std::env::consts::EXE_SUFFIX);
-    let launcher = root
+    let desktop = root
         .0
         .join("installed")
         .join(format!("cube-play{}", std::env::consts::EXE_SUFFIX));
@@ -45,11 +45,11 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
         use std::{env, fs, io::Write};
         fn main() {
             let args:Vec<_>=env::args_os().skip(1).collect();
-            if args.first().is_some_and(|v|v=="--launcher-protocol") {
+            if args.first().is_some_and(|v|v=="--desktop-protocol") {
                 match env::var("CUBE_PLAY_FIXTURE_MODE").as_deref() {
-                    Ok("incompatible")=>println!("cube-play-launcher 99"),
+                    Ok("incompatible")=>println!("cube-play 99"),
                     Ok("timeout")=>std::thread::sleep(std::time::Duration::from_secs(20)),
-                    _=>println!("cube-play-launcher 1")
+                    _=>println!("cube-play 1")
                 }
                 return;
             }
@@ -66,7 +66,7 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
             .args(["--edition=2024", "--crate-name", "play_contract_fixture"])
             .arg(&source)
             .arg("-o")
-            .arg(&launcher)
+            .arg(&desktop)
             .status()
             .unwrap()
             .success()
@@ -81,7 +81,7 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
     .unwrap();
     let help = cube(&root.0).args(["play", "--help"]).output().unwrap();
     assert!(help.status.success());
-    assert!(String::from_utf8_lossy(&help.stdout).contains("current directory"));
+    assert!(String::from_utf8_lossy(&help.stdout).contains("source folder"));
     for path in [
         None,
         Some("sample 空 file.mp4"),
@@ -89,8 +89,13 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
         Some("--literal.txt"),
     ] {
         let mut command = cube(&root.0);
-        command.args(["play", "--no-browser", "--offline"]);
+        command.arg("play");
         if let Some(path) = path {
+            fs::write(
+                root.0.join("investigation 空 space").join(path),
+                "selected source",
+            )
+            .unwrap();
             command.arg("--").arg(path);
         }
         assert!(command.status().unwrap().success());
@@ -103,24 +108,36 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
                 .canonicalize()
                 .unwrap()
         );
-        assert_eq!(
-            &values[1..5],
-            &["--protocol", "1", "--no-browser", "--offline"]
-        );
         if let Some(path) = path {
-            assert_eq!(&values[5..], &["--", path]);
+            assert_eq!(values[1], "--desktop-open");
+            assert_eq!(
+                Path::new(values[2]),
+                root.0
+                    .join("investigation 空 space")
+                    .join(path)
+                    .canonicalize()
+                    .unwrap()
+            );
         } else {
-            assert_eq!(values.len(), 5);
+            assert_eq!(values.len(), 1);
         }
     }
+    for flag in ["--stop", "--no-browser", "--offline"] {
+        assert!(
+            !cube(&root.0)
+                .args(["play", flag])
+                .status()
+                .unwrap()
+                .success()
+        );
+    }
     let output = cube(&root.0)
-        .args(["--json-errors", "play", "--stop"])
+        .args(["--json-errors", "play"])
         .env("CUBE_PLAY_FIXTURE_MODE", "failure")
         .output()
         .unwrap();
     assert_eq!(output.status.code(), Some(7));
-    let record = fs::read_to_string(root.0.join("record.txt")).unwrap();
-    assert!(record.contains("--json-errors\0--stop\0"));
+
     for mode in ["incompatible", "timeout"] {
         let output = cube(&root.0)
             .args(["--json-errors", "play"])
@@ -134,12 +151,12 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
             error["error"]["message"]
                 .as_str()
                 .unwrap()
-                .contains("launcher")
+                .contains("desktop")
         );
     }
     let relative = cube(&root.0)
         .args(["--json-errors", "play"])
-        .env("CUBE_PLAY_LAUNCHER", "./cube-play")
+        .env("CUBE_PLAY_APP", "./cube-play")
         .output()
         .unwrap();
     assert!(!relative.status.success());
@@ -147,12 +164,12 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
     assert_eq!(error["error"]["code"], "invalid_parameter");
     let explicit = cube(&root.0)
         .args(["play"])
-        .env("CUBE_PLAY_LAUNCHER", &launcher)
+        .env("CUBE_PLAY_APP", &desktop)
         .output()
         .unwrap();
     assert!(
         explicit.status.success(),
-        "explicit launcher failed ({}): {}",
+        "explicit desktop failed ({}): {}",
         explicit.status,
         String::from_utf8_lossy(&explicit.stderr)
     );
@@ -172,7 +189,7 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
         while !root.0.join("record.txt").exists() {
             assert!(
                 Instant::now() < deadline,
-                "delegation did not reach its launcher"
+                "delegation did not reach its desktop"
             );
             assert!(child.try_wait().unwrap().is_none());
             std::thread::sleep(Duration::from_millis(20));
@@ -190,7 +207,7 @@ fn delegates_only_to_the_trusted_launcher_and_preserves_the_contract() {
             "Unix delegation must retain process identity and signals"
         );
     }
-    fs::remove_file(&launcher).unwrap();
+    fs::remove_file(&desktop).unwrap();
     let missing = cube(&root.0)
         .args(["--json-errors", "play"])
         .output()

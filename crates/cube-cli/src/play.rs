@@ -1,15 +1,17 @@
-//! Closed contextual commands over one inherited private stdin/stdout session.
+//! Closed contextual commands over an inherited session or an explicitly issued private lease.
 //!
 //! This is a control client. Play owns authorization, planning, persistence and
 //! restricted operation workers. No database, filesystem, shell or network API
-//! is part of this protocol. External discovery and PTYs are separate facilities.
+//! is part of this protocol. External leases and native PTYs share its scoped requests.
 use clap::Subcommand;
 use cube_core::errors::{ErrorCode, OperationError};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::io::{BufRead, IsTerminal, Read, Write};
 
+mod external;
 mod session;
+pub use external::run as run_external;
 
 pub const PROTOCOL: u32 = 1;
 pub const FRAME_BYTES: usize = 262_144;
@@ -244,11 +246,11 @@ fn action(command: &Command, bootstrap: &Bootstrap) -> Result<Action, OperationE
 }
 /// Exchange one closed request. The trusted parent supplies the exact context and
 /// lower limits, authenticates the reply and owns process timeout/cleanup.
-pub fn exchange(
+fn round_trip(
     command: &Command,
     reader: &mut impl BufRead,
     writer: &mut impl Write,
-) -> Result<(), OperationError> {
+) -> Result<Reply, OperationError> {
     let bootstrap: Bootstrap =
         serde_json::from_value(read(reader)?).map_err(|_| error("invalid_context"))?;
     authorize(&bootstrap)?;
@@ -260,11 +262,18 @@ pub fn exchange(
         command: action(command, &bootstrap)?,
     };
     write(writer, &request)?;
-    let mut reply: Reply =
-        serde_json::from_value(read(reader)?).map_err(|_| error("invalid_reply"))?;
+    let reply: Reply = serde_json::from_value(read(reader)?).map_err(|_| error("invalid_reply"))?;
     if reply.kind != "reply" || reply.protocol != PROTOCOL || reply.nonce != bootstrap.nonce {
         return Err(error("protocol_mismatch"));
     }
+    Ok(reply)
+}
+pub fn exchange(
+    command: &Command,
+    reader: &mut impl BufRead,
+    writer: &mut impl Write,
+) -> Result<(), OperationError> {
+    let mut reply = round_trip(command, reader, writer)?;
     let success = matches!(reply.result, Outcome::Ok { .. });
     reply.kind = "result".into();
     write(writer, &reply)?;

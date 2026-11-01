@@ -12288,5 +12288,126 @@
     "parameters": {
       "phrase": "GIVEMELIBERTYORGIVEMEDEATH"
     }
+  },
+  {
+    "contract_sha256": "d90d5e82143850053e4bdca3f866f068550a3676659a4edc28807c3c0a4833e8",
+    "inputs": {
+      "terms": [
+        "non",
+        "oui",
+        "à",
+        "si (condition)"
+      ]
+    },
+    "operation": "symbol.solresol.encode",
+    "operation_version": 1,
+    "outputs": {
+      "provenance": {
+        "definition_sha256": "537128adb53644f8937c436df5a616aaa59253d4eab0a5c2cb2acd2d98e70433",
+        "profile_id": "gajewski_1902_monosyllables_v1",
+        "source_id": "gajewski-1902:facsimile-1997:pdf-page-4:monosyllables",
+        "source_sha256": "c5dda1a678112e54c2de790fe3b7612ba18fef6483ee43d42f8b6f74699d6a34",
+        "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Grammaire_du_Solresol.pdf"
+      },
+      "tokens": [
+        "do",
+        "si",
+        "fa",
+        "sol"
+      ]
+    },
+    "parameters": {
+      "profile": "gajewski_1902_monosyllables_v1"
+    }
+  },
+  {
+    "contract_sha256": "300752c5274db0d054c23992bbd8cb226589e8c16384d1cfc8e78a6ffdef5152",
+    "inputs": {
+      "tokens": [
+        "d",
+        "si",
+        "r",
+        "ré",
+        "do",
+        "do"
+      ]
+    },
+    "operation": "symbol.solresol.decode",
+    "operation_version": 1,
+    "outputs": {
+      "provenance": {
+        "definition_sha256": "537128adb53644f8937c436df5a616aaa59253d4eab0a5c2cb2acd2d98e70433",
+        "profile_id": "gajewski_1902_monosyllables_v1",
+        "source_id": "gajewski-1902:facsimile-1997:pdf-page-4:monosyllables",
+        "source_sha256": "c5dda1a678112e54c2de790fe3b7612ba18fef6483ee43d42f8b6f74699d6a34",
+        "source_url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Grammaire_du_Solresol.pdf"
+      },
+      "readings": [
+        {
+          "alternatives": [
+            "non",
+            "pas",
+            "point",
+            "ne",
+            "ni"
+          ],
+          "token_index": 0
+        },
+        {
+          "alternatives": [
+            "oui",
+            "soit",
+            "volontiers",
+            "d'accord"
+          ],
+          "token_index": 1
+        },
+        {
+          "alternatives": [
+            "et",
+            "ainsi que"
+          ],
+          "token_index": 2
+        },
+        {
+          "alternatives": [
+            "et",
+            "ainsi que"
+          ],
+          "token_index": 3
+        },
+        {
+          "alternatives": [
+            "non",
+            "pas",
+            "point",
+            "ne",
+            "ni"
+          ],
+          "token_index": 4
+        },
+        {
+          "alternatives": [
+            "non",
+            "pas",
+            "point",
+            "ne",
+            "ni"
+          ],
+          "token_index": 5
+        }
+      ],
+      "tokens": [
+        "d",
+        "si",
+        "r",
+        "ré",
+        "do",
+        "do"
+      ]
+    },
+    "parameters": {
+      "profile": "gajewski_1902_monosyllables_v1"
+    }
   }
 ]

@@ -25954,6 +25954,145 @@ Example:
 cube encode semaphore --text 'A B'
 ```
 
+## symbol.solresol.decode
+
+Decode the Gajewski monosyllable lexicon, retaining all French glosses, original forms and word positions.
+
+Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `solresol.forms` |
+| Output | `readings` | `solresol.readings` |
+| Output | `tokens` | `solresol.forms` |
+| Output | `provenance` | `solresol.provenance` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "d",
+      "si",
+      "r",
+      "ré",
+      "do",
+      "do"
+    ]
+  },
+  "parameters": {
+    "profile": "gajewski_1902_monosyllables_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "gajewski_1902_monosyllables_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube encode solresol --help
+```
+
+## symbol.solresol.encode
+
+Encode exact French gloss tokens with the complete Gajewski seven-monosyllable lexicon.
+
+Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `terms` | `solresol.terms` |
+| Output | `tokens` | `solresol.forms` |
+| Output | `provenance` | `solresol.provenance` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "terms": [
+      "non",
+      "oui",
+      "à",
+      "si (condition)"
+    ]
+  },
+  "parameters": {
+    "profile": "gajewski_1902_monosyllables_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "gajewski_1902_monosyllables_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube encode solresol --help
+```
+
 ## symbol.tokens.decode
 
 Caller-owned symbolic token map; exact boundaries, aliases and original source positions; no assets.

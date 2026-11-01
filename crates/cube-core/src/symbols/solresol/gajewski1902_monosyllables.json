@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {"alternatives": ["non", "pas", "point", "ne", "ni"], "codes": ["do", "d"]},
+    {"alternatives": ["et", "ainsi que"], "codes": ["ré", "r"]},
+    {"alternatives": ["ou", "ou bien"], "codes": ["mi", "m"]},
+    {"alternatives": ["à", "au"], "codes": ["fa", "f"]},
+    {"alternatives": ["si (condition)"], "codes": ["sol", "so"]},
+    {"alternatives": ["le"], "codes": ["la", "l"]},
+    {"alternatives": ["oui", "soit", "volontiers", "d'accord"], "codes": ["si", "s"]}
+  ],
+  "null_codes": [],
+  "cancel_codes": []
+}

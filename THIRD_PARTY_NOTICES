@@ -2318,3 +2318,29 @@ split/pad/indicator evidence; no numeral/Cyrillic or later six-row variant claim
 The source's canonical20-letter phrase prefix and numerical intermediate facts
 verify the algorithm. No article, scan, full lyric, external solver or backend
 code is distributed. No new library, proprietary asset or backend is required.
+
+ACA Headlines, Numbered Key and Key Phrase mathematical profile facts
+Sources: American Cryptogram Association specification sheets:
+https://www.cryptogram.org/downloads/aca.info/ciphers/Headlines.pdf
+https://www.cryptogram.org/downloads/aca.info/ciphers/NumberedKey.pdf
+https://www.cryptogram.org/downloads/aca.info/ciphers/KeyPhrase.pdf
+Independent Core implementations and source-known numerical/substitution facts;
+no ACA document, artwork, font or third-party implementation is distributed.
+
+Arnold-style paginated word-code profile facts
+Source: William F. Friedman, Lecture I Section 2, NSA historical release:
+https://www.nsa.gov/Portals/75/documents/news-features/declassified-documents/friedman-documents/lectures-speeches/FOLDER_019/41700339073966.pdf
+Caller-owned pages and original synthetic fixtures; no historical book edition,
+letter, code-name list, scan or copied implementation is bundled.
+
+Gajewski Solresol monosyllable lexicon
+Original work: Boleslas Gajewski, Grammaire du Solresol, 1902; PDF page 4 of
+the facsimile identified by the source index as a 1997 republication:
+https://upload.wikimedia.org/wikipedia/commons/b/b9/Grammaire_du_Solresol.pdf
+Source provenance and public-domain record:
+https://fr.wikisource.org/wiki/Fichier:Grammaire_du_Solresol.pdf
+PDF SHA-256: c5dda1a678112e54c2de790fe3b7612ba18fef6483ee43d42f8b6f74699d6a34
+Cube independently transcribes the complete seven-monosyllable French table,
+all seventeen glosses and seven explicit abbreviations. No scan, font, score
+or modern English translation is distributed. The finite versioned profile
+retains synonyms and source distinctions; it is not a general language translator.

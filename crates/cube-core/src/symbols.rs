@@ -4,6 +4,7 @@ pub mod a1z26;
 pub mod clock;
 pub mod keypad;
 pub mod semaphore;
+pub mod solresol;
 pub mod tokens;
 use crate::{
     errors::{ErrorCode, OperationError},

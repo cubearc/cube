@@ -1,6 +1,11 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const solresol:readonly string[]=cube.execute({operation:'symbol.solresol.encode',version:1,inputs:{terms:['non','oui']},parameters:{profile:'gajewski_1902_monosyllables_v1'}}).tokens;
+const glosses:readonly string[]=cube.execute({operation:'symbol.solresol.decode',version:1,inputs:{tokens:['do']},parameters:{profile:'gajewski_1902_monosyllables_v1'}}).readings[0].alternatives;
+void solresol;void glosses;
+// @ts-expect-error A source-qualified finite lexicon must be selected explicitly.
+cube.execute({operation:'symbol.solresol.encode',version:1,inputs:{terms:[]},parameters:{}});
 const phrase: string=cube.execute({operation:'cipher.key_phrase.encode',version:1,inputs:{text:'BHQ'},parameters:{phrase:'GIVEMELIBERTYORGIVEMEDEATH'}}).text;
 const phraseReadings=cube.execute({operation:'cipher.key_phrase.decode',version:1,inputs:{text:'I'},parameters:{phrase:'GIVEMELIBERTYORGIVEMEDEATH'}});
 const possibleText:string|null=phraseReadings.text;

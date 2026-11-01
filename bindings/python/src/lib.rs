@@ -39,6 +39,7 @@ mod probability;
 mod puzzlecodes;
 mod puzzles;
 mod recipe;
+mod solresol;
 mod stream;
 mod structured_composition;
 mod textops;
@@ -599,6 +600,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     headlines::register(module)?;
     numbered_key::register(module)?;
     word_codes::register(module)?;
+    solresol::register(module)?;
     poly::register(module)?;
     vigenere_keys::register(module)?;
     cryptanalysis::register(module)?;

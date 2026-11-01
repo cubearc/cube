@@ -35,6 +35,27 @@ pub(crate) struct Book {
     #[arg(long)]
     source: PathBuf,
 }
+pub(crate) fn solresol(args: Parameters, encode: bool) -> Result<String, Box<dyn Error>> {
+    use cube_core::symbols::solresol as s;
+    let op = if encode {
+        "symbol.solresol.encode"
+    } else {
+        "symbol.solresol.decode"
+    };
+    let (text, document) = transport(args, op)?;
+    let p: s::Parameters = poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let input: Vec<String> = poly::parse_parameters(&text).map_err(|mut e| {
+        if e.code == ErrorCode::InvalidParameter {
+            e.code = ErrorCode::InvalidInput;
+        }
+        e.operation(op).parameter("input")
+    })?;
+    Ok(if encode {
+        serde_json::to_string(&s::encode(&input, &p)?)?
+    } else {
+        serde_json::to_string(&s::decode(&input, &p)?)?
+    })
+}
 fn file(
     path: &Path,
     max: usize,

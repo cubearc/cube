@@ -1,7 +1,8 @@
 # Symbolic encodings
 
 Encode text as Morse, Braille masks, A1Z26 or Semaphore, or interpret a
-caller-supplied clock direction. These operations do not detect symbols in
+caller-supplied clock direction. A finite Solresol profile maps exact French
+gloss tokens and relative syllables. These operations do not detect symbols in
 audio or images.
 
 ## Morse, Braille and A1Z26
@@ -34,6 +35,67 @@ cube decode braille --text '⠀⠁⣿'
 ```
 
 A1Z26 encodes `Hi Cube` as `8-9 3-21-2-5`.
+
+## Solresol monosyllables
+
+Select `profile="gajewski_1902_monosyllables_v1"` explicitly. The profile contains
+the complete seven-entry monosyllable table from PDF page 4 of
+[Gajewski's grammar facsimile](https://upload.wikimedia.org/wikipedia/commons/b/b9/Grammaire_du_Solresol.pdf),
+independently transcribed from the original French. The
+[source record](https://fr.wikisource.org/wiki/Fichier:Grammaire_du_Solresol.pdf)
+identifies the 1902 original and its public-domain status; the index identifies
+the facsimile's 1997 republication. No scan, font, score or modern English
+translation is bundled.
+
+| Canonical word | Accepted abbreviation | All French gloss tokens |
+| --- | --- | --- |
+| `do` | `d` | `non`, `pas`, `point`, `ne`, `ni` |
+| `ré` | `r` | `et`, `ainsi que` |
+| `mi` | `m` | `ou`, `ou bien` |
+| `fa` | `f` | `à`, `au` |
+| `sol` | `so` | `si (condition)` |
+| `la` | `l` | `le` |
+| `si` | `s` | `oui`, `soit`, `volontiers`, `d'accord` |
+
+Encode exact presegmented French `terms` with `symbol.solresol.encode`. Each term
+selects the canonical full word; synonyms share it. Decode `tokens` with
+`symbol.solresol.decode` to retain every source-listed gloss in `readings`, with
+its zero-based `token_index`. The report also retains the original forms and
+abbreviations in `tokens`. It never guesses which synonym was intended.
+Internal spaces in a gloss, such as `ainsi que`, belong to one array entry.
+
+Save `{"profile":"gajewski_1902_monosyllables_v1"}` as `solresol.json`:
+
+```sh
+cube encode solresol --parameters solresol.json --text '["non","oui","à"]'
+cube decode solresol --parameters solresol.json --text '["d","si","ré"]'
+```
+
+The first report's tokens are `["do","si","fa"]`. The second preserves the
+abbreviation `d` and all five negative glosses, all four affirmative glosses,
+and both glosses for `ré`. The conditional gloss `si (condition)` encodes to
+`sol`; affirmative `oui` encodes to `si`.
+
+Spelling, accents and word boundaries are exact. Full forms are lowercase;
+`ré` uses NFC spelling, while `re` and decomposed `re\u0301` reject. Repeated array
+entries remain separate words. Joined or inflected forms and extra grammatical
+marks reject rather than being stripped. This finite profile does not implement
+other Solresol vocabulary, grammar, absolute pitch, notation or transcription.
+
+`provenance` contains source/profile identifiers, the source PDF's SHA-256 and
+the exact effective definition SHA-256. Encoding and decoding use the same
+definition identity. Input permits at most 65,536 tokens and 1 MiB compact JSON,
+with 256 UTF-8 bytes per token; the fixed definition is below 64 KiB. Complete
+reports are capped at 1 MiB without truncation. Large synonym expansions can
+reach that report cap before the token cap. Empty input returns empty tokens
+and readings with provenance.
+
+Native Python exposes `solresol_encode(terms, parameters)` and
+`solresol_decode(tokens, parameters)`. Rust uses `symbols::solresol::{encode,decode}`;
+JavaScript/TypeScript executes the canonical IDs with named `terms` or `tokens`
+input and the same required profile. Native Play uses structured word arrays
+and inspectable readings/provenance. For other caller-owned lexicons, use the
+[explicit symbolic token table](../../ciphers.md#symbol-token-tables) with its own source and ambiguity rules.
 
 ## Semaphore and directional clocks
 

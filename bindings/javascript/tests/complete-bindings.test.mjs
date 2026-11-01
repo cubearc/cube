@@ -4,6 +4,23 @@ import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
 
+test('finite Gajewski Solresol retains source synonyms, accents, aliases and positions', async () => {
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const cases=fixtures.filter(r=>r.operation.startsWith('symbol.solresol.'));
+  assert.equal(cases.length,2);
+  for(const r of cases) assert.deepEqual(cube.execute({operation:r.operation,version:1,inputs:r.inputs,parameters:r.parameters}),r.outputs,r.operation);
+  const p={profile:'gajewski_1902_monosyllables_v1'};
+  const encoded=cube.execute({operation:'symbol.solresol.encode',version:1,inputs:{terms:['non','oui','à','si (condition)']},parameters:p});
+  assert.deepEqual(encoded.tokens,['do','si','fa','sol']);
+  const decoded=cube.execute({operation:'symbol.solresol.decode',version:1,inputs:{tokens:['d','si','r','ré','do','do']},parameters:p});
+  assert.deepEqual(decoded.readings[0].alternatives,['non','pas','point','ne','ni']);
+  assert.deepEqual(decoded.tokens,['d','si','r','ré','do','do']);
+  assert.equal(decoded.readings[5].token_index,5);
+  assert.equal(decoded.provenance.definition_sha256,encoded.provenance.definition_sha256);
+  for(const token of ['re','re\u0301','rr','do-ré','C4']) assert.throws(()=>cube.execute({operation:'symbol.solresol.decode',version:1,inputs:{tokens:[token]},parameters:p}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'symbol.solresol.decode',version:1,inputs:{tokens:[]},parameters:{}}),{code:'invalid_parameter'});
+});
+
 test('Key Phrase alternatives and paginated whole words execute through the actual SDK', async () => {
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const cases=fixtures.filter(row=>/^cipher\.(key_phrase|arnold)\./.test(row.operation));

@@ -22,3 +22,10 @@ const readings = cube.execute({
 assert.equal(readings.text, null);
 assert.deepEqual(readings.records[0].alternatives, ['B', 'H', 'Q']);
 console.log(readings.records[0].alternatives);
+
+const syllables = cube.execute({
+  operation: 'symbol.solresol.encode', version: 1, inputs: { terms: ['non', 'oui', 'à'] },
+  parameters: { profile: 'gajewski_1902_monosyllables_v1' },
+});
+assert.deepEqual(syllables.tokens, ['do', 'si', 'fa']);
+console.log(syllables.tokens);

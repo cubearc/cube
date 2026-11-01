@@ -415,6 +415,7 @@ const MODULES: &[Module] = &[
     crate::ciphers::transposition::MODULE,
     crate::ciphers::fractionation::MODULE,
     crate::symbols::keypad::MODULE,
+    crate::symbols::solresol::MODULE,
     Module::plain(crate::text::keyboard::OPERATIONS),
     crate::text::keyboard::coordinates::MODULE,
     Module::plain(crate::text::classes::OPERATIONS),

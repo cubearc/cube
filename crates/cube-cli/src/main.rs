@@ -284,6 +284,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Exact French gloss tokens to the qualified Gajewski monosyllable lexicon
+    Solresol(puzzlecodescmd::Parameters),
     /// Exact caller-owned symbolic token table; no font or OCR
     Tokens(puzzlecodescmd::Parameters),
     /// Explicit telephone or delimited multi-tap keypad mapping
@@ -316,6 +318,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Retain all Gajewski monosyllable glosses and original word positions
+    Solresol(puzzlecodescmd::Parameters),
     /// Exact caller-owned symbolic token table; preserve aliases/positions
     Tokens(puzzlecodescmd::Parameters),
     /// Return canonical multi-tap text or telephone alternatives as JSON
@@ -872,6 +876,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     cube_core::symbols::a1z26::encode(&input.read_text("symbol.a1z26.encode")?)?
                 }
                 Encode::Tokens(args) => puzzlecodescmd::tokens(args, true)?,
+                Encode::Solresol(args) => puzzlecodescmd::solresol(args, true)?,
                 Encode::Morse(input) => {
                     cube_core::symbols::morse_encode(&input.read_text("symbol.morse.encode")?)?
                 }
@@ -917,6 +922,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 )?)?,
             )?,
             Decode::Tokens(args) => write_text(&mut output, &puzzlecodescmd::tokens(args, false)?)?,
+            Decode::Solresol(args) => {
+                write_text(&mut output, &puzzlecodescmd::solresol(args, false)?)?
+            }
             Decode::Morse(input) => write_text(
                 &mut output,
                 &cube_core::symbols::morse_decode(&input.read_text("symbol.morse.decode")?)?,

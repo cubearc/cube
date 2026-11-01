@@ -4,6 +4,34 @@ from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
+class SolresolParameters(TypedDict):
+    profile: Literal["gajewski_1902_monosyllables_v1"]
+
+class SolresolProvenance(TypedDict):
+    source_id: str
+    profile_id: Literal["gajewski_1902_monosyllables_v1"]
+    source_url: str
+    source_sha256: str
+    definition_sha256: str
+
+class SolresolReading(TypedDict):
+    token_index: int
+    alternatives: list[str]
+
+class SolresolEncodedReport(TypedDict):
+    tokens: list[str]
+    provenance: SolresolProvenance
+
+class SolresolDecodedReport(SolresolEncodedReport):
+    readings: list[SolresolReading]
+
+def solresol_encode(
+    terms: list[str], parameters: SolresolParameters
+) -> SolresolEncodedReport: ...
+def solresol_decode(
+    tokens: list[str], parameters: SolresolParameters
+) -> SolresolDecodedReport: ...
+
 class KeyPhraseParameters(TypedDict):
     phrase: str
 

@@ -41,7 +41,7 @@ jobs:
       - run: npm pack --ignore-scripts
       - run: node scripts/verify-package.mjs cubearc-cube-0.18.0.tgz
       - name: Preserve the tested package and qualification inventory
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: javascript-sdk
           path: |
@@ -103,7 +103,7 @@ jobs:
           BROWSER_ENGINE: ${{ matrix.browser }}
           CUBE_QUALIFICATION_REPORT: browser-qualification.json
       - name: Retain actual browser per-operation evidence
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: javascript-${{ matrix.browser }}-qualification
           path: bindings/javascript/browser-qualification.json

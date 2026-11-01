@@ -182,7 +182,140 @@ struct AdfgvxText(
     #[schemars(length(max=131072),regex(pattern=r"^[ADFGVX]*$"),extend("x-cube-max-utf8-bytes"=131072))]
      String,
 );
-static ROWS: [Row; 18] = [
+const COUNT: usize = 22;
+#[derive(serde::Serialize, serde::Deserialize, JsonSchema)]
+#[serde(transparent)]
+struct VicPlaintext(#[schemars(length(max = 65534), regex(pattern = r"^[A-Z.]*$"))] String);
+#[derive(serde::Serialize, serde::Deserialize, JsonSchema)]
+#[serde(transparent)]
+struct VicCiphertext(
+    #[schemars(length(min = 10, max = 131080), regex(pattern = r"^[0-9]*$"))] String,
+);
+static ROWS: [Row; COUNT] = [
+    row(Spec {
+        name: "VIC (English 2010)",
+        description: "Fixed 2010 English VIC: canonical A..Z/period text, explicit phrase/mnemonic/date/personal number, fixed50-digit derivation, ordinary then disrupted transposition, exact indicator/split/pad evidence. Date digit zero denotes group ten. No numeral-mode, Cyrillic, random padding or implicit normalization.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.vic.encode",
+        python: "vic_encode",
+        rust: "cube_core::ciphers::fractionation::vic::transform",
+        command: "cipher vic",
+        parameters: c::schema::<vic::VicEnglish2010>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<VicPlaintext>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<VicCiphertext>,
+            required: true,
+        }],
+        fixture: vic::fixtures::fixture_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[
+            "phrase",
+            "mnemonic",
+            "date_digits",
+            "personal_number",
+            "message_indicator",
+        ],
+        references: &["https://raincomplex.net/writing/title/vic-cipher/"],
+    }),
+    row(Spec {
+        name: "VIC (English 2010)",
+        description: "Fixed 2010 English VIC: canonical A..Z/period text, explicit phrase/mnemonic/date/personal number, fixed50-digit derivation, ordinary then disrupted transposition, exact indicator/split/pad evidence. Date digit zero denotes group ten. No numeral-mode, Cyrillic, random padding or implicit normalization.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.vic.decode",
+        python: "vic_decode",
+        rust: "cube_core::ciphers::fractionation::vic::transform",
+        command: "cipher vic",
+        parameters: c::schema::<vic::VicEnglish2010>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<VicCiphertext>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<VicPlaintext>,
+            required: true,
+        }],
+        fixture: vic::fixtures::fixture_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[
+            "phrase",
+            "mnemonic",
+            "date_digits",
+            "personal_number",
+            "message_indicator",
+        ],
+        references: &["https://raincomplex.net/writing/title/vic-cipher/"],
+    }),
+    row(Spec {
+        name: "CM Bifid",
+        description: "ACA conjugated-matrix Bifid with two explicit independent I/J squares and bounded periods; decode inverts the coordinate stream, not encryption with swapped squares.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.cm_bifid.encode",
+        python: "cm_bifid_encode",
+        rust: "cube_core::ciphers::fractionation::cm::cm_bifid",
+        command: "cipher cm-bifid",
+        parameters: c::schema::<cm::CmBifid>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: cm::fixture_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/CMBifid.pdf"],
+    }),
+    row(Spec {
+        name: "CM Bifid",
+        description: "ACA conjugated-matrix Bifid with two explicit independent I/J squares and bounded periods; decode inverts the coordinate stream, not encryption with swapped squares.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.cm_bifid.decode",
+        python: "cm_bifid_decode",
+        rust: "cube_core::ciphers::fractionation::cm::cm_bifid",
+        command: "cipher cm-bifid",
+        parameters: c::schema::<cm::CmBifid>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: cm::fixture_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/CMBifid.pdf"],
+    }),
     row(Spec {
         name: "Bifid",
         description: "Bifid: explicit bounded encode; see typed profile guide for conventions.",
@@ -852,29 +985,30 @@ static ROWS: [Row; 18] = [
         references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Pollux.pdf"],
     }),
 ];
-const fn profiles() -> [m::Entry; 18] {
-    let mut out = [ROWS[0].profile; 18];
+const fn profiles() -> [m::Entry; COUNT] {
+    let mut out = [ROWS[0].profile; COUNT];
     let mut i = 0;
-    while i < 18 {
+    while i < COUNT {
         out[i] = ROWS[i].profile;
         i += 1;
     }
     out
 }
-const fn contracts() -> [c::Entry; 18] {
-    let mut out = [ROWS[0].contract; 18];
+const fn contracts() -> [c::Entry; COUNT] {
+    let mut out = [ROWS[0].contract; COUNT];
     let mut i = 0;
-    while i < 18 {
+    while i < COUNT {
         out[i] = ROWS[i].contract;
         i += 1;
     }
     out
 }
-static PROFILES: [m::Entry; 18] = profiles();
-const CONTRACTS: [c::Entry; 18] = contracts();
+static PROFILES: [m::Entry; COUNT] = profiles();
+const CONTRACTS: [c::Entry; COUNT] = contracts();
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
-pub(crate) const MODULE: o::Module =
-    o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);
+pub(crate) const MODULE: o::Module = o::Module::profiled(OPERATIONS, &PROFILES)
+    .with_contracts(&CONTRACTS)
+    .with_executors(execution::ENTRIES);
 #[cfg(test)]
 mod tests {
     use super::*;

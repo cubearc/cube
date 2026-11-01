@@ -746,7 +746,208 @@ fn cardan_overlay(
     let result = transposition::grille::cardan_overlay(text, &p).map_err(super::file_error)?;
     super::structured(py, &serde_json::to_value(result).expect("typed report"))
 }
+#[pyfunction]
+fn cadenus_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.cadenus.encode",
+        "parameters",
+    )?;
+    let p: transposition::tables::Cadenus = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.cadenus.encode")))?;
+    let result = transposition::tables::cadenus(text, &p, false).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn cadenus_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.cadenus.decode",
+        "parameters",
+    )?;
+    let p: transposition::tables::Cadenus = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.cadenus.decode")))?;
+    let result = transposition::tables::cadenus(text, &p, true).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn swagman_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.swagman.encode",
+        "parameters",
+    )?;
+    let p: transposition::tables::Swagman = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.swagman.encode")))?;
+    let result = transposition::tables::swagman(text, &p, false).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn swagman_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.swagman.decode",
+        "parameters",
+    )?;
+    let p: transposition::tables::Swagman = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.swagman.decode")))?;
+    let result = transposition::tables::swagman(text, &p, true).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn nihilist_transposition_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.nihilist_transposition.encode",
+        "parameters",
+    )?;
+    let p: transposition::tables::Nihilist = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.nihilist_transposition.encode")))?;
+    let result = transposition::tables::nihilist(text, &p, false).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn nihilist_transposition_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.nihilist_transposition.decode",
+        "parameters",
+    )?;
+    let p: transposition::tables::Nihilist = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.nihilist_transposition.decode")))?;
+    let result = transposition::tables::nihilist(text, &p, true).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn ubchi_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.ubchi.encode",
+        "parameters",
+    )?;
+    let p: transposition::ubchi::Ubchi = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.ubchi.encode")))?;
+    let result = transposition::ubchi::transform(text, &p, false).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn ubchi_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.ubchi.decode",
+        "parameters",
+    )?;
+    let p: transposition::ubchi::Ubchi = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.ubchi.decode")))?;
+    let result = transposition::ubchi::transform(text, &p, true).map_err(super::file_error)?;
+    super::structured(py, &serde_json::to_value(result).expect("typed report"))
+}
+#[pyfunction]
+fn cm_bifid_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<String> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.cm_bifid.encode",
+        "parameters",
+    )?;
+    let p: fractionation::cm::CmBifid = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.cm_bifid.encode")))?;
+    fractionation::cm::cm_bifid(text, &p, false).map_err(super::file_error)
+}
+#[pyfunction]
+fn cm_bifid_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<String> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.cm_bifid.decode",
+        "parameters",
+    )?;
+    let p: fractionation::cm::CmBifid = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.cm_bifid.decode")))?;
+    fractionation::cm::cm_bifid(text, &p, true).map_err(super::file_error)
+}
+#[pyfunction]
+fn vic_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<String> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.vic.encode",
+        "parameters",
+    )?;
+    let p: fractionation::vic::VicEnglish2010 = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.vic.encode")))?;
+    fractionation::vic::transform(text, &p, false).map_err(super::file_error)
+}
+#[pyfunction]
+fn vic_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<String> {
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        "cipher.vic.decode",
+        "parameters",
+    )?;
+    let p: fractionation::vic::VicEnglish2010 = poly::parse_parameters(&document)
+        .map_err(|e| super::file_error(e.operation("cipher.vic.decode")))?;
+    fractionation::vic::transform(text, &p, true).map_err(super::file_error)
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(cadenus_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(cadenus_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(swagman_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(swagman_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(nihilist_transposition_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(nihilist_transposition_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(ubchi_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(ubchi_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(cm_bifid_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(cm_bifid_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(vic_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(vic_decode, module)?)?;
+
     module.add_function(wrap_pyfunction!(scytale_encode, module)?)?;
     module.add_function(wrap_pyfunction!(scytale_decode, module)?)?;
     module.add_function(wrap_pyfunction!(rail_fence_encode, module)?)?;

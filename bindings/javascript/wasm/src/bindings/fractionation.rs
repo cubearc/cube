@@ -28,6 +28,8 @@ macro_rules! report_handler {
     };
 }
 text_handler!(bifid, f::bifid);
+text_handler!(cm_bifid, f::cm::cm_bifid);
+text_handler!(vic, f::vic::transform);
 text_handler!(trifid, f::trifid);
 text_handler!(adfgx, f::adfgx);
 text_handler!(adfgvx, f::adfgvx);
@@ -44,6 +46,8 @@ fn nihilist(i: &Value, p: &Value, d: bool) -> Result<Value, OperationError> {
 }
 fn resolve(op: &str) -> Option<Handler> {
     Some(match op {
+        "cipher.cm_bifid.encode" | "cipher.cm_bifid.decode" => cm_bifid,
+        "cipher.vic.encode" | "cipher.vic.decode" => vic,
         "cipher.bifid.encode" | "cipher.bifid.decode" => bifid,
         "cipher.trifid.encode" | "cipher.trifid.decode" => trifid,
         "cipher.adfgx.encode" | "cipher.adfgx.decode" => adfgx,

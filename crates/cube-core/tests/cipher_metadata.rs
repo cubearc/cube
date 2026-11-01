@@ -121,7 +121,13 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
                 );
             }
             for p in m.security.sensitive_parameters {
-                assert!(d.parameters.iter().any(|v| v.name == *p));
+                assert!(
+                    serde_json::to_value(d.contract().unwrap().parameters).unwrap()["properties"]
+                        .get(*p)
+                        .is_some(),
+                    "{}: sensitive parameter {p} must exist in its canonical schema",
+                    d.id
+                );
             }
             if m.security.private_input || m.security.private_output {
                 assert!(d.discovery().pipeline.is_none());
@@ -134,8 +140,8 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 223);
-    assert_eq!(ids.len(), 339);
+    assert_eq!(annotated, 235);
+    assert_eq!(ids.len(), 351);
     assert_eq!(cube_core::pipeline::supported_adapters().len(), 53);
 }
 #[test]

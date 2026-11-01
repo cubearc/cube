@@ -4,6 +4,68 @@ from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
+class CadenusParameters(TypedDict):
+    keyword: str
+    padding: NotRequired[str | None]
+    original_length: NotRequired[int | str | None]
+
+class SwagmanParameters(TypedDict):
+    key: list[list[int]]
+    padding: NotRequired[str | None]
+    original_length: NotRequired[int | str | None]
+
+class NihilistTranspositionParameters(TypedDict):
+    key: list[int]
+    convention: Literal["writing_in", "taking_out"]
+    readout: Literal["rows", "columns"]
+    padding: NotRequired[str | None]
+    original_length: NotRequired[int | str | None]
+
+class TableReport(TypedDict):
+    text: str
+    original_length: int
+    padding_count: int
+
+class UbchiParameters(TypedDict):
+    key_phrase: str
+    nulls: str
+
+class UbchiReport(TypedDict):
+    text: str
+    original_length: int
+    null_count: int
+
+class CmBifidParameters(TypedDict):
+    input_square: str
+    output_square: str
+    period: int | str
+
+class VicEnglish2010Parameters(TypedDict):
+    phrase: str
+    mnemonic: str
+    date_digits: str
+    personal_number: int | str
+    message_indicator: str
+    split_at: int | str
+    padding: str
+
+def cadenus_encode(text: str, parameters: CadenusParameters) -> TableReport: ...
+def cadenus_decode(text: str, parameters: CadenusParameters) -> TableReport: ...
+def swagman_encode(text: str, parameters: SwagmanParameters) -> TableReport: ...
+def swagman_decode(text: str, parameters: SwagmanParameters) -> TableReport: ...
+def nihilist_transposition_encode(
+    text: str, parameters: NihilistTranspositionParameters
+) -> TableReport: ...
+def nihilist_transposition_decode(
+    text: str, parameters: NihilistTranspositionParameters
+) -> TableReport: ...
+def ubchi_encode(text: str, parameters: UbchiParameters) -> UbchiReport: ...
+def ubchi_decode(text: str, parameters: UbchiParameters) -> UbchiReport: ...
+def cm_bifid_encode(text: str, parameters: CmBifidParameters) -> str: ...
+def cm_bifid_decode(text: str, parameters: CmBifidParameters) -> str: ...
+def vic_encode(text: str, parameters: VicEnglish2010Parameters) -> str: ...
+def vic_decode(text: str, parameters: VicEnglish2010Parameters) -> str: ...
+
 class StringCombinations(Iterator[str]):
     def __iter__(self) -> StringCombinations: ...
     def __next__(self) -> str: ...

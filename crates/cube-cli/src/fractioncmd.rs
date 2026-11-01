@@ -283,3 +283,81 @@ pub(crate) fn cardan_overlay(args: Parameters) -> Result<String, Box<dyn Error>>
         &transposition::grille::cardan_overlay(&text, &p)?,
     )?)
 }
+
+pub(crate) fn cadenus(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.cadenus.decode"
+    } else {
+        "cipher.cadenus.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: transposition::tables::Cadenus =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = transposition::tables::cadenus(&text, &p, decode)?;
+    Ok(serde_json::to_string(&result)?)
+}
+
+pub(crate) fn swagman(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.swagman.decode"
+    } else {
+        "cipher.swagman.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: transposition::tables::Swagman =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = transposition::tables::swagman(&text, &p, decode)?;
+    Ok(serde_json::to_string(&result)?)
+}
+
+pub(crate) fn nihilist_transposition(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.nihilist_transposition.decode"
+    } else {
+        "cipher.nihilist_transposition.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: transposition::tables::Nihilist =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = transposition::tables::nihilist(&text, &p, decode)?;
+    Ok(serde_json::to_string(&result)?)
+}
+
+pub(crate) fn ubchi(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.ubchi.decode"
+    } else {
+        "cipher.ubchi.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: transposition::ubchi::Ubchi =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = transposition::ubchi::transform(&text, &p, decode)?;
+    Ok(serde_json::to_string(&result)?)
+}
+
+pub(crate) fn cm_bifid(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.cm_bifid.decode"
+    } else {
+        "cipher.cm_bifid.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: fractionation::cm::CmBifid =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = fractionation::cm::cm_bifid(&text, &p, decode)?;
+    Ok(result)
+}
+
+pub(crate) fn vic(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = if args.decode {
+        "cipher.vic.decode"
+    } else {
+        "cipher.vic.encode"
+    };
+    let (text, document, decode) = transport(args, op)?;
+    let p: fractionation::vic::VicEnglish2010 =
+        poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = fractionation::vic::transform(&text, &p, decode)?;
+    Ok(result)
+}

@@ -6,6 +6,48 @@ from pathlib import Path
 import cube
 import pytest
 
+
+def test_qualified_table_padding_and_vic_strict_fields_use_native_core():
+    plain = "X🐈e\u0301\0Z"
+    encoded = cube.cadenus_encode(plain, {"keyword": "EASY", "padding": "X"})
+    assert encoded["original_length"] == len(plain)
+    assert (
+        cube.cadenus_decode(
+            encoded["text"],
+            {"keyword": "EASY", "padding": "X", "original_length": len(plain)},
+        )["text"]
+        == plain
+    )
+    assert len(cube.cadenus_decode(encoded["text"], {"keyword": "EASY"})["text"]) == 100
+    with pytest.raises(ValueError):
+        cube.cadenus_decode(
+            encoded["text"],
+            {"keyword": "EASY", "padding": "Y", "original_length": len(plain)},
+        )
+    with pytest.raises(ValueError):
+        cube.swagman_encode("", {"key": [[1, 2, 3, 4]] * 4})
+    p = {"key_phrase": "AB AB", "nulls": "🐈Z"}
+    encoded = cube.ubchi_encode(plain, p)
+    assert encoded["null_count"] == 2
+    assert cube.ubchi_decode(encoded["text"], p)["text"] == plain
+    with pytest.raises(ValueError):
+        cube.ubchi_encode("A" * 65536, {"key_phrase": "A", "nulls": "Z"})
+    p = {
+        "phrase": "ALLTHEPEOPLEAREDEADB",
+        "mnemonic": "ASINTOER",
+        "date_digits": "391752",
+        "personal_number": 15,
+        "message_indicator": "60115",
+        "split_at": 0,
+        "padding": "0",
+    }
+    assert cube.vic_decode(cube.vic_encode("A..", p), p) == "A.."
+    with pytest.raises(ValueError):
+        cube.vic_encode("not canonical", p)
+    with pytest.raises(ValueError):
+        cube.vic_decode("00000", p)
+
+
 CASES = sum(
     (
         json.loads(

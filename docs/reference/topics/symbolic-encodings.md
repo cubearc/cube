@@ -469,3 +469,84 @@ null glyphs are not part of this chart profile.
 The correspondence-data component adapted from Hahn's chart is distributed
 with its [CC-BY-SA 3.0 attribution and share-alike terms](https://creativecommons.org/licenses/by-sa/3.0/).
 No chart artwork is included; the independent software keeps its stated license.
+
+### Fictional profile selection
+
+These fixed profiles transcribe one cited table each. Chart coordinates identify
+source glyphs; they are textual tokens, not characters to paste into a game font.
+For `prefix:rNcN`, rows and glyph columns are one-based, counted left to right in
+the source's fixed reference table, excluding its caption and empty cells. They
+never refer to the responsive symbol-entry palette. No fonts, images or puzzle
+solutions are distributed.
+
+| Profile | Exact repertoire and representation | Source |
+| --- | --- | --- |
+| `al_bhed_english_ffx_v1` | A–Z → literal uppercase Al Bhed letters; English FFX primer permutation | [dCode's published primer table](https://www.dcode.fr/al-bhed-language-final-fantasy) |
+| `hylian_skyward_dcode_v1` | A–Z, 20 distinct glyph groups; `hylian:rNcN`, rows A–I / J–R / S–Z | [dCode's Skyward Sword chart](https://www.dcode.fr/hylian-language-skyward-sword) |
+| `sheikah_botw_dcode_v1` | A–Z, 0–9, `! - . ?`; `sheikah:rNcN`, four glyphs per row | [dCode's BOTW/Self Deletus reference chart](https://www.dcode.fr/sheikah-language) |
+| `daedric_names_dcode_v1` | A–Z → exact case-sensitive letter names, including Xayah and Yahkem | [dCode's named-letter table](https://www.dcode.fr/daedric-language) |
+| `futurama_alien1_dcode_v1` | A–Z and 0–9; `alien1:rNcN`, six glyphs per row | [dCode's Alien 1 chart](https://www.dcode.fr/futurama-alien-alphabet) |
+| `bill_cipher_dcode_v1` | A–Z; `bill:rNcN`, seven glyphs per row | [dCode's Bill Cipher chart](https://www.dcode.fr/gravity-falls-bill-cipher) |
+| `gnommish_disney_2020_v1` | A–Z; `gnommish:rNcN`, rows A–M / N–Z | [Disney's 2020 activity translation guide, PDF page 1](https://books.disney.com/content/uploads/2020/02/2484_1.pdf) |
+
+All seven profiles require exact uppercase plaintext units. Spaces, lowercase,
+joined words, unspecified punctuation and cross-profile tokens reject. Split a
+message into supported units yourself; the operation never drops characters.
+The chart-based profiles return neutral IDs instead of copying source glyphs.
+
+Al Bhed uses the complete permutation:
+
+```text
+Plain: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+Token: YPLTAVKREZGMSHUBXNCDIJFQOW
+```
+
+Thus `["Y","O","U"]` encodes to `["O","U","I"]`. This profile does not
+select Japanese kana mappings, render the game's typography or infer exceptions
+for proper names. Digits and punctuation are outside its defined alphabet.
+
+Hylian preserves six source ambiguities: D/W, E/K, G/Q, I/X, O/Z and P/T.
+Encoding either letter selects the first chart slot; decoding either duplicate
+slot returns both letters and retains the exact supplied token. For example,
+`["D","W","E","K"]` encodes to
+`["hylian:r1c4","hylian:r1c4","hylian:r1c5","hylian:r1c5"]`.
+Decoding `hylian:r3c5`, the W slot, returns alternatives `["D","W"]`.
+Cube does not guess a word to resolve these readings. Other Zelda-era Hylian
+scripts are separate systems and are not aliases for this profile.
+
+Sheikah's rows are `ABCD / EFGH / IJKL / MNOP / QRST / UVWX / YZ01 /
+2345 / 6789 / !-.?`. For example, `0` is `sheikah:r7c3`, and `?` is
+`sheikah:r10c4`. Background color is not part of the textual token; Cube does not
+recognize or convert either graphical background style.
+
+Daedric names, in A–Z order, are:
+
+```text
+Ayem Bedt Cess Doht Ekem Hefhed Geth Hekem Iya Jeb Koht Lyr Meht
+Neht Oht Payem Quam Roht Seht Tayem Yoodt Vehk Web Xayah Yahkem Zyr
+```
+
+These spellings and the complete X/Y repertoire identify this particular
+published reference. They do not assert that every Elder Scrolls game uses the
+same forms. Lowercase names, `Nehk`, numbers and implicit tally marks reject.
+Each name is one token, not a space-separated phrase supplied as one token.
+
+Futurama's rows are `ABCDEF / GHIJKL / MNOPQR / STUVWX / YZ0123 / 456789`.
+This profile implements Alien 1 substitution; Alien 2's stateful arithmetic is
+not inferred. Only the letters and digits in the cited chart are included;
+unspecified graphical punctuation rejects.
+
+Bill Cipher's rows are `ABCDEFG / HIJKLMN / OPQRSTU / VWXYZ`.
+This is the cited Bill-symbol table, without an assertion that the Author,
+Journal 3, Book of Bill or other Gravity Falls alphabets are equivalent. Caesar,
+Atbash and additional substitutions are separate operations, never automatic.
+
+Gnommish selects the official Disney activity chart's 26 correspondences.
+For example, `M` is `gnommish:r1c13` and `N` is `gnommish:r2c1`.
+The profile does not infer circular text layout, numerals or book/movie variants
+outside that chart. The activity's prose, artwork and answers are not bundled.
+
+The six dCode reference descriptions are credited under the publisher's stated
+CC-BY terms. These are independently implemented correspondence transcriptions;
+no dCode software, font or renderer is used. Each result includes the reviewed
+source snapshot and effective-definition hashes, using the common limits above.

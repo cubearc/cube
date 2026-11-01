@@ -108,6 +108,34 @@ const fn row(
                 family: "symbolic_alphabet",
                 aliases: &[
                     m::Alias {
+                        name: "Al Bhed (English FFX)",
+                        usage: "profile=al_bhed_english_ffx_v1",
+                    },
+                    m::Alias {
+                        name: "Hylian (Skyward Sword)",
+                        usage: "profile=hylian_skyward_dcode_v1",
+                    },
+                    m::Alias {
+                        name: "Sheikah (BOTW reference)",
+                        usage: "profile=sheikah_botw_dcode_v1",
+                    },
+                    m::Alias {
+                        name: "Daedric (named letters)",
+                        usage: "profile=daedric_names_dcode_v1",
+                    },
+                    m::Alias {
+                        name: "Futurama Alien 1",
+                        usage: "profile=futurama_alien1_dcode_v1",
+                    },
+                    m::Alias {
+                        name: "Gravity Falls Bill Cipher (dCode table)",
+                        usage: "profile=bill_cipher_dcode_v1",
+                    },
+                    m::Alias {
+                        name: "Gnommish (Disney 2020 activity)",
+                        usage: "profile=gnommish_disney_2020_v1",
+                    },
+                    m::Alias {
                         name: "Theban (Trithemius 1518)",
                         usage: "profile=theban_trithemius_1518_v1",
                     },
@@ -200,6 +228,13 @@ const fn row(
                 rust_api: "cube_core::symbols::alphabet::{encode,decode}",
                 python_api: python,
                 references: &[
+                    "https://www.dcode.fr/al-bhed-language-final-fantasy",
+                    "https://www.dcode.fr/hylian-language-skyward-sword",
+                    "https://www.dcode.fr/sheikah-language",
+                    "https://www.dcode.fr/daedric-language",
+                    "https://www.dcode.fr/futurama-alien-alphabet",
+                    "https://www.dcode.fr/gravity-falls-bill-cipher",
+                    "https://books.disney.com/content/uploads/2020/02/2484_1.pdf",
                     "https://esotericarchives.com/tritheim/polygraphia/poly579.jpg",
                     "https://esotericarchives.com/agrippa/agripp3c.htm#chap30",
                     "https://esotericarchives.com/fonts/index.html",

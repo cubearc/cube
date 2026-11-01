@@ -1,0 +1,183 @@
+{
+  "source_id": "dcode:hylian:skyward-sword:fixed-reference-chart:2026-11-01",
+  "source_url": "https://www.dcode.fr/hylian-language-skyward-sword",
+  "source_sha256": "2aeb981bab1d7eb02c77ce3253f0f5b197eca76408ccb98692cffdae47fce135",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "hylian:r1c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "hylian:r1c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "hylian:r1c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "D",
+          "W"
+        ],
+        "codes": [
+          "hylian:r1c4",
+          "hylian:r3c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "E",
+          "K"
+        ],
+        "codes": [
+          "hylian:r1c5",
+          "hylian:r2c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "hylian:r1c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "G",
+          "Q"
+        ],
+        "codes": [
+          "hylian:r1c7",
+          "hylian:r2c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "hylian:r1c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "I",
+          "X"
+        ],
+        "codes": [
+          "hylian:r1c9",
+          "hylian:r3c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          "hylian:r2c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "hylian:r2c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "hylian:r2c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "hylian:r2c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "O",
+          "Z"
+        ],
+        "codes": [
+          "hylian:r2c6",
+          "hylian:r3c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "P",
+          "T"
+        ],
+        "codes": [
+          "hylian:r2c7",
+          "hylian:r3c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "hylian:r2c9"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "hylian:r3c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          "hylian:r3c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "hylian:r3c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "hylian:r3c7"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

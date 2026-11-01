@@ -82,6 +82,13 @@ def triliteral_decode(
 
 class AlphabetParameters(TypedDict):
     profile: Literal[
+        "al_bhed_english_ffx_v1",
+        "hylian_skyward_dcode_v1",
+        "sheikah_botw_dcode_v1",
+        "daedric_names_dcode_v1",
+        "futurama_alien1_dcode_v1",
+        "bill_cipher_dcode_v1",
+        "gnommish_disney_2020_v1",
         "theban_trithemius_1518_v1",
         "celestial_agrippa_ch30_v1",
         "malachim_agrippa_ch30_v1",
@@ -103,6 +110,13 @@ class AlphabetParameters(TypedDict):
 class AlphabetProvenance(TypedDict):
     source_id: str
     profile_id: Literal[
+        "al_bhed_english_ffx_v1",
+        "hylian_skyward_dcode_v1",
+        "sheikah_botw_dcode_v1",
+        "daedric_names_dcode_v1",
+        "futurama_alien1_dcode_v1",
+        "bill_cipher_dcode_v1",
+        "gnommish_disney_2020_v1",
         "theban_trithemius_1518_v1",
         "celestial_agrippa_ch30_v1",
         "malachim_agrippa_ch30_v1",

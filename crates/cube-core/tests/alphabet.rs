@@ -274,7 +274,7 @@ fn geometric_profiles_use_source_orientations_markers_and_clock_origin() {
 fn source_listed_aliases_preserve_received_forms_and_all_readings() {
     let aliases: Vec<serde_json::Value> =
         serde_json::from_str(include_str!("../src/symbols/alphabet/aliases.json")).unwrap();
-    assert_eq!(aliases.len(), 181); // Betamaze121 + birds26 + Enochian26 + Samech1 + Kaldeorum7.
+    assert_eq!(aliases.len(), 187); // Betamaze121 + birds26 + Enochian26 + Samech1 + Kaldeorum7 + Hylian6.
     for row in aliases {
         let p = json!({"profile":row["profile"]});
         let decoded = execution::execute(

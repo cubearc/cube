@@ -99,3 +99,12 @@ cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},par
 
 const geometric:readonly string[]=cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:['a']},parameters:{profile:'betamaze_cliff_2006_v1'}}).tokens;
 void geometric;
+
+const hylian:readonly string[]=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:['hylian:r3c5']},parameters:{profile:'hylian_skyward_dcode_v1'}}).readings[0].alternatives;
+void hylian;
+for(const profile of ['al_bhed_english_ffx_v1','sheikah_botw_dcode_v1','daedric_names_dcode_v1','futurama_alien1_dcode_v1','bill_cipher_dcode_v1','gnommish_disney_2020_v1'] as const) {
+  const tokens:readonly string[]=cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:['A']},parameters:{profile}}).tokens;
+  void tokens;
+}
+// @ts-expect-error Other fictional editions are not silently inferred.
+cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[]},parameters:{profile:'hylian_twilight_princess'}});

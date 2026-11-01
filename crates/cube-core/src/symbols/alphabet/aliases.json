@@ -1271,5 +1271,53 @@
     "alternatives": [
       "Q"
     ]
+  },
+  {
+    "profile": "hylian_skyward_dcode_v1",
+    "token": "hylian:r3c5",
+    "alternatives": [
+      "D",
+      "W"
+    ]
+  },
+  {
+    "profile": "hylian_skyward_dcode_v1",
+    "token": "hylian:r2c2",
+    "alternatives": [
+      "E",
+      "K"
+    ]
+  },
+  {
+    "profile": "hylian_skyward_dcode_v1",
+    "token": "hylian:r2c8",
+    "alternatives": [
+      "G",
+      "Q"
+    ]
+  },
+  {
+    "profile": "hylian_skyward_dcode_v1",
+    "token": "hylian:r3c6",
+    "alternatives": [
+      "I",
+      "X"
+    ]
+  },
+  {
+    "profile": "hylian_skyward_dcode_v1",
+    "token": "hylian:r3c8",
+    "alternatives": [
+      "O",
+      "Z"
+    ]
+  },
+  {
+    "profile": "hylian_skyward_dcode_v1",
+    "token": "hylian:r3c2",
+    "alternatives": [
+      "P",
+      "T"
+    ]
   }
 ]

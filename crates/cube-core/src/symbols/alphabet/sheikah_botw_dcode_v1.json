@@ -1,0 +1,331 @@
+{
+  "source_id": "dcode:sheikah:BOTW:Self-Deletus-reference-chart:2026-11-01",
+  "source_url": "https://www.dcode.fr/sheikah-language",
+  "source_sha256": "4f4c7103fe9a543c0c3e95baae1a5456f3a5c55fd7df385d657f161e828c74ea",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "sheikah:r1c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "sheikah:r1c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "sheikah:r1c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "sheikah:r1c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "sheikah:r2c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "sheikah:r2c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "sheikah:r2c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "sheikah:r2c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "sheikah:r3c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          "sheikah:r3c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          "sheikah:r3c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "sheikah:r3c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "sheikah:r4c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "sheikah:r4c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "sheikah:r4c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "sheikah:r4c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "sheikah:r5c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "sheikah:r5c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "sheikah:r5c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "sheikah:r5c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          "sheikah:r6c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "sheikah:r6c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "W"
+        ],
+        "codes": [
+          "sheikah:r6c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "sheikah:r6c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "sheikah:r7c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "sheikah:r7c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "0"
+        ],
+        "codes": [
+          "sheikah:r7c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "1"
+        ],
+        "codes": [
+          "sheikah:r7c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "2"
+        ],
+        "codes": [
+          "sheikah:r8c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "3"
+        ],
+        "codes": [
+          "sheikah:r8c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "4"
+        ],
+        "codes": [
+          "sheikah:r8c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "5"
+        ],
+        "codes": [
+          "sheikah:r8c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "6"
+        ],
+        "codes": [
+          "sheikah:r9c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "7"
+        ],
+        "codes": [
+          "sheikah:r9c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "8"
+        ],
+        "codes": [
+          "sheikah:r9c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "9"
+        ],
+        "codes": [
+          "sheikah:r9c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "!"
+        ],
+        "codes": [
+          "sheikah:r10c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "-"
+        ],
+        "codes": [
+          "sheikah:r10c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "."
+        ],
+        "codes": [
+          "sheikah:r10c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "?"
+        ],
+        "codes": [
+          "sheikah:r10c4"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

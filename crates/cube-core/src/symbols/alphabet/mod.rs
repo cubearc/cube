@@ -13,6 +13,20 @@ use serde::{Deserialize, Serialize};
 pub const MAX_REPORT: usize = 1048576;
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, JsonSchema)]
 pub enum Profile {
+    #[serde(rename = "al_bhed_english_ffx_v1")]
+    AlBhedEnglishFfxV1,
+    #[serde(rename = "hylian_skyward_dcode_v1")]
+    HylianSkywardDcodeV1,
+    #[serde(rename = "sheikah_botw_dcode_v1")]
+    SheikahBotwDcodeV1,
+    #[serde(rename = "daedric_names_dcode_v1")]
+    DaedricNamesDcodeV1,
+    #[serde(rename = "futurama_alien1_dcode_v1")]
+    FuturamaAlien1DcodeV1,
+    #[serde(rename = "bill_cipher_dcode_v1")]
+    BillCipherDcodeV1,
+    #[serde(rename = "gnommish_disney_2020_v1")]
+    GnommishDisney2020V1,
     #[serde(rename = "theban_trithemius_1518_v1")]
     ThebanTrithemius1518V1,
     #[serde(rename = "celestial_agrippa_ch30_v1")]
@@ -89,6 +103,13 @@ struct Source {
 }
 fn book(p: &Parameters) -> Result<(h::Book, Provenance), OperationError> {
     let source: Source = serde_json::from_str(match p.profile {
+        Profile::AlBhedEnglishFfxV1 => include_str!("al_bhed_english_ffx_v1.json"),
+        Profile::HylianSkywardDcodeV1 => include_str!("hylian_skyward_dcode_v1.json"),
+        Profile::SheikahBotwDcodeV1 => include_str!("sheikah_botw_dcode_v1.json"),
+        Profile::DaedricNamesDcodeV1 => include_str!("daedric_names_dcode_v1.json"),
+        Profile::FuturamaAlien1DcodeV1 => include_str!("futurama_alien1_dcode_v1.json"),
+        Profile::BillCipherDcodeV1 => include_str!("bill_cipher_dcode_v1.json"),
+        Profile::GnommishDisney2020V1 => include_str!("gnommish_disney_2020_v1.json"),
         Profile::ThebanTrithemius1518V1 => include_str!("theban_trithemius_1518_v1.json"),
         Profile::CelestialAgrippaCh30V1 => include_str!("celestial_agrippa_ch30_v1.json"),
         Profile::MalachimAgrippaCh30V1 => include_str!("malachim_agrippa_ch30_v1.json"),

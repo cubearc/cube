@@ -168,7 +168,7 @@ test('dated symbolic alphabets execute every published assignment in actual Wasm
 
 test('all source-permitted aliases execute with exact forms and ambiguity', async () => {
   const aliases=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/aliases.json',import.meta.url),'utf8'));
-  assert.equal(aliases.length,181);
+  assert.equal(aliases.length,187);
   for(const row of aliases) {
     const r=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[row.token]},parameters:{profile:row.profile}});
     assert.deepEqual(r.tokens,[row.token]);

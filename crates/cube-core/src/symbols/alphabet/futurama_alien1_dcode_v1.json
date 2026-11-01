@@ -1,0 +1,299 @@
+{
+  "source_id": "dcode:futurama:alien-1:fixed-reference-chart:2026-11-01",
+  "source_url": "https://www.dcode.fr/futurama-alien-alphabet",
+  "source_sha256": "9aee304ddee3104845dda6c82ba52991ce8ada658c22e80dc55beb08b441fb34",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "alien1:r1c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "alien1:r1c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "alien1:r1c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "alien1:r1c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "alien1:r1c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "alien1:r1c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "alien1:r2c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "alien1:r2c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "alien1:r2c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          "alien1:r2c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          "alien1:r2c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "alien1:r2c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "alien1:r3c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "alien1:r3c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "alien1:r3c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "alien1:r3c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "alien1:r3c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "alien1:r3c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "alien1:r4c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "alien1:r4c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          "alien1:r4c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "alien1:r4c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "W"
+        ],
+        "codes": [
+          "alien1:r4c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "alien1:r4c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "alien1:r5c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "alien1:r5c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "0"
+        ],
+        "codes": [
+          "alien1:r5c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "1"
+        ],
+        "codes": [
+          "alien1:r5c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "2"
+        ],
+        "codes": [
+          "alien1:r5c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "3"
+        ],
+        "codes": [
+          "alien1:r5c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "4"
+        ],
+        "codes": [
+          "alien1:r6c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "5"
+        ],
+        "codes": [
+          "alien1:r6c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "6"
+        ],
+        "codes": [
+          "alien1:r6c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "7"
+        ],
+        "codes": [
+          "alien1:r6c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "8"
+        ],
+        "codes": [
+          "alien1:r6c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "9"
+        ],
+        "codes": [
+          "alien1:r6c6"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

@@ -61,7 +61,7 @@ def test_published_aliases_retain_exact_form_and_all_readings():
             / "crates/cube-core/src/symbols/alphabet/aliases.json"
         ).read_text()
     )
-    assert len(aliases) == 181
+    assert len(aliases) == 187
     for row in aliases:
         r = cube.alphabet_decode([row["token"]], {"profile": row["profile"]})
         assert r["tokens"] == [row["token"]]
@@ -81,3 +81,17 @@ def test_output_budget_diagnostics_do_not_blame_the_input(count):
     assert e.value.code == "resource_limit"
     assert e.value.operation == "symbol.alphabet.encode"
     assert e.value.parameter == "output"
+
+
+def test_hylian_chart_duplicates_are_ambiguous_in_the_native_sdk():
+    p = {"profile": "hylian_skyward_dcode_v1"}
+    assert cube.alphabet_encode(["D", "W"], p)["tokens"] == [
+        "hylian:r1c4",
+        "hylian:r1c4",
+    ]
+    assert cube.alphabet_decode(["hylian:r3c5"], p)["readings"] == [
+        {"token_index": 0, "alternatives": ["D", "W"]}
+    ]
+    with pytest.raises(ValueError) as e:
+        cube.alphabet_decode(["sheikah:r1c1"], p)
+    assert e.value.code == "invalid_input"

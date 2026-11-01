@@ -88,6 +88,14 @@ impl Mapping {
     /// 1..4096 total unique nonempty tokens, 1..256 per source scalar, each <=256
     /// UTF-8 bytes, combined JSON <=64 KiB. Token concatenation is never inferred.
     pub fn new(def: Definition) -> Result<Self, OperationError> {
+        Self::with_token_limit(def, 256)
+    }
+    /// Internal constructors can retain a complete bounded repeated-position key.
+    /// The public caller-table API keeps its 256-token-per-symbol contract.
+    pub(super) fn with_token_limit(
+        def: Definition,
+        per_symbol: usize,
+    ) -> Result<Self, OperationError> {
         serialized_size(&def, MAX_DEFINITION, ENCODE)?;
         bound(ENCODE, "entries", def.entries.len(), MAX_SYMBOLS)?;
         if def.entries.is_empty() {
@@ -109,7 +117,7 @@ impl Mapping {
             if symbol != entry.symbol
                 || forward.insert(symbol, i).is_some()
                 || entry.tokens.is_empty()
-                || entry.tokens.len() > 256
+                || entry.tokens.len() > per_symbol
             {
                 return Err(error(
                     ENCODE,

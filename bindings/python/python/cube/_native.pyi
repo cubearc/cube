@@ -4,6 +4,52 @@ from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
+class HeadlinesParameters(TypedDict):
+    profile: Literal["aca_base"]
+    hat: str
+    key: str
+    setting: str
+    punctuation: Literal["preserve", "aca_printed"]
+
+class HeadlinesReport(TypedDict):
+    headlines: list[str]
+    alphabet: str
+    mappings: list[str]
+    definition_sha256: str
+
+def headlines_encode(
+    headlines: list[str], parameters: HeadlinesParameters
+) -> HeadlinesReport: ...
+def headlines_decode(
+    headlines: list[str], parameters: HeadlinesParameters
+) -> HeadlinesReport: ...
+
+class NumberedKeyParameters(TypedDict):
+    alphabet: str
+    key: str
+    preparation: Literal["exact", "ascii_lowercase_letters"]
+    rotation: int
+    origin: str
+    width: int
+    choice: Literal["first", "round_robin"]
+
+class NumberedKeyEntry(TypedDict):
+    symbol: str
+    tokens: list[str]
+
+class NumberedKeyReport(TypedDict):
+    text: str
+    tokens: list[str]
+    table: list[NumberedKeyEntry]
+    definition_sha256: str
+
+def numbered_key_encode(
+    text: str, parameters: NumberedKeyParameters
+) -> NumberedKeyReport: ...
+def numbered_key_decode(
+    tokens: list[str], parameters: NumberedKeyParameters
+) -> NumberedKeyReport: ...
+
 class CadenusParameters(TypedDict):
     keyword: str
     padding: NotRequired[str | None]

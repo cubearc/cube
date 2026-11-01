@@ -11111,5 +11111,470 @@
       "phrase": "ALLTHEPEOPLEAREDEADB",
       "split_at": 14
     }
+  },
+  {
+    "contract_sha256": "56ba1cb0e51fe08e5d1a75dc6621a65d577411dc9c728217e2dab1943a465d2f",
+    "inputs": {
+      "headlines": [
+        "*GCTJ TNWOT NOALZZNWLODL PHLXJFCZ ZLWNTZFANPO",
+        "*VZS *IUXYS FDHYO CZHWPYDO PT OPDZMY TZI CURZIZPZYO",
+        "*OAYLWF: OTYIDYEEWF XTJ ONZW YIUFWTZWC UTFCYNQTZUPETF FYZD",
+        "*GQHHPA YQDKPHD WFDNBFDPD FR '*UPYXRA *DRFGEPK'",
+        "*UIOYGWQH CVIJYJ QP=YQIUUIYQ *JSXGVVGWD"
+      ]
+    },
+    "operation": "cipher.headlines.decode",
+    "operation_version": 1,
+    "outputs": {
+      "alphabet": "CFUAPTOSNZILYEJWHGVBQMKXDR",
+      "definition_sha256": "59476688c2f633febc188beffe7a454f0d613a53c98bfa4971b152577614d4ca",
+      "headlines": [
+        "*BUSH SIGNS INTELLIGENCE OVERHAUL LEGISLATION",
+        "*BIN *LADEN URGES FIGHTERS TO STRIKE OIL FACILITIES",
+        "*PFIZER: PAINKILLER MAY POSE INCREASED CARDIOVASCULAR RISK",
+        "*CARREY MASTERS DISGUISES IN '*LEMONY *SNICKET'",
+        "*MARTINEZ BLASTS EX-TEAMMATE *SCHILLING"
+      ],
+      "mappings": [
+        "DRCFUAPTOSNZILYEJWHGVBQMKX",
+        "RCFUAPTOSNZILYEJWHGVBQMKXD",
+        "UAPTOSNZILYEJWHGVBQMKXDRCF",
+        "GVBQMKXDRCFUAPTOSNZILYEJWH",
+        "SNZILYEJWHGVBQMKXDRCFUAPTO"
+      ]
+    },
+    "parameters": {
+      "hat": "APOTHECARY",
+      "key": "CHEMIST",
+      "profile": "aca_base",
+      "punctuation": "aca_printed",
+      "setting": "DRUGS"
+    }
+  },
+  {
+    "contract_sha256": "1311cf18c8ce4728bcff5b3f929f34cc1321e4390eeca9ef50ec623a1ab00d19",
+    "inputs": {
+      "headlines": [
+        "*Bush Signs Intelligence Overhaul Legislation",
+        "*Bin *Laden Urges Fighters to Strike Oil Facilities",
+        "*Pfizer: Painkiller may pose increased cardiovascular risk",
+        "*Carrey masters disguises in '*Lemony *Snicket'",
+        "*Martinez blasts ex-teammate *Schilling"
+      ]
+    },
+    "operation": "cipher.headlines.encode",
+    "operation_version": 1,
+    "outputs": {
+      "alphabet": "CFUAPTOSNZILYEJWHGVBQMKXDR",
+      "definition_sha256": "59476688c2f633febc188beffe7a454f0d613a53c98bfa4971b152577614d4ca",
+      "headlines": [
+        "*GCTJ TNWOT NOALZZNWLODL PHLXJFCZ ZLWNTZFANPO",
+        "*VZS *IUXYS FDHYO CZHWPYDO PT OPDZMY TZI CURZIZPZYO",
+        "*OAYLWF: OTYIDYEEWF XTJ ONZW YIUFWTZWC UTFCYNQTZUPETF FYZD",
+        "*GQHHPA YQDKPHD WFDNBFDPD FR '*UPYXRA *DRFGEPK'",
+        "*UIOYGWQH CVIJYJ QP=YQIUUIYQ *JSXGVVGWD"
+      ],
+      "mappings": [
+        "DRCFUAPTOSNZILYEJWHGVBQMKX",
+        "RCFUAPTOSNZILYEJWHGVBQMKXD",
+        "UAPTOSNZILYEJWHGVBQMKXDRCF",
+        "GVBQMKXDRCFUAPTOSNZILYEJWH",
+        "SNZILYEJWHGVBQMKXDRCFUAPTO"
+      ]
+    },
+    "parameters": {
+      "hat": "APOTHECARY",
+      "key": "CHEMIST",
+      "profile": "aca_base",
+      "punctuation": "aca_printed",
+      "setting": "DRUGS"
+    }
+  },
+  {
+    "contract_sha256": "63c527d8557c340ab43866b582ccbfd389f90cdbefb5f00984222907b113dbde",
+    "inputs": {
+      "tokens": [
+        "23",
+        "15",
+        "20",
+        "11",
+        "13",
+        "17"
+      ]
+    },
+    "operation": "cipher.numbered_key.decode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "d928b699fbc9be73a60d9907e8c7ce34935778e2658b4d9839808b78b9d7ea6d",
+      "table": [
+        {
+          "symbol": "a",
+          "tokens": [
+            "23"
+          ]
+        },
+        {
+          "symbol": "b",
+          "tokens": [
+            "24"
+          ]
+        },
+        {
+          "symbol": "c",
+          "tokens": [
+            "16"
+          ]
+        },
+        {
+          "symbol": "d",
+          "tokens": [
+            "25"
+          ]
+        },
+        {
+          "symbol": "e",
+          "tokens": [
+            "15",
+            "20"
+          ]
+        },
+        {
+          "symbol": "f",
+          "tokens": [
+            "26"
+          ]
+        },
+        {
+          "symbol": "g",
+          "tokens": [
+            "27"
+          ]
+        },
+        {
+          "symbol": "h",
+          "tokens": [
+            "19"
+          ]
+        },
+        {
+          "symbol": "i",
+          "tokens": [
+            "11",
+            "13",
+            "17"
+          ]
+        },
+        {
+          "symbol": "j",
+          "tokens": [
+            "28"
+          ]
+        },
+        {
+          "symbol": "k",
+          "tokens": [
+            "14"
+          ]
+        },
+        {
+          "symbol": "l",
+          "tokens": [
+            "12"
+          ]
+        },
+        {
+          "symbol": "m",
+          "tokens": [
+            "00"
+          ]
+        },
+        {
+          "symbol": "n",
+          "tokens": [
+            "01"
+          ]
+        },
+        {
+          "symbol": "o",
+          "tokens": [
+            "02"
+          ]
+        },
+        {
+          "symbol": "p",
+          "tokens": [
+            "18"
+          ]
+        },
+        {
+          "symbol": "q",
+          "tokens": [
+            "03"
+          ]
+        },
+        {
+          "symbol": "r",
+          "tokens": [
+            "21"
+          ]
+        },
+        {
+          "symbol": "s",
+          "tokens": [
+            "22"
+          ]
+        },
+        {
+          "symbol": "t",
+          "tokens": [
+            "04"
+          ]
+        },
+        {
+          "symbol": "u",
+          "tokens": [
+            "05"
+          ]
+        },
+        {
+          "symbol": "v",
+          "tokens": [
+            "06"
+          ]
+        },
+        {
+          "symbol": "w",
+          "tokens": [
+            "07"
+          ]
+        },
+        {
+          "symbol": "x",
+          "tokens": [
+            "08"
+          ]
+        },
+        {
+          "symbol": "y",
+          "tokens": [
+            "09"
+          ]
+        },
+        {
+          "symbol": "z",
+          "tokens": [
+            "10"
+          ]
+        }
+      ],
+      "text": "aeeiii",
+      "tokens": [
+        "23",
+        "15",
+        "20",
+        "11",
+        "13",
+        "17"
+      ]
+    },
+    "parameters": {
+      "alphabet": "abcdefghijklmnopqrstuvwxyz",
+      "choice": "round_robin",
+      "key": "I like ciphers.",
+      "origin": "0",
+      "preparation": "ascii_lowercase_letters",
+      "rotation": 18,
+      "width": 2
+    }
+  },
+  {
+    "contract_sha256": "2c17a97a2197a9eb2b90dfec654e63e948faf9f0f5f306966bfe62cac4ef7733",
+    "inputs": {
+      "text": "A ee iii"
+    },
+    "operation": "cipher.numbered_key.encode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "d928b699fbc9be73a60d9907e8c7ce34935778e2658b4d9839808b78b9d7ea6d",
+      "table": [
+        {
+          "symbol": "a",
+          "tokens": [
+            "23"
+          ]
+        },
+        {
+          "symbol": "b",
+          "tokens": [
+            "24"
+          ]
+        },
+        {
+          "symbol": "c",
+          "tokens": [
+            "16"
+          ]
+        },
+        {
+          "symbol": "d",
+          "tokens": [
+            "25"
+          ]
+        },
+        {
+          "symbol": "e",
+          "tokens": [
+            "15",
+            "20"
+          ]
+        },
+        {
+          "symbol": "f",
+          "tokens": [
+            "26"
+          ]
+        },
+        {
+          "symbol": "g",
+          "tokens": [
+            "27"
+          ]
+        },
+        {
+          "symbol": "h",
+          "tokens": [
+            "19"
+          ]
+        },
+        {
+          "symbol": "i",
+          "tokens": [
+            "11",
+            "13",
+            "17"
+          ]
+        },
+        {
+          "symbol": "j",
+          "tokens": [
+            "28"
+          ]
+        },
+        {
+          "symbol": "k",
+          "tokens": [
+            "14"
+          ]
+        },
+        {
+          "symbol": "l",
+          "tokens": [
+            "12"
+          ]
+        },
+        {
+          "symbol": "m",
+          "tokens": [
+            "00"
+          ]
+        },
+        {
+          "symbol": "n",
+          "tokens": [
+            "01"
+          ]
+        },
+        {
+          "symbol": "o",
+          "tokens": [
+            "02"
+          ]
+        },
+        {
+          "symbol": "p",
+          "tokens": [
+            "18"
+          ]
+        },
+        {
+          "symbol": "q",
+          "tokens": [
+            "03"
+          ]
+        },
+        {
+          "symbol": "r",
+          "tokens": [
+            "21"
+          ]
+        },
+        {
+          "symbol": "s",
+          "tokens": [
+            "22"
+          ]
+        },
+        {
+          "symbol": "t",
+          "tokens": [
+            "04"
+          ]
+        },
+        {
+          "symbol": "u",
+          "tokens": [
+            "05"
+          ]
+        },
+        {
+          "symbol": "v",
+          "tokens": [
+            "06"
+          ]
+        },
+        {
+          "symbol": "w",
+          "tokens": [
+            "07"
+          ]
+        },
+        {
+          "symbol": "x",
+          "tokens": [
+            "08"
+          ]
+        },
+        {
+          "symbol": "y",
+          "tokens": [
+            "09"
+          ]
+        },
+        {
+          "symbol": "z",
+          "tokens": [
+            "10"
+          ]
+        }
+      ],
+      "text": "aeeiii",
+      "tokens": [
+        "23",
+        "15",
+        "20",
+        "11",
+        "13",
+        "17"
+      ]
+    },
+    "parameters": {
+      "alphabet": "abcdefghijklmnopqrstuvwxyz",
+      "choice": "round_robin",
+      "key": "I like ciphers.",
+      "origin": "0",
+      "preparation": "ascii_lowercase_letters",
+      "rotation": 18,
+      "width": 2
+    }
   }
 ]

@@ -4,6 +4,23 @@ import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
 
+test('ACA constructors preserve repeated positions and execute all five Headlines answers', async () => {
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const cases=fixtures.filter(row=>/^cipher\.(numbered_key|headlines)\./.test(row.operation));
+  assert.equal(cases.length,4);
+  for (const fixture of cases) assert.deepEqual(cube.execute({operation:fixture.operation,version:1,inputs:fixture.inputs,parameters:fixture.parameters}),fixture.outputs,fixture.operation);
+  const p={alphabet:'abcdefghijklmnopqrstuvwxyz',key:'I like ciphers.',preparation:'ascii_lowercase_letters',rotation:18,origin:'0',width:2,choice:'round_robin'};
+  assert.deepEqual(cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'A ee iii'},parameters:p}).tokens,['23','15','20','11','13','17']);
+  assert.deepEqual(cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'eee'},parameters:{...p,choice:'first'}}).tokens,['15','15','15']);
+  assert.equal(cube.execute({operation:'cipher.numbered_key.decode',version:1,inputs:{tokens:['20']},parameters:{...p,choice:'first'}}).text,'e');
+  assert.throws(()=>cube.execute({operation:'cipher.numbered_key.decode',version:1,inputs:{tokens:['1']},parameters:p}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'é'},parameters:p}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'a'},parameters:{...p,origin:'340282366920938463463374607431768211455'}}),{code:'invalid_parameter'});
+  const hp={profile:'aca_base',hat:'APOTHECARY',key:'CHEMIST',setting:'DRUGS',punctuation:'preserve'};
+  assert.deepEqual(cube.execute({operation:'cipher.headlines.encode',version:1,inputs:{headlines:['','','','','']},parameters:hp}).headlines,['','','','','']);
+  assert.throws(()=>cube.execute({operation:'cipher.headlines.encode',version:1,inputs:{headlines:['','','','','']},parameters:{...hp,setting:'CRUGS'}}),{code:'invalid_parameter'});
+});
+
 test('qualified table and VIC profiles execute every published answer through the actual SDK', async () => {
   const names=new Set(['cadenus','swagman','nihilist_transposition','ubchi','cm_bifid','vic']);
   let checked=0;

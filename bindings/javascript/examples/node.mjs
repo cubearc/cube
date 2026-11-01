@@ -7,3 +7,10 @@ assert.deepEqual(decoded.output, Uint8Array.of(0, 255));
 const joined = cube.execute({ operation: 'text.concat', version: 1, inputs: { left: 'Cube', right: 'Arc' }, parameters: { separator: '' } });
 assert.equal(joined.output, 'CubeArc');
 console.log(joined.output, Array.from(decoded.output));
+
+const numbered = cube.execute({
+  operation: 'cipher.numbered_key.encode', version: 1, inputs: { text: 'A ee iii' },
+  parameters: { alphabet: 'abcdefghijklmnopqrstuvwxyz', key: 'I like ciphers.', preparation: 'ascii_lowercase_letters', rotation: 18, origin: '0', width: 2, choice: 'round_robin' },
+});
+assert.deepEqual(numbered.tokens, ['23', '15', '20', '11', '13', '17']);
+console.log(numbered.tokens.join(' '));

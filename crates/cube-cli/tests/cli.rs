@@ -664,7 +664,7 @@ fn optional_profile_discovery_preserves_json_and_enforces_complete_output_limits
             .iter()
             .filter(|d| d.get("metadata").is_some())
             .count(),
-        235
+        239
     );
     let args = [
         "ops",

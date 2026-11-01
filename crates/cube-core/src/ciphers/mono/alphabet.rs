@@ -8,7 +8,7 @@ pub struct Mapping {
     forward: BTreeMap<char, char>,
     reverse: BTreeMap<char, char>,
 }
-fn symbols(value: &str, op: &'static str) -> Result<Vec<char>, OperationError> {
+pub(super) fn symbols(value: &str, op: &'static str) -> Result<Vec<char>, OperationError> {
     bound(op, "alphabet", value.len(), MAX_DEFINITION)?;
     let mut seen = BTreeSet::new();
     let mut result = Vec::new();

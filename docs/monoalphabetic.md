@@ -3,7 +3,7 @@
 Use explicit alphabets and tables to reproduce classical transformations. These
 profiles support historical analysis and challenges; they provide no modern
 confidentiality or authentication. Algorithms and validation live in Rust Core;
-CLI and native Python adapt their exact results.
+CLI, native Python and JavaScript/TypeScript/WebAssembly adapt their exact results.
 
 ## Exact alphabets and keywords
 
@@ -122,6 +122,83 @@ cube cipher homophonic \
 Rust uses `homophonic::Definition`, `Mapping::new` / `::parse`, and the typed
 `Counter` records. CLI definition files are explicit local UTF-8 JSON, opened
 read-only with a 64 KiB limit; the SDK accepts ordinary dictionaries.
+
+## Numbered Key construction
+
+`cipher.numbered_key.encode` and `.decode` implement the
+[ACA Numbered Key](https://www.cryptogram.org/downloads/aca.info/ciphers/NumberedKey.pdf)
+construction. Keep repeated letters in the prepared key, append absent alphabet
+symbols in caller order, rotate the extended key left, then number its positions.
+Each result contains canonical `text`, exact `tokens`, the full `table` and a
+`definition_sha256` of the canonical serialized parameters.
+
+Every parameter is required:
+
+| Parameter | Rule |
+| --- | --- |
+| `alphabet` | 1–4096 unique Unicode scalars, in explicit order |
+| `key` | Repeated positions retained; an empty key uses the alphabet |
+| `preparation` | `exact` retains scalars; `ascii_lowercase_letters` rejects non-ASCII, lowercases letters and removes other ASCII |
+| `rotation` | Zero-based extended-key position assigned the first number |
+| `origin` | Canonical decimal string in the unsigned 128-bit range |
+| `width` | Exact zero-padded token width, 1–40; all position numbers must fit |
+| `choice` | `first` or per-symbol `round_robin`; reset each invocation |
+
+Save these parameters as `numbered-key.json`:
+
+```json
+{"alphabet":"abcdefghijklmnopqrstuvwxyz","key":"I like ciphers.","preparation":"ascii_lowercase_letters","rotation":18,"origin":"0","width":2,"choice":"round_robin"}
+```
+
+```sh
+cube cipher numbered-key --parameters numbered-key.json --text 'A ee iii'
+```
+
+The report's tokens are `["23","15","20","11","13","17"]`. Repeated e and i
+positions remain available. `first` always selects e's `15`; decoding still accepts
+its other token `20`. Decode a JSON token array with `--decode --text '["20"]'`.
+The printed publication uses freely chosen homophones; deterministic encoding
+does not claim to reproduce those choices. Preparation cannot restore removed
+punctuation, spacing or case. Tokens must match their padded spelling exactly.
+
+Native Python exposes `numbered_key_encode(text, parameters)` and
+`numbered_key_decode(tokens, parameters)`. Rust uses
+`ciphers::mono::numbered_key::{encode,decode}`. The JavaScript SDK executes both
+canonical IDs with named `text` or `tokens` input and the same parameter object.
+
+Limits: 1 MiB input, 65,536 message scalars/tokens before preparation, 4096
+extended-key positions, 64 KiB serialized parameters and constructed table,
+4 MiB serialized report. Arithmetic overflow, insufficient width, duplicate
+alphabet symbols, unknown input symbols and unknown tokens fail without a
+partial result. The caller-owned homophonic API retains its own 256-code-per-symbol
+limit; Numbered Key retains all positions within its 4096-position bound.
+
+## Headlines
+
+`cipher.headlines.encode` and `.decode` implement the
+[ACA base Headlines profile](https://www.cryptogram.org/downloads/aca.info/ciphers/Headlines.pdf).
+Supply exactly five strings, including empty strings if needed. `profile` must
+be `aca_base`; `hat` and `key` contain 1–26 uppercase A–Z letters, and `setting`
+contains exactly five. HAT ties retain left-to-right order when reading the
+keyword-alphabet columns down. APOTHECARY/CHEMIST/DRUGS constructs
+`CFUAPTOSNZILYEJWHGVBQMKXDR` and the five published substitution rows.
+
+Letters canonicalize to uppercase. Insert proper-noun `*` markers explicitly;
+the operation does not identify names. Printable ASCII punctuation and spaces
+are retained. Choose `punctuation="preserve"` or `"aca_printed"` explicitly.
+The printed convention changes plaintext `-` to ciphertext `=` and reverses it
+on decoding; a literal `=` in plaintext or `-` in ciphertext rejects as ambiguous.
+Control characters and non-ASCII text reject. UP-column, plaintext-block and
+identity-reversal variants reject, including a setting that produces an identity
+row. The base profile never silently applies the publication's three reversals.
+
+CLI `cube cipher headlines --parameters FILE` reads a JSON array of five strings;
+add `--decode` for inverse substitution. Native Python functions are
+`headlines_encode(headlines, parameters)` and `headlines_decode(...)`;
+Rust uses `ciphers::mono::headlines::transform`. JavaScript uses the canonical IDs
+with named `headlines` input. Reports retain `headlines`, effective `alphabet`,
+five `mappings`, and `definition_sha256` of canonical serialized parameters.
+Aggregate input is at most 1 MiB/65,536 scalars and the report at most 4 MiB.
 
 ## Three distinct digit grammars
 

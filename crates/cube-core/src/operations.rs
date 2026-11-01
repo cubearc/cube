@@ -407,6 +407,8 @@ const MODULES: &[Module] = &[
     crate::ciphers::polybius::MODULE,
     crate::ciphers::mono::MODULE,
     crate::ciphers::mono::historical::MODULE,
+    crate::ciphers::mono::numbered_key::MODULE,
+    crate::ciphers::mono::headlines::MODULE,
     crate::ciphers::poly::MODULE,
     crate::ciphers::transposition::MODULE,
     crate::ciphers::fractionation::MODULE,

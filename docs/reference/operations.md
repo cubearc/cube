@@ -7885,6 +7885,222 @@ Example:
 cube cipher --help
 ```
 
+## cipher.headlines.decode
+
+Decode five caller Headlines with the qualified ACA base substitution rows.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `headlines` | `text.headlines` |
+| Output | `headlines` | `text.headlines` |
+| Output | `alphabet` | `text` |
+| Output | `mappings` | `cipher.substitution_rows` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "headlines": [
+      "*GCTJ TNWOT NOALZZNWLODL PHLXJFCZ ZLWNTZFANPO",
+      "*VZS *IUXYS FDHYO CZHWPYDO PT OPDZMY TZI CURZIZPZYO",
+      "*OAYLWF: OTYIDYEEWF XTJ ONZW YIUFWTZWC UTFCYNQTZUPETF FYZD",
+      "*GQHHPA YQDKPHD WFDNBFDPD FR '*UPYXRA *DRFGEPK'",
+      "*UIOYGWQH CVIJYJ QP=YQIUUIYQ *JSXGVVGWD"
+    ]
+  },
+  "parameters": {
+    "hat": "APOTHECARY",
+    "key": "CHEMIST",
+    "profile": "aca_base",
+    "punctuation": "aca_printed",
+    "setting": "DRUGS"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "description": "Keys use canonical A-Z. HAT ties retain left-to-right order. Exactly five\nsetting letters select the initial symbols of the five cipher alphabets.",
+  "type": "object",
+  "properties": {
+    "hat": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 1,
+      "pattern": "^[A-Z]+$"
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 1,
+      "pattern": "^[A-Z]+$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "punctuation": {
+      "$ref": "#/$defs/Punctuation"
+    },
+    "setting": {
+      "type": "string",
+      "maxLength": 5,
+      "minLength": 5,
+      "pattern": "^[A-Z]{5}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "hat",
+    "key",
+    "setting",
+    "punctuation"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aca_base"
+      ]
+    },
+    "Punctuation": {
+      "type": "string",
+      "enum": [
+        "preserve",
+        "aca_printed"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher headlines --help
+```
+
+## cipher.headlines.encode
+
+Construct the ACA HAT/KEY/SETTING mixed alphabet and encode five caller Headlines.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `headlines` | `text.headlines` |
+| Output | `headlines` | `text.headlines` |
+| Output | `alphabet` | `text` |
+| Output | `mappings` | `cipher.substitution_rows` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "headlines": [
+      "*Bush Signs Intelligence Overhaul Legislation",
+      "*Bin *Laden Urges Fighters to Strike Oil Facilities",
+      "*Pfizer: Painkiller may pose increased cardiovascular risk",
+      "*Carrey masters disguises in '*Lemony *Snicket'",
+      "*Martinez blasts ex-teammate *Schilling"
+    ]
+  },
+  "parameters": {
+    "hat": "APOTHECARY",
+    "key": "CHEMIST",
+    "profile": "aca_base",
+    "punctuation": "aca_printed",
+    "setting": "DRUGS"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "description": "Keys use canonical A-Z. HAT ties retain left-to-right order. Exactly five\nsetting letters select the initial symbols of the five cipher alphabets.",
+  "type": "object",
+  "properties": {
+    "hat": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 1,
+      "pattern": "^[A-Z]+$"
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 1,
+      "pattern": "^[A-Z]+$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "punctuation": {
+      "$ref": "#/$defs/Punctuation"
+    },
+    "setting": {
+      "type": "string",
+      "maxLength": 5,
+      "minLength": 5,
+      "pattern": "^[A-Z]{5}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "hat",
+    "key",
+    "setting",
+    "punctuation"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aca_base"
+      ]
+    },
+    "Punctuation": {
+      "type": "string",
+      "enum": [
+        "preserve",
+        "aca_printed"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher headlines --help
+```
+
 ## cipher.hill.decode
 
 Exact modular row-major Hill matrix and column vectors over caller-owned Unicode alphabet; explicit padding count.
@@ -9981,6 +10197,247 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.numbered_key.decode
+
+Decode exact ACA Numbered Key tokens with the complete repeated-position table.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `text` | `text` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "23",
+      "15",
+      "20",
+      "11",
+      "13",
+      "17"
+    ]
+  },
+  "parameters": {
+    "alphabet": "abcdefghijklmnopqrstuvwxyz",
+    "choice": "round_robin",
+    "key": "I like ciphers.",
+    "origin": "0",
+    "preparation": "ascii_lowercase_letters",
+    "rotation": 18,
+    "width": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "description": "Every convention is explicit. Rotation selects the extended-key position\nnumbered with origin; width is the exact zero-padded decimal token width.",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 65536
+    },
+    "choice": {
+      "$ref": "#/$defs/Choice"
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "x-cube-max-utf8-bytes": 65536
+    },
+    "origin": {
+      "description": "Canonical unsigned decimal u128, never a floating-point JSON number.",
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,38})$"
+    },
+    "preparation": {
+      "$ref": "#/$defs/Preparation"
+    },
+    "rotation": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4095,
+      "minimum": 0
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 40,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "key",
+    "preparation",
+    "rotation",
+    "origin",
+    "width",
+    "choice"
+  ],
+  "$defs": {
+    "Choice": {
+      "type": "string",
+      "enum": [
+        "first",
+        "round_robin"
+      ]
+    },
+    "Preparation": {
+      "type": "string",
+      "enum": [
+        "exact",
+        "ascii_lowercase_letters"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher numbered-key --help
+```
+
+## cipher.numbered_key.encode
+
+Construct the repeated-position ACA Numbered Key table and encode with explicit deterministic choices.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A ee iii"
+  },
+  "parameters": {
+    "alphabet": "abcdefghijklmnopqrstuvwxyz",
+    "choice": "round_robin",
+    "key": "I like ciphers.",
+    "origin": "0",
+    "preparation": "ascii_lowercase_letters",
+    "rotation": 18,
+    "width": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "description": "Every convention is explicit. Rotation selects the extended-key position\nnumbered with origin; width is the exact zero-padded decimal token width.",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 65536
+    },
+    "choice": {
+      "$ref": "#/$defs/Choice"
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 65536,
+      "x-cube-max-utf8-bytes": 65536
+    },
+    "origin": {
+      "description": "Canonical unsigned decimal u128, never a floating-point JSON number.",
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,38})$"
+    },
+    "preparation": {
+      "$ref": "#/$defs/Preparation"
+    },
+    "rotation": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4095,
+      "minimum": 0
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 40,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "alphabet",
+    "key",
+    "preparation",
+    "rotation",
+    "origin",
+    "width",
+    "choice"
+  ],
+  "$defs": {
+    "Choice": {
+      "type": "string",
+      "enum": [
+        "first",
+        "round_robin"
+      ]
+    },
+    "Preparation": {
+      "type": "string",
+      "enum": [
+        "exact",
+        "ascii_lowercase_letters"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher numbered-key --help
 ```
 
 ## cipher.periodic_gromark.decode

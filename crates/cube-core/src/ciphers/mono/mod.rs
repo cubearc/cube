@@ -2,8 +2,10 @@
 pub mod alphabet;
 pub mod checkerboard;
 pub mod grandpre;
+pub mod headlines;
 pub mod historical;
 pub mod homophonic;
+pub mod numbered_key;
 pub mod params;
 pub mod rotations;
 use crate::errors::{ErrorCode, OperationError};

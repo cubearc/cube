@@ -526,6 +526,10 @@ enum Cipher {
     /// Use the fixed Bazeries Grand Chiffre de 1691 table
     #[command(name = "great-cipher")]
     Great(historicalcmd::Great),
+    /// Construct and apply the explicit deterministic ACA Numbered Key table
+    NumberedKey(polycmd::Parameters),
+    /// Transform exactly five caller headlines with the qualified ACA base profile
+    Headlines(polycmd::Parameters),
     /// Five-symbol Bacon encoding with explicit alphabet and notation
     Bacon(puzzlecmd::BaconArgs),
     /// Shared Polybius/Tap square, explicit row,column pairs and word tokens
@@ -1085,6 +1089,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Nomenclator(args) => historicalcmd::table(args, false)?,
                 Cipher::Syllabary(args) => historicalcmd::table(args, true)?,
                 Cipher::Great(args) => historicalcmd::great(args)?,
+                Cipher::NumberedKey(args) => historicalcmd::numbered_key(args)?,
+                Cipher::Headlines(args) => historicalcmd::headlines(args)?,
                 Cipher::Rot8000(input) => {
                     ciphers::mono::rotations::rot8000(&input.read_text("cipher.rot8000")?)?
                 }

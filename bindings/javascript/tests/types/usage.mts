@@ -1,6 +1,14 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const numbered = cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'AAA'},parameters:{alphabet:'AB',key:'ABA',preparation:'exact',rotation:0,origin:'0',width:1,choice:'round_robin'}});
+const numberedTokens:readonly string[]=numbered.tokens;
+const headlineRows:readonly string[]=cube.execute({operation:'cipher.headlines.encode',version:1,inputs:{headlines:['','','','','']},parameters:{profile:'aca_base',hat:'APOTHECARY',key:'CHEMIST',setting:'DRUGS',punctuation:'preserve'}}).headlines;
+void numberedTokens; void headlineRows;
+// @ts-expect-error Numbered Key origin is exact decimal text, never a float.
+cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'A'},parameters:{alphabet:'AB',key:'ABA',preparation:'exact',rotation:0,origin:0,width:1,choice:'first'}});
+// @ts-expect-error Headlines requires the explicit qualified profile.
+cube.execute({operation:'cipher.headlines.encode',version:1,inputs:{headlines:[]},parameters:{hat:'A',key:'B',setting:'CDEFG',punctuation:'preserve'}});
 const table: string = cube.execute({operation:'cipher.cadenus.encode',version:1,inputs:{text:'A'},parameters:{keyword:'EASY',padding:'X'}}).text;
 const cm: string = cube.execute({operation:'cipher.cm_bifid.encode',version:1,inputs:{text:'A'},parameters:{input_square:'ABCDEFGHIKLMNOPQRSTUVWXYZ',output_square:'ABCDEFGHIKLMNOPQRSTUVWXYZ',period:1}}).text;
 const vic: string = cube.execute({operation:'cipher.vic.encode',version:1,inputs:{text:'A'},parameters:{phrase:'ALLTHEPEOPLEAREDEADB',mnemonic:'ASINTOER',date_digits:'391752',personal_number:15,message_indicator:'60115',split_at:0,padding:''}}).text;

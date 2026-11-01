@@ -4,6 +4,34 @@ use clap::Args;
 use cube_core::ciphers::mono::historical as h;
 use serde_json::{Value, json};
 use std::{error::Error, io::Read, path::PathBuf};
+pub(crate) fn headlines(args: crate::polycmd::Parameters) -> Result<String, Box<dyn Error>> {
+    use cube_core::ciphers::{mono::headlines as h, poly};
+    let op = if args.decode {
+        "cipher.headlines.decode"
+    } else {
+        "cipher.headlines.encode"
+    };
+    let (text, document, decode) = crate::polycmd::transport(args, op)?;
+    let p: h::Parameters = poly::parse_parameters(&document)?;
+    let input: Vec<String> = poly::parse_parameters(&text)?;
+    Ok(serde_json::to_string(&h::transform(&input, &p, decode)?)?)
+}
+pub(crate) fn numbered_key(args: crate::polycmd::Parameters) -> Result<String, Box<dyn Error>> {
+    use cube_core::ciphers::{mono::numbered_key as n, poly};
+    let op = if args.decode {
+        "cipher.numbered_key.decode"
+    } else {
+        "cipher.numbered_key.encode"
+    };
+    let (text, document, decode) = crate::polycmd::transport(args, op)?;
+    let p: n::Parameters = poly::parse_parameters(&document)?;
+    let report = if decode {
+        n::decode(&poly::parse_parameters::<Vec<String>>(&text)?, &p)?
+    } else {
+        n::encode(&text, &p)?
+    };
+    Ok(serde_json::to_string(&report)?)
+}
 #[derive(Args)]
 pub(crate) struct Pairs {
     #[command(flatten)]

@@ -444,6 +444,8 @@ enum Cipher {
     RunningKey(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
     Porta(polycmd::Parameters),
+    /// Bellaso's fixed reciprocal table of 1553; canonical 22-letter text/key
+    Bellaso(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
     Gromark(polycmd::Parameters),
     /// Explicit bounded historical profile; typed JSON parameters
@@ -1021,6 +1023,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Autokey(args) => polycmd::autokey(args)?,
                 Cipher::RunningKey(args) => polycmd::running_key(args)?,
                 Cipher::Porta(args) => polycmd::porta(args)?,
+                Cipher::Bellaso(args) => polycmd::bellaso(args)?,
                 Cipher::Gromark(args) => polycmd::gromark(args)?,
                 Cipher::PeriodicGromark(args) => polycmd::periodic_gromark(args)?,
                 Cipher::Solitaire(args) => polycmd::solitaire(args)?,

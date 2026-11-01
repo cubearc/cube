@@ -2,6 +2,20 @@
 use super::*;
 use crate::operations::contracts::Fixture;
 use serde_json::{Value, json};
+pub(crate) fn bellaso() -> Result<Fixture, OperationError> {
+    let p = bellaso::Bellaso1553 {
+        key: "VIRTVTIOMNIAPARENT".into(),
+        unmapped: crate::ciphers::mono::params::Unmapped::Reject,
+    };
+    let text = "LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO";
+    verified_key_text(
+        "cipher.bellaso",
+        text,
+        serde_json::to_value(&p).expect("typed parameters"),
+        bellaso::transform(text, &p)?,
+        "SYBOVEYLDANVOFSZLPIINCVPNSHMLRNXOIZNRD",
+    )
+}
 fn verified_key_text(
     op: &'static str,
     input: &str,

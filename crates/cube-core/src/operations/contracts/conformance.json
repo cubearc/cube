@@ -10808,5 +10808,20 @@
         ]
       ]
     }
+  },
+  {
+    "contract_sha256": "c8b93e43b5fdbd66e1ff7295f163dc10ecaf5faa67deb82ee0c8aab75a041304",
+    "inputs": {
+      "text": "LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO"
+    },
+    "operation": "cipher.bellaso",
+    "operation_version": 1,
+    "outputs": {
+      "text": "SYBOVEYLDANVOFSZLPIINCVPNSHMLRNXOIZNRD"
+    },
+    "parameters": {
+      "key": "VIRTVTIOMNIAPARENT",
+      "unmapped": "reject"
+    }
   }
 ]

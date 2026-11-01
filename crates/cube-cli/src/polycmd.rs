@@ -123,6 +123,12 @@ pub(crate) fn running_key(args: Parameters) -> Result<String, Box<dyn Error>> {
         poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
     Ok(schedules::running_key(&text, &p, decode)?)
 }
+pub(crate) fn bellaso(args: Parameters) -> Result<String, Box<dyn Error>> {
+    let op = "cipher.bellaso";
+    let (text, document, _) = transport(args, op)?;
+    let p = poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    Ok(poly::bellaso::transform(&text, &p)?)
+}
 pub(crate) fn porta(args: Parameters) -> Result<String, Box<dyn Error>> {
     let op = "cipher.porta";
     let (text, document, _decode) = transport(args, op)?;

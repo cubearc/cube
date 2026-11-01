@@ -1,5 +1,6 @@
 //! Bounded, explicit historical polyalphabetic/polygraphic profiles.
 //! No profile supplies modern confidentiality or authentication.
+pub mod bellaso;
 mod catalog;
 mod fixtures;
 pub mod geometry;

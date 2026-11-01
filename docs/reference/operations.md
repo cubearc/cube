@@ -4055,6 +4055,79 @@ Example:
 cube cipher beaufort --key B --text A
 ```
 
+## cipher.bellaso
+
+Fixed 1553 eleven-pair reciprocal table with required continuous countersign in ABCDEFGHILMNOPQRSTVXYZ; no implicit aliases, separator instructions or line resets. Unmapped scalars reject unless explicitly preserved without key advancement.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO"
+  },
+  "parameters": {
+    "key": "VIRTVTIOMNIAPARENT",
+    "unmapped": "reject"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bellaso1553",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "Nonempty repeated countersign in the exact 22-symbol canonical alphabet.",
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1,
+      "pattern": "^[ABCDEFGHILMNOPQRSTVXYZ]+$"
+    },
+    "unmapped": {
+      "description": "Preserved scalars remain exact and never consume a key symbol.",
+      "$ref": "#/$defs/Unmapped",
+      "default": "reject"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ],
+  "$defs": {
+    "Unmapped": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "preserve"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.bifid.decode
 
 Bifid: explicit bounded decode; see typed profile guide for conventions.

@@ -1,6 +1,12 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const bellaso: string = cube.execute({ operation: 'cipher.bellaso', version: 1, inputs: { text: 'A' }, parameters: { key: 'A', unmapped: 'reject' } }).text;
+void bellaso;
+// @ts-expect-error A canonical countersign is required.
+cube.execute({ operation: 'cipher.bellaso', version: 1, inputs: { text: 'A' }, parameters: {} });
+// @ts-expect-error Folding is not a Bellaso preservation policy.
+cube.execute({ operation: 'cipher.bellaso', version: 1, inputs: { text: 'A' }, parameters: { key: 'A', unmapped: 'fold' } });
 const bytes: Uint8Array = cube.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: 'AP8=' } }).output;
 const text: string = cube.execute({ operation: 'encoding.base64.encode', version: 1, inputs: { input: bytes } }).output;
 const joined: string = cube.execute({ operation: 'text.concat', version: 1, inputs: { left: 'Cube', right: 'Arc' }, parameters: { separator: '' } }).output;

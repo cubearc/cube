@@ -940,5 +940,33 @@
     "outputs": {
       "text": "IAMSTUDYING"
     }
+  },
+  {
+    "function": "bellaso",
+    "operation": "cipher.bellaso",
+    "command": "bellaso",
+    "parameters": {
+      "key": "VIRTVTIOMNIAPARENT"
+    },
+    "inputs": {
+      "text": "LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO"
+    },
+    "outputs": {
+      "text": "SYBOVEYLDANVOFSZLPIINCVPNSHMLRNXOIZNRD"
+    }
+  },
+  {
+    "function": "bellaso",
+    "operation": "cipher.bellaso",
+    "command": "bellaso",
+    "parameters": {
+      "key": "VIRTVTIOMNIAPARENT"
+    },
+    "inputs": {
+      "text": "SYBOVEYLDANVOFSZLPIINCVPNSHMLRNXOIZNRD"
+    },
+    "outputs": {
+      "text": "LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO"
+    }
   }
 ]

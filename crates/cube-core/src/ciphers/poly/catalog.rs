@@ -191,8 +191,39 @@ const fn classified_row(s: Spec, classification: m::Classification) -> Row {
         },
     }
 }
-const COUNT: usize = 50;
+const COUNT: usize = 51;
 static ROWS: [Row; COUNT] = [
+    row(Spec {
+        name: "Bellaso (1553)",
+        description: "Fixed 1553 eleven-pair reciprocal table with required continuous countersign in ABCDEFGHILMNOPQRSTVXYZ; no implicit aliases, separator instructions or line resets. Unmapped scalars reject unless explicitly preserved without key advancement.",
+        reversible: true,
+        output_type: "text",
+        id: "cipher.bellaso",
+        python: "bellaso",
+        rust: "cube_core::ciphers::poly::bellaso::transform",
+        command: "cipher bellaso",
+        parameters: c::schema::<bellaso::Bellaso1553>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        fixture: fixtures::bellaso,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &[
+            "https://preserver.beic.it/delivery/DeliveryManagerServlet?dps_pid=IE2960948",
+            "https://commons.wikimedia.org/wiki/File:Bellaso_1553.JPG",
+        ],
+    }),
     row(Spec {
         name: "Interrupted Key",
         description: "ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; preserve case and nonletters.",
@@ -1725,8 +1756,9 @@ const fn contracts() -> [c::Entry; COUNT] {
 static PROFILES: [m::Entry; COUNT] = profiles();
 const CONTRACTS: [c::Entry; COUNT] = contracts();
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
-pub(crate) const MODULE: o::Module =
-    o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);
+pub(crate) const MODULE: o::Module = o::Module::profiled(OPERATIONS, &PROFILES)
+    .with_contracts(&CONTRACTS)
+    .with_executors(bellaso::EXECUTORS);
 #[cfg(test)]
 mod tests {
     use super::*;

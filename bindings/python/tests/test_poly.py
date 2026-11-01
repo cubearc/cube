@@ -6,6 +6,26 @@ from pathlib import Path
 import cube
 import pytest
 
+
+def test_bellaso_canonical_spelling_and_preservation_are_explicit():
+    assert (
+        cube.bellaso("AA é🐈\nAA", {"key": "ACD", "unmapped": "preserve"})
+        == "NT é🐈\nTN"
+    )
+    assert cube.bellaso("", {"key": "A"}) == ""
+    for text in ["U", "J", "a", "é"]:
+        with pytest.raises(ValueError) as caught:
+            cube.bellaso(text, {"key": "A"})
+        assert caught.value.code == "invalid_input"
+    for parameters in [{}, {"key": "U"}, {"key": ""}, {"key": "A", "profile": "1555"}]:
+        with pytest.raises(ValueError) as caught:
+            cube.bellaso("A", parameters)
+        assert caught.value.code == "invalid_parameter"
+    with pytest.raises(ValueError) as caught:
+        cube.bellaso("A", {"key": "A" * 65537})
+    assert caught.value.code == "resource_limit"
+
+
 CASES = json.loads(
     (
         Path(__file__).resolve().parents[3]

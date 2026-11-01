@@ -20774,6 +20774,152 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.bellaso",
+      "category": "ciphers",
+      "description": "Fixed 1553 eleven-pair reciprocal table with required continuous countersign in ABCDEFGHILMNOPQRSTVXYZ; no implicit aliases, separator instructions or line resets. Unmapped scalars reject unless explicitly preserved without key advancement.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Bellaso1553",
+        "type": "object",
+        "properties": {
+          "key": {
+            "description": "Nonempty repeated countersign in the exact 22-symbol canonical alphabet.",
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1,
+            "pattern": "^[ABCDEFGHILMNOPQRSTVXYZ]+$"
+          },
+          "unmapped": {
+            "description": "Preserved scalars remain exact and never consume a key symbol.",
+            "$ref": "#/$defs/Unmapped",
+            "default": "reject"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "key"
+        ],
+        "$defs": {
+          "Unmapped": {
+            "type": "string",
+            "enum": [
+              "reject",
+              "preserve"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.bifid.decode",
       "category": "ciphers",
       "description": "Bifid: explicit bounded decode; see typed profile guide for conventions.",

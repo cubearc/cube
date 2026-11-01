@@ -130,6 +130,19 @@ fn running_key_decode(
     schedules::running_key(text, &p, true).map_err(super::file_error)
 }
 #[pyfunction]
+fn bellaso(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<String> {
+    let op = "cipher.bellaso";
+    let document = super::mono::document(
+        py,
+        parameters.as_any(),
+        poly::MAX_PARAMETERS,
+        op,
+        "parameters",
+    )?;
+    let p = poly::parse_parameters(&document).map_err(|e| super::file_error(e.operation(op)))?;
+    poly::bellaso::transform(text, &p).map_err(super::file_error)
+}
+#[pyfunction]
 fn porta(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<String> {
     let document = super::mono::document(
         py,
@@ -703,6 +716,7 @@ pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(running_key_encode, module)?)?;
     module.add_function(wrap_pyfunction!(running_key_decode, module)?)?;
     module.add_function(wrap_pyfunction!(porta, module)?)?;
+    module.add_function(wrap_pyfunction!(bellaso, module)?)?;
     module.add_function(wrap_pyfunction!(gromark_encode, module)?)?;
     module.add_function(wrap_pyfunction!(gromark_decode, module)?)?;
     module.add_function(wrap_pyfunction!(periodic_gromark_encode, module)?)?;

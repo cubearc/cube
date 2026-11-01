@@ -58,7 +58,10 @@ globalThis.qualification = (async () => {
 })();
 </script>`;
 
-test('actual browser initializes a packaged SDK worker under a non-root path and runs every Core binding', {timeout:240000}, async (t) => {
+// This is the aggregate catalog audit, not an individual operation deadline.
+// Firefox CI completed 300 known answers before the former four-minute cap.
+// Keep SDK initialization and each worker invocation at their existing 30 seconds.
+test('actual browser initializes a packaged SDK worker under a non-root path and runs every Core binding', {timeout:600000}, async (t) => {
   const destination = process.env.CUBE_QUALIFICATION_REPORT;
   if (destination) await rm(destination, { force: true });
   const wasmBytes = await readFile(files.get('/docs/playground/wasm/cube_wasm_bg.wasm')[1]);

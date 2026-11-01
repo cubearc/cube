@@ -409,6 +409,7 @@ const MODULES: &[Module] = &[
     crate::ciphers::mono::MODULE,
     crate::ciphers::mono::historical::MODULE,
     crate::ciphers::mono::numbered_key::MODULE,
+    crate::ciphers::mono::numeric::MODULE,
     crate::ciphers::mono::headlines::MODULE,
     crate::ciphers::mono::key_phrase::MODULE,
     crate::ciphers::poly::MODULE,

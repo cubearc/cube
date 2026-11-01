@@ -29,3 +29,10 @@ const syllables = cube.execute({
 });
 assert.deepEqual(syllables.tokens, ['do', 'si', 'fa']);
 console.log(syllables.tokens);
+
+const primeGroups = cube.execute({
+  operation: 'cipher.prime_multiplication.decode', version: 1, inputs: { products: ['6'] },
+  parameters: { profile: 'prime_multiset_v1', index: { alphabet: 'AB', first_index: 1, max_prime: 3 }, max_factor_checks: 10 },
+}).groups;
+if (primeGroups[0].product !== '6' || primeGroups[0].canonical_text !== 'AB') throw new Error('Prime multiset mismatch');
+console.log(primeGroups[0]);

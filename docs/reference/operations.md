@@ -9211,6 +9211,217 @@ Example:
 cube cipher --help
 ```
 
+## cipher.modulo.decode
+
+Decode Affine modular residues
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `text` | `text` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "8",
+      "7",
+      "7",
+      "22",
+      "21",
+      "2",
+      "18",
+      "22",
+      "5",
+      "17",
+      "2",
+      "15"
+    ]
+  },
+  "parameters": {
+    "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "modulus": 26,
+    "multiplier": "5",
+    "offset": "8",
+    "profile": "affine_residue_v1",
+    "token_origin": 0
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 2
+    },
+    "modulus": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 2
+    },
+    "multiplier": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "offset": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "token_origin": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "alphabet",
+    "modulus",
+    "multiplier",
+    "offset",
+    "token_origin"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "affine_residue_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.modulo.encode
+
+Encode Affine modular residues
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "AFFINECIPHER"
+  },
+  "parameters": {
+    "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "modulus": 26,
+    "multiplier": "5",
+    "offset": "8",
+    "profile": "affine_residue_v1",
+    "token_origin": 0
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 2
+    },
+    "modulus": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 2
+    },
+    "multiplier": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "offset": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,19})$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "token_origin": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "alphabet",
+    "modulus",
+    "multiplier",
+    "offset",
+    "token_origin"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "affine_residue_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.monome_dinome.decode
 
 Decode with an explicit monome_dinome digit table; reject unassigned/incomplete digit transport.
@@ -11615,6 +11826,444 @@ Parameters:
     "key"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.prime_multiplication.decode
+
+Decode Prime-product multiset
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `products` | `json` |
+| Output | `groups` | `json` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `factor_checks` | `json` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "products": [
+      "6",
+      "6",
+      "1",
+      "8"
+    ]
+  },
+  "parameters": {
+    "index": {
+      "alphabet": "AB",
+      "first_index": 1,
+      "max_prime": 3
+    },
+    "max_factor_checks": 100,
+    "profile": "prime_multiset_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "index": {
+      "$ref": "#/$defs/Index"
+    },
+    "max_factor_checks": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1000000,
+      "minimum": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "index",
+    "max_factor_checks"
+  ],
+  "$defs": {
+    "Index": {
+      "type": "object",
+      "properties": {
+        "alphabet": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1
+        },
+        "first_index": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 1
+        },
+        "max_prime": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 1000000,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alphabet",
+        "first_index",
+        "max_prime"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "prime_multiset_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.prime_multiplication.encode
+
+Encode Prime-product multiset
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `groups` | `json` |
+| Output | `groups` | `json` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `factor_checks` | `json` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "groups": [
+      "AB",
+      "BA",
+      "",
+      "AAA"
+    ]
+  },
+  "parameters": {
+    "index": {
+      "alphabet": "AB",
+      "first_index": 1,
+      "max_prime": 3
+    },
+    "max_factor_checks": 100,
+    "profile": "prime_multiset_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "index": {
+      "$ref": "#/$defs/Index"
+    },
+    "max_factor_checks": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1000000,
+      "minimum": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "index",
+    "max_factor_checks"
+  ],
+  "$defs": {
+    "Index": {
+      "type": "object",
+      "properties": {
+        "alphabet": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1
+        },
+        "first_index": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 1
+        },
+        "max_prime": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 1000000,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alphabet",
+        "first_index",
+        "max_prime"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "prime_multiset_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.prime_number.decode
+
+Decode Indexed prime alphabet
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `text` | `text` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "2",
+      "3",
+      "5",
+      "3",
+      "2"
+    ]
+  },
+  "parameters": {
+    "index": {
+      "alphabet": "ABC",
+      "first_index": 1,
+      "max_prime": 5
+    },
+    "profile": "indexed_primes_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "index": {
+      "$ref": "#/$defs/Index"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "index"
+  ],
+  "$defs": {
+    "Index": {
+      "type": "object",
+      "properties": {
+        "alphabet": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1
+        },
+        "first_index": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 1
+        },
+        "max_prime": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 1000000,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alphabet",
+        "first_index",
+        "max_prime"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "indexed_primes_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.prime_number.encode
+
+Encode Indexed prime alphabet
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ABCBA"
+  },
+  "parameters": {
+    "index": {
+      "alphabet": "ABC",
+      "first_index": 1,
+      "max_prime": 5
+    },
+    "profile": "indexed_primes_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "index": {
+      "$ref": "#/$defs/Index"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "index"
+  ],
+  "$defs": {
+    "Index": {
+      "type": "object",
+      "properties": {
+        "alphabet": {
+          "type": "string",
+          "maxLength": 4096,
+          "minLength": 1
+        },
+        "first_index": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 1
+        },
+        "max_prime": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 1000000,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alphabet",
+        "first_index",
+        "max_prime"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "indexed_primes_v1"
+      ]
+    }
+  }
 }
 ```
 
@@ -16678,6 +17327,169 @@ Parameters:
     "alphabet",
     "period"
   ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.triliteral.decode
+
+Decode Ordered three-trit code
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `cipher.symbol_tokens` |
+| Output | `text` | `text` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "...",
+      "..-",
+      "..x",
+      "xx-"
+    ]
+  },
+  "parameters": {
+    "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ",
+    "profile": "ordered_ternary_v1",
+    "trits": ".-x"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "trits": {
+      "type": "string",
+      "maxLength": 3,
+      "minLength": 3,
+      "x-cube-max-utf8-bytes": 12
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "alphabet",
+    "trits"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ordered_ternary_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.triliteral.encode
+
+Encode Ordered three-trit code
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `tokens` | `cipher.symbol_tokens` |
+| Output | `table` | `cipher.homophonic_table` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ROUZ"
+  },
+  "parameters": {
+    "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ",
+    "profile": "ordered_ternary_v1",
+    "trits": ".-x"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": "string",
+      "maxLength": 27,
+      "minLength": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "trits": {
+      "type": "string",
+      "maxLength": 3,
+      "minLength": 3,
+      "x-cube-max-utf8-bytes": 12
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "alphabet",
+    "trits"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ordered_ternary_v1"
+      ]
+    }
+  }
 }
 ```
 

@@ -12409,5 +12409,1017 @@
     "parameters": {
       "profile": "gajewski_1902_monosyllables_v1"
     }
+  },
+  {
+    "contract_sha256": "dad58b873a3fd60211c098c2ab106e7b484c6296b180b102038c22e87a4e55b0",
+    "inputs": {
+      "tokens": [
+        "8",
+        "7",
+        "7",
+        "22",
+        "21",
+        "2",
+        "18",
+        "22",
+        "5",
+        "17",
+        "2",
+        "15"
+      ]
+    },
+    "operation": "cipher.modulo.decode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "1c1be3909fea0e57e6464884da732683c135c54f98e73ad9ac96564fa9d01595",
+      "table": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "8"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "13"
+          ]
+        },
+        {
+          "symbol": "C",
+          "tokens": [
+            "18"
+          ]
+        },
+        {
+          "symbol": "D",
+          "tokens": [
+            "23"
+          ]
+        },
+        {
+          "symbol": "E",
+          "tokens": [
+            "2"
+          ]
+        },
+        {
+          "symbol": "F",
+          "tokens": [
+            "7"
+          ]
+        },
+        {
+          "symbol": "G",
+          "tokens": [
+            "12"
+          ]
+        },
+        {
+          "symbol": "H",
+          "tokens": [
+            "17"
+          ]
+        },
+        {
+          "symbol": "I",
+          "tokens": [
+            "22"
+          ]
+        },
+        {
+          "symbol": "J",
+          "tokens": [
+            "1"
+          ]
+        },
+        {
+          "symbol": "K",
+          "tokens": [
+            "6"
+          ]
+        },
+        {
+          "symbol": "L",
+          "tokens": [
+            "11"
+          ]
+        },
+        {
+          "symbol": "M",
+          "tokens": [
+            "16"
+          ]
+        },
+        {
+          "symbol": "N",
+          "tokens": [
+            "21"
+          ]
+        },
+        {
+          "symbol": "O",
+          "tokens": [
+            "0"
+          ]
+        },
+        {
+          "symbol": "P",
+          "tokens": [
+            "5"
+          ]
+        },
+        {
+          "symbol": "Q",
+          "tokens": [
+            "10"
+          ]
+        },
+        {
+          "symbol": "R",
+          "tokens": [
+            "15"
+          ]
+        },
+        {
+          "symbol": "S",
+          "tokens": [
+            "20"
+          ]
+        },
+        {
+          "symbol": "T",
+          "tokens": [
+            "25"
+          ]
+        },
+        {
+          "symbol": "U",
+          "tokens": [
+            "4"
+          ]
+        },
+        {
+          "symbol": "V",
+          "tokens": [
+            "9"
+          ]
+        },
+        {
+          "symbol": "W",
+          "tokens": [
+            "14"
+          ]
+        },
+        {
+          "symbol": "X",
+          "tokens": [
+            "19"
+          ]
+        },
+        {
+          "symbol": "Y",
+          "tokens": [
+            "24"
+          ]
+        },
+        {
+          "symbol": "Z",
+          "tokens": [
+            "3"
+          ]
+        }
+      ],
+      "text": "AFFINECIPHER"
+    },
+    "parameters": {
+      "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "modulus": 26,
+      "multiplier": "5",
+      "offset": "8",
+      "profile": "affine_residue_v1",
+      "token_origin": 0
+    }
+  },
+  {
+    "contract_sha256": "59ba086c241069548bd82dd3d015ab6fd0985813b88dd22c2c33f3ca4683d2d6",
+    "inputs": {
+      "text": "AFFINECIPHER"
+    },
+    "operation": "cipher.modulo.encode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "1c1be3909fea0e57e6464884da732683c135c54f98e73ad9ac96564fa9d01595",
+      "table": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "8"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "13"
+          ]
+        },
+        {
+          "symbol": "C",
+          "tokens": [
+            "18"
+          ]
+        },
+        {
+          "symbol": "D",
+          "tokens": [
+            "23"
+          ]
+        },
+        {
+          "symbol": "E",
+          "tokens": [
+            "2"
+          ]
+        },
+        {
+          "symbol": "F",
+          "tokens": [
+            "7"
+          ]
+        },
+        {
+          "symbol": "G",
+          "tokens": [
+            "12"
+          ]
+        },
+        {
+          "symbol": "H",
+          "tokens": [
+            "17"
+          ]
+        },
+        {
+          "symbol": "I",
+          "tokens": [
+            "22"
+          ]
+        },
+        {
+          "symbol": "J",
+          "tokens": [
+            "1"
+          ]
+        },
+        {
+          "symbol": "K",
+          "tokens": [
+            "6"
+          ]
+        },
+        {
+          "symbol": "L",
+          "tokens": [
+            "11"
+          ]
+        },
+        {
+          "symbol": "M",
+          "tokens": [
+            "16"
+          ]
+        },
+        {
+          "symbol": "N",
+          "tokens": [
+            "21"
+          ]
+        },
+        {
+          "symbol": "O",
+          "tokens": [
+            "0"
+          ]
+        },
+        {
+          "symbol": "P",
+          "tokens": [
+            "5"
+          ]
+        },
+        {
+          "symbol": "Q",
+          "tokens": [
+            "10"
+          ]
+        },
+        {
+          "symbol": "R",
+          "tokens": [
+            "15"
+          ]
+        },
+        {
+          "symbol": "S",
+          "tokens": [
+            "20"
+          ]
+        },
+        {
+          "symbol": "T",
+          "tokens": [
+            "25"
+          ]
+        },
+        {
+          "symbol": "U",
+          "tokens": [
+            "4"
+          ]
+        },
+        {
+          "symbol": "V",
+          "tokens": [
+            "9"
+          ]
+        },
+        {
+          "symbol": "W",
+          "tokens": [
+            "14"
+          ]
+        },
+        {
+          "symbol": "X",
+          "tokens": [
+            "19"
+          ]
+        },
+        {
+          "symbol": "Y",
+          "tokens": [
+            "24"
+          ]
+        },
+        {
+          "symbol": "Z",
+          "tokens": [
+            "3"
+          ]
+        }
+      ],
+      "tokens": [
+        "8",
+        "7",
+        "7",
+        "22",
+        "21",
+        "2",
+        "18",
+        "22",
+        "5",
+        "17",
+        "2",
+        "15"
+      ]
+    },
+    "parameters": {
+      "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "modulus": 26,
+      "multiplier": "5",
+      "offset": "8",
+      "profile": "affine_residue_v1",
+      "token_origin": 0
+    }
+  },
+  {
+    "contract_sha256": "ae68755a1b4cad429781e7a6e6bd519648e807e7482cec14aec085ca534d74d8",
+    "inputs": {
+      "products": [
+        "6",
+        "6",
+        "1",
+        "8"
+      ]
+    },
+    "operation": "cipher.prime_multiplication.decode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "9c88735444dd11d0c3a74e845c3e6bddf58e7cf0205a63d0c00208efc68fe979",
+      "factor_checks": 13,
+      "groups": [
+        {
+          "canonical_text": "AB",
+          "counts": [
+            {
+              "count": 1,
+              "symbol": "A"
+            },
+            {
+              "count": 1,
+              "symbol": "B"
+            }
+          ],
+          "product": "6",
+          "scalar_count": 2
+        },
+        {
+          "canonical_text": "AB",
+          "counts": [
+            {
+              "count": 1,
+              "symbol": "A"
+            },
+            {
+              "count": 1,
+              "symbol": "B"
+            }
+          ],
+          "product": "6",
+          "scalar_count": 2
+        },
+        {
+          "canonical_text": "",
+          "counts": [],
+          "product": "1",
+          "scalar_count": 0
+        },
+        {
+          "canonical_text": "AAA",
+          "counts": [
+            {
+              "count": 3,
+              "symbol": "A"
+            }
+          ],
+          "product": "8",
+          "scalar_count": 3
+        }
+      ],
+      "table": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "2"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "3"
+          ]
+        }
+      ]
+    },
+    "parameters": {
+      "index": {
+        "alphabet": "AB",
+        "first_index": 1,
+        "max_prime": 3
+      },
+      "max_factor_checks": 100,
+      "profile": "prime_multiset_v1"
+    }
+  },
+  {
+    "contract_sha256": "664ad45221c4098d3ba3bc0659558256443164f4d74dc1368b954d7e0f66d8f6",
+    "inputs": {
+      "groups": [
+        "AB",
+        "BA",
+        "",
+        "AAA"
+      ]
+    },
+    "operation": "cipher.prime_multiplication.encode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "9c88735444dd11d0c3a74e845c3e6bddf58e7cf0205a63d0c00208efc68fe979",
+      "factor_checks": 0,
+      "groups": [
+        {
+          "canonical_text": "AB",
+          "counts": [
+            {
+              "count": 1,
+              "symbol": "A"
+            },
+            {
+              "count": 1,
+              "symbol": "B"
+            }
+          ],
+          "product": "6",
+          "scalar_count": 2
+        },
+        {
+          "canonical_text": "AB",
+          "counts": [
+            {
+              "count": 1,
+              "symbol": "A"
+            },
+            {
+              "count": 1,
+              "symbol": "B"
+            }
+          ],
+          "product": "6",
+          "scalar_count": 2
+        },
+        {
+          "canonical_text": "",
+          "counts": [],
+          "product": "1",
+          "scalar_count": 0
+        },
+        {
+          "canonical_text": "AAA",
+          "counts": [
+            {
+              "count": 3,
+              "symbol": "A"
+            }
+          ],
+          "product": "8",
+          "scalar_count": 3
+        }
+      ],
+      "table": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "2"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "3"
+          ]
+        }
+      ]
+    },
+    "parameters": {
+      "index": {
+        "alphabet": "AB",
+        "first_index": 1,
+        "max_prime": 3
+      },
+      "max_factor_checks": 100,
+      "profile": "prime_multiset_v1"
+    }
+  },
+  {
+    "contract_sha256": "534d26d9e6f8f5f0bb0bf796796c54140e132fda6c88d78dec992310d5878b53",
+    "inputs": {
+      "tokens": [
+        "2",
+        "3",
+        "5",
+        "3",
+        "2"
+      ]
+    },
+    "operation": "cipher.prime_number.decode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "a88c21722e456fd408ba5bf5987f2acfd2e6980bcf62fca065cccce53398ac22",
+      "table": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "2"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "3"
+          ]
+        },
+        {
+          "symbol": "C",
+          "tokens": [
+            "5"
+          ]
+        }
+      ],
+      "text": "ABCBA"
+    },
+    "parameters": {
+      "index": {
+        "alphabet": "ABC",
+        "first_index": 1,
+        "max_prime": 5
+      },
+      "profile": "indexed_primes_v1"
+    }
+  },
+  {
+    "contract_sha256": "1cd31c09d4027675919d05f6f007bd9dc4cc4435c4b3904deed0fd865ad021a8",
+    "inputs": {
+      "text": "ABCBA"
+    },
+    "operation": "cipher.prime_number.encode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "a88c21722e456fd408ba5bf5987f2acfd2e6980bcf62fca065cccce53398ac22",
+      "table": [
+        {
+          "symbol": "A",
+          "tokens": [
+            "2"
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            "3"
+          ]
+        },
+        {
+          "symbol": "C",
+          "tokens": [
+            "5"
+          ]
+        }
+      ],
+      "tokens": [
+        "2",
+        "3",
+        "5",
+        "3",
+        "2"
+      ]
+    },
+    "parameters": {
+      "index": {
+        "alphabet": "ABC",
+        "first_index": 1,
+        "max_prime": 5
+      },
+      "profile": "indexed_primes_v1"
+    }
+  },
+  {
+    "contract_sha256": "55af35b06f9016d807f13c1ddeb14f25a3e82314f626ffc3c4eddf17628d12e5",
+    "inputs": {
+      "tokens": [
+        "...",
+        "..-",
+        "..x",
+        "xx-"
+      ]
+    },
+    "operation": "cipher.triliteral.decode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "4a172ca29fbc4955a9aaea771091a751c4a6435e6d74e9abc6de268f21693c75",
+      "table": [
+        {
+          "symbol": "R",
+          "tokens": [
+            "..."
+          ]
+        },
+        {
+          "symbol": "O",
+          "tokens": [
+            "..-"
+          ]
+        },
+        {
+          "symbol": "U",
+          "tokens": [
+            "..x"
+          ]
+        },
+        {
+          "symbol": "N",
+          "tokens": [
+            ".-."
+          ]
+        },
+        {
+          "symbol": "D",
+          "tokens": [
+            ".--"
+          ]
+        },
+        {
+          "symbol": "T",
+          "tokens": [
+            ".-x"
+          ]
+        },
+        {
+          "symbol": "A",
+          "tokens": [
+            ".x."
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            ".x-"
+          ]
+        },
+        {
+          "symbol": "L",
+          "tokens": [
+            ".xx"
+          ]
+        },
+        {
+          "symbol": "E",
+          "tokens": [
+            "-.."
+          ]
+        },
+        {
+          "symbol": "C",
+          "tokens": [
+            "-.-"
+          ]
+        },
+        {
+          "symbol": "F",
+          "tokens": [
+            "-.x"
+          ]
+        },
+        {
+          "symbol": "G",
+          "tokens": [
+            "--."
+          ]
+        },
+        {
+          "symbol": "H",
+          "tokens": [
+            "---"
+          ]
+        },
+        {
+          "symbol": "I",
+          "tokens": [
+            "--x"
+          ]
+        },
+        {
+          "symbol": "J",
+          "tokens": [
+            "-x."
+          ]
+        },
+        {
+          "symbol": "K",
+          "tokens": [
+            "-x-"
+          ]
+        },
+        {
+          "symbol": "M",
+          "tokens": [
+            "-xx"
+          ]
+        },
+        {
+          "symbol": "P",
+          "tokens": [
+            "x.."
+          ]
+        },
+        {
+          "symbol": "Q",
+          "tokens": [
+            "x.-"
+          ]
+        },
+        {
+          "symbol": "S",
+          "tokens": [
+            "x.x"
+          ]
+        },
+        {
+          "symbol": "V",
+          "tokens": [
+            "x-."
+          ]
+        },
+        {
+          "symbol": "W",
+          "tokens": [
+            "x--"
+          ]
+        },
+        {
+          "symbol": "X",
+          "tokens": [
+            "x-x"
+          ]
+        },
+        {
+          "symbol": "Y",
+          "tokens": [
+            "xx."
+          ]
+        },
+        {
+          "symbol": "Z",
+          "tokens": [
+            "xx-"
+          ]
+        }
+      ],
+      "text": "ROUZ"
+    },
+    "parameters": {
+      "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ",
+      "profile": "ordered_ternary_v1",
+      "trits": ".-x"
+    }
+  },
+  {
+    "contract_sha256": "05e04601ed725d037393e4de420fb91e39f8e275610f8d5f5274bf16d50413a0",
+    "inputs": {
+      "text": "ROUZ"
+    },
+    "operation": "cipher.triliteral.encode",
+    "operation_version": 1,
+    "outputs": {
+      "definition_sha256": "4a172ca29fbc4955a9aaea771091a751c4a6435e6d74e9abc6de268f21693c75",
+      "table": [
+        {
+          "symbol": "R",
+          "tokens": [
+            "..."
+          ]
+        },
+        {
+          "symbol": "O",
+          "tokens": [
+            "..-"
+          ]
+        },
+        {
+          "symbol": "U",
+          "tokens": [
+            "..x"
+          ]
+        },
+        {
+          "symbol": "N",
+          "tokens": [
+            ".-."
+          ]
+        },
+        {
+          "symbol": "D",
+          "tokens": [
+            ".--"
+          ]
+        },
+        {
+          "symbol": "T",
+          "tokens": [
+            ".-x"
+          ]
+        },
+        {
+          "symbol": "A",
+          "tokens": [
+            ".x."
+          ]
+        },
+        {
+          "symbol": "B",
+          "tokens": [
+            ".x-"
+          ]
+        },
+        {
+          "symbol": "L",
+          "tokens": [
+            ".xx"
+          ]
+        },
+        {
+          "symbol": "E",
+          "tokens": [
+            "-.."
+          ]
+        },
+        {
+          "symbol": "C",
+          "tokens": [
+            "-.-"
+          ]
+        },
+        {
+          "symbol": "F",
+          "tokens": [
+            "-.x"
+          ]
+        },
+        {
+          "symbol": "G",
+          "tokens": [
+            "--."
+          ]
+        },
+        {
+          "symbol": "H",
+          "tokens": [
+            "---"
+          ]
+        },
+        {
+          "symbol": "I",
+          "tokens": [
+            "--x"
+          ]
+        },
+        {
+          "symbol": "J",
+          "tokens": [
+            "-x."
+          ]
+        },
+        {
+          "symbol": "K",
+          "tokens": [
+            "-x-"
+          ]
+        },
+        {
+          "symbol": "M",
+          "tokens": [
+            "-xx"
+          ]
+        },
+        {
+          "symbol": "P",
+          "tokens": [
+            "x.."
+          ]
+        },
+        {
+          "symbol": "Q",
+          "tokens": [
+            "x.-"
+          ]
+        },
+        {
+          "symbol": "S",
+          "tokens": [
+            "x.x"
+          ]
+        },
+        {
+          "symbol": "V",
+          "tokens": [
+            "x-."
+          ]
+        },
+        {
+          "symbol": "W",
+          "tokens": [
+            "x--"
+          ]
+        },
+        {
+          "symbol": "X",
+          "tokens": [
+            "x-x"
+          ]
+        },
+        {
+          "symbol": "Y",
+          "tokens": [
+            "xx."
+          ]
+        },
+        {
+          "symbol": "Z",
+          "tokens": [
+            "xx-"
+          ]
+        }
+      ],
+      "tokens": [
+        "...",
+        "..-",
+        "..x",
+        "xx-"
+      ]
+    },
+    "parameters": {
+      "alphabet": "ROUNDTABLECFGHIJKMPQSVWXYZ",
+      "profile": "ordered_ternary_v1",
+      "trits": ".-x"
+    }
   }
 ]

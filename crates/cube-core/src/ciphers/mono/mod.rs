@@ -7,6 +7,7 @@ pub mod historical;
 pub mod homophonic;
 pub mod key_phrase;
 pub mod numbered_key;
+pub mod numeric;
 pub mod params;
 pub mod rotations;
 use crate::errors::{ErrorCode, OperationError};

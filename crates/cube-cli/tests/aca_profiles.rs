@@ -22,6 +22,10 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
                 "key_phrase",
                 "arnold",
                 "solresol",
+                "prime_number",
+                "prime_multiplication",
+                "modulo",
+                "triliteral",
             ]
             .contains(&op.split('.').nth(1).unwrap_or(""))
         })
@@ -81,6 +85,6 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 10);
+    assert_eq!(checked, 18);
     std::fs::remove_dir_all(directory).unwrap();
 }

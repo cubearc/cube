@@ -31980,6 +31980,610 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.modulo.decode",
+      "category": "ciphers",
+      "description": "Decode Affine modular residues",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "alphabet": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 2
+          },
+          "modulus": {
+            "type": "integer",
+            "format": "uint16",
+            "maximum": 4096,
+            "minimum": 2
+          },
+          "multiplier": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,19})$"
+          },
+          "offset": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,19})$"
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          },
+          "token_origin": {
+            "type": "integer",
+            "format": "uint8",
+            "maximum": 1,
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "alphabet",
+          "modulus",
+          "multiplier",
+          "offset",
+          "token_origin"
+        ],
+        "$defs": {
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "affine_residue_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 262144,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.modulo.encode",
+      "category": "ciphers",
+      "description": "Encode Affine modular residues",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "alphabet": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 2
+          },
+          "modulus": {
+            "type": "integer",
+            "format": "uint16",
+            "maximum": 4096,
+            "minimum": 2
+          },
+          "multiplier": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,19})$"
+          },
+          "offset": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,19})$"
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          },
+          "token_origin": {
+            "type": "integer",
+            "format": "uint8",
+            "maximum": 1,
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "alphabet",
+          "modulus",
+          "multiplier",
+          "offset",
+          "token_origin"
+        ],
+        "$defs": {
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "affine_residue_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/Tokens",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.monome_dinome.decode",
       "category": "ciphers",
       "description": "Decode with an explicit monome_dinome digit table; reject unassigned/incomplete digit transport.",
@@ -37367,6 +37971,1741 @@
         "max_input_bytes": 1048576,
         "max_output_bytes": 1048576,
         "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.prime_multiplication.decode",
+      "category": "ciphers",
+      "description": "Decode Prime-product multiset",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "products",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "index": {
+            "$ref": "#/$defs/Index"
+          },
+          "max_factor_checks": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 1000000,
+            "minimum": 1
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "index",
+          "max_factor_checks"
+        ],
+        "$defs": {
+          "Index": {
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "type": "string",
+                "maxLength": 4096,
+                "minLength": 1
+              },
+              "first_index": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 4096,
+                "minimum": 1
+              },
+              "max_prime": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 1000000,
+                "minimum": 2
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "alphabet",
+              "first_index",
+              "max_prime"
+            ]
+          },
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "prime_multiset_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "groups",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Group"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "factor_checks",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 1000000,
+            "minimum": 0,
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.prime_multiplication.encode",
+      "category": "ciphers",
+      "description": "Encode Prime-product multiset",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "groups",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Groups",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "index": {
+            "$ref": "#/$defs/Index"
+          },
+          "max_factor_checks": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 1000000,
+            "minimum": 1
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "index",
+          "max_factor_checks"
+        ],
+        "$defs": {
+          "Index": {
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "type": "string",
+                "maxLength": 4096,
+                "minLength": 1
+              },
+              "first_index": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 4096,
+                "minimum": 1
+              },
+              "max_prime": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 1000000,
+                "minimum": 2
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "alphabet",
+              "first_index",
+              "max_prime"
+            ]
+          },
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "prime_multiset_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "groups",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Group"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "factor_checks",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "uint32",
+            "maximum": 1000000,
+            "minimum": 0,
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Count": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 1
+                  },
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "count"
+                ]
+              },
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "Group": {
+                "type": "object",
+                "properties": {
+                  "canonical_text": {
+                    "type": "string",
+                    "maxLength": 127
+                  },
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Count"
+                    },
+                    "maxItems": 127
+                  },
+                  "product": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,38}$"
+                  },
+                  "scalar_count": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 127,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "product",
+                  "counts",
+                  "canonical_text",
+                  "scalar_count"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.prime_number.decode",
+      "category": "ciphers",
+      "description": "Decode Indexed prime alphabet",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "index": {
+            "$ref": "#/$defs/Index"
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "index"
+        ],
+        "$defs": {
+          "Index": {
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "type": "string",
+                "maxLength": 4096,
+                "minLength": 1
+              },
+              "first_index": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 4096,
+                "minimum": 1
+              },
+              "max_prime": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 1000000,
+                "minimum": 2
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "alphabet",
+              "first_index",
+              "max_prime"
+            ]
+          },
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "indexed_primes_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 262144,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.prime_number.encode",
+      "category": "ciphers",
+      "description": "Encode Indexed prime alphabet",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "index": {
+            "$ref": "#/$defs/Index"
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "index"
+        ],
+        "$defs": {
+          "Index": {
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "type": "string",
+                "maxLength": 4096,
+                "minLength": 1
+              },
+              "first_index": {
+                "type": "integer",
+                "format": "uint16",
+                "maximum": 4096,
+                "minimum": 1
+              },
+              "max_prime": {
+                "type": "integer",
+                "format": "uint32",
+                "maximum": 1000000,
+                "minimum": 2
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "alphabet",
+              "first_index",
+              "max_prime"
+            ]
+          },
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "indexed_primes_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/Tokens",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
         "max_work": null,
         "max_memory_bytes": null
       },
@@ -46126,6 +48465,576 @@
         "max_input_bytes": 1048576,
         "max_output_bytes": 2097152,
         "max_items": null,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.triliteral.decode",
+      "category": "ciphers",
+      "description": "Decode Ordered three-trit code",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "alphabet": {
+            "type": "string",
+            "maxLength": 27,
+            "minLength": 1
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          },
+          "trits": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "x-cube-max-utf8-bytes": 12
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "alphabet",
+          "trits"
+        ],
+        "$defs": {
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "ordered_ternary_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 65536,
+            "x-cube-max-utf8-bytes": 262144,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.triliteral.encode",
+      "category": "ciphers",
+      "description": "Encode Ordered three-trit code",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Text",
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "alphabet": {
+            "type": "string",
+            "maxLength": 27,
+            "minLength": 1
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          },
+          "trits": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 3,
+            "x-cube-max-utf8-bytes": 12
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile",
+          "alphabet",
+          "trits"
+        ],
+        "$defs": {
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "ordered_ternary_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "cipher.symbol_tokens",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/Tokens",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        },
+        {
+          "name": "table",
+          "semantic_type": "cipher.homophonic_table",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Entry"
+            },
+            "maxItems": 4096,
+            "minItems": 1,
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        },
+        {
+          "name": "definition_sha256",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "$defs": {
+              "Entry": {
+                "description": "One unique canonical scalar with 1..256 nonempty tokens, each <=256 UTF-8\nbytes. Every token is globally unique, including within the same entry.",
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "tokens": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 256,
+                    "minItems": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "symbol",
+                  "tokens"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
         "max_work": null,
         "max_memory_bytes": null
       },

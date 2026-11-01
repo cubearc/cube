@@ -1,6 +1,13 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const primeTokens: readonly string[]=cube.execute({operation:'cipher.prime_number.encode',version:1,inputs:{text:'AB'},parameters:{profile:'indexed_primes_v1',index:{alphabet:'AB',first_index:1,max_prime:3}}}).tokens;
+const multiset=cube.execute({operation:'cipher.prime_multiplication.decode',version:1,inputs:{products:['6']},parameters:{profile:'prime_multiset_v1',index:{alphabet:'AB',first_index:1,max_prime:3},max_factor_checks:10}}).groups[0];
+const exactProduct: string=multiset.product;
+const multiplicity: number=multiset.counts[0].count;
+const residues: readonly string[]=cube.execute({operation:'cipher.modulo.encode',version:1,inputs:{text:'A'},parameters:{profile:'affine_residue_v1',alphabet:'AB',modulus:2,multiplier:'1',offset:'0',token_origin:1}}).tokens;
+const trits: readonly string[]=cube.execute({operation:'cipher.triliteral.encode',version:1,inputs:{text:'AB'},parameters:{profile:'ordered_ternary_v1',alphabet:'AB',trits:'012'}}).tokens;
+void primeTokens; void exactProduct; void multiplicity; void residues; void trits;
 const solresol:readonly string[]=cube.execute({operation:'symbol.solresol.encode',version:1,inputs:{terms:['non','oui']},parameters:{profile:'gajewski_1902_monosyllables_v1'}}).tokens;
 const glosses:readonly string[]=cube.execute({operation:'symbol.solresol.decode',version:1,inputs:{tokens:['do']},parameters:{profile:'gajewski_1902_monosyllables_v1'}}).readings[0].alternatives;
 void solresol;void glosses;

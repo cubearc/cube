@@ -464,3 +464,67 @@ Python exports `rot8000`, `malespin`, `vatsyayana`, `nomenclator_encode/decode`,
 `syllabary_encode/decode` and `great_cipher_encode/decode`. JavaScript/TypeScript
 uses the same version-1 operation IDs and named ports in `cube.execute`; its
 types and runtime availability derive from the actual packaged Wasm.
+
+## Explicit numerical puzzle profiles
+
+The version-1 pairs `cipher.prime_number.encode/decode`,
+`cipher.prime_multiplication.encode/decode`, `cipher.modulo.encode/decode` and
+`cipher.triliteral.encode/decode` require a named profile and a caller-selected
+ordered alphabet of unique Unicode scalars. They never infer an alphabet, remove
+punctuation, fold case or normalize Unicode. These are puzzle encodings without
+modern confidentiality. Their typed schemas and executable known answers appear
+in the [operation reference](reference/operations.md).
+
+- `indexed_primes_v1`: required `index: {alphabet, first_index, max_prime}`.
+  Assign consecutive primes from the one-based `first_index` (1..4096), within
+  the inclusive `max_prime` (2..1,000,000). The entire alphabet must fit the bound,
+  even for an empty message. For ABC, index 1 and bound 5, ABCBA becomes
+  `["2","3","5","3","2"]`. Tokens are exact decimal strings; "02" rejects.
+- `prime_multiset_v1`: the same index plus required `max_factor_checks`
+  (1..1,000,000). Encode accepts presegmented `groups`; decode accepts decimal
+  `products`. AB and BA both produce "6" when A=2/B=3. Each result contains
+  `product`, `counts`, `canonical_text` in alphabet order and `scalar_count`.
+  No original order or word segmentation is recovered. Empty groups produce "1";
+  zero and factors outside the configured table reject. Products use checked
+  u128 arithmetic and remain strings on every SDK, including JavaScript.
+  Decode charges one check for each group and each attempted remainder,
+  successful or failed; repeated groups are charged again. Decoding
+  `["6","6","1","8"]` with alphabet AB uses exactly 13 checks.
+- `affine_residue_v1`: required `alphabet`, `modulus` equal to its scalar count
+  (2..4096), canonical unsigned-u64 decimal strings `multiplier` and `offset`,
+  and `token_origin` (0 or 1). For zero-based index i, the token is
+  `((multiplier*i+offset) mod modulus)+token_origin`. The multiplier must be
+  coprime to the modulus in both directions. A-Z with multiplier 5 / offset 8 / origin 0
+  maps AFFINECIPHER to `["8","7","7","22","21","2","18","22","5","17","2","15"]`.
+- `ordered_ternary_v1`: required `alphabet` (1..27 scalars) and `trits`
+  (three distinct ordered scalars). Assign fixed-width base 3 codewords from 000,
+  mapping each digit through the selected trit alphabet. Leading zero trits are
+  significant; unassigned codewords reject. This profile does not perform the
+  Morse stage of [ACA Fractionated Morse](https://www.cryptogram.org/downloads/aca.info/ciphers/FractionatedMorse.pdf).
+
+The indexed-prime implementation uses a private bounded sieve, following the
+[NIST definition](https://xlinux.nist.gov/dads/HTML/sieve.html), with marking from
+p², an ascending scan and a preprocessing ceiling of 33,554,432 charged steps. It does not expose
+an unbounded prime generator, cache or unrestricted factorizer. Modular arithmetic
+and radix conversion reuse existing Core modules. Products have at most 127 factors.
+
+Parameters are limited to 64 KiB serialized JSON. Inputs are limited to 1 MiB and
+65536 scalars/tokens; group scalars and recovered factors share an aggregate 65,536
+limit. Reports include the complete effective table and canonical parameter SHA256,
+and reject above4 MiB. The public caller-owned homophonic table's 64 KiB limit remains
+unchanged; derived numeric tables have a separate bounded internal construction.
+
+CLI commands are `cube cipher prime-number|prime-multiplication|modulo|triliteral
+--parameters FILE [--decode]`. The three substitution encoders read literal text;
+their decoders read a JSON token array. Prime multiplication reads a JSON group
+array when encoding and a JSON product array when decoding. For example, save
+`{"profile":"indexed_primes_v1","index":{"alphabet":"ABC","first_index":1,"max_prime":5}}`
+to a local parameters file and pipe ABCBA to `cube cipher prime-number --parameters
+FILE`.
+
+Python functions are `prime_number_encode/decode`,
+`prime_multiplication_encode/decode`, `modulo_encode/decode` and
+`triliteral_encode/decode`, taking the corresponding text/array and a parameters
+dictionary. JavaScript/TypeScript uses these operation IDs and named ports through
+`cube.execute`. Both SDKs execute Core algorithms, including the same work and
+overflow limits; catalogue presence alone is not treated as execution support.

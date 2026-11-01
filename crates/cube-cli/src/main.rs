@@ -32,6 +32,7 @@ mod fractioncmd;
 mod historicalcmd;
 mod modularcmd;
 mod monocmd;
+mod numericcmd;
 mod pipelinecmd;
 mod playcmd;
 mod polycmd;
@@ -532,6 +533,14 @@ enum Cipher {
     Great(historicalcmd::Great),
     /// Construct and apply the explicit deterministic ACA Numbered Key table
     NumberedKey(polycmd::Parameters),
+    /// Exact bounded indexed-prime alphabet
+    PrimeNumber(polycmd::Parameters),
+    /// Checked prime products representing unordered scalar multiplicities
+    PrimeMultiplication(polycmd::Parameters),
+    /// Explicit coprime affine residue table
+    Modulo(polycmd::Parameters),
+    /// Exact three-trit codewords over an explicit ordered alphabet
+    Triliteral(polycmd::Parameters),
     /// Transform exactly five caller headlines with the qualified ACA base profile
     Headlines(polycmd::Parameters),
     /// Apply the ACA Key Phrase alphabet and preserve all inverse alternatives
@@ -1102,6 +1111,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Syllabary(args) => historicalcmd::table(args, true)?,
                 Cipher::Great(args) => historicalcmd::great(args)?,
                 Cipher::NumberedKey(args) => historicalcmd::numbered_key(args)?,
+                Cipher::PrimeNumber(args) => numericcmd::prime_number(args)?,
+                Cipher::PrimeMultiplication(args) => numericcmd::prime_multiplication(args)?,
+                Cipher::Modulo(args) => numericcmd::modulo(args)?,
+                Cipher::Triliteral(args) => numericcmd::triliteral(args)?,
                 Cipher::Headlines(args) => historicalcmd::headlines(args)?,
                 Cipher::KeyPhrase(args) => historicalcmd::key_phrase(args)?,
                 Cipher::Arnold(args) => historicalcmd::arnold(args)?,

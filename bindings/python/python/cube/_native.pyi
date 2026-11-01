@@ -4,6 +4,82 @@ from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
+class PrimeIndex(TypedDict):
+    alphabet: str
+    first_index: int
+    max_prime: int
+
+class PrimeNumberParameters(TypedDict):
+    profile: Literal["indexed_primes_v1"]
+    index: PrimeIndex
+
+class PrimeProductParameters(TypedDict):
+    profile: Literal["prime_multiset_v1"]
+    index: PrimeIndex
+    max_factor_checks: int
+
+class ModuloParameters(TypedDict):
+    profile: Literal["affine_residue_v1"]
+    alphabet: str
+    modulus: int
+    multiplier: str
+    offset: str
+    token_origin: Literal[0, 1]
+
+class TriliteralParameters(TypedDict):
+    profile: Literal["ordered_ternary_v1"]
+    alphabet: str
+    trits: str
+
+class NumericEncodedReport(TypedDict):
+    tokens: list[str]
+    table: list[HomophonicEntry]
+    definition_sha256: str
+
+class NumericDecodedReport(TypedDict):
+    text: str
+    table: list[HomophonicEntry]
+    definition_sha256: str
+
+class PrimeProductCount(TypedDict):
+    symbol: str
+    count: int
+
+class PrimeProductGroup(TypedDict):
+    product: str
+    counts: list[PrimeProductCount]
+    canonical_text: str
+    scalar_count: int
+
+class PrimeProductReport(TypedDict):
+    groups: list[PrimeProductGroup]
+    table: list[HomophonicEntry]
+    factor_checks: int
+    definition_sha256: str
+
+def prime_number_encode(
+    text: str, parameters: PrimeNumberParameters
+) -> NumericEncodedReport: ...
+def prime_number_decode(
+    tokens: list[str], parameters: PrimeNumberParameters
+) -> NumericDecodedReport: ...
+def prime_multiplication_encode(
+    groups: list[str], parameters: PrimeProductParameters
+) -> PrimeProductReport: ...
+def prime_multiplication_decode(
+    products: list[str], parameters: PrimeProductParameters
+) -> PrimeProductReport: ...
+def modulo_encode(text: str, parameters: ModuloParameters) -> NumericEncodedReport: ...
+def modulo_decode(
+    tokens: list[str], parameters: ModuloParameters
+) -> NumericDecodedReport: ...
+def triliteral_encode(
+    text: str, parameters: TriliteralParameters
+) -> NumericEncodedReport: ...
+def triliteral_decode(
+    tokens: list[str], parameters: TriliteralParameters
+) -> NumericDecodedReport: ...
+
 class SolresolParameters(TypedDict):
     profile: Literal["gajewski_1902_monosyllables_v1"]
 

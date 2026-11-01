@@ -143,7 +143,7 @@ pub fn mod_inverse(a: u64, modulus: u64) -> Result<u64, OperationError> {
     }
     Ok(result.x.rem_euclid(i128::from(modulus)) as u64)
 }
-fn multiply(a: u64, b: u64, modulus: u64) -> Result<u64, OperationError> {
+pub(crate) fn multiply(a: u64, b: u64, modulus: u64) -> Result<u64, OperationError> {
     let product = u128::from(a)
         .checked_mul(u128::from(b))
         .ok_or_else(|| limit("number.mod_pow"))?;

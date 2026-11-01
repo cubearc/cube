@@ -10,6 +10,14 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "cipher.prime_number.encode": "prime_number_encode",
+    "cipher.prime_number.decode": "prime_number_decode",
+    "cipher.prime_multiplication.encode": "prime_multiplication_encode",
+    "cipher.prime_multiplication.decode": "prime_multiplication_decode",
+    "cipher.modulo.encode": "modulo_encode",
+    "cipher.modulo.decode": "modulo_decode",
+    "cipher.triliteral.encode": "triliteral_encode",
+    "cipher.triliteral.decode": "triliteral_decode",
     "symbol.solresol.encode": "solresol_encode",
     "symbol.solresol.decode": "solresol_decode",
     "cipher.arnold.encode": "arnold_encode",

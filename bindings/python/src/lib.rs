@@ -33,6 +33,7 @@ mod modular;
 mod mono;
 mod multiset;
 mod numbered_key;
+mod numeric_puzzles;
 mod pipeline;
 mod poly;
 mod probability;
@@ -599,6 +600,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     historical::register(module)?;
     headlines::register(module)?;
     numbered_key::register(module)?;
+    numeric_puzzles::register(module)?;
     word_codes::register(module)?;
     solresol::register(module)?;
     poly::register(module)?;

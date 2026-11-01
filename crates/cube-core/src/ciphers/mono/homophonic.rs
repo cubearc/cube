@@ -96,7 +96,16 @@ impl Mapping {
         def: Definition,
         per_symbol: usize,
     ) -> Result<Self, OperationError> {
-        serialized_size(&def, MAX_DEFINITION, ENCODE)?;
+        Self::with_limits(def, per_symbol, MAX_DEFINITION)
+    }
+    /// Derived numeric tables have a separately bounded internal serialization;
+    /// public caller definitions retain their existing64-KiB/256-token policy.
+    pub(super) fn with_limits(
+        def: Definition,
+        per_symbol: usize,
+        definition_bytes: usize,
+    ) -> Result<Self, OperationError> {
+        serialized_size(&def, definition_bytes, ENCODE)?;
         bound(ENCODE, "entries", def.entries.len(), MAX_SYMBOLS)?;
         if def.entries.is_empty() {
             return Err(error(

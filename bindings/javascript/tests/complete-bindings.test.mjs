@@ -3,6 +3,20 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
+test('numeric profiles execute exact fixtures and bounded multiset recovery in Wasm', async () => {
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const cases=fixtures.filter(r=>/^cipher\.(prime_number|prime_multiplication|modulo|triliteral)\./.test(r.operation));
+  assert.equal(cases.length,8);
+  for(const r of cases) assert.deepEqual(cube.execute({operation:r.operation,version:1,inputs:r.inputs,parameters:r.parameters}),r.outputs,r.operation);
+  const parameters={profile:'prime_multiset_v1',index:{alphabet:'AB',first_index:1,max_prime:3},max_factor_checks:13};
+  const encoded=cube.execute({operation:'cipher.prime_multiplication.encode',version:1,inputs:{groups:['AB','BA','']},parameters});
+  assert.deepEqual(encoded.groups[0],encoded.groups[1]);
+  assert.equal(encoded.groups[2].product,'1');
+  const decoded=cube.execute({operation:'cipher.prime_multiplication.decode',version:1,inputs:{products:['6','6','1','8']},parameters});
+  assert.equal(decoded.factor_checks,13);
+  assert.throws(()=>cube.execute({operation:'cipher.prime_multiplication.decode',version:1,inputs:{products:['6','6','1','8']},parameters:{...parameters,max_factor_checks:12}}),{code:'resource_limit'});
+  for(const token of ['0','01','5','6.0','340282366920938463463374607431768211456']) assert.throws(()=>cube.execute({operation:'cipher.prime_multiplication.decode',version:1,inputs:{products:[token]},parameters}),{code:'invalid_input'});
+});
 
 test('finite Gajewski Solresol retains source synonyms, accents, aliases and positions', async () => {
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));

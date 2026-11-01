@@ -14,7 +14,8 @@ the second example returns `A B`.
 
 ## Named alphabet tokens
 
-Select a dated source table when the clue uses Aurebesh or Standard Galactic.
+Select a dated source table when the clue uses a symbolic alphabet or geometric
+code.
 Save `{"profile":"aurebesh_ucsur_2016_v1"}` as `alphabet.json`, then encode
 explicit letter units:
 

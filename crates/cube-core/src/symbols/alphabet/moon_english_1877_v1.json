@@ -1,0 +1,235 @@
+{
+  "source_id": "moon:light-for-the-blind:1877:english-uncontracted:figure-1:N4128R:pdf-page-4",
+  "source_url": "https://www.unicode.org/wg2/docs/n4128.pdf",
+  "source_sha256": "2d281059a2ff03bb16ab24ca30562581e35b4f0ffd083243a113536b782a9846",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "moon:r1c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "moon:r1c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "moon:r1c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "moon:r1c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "moon:r1c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "moon:r1c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "moon:r1c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "moon:r2c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "moon:r2c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          "moon:r2c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          "moon:r2c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "moon:r2c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "moon:r2c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "moon:r2c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "moon:r3c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "moon:r3c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "moon:r3c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "moon:r3c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "moon:r3c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "moon:r3c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          "moon:r3c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "moon:r4c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "W"
+        ],
+        "codes": [
+          "moon:r4c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "moon:r4c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "moon:r4c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "moon:r4c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "&"
+        ],
+        "codes": [
+          "moon:r4c6"
+        ]
+      },
+      {
+        "alternatives": [
+          " "
+        ],
+        "codes": [
+          " "
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

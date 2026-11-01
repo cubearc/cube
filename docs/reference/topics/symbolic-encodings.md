@@ -201,9 +201,10 @@ named results; its JSON viewer preserves the arrays and provenance.
 
 Input is limited to 65,536 items and 1 MiB compact JSON, with at most 256 UTF-8
 bytes per unit/token. Each fixed definition is at most 64 KiB; the complete
-serialized report is at most 1 MiB. Decode can reach the report limit before the
+serialized report is at most 1 MiB. Either direction can reach its serialized-token/report limit before the
 item limit. Exceeding either fails with `resource_limit`, without truncating the
-message. Unknown units/tokens fail with `invalid_input`; a missing, unknown or
+message. SDK transport structure and worker limits can reject an invocation
+before it reaches these Core ceilings. Unknown units/tokens fail with `invalid_input`; a missing, unknown or
 extra profile parameter fails with `invalid_parameter`. These puzzle mappings
 provide no confidentiality or authentication.
 
@@ -299,3 +300,172 @@ publisher's `B01`–`B26` aliases and preserves those received codes. An ordinar
 space is a gap. Unknown codes, other feature orders and punctuation reject.
 The website's uppercasing and punctuation deletion are not applied to these
 exact, presegmented inputs.
+
+### Historical source profiles
+
+Historical profiles transcribe the exact selected repertoire. Their neutral glyph
+IDs refer to the cited source chart or illustration; they are not Unicode script
+encodings and do not render the source artwork. Match a glyph manually, then
+supply its exact ID. All array positions and explicit alternatives survive
+conversion. No normalization, transliteration, language translation or reading
+order is inferred.
+
+| Profile | Supported source repertoire |
+| --- | --- |
+| `theban_trithemius_1518_v1` | [Trithemius's 1518 plate](https://esotericarchives.com/tritheim/polygraphia/poly579.jpg): 23 Roman labels and the omega mark |
+| `celestial_agrippa_ch30_v1` | [Agrippa, Book III, chapter 30, Celestial plate](https://esotericarchives.com/agrippa/celestis.gif): 22 Hebrew base letters |
+| `malachim_agrippa_ch30_v1` | [Malachim plate in the same chapter](https://esotericarchives.com/agrippa/malachim.gif): 22 Hebrew base letters, including two Samech forms |
+| `magi_ambrosius_1539_v1` | [Peterson's Magi chart](https://esotericarchives.com/fonts/magi.jpg), attributed to Theseus Ambrosius (1539): 22 Hebrew base letters |
+| `enochian_peterson_2022_v1` | [Peterson's Enochian-3188 chart](https://esotericarchives.com/fonts/enochian-3188.jpg), associated with font version 1.00, 2022-08-27: actual nonblank letter cells in both chart styles |
+| `moon_english_1877_v1` | [Moon's 1877 alphabet, Figure 1/PDF p.4 of N4128R](https://www.unicode.org/wg2/docs/n4128.pdf): uncontracted English A–Z, ampersand and explicit gaps |
+| `dancing_men_doyle_1905_v1` | [Original Dancing Men illustrations](https://www.gutenberg.org/files/108/108-h/108-h.htm#chap03): 18 attested poses and their word-end flags |
+| `alphabetum_kaldeorum_hahn_2004_v1` | [Heiko Hahn's 2004 chart](https://commons.wikimedia.org/wiki/File:Alphabetum_Kaldeorum.jpg), after Cod.4°810, fol.41v: 23 labelled groups, 30 forms and explicit U/V alternatives |
+
+Except for Dancing Men, IDs use a script prefix and **one-based source row and
+column**, for example `celestial:r1c9`. Count glyphs left to right within each
+row of the cited chart; do not count headings or caption lines. These are legend
+coordinates, not the physical positions or reading order of a message. IDs are
+exact: changed prefixes, padding or leading zeros reject.
+
+#### Theban labels and omega
+
+The source's three rows, written as canonical units, are:
+
+```text
+r1: A B C D E F G H
+r2: I K L M N O P Q
+r3: R S T V X Y Z OMEGA
+```
+
+Use `theban:r1c1` for A and `theban:r3c8` for the omega-labelled mark.
+`OMEGA` identifies that source mark; Cube does not reinterpret it as W or
+insert sentence punctuation. J, U, W, lowercase and spaces are absent in this
+profile. There is no implicit I/J, U/V or doubled-V modernization.
+
+#### Hebrew units and the three source charts
+
+Celestial, Malachim and Magi use the following actual Hebrew base letters as
+units. They do not map a guessed modern Latin alphabet.
+
+| Source name | Unit | Source name | Unit |
+| --- | --- | --- | --- |
+| Aleph | א | Lamed | ל |
+| Beth | ב | Mem | מ |
+| Gimel | ג | Nun | נ |
+| Daleth | ד | Samech | ס |
+| He | ה | Ain | ע |
+| Vau | ו | Pe | פ |
+| Zain | ז | Zade | צ |
+| Cheth | ח | Kuff | ק |
+| Theth | ט | Res | ר |
+| Iod | י | Shin | ש |
+| Caph | כ | Tau | ת |
+
+The row lists below give the source names from **left to right**, so mixed-script
+text direction cannot reverse the coordinate convention:
+
+```text
+Celestial
+r1: Theth Cheth Zain Vau He Daleth Gimel Beth Aleph
+r2: Zade Pe Ain Samech Nun Mem Lamed Caph Iod
+r3: Tau Shin Res Kuff
+
+Malachim
+r1: Zain Vau He Daleth Gimel Beth Aleph
+r2: Nun Mem Lamed Caph Iod Theth Cheth
+r3: Res Kuff Zade Pe Ain Samech Samech Shin Tau
+
+Magi
+r1: Lamed Caph Iod Theth Cheth Zain Vau He Daleth Gimel Beth Aleph
+r2: Tau Shin Res Kuff Zade Pe Ain Samech Nun Mem
+```
+
+Malachim encodes Samech with `malachim:r3c6`. Both that form and
+`malachim:r3c7` decode to the same unit, retaining the received token. All other
+listed glyphs are distinct. Final forms ך/ם/ן/ף/ץ, vowel marks, Latin
+transliteration, spaces and punctuation reject. Input arrays retain their given
+order; Cube does not reverse them because the units are Hebrew.
+
+#### Enochian chart styles and alternative readings
+
+The first three chart rows are the formal glyph style and rows 4–6 are the
+handwritten style. Each row has ten labelled cells. They follow A–J, K–T and
+U–Z; cells K/W and the displayed punctuation cells are blank and reject. Encoding
+uses the first formal source form; decoding also accepts its handwritten alias.
+
+I/J share GON: `enochian:r1c9`, `enochian:r1c10`, `enochian:r4c9` and
+`enochian:r4c10` all return alternatives `["I","J"]`. U/V share the chart's
+VAN form: columns 1/2 of rows 3/6 return `["U","V"]`. Y is the explicitly
+marked GON+ extension at `enochian:r3c5` / `enochian:r6c5`.
+
+This profile preserves the modern chart's actual distinctions and gaps. It does
+not claim that Dee's original script had 26 letters, infer missing K/W, recover
+a unique I/J or U/V spelling, translate the Enochian language, or infer page
+direction. Plaintext units are exact uppercase labels even for the handwritten
+style. Spaces are not defined by this letter-table profile.
+
+#### Moon alphabet and supplied reading order
+
+The four rows of Figure1 are `A B C D E F G`, `H I J K L M N`,
+`O P Q R S T U`, and `V W X Y Z &`. Thus A is `moon:r1c1`, V is
+`moon:r4c1`, and ampersand is `moon:r4c6`. An ordinary space unit/token is an
+explicit gap.
+
+Supply the glyphs in reading order. The profile does not expand contractions,
+choose a numeral system, interpret tactile page layout or reverse alternate
+lines. It does not mirror glyphs. The proposal's suggested Unicode positions
+are not used as actual Unicode characters by Cube.
+
+#### Dancing Men poses and flags
+
+The following neutral IDs identify the body pose in the named original
+illustration, ignoring its optional flag. `f01` means Gutenberg's `img01.jpg`;
+`p01` means the first figure within that illustration.
+
+| Unit | Pose ID | Unit | Pose ID |
+| --- | --- | --- | --- |
+| A | `doyle:f01p01` | M | `doyle:f01p02` |
+| H | `doyle:f01p03` | E | `doyle:f01p04` |
+| R | `doyle:f01p05` | B | `doyle:f01p08` |
+| S | `doyle:f01p10` | L | `doyle:f01p11` |
+| N | `doyle:f01p13` | Y | `doyle:f01p15` |
+| T | `doyle:f02p02` | I | `doyle:f02p06` |
+| G | `doyle:f02p07` | C | `doyle:f03p01` |
+| O | `doyle:f03p02` | V | `doyle:f04p03` |
+| P | `doyle:f05p06` | D | `doyle:f05p24` |
+
+Append `:flag` for the same pose carrying a word-end flag. Its exact plaintext
+unit includes **one trailing U+0020 space**: `"M "` encodes as
+`doyle:f01p02:flag`, while `"M"` encodes the unflagged pose. A flag remains part
+of that one token/reading; Cube neither inserts nor strips it automatically.
+For example, encode `CODE` with an explicit word end using units
+`["C","O","D","E "]`.
+
+F, J, K, Q, U, W, X and Z have no attested pose in this profile and reject.
+P and V remain distinct: the source's V has a slightly sloping foot. Do not
+collapse that detail while transcribing. The profile does not repair historical
+B/R errors by guessing a word, or add later completed alphabets. Its source hash
+covers the Gutenberg HTML/image archive; all six relevant original illustration
+byte streams were checked against that archive.
+
+#### Alphabetum Kaldeorum forms and merged U/V
+
+Use `kaldeorum:rRcCvV`, where R/C are source row/column numbers and V is the
+form's one-based position from left to right inside its cell. For example,
+`kaldeorum:r1c7v2` is G's second form. The source rows are:
+
+```text
+r1: A B C D E F G H
+r2: I K L M N O P Q
+r3: R S T U/V X Y Z
+```
+
+G has two forms, H three, and L/O/P/Q two each; all other cells have one form.
+Encoding chooses form 1. Decoding any listed form retains that exact ID.
+The U/V cell always returns both alternatives; it does not guess a unique
+spelling. J/W, implicit I/J modernization, W-as-VV expansion and unspecified
+null glyphs are not part of this chart profile.
+
+The correspondence-data component adapted from Hahn's chart is distributed
+with its [CC-BY-SA 3.0 attribution and share-alike terms](https://creativecommons.org/licenses/by-sa/3.0/).
+No chart artwork is included; the independent software keeps its stated license.

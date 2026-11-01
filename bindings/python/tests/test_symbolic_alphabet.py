@@ -20,9 +20,10 @@ def test_all_published_assignments_and_exact_positions(row):
     assert encoded["tokens"] == row["tokens"]
     decoded = cube.alphabet_decode(row["tokens"], p)
     assert decoded["tokens"] == row["tokens"]
+    alternatives = row.get("alternatives", [[unit] for unit in row["units"]])
     assert decoded["readings"] == [
-        {"token_index": i, "alternatives": [unit]}
-        for i, unit in enumerate(row["units"])
+        {"token_index": i, "alternatives": readings}
+        for i, readings in enumerate(alternatives)
     ]
     assert encoded["provenance"] == decoded["provenance"]
     assert cube.alphabet_decode([], p)["readings"] == []
@@ -53,17 +54,30 @@ def test_parameter_input_and_limits_remain_typed():
     assert e.value.code == "invalid_input"
 
 
-def test_published_aliases_retain_exact_orientation_and_bird_code():
+def test_published_aliases_retain_exact_form_and_all_readings():
     aliases = json.loads(
         (
             Path(__file__).parents[3]
             / "crates/cube-core/src/symbols/alphabet/aliases.json"
         ).read_text()
     )
-    assert len(aliases) == 147
+    assert len(aliases) == 181
     for row in aliases:
         r = cube.alphabet_decode([row["token"]], {"profile": row["profile"]})
         assert r["tokens"] == [row["token"]]
         assert r["readings"] == [
             {"token_index": 0, "alternatives": row["alternatives"]}
         ]
+
+
+@pytest.mark.parametrize(
+    "count", [65536, (1048576 - 1) // (len("upright:left:flat:raised") + 3)]
+)
+def test_output_budget_diagnostics_do_not_blame_the_input(count):
+    with pytest.raises(ValueError) as e:
+        cube.alphabet_encode(
+            ["H"] * count, {"profile": "birds_nrtech_four_features_v1"}
+        )
+    assert e.value.code == "resource_limit"
+    assert e.value.operation == "symbol.alphabet.encode"
+    assert e.value.parameter == "output"

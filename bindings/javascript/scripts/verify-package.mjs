@@ -50,7 +50,7 @@ const alphabetVectors=JSON.parse(await readFile('./alphabet-vectors.json','utf8'
 for(const row of alphabetVectors) {
   const parameters={profile:row.profile};
   assert.deepEqual(cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:row.units},parameters}).tokens,row.tokens);
-  assert.deepEqual(cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters}).readings,row.units.map((unit,token_index)=>({token_index,alternatives:[unit]})));
+  assert.deepEqual(cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters}).readings,row.units.map((unit,token_index)=>({token_index,alternatives:row.alternatives?.[token_index]??[unit]})));
 }
 const alphabetAliases=JSON.parse(await readFile('./alphabet-aliases.json','utf8'));
 for(const row of alphabetAliases) {

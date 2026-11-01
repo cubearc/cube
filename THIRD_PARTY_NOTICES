@@ -2357,12 +2357,36 @@ adaptations; dCode software, images and services are not included. Full source
 identity and effective definition hashes accompany operation results.
 
 Pigpen/Rosicrucian paired-cell correspondence is independently transcribed from
-Haverhill Family History Group's Pigpen Code worksheet, page1. Templars glyph
+Haverhill Family History Group's Pigpen Code worksheet, page 1. Templars glyph
 correspondence is independently transcribed from Bothwell-Gosse/Dickinson,
-The Knights Templars, pp89-90, reproduced by the Grand Lodge of British Columbia
+The Knights Templars, pp.89-90, reproduced by the Grand Lodge of British Columbia
 and Yukon. Betamaze correspondence and permitted geometric transformations are
 independently transcribed from Terrana Cliff's alphabet, reproduced in Conlangs
-DE-Cal, Spring2006, printed p289 (PDF p111). NR Tech Studio's independently
+DE-Cal, Spring 2006, printed p.289 (PDF p.111). NR Tech Studio's independently
 published four-feature Birds on a Wire correspondence is implemented as that
 publisher's specific variant, with its B01-B26 code aliases. No source artwork,
 fonts, maze puzzles, SVG renderer or third-party implementation is included.
+
+Historical alphabet correspondence data
+=======================================
+
+The Alphabetum Kaldeorum source table by Heiko Hahn (original upload 2004-08-21)
+was published at https://commons.wikimedia.org/wiki/File:Alphabetum_Kaldeorum.jpg
+under Creative Commons Attribution-ShareAlike 3.0 Unported:
+https://creativecommons.org/licenses/by-sa/3.0/ . The independently transcribed
+crates/cube-core/src/symbols/alphabet/alphabetum_kaldeorum_hahn_2004_v1.json data
+component retains that license. Changes replace drawings with source row/column/
+variant IDs, retain all displayed correspondences and U/V alternatives, and select
+the first printed form deterministically. Its source and .license file are
+available with Cube's source distribution; no chart image or font is included.
+Independent software remains under its stated Apache-2.0 license.
+
+Other historical glyph correspondences are independently transcribed from the
+cited historical plates or attributed scholarly reconstructions: Trithemius (1518);
+Agrippa Book III, chapter 30; Theseus Ambrosius (1539) (Peterson chart); Peterson's
+Enochian-3188 chart associated with font version 1.00, 2022-08-27; Moon (1877),
+reproduced in N4128R, Figure 1; and Doyle's original 18 illustrated poses in the 1905
+Return of Sherlock Holmes, as reproduced in Project Gutenberg 108. Digital source
+reproductions are credited to their cited publishers, including Joseph H. Peterson
+at Esoteric Archives, Michael Everson's Moon proposal, and Project Gutenberg.
+Modern fonts, outlines, source prose, images and story solutions are not included.

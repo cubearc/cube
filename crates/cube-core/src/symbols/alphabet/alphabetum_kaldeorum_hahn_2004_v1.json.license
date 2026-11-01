@@ -1,0 +1,13 @@
+SPDX-FileCopyrightText: 2004 Heiko Hahn
+SPDX-FileCopyrightText: 2026 CubeArc contributors (functional transcription)
+SPDX-License-Identifier: CC-BY-SA-3.0
+
+Adapted correspondence data from Heiko Hahn's Alphabetum Kaldeorum chart,
+originally uploaded 2004-08-21, after Cod.4°810,fol.41v (1428).
+Source: https://commons.wikimedia.org/wiki/File:Alphabetum_Kaldeorum.jpg
+License: https://creativecommons.org/licenses/by-sa/3.0/
+
+Changes: independently replace the drawings with neutral source row/column/
+variant transcription IDs; retain every displayed form and explicit U/V reading;
+select the first source form deterministically. No artwork or font is included.
+This data component's license does not replace the independent software's license.

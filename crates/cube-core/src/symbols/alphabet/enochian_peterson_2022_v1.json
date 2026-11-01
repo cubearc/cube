@@ -1,0 +1,215 @@
+{
+  "source_id": "peterson:enochian-3188:version-1.00:2022-08-27:formal-and-handwritten-chart",
+  "source_url": "https://esotericarchives.com/fonts/enochian-3188.jpg",
+  "source_sha256": "245ef54fa42a6d1f03777df0099c3176fe8d2709941f0ef8784cf020f0a0eee1",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "enochian:r1c1",
+          "enochian:r4c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "enochian:r1c2",
+          "enochian:r4c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "enochian:r1c3",
+          "enochian:r4c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "enochian:r1c4",
+          "enochian:r4c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "enochian:r1c5",
+          "enochian:r4c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "enochian:r1c6",
+          "enochian:r4c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "enochian:r1c7",
+          "enochian:r4c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "enochian:r1c8",
+          "enochian:r4c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "I",
+          "J"
+        ],
+        "codes": [
+          "enochian:r1c9",
+          "enochian:r1c10",
+          "enochian:r4c9",
+          "enochian:r4c10"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "enochian:r2c2",
+          "enochian:r5c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "enochian:r2c3",
+          "enochian:r5c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "enochian:r2c4",
+          "enochian:r5c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "enochian:r2c5",
+          "enochian:r5c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "enochian:r2c6",
+          "enochian:r5c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "enochian:r2c7",
+          "enochian:r5c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "enochian:r2c8",
+          "enochian:r5c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "enochian:r2c9",
+          "enochian:r5c9"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "enochian:r2c10",
+          "enochian:r5c10"
+        ]
+      },
+      {
+        "alternatives": [
+          "U",
+          "V"
+        ],
+        "codes": [
+          "enochian:r3c1",
+          "enochian:r3c2",
+          "enochian:r6c1",
+          "enochian:r6c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "enochian:r3c4",
+          "enochian:r6c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "enochian:r3c5",
+          "enochian:r6c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "enochian:r3c6",
+          "enochian:r6c6"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

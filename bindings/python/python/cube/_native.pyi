@@ -82,6 +82,14 @@ def triliteral_decode(
 
 class AlphabetParameters(TypedDict):
     profile: Literal[
+        "theban_trithemius_1518_v1",
+        "celestial_agrippa_ch30_v1",
+        "malachim_agrippa_ch30_v1",
+        "magi_ambrosius_1539_v1",
+        "enochian_peterson_2022_v1",
+        "moon_english_1877_v1",
+        "dancing_men_doyle_1905_v1",
+        "alphabetum_kaldeorum_hahn_2004_v1",
         "aurebesh_ucsur_2016_v1",
         "standard_galactic_ucsur_2019_v1",
         "pigpen_haverhill_pairs_v1",
@@ -95,6 +103,14 @@ class AlphabetParameters(TypedDict):
 class AlphabetProvenance(TypedDict):
     source_id: str
     profile_id: Literal[
+        "theban_trithemius_1518_v1",
+        "celestial_agrippa_ch30_v1",
+        "malachim_agrippa_ch30_v1",
+        "magi_ambrosius_1539_v1",
+        "enochian_peterson_2022_v1",
+        "moon_english_1877_v1",
+        "dancing_men_doyle_1905_v1",
+        "alphabetum_kaldeorum_hahn_2004_v1",
         "aurebesh_ucsur_2016_v1",
         "standard_galactic_ucsur_2019_v1",
         "pigpen_haverhill_pairs_v1",

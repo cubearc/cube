@@ -1,0 +1,187 @@
+{
+  "source_id": "agrippa:book-III:chapter-30:celestial:peterson-digital-plate",
+  "source_url": "https://esotericarchives.com/agrippa/celestis.gif",
+  "source_sha256": "a5cd6e95ab24cf950d0d94b55d65a20c666068122e3cc977b1e97fcaf7d41af6",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "ט"
+        ],
+        "codes": [
+          "celestial:r1c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "ח"
+        ],
+        "codes": [
+          "celestial:r1c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "ז"
+        ],
+        "codes": [
+          "celestial:r1c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "ו"
+        ],
+        "codes": [
+          "celestial:r1c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "ה"
+        ],
+        "codes": [
+          "celestial:r1c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "ד"
+        ],
+        "codes": [
+          "celestial:r1c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "ג"
+        ],
+        "codes": [
+          "celestial:r1c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "ב"
+        ],
+        "codes": [
+          "celestial:r1c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "א"
+        ],
+        "codes": [
+          "celestial:r1c9"
+        ]
+      },
+      {
+        "alternatives": [
+          "צ"
+        ],
+        "codes": [
+          "celestial:r2c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "פ"
+        ],
+        "codes": [
+          "celestial:r2c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "ע"
+        ],
+        "codes": [
+          "celestial:r2c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "ס"
+        ],
+        "codes": [
+          "celestial:r2c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "נ"
+        ],
+        "codes": [
+          "celestial:r2c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "מ"
+        ],
+        "codes": [
+          "celestial:r2c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "ל"
+        ],
+        "codes": [
+          "celestial:r2c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "כ"
+        ],
+        "codes": [
+          "celestial:r2c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "י"
+        ],
+        "codes": [
+          "celestial:r2c9"
+        ]
+      },
+      {
+        "alternatives": [
+          "ת"
+        ],
+        "codes": [
+          "celestial:r3c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "ש"
+        ],
+        "codes": [
+          "celestial:r3c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "ר"
+        ],
+        "codes": [
+          "celestial:r3c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "ק"
+        ],
+        "codes": [
+          "celestial:r3c4"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

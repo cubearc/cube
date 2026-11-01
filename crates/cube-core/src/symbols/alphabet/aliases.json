@@ -1027,5 +1027,249 @@
     "alternatives": [
       "Z"
     ]
+  },
+  {
+    "profile": "malachim_agrippa_ch30_v1",
+    "token": "malachim:r3c7",
+    "alternatives": [
+      "ס"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c1",
+    "alternatives": [
+      "A"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c2",
+    "alternatives": [
+      "B"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c3",
+    "alternatives": [
+      "C"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c4",
+    "alternatives": [
+      "D"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c5",
+    "alternatives": [
+      "E"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c6",
+    "alternatives": [
+      "F"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c7",
+    "alternatives": [
+      "G"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c8",
+    "alternatives": [
+      "H"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r1c10",
+    "alternatives": [
+      "I",
+      "J"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c9",
+    "alternatives": [
+      "I",
+      "J"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r4c10",
+    "alternatives": [
+      "I",
+      "J"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c2",
+    "alternatives": [
+      "L"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c3",
+    "alternatives": [
+      "M"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c4",
+    "alternatives": [
+      "N"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c5",
+    "alternatives": [
+      "O"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c6",
+    "alternatives": [
+      "P"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c7",
+    "alternatives": [
+      "Q"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c8",
+    "alternatives": [
+      "R"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c9",
+    "alternatives": [
+      "S"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r5c10",
+    "alternatives": [
+      "T"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r3c2",
+    "alternatives": [
+      "U",
+      "V"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r6c1",
+    "alternatives": [
+      "U",
+      "V"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r6c2",
+    "alternatives": [
+      "U",
+      "V"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r6c4",
+    "alternatives": [
+      "X"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r6c5",
+    "alternatives": [
+      "Y"
+    ]
+  },
+  {
+    "profile": "enochian_peterson_2022_v1",
+    "token": "enochian:r6c6",
+    "alternatives": [
+      "Z"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r1c7v2",
+    "alternatives": [
+      "G"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r1c8v2",
+    "alternatives": [
+      "H"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r1c8v3",
+    "alternatives": [
+      "H"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r2c3v2",
+    "alternatives": [
+      "L"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r2c6v2",
+    "alternatives": [
+      "O"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r2c7v2",
+    "alternatives": [
+      "P"
+    ]
+  },
+  {
+    "profile": "alphabetum_kaldeorum_hahn_2004_v1",
+    "token": "kaldeorum:r2c8v2",
+    "alternatives": [
+      "Q"
+    ]
   }
 ]

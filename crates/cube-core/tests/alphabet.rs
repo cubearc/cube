@@ -69,7 +69,12 @@ fn every_published_assignment_executes_in_both_directions() {
         )
         .unwrap();
         for (index, unit) in row["units"].as_array().unwrap().iter().enumerate() {
-            assert_eq!(decoded["readings"][index]["alternatives"], json!([unit]));
+            let alternatives = row
+                .get("alternatives")
+                .and_then(|a| a.get(index))
+                .cloned()
+                .unwrap_or_else(|| json!([unit]));
+            assert_eq!(decoded["readings"][index]["alternatives"], alternatives);
             assert_eq!(decoded["readings"][index]["token_index"], index);
         }
     }
@@ -266,10 +271,10 @@ fn geometric_profiles_use_source_orientations_markers_and_clock_origin() {
 }
 
 #[test]
-fn source_listed_geometric_aliases_preserve_the_received_orientation() {
+fn source_listed_aliases_preserve_received_forms_and_all_readings() {
     let aliases: Vec<serde_json::Value> =
         serde_json::from_str(include_str!("../src/symbols/alphabet/aliases.json")).unwrap();
-    assert_eq!(aliases.len(), 147); // 121 additional Betamaze orientations +26 bird codes.
+    assert_eq!(aliases.len(), 181); // Betamaze121 + birds26 + Enochian26 + Samech1 + Kaldeorum7.
     for row in aliases {
         let p = json!({"profile":row["profile"]});
         let decoded = execution::execute(
@@ -375,4 +380,205 @@ fn unrelated_dot_cross_circle_and_clock_variants_are_not_guessed() {
             .collect::<String>(),
         "HELLO"
     );
+}
+
+#[test]
+fn historical_tables_use_actual_repertoires_and_preserve_flags_and_ambiguity() {
+    for (profile, units, tokens) in [
+        (
+            "theban_trithemius_1518_v1",
+            vec!["A", "I", "V", "OMEGA"],
+            vec!["theban:r1c1", "theban:r2c1", "theban:r3c4", "theban:r3c8"],
+        ),
+        (
+            "celestial_agrippa_ch30_v1",
+            vec!["א", "ט", "ק", "ת"],
+            vec![
+                "celestial:r1c9",
+                "celestial:r1c1",
+                "celestial:r3c4",
+                "celestial:r3c1",
+            ],
+        ),
+        (
+            "malachim_agrippa_ch30_v1",
+            vec!["א", "ס", "ת"],
+            vec!["malachim:r1c7", "malachim:r3c6", "malachim:r3c9"],
+        ),
+        (
+            "magi_ambrosius_1539_v1",
+            vec!["א", "ל", "ת", "מ"],
+            vec!["magi:r1c12", "magi:r1c1", "magi:r2c1", "magi:r2c10"],
+        ),
+        (
+            "enochian_peterson_2022_v1",
+            vec!["A", "I", "J", "U", "V", "Y"],
+            vec![
+                "enochian:r1c1",
+                "enochian:r1c9",
+                "enochian:r1c9",
+                "enochian:r3c1",
+                "enochian:r3c1",
+                "enochian:r3c5",
+            ],
+        ),
+        (
+            "moon_english_1877_v1",
+            vec!["A", "G", "H", "U", "V", "&", " "],
+            vec![
+                "moon:r1c1",
+                "moon:r1c7",
+                "moon:r2c1",
+                "moon:r3c7",
+                "moon:r4c1",
+                "moon:r4c6",
+                " ",
+            ],
+        ),
+        (
+            "dancing_men_doyle_1905_v1",
+            vec!["A", "M ", "P", "V"],
+            vec![
+                "doyle:f01p01",
+                "doyle:f01p02:flag",
+                "doyle:f05p06",
+                "doyle:f04p03",
+            ],
+        ),
+        (
+            "alphabetum_kaldeorum_hahn_2004_v1",
+            vec!["G", "H", "U", "V"],
+            vec![
+                "kaldeorum:r1c7v1",
+                "kaldeorum:r1c8v1",
+                "kaldeorum:r3c4v1",
+                "kaldeorum:r3c4v1",
+            ],
+        ),
+    ] {
+        let p = json!({"profile":profile});
+        let actual = execution::execute(
+            "symbol.alphabet.encode",
+            1,
+            &json!({"units":units}),
+            &p,
+            Budget::default(),
+        )
+        .unwrap();
+        assert_eq!(actual["tokens"], json!(tokens), "{profile}");
+        let decoded = execution::execute(
+            "symbol.alphabet.decode",
+            1,
+            &json!({"tokens":tokens}),
+            &p,
+            Budget::default(),
+        )
+        .unwrap();
+        if profile == "enochian_peterson_2022_v1" {
+            assert_eq!(decoded["readings"][1]["alternatives"], json!(["I", "J"]));
+            assert_eq!(decoded["readings"][3]["alternatives"], json!(["U", "V"]));
+        } else if profile == "alphabetum_kaldeorum_hahn_2004_v1" {
+            assert_eq!(decoded["readings"][2]["alternatives"], json!(["U", "V"]));
+        } else {
+            for (index, unit) in units.iter().enumerate() {
+                assert_eq!(decoded["readings"][index]["alternatives"], json!([unit]));
+            }
+        }
+    }
+}
+
+#[test]
+fn long_glyph_reports_fail_as_output_limits_without_relabelling_them_as_input() {
+    use cube_core::{errors::ErrorCode, symbols::alphabet as a};
+    let p = serde_json::from_value(json!({"profile":"birds_nrtech_four_features_v1"})).unwrap();
+    let error = a::encode(&vec!["H".into(); 65536], &p).unwrap_err();
+    assert_eq!(error.code, ErrorCode::ResourceLimit);
+    assert_eq!(error.parameter, Some("output"));
+    assert_eq!(error.operation, Some("symbol.alphabet.encode"));
+    // The bare token array fits; the complete report, including provenance, does not.
+    let count = (a::MAX_REPORT - 1) / ("upright:left:flat:raised".len() + 3);
+    let error = a::encode(&vec!["H".into(); count], &p).unwrap_err();
+    assert_eq!(error.code, ErrorCode::ResourceLimit);
+    assert_eq!(error.parameter, Some("output"));
+}
+
+#[test]
+fn historical_gaps_marks_and_source_variants_never_infer_modern_text() {
+    use cube_core::{errors::ErrorCode, symbols::alphabet as a};
+    for (profile, units) in [
+        (
+            "theban_trithemius_1518_v1",
+            vec!["J", "U", "W", "omega", "a", " "],
+        ),
+        (
+            "celestial_agrippa_ch30_v1",
+            vec!["A", "ך", "ם", "ן", "ף", "ץ", "אָ", " "],
+        ),
+        (
+            "malachim_agrippa_ch30_v1",
+            vec!["A", "ך", "ם", "ן", "ף", "ץ", " "],
+        ),
+        (
+            "magi_ambrosius_1539_v1",
+            vec!["A", "ך", "ם", "ן", "ף", "ץ", " "],
+        ),
+        ("enochian_peterson_2022_v1", vec!["K", "W", "a", " "]),
+        ("moon_english_1877_v1", vec!["1", "THE", "TH", "é"]),
+        (
+            "dancing_men_doyle_1905_v1",
+            vec!["F", "J", "K", "Q", "U", "W", "X", "Z", " ", "M  ", "AM"],
+        ),
+        (
+            "alphabetum_kaldeorum_hahn_2004_v1",
+            vec!["J", "W", "VV", "NULL", "a"],
+        ),
+    ] {
+        let p = serde_json::from_value(json!({"profile":profile})).unwrap();
+        for unit in units {
+            let error = a::encode(&[unit.into()], &p).unwrap_err();
+            assert_eq!(error.code, ErrorCode::InvalidInput, "{profile}: {unit}");
+        }
+    }
+    for (profile, token, expected) in [
+        ("malachim_agrippa_ch30_v1", "malachim:r3c7", vec!["ס"]),
+        (
+            "enochian_peterson_2022_v1",
+            "enochian:r4c10",
+            vec!["I", "J"],
+        ),
+        ("enochian_peterson_2022_v1", "enochian:r6c2", vec!["U", "V"]),
+        ("enochian_peterson_2022_v1", "enochian:r6c5", vec!["Y"]),
+        ("dancing_men_doyle_1905_v1", "doyle:f01p02:flag", vec!["M "]),
+        (
+            "alphabetum_kaldeorum_hahn_2004_v1",
+            "kaldeorum:r1c8v3",
+            vec!["H"],
+        ),
+        (
+            "alphabetum_kaldeorum_hahn_2004_v1",
+            "kaldeorum:r3c4v1",
+            vec!["U", "V"],
+        ),
+    ] {
+        let p = serde_json::from_value(json!({"profile":profile})).unwrap();
+        let result = a::decode(&[token.into()], &p).unwrap();
+        assert_eq!(result.tokens.0, [token]);
+        assert_eq!(result.readings[0].alternatives, expected);
+    }
+    for (profile, token) in [
+        ("theban_trithemius_1518_v1", "theban:r4c1"),
+        ("celestial_agrippa_ch30_v1", "celestial:r1c10"),
+        ("malachim_agrippa_ch30_v1", "malachim:r3c10"),
+        ("magi_ambrosius_1539_v1", "magi:r2c11"),
+        ("enochian_peterson_2022_v1", "enochian:r2c1"),
+        ("moon_english_1877_v1", "moon:r1c8"),
+        ("dancing_men_doyle_1905_v1", "doyle:f01p02:flag:flag"),
+        ("alphabetum_kaldeorum_hahn_2004_v1", "kaldeorum:r1c8v4"),
+    ] {
+        let p = serde_json::from_value(json!({"profile":profile})).unwrap();
+        assert_eq!(
+            a::decode(&[token.into()], &p).unwrap_err().code,
+            ErrorCode::InvalidInput
+        );
+    }
 }

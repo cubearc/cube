@@ -1,0 +1,299 @@
+{
+  "source_id": "doyle:return-of-sherlock-holmes:1905:gutenberg-108-html-image-archive:original-18-poses",
+  "source_url": "https://www.gutenberg.org/cache/epub/108/pg108-h.zip",
+  "source_sha256": "1fb22b471cab15a4695cdbd96a83b3e77e7830c80351c02cabb6751c8a5768d2",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "doyle:f01p01"
+        ]
+      },
+      {
+        "alternatives": [
+          "A "
+        ],
+        "codes": [
+          "doyle:f01p01:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "doyle:f01p02"
+        ]
+      },
+      {
+        "alternatives": [
+          "M "
+        ],
+        "codes": [
+          "doyle:f01p02:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "doyle:f01p03"
+        ]
+      },
+      {
+        "alternatives": [
+          "H "
+        ],
+        "codes": [
+          "doyle:f01p03:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "doyle:f01p04"
+        ]
+      },
+      {
+        "alternatives": [
+          "E "
+        ],
+        "codes": [
+          "doyle:f01p04:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "doyle:f01p05"
+        ]
+      },
+      {
+        "alternatives": [
+          "R "
+        ],
+        "codes": [
+          "doyle:f01p05:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "doyle:f01p08"
+        ]
+      },
+      {
+        "alternatives": [
+          "B "
+        ],
+        "codes": [
+          "doyle:f01p08:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "doyle:f01p10"
+        ]
+      },
+      {
+        "alternatives": [
+          "S "
+        ],
+        "codes": [
+          "doyle:f01p10:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "doyle:f01p11"
+        ]
+      },
+      {
+        "alternatives": [
+          "L "
+        ],
+        "codes": [
+          "doyle:f01p11:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "doyle:f01p13"
+        ]
+      },
+      {
+        "alternatives": [
+          "N "
+        ],
+        "codes": [
+          "doyle:f01p13:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "doyle:f01p15"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y "
+        ],
+        "codes": [
+          "doyle:f01p15:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "doyle:f02p02"
+        ]
+      },
+      {
+        "alternatives": [
+          "T "
+        ],
+        "codes": [
+          "doyle:f02p02:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "doyle:f02p06"
+        ]
+      },
+      {
+        "alternatives": [
+          "I "
+        ],
+        "codes": [
+          "doyle:f02p06:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "doyle:f02p07"
+        ]
+      },
+      {
+        "alternatives": [
+          "G "
+        ],
+        "codes": [
+          "doyle:f02p07:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "doyle:f03p01"
+        ]
+      },
+      {
+        "alternatives": [
+          "C "
+        ],
+        "codes": [
+          "doyle:f03p01:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "doyle:f03p02"
+        ]
+      },
+      {
+        "alternatives": [
+          "O "
+        ],
+        "codes": [
+          "doyle:f03p02:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "doyle:f04p03"
+        ]
+      },
+      {
+        "alternatives": [
+          "V "
+        ],
+        "codes": [
+          "doyle:f04p03:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "doyle:f05p06"
+        ]
+      },
+      {
+        "alternatives": [
+          "P "
+        ],
+        "codes": [
+          "doyle:f05p06:flag"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "doyle:f05p24"
+        ]
+      },
+      {
+        "alternatives": [
+          "D "
+        ],
+        "codes": [
+          "doyle:f05p24:flag"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

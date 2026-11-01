@@ -26286,6 +26286,14 @@ Parameters:
     "Profile": {
       "type": "string",
       "enum": [
+        "theban_trithemius_1518_v1",
+        "celestial_agrippa_ch30_v1",
+        "malachim_agrippa_ch30_v1",
+        "magi_ambrosius_1539_v1",
+        "enochian_peterson_2022_v1",
+        "moon_english_1877_v1",
+        "dancing_men_doyle_1905_v1",
+        "alphabetum_kaldeorum_hahn_2004_v1",
         "pigpen_haverhill_pairs_v1",
         "tic_tac_toe_dcode_v1",
         "templars_bothwell_gosse_v1",
@@ -26362,6 +26370,14 @@ Parameters:
     "Profile": {
       "type": "string",
       "enum": [
+        "theban_trithemius_1518_v1",
+        "celestial_agrippa_ch30_v1",
+        "malachim_agrippa_ch30_v1",
+        "magi_ambrosius_1539_v1",
+        "enochian_peterson_2022_v1",
+        "moon_english_1877_v1",
+        "dancing_men_doyle_1905_v1",
+        "alphabetum_kaldeorum_hahn_2004_v1",
         "pigpen_haverhill_pairs_v1",
         "tic_tac_toe_dcode_v1",
         "templars_bothwell_gosse_v1",

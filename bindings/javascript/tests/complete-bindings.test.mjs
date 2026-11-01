@@ -154,7 +154,7 @@ test('dated symbolic alphabets execute every published assignment in actual Wasm
     const encoded=cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:row.units},parameters});
     assert.deepEqual(encoded.tokens,row.tokens);
     const decoded=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters});
-    assert.deepEqual(decoded.readings,row.units.map((unit,token_index)=>({token_index,alternatives:[unit]})));
+    assert.deepEqual(decoded.readings,row.units.map((unit,token_index)=>({token_index,alternatives:row.alternatives?.[token_index]??[unit]})));
     assert.deepEqual(decoded.tokens,row.tokens);
     assert.deepEqual(decoded.provenance,encoded.provenance);
     assert.deepEqual(cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[]},parameters}).readings,[]);
@@ -166,13 +166,21 @@ test('dated symbolic alphabets execute every published assignment in actual Wasm
   assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:Array(65537).fill('A')},parameters}),{code:'resource_limit'});
 });
 
-test('all source-permitted geometric orientations and bird aliases execute without guessing', async () => {
+test('all source-permitted aliases execute with exact forms and ambiguity', async () => {
   const aliases=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/aliases.json',import.meta.url),'utf8'));
-  assert.equal(aliases.length,147);
+  assert.equal(aliases.length,181);
   for(const row of aliases) {
     const r=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[row.token]},parameters:{profile:row.profile}});
     assert.deepEqual(r.tokens,[row.token]);
     assert.deepEqual(r.readings,[{token_index:0,alternatives:row.alternatives}]);
   }
   for(const [profile,token] of [['pigpen_haverhill_pairs_v1','grid:ES:cross'],['tic_tac_toe_dcode_v1','grid:ES:dot'],['templars_bothwell_gosse_v1','angle:north:cross'],['betamaze_cliff_2006_v1','.../.../...'],['clock_quarter_hour_zero_v1','12:00'],['birds_nrtech_four_features_v1','B27']]) assert.throws(()=>cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[token]},parameters:{profile}}),{code:'invalid_input'});
+});
+
+test('complete symbolic reports enforce output budgets including provenance', () => {
+  const parameters={profile:'birds_nrtech_four_features_v1'};
+  // The SDK's stricter transport-node budget rejects this before Core invocation.
+  assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:Array(65536).fill('H')},parameters}),{code:'resource_limit'});
+  const count=Math.floor((1048576-1)/('upright:left:flat:raised'.length+3));
+  assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:Array(count).fill('H')},parameters}),{code:'resource_limit',operation:'symbol.alphabet.encode'});
 });

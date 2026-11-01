@@ -114,7 +114,7 @@ test('actual browser initializes a packaged SDK worker under a non-root path and
       const decoded=await globalThis.qualificationWorker.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters});
       return [encoded.value.tokens,decoded.value.readings];
     },row);
-    assert.deepEqual(results,[row.tokens,row.units.map((unit,token_index)=>({token_index,alternatives:[unit]}))]);
+    assert.deepEqual(results,[row.tokens,row.units.map((unit,token_index)=>({token_index,alternatives:row.alternatives?.[token_index]??[unit]}))]);
   }
   const alphabetAliases=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/aliases.json',import.meta.url),'utf8'));
   for(const row of alphabetAliases) {

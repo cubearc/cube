@@ -35,7 +35,7 @@ fn every_dated_alphabet_table_executes_in_both_cli_directions() {
                 for (index, unit) in row["units"].as_array().unwrap().iter().enumerate() {
                     assert_eq!(
                         actual["readings"][index],
-                        json!({"token_index":index,"alternatives":[unit]})
+                        json!({"token_index":index,"alternatives":row.get("alternatives").and_then(|a|a.get(index)).cloned().unwrap_or_else(||json!([unit]))})
                     );
                 }
             }

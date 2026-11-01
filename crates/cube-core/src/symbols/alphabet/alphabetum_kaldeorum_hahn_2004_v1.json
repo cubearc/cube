@@ -1,0 +1,203 @@
+{
+  "source_id": "heiko-hahn:alphabetum-kaldeorum:2004-08-21:Cod4-810-fol41v:chart",
+  "source_url": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Alphabetum_Kaldeorum.jpg",
+  "source_sha256": "cd6e5ca5d385cc2fe575682df9bedd819dc256a0bbb1770eae1b1a0945885f3c",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "kaldeorum:r1c1v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "kaldeorum:r1c2v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "kaldeorum:r1c3v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "kaldeorum:r1c4v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "kaldeorum:r1c5v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "kaldeorum:r1c6v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "kaldeorum:r1c7v1",
+          "kaldeorum:r1c7v2"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "kaldeorum:r1c8v1",
+          "kaldeorum:r1c8v2",
+          "kaldeorum:r1c8v3"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "kaldeorum:r2c1v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          "kaldeorum:r2c2v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "kaldeorum:r2c3v1",
+          "kaldeorum:r2c3v2"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "kaldeorum:r2c4v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "kaldeorum:r2c5v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "kaldeorum:r2c6v1",
+          "kaldeorum:r2c6v2"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "kaldeorum:r2c7v1",
+          "kaldeorum:r2c7v2"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "kaldeorum:r2c8v1",
+          "kaldeorum:r2c8v2"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "kaldeorum:r3c1v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "kaldeorum:r3c2v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "kaldeorum:r3c3v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "U",
+          "V"
+        ],
+        "codes": [
+          "kaldeorum:r3c4v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "kaldeorum:r3c5v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "kaldeorum:r3c6v1"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "kaldeorum:r3c7v1"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

@@ -108,6 +108,38 @@ const fn row(
                 family: "symbolic_alphabet",
                 aliases: &[
                     m::Alias {
+                        name: "Theban (Trithemius 1518)",
+                        usage: "profile=theban_trithemius_1518_v1",
+                    },
+                    m::Alias {
+                        name: "Celestial",
+                        usage: "profile=celestial_agrippa_ch30_v1",
+                    },
+                    m::Alias {
+                        name: "Malachim",
+                        usage: "profile=malachim_agrippa_ch30_v1",
+                    },
+                    m::Alias {
+                        name: "Alphabet of the Magi",
+                        usage: "profile=magi_ambrosius_1539_v1",
+                    },
+                    m::Alias {
+                        name: "Enochian (Peterson 2022)",
+                        usage: "profile=enochian_peterson_2022_v1",
+                    },
+                    m::Alias {
+                        name: "Moon (English 1877)",
+                        usage: "profile=moon_english_1877_v1",
+                    },
+                    m::Alias {
+                        name: "Dancing Men (Doyle 1905)",
+                        usage: "profile=dancing_men_doyle_1905_v1",
+                    },
+                    m::Alias {
+                        name: "Alphabetum Kaldeorum",
+                        usage: "profile=alphabetum_kaldeorum_hahn_2004_v1",
+                    },
+                    m::Alias {
                         name: "Pigpen",
                         usage: "profile=pigpen_haverhill_pairs_v1",
                     },
@@ -157,17 +189,24 @@ const fn row(
                 },
                 profile: m::Profile {
                     variant: descriptor.description,
-                    alphabet: "Exact source-listed units: uppercase Latin, lowercase Betamaze, explicit digraphs and source-defined punctuation/word gaps. Tokens are documented geometry, published bird codes/features, exact quarter-hour times or published private-use proposals. No normalization or universal font/key inference.",
+                    alphabet: "Exact source-listed Latin/Hebrew units, semantic marks, explicit digraphs and word-end units. Tokens identify cited chart glyphs, source geometry, bird features/codes, quarter-hour times or published private-use proposals; neutral chart IDs do not invent Unicode encodings. No case, normalization, font or language inference.",
                     key: "Fixed independently transcribed dated source tables, with source and effective-definition hashes. No fonts, source artwork or language translations bundled.",
-                    key_advancement: "Canonical source orientation/token per exact unit. Decode preserves every listed reading and original token position; Betamaze accepts its148source-permitted orientations, birds accept published B01-B26 aliases. No maze traversal or unlisted clock/dot/marker variants. Explicit segmentation distinguishes CH from C,H.",
+                    key_advancement: "Canonical first source form per exact unit. Decode preserves original glyph/flag/style tokens and every explicit reading, including Enochian I/J,U/V and Kaldeorum U/V. Betamaze accepts its148orientations; chart aliases retain source variants. No language, orthography, page-direction, maze or word-boundary guessing.",
                     block_bits: None,
                     output_bits: None,
                 },
                 resources: &[],
-                resource_notes: "Input <=65536 tokens/1MiB compact JSON; each token <=256 UTF-8 bytes; fixed definition <=64KiB; complete report <=1MiB. Unknown, joined or differently cased forms reject. Reserved/private-use holes and unsupported digits reject; no visual or text segmentation is inferred.",
+                resource_notes: "Input <=65536 tokens/1MiB compact JSON; each token <=256 UTF-8 bytes; fixed definition <=64KiB; complete report <=1MiB, including provenance. Only explicit units and aliases are accepted: no automatic segmentation, case changes, marker stripping or unknown-glyph replacement. Missing cells/reserved positions reject. Either direction may reach the report limit before the item limit.",
                 rust_api: "cube_core::symbols::alphabet::{encode,decode}",
                 python_api: python,
                 references: &[
+                    "https://esotericarchives.com/tritheim/polygraphia/poly579.jpg",
+                    "https://esotericarchives.com/agrippa/agripp3c.htm#chap30",
+                    "https://esotericarchives.com/fonts/index.html",
+                    "https://www.unicode.org/wg2/docs/n4128.pdf",
+                    "https://www.gutenberg.org/files/108/108-h/108-h.htm#chap03",
+                    "https://www.arthur-conan-doyle.com/wiki/Dancing_Men_Alphabet",
+                    "https://commons.wikimedia.org/wiki/File:Alphabetum_Kaldeorum.jpg",
                     "https://haverhill-tc.gov.uk/wp-content/uploads/Pigpen-Code.pdf",
                     "https://www.dcode.fr/tic-tac-toe-cipher",
                     "https://freemasonry.bcy.ca/texts/templars_cipher.html",

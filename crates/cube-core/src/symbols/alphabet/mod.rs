@@ -13,6 +13,22 @@ use serde::{Deserialize, Serialize};
 pub const MAX_REPORT: usize = 1048576;
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, JsonSchema)]
 pub enum Profile {
+    #[serde(rename = "theban_trithemius_1518_v1")]
+    ThebanTrithemius1518V1,
+    #[serde(rename = "celestial_agrippa_ch30_v1")]
+    CelestialAgrippaCh30V1,
+    #[serde(rename = "malachim_agrippa_ch30_v1")]
+    MalachimAgrippaCh30V1,
+    #[serde(rename = "magi_ambrosius_1539_v1")]
+    MagiAmbrosius1539V1,
+    #[serde(rename = "enochian_peterson_2022_v1")]
+    EnochianPeterson2022V1,
+    #[serde(rename = "moon_english_1877_v1")]
+    MoonEnglish1877V1,
+    #[serde(rename = "dancing_men_doyle_1905_v1")]
+    DancingMenDoyle1905V1,
+    #[serde(rename = "alphabetum_kaldeorum_hahn_2004_v1")]
+    AlphabetumKaldeorumHahn2004V1,
     #[serde(rename = "pigpen_haverhill_pairs_v1")]
     PigpenHaverhillPairsV1,
     #[serde(rename = "tic_tac_toe_dcode_v1")]
@@ -73,6 +89,16 @@ struct Source {
 }
 fn book(p: &Parameters) -> Result<(h::Book, Provenance), OperationError> {
     let source: Source = serde_json::from_str(match p.profile {
+        Profile::ThebanTrithemius1518V1 => include_str!("theban_trithemius_1518_v1.json"),
+        Profile::CelestialAgrippaCh30V1 => include_str!("celestial_agrippa_ch30_v1.json"),
+        Profile::MalachimAgrippaCh30V1 => include_str!("malachim_agrippa_ch30_v1.json"),
+        Profile::MagiAmbrosius1539V1 => include_str!("magi_ambrosius_1539_v1.json"),
+        Profile::EnochianPeterson2022V1 => include_str!("enochian_peterson_2022_v1.json"),
+        Profile::MoonEnglish1877V1 => include_str!("moon_english_1877_v1.json"),
+        Profile::DancingMenDoyle1905V1 => include_str!("dancing_men_doyle_1905_v1.json"),
+        Profile::AlphabetumKaldeorumHahn2004V1 => {
+            include_str!("alphabetum_kaldeorum_hahn_2004_v1.json")
+        }
         Profile::PigpenHaverhillPairsV1 => include_str!("pigpen_haverhill_pairs_v1.json"),
         Profile::TicTacToeDcodeV1 => include_str!("tic_tac_toe_dcode_v1.json"),
         Profile::TemplarsBothwellGosseV1 => include_str!("templars_bothwell_gosse_v1.json"),
@@ -110,7 +136,8 @@ pub fn encode(units: &[String], p: &Parameters) -> Result<Encoded, OperationErro
             tokens: h::Tokens(book.encode(units).map_err(|e| input_failure(e, "units"))?),
             provenance,
         };
-        homophonic::serialized_size(&result, MAX_REPORT, "symbol.alphabet.encode")?;
+        homophonic::serialized_size(&result, MAX_REPORT, "symbol.alphabet.encode")
+            .map_err(|e| e.parameter("output"))?;
         Ok(result)
     };
     run().map_err(|e: OperationError| e.operation("symbol.alphabet.encode"))
@@ -129,7 +156,8 @@ pub fn decode(tokens: &[String], p: &Parameters) -> Result<Decoded, OperationErr
             readings,
             provenance,
         };
-        homophonic::serialized_size(&result, MAX_REPORT, "symbol.alphabet.decode")?;
+        homophonic::serialized_size(&result, MAX_REPORT, "symbol.alphabet.decode")
+            .map_err(|e| e.parameter("output"))?;
         Ok(result)
     };
     run().map_err(|e: OperationError| e.operation("symbol.alphabet.decode"))
@@ -138,5 +166,8 @@ fn input_failure(mut error: OperationError, field: &'static str) -> OperationErr
     if error.code == ErrorCode::InvalidParameter {
         error.code = ErrorCode::InvalidInput;
     }
-    error.parameter(field)
+    if matches!(error.parameter, Some("unit" | "items")) {
+        error.parameter = Some(field);
+    }
+    error
 }

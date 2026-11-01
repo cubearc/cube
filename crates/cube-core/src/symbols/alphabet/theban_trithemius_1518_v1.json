@@ -1,0 +1,203 @@
+{
+  "source_id": "trithemius:polygraphia-1518:theban:plate-poly579",
+  "source_url": "https://esotericarchives.com/tritheim/polygraphia/poly579.jpg",
+  "source_sha256": "7e8a568a593cfc46bfe58afafde1220199e3d5bf31fdb6c47d10d3dfa158d0f4",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "theban:r1c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "theban:r1c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "theban:r1c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "theban:r1c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "theban:r1c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "theban:r1c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "theban:r1c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "theban:r1c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "theban:r2c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          "theban:r2c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "theban:r2c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "theban:r2c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "theban:r2c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "theban:r2c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "theban:r2c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "theban:r2c8"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "theban:r3c1"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "theban:r3c2"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "theban:r3c3"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "theban:r3c4"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "theban:r3c5"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "theban:r3c6"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "theban:r3c7"
+        ]
+      },
+      {
+        "alternatives": [
+          "OMEGA"
+        ],
+        "codes": [
+          "theban:r3c8"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

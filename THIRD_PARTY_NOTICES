@@ -2269,6 +2269,19 @@ Cube changes verified against primary scans: group 502 reads Bien in f312
 printed alternatives and Geneve? are distinguished. No inference fills blanks.
 No modern solver code, dictionary, scan or historical message is bundled.
 
+Bellaso 1553 numerical profile facts
+Source: Giovan Battista Bellaso, La cifra (Venice, 1553), ordinary continuous
+countersign instructions/example and fixed eleven-pair table, book pp.[3-5].
+BEIC digital library, IE2960948; PDF FL2960976, pp.6-8 including library cover.
+https://preserver.beic.it/delivery/DeliveryManagerServlet?dps_pid=IE2960948
+Cross-check: https://commons.wikimedia.org/wiki/File:Bellaso_1553.JPG
+Public-domain numerical correspondences independently implemented as rotations.
+Canonical capitals transcribe printed u/V as V and long s as S; the example
+begins Sybouey. No 1555/1564 variant, line-verse schedule or in-band y separator
+is inferred. The BEIC PDF attributes its facsimile to BEIC under CC BY 4.0;
+https://creativecommons.org/licenses/by/4.0/ . No scan, PDF, article or modern
+solver implementation is distributed with Cube.
+
 ROT8000 numerical profile facts
 Specification: rottytooth/rot8000 revision c47905631615173e51ac88e0901c4be642a1c8aa.
 Cube independently implements the fixed ranges and half-cycle using range

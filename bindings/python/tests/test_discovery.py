@@ -117,6 +117,7 @@ SDK_BINDINGS = {
     "cipher.running_key.encode": "running_key_encode",
     "cipher.running_key.decode": "running_key_decode",
     "cipher.porta": "porta",
+    "cipher.bellaso": "bellaso",
     "cipher.gromark.encode": "gromark_encode",
     "cipher.gromark.decode": "gromark_decode",
     "cipher.periodic_gromark.encode": "periodic_gromark_encode",

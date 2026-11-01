@@ -11,7 +11,7 @@ and named input/output ports.
 Letter, square and matrix cipher commands accept `--parameters PATH`, exact text
 from a positional argument, `--text`, `--file` or stdin, and `--decode` for the inverse. The parameter
 file is local, regular, UTF-8 JSON, at most 2 MiB; duplicate keys, excessive nesting
-and unknown fields reject. It is never downloaded or modified. Porta and Portax
+and unknown fields reject. It is never downloaded or modified. Bellaso, Porta and Portax
 are reciprocal, so either direction performs the same transformation.
 
 In a scratch directory, save a key and check the round trip:
@@ -125,6 +125,53 @@ security. It has the same preservation and byte limits as the schedules above.
 All three key profiles use linear bounded work, validate parameters before output
 and return exactly as many UTF-8 bytes as their input. Key and interruption
 storage are bounded separately; no stream state persists between calls.
+
+## Bellaso's 1553 reciprocal table
+
+`cube cipher bellaso` uses the fixed eleven reciprocal alphabet pairs printed in
+Bellaso's *La cifra* (Venice, 1553), with the ordinary continuous countersign
+described in its worked example. The [complete BEIC facsimile](https://preserver.beic.it/delivery/DeliveryManagerServlet?dps_pid=IE2960948)
+contains the instructions on book pages [3–4] and the table on the following leaf.
+
+Text and the required nonempty `key` use the exact canonical uppercase alphabet
+`ABCDEFGHILMNOPQRSTVXYZ`. Printed lowercase `u`/capital `V` is transcribed as `V`,
+and long `s` as `S`. Lowercase, `U`, `J`, `K`, `W` and accents are not silently
+normalized. Prepare the spelling explicitly before calling the operation.
+
+The key repeats continuously across transformed symbols and starts at its first
+symbol on each call. Applying the operation twice recovers the exact input.
+`unmapped` defaults to `reject`; explicit `preserve` retains every noncanonical
+scalar, including spaces, NUL and combining marks, without consuming a key symbol.
+Preservation keeps caller-supplied formatting and does not reconstruct the book's
+ciphertext groups. `Y` is always a data symbol. This profile does not interpret
+in-band word separators or switch key verses at line boundaries.
+
+Save `{"key":"VIRTVTIOMNIAPARENT"}` as `bellaso.json`, then run:
+
+```sh
+cube cipher bellaso --parameters bellaso.json 'LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO'
+```
+
+The result is `SYBOVEYLDANVOFSZLPIINCVPNSHMLRNXOIZNRD`. The initial `S` follows
+the printed example's *Sybouey* and the table's long-s glyph. Use the same key and
+operation to decode.
+
+| Resource | Maximum |
+| --- | --- |
+| Input and output | 1 MiB UTF-8 each |
+| Key | 64 KiB canonical ASCII, nonempty |
+| Alphabet/table | Fixed 22 symbols and 11 reciprocal pairs |
+
+SDK transports and native hosts can impose lower aggregate budgets; see
+[Core and interface limits](concepts/resource-limits.md#core-and-interface-limits).
+
+Work is linear in input and key length with bounded key storage and output.
+Direct Rust/Python text errors carry the original UTF-8 byte offset. Invalid
+keys, unknown fields and limit exhaustion reject without a result. Rust exposes
+`poly::bellaso::transform` with `Bellaso1553`; Python exposes `bellaso(text,
+parameters)`, and JavaScript/TypeScript uses `cipher.bellaso` with named `text`
+input/output. Native Play executes the same Core profile. There is no linear
+pipeline adapter.
 
 ## Canonical schedules and evolving alphabets
 

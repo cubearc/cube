@@ -50,6 +50,9 @@ report_handler!(digrafid, geometry::digrafid);
 fn porta(t: &str, p: &Value, _: bool) -> Result<Value, OperationError> {
     Ok(json!({"text":schedules::porta(t,&parse(p)?)?}))
 }
+fn bellaso(t: &str, p: &Value, _: bool) -> Result<Value, OperationError> {
+    Ok(json!({"text":poly::bellaso::transform(t,&parse(p)?)?}))
+}
 fn portax(t: &str, p: &Value, _: bool) -> Result<Value, OperationError> {
     Ok(json!({"text":tableaux::portax(t,&parse(p)?)?}))
 }
@@ -82,6 +85,7 @@ fn resolve(op: &str) -> Option<Handler> {
             multiplicative
         }
         "cipher.porta" => porta,
+        "cipher.bellaso" => bellaso,
         "cipher.portax" => portax,
         _ => return None,
     })

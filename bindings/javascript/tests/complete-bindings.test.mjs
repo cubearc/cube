@@ -4,6 +4,20 @@ import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
 
+test('Bellaso 1553 preserves the printed table, canonical spelling and key advancement in actual Wasm', () => {
+  const call = (text, parameters) => cube.execute({operation:'cipher.bellaso',version:1,inputs:{text},parameters}).text;
+  const plain='LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO';
+  const cipher='SYBOVEYLDANVOFSZLPIINCVPNSHMLRNXOIZNRD';
+  const parameters={key:'VIRTVTIOMNIAPARENT'};
+  assert.equal(call(plain,parameters),cipher);
+  assert.equal(call(cipher,parameters),plain);
+  assert.equal(call('AA é🐈\nAA',{key:'ACD',unmapped:'preserve'}),'NT é🐈\nTN');
+  assert.throws(()=>call('U',{key:'A'}),{code:'invalid_input'});
+  assert.throws(()=>call('A',{key:'U'}),{code:'invalid_parameter'});
+  // Native preflight rejects parameter values outside the canonical schema.
+  assert.throws(()=>call('A',{key:'A'.repeat(65537)}),{code:'invalid_parameter'});
+});
+
 test('canonical wide integers round-trip through the actual SDK without rounding or text coercion', () => {
   assert.deepEqual(cube.execute({ operation: 'number.gcd', version: 1, inputs: { a: 18446744073709551615n, b: 3n } }), { output: 3 });
   assert.throws(() => cube.execute({ operation: 'number.gcd', version: 1, inputs: { a: Number.MAX_SAFE_INTEGER + 1, b: 3 } }), { code: 'invalid_input' });

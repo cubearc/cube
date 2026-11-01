@@ -47,13 +47,13 @@ pub struct Report {
     pub periods: Vec<Period>,
     pub ranking: Vec<usize>,
 }
-fn ic(counts: &[u64; 26]) -> Option<f64> {
+pub(crate) fn ic(counts: &[u64; 26]) -> Option<f64> {
     let n: u64 = counts.iter().sum();
     (n > 1).then(|| {
         counts.iter().map(|&c| c * c.saturating_sub(1)).sum::<u64>() as f64 / (n * (n - 1)) as f64
     })
 }
-fn counts(text: &[u8]) -> [u64; 26] {
+pub(crate) fn counts(text: &[u8]) -> [u64; 26] {
     let mut counts = [0; 26];
     for &b in text {
         counts[(b - b'A') as usize] += 1;
@@ -145,18 +145,7 @@ pub fn estimate(r: &Request, cancel: Option<&AtomicBool>) -> Result<Report, Oper
             if !budget.take(bytes.len() + period) {
                 break;
             }
-            let mut columns = vec![[0u64; 26]; period];
-            for (i, &c) in bytes.iter().enumerate() {
-                columns[i % period][(c - b'A') as usize] += 1;
-            }
-            let ics: Vec<_> = columns.iter().filter_map(ic).collect();
-            periods.push(Period {
-                period,
-                valid_columns: ics.len(),
-                mean_column_ic: (!ics.is_empty())
-                    .then(|| ics.iter().sum::<f64>() / ics.len() as f64),
-                divisor_hits: 0,
-            });
+            periods.push(column_observation(bytes, period));
         }
     }
     let repeats = if budget.status.complete {
@@ -192,4 +181,25 @@ pub fn estimate(r: &Request, cancel: Option<&AtomicBool>) -> Result<Report, Oper
         periods,
         ranking,
     })
+}
+
+/// Caller supplies normalized ASCII letters and charges text.len()+period visits.
+pub(crate) fn column_observation(bytes: &[u8], period: usize) -> Period {
+    summarize_columns(&column_counts(bytes, period), period)
+}
+pub(crate) fn column_counts(bytes: &[u8], period: usize) -> Vec<[u64; 26]> {
+    let mut columns = vec![[0u64; 26]; period];
+    for (i, &c) in bytes.iter().enumerate() {
+        columns[i % period][(c - b'A') as usize] += 1;
+    }
+    columns
+}
+pub(crate) fn summarize_columns(columns: &[[u64; 26]], period: usize) -> Period {
+    let ics: Vec<_> = columns.iter().filter_map(ic).collect();
+    Period {
+        period,
+        valid_columns: ics.len(),
+        mean_column_ic: (!ics.is_empty()).then(|| ics.iter().sum::<f64>() / ics.len() as f64),
+        divisor_hits: 0,
+    }
 }

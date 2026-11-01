@@ -57,6 +57,8 @@ SDK_BINDINGS = {
     "analysis.homophonic.inspect": "homophonic_inspect",
     "analysis.crib.verify": "crib_verify",
     "analysis.frequency.compare": "frequency_compare",
+    "analysis.substitution.solve": "substitution_solve",
+    "analysis.family.suggest": "family_suggest",
     "cipher.enigma": "enigma",
     "cipher.aes.encrypt_blocks": "aes_encrypt_blocks",
     "cipher.aes.decrypt_blocks": "aes_decrypt_blocks",

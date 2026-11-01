@@ -130,3 +130,28 @@ pub(crate) fn frequency_compare() -> Result<Fixture, OperationError> {
     }
     Ok(fixture(request, r))
 }
+
+pub(crate) fn substitution_solve() -> Result<Fixture, OperationError> {
+    let request = json!({"profile":"observed_bijection_v1","alphabet":"ABCDEFGHIJKLMNOPQRSTUVWXYZ","ciphertext":"ABBA","outside":"preserve","dictionary":{"segmentation":"unicode_whitespace","words":["NOON","DEED","NOON"]}});
+    let report = substitution::solve(&parse_request(&request.to_string())?, None)?;
+    if report.candidates.len() != 2
+        || report.candidates[0].plaintext != "NOON"
+        || report.candidates[1].plaintext != "DEED"
+        || report.candidates[0].key_count != "620448401733239439360000"
+        || !report.status.complete
+    {
+        return Err(invalid("independent substitution fixture mismatch"));
+    }
+    Ok(fixture(request, report))
+}
+pub(crate) fn family_suggest() -> Result<Fixture, OperationError> {
+    let request = json!({"profile":"ascii_classical_evidence_v1","text":"THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. ".repeat(8)});
+    let report = family::suggest(&parse_request(&request.to_string())?, None)?;
+    if report.suggestions.is_empty()
+        || report.suggestions[0].rule != family::Rule::NonuniformCoincidenceV1
+        || !report.status.complete
+    {
+        return Err(invalid("independent family fixture mismatch"));
+    }
+    Ok(fixture(request, report))
+}

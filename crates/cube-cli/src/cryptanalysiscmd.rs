@@ -22,6 +22,10 @@ pub(crate) enum Command {
     Crib(crate::Input),
     /// Explicit Pearson frequency distance
     Frequency(crate::Input),
+    /// Exact bounded substitution constraints
+    Substitution(crate::Input),
+    /// Explainable compatible classical families
+    Families(crate::Input),
 }
 pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
@@ -95,6 +99,22 @@ pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn 
             write_report(
                 &mut *out,
                 serde_json::to_value(a::frequency::compare(&request, None)?)?,
+            )?;
+        }
+        Command::Substitution(input) => {
+            let doc = input.read_text_limit(a::MAX_REQUEST, "analysis.substitution.solve")?;
+            let request: a::substitution::Request = a::parse_request(&doc)?;
+            write_report(
+                &mut *out,
+                serde_json::to_value(a::substitution::solve(&request, None)?)?,
+            )?;
+        }
+        Command::Families(input) => {
+            let doc = input.read_text_limit(a::MAX_REQUEST, "analysis.family.suggest")?;
+            let request: a::family::Request = a::parse_request(&doc)?;
+            write_report(
+                &mut *out,
+                serde_json::to_value(a::family::suggest(&request, None)?)?,
             )?;
         }
     }

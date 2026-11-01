@@ -109,6 +109,41 @@ Example:
 cube cryptanalysis --help
 ```
 
+## analysis.family.suggest
+
+Evidence-linked classical family suggestions
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
 ## analysis.frequency.compare
 
 Explicit Pearson frequency distance
@@ -217,6 +252,41 @@ cube cryptanalysis --help
 ## analysis.period.estimate
 
 Explicit classical key-length evidence
+
+Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `json` |
+| Output | `report` | `analysis.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Empty",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cryptanalysis --help
+```
+
+## analysis.substitution.solve
+
+Exact bounded substitution constraints
 
 Category: `cryptanalysis`. Contract: 1. Pipeline adapter: none (direct API).
 

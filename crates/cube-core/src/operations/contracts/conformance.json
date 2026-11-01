@@ -13519,5 +13519,336 @@
     "parameters": {
       "profile": "standard_galactic_ucsur_2019_v1"
     }
+  },
+  {
+    "contract_sha256": "82ddc5dcdddc1286fd1688dbccea7ddf70a872d206f66287d3dd995f89ab1c92",
+    "inputs": {
+      "request": {
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "ciphertext": "ABBA",
+        "dictionary": {
+          "segmentation": "unicode_whitespace",
+          "words": [
+            "NOON",
+            "DEED",
+            "NOON"
+          ]
+        },
+        "outside": "preserve",
+        "profile": "observed_bijection_v1"
+      }
+    },
+    "operation": "analysis.substitution.solve",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "aliases": [],
+        "candidates": [
+          {
+            "canonical_key": "NOABCDEFGHIJKLMPQRSTUVWXYZ",
+            "free_cipher": "CDEFGHIJKLMNOPQRSTUVWXYZ",
+            "free_plain": "ABCDEFGHIJKLMPQRSTUVWXYZ",
+            "key_count": "620448401733239439360000",
+            "mapping": [
+              {
+                "cipher": "A",
+                "plain": "N"
+              },
+              {
+                "cipher": "B",
+                "plain": "O"
+              }
+            ],
+            "plaintext": "NOON",
+            "score": null,
+            "word_choices": [
+              0
+            ]
+          },
+          {
+            "canonical_key": "DEABCFGHIJKLMNOPQRSTUVWXYZ",
+            "free_cipher": "CDEFGHIJKLMNOPQRSTUVWXYZ",
+            "free_plain": "ABCFGHIJKLMNOPQRSTUVWXYZ",
+            "key_count": "620448401733239439360000",
+            "mapping": [
+              {
+                "cipher": "A",
+                "plain": "D"
+              },
+              {
+                "cipher": "B",
+                "plain": "E"
+              }
+            ],
+            "plaintext": "DEED",
+            "score": null,
+            "word_choices": [
+              1
+            ]
+          }
+        ],
+        "constraints": [
+          {
+            "original_byte_offsets": [
+              0
+            ],
+            "token": "ABBA"
+          }
+        ],
+        "contradiction": false,
+        "dictionary_classes": [
+          {
+            "input_indices": [
+              0,
+              2
+            ],
+            "word": "NOON"
+          },
+          {
+            "input_indices": [
+              1
+            ],
+            "word": "DEED"
+          }
+        ],
+        "key_unique": false,
+        "method": "observed_bijection_v1",
+        "model_sha256": null,
+        "plaintext_unique": false,
+        "ranking": [
+          0,
+          1
+        ],
+        "request_sha256": "6313232c571ccdb85d3b3827d2efa226d75e49f358aae28a5d3a5c32d72b8492",
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 129
+        },
+        "workspace_bytes_upper_bound": 16781364
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "c79a236c77448e1ab8850dc762639ecbcda0374dcf672c5e8a2dc88de07b5941",
+    "inputs": {
+      "request": {
+        "profile": "ascii_classical_evidence_v1",
+        "text": "THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. THE READER CAN CHECK EVERY CLAIM AND COMPARE THE LETTER COUNTS WITH THE ORIGINAL MESSAGE. "
+      }
+    },
+    "operation": "analysis.family.suggest",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "columns": [
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.3476990504017532,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.0896930829134219,
+              "period": 2,
+              "valid_columns": 2
+            },
+            "samples_per_column": 296
+          },
+          {
+            "minimum_distinct_letters": 20,
+            "minimum_squared_coefficient_of_variation": 0.5855524946434036,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.07714877983188352,
+              "period": 3,
+              "valid_columns": 3
+            },
+            "samples_per_column": 197
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.3476990504017532,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.08659680088251517,
+              "period": 4,
+              "valid_columns": 4
+            },
+            "samples_per_column": 148
+          },
+          {
+            "minimum_distinct_letters": 20,
+            "minimum_squared_coefficient_of_variation": 0.5606242496998799,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.07473257882031561,
+              "period": 5,
+              "valid_columns": 5
+            },
+            "samples_per_column": 118
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.3244481466055811,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.08443046071912053,
+              "period": 6,
+              "valid_columns": 6
+            },
+            "samples_per_column": 98
+          },
+          {
+            "minimum_distinct_letters": 20,
+            "minimum_squared_coefficient_of_variation": 0.5929705215419501,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.0715341558310071,
+              "period": 7,
+              "valid_columns": 7
+            },
+            "samples_per_column": 84
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.3476990504017532,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.08034061458718993,
+              "period": 8,
+              "valid_columns": 8
+            },
+            "samples_per_column": 74
+          },
+          {
+            "minimum_distinct_letters": 18,
+            "minimum_squared_coefficient_of_variation": 0.5426997245179064,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.06856546231546232,
+              "period": 9,
+              "valid_columns": 9
+            },
+            "samples_per_column": 65
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.3401321459350761,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.0794194428209624,
+              "period": 10,
+              "valid_columns": 10
+            },
+            "samples_per_column": 59
+          },
+          {
+            "minimum_distinct_letters": 17,
+            "minimum_squared_coefficient_of_variation": 0.40740740740740744,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.06895026706347461,
+              "period": 11,
+              "valid_columns": 11
+            },
+            "samples_per_column": 53
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.23073719283631822,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.07720804988662132,
+              "period": 12,
+              "valid_columns": 12
+            },
+            "samples_per_column": 49
+          },
+          {
+            "minimum_distinct_letters": 16,
+            "minimum_squared_coefficient_of_variation": 0.3669135802469137,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.06699098003445829,
+              "period": 13,
+              "valid_columns": 13
+            },
+            "samples_per_column": 45
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.2755102040816326,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.07331928801015586,
+              "period": 14,
+              "valid_columns": 14
+            },
+            "samples_per_column": 42
+          },
+          {
+            "minimum_distinct_letters": 14,
+            "minimum_squared_coefficient_of_variation": 0.3500000000000001,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.06639226270805218,
+              "period": 15,
+              "valid_columns": 15
+            },
+            "samples_per_column": 39
+          },
+          {
+            "minimum_distinct_letters": 15,
+            "minimum_squared_coefficient_of_variation": 0.3476990504017532,
+            "observation": {
+              "divisor_hits": 0,
+              "mean_column_ic": 0.06756756756756757,
+              "period": 16,
+              "valid_columns": 16
+            },
+            "samples_per_column": 37
+          }
+        ],
+        "eligibility_failures": [],
+        "observations": {
+          "ascii_letters": 592,
+          "control_bytes": 0,
+          "distinct_letters": 20,
+          "ic": 0.07989207481593269,
+          "input_bytes": 720,
+          "letter_fraction": 0.8222222222222222,
+          "maximum_letter_fraction": 0.17567567567567569,
+          "non_ascii_bytes": 0,
+          "transport_like": false
+        },
+        "profile": "ascii_classical_evidence_v1",
+        "status": {
+          "complete": true,
+          "stop": "complete",
+          "work": 13247
+        },
+        "suggestions": [
+          {
+            "alternatives": [
+              "IC is invariant under a bijective substitution or rearrangement; it cannot distinguish these families from plaintext.",
+              "Structured or periodic data can have the same counts; short or other-language samples may fall outside this interval."
+            ],
+            "assumptions": [
+              "ASCII letter view has at least 64 letters and 8 distinct letters; IC in [0.052,0.095].",
+              "Nonuniform natural-language-like distribution; thresholds are fixed policy, not universal language properties."
+            ],
+            "compatible_families": [
+              "plaintext",
+              "monoalphabetic_substitution",
+              "transposition"
+            ],
+            "periods": [],
+            "rule": "nonuniform_coincidence_v1"
+          }
+        ],
+        "view": "ascii_letters_uppercase_byte_view_v1"
+      }
+    },
+    "parameters": {}
   }
 ]

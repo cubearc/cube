@@ -108,3 +108,14 @@ for(const profile of ['al_bhed_english_ffx_v1','sheikah_botw_dcode_v1','daedric_
 }
 // @ts-expect-error Other fictional editions are not silently inferred.
 cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[]},parameters:{profile:'hylian_twilight_princess'}});
+
+const substitutionReport=cube.execute({operation:'analysis.substitution.solve',version:1,inputs:{request:{profile:'observed_bijection_v1',alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',ciphertext:'ABBA',outside:'preserve'}}}).report;
+const keyCount:string|undefined=substitutionReport.candidates[0]?.key_count;
+void keyCount;
+const familyReport=cube.execute({operation:'analysis.family.suggest',version:1,inputs:{request:{profile:'ascii_classical_evidence_v1',text:'ABC'}}}).report;
+const evidenceRule:'nonuniform_coincidence_v1'|'periodic_columns_v1'|undefined=familyReport.suggestions[0]?.rule;
+void evidenceRule;
+// @ts-expect-error The substitution profile is explicit.
+cube.execute({operation:'analysis.substitution.solve',version:1,inputs:{request:{alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',ciphertext:'ABBA',outside:'preserve'}}});
+// @ts-expect-error Family guesses use finite reviewed rules, not arbitrary labels.
+cube.execute({operation:'analysis.family.suggest',version:1,inputs:{request:{profile:'ascii_classical_evidence_v1',text:'ABC',rules:['detect_aes']}}});

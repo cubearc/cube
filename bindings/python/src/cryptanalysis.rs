@@ -227,6 +227,56 @@ fn frequency_compare(
             .map_err(|_| pyo3::exceptions::PyValueError::new_err("invalid report"))?,
     )
 }
+#[pyfunction]
+#[pyo3(signature=(request, *, cancellation=None))]
+fn substitution_solve(
+    py: Python<'_>,
+    request: &Bound<'_, PyDict>,
+    cancellation: Option<&CancellationToken>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        request.as_any(),
+        a::MAX_REQUEST,
+        "analysis.substitution.solve",
+        "request",
+    )?;
+    let r: a::substitution::Request = a::parse_request(&document).map_err(super::file_error)?;
+    let token = cancellation.map(|c| &c.flag);
+    let report = py
+        .detach(|| a::substitution::solve(&r, token))
+        .map_err(|e| super::file_error(e.operation("analysis.substitution.solve")))?;
+    super::structured(
+        py,
+        &serde_json::to_value(report)
+            .map_err(|_| pyo3::exceptions::PyValueError::new_err("invalid report"))?,
+    )
+}
+#[pyfunction]
+#[pyo3(signature=(request, *, cancellation=None))]
+fn family_suggest(
+    py: Python<'_>,
+    request: &Bound<'_, PyDict>,
+    cancellation: Option<&CancellationToken>,
+) -> PyResult<Py<PyAny>> {
+    let document = super::mono::document(
+        py,
+        request.as_any(),
+        a::MAX_REQUEST,
+        "analysis.family.suggest",
+        "request",
+    )?;
+    let r: a::family::Request = a::parse_request(&document).map_err(super::file_error)?;
+    let token = cancellation.map(|c| &c.flag);
+    let report = py
+        .detach(|| a::family::suggest(&r, token))
+        .map_err(|e| super::file_error(e.operation("analysis.family.suggest")))?;
+    super::structured(
+        py,
+        &serde_json::to_value(report)
+            .map_err(|_| pyo3::exceptions::PyValueError::new_err("invalid report"))?,
+    )
+}
 pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(language_score, module)?)?;
     module.add_function(wrap_pyfunction!(period_estimate, module)?)?;
@@ -237,5 +287,7 @@ pub(super) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(homophonic_inspect, module)?)?;
     module.add_function(wrap_pyfunction!(crib_verify, module)?)?;
     module.add_function(wrap_pyfunction!(frequency_compare, module)?)?;
+    module.add_function(wrap_pyfunction!(substitution_solve, module)?)?;
+    module.add_function(wrap_pyfunction!(family_suggest, module)?)?;
     Ok(())
 }

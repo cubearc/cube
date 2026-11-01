@@ -184,3 +184,26 @@ test('complete symbolic reports enforce output budgets including provenance', ()
   const count=Math.floor((1048576-1)/('upright:left:flat:raised'.length+3));
   assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:Array(count).fill('H')},parameters}),{code:'resource_limit',operation:'symbol.alphabet.encode'});
 });
+
+
+test('bounded substitution and explainable families execute Core reports in Wasm',async()=>{
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const ids=new Set(['analysis.substitution.solve','analysis.family.suggest']);
+  const cases=fixtures.filter(r=>ids.has(r.operation));
+  assert.equal(cases.length,2);
+  for(const row of cases) assert.deepEqual(cube.execute({operation:row.operation,version:1,inputs:row.inputs,parameters:row.parameters}),row.outputs);
+  const request={profile:'observed_bijection_v1',alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',ciphertext:'αBBα',outside:'preserve',aliases:[{alias:'α',symbol:'A'}],dictionary:{segmentation:'unicode_whitespace',words:['NOON','DEED','NOON']}};
+  const solve=request=>cube.execute({operation:'analysis.substitution.solve',version:1,inputs:{request}}).report;
+  const result=solve(request);
+  assert.deepEqual(result.candidates.map(c=>c.plaintext),['NOON','DEED']);
+  assert.equal(result.candidates[0].key_count,'620448401733239439360000');
+  assert.deepEqual(result.dictionary_classes[0].input_indices,[0,2]);
+  assert.equal(solve({...request,limits:{max_work:0}}).status.stop,'work_limit');
+  assert.equal(solve({...request,limits:{max_results:1}}).status.stop,'result_limit');
+  assert.throws(()=>solve({...request,limits:{max_work:1048577}}),{code:'invalid_input'});
+  assert.throws(()=>solve({...request,alphabet:'ABC'}),{code:'invalid_input'});
+  assert.throws(()=>solve({...request,alphabet:'A'.repeat(26)}),{code:'invalid_parameter'});
+  const report=cube.execute({operation:'analysis.family.suggest',version:1,inputs:{request:{profile:'ascii_classical_evidence_v1',bytes:[0,255,65]}}}).report;
+  assert.deepEqual(report.suggestions,[]);
+  assert.ok(report.eligibility_failures.includes('outside_ascii_profile'));
+});

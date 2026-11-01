@@ -200,3 +200,118 @@ Native Python accepts the existing optional keyword
 `cancellation=CancellationToken()` and releases the GIL during analysis so another
 thread can cancel. CLI and native Python use the same typed Core calls;
 Play uses its existing killable worker and safe structured report viewer.
+
+## Substitution constraints
+
+`analysis.substitution.solve` (`cryptanalysis substitution`, `substitution_solve`)
+solves the explicit `observed_bijection_v1` profile. Supply an ordered `alphabet`
+of 26–64 unique non-whitespace Unicode scalars, `ciphertext`, and `outside`:
+`preserve` or `reject`. There is no case folding or normalization. Optional
+`cribs` contain canonical `{cipher,plain}` scalar pairs. Optional `aliases`
+contain `{alias,symbol}` pairs: distinct noncanonical cipher scalars explicitly
+mapped to canonical alphabet symbols. Aliases are observations, not extra keys.
+
+An optional `dictionary` declares `segmentation: unicode_whitespace` and exact
+`words`. Every ciphertext token must match a dictionary word under one shared
+bijection, with punctuation retained and outside-alphabet literals unchanged.
+Repeated tokens share a constraint and retain all original UTF-8 start offsets.
+Duplicate dictionary words share a `dictionary_classes` entry retaining every
+original `input_indices` position. Candidate `word_choices` select those classes;
+the Cartesian product of duplicate source choices is represented without expansion.
+An empty dictionary rules out nonempty tokens. Without a dictionary, the solver
+enumerates mappings only for observed alphabet symbols.
+
+Each candidate contains plaintext, the constrained `mapping`, a `canonical_key`
+(targets in alphabet order), `free_cipher`, `free_plain` and decimal `key_count`.
+Every permutation of the free targets is a valid full key in that class; the
+count is exactly their factorial. The canonical key fills free positions in
+alphabet order. These completions produce identical plaintext and are not
+silently discarded. For example, `ABBA` with dictionary `NOON, DEED, NOON`
+has two plaintext classes, each representing `24!` keys.
+
+`candidates` retain deterministic search order. With a dictionary, minimum
+remaining domain chooses a token, ties by first appearance; word choices follow
+first dictionary appearance. Without one, both source and target order follow
+the alphabet. Optional `model` reuses [language scoring](#language-scoring), with
+its own digest. `ranking` contains candidate indices by descending mean score,
+with search order on ties. `request_sha256` binds the serialized typed request,
+including defaults, limits, source ordering and model.
+
+`contradiction` means a proved inconsistent crib or a complete search with no
+solutions. An interrupted empty search proves nothing. `plaintext_unique` and
+`key_unique` are null when unresolved; multiple found classes prove nonuniqueness,
+and a free-key count greater than one proves key nonuniqueness. Uniqueness applies
+only to the supplied constraints, never to historical identity or authenticity.
+
+| Resource | Default / hard ceiling |
+| --- | --- |
+| Ciphertext | 65536 scalars and 1 MiB |
+| Dictionary | 4096 input words, 256 scalars each, 1 MiB aggregate UTF-8 |
+| Distinct ciphertext tokens | 4096 |
+| Cribs / cipher aliases | 4096 / 256 |
+| Optional model | Language-scoring limits |
+| `limits.max_work` | 1048576 visits; may be lowered to zero |
+| `limits.max_results` | 128 / 4096 candidates |
+| `limits.max_memory_bytes` | 64 MiB / 64 MiB conservative workspace reserve |
+| JSON request / report | 4 MiB each; strict transport depth 16 and 400000 nodes |
+
+Structural validation is bounded independently. Work charges all ciphertext
+scalars, source dictionary scalars (including duplicates), crib/alias entries,
+unique-word indexing, token/domain indexing, search nodes, attempted assignments,
+full support tests (including failed tests), plaintext rendering and optional
+scoring. A support test reserves its whole word length before examining it.
+The reported workspace upper bound reserves request duplication, index edges,
+search stack, scoring scratch, retained report and serialization copies before
+allocating domains. It is a conservative operation reserve, not process RSS;
+smaller memory budgets may reject even small requests.
+
+Constraint metadata must fit a conservative 1 MiB reserve minus 8192 bytes;
+candidates collectively retain at most 3 MiB of canonical JSON. Metadata/preflight
+or final serialization overflow raises a typed resource error. Search work,
+cancellation or candidate retention returns a marked prefix. Reaching exactly
+`max_results` is complete only if the remaining search is exhausted; finding
+another solution marks `result_limit`. No stochastic search, hidden dictionary,
+external solver or downloaded model is used.
+
+## Cipher-family suggestions
+
+`analysis.family.suggest` (`cryptanalysis families`, `family_suggest`) requires
+`profile: ascii_classical_evidence_v1` and exactly one of `text` or `bytes`.
+The byte view selects ASCII letters and uppercases them; it never automatically
+decodes binary or folds accents. `observations` records byte/letter counts,
+diversity, IC, control and non-ASCII bytes, dominance and transport-like evidence.
+These are facts about the declared view, separate from the suggestions.
+
+Eligibility requires at least 64 letters, 8 distinct letters, letter fraction
+at least 0.75, no letter occupying 0.25 or more of the stream, no binary controls
+or non-ASCII bytes, and no all-hex or unspaced transport-like signature. That
+signature requires at least 64 bytes, only alphanumerics or `+/=_-`, and at least
+one digit or one of those punctuation marks. Ineligible inputs return explicit
+`eligibility_failures` and no family claims.
+
+`rules` defaults to the following order. A caller may supply an empty subset or
+reorder it; duplicates and unknown rules are invalid.
+
+| Rule | Compatibility evidence | Remaining ambiguity |
+| --- | --- | --- |
+| `nonuniform_coincidence_v1` | Whole-letter IC in [0.052,0.095] | Plaintext, monoalphabetic substitution and transposition have indistinguishable count evidence |
+| `periodic_columns_v1` | At least 24 letters and 8 distinct letters per column, squared coefficient of variation over occupied bins at least 0.1 in every column, mean IC in [0.052,0.095], and mean IC at least 0.012 above global IC | Repeating-key polyalphabetic text, periodic plaintext, interleaved or constructed streams can share this signal |
+
+`periods` defaults to 2–16; up to 32 unique periods in 2–64 may be supplied.
+Periods lacking 24 letters per column are omitted. `columns` records the exact
+column evidence, including sample floor, minimum diversity and variation.
+These thresholds are a finite policy assumption for this profile, not universal
+language facts or calibrated confidence. Uniform or random-looking data without
+qualified column evidence produces no identity claim. Suggestions include rule
+IDs, compatible families, assumptions, alternative explanations and tested periods.
+Nothing is transformed or automatically executed.
+
+Input is limited to 1 MiB and strict 4 MiB JSON transport. Work defaults to
+16 Mi visits, with one per input byte (one for empty input), one per rule, and
+`letter_count + 27 * period` for each tested column observation. Structural
+validation has fixed bounds. At most two suggestions are possible; shared
+`limits.max_results` can lower their retention. Work/cancellation returns partial
+facts and completed rules only, with `observations: null` if the input scan did
+not finish. A result cap marks omitted suggestions incomplete; report overflow
+is a typed error. Read the [measured evaluation](../../research/classical-analysis-evaluation.md)
+for known false positives and counterexamples.

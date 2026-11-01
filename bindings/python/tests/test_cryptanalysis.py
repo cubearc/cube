@@ -41,6 +41,8 @@ def test_native_analysis_matches_reviewed_contracts():
         "analysis.homophonic.inspect": "homophonic_inspect",
         "analysis.crib.verify": "crib_verify",
         "analysis.frequency.compare": "frequency_compare",
+        "analysis.substitution.solve": "substitution_solve",
+        "analysis.family.suggest": "family_suggest",
     }
     assert set(mapping) == {
         v["operation"] for v in vectors if v["operation"].startswith("analysis.")
@@ -90,3 +92,45 @@ def test_probability_mass_cannot_exceed_one_even_inside_sum_tolerance():
                 },
             }
         )
+
+
+def test_substitution_exact_classes_aliases_and_cancellation():
+    import math
+
+    request = {
+        "profile": "observed_bijection_v1",
+        "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "ciphertext": "αBBα",
+        "outside": "preserve",
+        "aliases": [{"alias": "α", "symbol": "A"}],
+        "dictionary": {
+            "segmentation": "unicode_whitespace",
+            "words": ["NOON", "DEED", "NOON"],
+        },
+    }
+    result = cube.substitution_solve(request)
+    assert [c["plaintext"] for c in result["candidates"]] == ["NOON", "DEED"]
+    assert result["candidates"][0]["key_count"] == str(math.factorial(24))
+    assert result["dictionary_classes"][0]["input_indices"] == [0, 2]
+    token = cube.CancellationToken()
+    token.cancel()
+    result = cube.substitution_solve(request, cancellation=token)
+    assert result["status"]["stop"] == "cancelled"
+    assert not result["contradiction"]
+    request["limits"] = {"max_work": 1048577}
+    with pytest.raises(ValueError) as error:
+        cube.substitution_solve(request)
+    assert error.value.operation == "analysis.substitution.solve"
+
+
+def test_family_uncertainty_and_native_cancellation():
+    request = {"profile": "ascii_classical_evidence_v1", "text": "AB" * 128}
+    result = cube.family_suggest(request)
+    assert result["suggestions"] == []
+    assert "fewer_than_8_distinct_letters" in result["eligibility_failures"]
+    token = cube.CancellationToken()
+    token.cancel()
+    assert (
+        cube.family_suggest(request, cancellation=token)["status"]["stop"]
+        == "cancelled"
+    )

@@ -82,7 +82,24 @@ const fn row(s: Spec) -> Row {
         },
     }
 }
-static ROWS: [Row; 9] = [
+const fn solver_row(s: Spec) -> Row {
+    let mut result = row(s);
+    result.contract.limits.max_work = Some(1048576);
+    if let Some(ref mut metadata) = result.profile.metadata {
+        metadata.references = &["https://aima.cs.berkeley.edu/python/csp.html"];
+        metadata.resource_notes = "Observed-bijection-v1: 26..64 scalars, ciphertext <=65536 scalars/1 MiB, <=4096 exact dictionary words of <=256 scalars, <=256 cipher aliases, 1 Mi scalar/support visits, <=4096 candidates, <=64 MiB conservatively reserved workspace, <=4 MiB request/report. Unobserved keys are exact factorial classes. Report retention may stop before max_results; limits never imply contradiction.";
+    }
+    result
+}
+const fn family_row(s: Spec) -> Row {
+    let mut result = row(s);
+    if let Some(ref mut metadata) = result.profile.metadata {
+        metadata.references = &["https://pages.mtu.edu/~shene/NSF-4/Tutorial/VIG/Vig-IOC.html"];
+        metadata.resource_notes = "ASCII-classical-evidence-v1: <=1 MiB input, <=32 explicit periods in 2..64, two finite rules and at most two suggestions, <=16 Mi observation visits, <=4 MiB strict request/report. IC and column facts remain distinct from compatible-family heuristics and alternatives; no posterior probabilities or cipher identity proof.";
+    }
+    result
+}
+static ROWS: [Row; 11] = [
     row(Spec {
         id: "analysis.language.score",
         name: "Caller-owned language-model scoring",
@@ -263,27 +280,67 @@ static ROWS: [Row; 9] = [
         }],
         fixture: fixtures::frequency_compare,
     }),
+    solver_row(Spec {
+        id: "analysis.substitution.solve",
+        name: "Exact bounded substitution constraints",
+        command: "cryptanalysis substitution",
+        python: "substitution_solve",
+        rust: "cube_core::cryptanalysis::substitution::solve",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<substitution::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<substitution::Report>,
+            required: true,
+        }],
+        fixture: fixtures::substitution_solve,
+    }),
+    family_row(Spec {
+        id: "analysis.family.suggest",
+        name: "Evidence-linked classical family suggestions",
+        command: "cryptanalysis families",
+        python: "family_suggest",
+        rust: "cube_core::cryptanalysis::family::suggest",
+        inputs: &[c::Port {
+            name: "request",
+            semantic_type: "json",
+            schema: c::schema::<family::Request>,
+            required: true,
+        }],
+        outputs: &[c::Port {
+            name: "report",
+            semantic_type: "analysis.report",
+            schema: c::schema::<family::Report>,
+            required: true,
+        }],
+        fixture: fixtures::family_suggest,
+    }),
 ];
-const fn profiles() -> [m::Entry; 9] {
-    let mut out = [ROWS[0].profile; 9];
+const fn profiles() -> [m::Entry; 11] {
+    let mut out = [ROWS[0].profile; 11];
     let mut i = 0;
-    while i < 9 {
+    while i < 11 {
         out[i] = ROWS[i].profile;
         i += 1;
     }
     out
 }
-const fn contracts() -> [c::Entry; 9] {
-    let mut out = [ROWS[0].contract; 9];
+const fn contracts() -> [c::Entry; 11] {
+    let mut out = [ROWS[0].contract; 11];
     let mut i = 0;
-    while i < 9 {
+    while i < 11 {
         out[i] = ROWS[i].contract;
         i += 1;
     }
     out
 }
-const PROFILES: [m::Entry; 9] = profiles();
-const CONTRACTS: [c::Entry; 9] = contracts();
+const PROFILES: [m::Entry; 11] = profiles();
+const CONTRACTS: [c::Entry; 11] = contracts();
 pub static OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
 pub(crate) const MODULE: o::Module =
     o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);

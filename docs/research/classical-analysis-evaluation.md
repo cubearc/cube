@@ -110,3 +110,52 @@ reversible, are not modern cipher breaking and do not establish authenticity.
 All experimental fixtures and code here are original under this repository's
 license. Only the measured Python experiment is claimed; it is portable standard
 Python plus the existing Cube CLI, without network or external solver execution.
+
+
+## Functional qualification — 2026-11-01
+
+The historical deferrals above describe the earlier probe, not current product
+availability. `analysis.substitution.solve` implements the explicit observed
+bijection profile and `analysis.family.suggest` implements finite evidence rules.
+Their complete current inputs, outputs, limits and interpretation are in the
+[classical analysis reference](../reference/topics/cryptanalysis.md).
+
+The substitution solver independently implements deterministic all-different
+constraints, pattern indexing, minimum remaining values and backtracking, using
+[AIMA's primary CSP reference](https://aima.cs.berkeley.edu/python/csp.html).
+No upstream code, solver dependency, corpus or dictionary is bundled. Existing
+Core substitution rendering, scoring and NumBigInt are reused. The earlier
+unused-key enumeration premise is removed: each observed mapping represents an
+exact factorial class of full keys. Caller dictionary duplicates retain source
+indices as factored choices. Tests compare small search spaces against factorial
+oracles, full-key inverses and exact hand-computed words, including 64 Unicode
+symbols, aliases, contradictory cribs and cancellation.
+
+Family evidence reuses Core's exact IC and column counts, following the
+[author's IC derivation](https://pages.mtu.edu/~shene/NSF-4/Tutorial/VIG/Vig-IOC.html).
+A regression test exposed a false positive in a preliminary column-IC rule:
+repeating `ABCDEFGHIJKLMNOPQRSTUVWXYZ` raises column IC while each occupied
+column distribution remains uniform. The shipped profile adds explicit occupied-bin
+variation and diversity gates. These gates reduce this particular error without
+establishing universal cipher identification. Plaintext and its substitution or
+rearrangement remain intentionally indistinguishable; periodic plaintext remains
+an explicit alternative to a repeating-key cipher.
+
+The reproducible production evaluation is
+[classical-family-evaluation.py](classical-family-evaluation.py). It compares the
+legacy experimental thresholds, actual header triage and the installed native
+operation on original held-out and constructed cases. Its emitted JSON records
+compatibility hits, unsupported family claims on negative controls, abstentions
+and actual observations. This is a finite qualification set, not a calibrated
+classifier or estimate of real-world error rates.
+
+
+The installed native evaluation recorded 22 cases: all 8 count-compatible
+plaintext/substitution/rearrangement cases and both repeating-key cases retained
+their compatible family. Among 12 negative controls, the earlier rules made
+claims on 9; the delivered rules abstained on 11 and retained a count-compatible
+suggestion on the intentionally periodic language sequence. That remaining case
+is a documented counterexample, not a proven encryption detection. Header triage
+made no cipher-family claims and suggested inspections only. The exact per-case
+facts are reproducible from the script; these finite counts do not establish
+population accuracy or calibration.

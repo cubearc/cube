@@ -32,6 +32,8 @@ handler!(transposition, a::transposition::rank);
 handler!(homophonic, a::homophonic::inspect);
 handler!(crib, a::crib::verify);
 handler!(frequency, a::frequency::compare);
+handler!(substitution, a::substitution::solve);
+handler!(families, a::family::suggest);
 fn resolve(op: &str) -> Option<Handler> {
     Some(match op {
         "analysis.language.score" => score,
@@ -43,6 +45,8 @@ fn resolve(op: &str) -> Option<Handler> {
         "analysis.homophonic.inspect" => homophonic,
         "analysis.crib.verify" => crib,
         "analysis.frequency.compare" => frequency,
+        "analysis.substitution.solve" => substitution,
+        "analysis.family.suggest" => families,
         _ => return None,
     })
 }

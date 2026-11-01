@@ -26229,6 +26229,147 @@ Example:
 cube encode a1z26 --text 'Hi Cube'
 ```
 
+## symbol.alphabet.decode
+
+Decode a source-qualified symbolic alphabet, retaining all readings, exact tokens and positions.
+
+Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `alphabet.tokens` |
+| Output | `readings` | `alphabet.readings` |
+| Output | `tokens` | `alphabet.tokens` |
+| Output | `provenance` | `alphabet.provenance` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "parameters": {
+    "profile": "standard_galactic_ucsur_2019_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aurebesh_ucsur_2016_v1",
+        "standard_galactic_ucsur_2019_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube encode alphabet --help
+```
+
+## symbol.alphabet.encode
+
+Encode exact presegmented units with an explicit source-qualified symbolic alphabet.
+
+Category: `symbols`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `units` | `alphabet.units` |
+| Output | `tokens` | `alphabet.tokens` |
+| Output | `provenance` | `alphabet.provenance` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "units": [
+      "A",
+      "CH",
+      "C",
+      "H",
+      "Z"
+    ]
+  },
+  "parameters": {
+    "profile": "aurebesh_ucsur_2016_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aurebesh_ucsur_2016_v1",
+        "standard_galactic_ucsur_2019_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube encode alphabet --help
+```
+
 ## symbol.braille.decode
 
 Decode U+2800..U+28FF cells to exact mask bytes; reject other characters; <=1 MiB.

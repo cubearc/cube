@@ -16,12 +16,16 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
     let mut checked = 0;
     for case in cases.iter().filter(|c| {
         c["operation"].as_str().is_some_and(|op| {
+            if !op.starts_with("cipher.") && !op.starts_with("symbol.") {
+                return false;
+            }
             [
                 "numbered_key",
                 "headlines",
                 "key_phrase",
                 "arnold",
                 "solresol",
+                "alphabet",
                 "prime_number",
                 "prime_multiplication",
                 "modulo",
@@ -38,7 +42,7 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
         let operation = case["operation"].as_str().unwrap();
         let mut cmd = Command::new(env!("CARGO_BIN_EXE_cube"));
         let command = operation.split('.').nth(1).unwrap().replace('_', "-");
-        let symbolic = operation.starts_with("symbol.solresol.");
+        let symbolic = operation.starts_with("symbol.");
         let mode = if symbolic {
             if operation.ends_with("decode") {
                 "decode"
@@ -85,6 +89,6 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 18);
+    assert_eq!(checked, 20);
     std::fs::remove_dir_all(directory).unwrap();
 }

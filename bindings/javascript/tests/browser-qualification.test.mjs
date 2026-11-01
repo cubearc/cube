@@ -103,6 +103,16 @@ test('actual browser initializes a packaged SDK worker under a non-root path and
   assert.deepEqual(actual.result.output, { type: 'text', data: 'Café' });
   assert.deepEqual(actual.result.intermediates['0'], { type: 'bytes', base64: 'Q2Fmw6k=' });
   const fixtures = JSON.parse(await readFile(files.get('/docs/playground/fixtures.json')[1], 'utf8'));
+  const alphabetVectors=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/vectors.json',import.meta.url),'utf8'));
+  for(const row of alphabetVectors) {
+    const results=await page.evaluate(async row=> {
+      const parameters={profile:row.profile};
+      const encoded=await globalThis.qualificationWorker.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:row.units},parameters});
+      const decoded=await globalThis.qualificationWorker.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters});
+      return [encoded.value.tokens,decoded.value.readings];
+    },row);
+    assert.deepEqual(results,[row.tokens,row.units.map((unit,token_index)=>({token_index,alternatives:[unit]}))]);
+  }
   let completedDirect = 0;
   const report = await qualificationReport({
     snapshot: actual.snapshot,

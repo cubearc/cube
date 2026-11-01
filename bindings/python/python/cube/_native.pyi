@@ -80,6 +80,34 @@ def triliteral_decode(
     tokens: list[str], parameters: TriliteralParameters
 ) -> NumericDecodedReport: ...
 
+class AlphabetParameters(TypedDict):
+    profile: Literal["aurebesh_ucsur_2016_v1", "standard_galactic_ucsur_2019_v1"]
+
+class AlphabetProvenance(TypedDict):
+    source_id: str
+    profile_id: Literal["aurebesh_ucsur_2016_v1", "standard_galactic_ucsur_2019_v1"]
+    source_url: str
+    source_sha256: str
+    definition_sha256: str
+
+class AlphabetReading(TypedDict):
+    token_index: int
+    alternatives: list[str]
+
+class AlphabetEncodedReport(TypedDict):
+    tokens: list[str]
+    provenance: AlphabetProvenance
+
+class AlphabetDecodedReport(AlphabetEncodedReport):
+    readings: list[AlphabetReading]
+
+def alphabet_encode(
+    units: list[str], parameters: AlphabetParameters
+) -> AlphabetEncodedReport: ...
+def alphabet_decode(
+    tokens: list[str], parameters: AlphabetParameters
+) -> AlphabetDecodedReport: ...
+
 class SolresolParameters(TypedDict):
     profile: Literal["gajewski_1902_monosyllables_v1"]
 

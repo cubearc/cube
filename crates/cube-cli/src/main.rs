@@ -285,6 +285,8 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Source-qualified symbolic alphabet over exact presegmented JSON units
+    Alphabet(puzzlecodescmd::Parameters),
     /// Exact French gloss tokens to the qualified Gajewski monosyllable lexicon
     Solresol(puzzlecodescmd::Parameters),
     /// Exact caller-owned symbolic token table; no font or OCR
@@ -319,6 +321,8 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Read exact symbolic tokens, retaining alternatives and positions
+    Alphabet(puzzlecodescmd::Parameters),
     /// Retain all Gajewski monosyllable glosses and original word positions
     Solresol(puzzlecodescmd::Parameters),
     /// Exact caller-owned symbolic token table; preserve aliases/positions
@@ -885,6 +889,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     cube_core::symbols::a1z26::encode(&input.read_text("symbol.a1z26.encode")?)?
                 }
                 Encode::Tokens(args) => puzzlecodescmd::tokens(args, true)?,
+                Encode::Alphabet(args) => puzzlecodescmd::alphabet(args, true)?,
                 Encode::Solresol(args) => puzzlecodescmd::solresol(args, true)?,
                 Encode::Morse(input) => {
                     cube_core::symbols::morse_encode(&input.read_text("symbol.morse.encode")?)?
@@ -931,6 +936,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 )?)?,
             )?,
             Decode::Tokens(args) => write_text(&mut output, &puzzlecodescmd::tokens(args, false)?)?,
+            Decode::Alphabet(args) => {
+                write_text(&mut output, &puzzlecodescmd::alphabet(args, false)?)?
+            }
             Decode::Solresol(args) => {
                 write_text(&mut output, &puzzlecodescmd::solresol(args, false)?)?
             }

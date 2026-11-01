@@ -1,0 +1,411 @@
+{
+  "source_id": "aurebesh_ucsur_2016_v1",
+  "source_url": "https://www.kreativekorp.com/ucsur/charts/aurebesh.htm",
+  "source_sha256": "d83267b3d7ca4bf82558b3927a9f86d900c729c04bf312601f91696452b5922b",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "W"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "CH"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "AE"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "EO"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "KH"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "NG"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "OO"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "SH"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "TH"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          ","
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "."
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "?"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "!"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          ":"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          ";"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "-"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "“"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "”"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "‘"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "’"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "("
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          ")"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "/"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "CREDITS_SIGN"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          " "
+        ],
+        "codes": [
+          " "
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

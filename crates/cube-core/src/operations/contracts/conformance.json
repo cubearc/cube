@@ -13421,5 +13421,103 @@
       "profile": "ordered_ternary_v1",
       "trits": ".-x"
     }
+  },
+  {
+    "contract_sha256": "ee2fb2cc0ff096d904cd5e03fc2e7b2e9cb9844e44d17fe2b86780b2f7726ecc",
+    "inputs": {
+      "units": [
+        "A",
+        "CH",
+        "C",
+        "H",
+        "Z"
+      ]
+    },
+    "operation": "symbol.alphabet.encode",
+    "operation_version": 1,
+    "outputs": {
+      "provenance": {
+        "definition_sha256": "b39d4826197e2cfdd4644c4f479a583b065a09c0061453f3b5c17524103ecab3",
+        "profile_id": "aurebesh_ucsur_2016_v1",
+        "source_id": "aurebesh_ucsur_2016_v1",
+        "source_sha256": "d83267b3d7ca4bf82558b3927a9f86d900c729c04bf312601f91696452b5922b",
+        "source_url": "https://www.kreativekorp.com/ucsur/charts/aurebesh.htm"
+      },
+      "tokens": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "parameters": {
+      "profile": "aurebesh_ucsur_2016_v1"
+    }
+  },
+  {
+    "contract_sha256": "fbecc0fe3d5edcd35cf90169d6fb56ebd14d4cfccfdefd0b005af11590816808",
+    "inputs": {
+      "tokens": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "operation": "symbol.alphabet.decode",
+    "operation_version": 1,
+    "outputs": {
+      "provenance": {
+        "definition_sha256": "6348a8a549ffb90b2ef3e136e62e64d52fbfd19e40bb96d03b549a14408dfc7b",
+        "profile_id": "standard_galactic_ucsur_2019_v1",
+        "source_id": "standard_galactic_ucsur_2019_v1",
+        "source_sha256": "a0e7845ad1fca1660700b1f8bbc57794f1acf3d7146f5230aeba8b25d20cc649",
+        "source_url": "https://www.kreativekorp.com/ucsur/charts/sga.html"
+      },
+      "readings": [
+        {
+          "alternatives": [
+            "K"
+          ],
+          "token_index": 0
+        },
+        {
+          "alternatives": [
+            "E"
+          ],
+          "token_index": 1
+        },
+        {
+          "alternatives": [
+            "E"
+          ],
+          "token_index": 2
+        },
+        {
+          "alternatives": [
+            "N"
+          ],
+          "token_index": 3
+        },
+        {
+          "alternatives": [
+            "."
+          ],
+          "token_index": 4
+        }
+      ],
+      "tokens": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "parameters": {
+      "profile": "standard_galactic_ucsur_2019_v1"
+    }
   }
 ]

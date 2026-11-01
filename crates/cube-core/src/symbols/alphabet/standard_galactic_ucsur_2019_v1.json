@@ -1,0 +1,251 @@
+{
+  "source_id": "standard_galactic_ucsur_2019_v1",
+  "source_url": "https://www.kreativekorp.com/ucsur/charts/sga.html",
+  "source_sha256": "a0e7845ad1fca1660700b1f8bbc57794f1acf3d7146f5230aeba8b25d20cc649",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "W"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "“"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "”"
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          "."
+        ],
+        "codes": [
+          ""
+        ]
+      },
+      {
+        "alternatives": [
+          " "
+        ],
+        "codes": [
+          " "
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

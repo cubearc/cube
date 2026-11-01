@@ -146,3 +146,22 @@ test('historical operations execute through the packaged Wasm with exact Unicode
     units: [{ token_index: 0, alternatives: ['OR'] }], null_indices: [3], canceled_indices: [1], cancel_indices: [2],
   });
 });
+
+test('dated symbolic alphabets execute every published assignment in actual Wasm', async () => {
+  const rows=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/vectors.json',import.meta.url),'utf8'));
+  for(const row of rows) {
+    const parameters={profile:row.profile};
+    const encoded=cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:row.units},parameters});
+    assert.deepEqual(encoded.tokens,row.tokens);
+    const decoded=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters});
+    assert.deepEqual(decoded.readings,row.units.map((unit,token_index)=>({token_index,alternatives:[unit]})));
+    assert.deepEqual(decoded.tokens,row.tokens);
+    assert.deepEqual(decoded.provenance,encoded.provenance);
+    assert.deepEqual(cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[]},parameters}).readings,[]);
+  }
+  const parameters={profile:'aurebesh_ucsur_2016_v1'};
+  for(const unit of ['a','Ch','CHAT','0','é','']) assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[unit]},parameters}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:['\ue8d0']},parameters}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},parameters:{}}),{code:'invalid_parameter'});
+  assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:Array(65537).fill('A')},parameters}),{code:'resource_limit'});
+});

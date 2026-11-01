@@ -88,3 +88,11 @@ void rot8000; void paired; void alternatives;
 cube.execute({ operation: 'cipher.great_cipher.encode', version: 1, inputs: { text: 'LesEnnemis' } });
 // @ts-expect-error Vatsyayana requires an explicit pairing key.
 cube.execute({ operation: 'cipher.vatsyayana', version: 1, inputs: { text: 'A' }, parameters: {} });
+
+const alphabetTokens:readonly string[]=cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:['A','CH']},parameters:{profile:'aurebesh_ucsur_2016_v1'}}).tokens;
+const alphabetReadings:readonly string[]=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:['\ueb40']},parameters:{profile:'standard_galactic_ucsur_2019_v1'}}).readings[0].alternatives;
+void alphabetTokens;void alphabetReadings;
+// @ts-expect-error Named source profile is required.
+cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},parameters:{}});
+// @ts-expect-error Unqualified display names are not profile IDs.
+cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},parameters:{profile:'Aurebesh'}});

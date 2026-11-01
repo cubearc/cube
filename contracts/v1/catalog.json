@@ -96733,6 +96733,522 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "symbol.alphabet.decode",
+      "category": "symbols",
+      "description": "Decode a source-qualified symbolic alphabet, retaining all readings, exact tokens and positions.",
+      "example": "cube encode alphabet --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "alphabet.tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile"
+        ],
+        "$defs": {
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "aurebesh_ucsur_2016_v1",
+              "standard_galactic_ucsur_2019_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "readings",
+          "semantic_type": "alphabet.readings",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Unit"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "aurebesh_ucsur_2016_v1",
+                  "standard_galactic_ucsur_2019_v1"
+                ]
+              },
+              "Provenance": {
+                "type": "object",
+                "properties": {
+                  "definition_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "profile_id": {
+                    "$ref": "#/$defs/Profile"
+                  },
+                  "source_id": {
+                    "type": "string",
+                    "maxLength": 1024,
+                    "minLength": 1
+                  },
+                  "source_sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "source_url": {
+                    "type": "string",
+                    "maxLength": 1024,
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "source_id",
+                  "profile_id",
+                  "source_url",
+                  "source_sha256",
+                  "definition_sha256"
+                ]
+              },
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              },
+              "Tokens": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/TokenText"
+                },
+                "maxItems": 65536,
+                "x-cube-max-serialized-bytes": 1048576
+              },
+              "Unit": {
+                "type": "object",
+                "properties": {
+                  "alternatives": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/TokenText"
+                    },
+                    "maxItems": 16,
+                    "minItems": 1
+                  },
+                  "token_index": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 65535,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "token_index",
+                  "alternatives"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "tokens",
+          "semantic_type": "alphabet.tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "provenance",
+          "semantic_type": "alphabet.provenance",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Provenance",
+            "type": "object",
+            "properties": {
+              "definition_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "profile_id": {
+                "$ref": "#/$defs/Profile"
+              },
+              "source_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1
+              },
+              "source_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "source_url": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "source_id",
+              "profile_id",
+              "source_url",
+              "source_sha256",
+              "definition_sha256"
+            ],
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "aurebesh_ucsur_2016_v1",
+                  "standard_galactic_ucsur_2019_v1"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "symbol.alphabet.encode",
+      "category": "symbols",
+      "description": "Encode exact presegmented units with an explicit source-qualified symbolic alphabet.",
+      "example": "cube encode alphabet --help",
+      "deterministic": true,
+      "reversible": false,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "units",
+          "semantic_type": "alphabet.units",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "profile"
+        ],
+        "$defs": {
+          "Profile": {
+            "type": "string",
+            "enum": [
+              "aurebesh_ucsur_2016_v1",
+              "standard_galactic_ucsur_2019_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "tokens",
+          "semantic_type": "alphabet.tokens",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Tokens",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/TokenText"
+            },
+            "maxItems": 65536,
+            "x-cube-max-serialized-bytes": 1048576,
+            "$defs": {
+              "TokenText": {
+                "description": "Token string schema mirrors the exact serialized String representation and\nits existing byte/scalar limits; it does not select or execute an operation.",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1,
+                "x-cube-max-utf8-bytes": 256
+              }
+            }
+          }
+        },
+        {
+          "name": "provenance",
+          "semantic_type": "alphabet.provenance",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Provenance",
+            "type": "object",
+            "properties": {
+              "definition_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "profile_id": {
+                "$ref": "#/$defs/Profile"
+              },
+              "source_id": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1
+              },
+              "source_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "source_url": {
+                "type": "string",
+                "maxLength": 1024,
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "source_id",
+              "profile_id",
+              "source_url",
+              "source_sha256",
+              "definition_sha256"
+            ],
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "aurebesh_ucsur_2016_v1",
+                  "standard_galactic_ucsur_2019_v1"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": false,
+        "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "symbol.braille.decode",
       "category": "symbols",
       "description": "Decode U+2800..U+28FF cells to exact mask bytes; reject other characters; <=1 MiB.",

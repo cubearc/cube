@@ -152,3 +152,57 @@ angles. It does not recognize clock images or define official Semaphore.
 Each call handles one reading with fixed work/storage and output below 1 KiB.
 Optional Semaphore decoding maps hour to LH and minute to RH; ambiguity and
 unsupported pairs fail. This structured result has no pipeline adapter.
+
+## Dated symbolic alphabets
+
+Use `symbol.alphabet.encode` with exact presegmented `units`, or
+`symbol.alphabet.decode` with exact `tokens`. A required `profile` selects one
+published table; display names alone are not accepted.
+
+| Profile | Units and representation | Source |
+| --- | --- | --- |
+| `aurebesh_ucsur_2016_v1` | A–Z at U+E890–U+E8A9; CH, AE, EO, KH, NG, OO, SH, TH at U+E8AA–U+E8B1; published punctuation at U+E8C0–U+E8CE | [Doug Ewell's proposal, 2016-06-22](https://www.kreativekorp.com/ucsur/charts/aurebesh.htm) |
+| `standard_galactic_ucsur_2019_v1` | A–Z at U+EB40–U+EB59; left/right quotation marks and full stop at U+EB5D–U+EB5F | [Rebecca Bettencourt's proposal, 2019-09-14](https://www.kreativekorp.com/ucsur/charts/sga.html) |
+
+These are **private-use proposals**, not Unicode-standard encodings of the
+scripts. Viewing their glyphs requires a font implementing the selected proposal;
+Cube bundles no fonts or source artwork. Ordinary U+0020 spaces pass through as
+explicit units. Neither profile defines digits; unsupported units, reserved
+positions, lowercase and joined words reject. Case folding, font detection, OCR
+and language translation are not inferred.
+
+Aurebesh punctuation uses the literal units `, . ? ! : ; - “ ” ‘ ’ ( ) /` and
+the semantic unit `CREDITS_SIGN`, in proposal order. Standard Galactic punctuation
+uses the literal units `“ ” .`. ASCII straight quotes are not aliases for the
+proposal's left/right marks.
+
+Save `{"profile":"aurebesh_ucsur_2016_v1"}` as `alphabet.json`:
+
+```sh
+cube encode alphabet --parameters alphabet.json --text '["A","CH","C","H"]'
+```
+
+The JSON report's `tokens` are U+E890, U+E8AA, U+E892, U+E897, in that order.
+Supplying `CH` as one unit selects the digraph; separate `C` and `H` select two
+letters. Decode returns the original tokens and `readings`, each with its
+zero-based `token_index` and every listed `alternative`. Repeated symbols remain
+separate. Empty input returns empty arrays. Both reports include the dated
+`profile_id`, source URL, SHA-256 of the reviewed source HTML and SHA-256 of the
+canonical effective definition. Source hashes identify the reviewed snapshots;
+they do not claim a font's identity or licensing terms.
+
+### Interfaces and limits
+
+Native Python exposes `alphabet_encode(units, parameters)` and
+`alphabet_decode(tokens, parameters)`. Rust uses
+`symbols::alphabet::{encode,decode}`. The JavaScript/TypeScript SDK executes the
+same operation IDs through Core Wasm. Play supports the typed JSON ports and
+named results; its JSON viewer preserves the arrays and provenance.
+
+Input is limited to 65,536 items and 1 MiB compact JSON, with at most 256 UTF-8
+bytes per unit/token. Each fixed definition is at most 64 KiB; the complete
+serialized report is at most 1 MiB. Decode can reach the report limit before the
+item limit. Exceeding either fails with `resource_limit`, without truncating the
+message. Unknown units/tokens fail with `invalid_input`; a missing, unknown or
+extra profile parameter fails with `invalid_parameter`. These puzzle mappings
+provide no confidentiality or authentication.

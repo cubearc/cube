@@ -140,8 +140,8 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 253);
-    assert_eq!(ids.len(), 369);
+    assert_eq!(annotated, 255);
+    assert_eq!(ids.len(), 371);
     assert_eq!(cube_core::pipeline::supported_adapters().len(), 53);
 }
 #[test]

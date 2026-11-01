@@ -43,6 +43,7 @@ mod recipe;
 mod solresol;
 mod stream;
 mod structured_composition;
+mod symbolic_alphabet;
 mod textops;
 mod traversal;
 mod unicode;
@@ -602,6 +603,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     numbered_key::register(module)?;
     numeric_puzzles::register(module)?;
     word_codes::register(module)?;
+    symbolic_alphabet::register(module)?;
     solresol::register(module)?;
     poly::register(module)?;
     vigenere_keys::register(module)?;

@@ -12,6 +12,22 @@ cube decode semaphore --text 'S,SW / S,W'
 The directions describe the two arms. The slash separates words; decoding
 the second example returns `A B`.
 
+## Named alphabet tokens
+
+Select a dated source table when the clue uses Aurebesh or Standard Galactic.
+Save `{"profile":"aurebesh_ucsur_2016_v1"}` as `alphabet.json`, then encode
+explicit letter units:
+
+```sh
+cube encode alphabet --parameters alphabet.json --text '["A","CH"]'
+```
+
+The `tokens` in the JSON report are the private-use characters U+E890 and U+E8AA.
+Rendering them as glyphs requires a matching font. The single unit `CH` selects
+the digraph; `C` and `H` would produce two tokens. See
+[dated symbolic alphabets](../reference/topics/symbolic-encodings.md#dated-symbolic-alphabets)
+for the supported tables, punctuation, exact decoding and limits.
+
 ## Book positions
 
 Create a short source text, then select the first character from each word:

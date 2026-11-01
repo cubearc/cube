@@ -1,6 +1,6 @@
 //! Typed fractionation profiles call Core with explicit alphabets and periods.
 use super::field;
-use cube_core::{
+use crate::{
     ciphers::{
         fractionation::{self as f, morse},
         poly,
@@ -61,7 +61,13 @@ fn resolve(op: &str) -> Option<Handler> {
 pub(super) fn supports(op: &str) -> bool {
     resolve(op).is_some()
 }
-pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    i: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     resolve(op).ok_or_else(|| {
         OperationError::new(
             ErrorCode::InvalidInput,

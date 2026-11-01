@@ -1,6 +1,6 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
 use super::field;
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     graph,
     logic::boolean,
@@ -51,8 +51,14 @@ fn output(value: impl Serialize) -> Result<Value, OperationError> {
         .map(|value| json!({"output":value}))
         .map_err(|_| invalid())
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| match selected {
         Adapter::Components | Adapter::Shortest | Adapter::Cycle | Adapter::Euler => {

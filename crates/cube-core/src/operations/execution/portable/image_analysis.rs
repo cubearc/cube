@@ -3,7 +3,7 @@ use super::{
     field,
     images::{bytes, channels, image, raster, region},
 };
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     image::{self, Image},
 };
@@ -67,8 +67,14 @@ fn layout(p: &Value) -> Result<image::RawLayout, OperationError> {
         offset: field(p, "offset")?,
     })
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| {
         match selected {
@@ -85,7 +91,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
             }
             Adapter::Png => {
                 return Ok(
-                    json!({"output":cube_core::forensics::png::inspect(&mut Cursor::new(super::bytes(&inputs["input"])?),field(&p,"strict")?,field(&p,"payload_budget")?)?}),
+                    json!({"output":crate::forensics::png::inspect(&mut Cursor::new(super::bytes(&inputs["input"])?),field(&p,"strict")?,field(&p,"payload_budget")?)?}),
                 );
             }
             Adapter::Pairs => {
@@ -152,8 +158,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
                     .map(|v| {
                         v.iter()
                             .map(|s| {
-                                cube_core::encoding::hex_decode(s)
-                                    .map_err(|e| invalid().caused_by(e))
+                                crate::encoding::hex_decode(s).map_err(|e| invalid().caused_by(e))
                             })
                             .collect::<Result<Vec<_>, _>>()
                     })
@@ -171,7 +176,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
                 let colors: Vec<String> = field(&p, "colors")?;
                 let colors = colors
                     .iter()
-                    .map(|s| cube_core::encoding::hex_decode(s).map_err(|e| invalid().caused_by(e)))
+                    .map(|s| crate::encoding::hex_decode(s).map_err(|e| invalid().caused_by(e)))
                     .collect::<Result<Vec<_>, _>>()?;
                 let layer = source.exact_colors(
                     &colors,

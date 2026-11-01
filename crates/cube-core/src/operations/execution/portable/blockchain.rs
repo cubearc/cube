@@ -1,6 +1,6 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
 use super::{field, images::bytes};
-use cube_core::{
+use crate::{
     blockchain::{self as key, bitcoin, candidates, ethereum, private, wif},
     errors::{ErrorCode, OperationError},
 };
@@ -41,8 +41,14 @@ fn network(p: &Value, k: &str) -> Result<Option<key::Network>, OperationError> {
         .map(|_| key::Network::parse(text(p, k)?))
         .transpose()
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| {
         if matches!(selected, Adapter::Wif) {

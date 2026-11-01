@@ -1,6 +1,6 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
 use super::{bytes, field};
-use cube_core::{
+use crate::{
     ciphers::{bacon, polybius},
     errors::{ErrorCode, OperationError},
     symbols::{self, clock, keypad},
@@ -93,15 +93,21 @@ fn output(value: impl Serialize) -> Result<Value, OperationError> {
         .map(|value| json!({"output": value}))
         .map_err(|_| invalid())
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| match selected {
         Adapter::MorseEncode => output(symbols::morse_encode(string(&inputs, "input")?)?),
         Adapter::MorseDecode => output(symbols::morse_decode(string(&inputs, "input")?)?),
         Adapter::BrailleEncode => output(symbols::braille_encode(&bytes(&inputs["input"])?)?),
         Adapter::BrailleDecode => output(
-            json!({"base64":cube_core::encoding::base64_encode(&symbols::braille_decode(string(&inputs,"input")?)?)}),
+            json!({"base64":crate::encoding::base64_encode(&symbols::braille_decode(string(&inputs,"input")?)?)}),
         ),
         Adapter::BaconEncode => output(bacon::encode(
             string(&inputs, "input")?,

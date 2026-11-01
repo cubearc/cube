@@ -1,5 +1,4 @@
 //! Thin ABI qualification over actual Core APIs; algorithms remain in Core.
-mod bindings;
 use cube_core::{
     errors::{ErrorCode, OperationError},
     operations::{contracts, execution},
@@ -54,6 +53,9 @@ fn execution_error_at(value: execution::Failure, operation: Option<&'static str>
         "resource_limit" | "input_limit" | "output_limit" | "numeric_overflow" => "resource_limit",
         "invalid_registration" | "invalid_response" => "runtime_failure",
         "operation_failed" => "operation_failed",
+        "unsupported_format" => "unsupported_format",
+        "cancelled" => "cancelled",
+        "io" => "io",
         _ => "invalid_input",
     };
     serde_json::json!({
@@ -82,7 +84,7 @@ fn empty_parameters() -> serde_json::Value {
 #[wasm_bindgen]
 pub fn executors_json() -> Result<String, String> {
     let entries = execution::catalog(budget()).map_err(execution_error)?;
-    let mut values = entries
+    let values = entries
         .into_iter()
         .map(|entry| {
             serde_json::json!({
@@ -95,20 +97,6 @@ pub fn executors_json() -> Result<String, String> {
             })
         })
         .collect::<Vec<_>>();
-    for contract in contracts::document().map_err(error)?.operations {
-        if bindings::supports(&contract.operation)
-            && !values
-                .iter()
-                .any(|entry| entry["operation"] == contract.operation)
-        {
-            values.push(
-                bindings::describe(
-                    &serde_json::to_value(contract).expect("canonical contract serializes"),
-                )
-                .map_err(error)?,
-            );
-        }
-    }
     Ok(contracts::canonical_value(serde_json::json!(values)).to_string())
 }
 
@@ -127,28 +115,7 @@ pub fn execute_json(document: &str) -> Result<String, String> {
             "use an exact named operation invocation",
         ))
     })?;
-    let entry = match execution::describe(&request.operation, budget()) {
-        Ok(entry) => entry,
-        Err(_) if bindings::supports(&request.operation) => {
-            let contract = cube_core::operations::require(&request.operation)
-                .map_err(error)?
-                .contract()
-                .map_err(error)?;
-            if request.version != contract.operation_version {
-                return Err(serde_json::json!({"code":"incompatible_version", "message":"operation version differs from the installed executor", "operation":request.operation}).to_string());
-            }
-            return bindings::execute(
-                &request.operation,
-                request.version,
-                request.inputs,
-                request.parameters,
-                MAX_CODEC_INPUT,
-            )
-            .map(|value| value.to_string())
-            .map_err(error);
-        }
-        Err(failure) => return Err(execution_error(failure)),
-    };
+    let entry = execution::describe(&request.operation, budget()).map_err(execution_error)?;
     if request.version != entry.contract.operation_version {
         return Err(serde_json::json!({
             "code": "incompatible_version",
@@ -157,14 +124,10 @@ pub fn execute_json(document: &str) -> Result<String, String> {
         })
         .to_string());
     }
-    let output = execution::execute(
-        &request.operation,
-        request.version,
-        &request.inputs,
-        &request.parameters,
-        budget(),
-    )
-    .map_err(|value| execution_error_at(value, Some(entry.operation)))?;
+    let output = invoke(&request, entry.effects).map_err(|value| match value {
+        execution::InvocationError::Code(value) => execution_error_at(value, Some(entry.operation)),
+        execution::InvocationError::Operation(value) => error(value),
+    })?;
     Ok(contracts::canonical_value(output).to_string())
 }
 
@@ -186,6 +149,47 @@ fn limit(size: usize, operation: &'static str) -> Result<(), String> {
 pub fn encode_base64(input: &[u8]) -> Result<String, String> {
     limit(input.len(), "encoding.base64.encode")?;
     Ok(cube_core::encoding::base64_encode(input))
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(catch, js_namespace = performance, js_name = now)]
+    fn monotonic_now() -> Result<f64, JsValue>;
+}
+fn invoke(
+    request: &Invocation,
+    _effects: execution::Effects,
+) -> Result<serde_json::Value, execution::InvocationError> {
+    #[cfg(target_arch = "wasm32")]
+    if _effects == execution::Effects::MonotonicClock {
+        let clock_error =
+            || OperationError::new(ErrorCode::Io, "monotonic clock is unavailable or invalid");
+        let start =
+            monotonic_now().map_err(|_| execution::InvocationError::Operation(clock_error()))?;
+        if !start.is_finite() {
+            return Err(execution::InvocationError::Operation(clock_error()));
+        }
+        let mut elapsed = || {
+            let milliseconds = monotonic_now().map_err(|_| clock_error())? - start;
+            std::time::Duration::try_from_secs_f64(milliseconds / 1000.0).map_err(|_| clock_error())
+        };
+        return execution::invoke_with_clock(
+            &request.operation,
+            request.version,
+            &request.inputs,
+            &request.parameters,
+            budget(),
+            &mut elapsed,
+        );
+    }
+    execution::invoke(
+        &request.operation,
+        request.version,
+        &request.inputs,
+        &request.parameters,
+        budget(),
+    )
 }
 
 #[wasm_bindgen]
@@ -300,6 +304,19 @@ pub fn run_recipe_json(
 mod binding_tests {
     use super::*;
     use serde_json::{Value, json};
+
+    #[test]
+    fn direct_errors_keep_safe_parameter_context() {
+        let request = json!({"operation":"cipher.book.decode","version":1,
+            "inputs":{"input":"0:1"},
+            "parameters":{"source":"private-book-sentinel","scheme":"word_character","index_base":1}});
+        let error = execute_json(&request.to_string()).unwrap_err();
+        let value: Value = serde_json::from_str(&error).unwrap();
+        assert_eq!(value["code"], "invalid_input");
+        assert_eq!(value["operation"], "cipher.book.decode");
+        assert_eq!(value["parameter"], "coordinates");
+        assert!(!error.contains("private-book-sentinel"));
+    }
 
     #[test]
     fn historical_native_executors_preserve_typed_error_categories() {

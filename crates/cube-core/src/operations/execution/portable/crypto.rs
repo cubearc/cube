@@ -1,6 +1,6 @@
 //! Raw cipher profiles forward exact bytes and explicit key material to Core.
 use super::{bytes, field};
-use cube_core::{
+use crate::{
     ciphers::{aes_blocks, stream},
     errors::{ErrorCode, OperationError},
 };
@@ -15,10 +15,16 @@ pub(super) fn supports(op: &str) -> bool {
                 | "encoding.base58check.decode"
         )
 }
-pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    i: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     if op == "encoding.base58check.decode" {
         return Ok(
-            json!({"output":cube_core::encoding::base58check::decode(&field::<String>(&i,"input")?)?}),
+            json!({"output":crate::encoding::base58check::decode(&field::<String>(&i,"input")?)?}),
         );
     }
     let input = bytes(&i["input"])?;
@@ -44,7 +50,7 @@ pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationEr
             aes_blocks::decrypt(&input, key.as_ref())?
         }
     };
-    Ok(json!({"output":{"base64":cube_core::encoding::base64_encode(&output)}}))
+    Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}))
 }
 fn invalid() -> OperationError {
     OperationError::new(

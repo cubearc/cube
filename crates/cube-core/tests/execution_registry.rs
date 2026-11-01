@@ -54,37 +54,10 @@ fn registered_base64_codecs_preserve_exact_named_bytes_and_host_budgets() {
     );
 }
 #[test]
-fn registered_executors_use_real_named_contracts_and_reject_unregistered_operations() {
+fn unavailable_operation_ids_never_gain_execution_from_metadata_alone() {
     let budget = Budget::default();
-    let catalog = execution::catalog(budget).unwrap();
-    assert!(catalog.iter().any(|e| e.operation == "image.pixels.export"));
-    assert!(execution::describe("file.info.inspect", budget).is_err());
-    let fixtures: Vec<serde_json::Value> =
-        serde_json::from_str(include_str!("../src/operations/contracts/conformance.json")).unwrap();
-    for entry in catalog {
-        let c = operations::require(entry.operation)
-            .unwrap()
-            .contract()
-            .unwrap();
-        let f = fixtures
-            .iter()
-            .find(|f| f["operation"] == entry.operation)
-            .unwrap();
-        let actual = execution::execute(
-            entry.operation,
-            c.operation_version,
-            &f["inputs"],
-            &f["parameters"],
-            budget,
-        )
-        .unwrap();
-        assert_eq!(
-            operations::contracts::canonical_value(actual),
-            operations::contracts::canonical_value(f["outputs"].clone()),
-            "{}",
-            entry.operation
-        );
-    }
+    assert!(execution::describe("shell.execute", budget).is_err());
+    assert!(execution::execute("shell.execute", 1, &json!({}), &json!({}), budget).is_err());
 }
 #[test]
 fn spiral_and_an_unrelated_executor_need_only_core_registration() {

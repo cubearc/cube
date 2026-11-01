@@ -1,5 +1,5 @@
 //! Explicit analysis requests; scoring and search remain bounded Core algorithms.
-use cube_core::{
+use crate::{
     cryptanalysis as a,
     errors::{ErrorCode, OperationError},
 };
@@ -49,7 +49,13 @@ fn resolve(op: &str) -> Option<Handler> {
 pub(super) fn supports(op: &str) -> bool {
     resolve(op).is_some()
 }
-pub(super) fn execute(op: &str, i: Value, _: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    i: Value,
+    _: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     resolve(op).ok_or_else(|| {
         OperationError::new(ErrorCode::InvalidInput, "no installed analysis binding")
     })?(&i["request"].to_string())

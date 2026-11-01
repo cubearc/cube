@@ -1,5 +1,5 @@
 //! Restore only schema-annotated integer fields after canonical validation.
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     operations::contracts::{self, PortContract},
 };

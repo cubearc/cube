@@ -1,6 +1,6 @@
 //! Typed classical-profile adapters. Core owns alphabet, key and padding rules.
 use super::field;
-use cube_core::{
+use crate::{
     ciphers::poly::{self, geometry, hill, key_profiles, schedules, stateful, tableaux},
     errors::{ErrorCode, OperationError},
 };
@@ -93,7 +93,13 @@ fn resolve(op: &str) -> Option<Handler> {
 pub(super) fn supports(op: &str) -> bool {
     resolve(op).is_some()
 }
-pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    i: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     let t: String = field(&i, "text")?;
     resolve(op).ok_or_else(|| {
         OperationError::new(ErrorCode::InvalidInput, "no installed polygraphic binding")

@@ -1,6 +1,6 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
 use super::field;
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     investigation::{profile, session, triage},
     pipeline::{self, recipe::Recipe},
@@ -90,8 +90,14 @@ fn plan(v: &Value) -> Result<pipeline::Plan, OperationError> {
     )
     .map_err(|e| *e.error)
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| {
         let request = &inputs["input"];
@@ -141,7 +147,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
             }
             Adapter::Profile => {
                 let profile: profile::Profile = field(&inputs, "profile")?;
-                json!({"output":run_profile(&profile,&super::bytes(request)?)?.session})
+                json!({"output":run_profile(&profile,&super::bytes(request)?,clock)?.session})
             }
             Adapter::Replay => {
                 let session = session(&request["session"])?;
@@ -173,43 +179,41 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
                 json!({"output":session})
             }
             Adapter::Triage => {
-                json!({"output":triage::bytes(&super::bytes(request)?,field(&p,"max_read_bytes")?,&cube_core::operations::catalog())?})
+                json!({"output":triage::bytes(&super::bytes(request)?,field(&p,"max_read_bytes")?,&crate::operations::catalog())?})
             }
         })
     })();
     result.map_err(|e: OperationError| e.operation(identity))
 }
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen::prelude::wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen::prelude::wasm_bindgen(catch, js_namespace = performance, js_name = now)]
-    fn monotonic_now() -> Result<f64, wasm_bindgen::JsValue>;
+pub(super) fn effects(operation: &str) -> crate::operations::execution::Effects {
+    if matches!(adapter(operation), Some(Adapter::Profile)) {
+        crate::operations::execution::Effects::MonotonicClock
+    } else {
+        crate::operations::execution::Effects::Pure
+    }
 }
 fn run_profile(
     profile: &profile::Profile,
     data: &[u8],
+    clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<profile::Investigation, OperationError> {
+    if let Some(clock) = clock {
+        return profile
+            .run_bytes_with_clock(data, None, || {
+                clock().map_err(pipeline::Error::from_operation)
+            })
+            .map_err(|e| *e.error);
+    }
     #[cfg(not(target_arch = "wasm32"))]
     {
         profile.run_bytes(data, None).map_err(|e| *e.error)
     }
     #[cfg(target_arch = "wasm32")]
     {
-        let clock_error =
-            || OperationError::new(ErrorCode::Io, "monotonic clock is unavailable or invalid");
-        let start = monotonic_now().map_err(|_| clock_error())?;
-        if !start.is_finite() {
-            return Err(clock_error());
-        }
-        profile
-            .run_bytes_with_clock(data, None, || {
-                let elapsed = monotonic_now()
-                    .map_err(|_| pipeline::Error::from_operation(clock_error()))?
-                    - start;
-                std::time::Duration::try_from_secs_f64(elapsed / 1000.0)
-                    .map_err(|_| pipeline::Error::from_operation(clock_error()))
-            })
-            .map_err(|e| *e.error)
+        Err(OperationError::new(
+            ErrorCode::Io,
+            "an explicit monotonic host clock is required",
+        ))
     }
 }

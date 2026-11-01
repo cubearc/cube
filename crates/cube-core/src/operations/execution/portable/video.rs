@@ -3,7 +3,7 @@ use super::{
     field,
     images::{bytes, channels, image},
 };
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     media::video::{self, audio, comparison, frames},
 };
@@ -33,8 +33,14 @@ fn invalid() -> OperationError {
         "use explicit track IDs and bounded frame selections",
     )
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| {
         let mut reader = Cursor::new(super::bytes(&inputs["input"])?);

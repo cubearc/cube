@@ -1,8 +1,9 @@
-//! Explicit pure-data executors, registered by their owning modules.
+//! Explicit bounded data executors over the owning Core algorithms.
 //!
 //! Catalog metadata alone never grants execution. Hosts negotiate representations,
 //! enforce retention policy and OS resource isolation, then pass lower budgets.
 //! Files, credentials, network and process authority are never accepted here.
+mod portable;
 mod values;
 use super::contracts::Contract;
 use serde::Serialize;
@@ -20,11 +21,13 @@ pub enum Representation {
     Json,
     ImageSamples,
 }
-/// This registry executes only pure transformations of supplied data.
+/// Observable effects required in addition to supplied data.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Effects {
     Pure,
+    /// The operation explicitly measures elapsed monotonic time.
+    MonotonicClock,
 }
 /// Per-invocation ceilings; host process limits remain independently necessary.
 #[derive(Clone, Copy, Debug)]
@@ -104,13 +107,19 @@ fn entry(operation: &str) -> Result<&'static Entry> {
         .find(|e| e.operation == operation)
         .ok_or(Failure("unsupported_operation"))
 }
+fn portable_error(error: crate::errors::OperationError) -> Failure {
+    Failure(error.code.as_str())
+}
+fn uses_portable(operation: &str) -> bool {
+    entry(operation).is_err() && portable::supports(operation)
+}
 fn contract(operation: &str) -> Result<Contract> {
     super::require(operation)
         .map_err(|_| Failure("unsupported_operation"))?
         .contract()
         .map_err(|_| Failure("contract_mismatch"))
 }
-/// Discover only explicitly registered executors. No CLI reflection or fallback.
+/// Discover explicit module executors and typed portable families, without CLI reflection.
 pub fn catalog(budget: Budget) -> Result<Vec<Executable>> {
     let mut result = Vec::new();
     for module in super::MODULES {
@@ -128,10 +137,18 @@ pub fn catalog(budget: Budget) -> Result<Vec<Executable>> {
             result.push(describe(executor.operation, budget)?);
         }
     }
+    for descriptor in super::catalog() {
+        if uses_portable(descriptor.id) {
+            result.push(describe(descriptor.id, budget)?);
+        }
+    }
     Ok(result)
 }
 /// Resolve representations and effective defaults for one installed executor.
 pub fn describe(operation: &str, budget: Budget) -> Result<Executable> {
+    if uses_portable(operation) {
+        return portable::describe(operation, budget).map_err(portable_error);
+    }
     let e = entry(operation)?;
     let c = contract(operation)?;
     let ports = |ports: &[super::contracts::PortContract], representations: &[Representation]| {
@@ -155,6 +172,11 @@ pub fn describe(operation: &str, budget: Budget) -> Result<Executable> {
 }
 /// Canonical schema defaults, specialized only by the owning module's budget policy.
 pub fn defaults(operation: &str, budget: Budget) -> Result<Value> {
+    if uses_portable(operation) {
+        return portable::describe(operation, budget)
+            .map(|e| e.parameters)
+            .map_err(portable_error);
+    }
     let e = entry(operation)?;
     let c = contract(operation)?;
     let schema = c.parameters.as_value();
@@ -192,6 +214,9 @@ pub fn validate_parameters(
     parameters: &Value,
     budget: Budget,
 ) -> Result<()> {
+    if uses_portable(operation) {
+        return portable::configure(operation, version, parameters, budget).map_err(portable_error);
+    }
     let e = entry(operation)?;
     let c = contract(operation)?;
     if c.operation_version != version {
@@ -217,6 +242,10 @@ pub fn validate(
     parameters: &Value,
     budget: Budget,
 ) -> Result<()> {
+    if uses_portable(operation) {
+        return portable::validate(operation, version, inputs, parameters, budget)
+            .map_err(portable_error);
+    }
     validate_parameters(operation, version, parameters, budget)?;
     let e = entry(operation)?;
     let c = contract(operation)?;
@@ -236,6 +265,74 @@ pub fn validate(
     }
     Ok(())
 }
+/// Safe operation context for hosts that expose typed diagnostic details.
+#[derive(Debug)]
+pub enum InvocationError {
+    Code(Failure),
+    Operation(crate::errors::OperationError),
+}
+impl InvocationError {
+    pub fn code(&self) -> &'static str {
+        match self {
+            Self::Code(error) => error.0,
+            Self::Operation(error) => error.code.as_str(),
+        }
+    }
+}
+impl std::fmt::Display for InvocationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Code(error) => error.fmt(f),
+            Self::Operation(error) => error.fmt(f),
+        }
+    }
+}
+impl std::error::Error for InvocationError {}
+
+/// Host-supplied elapsed monotonic time; this grants no filesystem or network authority.
+pub type Elapsed<'a> =
+    &'a mut dyn FnMut() -> std::result::Result<std::time::Duration, crate::errors::OperationError>;
+
+/// Execute a named invocation while preserving safe Core error context.
+pub fn invoke(
+    operation: &str,
+    version: u32,
+    inputs: &Value,
+    parameters: &Value,
+    budget: Budget,
+) -> std::result::Result<Value, InvocationError> {
+    invoke_in(operation, version, inputs, parameters, budget, None)
+}
+/// Supply an explicit host clock for operations declaring monotonic-clock effects.
+pub fn invoke_with_clock(
+    operation: &str,
+    version: u32,
+    inputs: &Value,
+    parameters: &Value,
+    budget: Budget,
+    clock: Elapsed<'_>,
+) -> std::result::Result<Value, InvocationError> {
+    invoke_in(operation, version, inputs, parameters, budget, Some(clock))
+}
+fn invoke_in(
+    operation: &str,
+    version: u32,
+    inputs: &Value,
+    parameters: &Value,
+    budget: Budget,
+    clock: Option<Elapsed<'_>>,
+) -> std::result::Result<Value, InvocationError> {
+    if uses_portable(operation) {
+        let identity = super::require(operation)
+            .map_err(InvocationError::Operation)?
+            .id;
+        return portable::execute(operation, version, inputs, parameters, budget, clock)
+            .map_err(|error| InvocationError::Operation(error.operation(identity)));
+    }
+    execute_registered(operation, version, inputs, parameters, budget)
+        .map_err(InvocationError::Code)
+}
+
 /// Return complete named output ports; validate both sides of the real contract.
 ///
 /// ```
@@ -247,6 +344,16 @@ pub fn validate(
 /// # Ok::<(), execution::Failure>(())
 /// ```
 pub fn execute(
+    operation: &str,
+    version: u32,
+    inputs: &Value,
+    parameters: &Value,
+    budget: Budget,
+) -> Result<Value> {
+    invoke(operation, version, inputs, parameters, budget).map_err(|error| Failure(error.code()))
+}
+
+fn execute_registered(
     operation: &str,
     version: u32,
     inputs: &Value,
@@ -267,6 +374,9 @@ pub fn execute(
 }
 /// Account all named outputs, including metadata and secondary byte ports.
 pub fn output_size(operation: &str, output: &Value) -> Result<usize> {
+    if uses_portable(operation) {
+        return portable::output_size(operation, output).map_err(portable_error);
+    }
     let e = entry(operation)?;
     values::size(
         &contract(operation)?.outputs,

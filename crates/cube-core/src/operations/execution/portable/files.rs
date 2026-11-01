@@ -1,6 +1,6 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
 use super::field;
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     forensics::{self, ByteRange, boundaries, exif, ranges, signatures, zip},
     web,
@@ -69,8 +69,14 @@ fn output(value: impl Serialize) -> Result<Value, OperationError> {
         .map(|v| json!({"output":v}))
         .map_err(|_| invalid())
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| {
         if matches!(selected, Adapter::Info) {
@@ -101,7 +107,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
                 number(&p, "max_bytes")?,
             )?;
             return Ok(
-                json!({"output":report,"data":{"base64":cube_core::encoding::base64_encode(&data)}}),
+                json!({"output":report,"data":{"base64":crate::encoding::base64_encode(&data)}}),
             );
         }
         if matches!(selected, Adapter::Html | Adapter::Har) {
@@ -135,7 +141,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
             }
             Adapter::Extract => {
                 let data = forensics::read_range(&mut reader, selection(&p)?)?;
-                output(json!({"base64":cube_core::encoding::base64_encode(&data)}))
+                output(json!({"base64":crate::encoding::base64_encode(&data)}))
             }
             Adapter::Scan => {
                 let format = p

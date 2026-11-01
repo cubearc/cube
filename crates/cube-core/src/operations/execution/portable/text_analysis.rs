@@ -1,6 +1,6 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
 use super::field;
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     text::{
         anagram, combinations, grid, lexical, multiset, positions, statistics, transform,
@@ -91,8 +91,14 @@ fn output(value: impl Serialize) -> Result<Value, OperationError> {
         .map(|v| json!({"output":v}))
         .map_err(|_| invalid())
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
-    let identity = cube_core::operations::require(op)?.id;
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    let identity = crate::operations::require(op)?.id;
     let selected = adapter(op).ok_or_else(invalid)?;
     let result = (|| match selected {
         Adapter::Grid => {
@@ -100,7 +106,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
                 string(&inputs, "input")?,
                 field(&p, "width")?,
                 field(&p, "drop_whitespace")?,
-                cube_core::image::Traversal::parse(string(&p, "traversal")?)?,
+                crate::image::Traversal::parse(string(&p, "traversal")?)?,
             )?;
             let mut result = json!({"output":grid});
             if let Some(colors) = p.get("colors") {
@@ -182,7 +188,7 @@ pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, Operat
                 let path = lexical::parse_dictionary(
                     string(&inputs, "path")?,
                     word_ladder::MAX_DICTIONARY_BYTES,
-                    cube_core::graph::MAX_VERTICES,
+                    crate::graph::MAX_VERTICES,
                 )?;
                 output(word_ladder::validate(
                     &dictionary,

@@ -1,5 +1,5 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     image::{Channel, ColorModel, Corner, Image, Region, Traversal},
     operations::contracts::values,
@@ -46,7 +46,7 @@ pub(super) fn image(value: &Image) -> Value {
     json!(values::Image::from(value))
 }
 pub(super) fn bytes(value: &[u8]) -> Value {
-    json!({"base64":cube_core::encoding::base64_encode(value)})
+    json!({"base64":crate::encoding::base64_encode(value)})
 }
 pub(super) fn region(p: &Value) -> Result<Option<Region>, OperationError> {
     let Some(value) = p.get("region") else {
@@ -70,10 +70,16 @@ pub(super) fn channels(p: &Value) -> Result<Option<Vec<Channel>>, OperationError
         })
         .transpose()
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     if op == "image.decode" {
         return Ok(
-            json!({"output":image(&Image::decode_with_sample_limit(&super::bytes(&inputs["input"] )?, super::super::MAX_CODEC_INPUT)?)}),
+            json!({"output":image(&Image::decode_with_sample_limit(&super::bytes(&inputs["input"] )?, budget.image_sample_bytes.min(budget.output_bytes))?)}),
         );
     }
     let source = raster(

@@ -1,5 +1,5 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     numbers::{self, combinatorics as counts, constants, modular},
 };
@@ -30,7 +30,13 @@ fn number(value: &Value, name: &str) -> Result<u64, OperationError> {
 fn text<'a>(value: &'a Value, name: &str) -> Result<&'a str, OperationError> {
     value.get(name).and_then(Value::as_str).ok_or_else(invalid)
 }
-pub(super) fn execute(op: &str, inputs: Value, p: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    inputs: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     let a = |name| number(&inputs, name);
     let n = |name| number(&p, name);
     let t = |name| text(&p, name);

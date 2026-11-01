@@ -1,5 +1,5 @@
 //! Typed named-port binding adapters over the owning Core APIs.
-use cube_core::{
+use crate::{
     ciphers::{book, poly},
     errors::{ErrorCode, OperationError},
     symbols::tokens,
@@ -80,8 +80,10 @@ pub(super) fn execute(
     operation: &str,
     inputs: Value,
     parameters: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
-    let op = cube_core::operations::require(operation)?.id;
+    let op = crate::operations::require(operation)?.id;
     (||match op {
  "cipher.book.encode"=>{ let i:Book=parse(inputs)?;let p:book::EncodeOptions=parse(parameters)?;output(book::encode(&i.source,&i.text,&p)?) },
  "cipher.book.decode"=>{ let i:Legacy=parse(inputs)?;let p:BookDecode=parse(parameters)?;Ok(json!({"output":book::decode(&p.source,&i.input,book::Scheme::parse(&p.scheme)?,p.index_base)?})) },

@@ -1,6 +1,6 @@
 //! Explicit caller-defined mappings, with token boundaries preserved by Core.
 use super::field;
-use cube_core::{
+use crate::{
     ciphers::{
         enigma,
         mono::{
@@ -19,7 +19,13 @@ pub(super) fn supports(op: &str) -> bool {
         .any(|d| d.id == op)
         || op == "cipher.enigma"
 }
-pub(super) fn execute(op: &str, i: Value, p: Value) -> Result<Value, OperationError> {
+pub(super) fn execute(
+    op: &str,
+    i: Value,
+    p: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
+) -> Result<Value, OperationError> {
     if mono::historical::OPERATIONS.iter().any(|d| d.id == op) {
         return mono::historical::execute(op, &i, &p);
     }

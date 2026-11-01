@@ -1,5 +1,5 @@
 //! Typed named-port adapter over public Core APIs; no algorithm implementation.
-use cube_core::{
+use crate::{
     errors::{ErrorCode, OperationError},
     operations::{self, ParameterType},
     pipeline,
@@ -23,6 +23,8 @@ pub(super) fn execute(
     operation: &str,
     inputs: Value,
     parameters: Value,
+    _budget: crate::operations::execution::Budget,
+    _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
     // The direct Core contract accepts full-width u64 counts; pipeline integers
     // have a smaller signed range. Preserve the declared direct contract here.
@@ -35,11 +37,11 @@ pub(super) fn execute(
         let unit = parameters["unit_bytes"].as_u64().ok_or_else(invalid)?;
         let unit = usize::try_from(unit).map_err(|_| invalid())?;
         let output = if operation == "binary.rotate_left" {
-            cube_core::binary::transform::rotate_left(&data, count, unit)?
+            crate::binary::transform::rotate_left(&data, count, unit)?
         } else {
-            cube_core::binary::transform::rotate_right(&data, count, unit)?
+            crate::binary::transform::rotate_right(&data, count, unit)?
         };
-        return Ok(json!({"output":{"base64":cube_core::encoding::base64_encode(&output)}}));
+        return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
     }
     let descriptor = operations::describe(operation).ok_or_else(invalid)?;
     let input = match descriptor.input_type {
@@ -89,7 +91,7 @@ pub(super) fn execute(
         .output;
     match output {
         pipeline::Value::Bytes { data } => {
-            Ok(json!({"output":{"base64":cube_core::encoding::base64_encode(&data)}}))
+            Ok(json!({"output":{"base64":crate::encoding::base64_encode(&data)}}))
         }
         pipeline::Value::Text { data } => Ok(json!({"output":data})),
         _ => Err(invalid()),

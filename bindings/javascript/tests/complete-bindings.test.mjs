@@ -4,6 +4,28 @@ import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
 
+test('qualified table and VIC profiles execute every published answer through the actual SDK', async () => {
+  const names=new Set(['cadenus','swagman','nihilist_transposition','ubchi','cm_bifid','vic']);
+  let checked=0;
+  for (const domain of ['transposition','fractionation']) {
+    const vectors=JSON.parse(await readFile(new URL(`../../../crates/cube-core/src/ciphers/${domain}/vectors.json`,import.meta.url),'utf8'));
+    for (const v of vectors.filter(v=>names.has(v.operation.split('.')[1]))) {
+      assert.deepEqual(cube.execute({operation:v.operation,version:1,inputs:v.inputs,parameters:v.parameters}),v.outputs,v.operation);
+      checked++;
+    }
+  }
+  assert.equal(checked,12);
+  const text='X🐈e\u0301\0Z';
+  const encoded=cube.execute({operation:'cipher.cadenus.encode',version:1,inputs:{text},parameters:{keyword:'EASY',padding:'X'}});
+  assert.equal(cube.execute({operation:'cipher.cadenus.decode',version:1,inputs:{text:encoded.text},parameters:{keyword:'EASY',padding:'X',original_length:encoded.original_length}}).text,text);
+  assert.throws(()=>cube.execute({operation:'cipher.swagman.encode',version:1,inputs:{text:''},parameters:{key:[[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]]}}),{code:'invalid_parameter'});
+  const p={phrase:'ALLTHEPEOPLEAREDEADB',mnemonic:'ASINTOER',date_digits:'391752',personal_number:15,message_indicator:'60115',split_at:0,padding:'0'};
+  const cipher=cube.execute({operation:'cipher.vic.encode',version:1,inputs:{text:'A..'},parameters:p}).text;
+  assert.equal(cube.execute({operation:'cipher.vic.decode',version:1,inputs:{text:cipher},parameters:p}).text,'A..');
+  assert.throws(()=>cube.execute({operation:'cipher.vic.encode',version:1,inputs:{text:'123'},parameters:p}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'cipher.vic.decode',version:1,inputs:{text:'00000'},parameters:p}),{code:'invalid_input'});
+});
+
 test('Bellaso 1553 preserves the printed table, canonical spelling and key advancement in actual Wasm', () => {
   const call = (text, parameters) => cube.execute({operation:'cipher.bellaso',version:1,inputs:{text},parameters}).text;
   const plain='LARMATATVRCHESCAPARTIRAACINQVEDILVGLIO';

@@ -1,10 +1,13 @@
 //! Exact Unicode-scalar permutations. Historical ciphers provide no security.
 mod catalog;
+mod execution;
 mod fixtures;
 pub mod grille;
 pub mod routes;
+pub mod tables;
 #[cfg(test)]
 mod tests;
+pub mod ubchi;
 pub(crate) mod wire;
 use crate::ciphers::poly::{bound, invalid};
 use crate::errors::OperationError;

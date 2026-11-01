@@ -67,10 +67,11 @@ navigation names, and verify the locked portal build and authorized publication.
 Product Markdown changes alone do not update the published portal. Report the
 reason when no portal update is required.
 
-When a change crosses Cube and Play execution, verify the relevant Play Docker
-Runner/Lab/runtime checks in Actions against the delivered Core revision. Reuse
-existing jobs; ensure a Core-side integration check tests the current Core commit
-against a reviewed Play revision when that boundary changes.
+When a change crosses Cube and Play execution, verify the native engine, typed
+graph, real worker/IPC and Electron application checks in Actions against the
+delivered Core revision. Reuse existing jobs; ensure a Core-side integration
+check tests the current Core commit against a reviewed Play revision when that
+boundary changes. Preserve native policy and unchanged coverage gates.
 
 Respect review-only and planning-only requests. Report the pages and validation
 actually changed or performed.

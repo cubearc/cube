@@ -125,7 +125,361 @@ struct PadCount(#[schemars(range(min = 0, max = 4095))] usize);
 #[derive(serde::Serialize, serde::Deserialize, JsonSchema)]
 #[serde(transparent)]
 struct Positions(#[schemars(length(max = 65536))] Vec<usize>);
-static ROWS: [Row; 30] = [
+const COUNT: usize = 38;
+#[derive(serde::Serialize, serde::Deserialize, JsonSchema)]
+#[serde(transparent)]
+struct BlockPadCount(#[schemars(range(min = 0, max = 65535))] usize);
+#[derive(serde::Serialize, serde::Deserialize, JsonSchema)]
+#[serde(transparent)]
+struct UbchiLength(#[schemars(range(min = 0, max = 65535))] usize);
+#[derive(serde::Serialize, serde::Deserialize, JsonSchema)]
+#[serde(transparent)]
+struct NullCount(#[schemars(range(min = 1, max = 4096))] usize);
+static ROWS: [Row; COUNT] = [
+    row(Spec {
+        name: "Ubchi",
+        description: "LANAKI1997 Ubchi: identical stable phrase keys in two incomplete Columnar passes, with exact caller nulls inserted between them, one per phrase word; inverse validates the suffix before reversing the first pass.",
+        reversible: true,
+        output_type: "ubchi_report",
+        id: "cipher.ubchi.encode",
+        python: "ubchi_encode",
+        rust: "cube_core::ciphers::transposition::ubchi::transform",
+        command: "cipher ubchi",
+        parameters: c::schema::<ubchi::Ubchi>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<UbchiLength>,
+                required: true,
+            },
+            c::Port {
+                name: "null_count",
+                semantic_type: "integer",
+                schema: c::schema::<NullCount>,
+                required: true,
+            },
+        ],
+        fixture: ubchi::fixture_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &[
+            "https://www.cryptogram.org/downloads/LANAKI%20Crypto%20Lessons/LESSON24.pdf",
+        ],
+    }),
+    row(Spec {
+        name: "Ubchi",
+        description: "LANAKI1997 Ubchi: identical stable phrase keys in two incomplete Columnar passes, with exact caller nulls inserted between them, one per phrase word; inverse validates the suffix before reversing the first pass.",
+        reversible: true,
+        output_type: "ubchi_report",
+        id: "cipher.ubchi.decode",
+        python: "ubchi_decode",
+        rust: "cube_core::ciphers::transposition::ubchi::transform",
+        command: "cipher ubchi",
+        parameters: c::schema::<ubchi::Ubchi>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<UbchiLength>,
+                required: true,
+            },
+            c::Port {
+                name: "null_count",
+                semantic_type: "integer",
+                schema: c::schema::<NullCount>,
+                required: true,
+            },
+        ],
+        fixture: ubchi::fixture_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &[
+            "https://www.cryptogram.org/downloads/LANAKI%20Crypto%20Lessons/LESSON24.pdf",
+        ],
+    }),
+    row(Spec {
+        name: "Cadenus",
+        description: "ACA fixed 25-row Cadenus; reverse row labels with V/W sharing a rotation, stable uppercase keyword ordering and exact scalar blocks. Explicit pad/original-length evidence only.",
+        reversible: true,
+        output_type: "table_report",
+        id: "cipher.cadenus.encode",
+        python: "cadenus_encode",
+        rust: "cube_core::ciphers::transposition::tables::cadenus",
+        command: "cipher cadenus",
+        parameters: c::schema::<tables::Cadenus>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<SymbolCount>,
+                required: true,
+            },
+            c::Port {
+                name: "padding_count",
+                semantic_type: "integer",
+                schema: c::schema::<BlockPadCount>,
+                required: true,
+            },
+        ],
+        fixture: tables::fixtures::cadenus_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Cadenus.pdf"],
+    }),
+    row(Spec {
+        name: "Cadenus",
+        description: "ACA fixed 25-row Cadenus; reverse row labels with V/W sharing a rotation, stable uppercase keyword ordering and exact scalar blocks. Explicit pad/original-length evidence only.",
+        reversible: true,
+        output_type: "table_report",
+        id: "cipher.cadenus.decode",
+        python: "cadenus_decode",
+        rust: "cube_core::ciphers::transposition::tables::cadenus",
+        command: "cipher cadenus",
+        parameters: c::schema::<tables::Cadenus>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<SymbolCount>,
+                required: true,
+            },
+            c::Port {
+                name: "padding_count",
+                semantic_type: "integer",
+                schema: c::schema::<BlockPadCount>,
+                required: true,
+            },
+        ],
+        fixture: tables::fixtures::cadenus_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Cadenus.pdf"],
+    }),
+    row(Spec {
+        name: "Swagman",
+        description: "ACA 4..8 Latin-square Swagman; exact scalar row-fill rectangle, periodic column routing and column readout. Explicit pad/original-length evidence only.",
+        reversible: true,
+        output_type: "table_report",
+        id: "cipher.swagman.encode",
+        python: "swagman_encode",
+        rust: "cube_core::ciphers::transposition::tables::swagman",
+        command: "cipher swagman",
+        parameters: c::schema::<tables::Swagman>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<SymbolCount>,
+                required: true,
+            },
+            c::Port {
+                name: "padding_count",
+                semantic_type: "integer",
+                schema: c::schema::<BlockPadCount>,
+                required: true,
+            },
+        ],
+        fixture: tables::fixtures::swagman_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Swagman.pdf"],
+    }),
+    row(Spec {
+        name: "Swagman",
+        description: "ACA 4..8 Latin-square Swagman; exact scalar row-fill rectangle, periodic column routing and column readout. Explicit pad/original-length evidence only.",
+        reversible: true,
+        output_type: "table_report",
+        id: "cipher.swagman.decode",
+        python: "swagman_decode",
+        rust: "cube_core::ciphers::transposition::tables::swagman",
+        command: "cipher swagman",
+        parameters: c::schema::<tables::Swagman>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<SymbolCount>,
+                required: true,
+            },
+            c::Port {
+                name: "padding_count",
+                semantic_type: "integer",
+                schema: c::schema::<BlockPadCount>,
+                required: true,
+            },
+        ],
+        fixture: tables::fixtures::swagman_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Swagman.pdf"],
+    }),
+    row(Spec {
+        name: "Nihilist Transposition",
+        description: "ACA side1..10 Nihilist Transposition; explicit writing-in/taking-out one-based keys and row/column readout. Exact scalar blocks and explicit pad/original-length evidence only.",
+        reversible: true,
+        output_type: "table_report",
+        id: "cipher.nihilist_transposition.encode",
+        python: "nihilist_transposition_encode",
+        rust: "cube_core::ciphers::transposition::tables::nihilist",
+        command: "cipher nihilist-transposition",
+        parameters: c::schema::<tables::Nihilist>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<SymbolCount>,
+                required: true,
+            },
+            c::Port {
+                name: "padding_count",
+                semantic_type: "integer",
+                schema: c::schema::<BlockPadCount>,
+                required: true,
+            },
+        ],
+        fixture: tables::fixtures::nihilist_encode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &[
+            "https://www.cryptogram.org/downloads/aca.info/ciphers/NihilistTransposition.pdf",
+        ],
+    }),
+    row(Spec {
+        name: "Nihilist Transposition",
+        description: "ACA side1..10 Nihilist Transposition; explicit writing-in/taking-out one-based keys and row/column readout. Exact scalar blocks and explicit pad/original-length evidence only.",
+        reversible: true,
+        output_type: "table_report",
+        id: "cipher.nihilist_transposition.decode",
+        python: "nihilist_transposition_decode",
+        rust: "cube_core::ciphers::transposition::tables::nihilist",
+        command: "cipher nihilist-transposition",
+        parameters: c::schema::<tables::Nihilist>,
+        inputs: &[c::Port {
+            name: "text",
+            semantic_type: "text",
+            schema: c::schema::<Text>,
+            required: true,
+        }],
+        outputs: &[
+            c::Port {
+                name: "text",
+                semantic_type: "text",
+                schema: c::schema::<Text>,
+                required: true,
+            },
+            c::Port {
+                name: "original_length",
+                semantic_type: "integer",
+                schema: c::schema::<SymbolCount>,
+                required: true,
+            },
+            c::Port {
+                name: "padding_count",
+                semantic_type: "integer",
+                schema: c::schema::<BlockPadCount>,
+                required: true,
+            },
+        ],
+        fixture: tables::fixtures::nihilist_decode,
+        input_max: 1048576,
+        output_max: 1048576,
+        sensitive: &[],
+        references: &[
+            "https://www.cryptogram.org/downloads/aca.info/ciphers/NihilistTransposition.pdf",
+        ],
+    }),
     row(Spec {
         name: "Scytale",
         description: "Scytale: explicit bounded encode; see typed profile guide for conventions.",
@@ -1045,29 +1399,30 @@ static ROWS: [Row; 30] = [
         references: &["https://www.cryptogram.org/downloads/aca.info/ciphers/Grille.pdf"],
     }),
 ];
-const fn profiles() -> [m::Entry; 30] {
-    let mut out = [ROWS[0].profile; 30];
+const fn profiles() -> [m::Entry; COUNT] {
+    let mut out = [ROWS[0].profile; COUNT];
     let mut i = 0;
-    while i < 30 {
+    while i < COUNT {
         out[i] = ROWS[i].profile;
         i += 1;
     }
     out
 }
-const fn contracts() -> [c::Entry; 30] {
-    let mut out = [ROWS[0].contract; 30];
+const fn contracts() -> [c::Entry; COUNT] {
+    let mut out = [ROWS[0].contract; COUNT];
     let mut i = 0;
-    while i < 30 {
+    while i < COUNT {
         out[i] = ROWS[i].contract;
         i += 1;
     }
     out
 }
-static PROFILES: [m::Entry; 30] = profiles();
-const CONTRACTS: [c::Entry; 30] = contracts();
+static PROFILES: [m::Entry; COUNT] = profiles();
+const CONTRACTS: [c::Entry; COUNT] = contracts();
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILES);
-pub(crate) const MODULE: o::Module =
-    o::Module::profiled(OPERATIONS, &PROFILES).with_contracts(&CONTRACTS);
+pub(crate) const MODULE: o::Module = o::Module::profiled(OPERATIONS, &PROFILES)
+    .with_contracts(&CONTRACTS)
+    .with_executors(execution::ENTRIES);
 #[cfg(test)]
 mod tests {
     use super::*;

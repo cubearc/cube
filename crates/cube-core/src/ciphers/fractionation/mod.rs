@@ -1,10 +1,13 @@
 //! Explicit historical coordinate fractionation. Not modern cryptography.
 use crate::ciphers::transposition::wire;
 mod catalog;
+pub mod cm;
+mod execution;
 mod fixtures;
 pub mod morse;
 #[cfg(test)]
 mod tests;
+pub mod vic;
 use crate::ciphers::{
     poly::{AZ, IJ, bound, invalid, letters, permutation},
     polybius::{Square, Token},
@@ -65,9 +68,19 @@ pub fn bifid(text: &str, p: &Bifid, decode: bool) -> Result<String, OperationErr
     };
     period(p.period, op)?;
     let sq = square(&p.square, op)?;
-    let coords = pairs(&sq, text, 0, op)?;
+    bifid_squares(text, p.period, &sq, &sq, decode, op)
+}
+fn bifid_squares(
+    text: &str,
+    period: usize,
+    from: &Square,
+    to: &Square,
+    decode: bool,
+    op: &'static str,
+) -> Result<String, OperationError> {
+    let coords = pairs(from, text, 0, op)?;
     let mut output = Vec::with_capacity(coords.len());
-    for group in coords.chunks(p.period) {
+    for group in coords.chunks(period) {
         let n = group.len();
         if decode {
             let stream: Vec<_> = group.iter().flat_map(|v| v.iter().copied()).collect();
@@ -81,7 +94,7 @@ pub fn bifid(text: &str, p: &Bifid, decode: bool) -> Result<String, OperationErr
             output.extend(stream.as_chunks::<2>().0.iter().map(|v| Some(*v)));
         }
     }
-    sq.decode(&output, 0).map_err(|e| e.operation(op))
+    to.decode(&output, 0).map_err(|e| e.operation(op))
 }
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]

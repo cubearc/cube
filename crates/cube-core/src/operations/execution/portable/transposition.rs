@@ -32,6 +32,34 @@ text_handler!(route, routes::route);
 text_handler!(spiral, routes::spiral);
 text_handler!(caesar_box, routes::caesar_box);
 text_handler!(turning_grille, grille::turning_grille);
+fn cadenus(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
+    output(cube_core::ciphers::transposition::tables::cadenus(
+        t,
+        &parse::<cube_core::ciphers::transposition::tables::Cadenus>(p)?,
+        d,
+    )?)
+}
+fn swagman(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
+    output(cube_core::ciphers::transposition::tables::swagman(
+        t,
+        &parse::<cube_core::ciphers::transposition::tables::Swagman>(p)?,
+        d,
+    )?)
+}
+fn nihilist_transposition(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
+    output(cube_core::ciphers::transposition::tables::nihilist(
+        t,
+        &parse::<cube_core::ciphers::transposition::tables::Nihilist>(p)?,
+        d,
+    )?)
+}
+fn ubchi(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
+    output(cube_core::ciphers::transposition::ubchi::transform(
+        t,
+        &parse::<cube_core::ciphers::transposition::ubchi::Ubchi>(p)?,
+        d,
+    )?)
+}
 fn complete(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
     output(t::complete_columnar(t, &parse(p)?, d)?)
 }
@@ -43,6 +71,12 @@ fn overlay(t: &str, p: &Value, _: bool) -> Result<Value, OperationError> {
 }
 fn resolve(op: &str) -> Option<Handler> {
     Some(match op {
+        "cipher.cadenus.encode" | "cipher.cadenus.decode" => cadenus,
+        "cipher.swagman.encode" | "cipher.swagman.decode" => swagman,
+        "cipher.nihilist_transposition.encode" | "cipher.nihilist_transposition.decode" => {
+            nihilist_transposition
+        }
+        "cipher.ubchi.encode" | "cipher.ubchi.decode" => ubchi,
         "cipher.scytale.encode" | "cipher.scytale.decode" => scytale,
         "cipher.rail_fence.encode" | "cipher.rail_fence.decode" => rail_fence,
         "cipher.redefence.encode" | "cipher.redefence.decode" => redefence,

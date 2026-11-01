@@ -2286,3 +2286,35 @@ ROT8000 numerical profile facts
 Specification: rottytooth/rot8000 revision c47905631615173e51ac88e0901c4be642a1c8aa.
 Cube independently implements the fixed ranges and half-cycle using range
 arithmetic. No upstream GPL implementation or generated mapping table is bundled.
+
+ACA table and conjugated fractionation numerical profile facts
+Sources: American Cryptogram Association Cadenus, Swagman, Nihilist
+Transposition and CM Bifid specification sheets, reviewed 2026-11-01:
+https://www.cryptogram.org/downloads/aca.info/ciphers/Cadenus.pdf
+https://www.cryptogram.org/downloads/aca.info/ciphers/Swagman.pdf
+https://www.cryptogram.org/downloads/aca.info/ciphers/NihilistTransposition.pdf
+https://www.cryptogram.org/downloads/aca.info/ciphers/CMBifid.pdf
+Independent Rust implementations of the mathematical schedules; source-known
+answers and numeric table facts are transcribed for verification. Cadenus
+retains its fixed25rows with an explicitly bounded keyword-width extension.
+No ACA document, font, scan, third-party implementation or solver is bundled.
+
+Ubchi mathematical profile facts
+Source: LANAKI, Lecture24,20March1997,revision0,pp1-2:
+https://www.cryptogram.org/downloads/LANAKI%20Crypto%20Lessons/LESSON24.pdf
+Original wrapper around Core's incomplete Columnar passes; the caller supplies
+exact between-pass nulls by actual key-phrase word count. Numerical known-answer
+facts only; no lecture/PDF, copied implementation or new dependency is bundled.
+
+VIC English2010 mathematical profile facts
+Source: the[rain]complex, VIC cipher,31May2010, original complete English example:
+https://raincomplex.net/writing/title/vic-cipher/
+Structural cross-check: David Kahn, Number One From Moscow, Studies in
+Intelligence,1961; CIA historical release22September1993:
+https://www.cia.gov/resources/csi/static/Number-One-From-Moscow.pdf
+Independent key derivation and disrupted routing reuse Core's checkerboard and
+column permutations. Fixed literal English alphabet, five-row schedule, supplied
+split/pad/indicator evidence; no numeral/Cyrillic or later six-row variant claimed.
+The source's canonical20-letter phrase prefix and numerical intermediate facts
+verify the algorithm. No article, scan, full lyric, external solver or backend
+code is distributed. No new library, proprietary asset or backend is required.

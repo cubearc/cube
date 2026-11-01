@@ -1,6 +1,16 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const table: string = cube.execute({operation:'cipher.cadenus.encode',version:1,inputs:{text:'A'},parameters:{keyword:'EASY',padding:'X'}}).text;
+const cm: string = cube.execute({operation:'cipher.cm_bifid.encode',version:1,inputs:{text:'A'},parameters:{input_square:'ABCDEFGHIKLMNOPQRSTUVWXYZ',output_square:'ABCDEFGHIKLMNOPQRSTUVWXYZ',period:1}}).text;
+const vic: string = cube.execute({operation:'cipher.vic.encode',version:1,inputs:{text:'A'},parameters:{phrase:'ALLTHEPEOPLEAREDEADB',mnemonic:'ASINTOER',date_digits:'391752',personal_number:15,message_indicator:'60115',split_at:0,padding:''}}).text;
+void table; void cm; void vic;
+// @ts-expect-error Both independent squares are required.
+cube.execute({operation:'cipher.cm_bifid.encode',version:1,inputs:{text:'A'},parameters:{input_square:'ABCDEFGHIKLMNOPQRSTUVWXYZ',period:1}});
+// @ts-expect-error Key convention and readout are explicit, not optional guesses.
+cube.execute({operation:'cipher.nihilist_transposition.encode',version:1,inputs:{text:'A'},parameters:{key:[1]}});
+// @ts-expect-error VIC never supplies a missing personal number or indicator.
+cube.execute({operation:'cipher.vic.encode',version:1,inputs:{text:'A'},parameters:{phrase:'ALLTHEPEOPLEAREDEADB'}});
 const bellaso: string = cube.execute({ operation: 'cipher.bellaso', version: 1, inputs: { text: 'A' }, parameters: { key: 'A', unmapped: 'reject' } }).text;
 void bellaso;
 // @ts-expect-error A canonical countersign is required.

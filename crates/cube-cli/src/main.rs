@@ -371,6 +371,18 @@ enum Cipher {
 
     /// Deterministic inverse book coordinates with exact caller source provenance
     BookEncode(puzzlecodescmd::Book),
+    /// Qualified cadenus profile; explicit bounded JSON parameters
+    Cadenus(polycmd::Parameters),
+    /// Qualified swagman profile; explicit bounded JSON parameters
+    Swagman(polycmd::Parameters),
+    /// Qualified nihilist transposition profile; explicit bounded JSON parameters
+    NihilistTransposition(polycmd::Parameters),
+    /// Qualified ubchi profile; explicit bounded JSON parameters
+    Ubchi(polycmd::Parameters),
+    /// Qualified cm bifid profile; explicit bounded JSON parameters
+    CmBifid(polycmd::Parameters),
+    /// Qualified vic profile; explicit bounded JSON parameters
+    Vic(polycmd::Parameters),
     /// Explicit bounded scytale profile; JSON parameters required
     Scytale(polycmd::Parameters),
     /// Explicit bounded rail fence profile; JSON parameters required
@@ -994,6 +1006,12 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     );
                 }
                 Cipher::Vernam(args) => return streamcmd::run(None, args, &mut output),
+                Cipher::Cadenus(args) => fractioncmd::cadenus(args)?,
+                Cipher::Swagman(args) => fractioncmd::swagman(args)?,
+                Cipher::NihilistTransposition(args) => fractioncmd::nihilist_transposition(args)?,
+                Cipher::Ubchi(args) => fractioncmd::ubchi(args)?,
+                Cipher::CmBifid(args) => fractioncmd::cm_bifid(args)?,
+                Cipher::Vic(args) => fractioncmd::vic(args)?,
                 Cipher::Scytale(args) => fractioncmd::scytale(args)?,
                 Cipher::RailFence(args) => fractioncmd::rail_fence(args)?,
                 Cipher::Redefence(args) => fractioncmd::redefence(args)?,

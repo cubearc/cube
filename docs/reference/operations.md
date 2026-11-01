@@ -4470,6 +4470,162 @@ Example:
 cube --help
 ```
 
+## cipher.cadenus.decode
+
+ACA fixed 25-row Cadenus; reverse row labels with V/W sharing a rotation, stable uppercase keyword ordering and exact scalar blocks. Explicit pad/original-length evidence only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "SYSTRETOMTATTLUSOATLEEESFIYHEASDFNMSCHBHNEUVSNPMTOFARENUSEIEEIELTARLMENTIEETOGEVESITFAISLTNGEEUVOWUL"
+  },
+  "parameters": {
+    "keyword": "EASY"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cadenus",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "pattern": "^[A-Z]+$"
+    },
+    "original_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "maxLength": 1,
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "keyword"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.cadenus.encode
+
+ACA fixed 25-row Cadenus; reverse row labels with V/W sharing a rotation, stable uppercase keyword ordering and exact scalar blocks. Explicit pad/original-length evidence only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ASEVERELIMITATIONONTHEUSEFULNESSOFTHECADENUSISTHATEVERYMESSAGEMUSTBEAMULTIPLEOFTWENTYFIVELETTERSLONG"
+  },
+  "parameters": {
+    "keyword": "EASY"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cadenus",
+  "type": "object",
+  "properties": {
+    "keyword": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "pattern": "^[A-Z]+$"
+    },
+    "original_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "maxLength": 1,
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "keyword"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.caesar.decode
 
 Decode ASCII letters with a signed Caesar shift; preserve other Unicode.
@@ -5375,6 +5531,202 @@ Parameters:
     "right"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.cm_bifid.decode
+
+ACA conjugated-matrix Bifid with two explicit independent I/J squares and bounded periods; decode inverts the coordinate stream, not encryption with swapped squares.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "FANXZEXFENUKKRBYNKAK"
+  },
+  "parameters": {
+    "input_square": "EXTRAKLMPOHWZQDGVUSIFCBYN",
+    "output_square": "NCDRSOBFQUVAGPWEYHMXLTIKZ",
+    "period": 7
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CmBifid",
+  "type": "object",
+  "properties": {
+    "input_square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "output_square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "period": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "input_square",
+    "output_square",
+    "period"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.cm_bifid.encode
+
+ACA conjugated-matrix Bifid with two explicit independent I/J squares and bounded periods; decode inverts the coordinate stream, not encryption with swapped squares.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ODDPERIODSAREPOPULAR"
+  },
+  "parameters": {
+    "input_square": "EXTRAKLMPOHWZQDGVUSIFCBYN",
+    "output_square": "NCDRSOBFQUVAGPWEYHMXLTIKZ",
+    "period": 7
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CmBifid",
+  "type": "object",
+  "properties": {
+    "input_square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "output_square": {
+      "type": "string",
+      "maxLength": 25,
+      "minLength": 25
+    },
+    "period": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "input_square",
+    "output_square",
+    "period"
+  ]
 }
 ```
 
@@ -9084,6 +9436,234 @@ Parameters:
     "square",
     "key"
   ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.nihilist_transposition.decode
+
+ACA side1..10 Nihilist Transposition; explicit writing-in/taking-out one-based keys and row/column readout. Exact scalar blocks and explicit pad/original-length evidence only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "EQDERSEHNUEREADE"
+  },
+  "parameters": {
+    "convention": "writing_in",
+    "key": [
+      2,
+      1,
+      3,
+      4
+    ],
+    "readout": "columns"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nihilist",
+  "type": "object",
+  "properties": {
+    "convention": {
+      "$ref": "#/$defs/Convention"
+    },
+    "key": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "maximum": 10,
+        "minimum": 1
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "original_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "readout": {
+      "$ref": "#/$defs/Readout"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "convention",
+    "readout"
+  ],
+  "$defs": {
+    "Convention": {
+      "type": "string",
+      "enum": [
+        "writing_in",
+        "taking_out"
+      ]
+    },
+    "Readout": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.nihilist_transposition.encode
+
+ACA side1..10 Nihilist Transposition; explicit writing-in/taking-out one-based keys and row/column readout. Exact scalar blocks and explicit pad/original-length evidence only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "SQUARENEEDEDHERE"
+  },
+  "parameters": {
+    "convention": "writing_in",
+    "key": [
+      2,
+      1,
+      3,
+      4
+    ],
+    "readout": "columns"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nihilist",
+  "type": "object",
+  "properties": {
+    "convention": {
+      "$ref": "#/$defs/Convention"
+    },
+    "key": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "maximum": 10,
+        "minimum": 1
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "original_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "readout": {
+      "$ref": "#/$defs/Readout"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key",
+    "convention",
+    "readout"
+  ],
+  "$defs": {
+    "Convention": {
+      "type": "string",
+      "enum": [
+        "writing_in",
+        "taking_out"
+      ]
+    },
+    "Readout": {
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns"
+      ]
+    }
+  }
 }
 ```
 
@@ -13980,6 +14560,256 @@ Example:
 cube cipher substitution --help
 ```
 
+## cipher.swagman.decode
+
+ACA 4..8 Latin-square Swagman; exact scalar row-fill rectangle, periodic column routing and column readout. Explicit pad/original-length evidence only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "ENDSCMORDANIBOISICTNASTGBLTEWAOAREEFSAIDVPYRMOEAIAFUILRLDOCOTJNRAAENOUNCMITSOAPHSKATI"
+  },
+  "parameters": {
+    "key": [
+      [
+        3,
+        2,
+        1,
+        4,
+        5
+      ],
+      [
+        1,
+        5,
+        3,
+        2,
+        4
+      ],
+      [
+        2,
+        4,
+        5,
+        3,
+        1
+      ],
+      [
+        5,
+        3,
+        4,
+        1,
+        2
+      ],
+      [
+        4,
+        1,
+        2,
+        5,
+        3
+      ]
+    ]
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Swagman",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "A 4..8 square; each row and column permutes the one-based ranks.",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "maximum": 8,
+          "minimum": 1
+        },
+        "maxItems": 8,
+        "minItems": 4,
+        "uniqueItems": true
+      },
+      "maxItems": 8,
+      "minItems": 4
+    },
+    "original_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "maxLength": 1,
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.swagman.encode
+
+ACA 4..8 Latin-square Swagman; exact scalar row-fill rectangle, periodic column routing and column readout. Explicit pad/original-length evidence only.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `padding_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "DONTBEAFRAIDTOTAKEABIGLEAPIFONEISINDICATEDYOUCANNOTCROSSARIVERORACHASMINTWOSMALLJUMPS"
+  },
+  "parameters": {
+    "key": [
+      [
+        3,
+        2,
+        1,
+        4,
+        5
+      ],
+      [
+        1,
+        5,
+        3,
+        2,
+        4
+      ],
+      [
+        2,
+        4,
+        5,
+        3,
+        1
+      ],
+      [
+        5,
+        3,
+        4,
+        1,
+        2
+      ],
+      [
+        4,
+        1,
+        2,
+        5,
+        3
+      ]
+    ]
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Swagman",
+  "type": "object",
+  "properties": {
+    "key": {
+      "description": "A 4..8 square; each row and column permutes the one-based ranks.",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "maximum": 8,
+          "minimum": 1
+        },
+        "maxItems": 8,
+        "minItems": 4,
+        "uniqueItems": true
+      },
+      "maxItems": 8,
+      "minItems": 4
+    },
+    "original_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "default": null,
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "padding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null,
+      "maxLength": 1,
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.syllabary.decode
 
 Decode exact ACA syllabary coordinate pairs; retain unit boundaries and original token positions.
@@ -15654,6 +16484,140 @@ Example:
 cube cipher --help
 ```
 
+## cipher.ubchi.decode
+
+LANAKI1997 Ubchi: identical stable phrase keys in two incomplete Columnar passes, with exact caller nulls inserted between them, one per phrase word; inverse validates the suffix before reversing the first pass.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `null_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "RARHZIADAREIOSAUFRTMLTVTECNMTXSSTOEERSXAYVNCIPAF"
+  },
+  "parameters": {
+    "key_phrase": "HERRSCHAFT",
+    "nulls": "Z"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ubchi",
+  "type": "object",
+  "properties": {
+    "key_phrase": {
+      "type": "string",
+      "maxLength": 8191,
+      "minLength": 1,
+      "pattern": "^[A-Z]+( [A-Z]+)*$"
+    },
+    "nulls": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 16384
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key_phrase",
+    "nulls"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.ubchi.encode
+
+LANAKI1997 Ubchi: identical stable phrase keys in two incomplete Columnar passes, with exact caller nulls inserted between them, one per phrase word; inverse validates the suffix before reversing the first pass.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `original_length` | `integer` |
+| Output | `null_count` | `integer` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "FIRSTARMYXPLANFIVEACTIVATEDXCROSSMARNEATSETHOUR"
+  },
+  "parameters": {
+    "key_phrase": "HERRSCHAFT",
+    "nulls": "Z"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ubchi",
+  "type": "object",
+  "properties": {
+    "key_phrase": {
+      "type": "string",
+      "maxLength": 8191,
+      "minLength": 1,
+      "pattern": "^[A-Z]+( [A-Z]+)*$"
+    },
+    "nulls": {
+      "type": "string",
+      "maxLength": 4096,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 16384
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key_phrase",
+    "nulls"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.vatsyayana
 
 Reciprocal exact caller-defined disjoint scalar pairs; reject unmatched symbols by default, without a guessed historical alphabet.
@@ -15784,6 +16748,296 @@ Example:
 
 ```sh
 cube cipher vernam --key-file pad.bin --input message.bin --stdout
+```
+
+## cipher.vic.decode
+
+Fixed 2010 English VIC: canonical A..Z/period text, explicit phrase/mnemonic/date/personal number, fixed50-digit derivation, ordinary then disrupted transposition, exact indicator/split/pad evidence. Date digit zero denotes group ten. No numeral-mode, Cyrillic, random padding or implicit normalization.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VicEnglish2010",
+  "type": "object",
+  "properties": {
+    "date_digits": {
+      "type": "string",
+      "maxLength": 6,
+      "minLength": 6,
+      "pattern": "^[0-9]{6}$"
+    },
+    "message_indicator": {
+      "type": "string",
+      "maxLength": 5,
+      "minLength": 5,
+      "pattern": "^[0-9]{5}$"
+    },
+    "mnemonic": {
+      "type": "string",
+      "maxLength": 8,
+      "minLength": 8,
+      "pattern": "^[A-Z]{8}$"
+    },
+    "padding": {
+      "type": "string",
+      "maxLength": 4,
+      "pattern": "^[0-9]{0,4}$"
+    },
+    "personal_number": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 24,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 24,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 24,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "phrase": {
+      "type": "string",
+      "maxLength": 20,
+      "minLength": 20,
+      "pattern": "^[A-Z]{20}$"
+    },
+    "split_at": {
+      "description": "Retain this exact plaintext byte/scalar split for both directions.",
+      "anyOf": [
+        {
+          "description": "Retain this exact plaintext byte/scalar split for both directions.",
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65534,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "description": "Retain this exact plaintext byte/scalar split for both directions.",
+            "format": "uint",
+            "maximum": 65534,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "description": "Retain this exact plaintext byte/scalar split for both directions.",
+        "format": "uint",
+        "maximum": 65534,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "phrase",
+    "mnemonic",
+    "date_digits",
+    "personal_number",
+    "message_indicator",
+    "split_at",
+    "padding"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.vic.encode
+
+Fixed 2010 English VIC: canonical A..Z/period text, explicit phrase/mnemonic/date/personal number, fixed50-digit derivation, ordinary then disrupted transposition, exact indicator/split/pad evidence. Date digit zero denotes group ten. No numeral-mode, Cyrillic, random padding or implicit normalization.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VicEnglish2010",
+  "type": "object",
+  "properties": {
+    "date_digits": {
+      "type": "string",
+      "maxLength": 6,
+      "minLength": 6,
+      "pattern": "^[0-9]{6}$"
+    },
+    "message_indicator": {
+      "type": "string",
+      "maxLength": 5,
+      "minLength": 5,
+      "pattern": "^[0-9]{5}$"
+    },
+    "mnemonic": {
+      "type": "string",
+      "maxLength": 8,
+      "minLength": 8,
+      "pattern": "^[A-Z]{8}$"
+    },
+    "padding": {
+      "type": "string",
+      "maxLength": 4,
+      "pattern": "^[0-9]{0,4}$"
+    },
+    "personal_number": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 24,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 24,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 24,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "phrase": {
+      "type": "string",
+      "maxLength": 20,
+      "minLength": 20,
+      "pattern": "^[A-Z]{20}$"
+    },
+    "split_at": {
+      "description": "Retain this exact plaintext byte/scalar split for both directions.",
+      "anyOf": [
+        {
+          "description": "Retain this exact plaintext byte/scalar split for both directions.",
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65534,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "description": "Retain this exact plaintext byte/scalar split for both directions.",
+            "format": "uint",
+            "maximum": 65534,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "description": "Retain this exact plaintext byte/scalar split for both directions.",
+        "format": "uint",
+        "maximum": 65534,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "phrase",
+    "mnemonic",
+    "date_digits",
+    "personal_number",
+    "message_indicator",
+    "split_at",
+    "padding"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.vigenere.decode

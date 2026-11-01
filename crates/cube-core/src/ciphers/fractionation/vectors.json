@@ -326,5 +326,77 @@
       "padding_count": 0,
       "padding_ambiguous": false
     }
+  },
+  {
+    "function": "cm_bifid_encode",
+    "operation": "cipher.cm_bifid.encode",
+    "command": "cm-bifid",
+    "parameters": {
+      "input_square": "EXTRAKLMPOHWZQDGVUSIFCBYN",
+      "output_square": "NCDRSOBFQUVAGPWEYHMXLTIKZ",
+      "period": 7
+    },
+    "inputs": {
+      "text": "ODDPERIODSAREPOPULAR"
+    },
+    "outputs": {
+      "text": "FANXZEXFENUKKRBYNKAK"
+    }
+  },
+  {
+    "function": "cm_bifid_decode",
+    "operation": "cipher.cm_bifid.decode",
+    "command": "cm-bifid",
+    "parameters": {
+      "input_square": "EXTRAKLMPOHWZQDGVUSIFCBYN",
+      "output_square": "NCDRSOBFQUVAGPWEYHMXLTIKZ",
+      "period": 7
+    },
+    "inputs": {
+      "text": "FANXZEXFENUKKRBYNKAK"
+    },
+    "outputs": {
+      "text": "ODDPERIODSAREPOPULAR"
+    }
+  },
+  {
+    "function": "vic_encode",
+    "operation": "cipher.vic.encode",
+    "command": "vic",
+    "parameters": {
+      "phrase": "ALLTHEPEOPLEAREDEADB",
+      "mnemonic": "ASINTOER",
+      "date_digits": "391752",
+      "personal_number": 15,
+      "message_indicator": "60115",
+      "split_at": 14,
+      "padding": ""
+    },
+    "inputs": {
+      "text": "ASSIGNEDOBJECTIVESINVALIDATED.REPORTIMMEDIATELYTOSAFEHOUSE.AWAITEXTRACTIONINSTRUCTIONSWITHINWEEK"
+    },
+    "outputs": {
+      "text": "439836529332548692543593224039193759123412656674021687356133550753351136926066081424184749148634617711450653261143330085374956011529149"
+    }
+  },
+  {
+    "function": "vic_decode",
+    "operation": "cipher.vic.decode",
+    "command": "vic",
+    "parameters": {
+      "phrase": "ALLTHEPEOPLEAREDEADB",
+      "mnemonic": "ASINTOER",
+      "date_digits": "391752",
+      "personal_number": 15,
+      "message_indicator": "60115",
+      "split_at": 14,
+      "padding": ""
+    },
+    "inputs": {
+      "text": "439836529332548692543593224039193759123412656674021687356133550753351136926066081424184749148634617711450653261143330085374956011529149"
+    },
+    "outputs": {
+      "text": "ASSIGNEDOBJECTIVESINVALIDATED.REPORTIMMEDIATELYTOSAFEHOUSE.AWAITEXTRACTIONINSTRUCTIONSWITHINWEEK"
+    }
   }
 ]

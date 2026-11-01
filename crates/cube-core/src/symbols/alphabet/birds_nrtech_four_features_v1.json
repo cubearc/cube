@@ -1,0 +1,253 @@
+{
+  "source_id": "nrtechstudio:birds-on-a-wire:four-feature-reference:retrieved-2026-11-01",
+  "source_url": "https://nrtechstudio.com/tools/birds-on-a-wire-cipher/",
+  "source_sha256": "14dfaddcca351a5ef56035ea345bb945035bc64eb944b9c92fca08c3303aa255",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "A"
+        ],
+        "codes": [
+          "back:left:up:folded",
+          "B01"
+        ]
+      },
+      {
+        "alternatives": [
+          "B"
+        ],
+        "codes": [
+          "upright:front:down:raised",
+          "B02"
+        ]
+      },
+      {
+        "alternatives": [
+          "C"
+        ],
+        "codes": [
+          "forward:right:flat:spread",
+          "B03"
+        ]
+      },
+      {
+        "alternatives": [
+          "D"
+        ],
+        "codes": [
+          "back:front:flat:folded",
+          "B04"
+        ]
+      },
+      {
+        "alternatives": [
+          "E"
+        ],
+        "codes": [
+          "upright:right:up:raised",
+          "B05"
+        ]
+      },
+      {
+        "alternatives": [
+          "F"
+        ],
+        "codes": [
+          "forward:left:down:spread",
+          "B06"
+        ]
+      },
+      {
+        "alternatives": [
+          "G"
+        ],
+        "codes": [
+          "back:right:down:folded",
+          "B07"
+        ]
+      },
+      {
+        "alternatives": [
+          "H"
+        ],
+        "codes": [
+          "upright:left:flat:raised",
+          "B08"
+        ]
+      },
+      {
+        "alternatives": [
+          "I"
+        ],
+        "codes": [
+          "forward:front:up:spread",
+          "B09"
+        ]
+      },
+      {
+        "alternatives": [
+          "J"
+        ],
+        "codes": [
+          "back:left:down:raised",
+          "B10"
+        ]
+      },
+      {
+        "alternatives": [
+          "K"
+        ],
+        "codes": [
+          "upright:right:flat:folded",
+          "B11"
+        ]
+      },
+      {
+        "alternatives": [
+          "L"
+        ],
+        "codes": [
+          "forward:left:up:raised",
+          "B12"
+        ]
+      },
+      {
+        "alternatives": [
+          "M"
+        ],
+        "codes": [
+          "back:front:up:spread",
+          "B13"
+        ]
+      },
+      {
+        "alternatives": [
+          "N"
+        ],
+        "codes": [
+          "upright:left:down:folded",
+          "B14"
+        ]
+      },
+      {
+        "alternatives": [
+          "O"
+        ],
+        "codes": [
+          "forward:right:flat:raised",
+          "B15"
+        ]
+      },
+      {
+        "alternatives": [
+          "P"
+        ],
+        "codes": [
+          "back:right:up:spread",
+          "B16"
+        ]
+      },
+      {
+        "alternatives": [
+          "Q"
+        ],
+        "codes": [
+          "upright:front:down:folded",
+          "B17"
+        ]
+      },
+      {
+        "alternatives": [
+          "R"
+        ],
+        "codes": [
+          "forward:left:flat:folded",
+          "B18"
+        ]
+      },
+      {
+        "alternatives": [
+          "S"
+        ],
+        "codes": [
+          "back:left:flat:spread",
+          "B19"
+        ]
+      },
+      {
+        "alternatives": [
+          "T"
+        ],
+        "codes": [
+          "upright:right:down:spread",
+          "B20"
+        ]
+      },
+      {
+        "alternatives": [
+          "U"
+        ],
+        "codes": [
+          "forward:front:up:folded",
+          "B21"
+        ]
+      },
+      {
+        "alternatives": [
+          "V"
+        ],
+        "codes": [
+          "back:front:down:spread",
+          "B22"
+        ]
+      },
+      {
+        "alternatives": [
+          "W"
+        ],
+        "codes": [
+          "upright:left:up:raised",
+          "B23"
+        ]
+      },
+      {
+        "alternatives": [
+          "X"
+        ],
+        "codes": [
+          "forward:right:down:raised",
+          "B24"
+        ]
+      },
+      {
+        "alternatives": [
+          "Y"
+        ],
+        "codes": [
+          "back:right:flat:raised",
+          "B25"
+        ]
+      },
+      {
+        "alternatives": [
+          "Z"
+        ],
+        "codes": [
+          "upright:front:flat:spread",
+          "B26"
+        ]
+      },
+      {
+        "alternatives": [
+          " "
+        ],
+        "codes": [
+          " "
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

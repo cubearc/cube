@@ -13,6 +13,18 @@ use serde::{Deserialize, Serialize};
 pub const MAX_REPORT: usize = 1048576;
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, JsonSchema)]
 pub enum Profile {
+    #[serde(rename = "pigpen_haverhill_pairs_v1")]
+    PigpenHaverhillPairsV1,
+    #[serde(rename = "tic_tac_toe_dcode_v1")]
+    TicTacToeDcodeV1,
+    #[serde(rename = "templars_bothwell_gosse_v1")]
+    TemplarsBothwellGosseV1,
+    #[serde(rename = "betamaze_cliff_2006_v1")]
+    BetamazeCliff2006V1,
+    #[serde(rename = "clock_quarter_hour_zero_v1")]
+    ClockQuarterHourZeroV1,
+    #[serde(rename = "birds_nrtech_four_features_v1")]
+    BirdsNrtechFourFeaturesV1,
     #[serde(rename = "aurebesh_ucsur_2016_v1")]
     AurebeshUcsur2016V1,
     #[serde(rename = "standard_galactic_ucsur_2019_v1")]
@@ -61,6 +73,12 @@ struct Source {
 }
 fn book(p: &Parameters) -> Result<(h::Book, Provenance), OperationError> {
     let source: Source = serde_json::from_str(match p.profile {
+        Profile::PigpenHaverhillPairsV1 => include_str!("pigpen_haverhill_pairs_v1.json"),
+        Profile::TicTacToeDcodeV1 => include_str!("tic_tac_toe_dcode_v1.json"),
+        Profile::TemplarsBothwellGosseV1 => include_str!("templars_bothwell_gosse_v1.json"),
+        Profile::BetamazeCliff2006V1 => include_str!("betamaze_cliff_2006_v1.json"),
+        Profile::ClockQuarterHourZeroV1 => include_str!("clock_quarter_hour_zero_v1.json"),
+        Profile::BirdsNrtechFourFeaturesV1 => include_str!("birds_nrtech_four_features_v1.json"),
         Profile::AurebeshUcsur2016V1 => include_str!("aurebesh_ucsur_2016_v1.json"),
         Profile::StandardGalacticUcsur2019V1 => {
             include_str!("standard_galactic_ucsur_2019_v1.json")

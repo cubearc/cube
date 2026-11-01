@@ -165,3 +165,14 @@ test('dated symbolic alphabets execute every published assignment in actual Wasm
   assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},parameters:{}}),{code:'invalid_parameter'});
   assert.throws(()=>cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:Array(65537).fill('A')},parameters}),{code:'resource_limit'});
 });
+
+test('all source-permitted geometric orientations and bird aliases execute without guessing', async () => {
+  const aliases=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/aliases.json',import.meta.url),'utf8'));
+  assert.equal(aliases.length,147);
+  for(const row of aliases) {
+    const r=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[row.token]},parameters:{profile:row.profile}});
+    assert.deepEqual(r.tokens,[row.token]);
+    assert.deepEqual(r.readings,[{token_index:0,alternatives:row.alternatives}]);
+  }
+  for(const [profile,token] of [['pigpen_haverhill_pairs_v1','grid:ES:cross'],['tic_tac_toe_dcode_v1','grid:ES:dot'],['templars_bothwell_gosse_v1','angle:north:cross'],['betamaze_cliff_2006_v1','.../.../...'],['clock_quarter_hour_zero_v1','12:00'],['birds_nrtech_four_features_v1','B27']]) assert.throws(()=>cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[token]},parameters:{profile}}),{code:'invalid_input'});
+});

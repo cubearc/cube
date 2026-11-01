@@ -26286,6 +26286,12 @@ Parameters:
     "Profile": {
       "type": "string",
       "enum": [
+        "pigpen_haverhill_pairs_v1",
+        "tic_tac_toe_dcode_v1",
+        "templars_bothwell_gosse_v1",
+        "betamaze_cliff_2006_v1",
+        "clock_quarter_hour_zero_v1",
+        "birds_nrtech_four_features_v1",
         "aurebesh_ucsur_2016_v1",
         "standard_galactic_ucsur_2019_v1"
       ]
@@ -26356,6 +26362,12 @@ Parameters:
     "Profile": {
       "type": "string",
       "enum": [
+        "pigpen_haverhill_pairs_v1",
+        "tic_tac_toe_dcode_v1",
+        "templars_bothwell_gosse_v1",
+        "betamaze_cliff_2006_v1",
+        "clock_quarter_hour_zero_v1",
+        "birds_nrtech_four_features_v1",
         "aurebesh_ucsur_2016_v1",
         "standard_galactic_ucsur_2019_v1"
       ]

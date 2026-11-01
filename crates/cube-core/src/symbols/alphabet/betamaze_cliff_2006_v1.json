@@ -1,0 +1,348 @@
+{
+  "source_id": "terrana-cliff:betamaze:conlang-decal-2006:printed-page-289:pdf-page-111",
+  "source_url": "https://library.conlang.org/education/DECAL_%20reader_part2.pdf",
+  "source_sha256": "553c50b719f8db0e303350271e85e07475bee9058fc65d41a24b41deabb95f84",
+  "definition": {
+    "entries": [
+      {
+        "alternatives": [
+          "a"
+        ],
+        "codes": [
+          "#CB/..C/C.#",
+          "#.B/B../CB#",
+          "A.#/..A/#AD",
+          "AD#/D../#.D"
+        ]
+      },
+      {
+        "alternatives": [
+          "b"
+        ],
+        "codes": [
+          "#CB/..C/#.#",
+          "#.#/..A/#AD",
+          "#.#/B../CB#",
+          "AD#/D../#.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "c"
+        ],
+        "codes": [
+          "AD#/D#A/#B#",
+          "#C#/B#A/CB#",
+          "#C#/D#A/#AD",
+          "#CB/B#C/#A#",
+          "#CB/D#C/#B#",
+          "#D#/B#A/#AD",
+          "#D#/B#C/CB#",
+          "AD#/D#C/#A#"
+        ]
+      },
+      {
+        "alternatives": [
+          "d"
+        ],
+        "codes": [
+          "#D#/B#A/CB#",
+          "#C#/B#A/#AD",
+          "#CB/D#C/#A#",
+          "AD#/D#C/#B#"
+        ]
+      },
+      {
+        "alternatives": [
+          "e"
+        ],
+        "codes": [
+          "#.#/.DA/#A#",
+          "#.#/BC./#B#",
+          "#C#/.BC/#.#",
+          "#D#/DA./#.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "f"
+        ],
+        "codes": [
+          "#.#/.DA/CB#",
+          "#.#/BC./#AD",
+          "#.B/.DC/#A#",
+          "#C#/.BA/#.D",
+          "#CB/DA./#.#",
+          "#D#/BA./C.#",
+          "A.#/DC./#B#",
+          "AD#/.BC/#.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "g"
+        ],
+        "codes": [
+          "#D#/B#C/#A#",
+          "#C#/D#A/#B#"
+        ]
+      },
+      {
+        "alternatives": [
+          "h"
+        ],
+        "codes": [
+          "A.#/.DA/CB#",
+          "#.B/BC./#AD",
+          "#C#/.BA/C.D",
+          "#CB/DA./#.D",
+          "#D#/BA./C.D",
+          "A.B/.DC/#A#",
+          "A.B/DC./#B#",
+          "AD#/.BC/C.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "i"
+        ],
+        "codes": [
+          "#.#/.DA/CBA",
+          "#.#/BC./BAD",
+          "#.B/.DC/#AA",
+          "#CC/.BA/#.D",
+          "A.#/DC./BB#",
+          "ADC/.BC/#.#",
+          "DCB/DA./#.#",
+          "DD#/BA./C.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "j"
+        ],
+        "codes": [
+          "ADB/B#C/CAD",
+          "ACB/D#A/CBD"
+        ]
+      },
+      {
+        "alternatives": [
+          "k"
+        ],
+        "codes": [
+          "AD#/B#C/#AD",
+          "#CB/D#A/CB#",
+          "#DB/B#C/CA#",
+          "AC#/D#A/#BD"
+        ]
+      },
+      {
+        "alternatives": [
+          "l"
+        ],
+        "codes": [
+          "#DB/B#C/CB#",
+          "#CB/B#A/CB#",
+          "#CB/B#C/CA#",
+          "#CB/D#C/CB#",
+          "AC#/D#A/#AD",
+          "AD#/B#A/#AD",
+          "AD#/D#A/#BD",
+          "AD#/D#C/#AD"
+        ]
+      },
+      {
+        "alternatives": [
+          "m"
+        ],
+        "codes": [
+          "ADB/B.C/CAD",
+          "ACB/D.A/CBD"
+        ]
+      },
+      {
+        "alternatives": [
+          "n"
+        ],
+        "codes": [
+          "AD#/B#./C.D",
+          "#.B/B#./CAD",
+          "#CB/.#A/C.D",
+          "A.#/.#A/CBD",
+          "A.B/.#C/#AD",
+          "A.B/D#./CB#",
+          "ACB/D#./#.D",
+          "ADB/.#C/C.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "o"
+        ],
+        "codes": [
+          "AD#/B#A/C.D",
+          "#CB/B#./CAD",
+          "#CB/B#A/C.D",
+          "A.B/D#C/#AD",
+          "A.B/D#C/CB#",
+          "ACB/D#./#AD",
+          "AD#/.#A/CBD",
+          "ADB/.#C/CB#"
+        ]
+      },
+      {
+        "alternatives": [
+          "p"
+        ],
+        "codes": [
+          "AD#/D#A/.AD",
+          "#CB/B#C/CB.",
+          ".CB/B#C/CB#",
+          "AD./D#A/#AD"
+        ]
+      },
+      {
+        "alternatives": [
+          "q"
+        ],
+        "codes": [
+          "AD#/B#./CBD",
+          "#.B/B#A/CAD",
+          "#CB/.#A/CAD",
+          "A.#/B#A/CBD",
+          "ACB/.#C/#AD",
+          "ACB/D#C/#.D",
+          "ADB/D#./CB#",
+          "ADB/D#C/C.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "r"
+        ],
+        "codes": [
+          "AD#/..A/#B#",
+          "#.B/D.C/#B#",
+          "#C#/B.A/C.#",
+          "#C#/D../#AD",
+          "#CB/B../#A#",
+          "#D#/..C/CB#",
+          "#D#/B.A/#.D",
+          "A.#/D.C/#A#"
+        ]
+      },
+      {
+        "alternatives": [
+          "s"
+        ],
+        "codes": [
+          "#D#/B../CB#",
+          "#.#/B.A/#AD",
+          "#.#/B.A/CB#",
+          "#C#/..A/#AD",
+          "#CB/..C/#A#",
+          "#CB/D.C/#.#",
+          "AD#/D../#B#",
+          "AD#/D.C/#.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "t"
+        ],
+        "codes": [
+          "AD#/.#./CBD",
+          "#.B/B#A/C.D",
+          "#CB/.#./CAD",
+          "A.#/B#A/C.D",
+          "A.B/D#C/#.D",
+          "A.B/D#C/C.#",
+          "ACB/.#./#AD",
+          "ADB/.#./CB#"
+        ]
+      },
+      {
+        "alternatives": [
+          "u"
+        ],
+        "codes": [
+          "A.#/.#C/#B#",
+          "#.B/D#./#A#",
+          "#C#/B#./#.D",
+          "#D#/.#A/C.#"
+        ]
+      },
+      {
+        "alternatives": [
+          "v"
+        ],
+        "codes": [
+          "A.#/.#A/#B#",
+          "#.B/B#./#A#",
+          "#.B/D#./#B#",
+          "#C#/.#A/C.#",
+          "#C#/D#./#.D",
+          "#D#/.#C/C.#",
+          "#D#/B#./#.D",
+          "A.#/.#C/#A#"
+        ]
+      },
+      {
+        "alternatives": [
+          "w"
+        ],
+        "codes": [
+          "A.#/.#A/#AD",
+          "#.B/B#./CB#",
+          "#CB/.#C/C.#",
+          "AD#/D#./#.D"
+        ]
+      },
+      {
+        "alternatives": [
+          "x"
+        ],
+        "codes": [
+          "AD#/..A/#.#",
+          "#.#/..C/CB#",
+          "#.#/D../#AD",
+          "#.B/..C/#B#",
+          "#C#/B../C.#",
+          "#CB/B../#.#",
+          "#D#/..A/#.D",
+          "A.#/D../#A#"
+        ]
+      },
+      {
+        "alternatives": [
+          "y"
+        ],
+        "codes": [
+          "#.B/..C/CB#",
+          "#CB/B../C.#",
+          "A.#/D../#AD",
+          "AD#/..A/#.D"
+        ]
+      },
+      {
+        "alternatives": [
+          "z"
+        ],
+        "codes": [
+          "D.C/.../B.A"
+        ]
+      },
+      {
+        "alternatives": [
+          " "
+        ],
+        "codes": [
+          "A.B/.../C.D"
+        ]
+      }
+    ],
+    "null_codes": [],
+    "cancel_codes": []
+  }
+}

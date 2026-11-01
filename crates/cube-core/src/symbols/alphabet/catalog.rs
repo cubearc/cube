@@ -108,6 +108,34 @@ const fn row(
                 family: "symbolic_alphabet",
                 aliases: &[
                     m::Alias {
+                        name: "Pigpen",
+                        usage: "profile=pigpen_haverhill_pairs_v1",
+                    },
+                    m::Alias {
+                        name: "Rosicrucian (Haverhill paired variant)",
+                        usage: "profile=pigpen_haverhill_pairs_v1",
+                    },
+                    m::Alias {
+                        name: "Tic-Tac-Toe",
+                        usage: "profile=tic_tac_toe_dcode_v1",
+                    },
+                    m::Alias {
+                        name: "Templars",
+                        usage: "profile=templars_bothwell_gosse_v1",
+                    },
+                    m::Alias {
+                        name: "Betamaze",
+                        usage: "profile=betamaze_cliff_2006_v1",
+                    },
+                    m::Alias {
+                        name: "Clock quarter-hour code",
+                        usage: "profile=clock_quarter_hour_zero_v1",
+                    },
+                    m::Alias {
+                        name: "Birds on a Wire (NR Tech Studio)",
+                        usage: "profile=birds_nrtech_four_features_v1",
+                    },
+                    m::Alias {
                         name: "Aurebesh",
                         usage: "profile=aurebesh_ucsur_2016_v1",
                     },
@@ -129,9 +157,9 @@ const fn row(
                 },
                 profile: m::Profile {
                     variant: descriptor.description,
-                    alphabet: "Exact source-listed uppercase units, digraphs and punctuation. UCSUR PUA assignments are private-use proposals, not Unicode-standard script encodings. Ordinary interword spaces are preserved. No normalization.",
+                    alphabet: "Exact source-listed units: uppercase Latin, lowercase Betamaze, explicit digraphs and source-defined punctuation/word gaps. Tokens are documented geometry, published bird codes/features, exact quarter-hour times or published private-use proposals. No normalization or universal font/key inference.",
                     key: "Fixed independently transcribed dated source tables, with source and effective-definition hashes. No fonts, source artwork or language translations bundled.",
-                    key_advancement: "Canonical token per exact unit; decoding retains all listed alternatives in source order. Explicit segmentation distinguishes CH from C,H. Repeated tokens retain their positions.",
+                    key_advancement: "Canonical source orientation/token per exact unit. Decode preserves every listed reading and original token position; Betamaze accepts its148source-permitted orientations, birds accept published B01-B26 aliases. No maze traversal or unlisted clock/dot/marker variants. Explicit segmentation distinguishes CH from C,H.",
                     block_bits: None,
                     output_bits: None,
                 },
@@ -140,6 +168,12 @@ const fn row(
                 rust_api: "cube_core::symbols::alphabet::{encode,decode}",
                 python_api: python,
                 references: &[
+                    "https://haverhill-tc.gov.uk/wp-content/uploads/Pigpen-Code.pdf",
+                    "https://www.dcode.fr/tic-tac-toe-cipher",
+                    "https://freemasonry.bcy.ca/texts/templars_cipher.html",
+                    "https://library.conlang.org/education/DECAL_%20reader_part2.pdf",
+                    "https://www.dcode.fr/clock-cipher",
+                    "https://nrtechstudio.com/tools/birds-on-a-wire-cipher/",
                     "https://www.kreativekorp.com/ucsur/charts/aurebesh.htm",
                     "https://www.kreativekorp.com/ucsur/charts/sga.html",
                 ],

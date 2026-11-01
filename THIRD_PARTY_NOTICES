@@ -2344,3 +2344,25 @@ Cube independently transcribes the complete seven-monosyllable French table,
 all seventeen glosses and seven explicit abbreviations. No scan, font, score
 or modern English translation is distributed. The finite versioned profile
 retains synonyms and source distinctions; it is not a general language translator.
+
+Symbolic alphabet source descriptions
+====================================
+
+The Tic-Tac-Toe single-grid and quarter-hour clock profiles independently
+implement the published descriptions at https://www.dcode.fr/tic-tac-toe-cipher
+and https://www.dcode.fr/clock-cipher, retrieved 2026-11-01. dCode.fr permits reuse
+of this page content under its stated Creative Commons Attribution (CC-BY)
+terms. Cube's geometry tokens, strict segmentation and validation are independent
+adaptations; dCode software, images and services are not included. Full source
+identity and effective definition hashes accompany operation results.
+
+Pigpen/Rosicrucian paired-cell correspondence is independently transcribed from
+Haverhill Family History Group's Pigpen Code worksheet, page1. Templars glyph
+correspondence is independently transcribed from Bothwell-Gosse/Dickinson,
+The Knights Templars, pp89-90, reproduced by the Grand Lodge of British Columbia
+and Yukon. Betamaze correspondence and permitted geometric transformations are
+independently transcribed from Terrana Cliff's alphabet, reproduced in Conlangs
+DE-Cal, Spring2006, printed p289 (PDF p111). NR Tech Studio's independently
+published four-feature Birds on a Wire correspondence is implemented as that
+publisher's specific variant, with its B01-B26 code aliases. No source artwork,
+fonts, maze puzzles, SVG renderer or third-party implementation is included.

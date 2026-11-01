@@ -180,3 +180,199 @@ fn exact_empty_repeated_data_and_limits_never_truncate() {
         ErrorCode::ResourceLimit
     );
 }
+
+#[test]
+fn geometric_profiles_use_source_orientations_markers_and_clock_origin() {
+    for (profile, units, tokens) in [
+        (
+            "pigpen_haverhill_pairs_v1",
+            vec!["A", "B", "S", "T", "W"],
+            vec![
+                "grid:ES",
+                "grid:ES:dot",
+                "wedge:north",
+                "wedge:north:dot",
+                "wedge:east",
+            ],
+        ),
+        (
+            "tic_tac_toe_dcode_v1",
+            vec!["A", "J", "S", "Z", " "],
+            vec![
+                "grid:ES",
+                "grid:ES:cross",
+                "grid:ES:circle",
+                "grid:NEW:circle",
+                "grid:NW:circle",
+            ],
+        ),
+        (
+            "templars_bothwell_gosse_v1",
+            vec!["A", "O", "E", "V", "K", "Y", "N"],
+            vec![
+                "angle:south",
+                "angle:south:dot",
+                "triangle:east",
+                "triangle:east:dot",
+                "lozenge:east-arm",
+                "lozenge:east-arm:dot",
+                "saltire",
+            ],
+        ),
+        (
+            "betamaze_cliff_2006_v1",
+            vec!["a", "m", "z", " "],
+            vec!["#CB/..C/C.#", "ADB/B.C/CAD", "D.C/.../B.A", "A.B/.../C.D"],
+        ),
+        (
+            "clock_quarter_hour_zero_v1",
+            vec!["A", "B", "M", "Y", "Z"],
+            vec!["00:00", "00:15", "03:00", "06:00", "06:15"],
+        ),
+        (
+            "birds_nrtech_four_features_v1",
+            vec!["H", "E", "L", "L", "O"],
+            vec![
+                "upright:left:flat:raised",
+                "upright:right:up:raised",
+                "forward:left:up:raised",
+                "forward:left:up:raised",
+                "forward:right:flat:raised",
+            ],
+        ),
+    ] {
+        let p = json!({"profile":profile});
+        let encoded = execution::execute(
+            "symbol.alphabet.encode",
+            1,
+            &json!({"units":units}),
+            &p,
+            Budget::default(),
+        )
+        .unwrap();
+        assert_eq!(encoded["tokens"], json!(tokens), "{profile}");
+        let decoded = execution::execute(
+            "symbol.alphabet.decode",
+            1,
+            &json!({"tokens":tokens}),
+            &p,
+            Budget::default(),
+        )
+        .unwrap();
+        for (index, unit) in units.iter().enumerate() {
+            assert_eq!(decoded["readings"][index]["alternatives"], json!([unit]));
+        }
+    }
+}
+
+#[test]
+fn source_listed_geometric_aliases_preserve_the_received_orientation() {
+    let aliases: Vec<serde_json::Value> =
+        serde_json::from_str(include_str!("../src/symbols/alphabet/aliases.json")).unwrap();
+    assert_eq!(aliases.len(), 147); // 121 additional Betamaze orientations +26 bird codes.
+    for row in aliases {
+        let p = json!({"profile":row["profile"]});
+        let decoded = execution::execute(
+            "symbol.alphabet.decode",
+            1,
+            &json!({"tokens":[row["token"]]}),
+            &p,
+            Budget::default(),
+        )
+        .unwrap();
+        assert_eq!(decoded["tokens"], json!([row["token"]]));
+        assert_eq!(decoded["readings"][0]["alternatives"], row["alternatives"]);
+    }
+}
+#[test]
+fn unrelated_dot_cross_circle_and_clock_variants_are_not_guessed() {
+    for (profile, tokens) in [
+        (
+            "pigpen_haverhill_pairs_v1",
+            vec![
+                "grid:ES:circle",
+                "grid:ES:cross",
+                "grid:SE",
+                "wedge:east:cross",
+            ],
+        ),
+        (
+            "tic_tac_toe_dcode_v1",
+            vec!["grid:ES:dot", "wedge:north", "grid:ES:Circle"],
+        ),
+        (
+            "templars_bothwell_gosse_v1",
+            vec![
+                "angle:north:cross",
+                "triangle:north:circle",
+                "lozenge:north",
+                "cross",
+            ],
+        ),
+        (
+            "betamaze_cliff_2006_v1",
+            vec![".../.../...", "#CB/..C/C.# ", "ABC/DEF/GHI", "#CB/..C/C.."],
+        ),
+        (
+            "clock_quarter_hour_zero_v1",
+            vec!["12:00", "00:0", "0:00", "06:30", "00:01", " "],
+        ),
+        (
+            "birds_nrtech_four_features_v1",
+            vec![
+                "B00",
+                "B27",
+                "B1",
+                "b01",
+                "back:left:up:raised",
+                "left:back:up:folded",
+            ],
+        ),
+    ] {
+        for token in tokens {
+            assert!(
+                execution::execute(
+                    "symbol.alphabet.decode",
+                    1,
+                    &json!({"tokens":[token]}),
+                    &json!({"profile":profile}),
+                    Budget::default()
+                )
+                .is_err(),
+                "{profile}: {token}"
+            );
+        }
+    }
+    let p: cube_core::symbols::alphabet::Parameters =
+        serde_json::from_value(json!({"profile":"templars_bothwell_gosse_v1"})).unwrap();
+    assert!(cube_core::symbols::alphabet::encode(&["J".into()], &p).is_err());
+    let p = json!({"profile":"pigpen_haverhill_pairs_v1"});
+    let r=execution::execute("symbol.alphabet.decode",1,&json!({"tokens":["grid:NSW:dot","grid:NESW","wedge:north","wedge:north:dot","grid:SW","grid:NE:dot"]}),&p,Budget::default()).unwrap();
+    assert_eq!(
+        r["readings"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| r["alternatives"][0].as_str().unwrap())
+            .collect::<String>(),
+        "LISTEN"
+    );
+    let p = json!({"profile":"birds_nrtech_four_features_v1"});
+    let r = execution::execute(
+        "symbol.alphabet.decode",
+        1,
+        &json!({"tokens":["B08","B05","B12","B12","B15"]}),
+        &p,
+        Budget::default(),
+    )
+    .unwrap();
+    assert_eq!(
+        r["readings"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|r| r["alternatives"][0].as_str().unwrap())
+            .collect::<String>(),
+        "HELLO"
+    );
+}

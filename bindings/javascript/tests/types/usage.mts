@@ -96,3 +96,6 @@ void alphabetTokens;void alphabetReadings;
 cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},parameters:{}});
 // @ts-expect-error Unqualified display names are not profile IDs.
 cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:[]},parameters:{profile:'Aurebesh'}});
+
+const geometric:readonly string[]=cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:['a']},parameters:{profile:'betamaze_cliff_2006_v1'}}).tokens;
+void geometric;

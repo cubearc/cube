@@ -81,11 +81,29 @@ def triliteral_decode(
 ) -> NumericDecodedReport: ...
 
 class AlphabetParameters(TypedDict):
-    profile: Literal["aurebesh_ucsur_2016_v1", "standard_galactic_ucsur_2019_v1"]
+    profile: Literal[
+        "aurebesh_ucsur_2016_v1",
+        "standard_galactic_ucsur_2019_v1",
+        "pigpen_haverhill_pairs_v1",
+        "tic_tac_toe_dcode_v1",
+        "templars_bothwell_gosse_v1",
+        "betamaze_cliff_2006_v1",
+        "clock_quarter_hour_zero_v1",
+        "birds_nrtech_four_features_v1",
+    ]
 
 class AlphabetProvenance(TypedDict):
     source_id: str
-    profile_id: Literal["aurebesh_ucsur_2016_v1", "standard_galactic_ucsur_2019_v1"]
+    profile_id: Literal[
+        "aurebesh_ucsur_2016_v1",
+        "standard_galactic_ucsur_2019_v1",
+        "pigpen_haverhill_pairs_v1",
+        "tic_tac_toe_dcode_v1",
+        "templars_bothwell_gosse_v1",
+        "betamaze_cliff_2006_v1",
+        "clock_quarter_hour_zero_v1",
+        "birds_nrtech_four_features_v1",
+    ]
     source_url: str
     source_sha256: str
     definition_sha256: str

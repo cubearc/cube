@@ -17,6 +17,7 @@ try {
   run('npm', ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', tarball]);
   await writeFile(join(directory, 'fixtures.json'), await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url)));
   await writeFile(join(directory, 'alphabet-vectors.json'), await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/vectors.json', import.meta.url)));
+  await writeFile(join(directory, 'alphabet-aliases.json'), await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/aliases.json', import.meta.url)));
   await writeFile(join(directory, 'consumer.mjs'), `
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -50,6 +51,12 @@ for(const row of alphabetVectors) {
   const parameters={profile:row.profile};
   assert.deepEqual(cube.execute({operation:'symbol.alphabet.encode',version:1,inputs:{units:row.units},parameters}).tokens,row.tokens);
   assert.deepEqual(cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:row.tokens},parameters}).readings,row.units.map((unit,token_index)=>({token_index,alternatives:[unit]})));
+}
+const alphabetAliases=JSON.parse(await readFile('./alphabet-aliases.json','utf8'));
+for(const row of alphabetAliases) {
+  const r=cube.execute({operation:'symbol.alphabet.decode',version:1,inputs:{tokens:[row.token]},parameters:{profile:row.profile}});
+  assert.deepEqual(r.tokens,[row.token]);
+  assert.deepEqual(r.readings,[{token_index:0,alternatives:row.alternatives}]);
 }
 assert.ok(CubeError.prototype instanceof Error);
 await import('@cubearc/cube/browser');

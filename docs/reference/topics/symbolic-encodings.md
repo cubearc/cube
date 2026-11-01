@@ -187,7 +187,7 @@ Supplying `CH` as one unit selects the digraph; separate `C` and `H` select two
 letters. Decode returns the original tokens and `readings`, each with its
 zero-based `token_index` and every listed `alternative`. Repeated symbols remain
 separate. Empty input returns empty arrays. Both reports include the dated
-`profile_id`, source URL, SHA-256 of the reviewed source HTML and SHA-256 of the
+`profile_id`, source URL, SHA-256 of the reviewed source snapshot (HTML, PDF or chart bytes) and SHA-256 of the
 canonical effective definition. Source hashes identify the reviewed snapshots;
 they do not claim a font's identity or licensing terms.
 
@@ -206,3 +206,96 @@ item limit. Exceeding either fails with `resource_limit`, without truncating the
 message. Unknown units/tokens fail with `invalid_input`; a missing, unknown or
 extra profile parameter fails with `invalid_parameter`. These puzzle mappings
 provide no confidentiality or authentication.
+
+### Geometric profile selection
+
+These profiles use exact textual transcriptions of shapes or clock positions.
+They perform no graphical recognition. Choose the table that matches the clue;
+profiles with similar names can assign different letters to the same shape.
+
+| Profile | Exact source and supported repertoire |
+| --- | --- |
+| `pigpen_haverhill_pairs_v1` | [Haverhill Family History Group, page1](https://haverhill-tc.gov.uk/wp-content/uploads/Pigpen-Code.pdf): A–Z in paired cells; called Pigpen/Freemason/Rosicrucian by this source |
+| `tic_tac_toe_dcode_v1` | [dCode single-grid description](https://www.dcode.fr/tic-tac-toe-cipher): A–I plain, J–R cross, S–Z circle; last circled cell selected for space |
+| `templars_bothwell_gosse_v1` | [Bothwell-Gosse/Dickinson, pp89–90](https://freemasonry.bcy.ca/texts/templars_cipher.html): 25 letters, no J, plus explicit space gaps |
+| `betamaze_cliff_2006_v1` | [Terrana Cliff's chart in the Conlangs DE-Cal reader](https://library.conlang.org/education/DECAL_%20reader_part2.pdf), printed p289/PDF p111: lowercase a–z and the space shape |
+| `clock_quarter_hour_zero_v1` | [dCode's quarter-hour example](https://www.dcode.fr/clock-cipher): A=`00:00`, B=`00:15`, …, Z=`06:15`; no space or punctuation token |
+| `birds_nrtech_four_features_v1` | [NR Tech Studio's four-feature reference](https://nrtechstudio.com/tools/birds-on-a-wire-cipher/): A–Z and explicit space gaps; its authored variant, without an assertion that other bird drawings match |
+
+The dCode descriptions are attributed under the publisher's stated CC-BY terms;
+their software is not reused. Glyph correspondences and geometric rules are
+independently transcribed. The source snapshots, rather than source fonts or
+artwork, identify the exact reviewed variants.
+
+### Grid walls and markers
+
+For Pigpen and Tic-Tac-Toe, `grid:` is followed by the cardinal walls surrounding
+the cell, in **N,E,S,W order**, omitting absent walls. The top-left cell is
+`grid:ES`; the center is `grid:NESW`. No outer border is added to either grid.
+
+Haverhill's nine cells contain `AB CD EF / GH IJ KL / MN OP QR`. The first
+letter has no marker; the second adds `:dot`. The X sectors contain `ST` north,
+`UV` west, `WX` east and `YZ` south. Use `wedge:north`, `wedge:west`,
+`wedge:east`, `wedge:south`, again adding `:dot` for the second letter.
+A wedge names the sector occupied by the letter, not the direction of its apex.
+Thus `A` encodes as `grid:ES`, `B` as `grid:ES:dot`, and `S` as `wedge:north`.
+An ordinary space unit/token represents the source example's word gap.
+
+Tic-Tac-Toe fills the nine cells row by row three times. The first bank has no
+marker, the second adds `:cross`, and the third adds `:circle`. Consequently,
+`J` is `grid:ES:cross`, while `S` is `grid:ES:circle`. Space uses the remaining
+bottom-right circled cell, `grid:NW:circle`. Dots and X-grid wedges reject in
+this profile. Marker spellings and wall order are exact; no mirrored or rotated
+variant is inferred.
+
+### Templars shape tokens
+
+Open-angle tokens name their **apex**: A, B, C, D use `angle:south`,
+`angle:west`, `angle:north`, `angle:east`. O, P, Q, R add `:dot` respectively.
+Closed triangles E, F, G, H use `triangle:east`, `triangle:west`,
+`triangle:north`, `triangle:south`; their dotted counterparts are V, T, U, S
+in that source order.
+
+The lozenges refer to the arms of **diagram III** in the cited source:
+I, K, L, M use `lozenge:north-arm`, `lozenge:east-arm`,
+`lozenge:south-arm`, `lozenge:west-arm`. The dotted forms read X, Y, W, Z.
+N is `saltire`. These arm labels avoid inventing a generic diamond rotation
+convention. J rejects; Cube does not silently merge it with I. Ordinary spaces
+are explicit gaps. The profile identifies the published table, without claiming
+its supposed medieval attribution is established.
+
+### Betamaze cells and reading order
+
+A token contains three rows separated by `/`, each with three cells. Use `.` for
+a white cell, `#` for a full black cell, and A/B/C/D for black triangles at the
+NW/NE/SW/SE corner of a cell. These uppercase cell labels are geometry notation;
+the plaintext units are lowercase.
+
+For example, `a` is `#CB/..C/C.#`, `m` is `ADB/B.C/CAD`, `z` is
+`D.C/.../B.A`, and space is `A.B/.../C.D`. Encoding selects the orientation
+printed in the cited chart. Decoding accepts all source-permitted rotations and
+reflections: 148 distinct tokens across the 27 shapes. It retains each token's
+received orientation in the report. Other shapes, changed padding and uppercase
+plaintext reject.
+
+Supply tokens in the intended reading order. Cube does not find the entrance,
+choose a branch, solve a maze or infer word order from adjoining tiles.
+
+### Clock times and bird features
+
+The clock profile advances one quarter-hour per uppercase letter, starting at
+A=`00:00`. Times require two hour digits, a colon and two minute digits. This is
+one explicit published example, not a universal clock alphabet. `12:00`,
+`00:0`, times after `06:15`, unsupported minutes and spaces reject. No timezone,
+clock-hand direction or brute-force key selection is involved.
+
+Bird tokens contain four colon-separated features in this exact order:
+`body:head:tail:wing`. Body is `back`, `upright` or `forward`; head is `left`,
+`front` or `right`; tail is `up`, `down` or `flat`; wing is `folded`, `raised` or
+`spread`. Only the source's 26 combinations are accepted. For example,
+A=`back:left:up:folded`, H=`upright:left:flat:raised`, and
+L=`forward:left:up:raised`. Encoding emits features; decoding also accepts the
+publisher's `B01`–`B26` aliases and preserves those received codes. An ordinary
+space is a gap. Unknown codes, other feature orders and punctuation reject.
+The website's uppercasing and punctuation deletion are not applied to these
+exact, presegmented inputs.

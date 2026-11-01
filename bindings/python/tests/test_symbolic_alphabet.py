@@ -51,3 +51,19 @@ def test_parameter_input_and_limits_remain_typed():
     with pytest.raises(ValueError) as e:
         cube.alphabet_decode(["\ue8d0"], p)
     assert e.value.code == "invalid_input"
+
+
+def test_published_aliases_retain_exact_orientation_and_bird_code():
+    aliases = json.loads(
+        (
+            Path(__file__).parents[3]
+            / "crates/cube-core/src/symbols/alphabet/aliases.json"
+        ).read_text()
+    )
+    assert len(aliases) == 147
+    for row in aliases:
+        r = cube.alphabet_decode([row["token"]], {"profile": row["profile"]})
+        assert r["tokens"] == [row["token"]]
+        assert r["readings"] == [
+            {"token_index": 0, "alternatives": row["alternatives"]}
+        ]

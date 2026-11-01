@@ -4,6 +4,50 @@ use clap::Args;
 use cube_core::ciphers::mono::historical as h;
 use serde_json::{Value, json};
 use std::{error::Error, io::Read, path::PathBuf};
+fn named_inputs<T: serde::de::DeserializeOwned>(
+    document: &str,
+    op: &'static str,
+) -> Result<T, cube_core::errors::OperationError> {
+    cube_core::ciphers::poly::parse_parameters(document).map_err(|mut e| {
+        if e.code == cube_core::errors::ErrorCode::InvalidParameter {
+            e.code = cube_core::errors::ErrorCode::InvalidInput;
+        }
+        e.operation(op).parameter("inputs")
+    })
+}
+pub(crate) fn key_phrase(args: crate::polycmd::Parameters) -> Result<String, Box<dyn Error>> {
+    use cube_core::ciphers::{mono::key_phrase as k, poly};
+    let op = if args.decode {
+        "cipher.key_phrase.decode"
+    } else {
+        "cipher.key_phrase.encode"
+    };
+    let (text, document, decode) = crate::polycmd::transport(args, op)?;
+    let p: k::Parameters = poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    Ok(if decode {
+        serde_json::to_string(&k::decode(&text, &p)?)?
+    } else {
+        serde_json::to_string(&k::encode(&text, &p)?)?
+    })
+}
+pub(crate) fn arnold(args: crate::polycmd::Parameters) -> Result<String, Box<dyn Error>> {
+    use cube_core::ciphers::{book::words as a, poly};
+    let op = if args.decode {
+        "cipher.arnold.decode"
+    } else {
+        "cipher.arnold.encode"
+    };
+    let (text, document, decode) = crate::polycmd::transport(args, op)?;
+    let p: a::Parameters = poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let result = if decode {
+        let input: a::DecodeInput = named_inputs(&text, op)?;
+        a::decode(&input.pages.0, &input.coordinates, &p)?
+    } else {
+        let input: a::EncodeInput = named_inputs(&text, op)?;
+        a::encode(&input.pages.0, &input.words.0, &p)?
+    };
+    Ok(serde_json::to_string(&result)?)
+}
 pub(crate) fn headlines(args: crate::polycmd::Parameters) -> Result<String, Box<dyn Error>> {
     use cube_core::ciphers::{mono::headlines as h, poly};
     let op = if args.decode {
@@ -12,8 +56,8 @@ pub(crate) fn headlines(args: crate::polycmd::Parameters) -> Result<String, Box<
         "cipher.headlines.encode"
     };
     let (text, document, decode) = crate::polycmd::transport(args, op)?;
-    let p: h::Parameters = poly::parse_parameters(&document)?;
-    let input: Vec<String> = poly::parse_parameters(&text)?;
+    let p: h::Parameters = poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
+    let input: Vec<String> = named_inputs(&text, op)?;
     Ok(serde_json::to_string(&h::transform(&input, &p, decode)?)?)
 }
 pub(crate) fn numbered_key(args: crate::polycmd::Parameters) -> Result<String, Box<dyn Error>> {
@@ -24,9 +68,9 @@ pub(crate) fn numbered_key(args: crate::polycmd::Parameters) -> Result<String, B
         "cipher.numbered_key.encode"
     };
     let (text, document, decode) = crate::polycmd::transport(args, op)?;
-    let p: n::Parameters = poly::parse_parameters(&document)?;
+    let p: n::Parameters = poly::parse_parameters(&document).map_err(|e| e.operation(op))?;
     let report = if decode {
-        n::decode(&poly::parse_parameters::<Vec<String>>(&text)?, &p)?
+        n::decode(&named_inputs::<Vec<String>>(&text, op)?, &p)?
     } else {
         n::encode(&text, &p)?
     };

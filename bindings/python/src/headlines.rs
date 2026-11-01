@@ -20,14 +20,7 @@ fn call(
         "parameters",
     )?)
     .map_err(|e| super::file_error(e.operation(op)))?;
-    let input = poly::parse_parameters::<Vec<String>>(&super::mono::document(
-        py,
-        headlines,
-        1048576,
-        op,
-        "headlines",
-    )?)
-    .map_err(|e| super::file_error(e.operation(op)))?;
+    let input = super::mono::input::<Vec<String>>(py, headlines, 1048576, op, "headlines")?;
     let result = h::transform(&input, &p, decode).map_err(super::file_error)?;
     super::structured(py, &serde_json::to_value(result).expect("typed report"))
 }

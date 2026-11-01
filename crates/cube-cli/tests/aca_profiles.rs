@@ -16,7 +16,8 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
     let mut checked = 0;
     for case in cases.iter().filter(|c| {
         c["operation"].as_str().is_some_and(|op| {
-            op.starts_with("cipher.numbered_key.") || op.starts_with("cipher.headlines.")
+            ["numbered_key", "headlines", "key_phrase", "arnold"]
+                .contains(&op.split('.').nth(1).unwrap_or(""))
         })
     }) {
         std::fs::write(
@@ -26,16 +27,9 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
         .unwrap();
         let operation = case["operation"].as_str().unwrap();
         let mut cmd = Command::new(env!("CARGO_BIN_EXE_cube"));
-        cmd.args([
-            "cipher",
-            if operation.contains("numbered_key") {
-                "numbered-key"
-            } else {
-                "headlines"
-            },
-            "--parameters",
-        ])
-        .arg(&parameters);
+        let command = operation.split('.').nth(1).unwrap().replace('_', "-");
+        cmd.args(["cipher", &command, "--parameters"])
+            .arg(&parameters);
         if operation.ends_with("decode") {
             cmd.arg("--decode");
         }
@@ -45,7 +39,9 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
             .stderr(Stdio::piped())
             .spawn()
             .unwrap();
-        let input = if let Some(text) = case["inputs"].get("text").and_then(Value::as_str) {
+        let input = if operation.starts_with("cipher.arnold.") {
+            serde_json::to_string(&case["inputs"]).unwrap()
+        } else if let Some(text) = case["inputs"].get("text").and_then(Value::as_str) {
             text.into()
         } else {
             serde_json::to_string(case["inputs"].as_object().unwrap().values().next().unwrap())
@@ -70,6 +66,6 @@ fn aca_profile_cli_invocations_match_the_published_answers() {
         );
         checked += 1;
     }
-    assert_eq!(checked, 4);
+    assert_eq!(checked, 8);
     std::fs::remove_dir_all(directory).unwrap();
 }

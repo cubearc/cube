@@ -4,6 +4,26 @@ import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
 
+test('Key Phrase alternatives and paginated whole words execute through the actual SDK', async () => {
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const cases=fixtures.filter(row=>/^cipher\.(key_phrase|arnold)\./.test(row.operation));
+  assert.equal(cases.length,4);
+  for (const row of cases) assert.deepEqual(cube.execute({operation:row.operation,version:1,inputs:row.inputs,parameters:row.parameters}),row.outputs,row.operation);
+  const p={phrase:'GIVEMELIBERTYORGIVEMEDEATH'};
+  const result=cube.execute({operation:'cipher.key_phrase.decode',version:1,inputs:{text:'I'},parameters:p});
+  assert.equal(result.text,null);
+  assert.deepEqual(result.records[0].alternatives,['B','H','Q']);
+  assert.equal(cube.execute({operation:'cipher.key_phrase.encode',version:1,inputs:{text:'bhq *'},parameters:p}).text,'III *');
+  assert.throws(()=>cube.execute({operation:'cipher.key_phrase.decode',version:1,inputs:{text:'Z'},parameters:p}),{code:'invalid_input'});
+  const ap={profile:'arnold_paged_words_v1',source_id:'synthetic:edition-one',index_base:0,choice:'round_robin'};
+  const pages=['A B\nA 猫.','A'];
+  const encoded=cube.execute({operation:'cipher.arnold.encode',version:1,inputs:{pages,words:['A','A','A','A']},parameters:ap});
+  assert.deepEqual(encoded.coordinates,[{page:0,line:0,word:0},{page:0,line:1,word:0},{page:1,line:0,word:0},{page:0,line:0,word:0}]);
+  assert.deepEqual(cube.execute({operation:'cipher.arnold.decode',version:1,inputs:{pages,coordinates:encoded.coordinates},parameters:ap}),encoded);
+  assert.throws(()=>cube.execute({operation:'cipher.arnold.decode',version:1,inputs:{pages,coordinates:[{page:0,line:9,word:0}]},parameters:ap}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'cipher.arnold.encode',version:1,inputs:{pages:[1],words:[]},parameters:ap}),{code:'invalid_input'});
+});
+
 test('ACA constructors preserve repeated positions and execute all five Headlines answers', async () => {
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const cases=fixtures.filter(row=>/^cipher\.(numbered_key|headlines)\./.test(row.operation));

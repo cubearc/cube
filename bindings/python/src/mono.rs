@@ -41,6 +41,31 @@ pub(crate) fn document(
     }
     Ok(output)
 }
+/// Decode bounded named input data without mislabeling it as configuration.
+pub(crate) fn input<T: serde::de::DeserializeOwned>(
+    py: Python<'_>,
+    value: &Bound<'_, PyAny>,
+    maximum: usize,
+    op: &'static str,
+    name: &'static str,
+) -> PyResult<T> {
+    let document = document(py, value, maximum, op, name)?;
+    cube_core::ciphers::poly::parse_parameters(&document).map_err(|e| {
+        let code = if e.code == cube_core::errors::ErrorCode::InvalidParameter {
+            cube_core::errors::ErrorCode::InvalidInput
+        } else {
+            e.code
+        };
+        super::file_error(
+            cube_core::errors::OperationError::new(
+                code,
+                "use the exact bounded named input representation",
+            )
+            .operation(op)
+            .parameter(name),
+        )
+    })
+}
 #[pyfunction]
 #[pyo3(signature=(text,source,*,target=None,keyword=None,unmapped="reject"))]
 fn substitution_encode(

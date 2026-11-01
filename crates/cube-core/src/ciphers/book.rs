@@ -7,6 +7,7 @@ use crate::{
 use std::collections::BTreeMap;
 
 pub mod encoding;
+pub mod words;
 pub use encoding::{EncodeOptions, EncodeReport, MatchPolicy, encode};
 
 pub const MAX_COORDINATES: usize = 65_536;

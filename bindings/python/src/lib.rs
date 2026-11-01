@@ -49,6 +49,7 @@ mod video;
 mod vigenere_keys;
 mod web;
 mod word;
+mod word_codes;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
@@ -597,6 +598,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     historical::register(module)?;
     headlines::register(module)?;
     numbered_key::register(module)?;
+    word_codes::register(module)?;
     poly::register(module)?;
     vigenere_keys::register(module)?;
     cryptanalysis::register(module)?;

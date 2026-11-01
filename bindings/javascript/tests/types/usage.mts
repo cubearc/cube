@@ -1,6 +1,17 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const phrase: string=cube.execute({operation:'cipher.key_phrase.encode',version:1,inputs:{text:'BHQ'},parameters:{phrase:'GIVEMELIBERTYORGIVEMEDEATH'}}).text;
+const phraseReadings=cube.execute({operation:'cipher.key_phrase.decode',version:1,inputs:{text:'I'},parameters:{phrase:'GIVEMELIBERTYORGIVEMEDEATH'}});
+const possibleText:string|null=phraseReadings.text;
+const wordReport=cube.execute({operation:'cipher.arnold.encode',version:1,inputs:{pages:['A'],words:['A']},parameters:{profile:'arnold_paged_words_v1',source_id:'synthetic',index_base:1,choice:'first'}});
+const exactWords:readonly string[]=wordReport.words;
+void phrase;void possibleText;void exactWords;
+// @ts-expect-error A phrase inverse can remain ambiguous.
+const guessedPlaintext:string=phraseReadings.text;
+void guessedPlaintext;
+// @ts-expect-error Paginated whole-word codes require explicit pages.
+cube.execute({operation:'cipher.arnold.encode',version:1,inputs:{words:['A']},parameters:{profile:'arnold_paged_words_v1',source_id:'synthetic',index_base:1,choice:'first'}});
 const numbered = cube.execute({operation:'cipher.numbered_key.encode',version:1,inputs:{text:'AAA'},parameters:{alphabet:'AB',key:'ABA',preparation:'exact',rotation:0,origin:'0',width:1,choice:'round_robin'}});
 const numberedTokens:readonly string[]=numbered.tokens;
 const headlineRows:readonly string[]=cube.execute({operation:'cipher.headlines.encode',version:1,inputs:{headlines:['','','','','']},parameters:{profile:'aca_base',hat:'APOTHECARY',key:'CHEMIST',setting:'DRUGS',punctuation:'preserve'}}).headlines;

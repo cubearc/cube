@@ -48,3 +48,11 @@ def test_native_errors_identify_the_requested_operation():
     with pytest.raises(ValueError) as failure:
         cube.numbered_key_encode("1", dict(PARAMETERS, preparation="exact", key="abc"))
     assert failure.value.operation == "cipher.numbered_key.encode"
+
+
+def test_wrong_typed_tokens_use_input_diagnostics():
+    with pytest.raises(ValueError) as failure:
+        cube.numbered_key_decode([0], PARAMETERS)
+    assert failure.value.code == "invalid_input"
+    assert failure.value.operation == "cipher.numbered_key.decode"
+    assert failure.value.parameter == "tokens"

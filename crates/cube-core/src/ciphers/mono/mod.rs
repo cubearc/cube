@@ -5,6 +5,7 @@ pub mod grandpre;
 pub mod headlines;
 pub mod historical;
 pub mod homophonic;
+pub mod key_phrase;
 pub mod numbered_key;
 pub mod params;
 pub mod rotations;

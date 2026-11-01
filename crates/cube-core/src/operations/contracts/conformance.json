@@ -11576,5 +11576,717 @@
       "rotation": 18,
       "width": 2
     }
+  },
+  {
+    "contract_sha256": "a0e53de41383b9a392eeffb9ceea13310526781d1b786e767630b8495649991a",
+    "inputs": {
+      "pages": [
+        "THE ROAD\nTHE CUBE",
+        "CUBE 🐈\r\nROAD"
+      ],
+      "words": [
+        "THE",
+        "THE",
+        "CUBE",
+        "CUBE",
+        "🐈"
+      ]
+    },
+    "operation": "cipher.arnold.encode",
+    "operation_version": 1,
+    "outputs": {
+      "coordinates": [
+        {
+          "line": 1,
+          "page": 1,
+          "word": 1
+        },
+        {
+          "line": 2,
+          "page": 1,
+          "word": 1
+        },
+        {
+          "line": 2,
+          "page": 1,
+          "word": 2
+        },
+        {
+          "line": 1,
+          "page": 2,
+          "word": 1
+        },
+        {
+          "line": 1,
+          "page": 2,
+          "word": 2
+        }
+      ],
+      "definition_sha256": "54565fd9de7343b4d957b079b9473e68124c8c3dc307ca30d6cdb8000adfc47f",
+      "source_id": "synthetic:two-pages-v1",
+      "source_sha256": "2bdf8fd523fcf3ca0714e9d2b2fa779995207ac58bd359516a92478b41bed0d5",
+      "words": [
+        "THE",
+        "THE",
+        "CUBE",
+        "CUBE",
+        "🐈"
+      ]
+    },
+    "parameters": {
+      "choice": "round_robin",
+      "index_base": 1,
+      "profile": "arnold_paged_words_v1",
+      "source_id": "synthetic:two-pages-v1"
+    }
+  },
+  {
+    "contract_sha256": "365cfc6250984d61b4d8454d05d90d06ae433e069de1ea19d0f46274ef27fffe",
+    "inputs": {
+      "coordinates": [
+        {
+          "line": 1,
+          "page": 1,
+          "word": 1
+        },
+        {
+          "line": 2,
+          "page": 1,
+          "word": 1
+        },
+        {
+          "line": 2,
+          "page": 1,
+          "word": 2
+        },
+        {
+          "line": 1,
+          "page": 2,
+          "word": 1
+        },
+        {
+          "line": 1,
+          "page": 2,
+          "word": 2
+        }
+      ],
+      "pages": [
+        "THE ROAD\nTHE CUBE",
+        "CUBE 🐈\r\nROAD"
+      ]
+    },
+    "operation": "cipher.arnold.decode",
+    "operation_version": 1,
+    "outputs": {
+      "coordinates": [
+        {
+          "line": 1,
+          "page": 1,
+          "word": 1
+        },
+        {
+          "line": 2,
+          "page": 1,
+          "word": 1
+        },
+        {
+          "line": 2,
+          "page": 1,
+          "word": 2
+        },
+        {
+          "line": 1,
+          "page": 2,
+          "word": 1
+        },
+        {
+          "line": 1,
+          "page": 2,
+          "word": 2
+        }
+      ],
+      "definition_sha256": "54565fd9de7343b4d957b079b9473e68124c8c3dc307ca30d6cdb8000adfc47f",
+      "source_id": "synthetic:two-pages-v1",
+      "source_sha256": "2bdf8fd523fcf3ca0714e9d2b2fa779995207ac58bd359516a92478b41bed0d5",
+      "words": [
+        "THE",
+        "THE",
+        "CUBE",
+        "CUBE",
+        "🐈"
+      ]
+    },
+    "parameters": {
+      "choice": "round_robin",
+      "index_base": 1,
+      "profile": "arnold_paged_words_v1",
+      "source_id": "synthetic:two-pages-v1"
+    }
+  },
+  {
+    "contract_sha256": "8e8c26a0fc85e899baaadff80a58033341a5b4ce69c3700ac081ee29eb2e7dfa",
+    "inputs": {
+      "text": "A CIPHERTEXT LETTER MAY STAND FOR MORE THAN ONE PLAINTEXT LETTER."
+    },
+    "operation": "cipher.key_phrase.encode",
+    "operation_version": 1,
+    "outputs": {
+      "ambiguous": false,
+      "definition_sha256": "be5693dc2027f2f245b01452d5c6904c21e399203562790ac376b541a58b1562",
+      "records": [
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 0,
+          "input": "A",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 1,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "V"
+          ],
+          "byte_offset": 2,
+          "input": "C",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "B"
+          ],
+          "byte_offset": 3,
+          "input": "I",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 4,
+          "input": "P",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "I"
+          ],
+          "byte_offset": 5,
+          "input": "H",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 6,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "V"
+          ],
+          "byte_offset": 7,
+          "input": "R",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 8,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 9,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "A"
+          ],
+          "byte_offset": 10,
+          "input": "X",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 11,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 12,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "T"
+          ],
+          "byte_offset": 13,
+          "input": "L",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 14,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 15,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 16,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 17,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "V"
+          ],
+          "byte_offset": 18,
+          "input": "R",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 19,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "Y"
+          ],
+          "byte_offset": 20,
+          "input": "M",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 21,
+          "input": "A",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "T"
+          ],
+          "byte_offset": 22,
+          "input": "Y",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 23,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "E"
+          ],
+          "byte_offset": 24,
+          "input": "S",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 25,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 26,
+          "input": "A",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "O"
+          ],
+          "byte_offset": 27,
+          "input": "N",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "E"
+          ],
+          "byte_offset": 28,
+          "input": "D",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 29,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "E"
+          ],
+          "byte_offset": 30,
+          "input": "F",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "R"
+          ],
+          "byte_offset": 31,
+          "input": "O",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "V"
+          ],
+          "byte_offset": 32,
+          "input": "R",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 33,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "Y"
+          ],
+          "byte_offset": 34,
+          "input": "M",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "R"
+          ],
+          "byte_offset": 35,
+          "input": "O",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "V"
+          ],
+          "byte_offset": 36,
+          "input": "R",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 37,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 38,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 39,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "I"
+          ],
+          "byte_offset": 40,
+          "input": "H",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 41,
+          "input": "A",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "O"
+          ],
+          "byte_offset": 42,
+          "input": "N",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 43,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "R"
+          ],
+          "byte_offset": 44,
+          "input": "O",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "O"
+          ],
+          "byte_offset": 45,
+          "input": "N",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 46,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 47,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 48,
+          "input": "P",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "T"
+          ],
+          "byte_offset": 49,
+          "input": "L",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "G"
+          ],
+          "byte_offset": 50,
+          "input": "A",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "B"
+          ],
+          "byte_offset": 51,
+          "input": "I",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "O"
+          ],
+          "byte_offset": 52,
+          "input": "N",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 53,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 54,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "A"
+          ],
+          "byte_offset": 55,
+          "input": "X",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 56,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            " "
+          ],
+          "byte_offset": 57,
+          "input": " ",
+          "mapped": false
+        },
+        {
+          "alternatives": [
+            "T"
+          ],
+          "byte_offset": 58,
+          "input": "L",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 59,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 60,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 61,
+          "input": "T",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "M"
+          ],
+          "byte_offset": 62,
+          "input": "E",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "V"
+          ],
+          "byte_offset": 63,
+          "input": "R",
+          "mapped": true
+        },
+        {
+          "alternatives": [
+            "."
+          ],
+          "byte_offset": 64,
+          "input": ".",
+          "mapped": false
+        }
+      ],
+      "text": "G VBGIMVMMAM TMMMMV YGT EMGOE ERV YRVM MIGO ROM GTGBOMMAM TMMMMV."
+    },
+    "parameters": {
+      "phrase": "GIVEMELIBERTYORGIVEMEDEATH"
+    }
+  },
+  {
+    "contract_sha256": "0d558c8de5b508ee29c725e86eb331e657e76d125ad4fc4a4098762a6cb67c2b",
+    "inputs": {
+      "text": "I"
+    },
+    "operation": "cipher.key_phrase.decode",
+    "operation_version": 1,
+    "outputs": {
+      "ambiguous": true,
+      "definition_sha256": "be5693dc2027f2f245b01452d5c6904c21e399203562790ac376b541a58b1562",
+      "records": [
+        {
+          "alternatives": [
+            "B",
+            "H",
+            "Q"
+          ],
+          "byte_offset": 0,
+          "input": "I",
+          "mapped": true
+        }
+      ],
+      "text": null
+    },
+    "parameters": {
+      "phrase": "GIVEMELIBERTYORGIVEMEDEATH"
+    }
   }
 ]

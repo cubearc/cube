@@ -123,6 +123,39 @@ Rust uses `homophonic::Definition`, `Mapping::new` / `::parse`, and the typed
 `Counter` records. CLI definition files are explicit local UTF-8 JSON, opened
 read-only with a 64 KiB limit; the SDK accepts ordinary dictionaries.
 
+## Key Phrase and ambiguous readings
+
+The [ACA Key Phrase](https://www.cryptogram.org/downloads/aca.info/ciphers/KeyPhrase.pdf)
+profile matches a complete 26-letter phrase to the straight A–Z alphabet.
+Supply its letters as exactly 26 uppercase A–Z characters in `phrase`, with
+spaces and punctuation already removed. Repetitions remain significant;
+the operation does not deduplicate a keyword or decide whether a phrase is complete.
+
+`cipher.key_phrase.encode` returns unique `text`; `.decode` returns every
+per-character reading in `records`. A decoded `text` is `null` when any character
+is ambiguous. With `GIVEMELIBERTYORGIVEMEDEATH`, B, H and Q all encode to I;
+decoding I retains `["B","H","Q"]` rather than selecting a plaintext letter.
+`ambiguous` states that condition explicitly. Records retain original `input`,
+zero-based `byte_offset`, ordered `alternatives` and whether a letter was `mapped`.
+Reports also identify the canonical parameter definition by `definition_sha256`.
+
+Letters canonicalize to uppercase; printable ASCII spaces and punctuation remain
+in place. Insert proper-noun `*` markers yourself. Unknown ciphertext letters,
+non-ASCII characters and controls reject. No dictionary, language model or
+Cartesian expansion resolves alternatives automatically. Empty input returns
+empty text and records.
+
+CLI uses `cube cipher key-phrase --parameters FILE`, with ordinary text input and
+optional `--decode`; the file contains `{"phrase":"GIVEMELIBERTYORGIVEMEDEATH"}`.
+For `--decode --text I`, inspect the three alternatives above and the null text.
+Native Python provides `key_phrase_encode(text, parameters)` and
+`key_phrase_decode(...)`; Rust uses `ciphers::mono::key_phrase::{encode,decode}`.
+JavaScript/TypeScript uses the canonical IDs with named `text` input. The encoded
+text port is text; the inverse's nullable text and readings are structured values.
+Input is at most 1 MiB/65,536 printable ASCII scalars; serialized reports are at
+most 4 MiB. Conservative report preflight can reject expansion before that final
+ceiling; a maximal input is not a promise that all alternative readings will fit.
+
 ## Numbered Key construction
 
 `cipher.numbered_key.encode` and `.decode` implement the

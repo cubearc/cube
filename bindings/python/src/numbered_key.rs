@@ -27,9 +27,7 @@ fn numbered_key_decode(
 ) -> PyResult<Py<PyAny>> {
     let op = "cipher.numbered_key.decode";
     let p = parse_parameters(py, parameters, op)?;
-    let document = super::mono::document(py, tokens, 1048576, op, "tokens")?;
-    let tokens = poly::parse_parameters::<Vec<String>>(&document)
-        .map_err(|e| super::file_error(e.operation(op)))?;
+    let tokens = super::mono::input::<Vec<String>>(py, tokens, 1048576, op, "tokens")?;
     let report = n::decode(&tokens, &p).map_err(super::file_error)?;
     super::structured(py, &serde_json::to_value(report).expect("typed report"))
 }

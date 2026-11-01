@@ -436,6 +436,7 @@ version = "0.18.0"
 dependencies = [
  "cube-core",
  "pyo3",
+ "serde",
  "serde_json",
  "zeroize",
 ]

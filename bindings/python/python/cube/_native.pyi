@@ -4,6 +4,57 @@ from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
+class KeyPhraseParameters(TypedDict):
+    phrase: str
+
+class KeyPhraseRecord(TypedDict):
+    byte_offset: int
+    input: str
+    alternatives: list[str]
+    mapped: bool
+
+class KeyPhraseReadings(TypedDict):
+    ambiguous: bool
+    records: list[KeyPhraseRecord]
+    definition_sha256: str
+
+class KeyPhraseEncodedReport(KeyPhraseReadings):
+    text: str
+
+class KeyPhraseDecodedReport(KeyPhraseReadings):
+    text: str | None
+
+class ArnoldParameters(TypedDict):
+    profile: Literal["arnold_paged_words_v1"]
+    source_id: str
+    index_base: Literal[0, 1]
+    choice: Literal["first", "round_robin"]
+
+class WordCoordinate(TypedDict):
+    page: int
+    line: int
+    word: int
+
+class ArnoldReport(TypedDict):
+    words: list[str]
+    coordinates: list[WordCoordinate]
+    source_id: str
+    source_sha256: str
+    definition_sha256: str
+
+def key_phrase_encode(
+    text: str, parameters: KeyPhraseParameters
+) -> KeyPhraseEncodedReport: ...
+def key_phrase_decode(
+    text: str, parameters: KeyPhraseParameters
+) -> KeyPhraseDecodedReport: ...
+def arnold_encode(
+    pages: list[str], words: list[str], parameters: ArnoldParameters
+) -> ArnoldReport: ...
+def arnold_decode(
+    pages: list[str], coordinates: list[WordCoordinate], parameters: ArnoldParameters
+) -> ArnoldReport: ...
+
 class HeadlinesParameters(TypedDict):
     profile: Literal["aca_base"]
     hat: str

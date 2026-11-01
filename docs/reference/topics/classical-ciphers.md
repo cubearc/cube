@@ -76,6 +76,57 @@ result or substitute character is returned.
 No book is bundled, fetched or stored. Book coordinates have no pipeline adapter;
 their text result can be passed to ordinary text operations.
 
+## Whole words from caller pages
+
+`cipher.arnold.encode` and `.decode` provide the explicit
+`arnold_paged_words_v1` profile. The
+[Friedman lecture](https://www.nsa.gov/Portals/75/documents/news-features/declassified-documents/friedman-documents/lectures-speeches/FOLDER_019/41700339073966.pdf)
+describes dictionary/book word codes and page, line and word coordinates used in
+that historical setting. This profile takes the caller's exact pages and complete
+words; it does not reproduce an unspecified Blackstone or dictionary edition,
+conventional code names, or a letter fallback.
+
+Supply named `pages`, a JSON array of page strings, and either `words` or
+`coordinates`. A coordinate is `{"page":1,"line":2,"word":1}`. Parameters require
+`profile="arnold_paged_words_v1"`, an exact `source_id` identifying the caller's
+edition, `index_base` 0 or 1, and `choice="first"` or `"round_robin"`.
+Round robin cycles independently for each exact word and resets each invocation.
+Word and line rules are shared with book coordinates above; page boundaries are
+the supplied array boundaries. Case, punctuation and combining marks stay exact.
+
+For pages `["THE ROAD\nTHE CUBE","CUBE 🐈\r\nROAD"]`, base 1 and round robin,
+words `["THE","THE","CUBE","CUBE","🐈"]` select
+`(1,1,1), (1,2,1), (1,2,2), (2,1,1), (2,1,2)`.
+Decode those coordinates to recover the same presegmented words. Message spacing
+is not reconstructed. Unknown words and unavailable coordinates fail.
+
+Reports include `words`, selected `coordinates`, `source_id`, `source_sha256` and
+`definition_sha256`. The source hash covers the compact JSON array of exact page
+strings, preserving page boundaries and original line endings. The definition
+hash also binds the canonical parameters. An edition ID is a caller assertion,
+never a remote lookup or proof of authenticity.
+
+CLI `cube cipher arnold --parameters FILE` reads a JSON input object containing
+`pages` and `words`; use `--decode` with `pages` and `coordinates`. Native Python
+functions are `arnold_encode(pages, words, parameters)` and
+`arnold_decode(pages, coordinates, parameters)`. Rust uses
+`ciphers::book::words::{encode,decode}`; JavaScript/TypeScript uses the canonical
+IDs and corresponding named inputs. Native Play uses structured page/word/
+coordinate values and inspectable named results.
+
+| Resource | Maximum |
+| --- | --- |
+| Source pages | 1 MiB compact JSON |
+| Indexed source | 65,536 combined pages, lines and words |
+| Source word | 256 UTF-8 bytes |
+| Message words or coordinate input | 65,536 items and 1 MiB compact JSON |
+| Edition ID | 1024 UTF-8 bytes, nonempty |
+| Serialized report | 4 MiB, with bounded expansion preflight |
+
+Interfaces may apply lower aggregate input/output budgets. Neither books nor
+source retrieval are bundled; the original character-coordinate operations
+retain their formats and behavior.
+
 ## Modern encrypted files
 
 The current API has no modern encrypted-file decryption operation. Proposed

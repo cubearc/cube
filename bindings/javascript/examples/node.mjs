@@ -14,3 +14,11 @@ const numbered = cube.execute({
 });
 assert.deepEqual(numbered.tokens, ['23', '15', '20', '11', '13', '17']);
 console.log(numbered.tokens.join(' '));
+
+const readings = cube.execute({
+  operation: 'cipher.key_phrase.decode', version: 1, inputs: { text: 'I' },
+  parameters: { phrase: 'GIVEMELIBERTYORGIVEMEDEATH' },
+});
+assert.equal(readings.text, null);
+assert.deepEqual(readings.records[0].alternatives, ['B', 'H', 'Q']);
+console.log(readings.records[0].alternatives);

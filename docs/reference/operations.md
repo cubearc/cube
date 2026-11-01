@@ -3552,6 +3552,236 @@ Example:
 cube cipher --help
 ```
 
+## cipher.arnold.decode
+
+Decode complete words from exact caller page/line/word coordinates, retaining source provenance.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `pages` | `book.pages` |
+| Input | `coordinates` | `book.word_coordinates` |
+| Output | `words` | `book.words` |
+| Output | `coordinates` | `book.word_coordinates` |
+| Output | `source_id` | `text` |
+| Output | `source_sha256` | `text` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "coordinates": [
+      {
+        "line": 1,
+        "page": 1,
+        "word": 1
+      },
+      {
+        "line": 2,
+        "page": 1,
+        "word": 1
+      },
+      {
+        "line": 2,
+        "page": 1,
+        "word": 2
+      },
+      {
+        "line": 1,
+        "page": 2,
+        "word": 1
+      },
+      {
+        "line": 1,
+        "page": 2,
+        "word": 2
+      }
+    ],
+    "pages": [
+      "THE ROAD\nTHE CUBE",
+      "CUBE 🐈\r\nROAD"
+    ]
+  },
+  "parameters": {
+    "choice": "round_robin",
+    "index_base": 1,
+    "profile": "arnold_paged_words_v1",
+    "source_id": "synthetic:two-pages-v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "choice": {
+      "$ref": "#/$defs/MatchPolicy"
+    },
+    "index_base": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "source_id": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 1024
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "source_id",
+    "index_base",
+    "choice"
+  ],
+  "$defs": {
+    "MatchPolicy": {
+      "type": "string",
+      "enum": [
+        "first",
+        "round_robin"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "arnold_paged_words_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher arnold --help
+```
+
+## cipher.arnold.encode
+
+Encode exact whole words with an explicit paginated Arnold-style source and deterministic coordinate choices.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `pages` | `book.pages` |
+| Input | `words` | `book.words` |
+| Output | `words` | `book.words` |
+| Output | `coordinates` | `book.word_coordinates` |
+| Output | `source_id` | `text` |
+| Output | `source_sha256` | `text` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "pages": [
+      "THE ROAD\nTHE CUBE",
+      "CUBE 🐈\r\nROAD"
+    ],
+    "words": [
+      "THE",
+      "THE",
+      "CUBE",
+      "CUBE",
+      "🐈"
+    ]
+  },
+  "parameters": {
+    "choice": "round_robin",
+    "index_base": 1,
+    "profile": "arnold_paged_words_v1",
+    "source_id": "synthetic:two-pages-v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "choice": {
+      "$ref": "#/$defs/MatchPolicy"
+    },
+    "index_base": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 1,
+      "minimum": 0
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "source_id": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1,
+      "x-cube-max-utf8-bytes": 1024
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "source_id",
+    "index_base",
+    "choice"
+  ],
+  "$defs": {
+    "MatchPolicy": {
+      "type": "string",
+      "enum": [
+        "first",
+        "round_robin"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "arnold_paged_words_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher arnold --help
+```
+
 ## cipher.atbash
 
 Reverse ASCII alphabets; preserve case and other Unicode, <=1 MiB; not secure encryption.
@@ -8813,6 +9043,128 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.key_phrase.decode
+
+Decode the ACA Key Phrase alphabet into all per-letter readings without guessing plaintext.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text.optional` |
+| Output | `ambiguous` | `boolean` |
+| Output | `records` | `cipher.phrase_readings` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "I"
+  },
+  "parameters": {
+    "phrase": "GIVEMELIBERTYORGIVEMEDEATH"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "phrase": {
+      "description": "Exactly the 26 uppercase letters of a complete caller-chosen phrase,\nwith spaces/punctuation already removed. Repeated letters are retained.",
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26,
+      "pattern": "^[A-Z]{26}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "phrase"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher key-phrase --help
+```
+
+## cipher.key_phrase.encode
+
+Encode the ACA 26-letter Key Phrase alphabet, retaining repeated phrase letters and word divisions.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Output | `text` | `text` |
+| Output | `ambiguous` | `boolean` |
+| Output | `records` | `cipher.phrase_readings` |
+| Output | `definition_sha256` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "text": "A CIPHERTEXT LETTER MAY STAND FOR MORE THAN ONE PLAINTEXT LETTER."
+  },
+  "parameters": {
+    "phrase": "GIVEMELIBERTYORGIVEMEDEATH"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "phrase": {
+      "description": "Exactly the 26 uppercase letters of a complete caller-chosen phrase,\nwith spaces/punctuation already removed. Repeated letters are retained.",
+      "type": "string",
+      "maxLength": 26,
+      "minLength": 26,
+      "pattern": "^[A-Z]{26}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "phrase"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher key-phrase --help
 ```
 
 ## cipher.malespin

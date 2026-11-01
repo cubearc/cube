@@ -530,6 +530,10 @@ enum Cipher {
     NumberedKey(polycmd::Parameters),
     /// Transform exactly five caller headlines with the qualified ACA base profile
     Headlines(polycmd::Parameters),
+    /// Apply the ACA Key Phrase alphabet and preserve all inverse alternatives
+    KeyPhrase(polycmd::Parameters),
+    /// Select complete words from explicit caller pages, lines and word positions
+    Arnold(polycmd::Parameters),
     /// Five-symbol Bacon encoding with explicit alphabet and notation
     Bacon(puzzlecmd::BaconArgs),
     /// Shared Polybius/Tap square, explicit row,column pairs and word tokens
@@ -1091,6 +1095,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Great(args) => historicalcmd::great(args)?,
                 Cipher::NumberedKey(args) => historicalcmd::numbered_key(args)?,
                 Cipher::Headlines(args) => historicalcmd::headlines(args)?,
+                Cipher::KeyPhrase(args) => historicalcmd::key_phrase(args)?,
+                Cipher::Arnold(args) => historicalcmd::arnold(args)?,
                 Cipher::Rot8000(input) => {
                     ciphers::mono::rotations::rot8000(&input.read_text("cipher.rot8000")?)?
                 }

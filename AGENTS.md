@@ -9,7 +9,14 @@
   Keep byte transformations byte-oriented and errors typed.
 - `crates/cube-cli` adapts core operations to Clap commands.
   `bindings/python` adapts them to PyO3 functions with Python stubs and pytest tests.
+  `bindings/javascript/wasm` adapts portable Core operations for the packaged
+  JavaScript SDK and generated TypeScript contracts.
   Never duplicate an algorithm in an interface or SDK.
+- Every new or changed operation must be reflected in all supported SDKs in the
+  same logical change, including native Python and JavaScript/TypeScript/WebAssembly.
+  Update bindings, exports, type declarations, discovery/availability, packaged
+  conformance tests and affected examples. SDKs must reuse Core algorithms;
+  catalog presence alone does not prove executable SDK support.
 - Use stable Rust, edition 2024, idiomatic Rust and Python, and small cohesive
   modules. Do not add speculative frameworks or dependencies.
 - Write documentation, comments, errors, templates, and agent instructions in English.

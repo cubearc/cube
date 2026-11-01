@@ -76,6 +76,10 @@ fn rot18(text: &str) -> PyResult<String> {
     rotations::rot18(text).map_err(super::file_error)
 }
 #[pyfunction]
+fn rot8000(text: &str) -> PyResult<String> {
+    rotations::rot8000(text).map_err(super::file_error)
+}
+#[pyfunction]
 fn rot47(text: &str) -> PyResult<String> {
     rotations::rot47(text).map_err(super::file_error)
 }
@@ -289,6 +293,7 @@ pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(rot5, module)?)?;
     module.add_function(wrap_pyfunction!(rot18, module)?)?;
     module.add_function(wrap_pyfunction!(rot47, module)?)?;
+    module.add_function(wrap_pyfunction!(rot8000, module)?)?;
     module.add_function(wrap_pyfunction!(homophonic_encode, module)?)?;
     module.add_function(wrap_pyfunction!(homophonic_decode, module)?)?;
     module.add_function(wrap_pyfunction!(straddling_encode, module)?)?;

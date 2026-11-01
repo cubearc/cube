@@ -10267,5 +10267,546 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "2acca44d3ba7ca607329169e6ae5d5ffe2de77a60acbff71588683fe967f0687",
+    "inputs": {
+      "tokens": [
+        "124",
+        "22",
+        "125",
+        "46",
+        "345",
+        "27",
+        "120",
+        "14",
+        "55",
+        "502"
+      ]
+    },
+    "operation": "cipher.great_cipher.decode",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "cancel_indices": [
+          5
+        ],
+        "canceled_indices": [
+          4
+        ],
+        "null_indices": [
+          7
+        ],
+        "units": [
+          {
+            "alternatives": [
+              "Les"
+            ],
+            "token_index": 0
+          },
+          {
+            "alternatives": [
+              "En"
+            ],
+            "token_index": 1
+          },
+          {
+            "alternatives": [
+              "Ne"
+            ],
+            "token_index": 2
+          },
+          {
+            "alternatives": [
+              "Mi"
+            ],
+            "token_index": 3
+          },
+          {
+            "alternatives": [
+              "S"
+            ],
+            "token_index": 6
+          },
+          {
+            "alternatives": [
+              "I",
+              "J"
+            ],
+            "token_index": 8
+          },
+          {
+            "alternatives": [
+              "Bien"
+            ],
+            "token_index": 9
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "a1ab607ad0e9606bddea4a98dd93869d0521f5758845f62b11a49c5f70edf5dd",
+    "inputs": {
+      "units": [
+        "Les",
+        "En",
+        "Ne",
+        "Mi",
+        "S"
+      ]
+    },
+    "operation": "cipher.great_cipher.encode",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "124",
+        "22",
+        "125",
+        "46",
+        "120"
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "46b382fc067df723bf3a2aa85509996f161656fc4f14685ad2da5efa8669a2db",
+    "inputs": {
+      "text": "bueno Amigo á"
+    },
+    "operation": "cipher.malespin",
+    "operation_version": 1,
+    "outputs": {
+      "text": "tuani Epofi á"
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "e6549917e378476819b46ed2beba5aebddcf7eb2b8c70041f3e9dbfc9156d96f",
+    "inputs": {
+      "tokens": [
+        "10",
+        "05",
+        "27",
+        "99"
+      ]
+    },
+    "operation": "cipher.nomenclator.decode",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "cancel_indices": [
+          2
+        ],
+        "canceled_indices": [
+          1
+        ],
+        "null_indices": [
+          3
+        ],
+        "units": [
+          {
+            "alternatives": [
+              "OR"
+            ],
+            "token_index": 0
+          }
+        ]
+      }
+    },
+    "parameters": {
+      "definition": {
+        "cancel_codes": [
+          "27"
+        ],
+        "entries": [
+          {
+            "alternatives": [
+              "OR"
+            ],
+            "codes": [
+              "10"
+            ]
+          },
+          {
+            "alternatives": [
+              "D"
+            ],
+            "codes": [
+              "05"
+            ]
+          }
+        ],
+        "null_codes": [
+          "99"
+        ]
+      }
+    }
+  },
+  {
+    "contract_sha256": "8373c5d349f7f6adc1ebd70270db9da136223bf6db31d5dbdb8ab63d5f94e926",
+    "inputs": {
+      "units": [
+        "OR",
+        "D"
+      ]
+    },
+    "operation": "cipher.nomenclator.encode",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "10",
+        "05"
+      ]
+    },
+    "parameters": {
+      "definition": {
+        "cancel_codes": [
+          "27"
+        ],
+        "entries": [
+          {
+            "alternatives": [
+              "OR"
+            ],
+            "codes": [
+              "10"
+            ]
+          },
+          {
+            "alternatives": [
+              "D"
+            ],
+            "codes": [
+              "05"
+            ]
+          }
+        ],
+        "null_codes": [
+          "99"
+        ]
+      }
+    }
+  },
+  {
+    "contract_sha256": "a54f1d91fa56861282375bf978270d3cdd9dd11da3d988be0055620343e5462f",
+    "inputs": {
+      "text": "A 😀"
+    },
+    "operation": "cipher.rot8000",
+    "operation_version": 1,
+    "outputs": {
+      "text": "籊 😀"
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "ef792f8555b021bf3346f75e0d2383007ecca7a3cfc0ddfe6f63cf2f4967089f",
+    "inputs": {
+      "tokens": [
+        "10",
+        "26"
+      ]
+    },
+    "operation": "cipher.syllabary.decode",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "cancel_indices": [],
+        "canceled_indices": [],
+        "null_indices": [],
+        "units": [
+          {
+            "alternatives": [
+              "OR"
+            ],
+            "token_index": 0
+          },
+          {
+            "alternatives": [
+              "DE"
+            ],
+            "token_index": 1
+          }
+        ]
+      }
+    },
+    "parameters": {
+      "definition": {
+        "cells": [
+          "C",
+          "3",
+          "H",
+          "8",
+          "AR",
+          "M",
+          "ING",
+          "P",
+          "RI",
+          "N",
+          "CE",
+          "A",
+          "1",
+          "AL",
+          "AN",
+          "AND",
+          "ARE",
+          "AS",
+          "AT",
+          "ATE",
+          "ATI",
+          "B",
+          "2",
+          "BE",
+          "CA",
+          "CO",
+          "COM",
+          "D",
+          "4",
+          "DA",
+          "DE",
+          "E",
+          "5",
+          "EA",
+          "ED",
+          "EN",
+          "ENT",
+          "ER",
+          "ERE",
+          "ERS",
+          "ES",
+          "EST",
+          "F",
+          "6",
+          "G",
+          "7",
+          "HAS",
+          "HE",
+          "I",
+          "9",
+          "IN",
+          "ION",
+          "IS",
+          "IT",
+          "IVE",
+          "J",
+          "0",
+          "K",
+          "L",
+          "LA",
+          "LE",
+          "ME",
+          "ND",
+          "NE",
+          "NT",
+          "O",
+          "OF",
+          "ON",
+          "OR",
+          "OU",
+          "Q",
+          "R",
+          "RA",
+          "RE",
+          "RED",
+          "RES",
+          "RO",
+          "S",
+          "SE",
+          "SH",
+          "ST",
+          "STO",
+          "T",
+          "TE",
+          "TED",
+          "TER",
+          "TH",
+          "THE",
+          "THI",
+          "THR",
+          "TI",
+          "TO",
+          "U",
+          "V",
+          "VE",
+          "W",
+          "WE",
+          "X",
+          "Y",
+          "Z"
+        ],
+        "column_labels": "6719432508",
+        "row_labels": "8502341679"
+      }
+    }
+  },
+  {
+    "contract_sha256": "01bf748302874ec0a422cd06660c7b9789b1fbb1d1b2e054eff5e6075bcad7f6",
+    "inputs": {
+      "units": [
+        "OR",
+        "DE",
+        "R",
+        "S",
+        "RE",
+        "CE",
+        "IVE",
+        "D"
+      ]
+    },
+    "operation": "cipher.syllabary.encode",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "10",
+        "26",
+        "67",
+        "65",
+        "69",
+        "56",
+        "44",
+        "05"
+      ]
+    },
+    "parameters": {
+      "definition": {
+        "cells": [
+          "C",
+          "3",
+          "H",
+          "8",
+          "AR",
+          "M",
+          "ING",
+          "P",
+          "RI",
+          "N",
+          "CE",
+          "A",
+          "1",
+          "AL",
+          "AN",
+          "AND",
+          "ARE",
+          "AS",
+          "AT",
+          "ATE",
+          "ATI",
+          "B",
+          "2",
+          "BE",
+          "CA",
+          "CO",
+          "COM",
+          "D",
+          "4",
+          "DA",
+          "DE",
+          "E",
+          "5",
+          "EA",
+          "ED",
+          "EN",
+          "ENT",
+          "ER",
+          "ERE",
+          "ERS",
+          "ES",
+          "EST",
+          "F",
+          "6",
+          "G",
+          "7",
+          "HAS",
+          "HE",
+          "I",
+          "9",
+          "IN",
+          "ION",
+          "IS",
+          "IT",
+          "IVE",
+          "J",
+          "0",
+          "K",
+          "L",
+          "LA",
+          "LE",
+          "ME",
+          "ND",
+          "NE",
+          "NT",
+          "O",
+          "OF",
+          "ON",
+          "OR",
+          "OU",
+          "Q",
+          "R",
+          "RA",
+          "RE",
+          "RED",
+          "RES",
+          "RO",
+          "S",
+          "SE",
+          "SH",
+          "ST",
+          "STO",
+          "T",
+          "TE",
+          "TED",
+          "TER",
+          "TH",
+          "THE",
+          "THI",
+          "THR",
+          "TI",
+          "TO",
+          "U",
+          "V",
+          "VE",
+          "W",
+          "WE",
+          "X",
+          "Y",
+          "Z"
+        ],
+        "column_labels": "6719432508",
+        "row_labels": "8502341679"
+      }
+    }
+  },
+  {
+    "contract_sha256": "d39f3689ddd7ae50e3ef1c6984e17a1f973ad6d331b198359a28e1a41d9a0d8b",
+    "inputs": {
+      "text": "QOEU"
+    },
+    "operation": "cipher.vatsyayana",
+    "operation_version": 1,
+    "outputs": {
+      "text": "WISH"
+    },
+    "parameters": {
+      "pairs": [
+        [
+          "Q",
+          "W"
+        ],
+        [
+          "O",
+          "I"
+        ],
+        [
+          "E",
+          "S"
+        ],
+        [
+          "U",
+          "H"
+        ]
+      ]
+    }
   }
 ]

@@ -39,7 +39,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         )?;
         writeln!(
             reference,
-            "Play execution: query the authorized runtime's `/api/lab/v2/operations` availability and constraints. Direct API or pipeline support alone does not authorize a Play call.\n"
+            "Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.\n"
         )?;
         let fixture = fixtures
             .iter()

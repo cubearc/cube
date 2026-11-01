@@ -23,3 +23,22 @@ test('nested canonical decimal inputs retain typed behavior in actual Wasm', asy
   inputs.profile.budgets.max_elapsed_ms='5000';
   assert.deepEqual(cube.execute({operation:fixture.operation,version:fixture.operation_version,inputs,parameters:fixture.parameters}),fixture.outputs);
 });
+
+test('historical operations execute through the packaged Wasm with exact Unicode and codebook evidence', () => {
+  const execute = (operation, inputs, parameters = {}) => cube.execute({ operation, version: 1, inputs, parameters });
+  assert.deepEqual(execute('cipher.rot8000', { text: 'A 😀\0' }), { text: '籊 😀\0' });
+  assert.deepEqual(execute('cipher.malespin', { text: 'bueno Amigo á' }), { text: 'tuani Epofi á' });
+  assert.deepEqual(execute('cipher.vatsyayana', { text: 'QOEU' }, { pairs: [['Q','W'],['O','I'],['E','S'],['U','H']] }), { text: 'WISH' });
+  assert.deepEqual(execute('cipher.great_cipher.encode', { units: ['Les','En','Ne','Mi','S'] }), { tokens: ['124','22','125','46','120'] });
+  assert.deepEqual(execute('cipher.great_cipher.decode', { tokens: ['55','502'] }).report.units, [
+    { token_index: 0, alternatives: ['I','J'] }, { token_index: 1, alternatives: ['Bien'] },
+  ]);
+  assert.throws(() => execute('cipher.great_cipher.decode', { tokens: ['6'] }), { code: 'invalid_input' });
+  assert.throws(() => execute('cipher.vatsyayana', { text: 'A' }, { pairs: [['A','B'],['B','C']] }), { code: 'invalid_parameter' });
+  assert.throws(() => execute('cipher.rot8000', { text: '\ud800' }), { code: 'invalid_input' });
+  assert.throws(() => execute('cipher.nomenclator.encode', { units: Array(4050).fill('A') }, { definition: { entries: [{ alternatives: ['A'], codes: ['x'.repeat(256)] }] } }), { code: 'resource_limit' });
+  const definition = { entries: [{ alternatives: ['OR'], codes: ['10'] }, { alternatives: ['D'], codes: ['05'] }], null_codes: ['99'], cancel_codes: ['27'] };
+  assert.deepEqual(execute('cipher.nomenclator.decode', { tokens: ['10','05','27','99'] }, { definition }).report, {
+    units: [{ token_index: 0, alternatives: ['OR'] }], null_indices: [3], canceled_indices: [1], cancel_indices: [2],
+  });
+});

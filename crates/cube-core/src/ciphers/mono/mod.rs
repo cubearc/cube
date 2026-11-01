@@ -2,6 +2,7 @@
 pub mod alphabet;
 pub mod checkerboard;
 pub mod grandpre;
+pub mod historical;
 pub mod homophonic;
 pub mod params;
 pub mod rotations;
@@ -52,6 +53,7 @@ pub(crate) fn policy(op: &'static str, name: &str) -> Result<bool, OperationErro
 }
 
 mod catalog;
+mod execution;
 mod fixtures;
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;

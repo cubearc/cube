@@ -50,8 +50,8 @@ fn execution_error(value: execution::Failure) -> String {
 fn execution_error_at(value: execution::Failure, operation: Option<&'static str>) -> String {
     let code = match value.0 {
         "unsupported_operation" => "unsupported_operation",
-        "invalid_parameters" | "invalid_pointer" => "invalid_parameter",
-        "input_limit" | "output_limit" | "numeric_overflow" => "resource_limit",
+        "invalid_parameter" | "invalid_parameters" | "invalid_pointer" => "invalid_parameter",
+        "resource_limit" | "input_limit" | "output_limit" | "numeric_overflow" => "resource_limit",
         "invalid_registration" | "invalid_response" => "runtime_failure",
         "operation_failed" => "operation_failed",
         _ => "invalid_input",
@@ -300,6 +300,37 @@ pub fn run_recipe_json(
 mod binding_tests {
     use super::*;
     use serde_json::{Value, json};
+
+    #[test]
+    fn historical_native_executors_preserve_typed_error_categories() {
+        for (operation, inputs, parameters, code) in [
+            (
+                "cipher.nomenclator.encode",
+                json!({"units":vec!["A";4050]}),
+                json!({"definition":{"entries":[{"alternatives":["A"],"codes":["x".repeat(256)]}]}}),
+                "resource_limit",
+            ),
+            (
+                "cipher.great_cipher.decode",
+                json!({"tokens":["6"]}),
+                json!({}),
+                "invalid_input",
+            ),
+            (
+                "cipher.vatsyayana",
+                json!({"text":"A"}),
+                json!({"pairs":[["A","B"],["B","C"]]}),
+                "invalid_parameter",
+            ),
+        ] {
+            let request =
+                json!({"operation":operation,"version":1,"inputs":inputs,"parameters":parameters});
+            let error: Value =
+                serde_json::from_str(&execute_json(&request.to_string()).unwrap_err()).unwrap();
+            assert_eq!(error["code"], code, "{operation}");
+            assert_eq!(error["operation"], operation);
+        }
+    }
 
     #[test]
     fn book_cipher_executes_arbitrary_named_inputs() {

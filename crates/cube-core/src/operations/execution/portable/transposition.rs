@@ -33,30 +33,30 @@ text_handler!(spiral, routes::spiral);
 text_handler!(caesar_box, routes::caesar_box);
 text_handler!(turning_grille, grille::turning_grille);
 fn cadenus(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
-    output(cube_core::ciphers::transposition::tables::cadenus(
+    output(crate::ciphers::transposition::tables::cadenus(
         t,
-        &parse::<cube_core::ciphers::transposition::tables::Cadenus>(p)?,
+        &parse::<crate::ciphers::transposition::tables::Cadenus>(p)?,
         d,
     )?)
 }
 fn swagman(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
-    output(cube_core::ciphers::transposition::tables::swagman(
+    output(crate::ciphers::transposition::tables::swagman(
         t,
-        &parse::<cube_core::ciphers::transposition::tables::Swagman>(p)?,
+        &parse::<crate::ciphers::transposition::tables::Swagman>(p)?,
         d,
     )?)
 }
 fn nihilist_transposition(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
-    output(cube_core::ciphers::transposition::tables::nihilist(
+    output(crate::ciphers::transposition::tables::nihilist(
         t,
-        &parse::<cube_core::ciphers::transposition::tables::Nihilist>(p)?,
+        &parse::<crate::ciphers::transposition::tables::Nihilist>(p)?,
         d,
     )?)
 }
 fn ubchi(t: &str, p: &Value, d: bool) -> Result<Value, OperationError> {
-    output(cube_core::ciphers::transposition::ubchi::transform(
+    output(crate::ciphers::transposition::ubchi::transform(
         t,
-        &parse::<cube_core::ciphers::transposition::ubchi::Ubchi>(p)?,
+        &parse::<crate::ciphers::transposition::ubchi::Ubchi>(p)?,
         d,
     )?)
 }

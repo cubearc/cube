@@ -131,7 +131,9 @@ fn result_text(data: &Value) -> Result<String, OperationError> {
 }
 
 #[cfg(unix)]
-pub(super) fn run() -> Result<(), OperationError> {
+pub(super) fn run(
+    policy: impl FnOnce() -> Result<(), OperationError>,
+) -> Result<(), OperationError> {
     use std::{io::BufReader, os::unix::net::UnixStream, sync::mpsc, time::Duration};
     if !std::io::stdin().is_terminal() || !std::io::stderr().is_terminal() {
         return Err(error("context_unavailable"));
@@ -156,6 +158,7 @@ pub(super) fn run() -> Result<(), OperationError> {
             }
         })
         .map_err(|_| error("owner_watch_unavailable"))?;
+    policy()?;
     let next = || {
         receive
             .recv_timeout(Duration::from_secs(5))
@@ -265,7 +268,9 @@ pub(super) fn run() -> Result<(), OperationError> {
 }
 
 #[cfg(not(unix))]
-pub(super) fn run() -> Result<(), OperationError> {
+pub(super) fn run(
+    _policy: impl FnOnce() -> Result<(), OperationError>,
+) -> Result<(), OperationError> {
     Err(error("native_policy_unavailable"))
 }
 
@@ -311,5 +316,15 @@ mod tests {
             )
             .is_err()
         );
+    }
+    #[test]
+    fn a_missing_inherited_terminal_never_applies_a_host_policy() {
+        let invoked = std::cell::Cell::new(false);
+        let result = super::super::run_session_with_policy(|| {
+            invoked.set(true);
+            Err(error("test_policy_denied"))
+        });
+        assert!(result.is_err());
+        assert!(!invoked.get());
     }
 }

@@ -282,11 +282,21 @@ pub fn exchange(
     }
     Ok(())
 }
+/// Enter an authorized inherited PTY/control session with a host startup policy.
+/// The owner reader starts before the policy runs, and no interactive command is
+/// read until it succeeds. Native hosts can then deny further thread creation.
+/// Missing inherited authority returns before invoking the policy.
+pub fn run_session_with_policy(
+    policy: impl FnOnce() -> Result<(), OperationError>,
+) -> Result<(), OperationError> {
+    session::run(policy)
+}
+
 /// Contextual commands have no discovery or launcher fallback. A terminal alone
 /// does not supply an application-authorized inherited session.
 pub fn run(command: &Command) -> Result<(), OperationError> {
     if matches!(command, Command::Session) {
-        return session::run();
+        return run_session_with_policy(|| Ok(()));
     }
     if std::io::stdin().is_terminal() {
         return Err(error("context_unavailable"));

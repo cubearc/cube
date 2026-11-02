@@ -9115,6 +9115,78 @@ Example:
 cube cipher --help
 ```
 
+## cipher.jefferson.decode
+
+Configured numbered26-letter wheels from Jefferson's manuscript, before22 March1802; caller chooses the complete wheel set.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.jefferson.encode
+
+Configured numbered26-letter wheels from Jefferson's manuscript, before22 March1802; caller chooses the complete wheel set.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.key_phrase.decode
 
 Decode the ACA Key Phrase alphabet into all per-letter readings without guessing plaintext.
@@ -9235,6 +9307,150 @@ Example:
 
 ```sh
 cube cipher key-phrase --help
+```
+
+## cipher.m138a.decode
+
+M-138-A/CSP-845 raw30-track/100-strip mechanism with explicit selected strip identities; no automatic message procedure.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.m138a.encode
+
+M-138-A/CSP-845 raw30-track/100-strip mechanism with explicit selected strip identities; no automatic message procedure.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.m94.decode
+
+Standard M-94/CSP-488 wheels; FM24-5 section V,19 October1942.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.m94.encode
+
+Standard M-94/CSP-488 wheels; FM24-5 section V,19 October1942.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.malespin

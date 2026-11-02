@@ -33276,6 +33276,382 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.jefferson.decode",
+      "category": "ciphers",
+      "description": "Configured numbered26-letter wheels from Jefferson's manuscript, before22 March1802; caller chooses the complete wheel set.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "JeffersonParameters",
+            "description": "Jefferson's numbered mixed-alphabet wheels, explicitly supplied as described\nin his manuscript before22 March1802. No canonical wheel set was prescribed.",
+            "type": "object",
+            "properties": {
+              "order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/ConfiguredWheelId"
+                },
+                "maxItems": 64,
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "profile": {
+                "$ref": "#/$defs/JeffersonProfile"
+              },
+              "row_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RowOffset"
+                },
+                "maxItems": 65536
+              },
+              "wheels": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Alphabet"
+                },
+                "maxItems": 64,
+                "minItems": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "wheels",
+              "order",
+              "row_offsets"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "ConfiguredWheelId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 64,
+                "minimum": 1
+              },
+              "JeffersonProfile": {
+                "type": "string",
+                "enum": [
+                  "jefferson_configured_v1"
+                ]
+              },
+              "RowOffset": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 2097152,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.jefferson.encode",
+      "category": "ciphers",
+      "description": "Configured numbered26-letter wheels from Jefferson's manuscript, before22 March1802; caller chooses the complete wheel set.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "JeffersonParameters",
+            "description": "Jefferson's numbered mixed-alphabet wheels, explicitly supplied as described\nin his manuscript before22 March1802. No canonical wheel set was prescribed.",
+            "type": "object",
+            "properties": {
+              "order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/ConfiguredWheelId"
+                },
+                "maxItems": 64,
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "profile": {
+                "$ref": "#/$defs/JeffersonProfile"
+              },
+              "row_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RowOffset"
+                },
+                "maxItems": 65536
+              },
+              "wheels": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Alphabet"
+                },
+                "maxItems": 64,
+                "minItems": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "wheels",
+              "order",
+              "row_offsets"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "ConfiguredWheelId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 64,
+                "minimum": 1
+              },
+              "JeffersonProfile": {
+                "type": "string",
+                "enum": [
+                  "jefferson_configured_v1"
+                ]
+              },
+              "RowOffset": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 2097152,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.key_phrase.decode",
       "category": "ciphers",
       "description": "Decode the ACA Key Phrase alphabet into all per-letter readings without guessing plaintext.",
@@ -33892,6 +34268,742 @@
       "policy": {
         "private_input": false,
         "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.m138a.decode",
+      "category": "ciphers",
+      "description": "M-138-A/CSP-845 raw30-track/100-strip mechanism with explicit selected strip identities; no automatic message procedure.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "M138aParameters",
+            "description": "M-138-A/CSP-845 raw30-track strip mechanism. Supply the complete100-strip\nseries in numbered order and select30 distinct IDs. Message indicators,\nnull insertion and code-word procedures are outside this raw transform.",
+            "type": "object",
+            "properties": {
+              "order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/StripId"
+                },
+                "maxItems": 30,
+                "minItems": 30,
+                "uniqueItems": true
+              },
+              "profile": {
+                "$ref": "#/$defs/M138aProfile"
+              },
+              "row_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RowOffset"
+                },
+                "maxItems": 34953
+              },
+              "strip_series": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+              },
+              "strips": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Alphabet"
+                },
+                "maxItems": 100,
+                "minItems": 100
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "strip_series",
+              "strips",
+              "order",
+              "row_offsets"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "M138aProfile": {
+                "type": "string",
+                "enum": [
+                  "m138a_configured_v1"
+                ]
+              },
+              "RowOffset": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              },
+              "StripId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 100,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 2097152,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.m138a.encode",
+      "category": "ciphers",
+      "description": "M-138-A/CSP-845 raw30-track/100-strip mechanism with explicit selected strip identities; no automatic message procedure.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "M138aParameters",
+            "description": "M-138-A/CSP-845 raw30-track strip mechanism. Supply the complete100-strip\nseries in numbered order and select30 distinct IDs. Message indicators,\nnull insertion and code-word procedures are outside this raw transform.",
+            "type": "object",
+            "properties": {
+              "order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/StripId"
+                },
+                "maxItems": 30,
+                "minItems": 30,
+                "uniqueItems": true
+              },
+              "profile": {
+                "$ref": "#/$defs/M138aProfile"
+              },
+              "row_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RowOffset"
+                },
+                "maxItems": 34953
+              },
+              "strip_series": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$"
+              },
+              "strips": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Alphabet"
+                },
+                "maxItems": 100,
+                "minItems": 100
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "strip_series",
+              "strips",
+              "order",
+              "row_offsets"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "M138aProfile": {
+                "type": "string",
+                "enum": [
+                  "m138a_configured_v1"
+                ]
+              },
+              "RowOffset": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              },
+              "StripId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 100,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 2097152,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.m94.decode",
+      "category": "ciphers",
+      "description": "Standard M-94/CSP-488 wheels; FM24-5 section V,19 October1942.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "M94Parameters",
+            "description": "Explicit left-to-right standard wheel order and one clockwise row\ndisplacement per successive block of at most25 letters. Decoding requires\nthe same displacements; it never guesses a meaningful-looking row.",
+            "type": "object",
+            "properties": {
+              "order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/WheelId"
+                },
+                "maxItems": 25,
+                "minItems": 25,
+                "uniqueItems": true
+              },
+              "profile": {
+                "$ref": "#/$defs/M94Profile"
+              },
+              "row_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RowOffset"
+                },
+                "maxItems": 41944
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "order",
+              "row_offsets"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "M94Profile": {
+                "type": "string",
+                "enum": [
+                  "m94_v1"
+                ]
+              },
+              "RowOffset": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              },
+              "WheelId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 2097152,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.m94.encode",
+      "category": "ciphers",
+      "description": "Standard M-94/CSP-488 wheels; FM24-5 section V,19 October1942.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "M94Parameters",
+            "description": "Explicit left-to-right standard wheel order and one clockwise row\ndisplacement per successive block of at most25 letters. Decoding requires\nthe same displacements; it never guesses a meaningful-looking row.",
+            "type": "object",
+            "properties": {
+              "order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/WheelId"
+                },
+                "maxItems": 25,
+                "minItems": 25,
+                "uniqueItems": true
+              },
+              "profile": {
+                "$ref": "#/$defs/M94Profile"
+              },
+              "row_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RowOffset"
+                },
+                "maxItems": 41944
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "order",
+              "row_offsets"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "M94Profile": {
+                "type": "string",
+                "enum": [
+                  "m94_v1"
+                ]
+              },
+              "RowOffset": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              },
+              "WheelId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 2097152,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
         "sensitive_parameters": [],
         "automatic_capture": false,
         "grants_filesystem_access": false,

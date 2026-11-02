@@ -13,6 +13,7 @@ remain in each operation's reference.
 - [Encoding and decoding](topics/encoding-and-decoding.md)
 - [Position-aware transformations](topics/position-aware-transformations.md)
 - [Classical ciphers](topics/classical-ciphers.md)
+- [Disks and strips](topics/disks-and-strips.md)
 - [Raw AES blocks](topics/aes-blocks.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)

@@ -1,6 +1,12 @@
 import { createCube, type RecipeDefinition } from '../../dist/node.mjs';
 
 const cube = await createCube();
+const m94Settings={profile:'m94_v1' as const,order:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25] as const,row_offsets:[1]};
+const m94Text:string=cube.execute({operation:'cipher.m94.encode',version:1,inputs:{text:'A',settings:m94Settings}}).text;
+const wheelText:string=cube.execute({operation:'cipher.jefferson.decode',version:1,inputs:{text:'B',settings:{profile:'jefferson_configured_v1',wheels:['ABCDEFGHIJKLMNOPQRSTUVWXYZ'],order:[1],row_offsets:[1]}}}).text;
+void m94Text;void wheelText;
+// @ts-expect-error Historical rows must be explicitly selected for decoding.
+cube.execute({operation:'cipher.m94.decode',version:1,inputs:{text:'B',settings:{profile:'m94_v1',order:m94Settings.order}}});
 const primeTokens: readonly string[]=cube.execute({operation:'cipher.prime_number.encode',version:1,inputs:{text:'AB'},parameters:{profile:'indexed_primes_v1',index:{alphabet:'AB',first_index:1,max_prime:3}}}).tokens;
 const multiset=cube.execute({operation:'cipher.prime_multiplication.decode',version:1,inputs:{products:['6']},parameters:{profile:'prime_multiset_v1',index:{alphabet:'AB',first_index:1,max_prime:3},max_factor_checks:10}}).groups[0];
 const exactProduct: string=multiset.product;

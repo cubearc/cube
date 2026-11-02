@@ -74,6 +74,7 @@ console.log('Installed package: Node '+process.version+'; all '+fixtures.length+
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));
   if (!notices.equals(await readFile(new URL('../../../THIRD_PARTY_NOTICES', import.meta.url)))) throw new Error('Packaged third-party notices differ from the reviewed source.');
   run(process.execPath, [join(assets, 'examples/node.mjs')]);
+  run(process.execPath, [join(assets, 'examples/mechanical.mjs')]);
   await writeFile(join(directory, 'example.mts'), await readFile(join(assets, 'examples/node.mts')));
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled', 'example.mts']);
   run(process.execPath, [join(directory, 'compiled/example.mjs')]);

@@ -6,6 +6,7 @@ pub mod book;
 pub mod classical;
 pub mod enigma;
 pub(crate) mod execution;
+pub mod mechanical;
 pub mod mono;
 pub mod poly;
 pub mod polybius;

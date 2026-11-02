@@ -3,6 +3,16 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
+test('historical wheel and strip profiles execute through actual Wasm with explicit rows', async()=>{
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const rows=fixtures.filter(r=>/^cipher\.(m94|jefferson|m138a)\./.test(r.operation));
+  assert.equal(rows.length,6);
+  for(const r of rows)assert.deepEqual(cube.execute({operation:r.operation,version:1,inputs:r.inputs,parameters:r.parameters}),r.outputs,r.operation);
+  const settings=rows.find(r=>r.operation==='cipher.m94.encode').inputs.settings;
+  assert.throws(()=>cube.execute({operation:'cipher.m94.encode',version:1,inputs:{text:'SECRET',settings:{...settings,row_offsets:[]}}}),{code:'invalid_parameter'});
+  assert.throws(()=>cube.execute({operation:'cipher.m94.encode',version:1,inputs:{text:'a',settings:{...settings,row_offsets:[1]}}}),{code:'invalid_input'});
+  assert.throws(()=>cube.execute({operation:'cipher.m94.encode',version:1,inputs:{text:'A'.repeat(1048577),settings:{...settings,row_offsets:Array(41944).fill(1)}}}),{code:'resource_limit'});
+});
 test('numeric profiles execute exact fixtures and bounded multiset recovery in Wasm', async () => {
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const cases=fixtures.filter(r=>/^cipher\.(prime_number|prime_multiplication|modulo|triliteral)\./.test(r.operation));

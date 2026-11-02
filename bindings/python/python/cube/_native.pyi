@@ -2012,6 +2012,30 @@ def enigma(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """
     ...
 
+def m94_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher exact A-Z with standard wheels and explicit per-block rows."""
+    ...
+
+def m94_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Decipher with identical wheel order and explicit per-block rows."""
+    ...
+
+def jefferson_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher caller-configured numbered wheels with explicit per-block rows."""
+    ...
+
+def jefferson_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Reverse the exact configured wheels and rows, without guessing."""
+    ...
+
+def m138a_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher30-track M-138-A with100 explicit strips and selected IDs."""
+    ...
+
+def m138a_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Reverse the raw30-track strip transform with the same series and rows."""
+    ...
+
 def book_encode(
     source: str, text: str, parameters: dict[str, Any]
 ) -> dict[str, Any]: ...

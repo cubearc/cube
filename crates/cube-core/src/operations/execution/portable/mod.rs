@@ -227,6 +227,7 @@ fn prepare(
     budget: super::Budget,
 ) -> Result<(contracts::Contract, Value, Value), OperationError> {
     let contract = contract(operation, version)?;
+    crate::ciphers::mechanical::preflight(operation, inputs)?;
     contract.validate_inputs(inputs)?;
     let effective = effective(&contract, parameters, budget)?;
     let bytes = port_bytes(

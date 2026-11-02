@@ -30,6 +30,7 @@ mod cryptanalysiscmd;
 mod enigmacmd;
 mod fractioncmd;
 mod historicalcmd;
+mod mechanicalcmd;
 mod modularcmd;
 mod monocmd;
 mod numericcmd;
@@ -452,6 +453,21 @@ enum Cipher {
     VigenereMultiplicative(polycmd::Parameters),
     /// Historical Enigma I/M3; reciprocal transform with final windows and optional trace
     Enigma(enigmacmd::Parameters),
+    /// Standard M-94 wheels with explicit order and per-block row displacements
+    M94 {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// Configured Jefferson wheels with explicit row selection
+    Jefferson {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// M-138-A30-track raw strip cipher with an explicit numbered strip series
+    M138a {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Hazardous raw AES blocks; key file only, no padding or authentication
     Aes {
         #[command(subcommand)]
@@ -995,6 +1011,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::ProgressiveKey(args) => polycmd::progressive_key(args)?,
                 Cipher::VigenereMultiplicative(args) => polycmd::vigenere_multiplicative(args)?,
                 Cipher::Enigma(args) => enigmacmd::run(args)?,
+                Cipher::M94 { command } => mechanicalcmd::m94(command)?,
+                Cipher::Jefferson { command } => mechanicalcmd::jefferson(command)?,
+                Cipher::M138a { command } => mechanicalcmd::m138a(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(

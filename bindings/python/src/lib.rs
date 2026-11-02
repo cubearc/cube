@@ -29,6 +29,7 @@ mod historical;
 mod image;
 mod investigation;
 mod lexical;
+mod mechanical;
 mod modular;
 mod mono;
 mod multiset;
@@ -609,6 +610,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     vigenere_keys::register(module)?;
     cryptanalysis::register(module)?;
     enigma::register(module)?;
+    mechanical::register(module)?;
     aes_blocks::register(module)?;
     stream::register(module)?;
     fraction::register(module)?;

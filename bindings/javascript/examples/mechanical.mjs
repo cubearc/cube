@@ -16,3 +16,7 @@ const alberti={profile:'alberti_di_palma_2009_v1',initial_index:'c'};
 assert.equal(cube.execute({operation:'cipher.alberti.decode',version:1,inputs:{text:'sfzefqqfxkmohihuy',settings:alberti}}).text,'SILVI4ALOVES2CATS');
 const kryha={profile:'kryha_callimahos_1973_v1',plain_alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',cipher_alphabet:'HYDRAULICBEFGJKMNOPQSTVWXZ',initial_state:{rotation:0,selector:1}};
 assert.equal(cube.execute({operation:'cipher.kryha.encode',version:1,inputs:{text:'A'.repeat(17),settings:kryha}}).text,'HIJSZUGPHLNTYLJQX');
+
+const lorenzSettings={profile:'lorenz_sz40_v1',chi:[41,31,29,26,23].map(n=>'0'.repeat(n)),psi:[43,47,51,53,59].map(n=>'0'.repeat(n)),mu61:'0'.repeat(61),mu37:'0'.repeat(37),plaintext_limitation:false,initial_state:{chi:[0,0,0,0,0],psi:[0,0,0,0,0],mu61:0,mu37:0,chi2_previous:false,psi1_previous:false,plain5_previous:[false,false]}};
+// Explicit all-dot qualification key: the five-bit values remain unchanged.
+assert.deepEqual(cube.execute({operation:'cipher.lorenz.encode',version:1,inputs:{codes:[0,31,5],settings:lorenzSettings}}).codes,[0,31,5]);

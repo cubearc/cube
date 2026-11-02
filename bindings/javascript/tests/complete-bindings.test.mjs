@@ -31,6 +31,38 @@ test('stateful historical mechanisms preserve published answers, continuation an
   }
 });
 
+test('Lorenz five-bit models execute their source pins, delayed KT history and continuation in actual Wasm', async () => {
+  const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/lorenz_vectors.json',import.meta.url),'utf8'));
+  const execute=(direction,codes,settings)=>cube.execute({operation:`cipher.lorenz.${direction}`,version:1,inputs:{codes,settings}});
+  assert.deepEqual(execute('encode',v.codes,v.settings).codes,v.expected);
+  for(const profile of ['lorenz_sz40_v1','lorenz_sz42a_v1','lorenz_sz42b_v1']) {
+    for(const plaintext_limitation of [false,true]) {
+      if(profile==='lorenz_sz40_v1'&&plaintext_limitation)continue;
+      const settings={...v.settings,profile,plaintext_limitation,trace:false};
+      const codes=Array.from({length:32},(_,i)=>i);
+      const whole=execute('encode',codes,settings);
+      const decoded=execute('decode',whole.codes,settings);
+      assert.deepEqual(decoded.codes,codes);
+      assert.deepEqual(decoded.final_state,whole.final_state);
+      const first=execute('encode',codes.slice(0,7),settings);
+      const second=execute('encode',codes.slice(7),{...settings,initial_state:first.final_state});
+      assert.deepEqual([...first.codes,...second.codes],whole.codes);
+      assert.deepEqual(second.final_state,whole.final_state);
+    }
+  }
+  for(const codes of [[32],[-1],[true]])assert.throws(()=>execute('encode',codes,v.settings),{code:'invalid_input'});
+  const settings={...v.settings,trace:false};
+  const nodes=value=>1+(value&&typeof value==='object'?Object.values(value).reduce((sum,v)=>sum+nodes(v),0):0);
+  const empty={operation:'cipher.lorenz.encode',version:1,inputs:{codes:[],settings},parameters:{}};
+  const maxCodes=cube.limits.direct.documentNodes-nodes(empty);
+  assert.equal(execute('encode',Array(maxCodes).fill(31),settings).codes.length,maxCodes);
+  assert.throws(()=>execute('encode',Array(maxCodes+1).fill(31),settings),{code:'resource_limit'});
+  assert.throws(()=>execute('encode',Array(1048576).fill(31),settings),{code:'resource_limit'});
+  assert.throws(()=>execute('encode',Array(1048577).fill(0),{...v.settings,trace:false}),{code:'resource_limit'});
+  assert.throws(()=>execute('encode',Array(65537).fill(0),v.settings),{code:'resource_limit'});
+  assert.throws(()=>execute('encode',[],{...v.settings,plaintext_limitation:true}),{code:'invalid_parameter'});
+});
+
 test('numeric profiles execute exact fixtures and bounded multiset recovery in Wasm', async () => {
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const cases=fixtures.filter(r=>/^cipher\.(prime_number|prime_multiplication|modulo|triliteral)\./.test(r.operation));

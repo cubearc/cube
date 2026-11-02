@@ -4,11 +4,15 @@ mod alphabet;
 mod catalog;
 pub mod disks;
 pub mod kryha;
+pub mod lorenz;
+mod lorenz_catalog;
 mod stateful_catalog;
 pub mod wheatstone;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
+pub(crate) use lorenz_catalog::MODULE as LORENZ_MODULE;
+pub use lorenz_catalog::OPERATIONS as LORENZ_OPERATIONS;
 use serde::{Serialize, de::DeserializeOwned};
 pub(crate) use stateful_catalog::MODULE as STATEFUL_MODULE;
 pub use stateful_catalog::OPERATIONS as STATEFUL_OPERATIONS;
@@ -24,6 +28,7 @@ fn descriptor(operation: &str) -> Option<&'static crate::operations::Descriptor>
     OPERATIONS
         .iter()
         .chain(STATEFUL_OPERATIONS)
+        .chain(LORENZ_OPERATIONS)
         .find(|d| d.id == operation)
 }
 pub(crate) fn execute(
@@ -31,6 +36,9 @@ pub(crate) fn execute(
     inputs: &serde_json::Value,
     parameters: &serde_json::Value,
 ) -> Result<serde_json::Value, OperationError> {
+    if LORENZ_OPERATIONS.iter().any(|d| d.id == operation) {
+        return lorenz_catalog::execute(operation, inputs, parameters);
+    }
     if STATEFUL_OPERATIONS.iter().any(|d| d.id == operation) {
         stateful_catalog::execute(operation, inputs, parameters)
     } else {
@@ -106,6 +114,14 @@ fn text_budget(text: &str, op: &'static str) -> Result<(), OperationError> {
 /// Preserve the owning operation's resource error before generic schema
 /// validation can classify an oversized, otherwise typed string as bad input.
 pub(crate) fn preflight(operation: &str, inputs: &serde_json::Value) -> Result<(), OperationError> {
+    if let Some(d) = LORENZ_OPERATIONS.iter().find(|d| d.id == operation) {
+        if let Some(codes) = inputs.get("codes").and_then(serde_json::Value::as_array) {
+            lorenz::input_budget(codes.len(), d.id)?;
+        }
+        if let Some(settings) = inputs.get("settings") {
+            parameter_size(settings, d.id)?;
+        }
+    }
     if let Some(descriptor) = descriptor(operation)
         && let Some(text) = inputs.get("text").and_then(serde_json::Value::as_str)
     {

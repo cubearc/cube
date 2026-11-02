@@ -2175,3 +2175,11 @@ def alberti_encode(text: str, parameters: dict[str, object]) -> dict[str, object
 def alberti_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """Source-qualified Alberti decode; text, final alignment and optional trace."""
     ...
+
+def lorenz_encode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher exact five-bit codes with explicit Lorenz profile and histories."""
+    ...
+
+def lorenz_decode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
+    """Decode five-bit codes; KT feedback uses recovered plaintext history."""
+    ...

@@ -15052,5 +15052,431 @@
       ]
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "be7e121b0c4c0d61a1bd85b82f08ac0382b4d8c537ab135b5bc0c8d6cb8eb4b6",
+    "inputs": {
+      "codes": [
+        14,
+        3,
+        3,
+        0
+      ],
+      "settings": {
+        "chi": [
+          "00011110000110000101100100110101101011110",
+          "1100111011000101011000100001110",
+          "00111011001000011100110110011",
+          "00110010110010011001001111",
+          "01000101100100011101110"
+        ],
+        "initial_state": {
+          "chi": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "chi2_previous": false,
+          "mu37": 0,
+          "mu61": 0,
+          "plain5_previous": [
+            false,
+            false
+          ],
+          "psi": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "psi1_previous": false
+        },
+        "mu37": "1011101010101001010111010101010101010",
+        "mu61": "1110101100110011000111101011011000110000111101100110001100001",
+        "plaintext_limitation": false,
+        "profile": "lorenz_sz40_v1",
+        "psi": [
+          "0010101010100100101101101010011011100111000",
+          "00101101010101010110011010010111100000111001011",
+          "101010101010100100110101011110000111000111011001001",
+          "10100110101010101011010000110011001101111101001000010",
+          "01010101011000101001110111101101000010001001101100110010101"
+        ],
+        "trace": true
+      }
+    },
+    "operation": "cipher.lorenz.decode",
+    "operation_version": 1,
+    "outputs": {
+      "codes": [
+        0,
+        1,
+        31,
+        2
+      ],
+      "final_state": {
+        "chi": [
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "chi2_previous": false,
+        "mu37": 3,
+        "mu61": 4,
+        "plain5_previous": [
+          true,
+          false
+        ],
+        "psi": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "psi1_previous": true
+      },
+      "trace": [
+        {
+          "basic_motor": true,
+          "key_code": 14,
+          "offset": 0,
+          "psi_step": true,
+          "state": {
+            "chi": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "chi2_previous": true,
+            "mu37": 1,
+            "mu61": 1,
+            "plain5_previous": [
+              false,
+              false
+            ],
+            "psi": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "psi1_previous": false
+          }
+        },
+        {
+          "basic_motor": false,
+          "key_code": 2,
+          "offset": 1,
+          "psi_step": false,
+          "state": {
+            "chi": [
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "chi2_previous": true,
+            "mu37": 2,
+            "mu61": 2,
+            "plain5_previous": [
+              false,
+              false
+            ],
+            "psi": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "psi1_previous": false
+          }
+        },
+        {
+          "basic_motor": true,
+          "key_code": 28,
+          "offset": 2,
+          "psi_step": true,
+          "state": {
+            "chi": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "chi2_previous": false,
+            "mu37": 3,
+            "mu61": 3,
+            "plain5_previous": [
+              false,
+              true
+            ],
+            "psi": [
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "psi1_previous": false
+          }
+        },
+        {
+          "basic_motor": true,
+          "key_code": 2,
+          "offset": 3,
+          "psi_step": true,
+          "state": {
+            "chi": [
+              4,
+              4,
+              4,
+              4,
+              4
+            ],
+            "chi2_previous": false,
+            "mu37": 3,
+            "mu61": 4,
+            "plain5_previous": [
+              true,
+              false
+            ],
+            "psi": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "psi1_previous": true
+          }
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "ea41dd7226bbe28685bc294c14d4a1106425301818b9b1ff92e6e9556e893dda",
+    "inputs": {
+      "codes": [
+        0,
+        1,
+        31,
+        2
+      ],
+      "settings": {
+        "chi": [
+          "00011110000110000101100100110101101011110",
+          "1100111011000101011000100001110",
+          "00111011001000011100110110011",
+          "00110010110010011001001111",
+          "01000101100100011101110"
+        ],
+        "initial_state": {
+          "chi": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "chi2_previous": false,
+          "mu37": 0,
+          "mu61": 0,
+          "plain5_previous": [
+            false,
+            false
+          ],
+          "psi": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "psi1_previous": false
+        },
+        "mu37": "1011101010101001010111010101010101010",
+        "mu61": "1110101100110011000111101011011000110000111101100110001100001",
+        "plaintext_limitation": false,
+        "profile": "lorenz_sz40_v1",
+        "psi": [
+          "0010101010100100101101101010011011100111000",
+          "00101101010101010110011010010111100000111001011",
+          "101010101010100100110101011110000111000111011001001",
+          "10100110101010101011010000110011001101111101001000010",
+          "01010101011000101001110111101101000010001001101100110010101"
+        ],
+        "trace": true
+      }
+    },
+    "operation": "cipher.lorenz.encode",
+    "operation_version": 1,
+    "outputs": {
+      "codes": [
+        14,
+        3,
+        3,
+        0
+      ],
+      "final_state": {
+        "chi": [
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "chi2_previous": false,
+        "mu37": 3,
+        "mu61": 4,
+        "plain5_previous": [
+          true,
+          false
+        ],
+        "psi": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "psi1_previous": true
+      },
+      "trace": [
+        {
+          "basic_motor": true,
+          "key_code": 14,
+          "offset": 0,
+          "psi_step": true,
+          "state": {
+            "chi": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "chi2_previous": true,
+            "mu37": 1,
+            "mu61": 1,
+            "plain5_previous": [
+              false,
+              false
+            ],
+            "psi": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "psi1_previous": false
+          }
+        },
+        {
+          "basic_motor": false,
+          "key_code": 2,
+          "offset": 1,
+          "psi_step": false,
+          "state": {
+            "chi": [
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "chi2_previous": true,
+            "mu37": 2,
+            "mu61": 2,
+            "plain5_previous": [
+              false,
+              false
+            ],
+            "psi": [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "psi1_previous": false
+          }
+        },
+        {
+          "basic_motor": true,
+          "key_code": 28,
+          "offset": 2,
+          "psi_step": true,
+          "state": {
+            "chi": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "chi2_previous": false,
+            "mu37": 3,
+            "mu61": 3,
+            "plain5_previous": [
+              false,
+              true
+            ],
+            "psi": [
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "psi1_previous": false
+          }
+        },
+        {
+          "basic_motor": true,
+          "key_code": 2,
+          "offset": 3,
+          "psi_step": true,
+          "state": {
+            "chi": [
+              4,
+              4,
+              4,
+              4,
+              4
+            ],
+            "chi2_previous": false,
+            "mu37": 3,
+            "mu61": 4,
+            "plain5_previous": [
+              true,
+              false
+            ],
+            "psi": [
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "psi1_previous": true
+          }
+        }
+      ]
+    },
+    "parameters": {}
   }
 ]

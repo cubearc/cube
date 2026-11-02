@@ -54,8 +54,8 @@ This is execution of compiled TypeScript, not just a typecheck. Run the verifier
 with each declared Node.js runtime. The package carries the unchanged project
 license and third-party notices alongside its Wasm assets.
 
-The packaged `examples/mechanical.mjs` executes M-94, Wheatstone, Kryha and
-Alberti known answers through `cube.execute`. These calls use typed `text` and
+The packaged `examples/mechanical.mjs` executes M-94, Wheatstone, Kryha,
+Alberti and Lorenz known answers through `cube.execute`. These calls use typed `text` and
 `settings` inputs and reuse Core algorithms. See [clock and shifting disks](../reference/topics/stateful-disks.md)
 for continuation state and [disks and strips](../reference/topics/disks-and-strips.md)
 for explicit row selection.

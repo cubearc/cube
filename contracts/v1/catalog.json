@@ -35397,6 +35397,1348 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.lorenz.decode",
+      "category": "ciphers",
+      "description": "Lorenz SZ40/SZ42a/SZ42b five-bit logical-contact profiles with explicit pins, starting indices, limitation histories and KT switch.",
+      "example": "cube cipher lorenz --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "basic_motor": {
+                    "type": "boolean"
+                  },
+                  "key_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "psi_step": {
+                    "type": "boolean"
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "key_code",
+                  "basic_motor",
+                  "psi_step"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "chi": {
+                "description": "Impulse order 1..5. Index zero is the first supplied contact.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/PinPattern"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "mu37": {
+                "type": "string",
+                "pattern": "^[01]{37}$"
+              },
+              "mu61": {
+                "type": "string",
+                "pattern": "^[01]{61}$"
+              },
+              "plaintext_limitation": {
+                "description": "Required KT switch; SZ40 refuses true. Initial history is always explicit.",
+                "type": "boolean"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "psi": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/PinPattern"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "chi",
+              "psi",
+              "mu61",
+              "mu37",
+              "plaintext_limitation",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "PinPattern": {
+                "type": "string",
+                "pattern": "^[01]{23,61}$"
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "lorenz_sz40_v1",
+                  "lorenz_sz42a_v1",
+                  "lorenz_sz42b_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "basic_motor": {
+                    "type": "boolean"
+                  },
+                  "key_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "psi_step": {
+                    "type": "boolean"
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "key_code",
+                  "basic_motor",
+                  "psi_step"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "chi": {
+                "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "chi2_previous": {
+                "description": "Signal from the preceding processed character, even if Psi did not move.",
+                "type": "boolean"
+              },
+              "mu37": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 36,
+                "minimum": 0
+              },
+              "mu61": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 60,
+                "minimum": 0
+              },
+              "plain5_previous": {
+                "description": "Fifth plaintext impulses two characters back, then one character back.",
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                },
+                "maxItems": 2,
+                "minItems": 2
+              },
+              "psi": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "psi1_previous": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "chi",
+              "psi",
+              "mu61",
+              "mu37",
+              "chi2_previous",
+              "psi1_previous",
+              "plain5_previous"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "basic_motor": {
+                    "type": "boolean"
+                  },
+                  "key_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "psi_step": {
+                    "type": "boolean"
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "key_code",
+                  "basic_motor",
+                  "psi_step"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4718592,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.lorenz.encode",
+      "category": "ciphers",
+      "description": "Lorenz SZ40/SZ42a/SZ42b five-bit logical-contact profiles with explicit pins, starting indices, limitation histories and KT switch.",
+      "example": "cube cipher lorenz --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "basic_motor": {
+                    "type": "boolean"
+                  },
+                  "key_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "psi_step": {
+                    "type": "boolean"
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "key_code",
+                  "basic_motor",
+                  "psi_step"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "chi": {
+                "description": "Impulse order 1..5. Index zero is the first supplied contact.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/PinPattern"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "mu37": {
+                "type": "string",
+                "pattern": "^[01]{37}$"
+              },
+              "mu61": {
+                "type": "string",
+                "pattern": "^[01]{61}$"
+              },
+              "plaintext_limitation": {
+                "description": "Required KT switch; SZ40 refuses true. Initial history is always explicit.",
+                "type": "boolean"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "psi": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/PinPattern"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "chi",
+              "psi",
+              "mu61",
+              "mu37",
+              "plaintext_limitation",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "PinPattern": {
+                "type": "string",
+                "pattern": "^[01]{23,61}$"
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "lorenz_sz40_v1",
+                  "lorenz_sz42a_v1",
+                  "lorenz_sz42b_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "basic_motor": {
+                    "type": "boolean"
+                  },
+                  "key_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "psi_step": {
+                    "type": "boolean"
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "key_code",
+                  "basic_motor",
+                  "psi_step"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "chi": {
+                "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "chi2_previous": {
+                "description": "Signal from the preceding processed character, even if Psi did not move.",
+                "type": "boolean"
+              },
+              "mu37": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 36,
+                "minimum": 0
+              },
+              "mu61": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 60,
+                "minimum": 0
+              },
+              "plain5_previous": {
+                "description": "Fifth plaintext impulses two characters back, then one character back.",
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                },
+                "maxItems": 2,
+                "minItems": 2
+              },
+              "psi": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "psi1_previous": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "chi",
+              "psi",
+              "mu61",
+              "mu37",
+              "chi2_previous",
+              "psi1_previous",
+              "plain5_previous"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "chi": {
+                    "description": "Logical contact indices in each supplied sequence, not window numbers.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "chi2_previous": {
+                    "description": "Signal from the preceding processed character, even if Psi did not move.",
+                    "type": "boolean"
+                  },
+                  "mu37": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 36,
+                    "minimum": 0
+                  },
+                  "mu61": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 60,
+                    "minimum": 0
+                  },
+                  "plain5_previous": {
+                    "description": "Fifth plaintext impulses two characters back, then one character back.",
+                    "type": "array",
+                    "items": {
+                      "type": "boolean"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2
+                  },
+                  "psi": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "psi1_previous": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "chi",
+                  "psi",
+                  "mu61",
+                  "mu37",
+                  "chi2_previous",
+                  "psi1_previous",
+                  "plain5_previous"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "basic_motor": {
+                    "type": "boolean"
+                  },
+                  "key_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "psi_step": {
+                    "type": "boolean"
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "key_code",
+                  "basic_motor",
+                  "psi_step"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4718592,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.m138a.decode",
       "category": "ciphers",
       "description": "M-138-A/CSP-845 raw30-track/100-strip mechanism with explicit selected strip identities; no automatic message procedure.",

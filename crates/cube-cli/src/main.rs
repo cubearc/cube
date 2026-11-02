@@ -483,6 +483,11 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Unpacked five-bit JSON codes; explicit Lorenz model and complete settings
+    Lorenz {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Hazardous raw AES blocks; key file only, no padding or authentication
     Aes {
         #[command(subcommand)]
@@ -1032,6 +1037,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Wheatstone { command } => mechanicalcmd::wheatstone(command)?,
                 Cipher::Kryha { command } => mechanicalcmd::kryha(command)?,
                 Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
+                Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(

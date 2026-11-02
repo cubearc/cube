@@ -52,16 +52,22 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
                 "wheatstone",
                 "kryha",
                 "alberti",
+                "lorenz",
             ]
             .contains(&parts[1])
         {
             continue;
         }
         std::fs::write(&path, row["inputs"]["settings"].to_string()).unwrap();
+        let input = if parts[1] == "lorenz" {
+            row["inputs"]["codes"].to_string()
+        } else {
+            row["inputs"]["text"].as_str().unwrap().to_owned()
+        };
         let result = Command::new(env!("CARGO_BIN_EXE_cube"))
             .args(["cipher", parts[1], parts[2], "--parameters"])
             .arg(&path)
-            .args(["--text", row["inputs"]["text"].as_str().unwrap()])
+            .args(["--text", &input])
             .output()
             .unwrap();
         assert!(
@@ -76,6 +82,6 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
         );
         tested += 1;
     }
-    assert_eq!(tested, 12);
+    assert_eq!(tested, 14);
     std::fs::remove_dir_all(dir).unwrap();
 }

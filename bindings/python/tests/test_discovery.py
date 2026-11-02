@@ -66,6 +66,8 @@ SDK_BINDINGS = {
     "cipher.kryha.decode": "kryha_decode",
     "cipher.alberti.encode": "alberti_encode",
     "cipher.alberti.decode": "alberti_decode",
+    "cipher.lorenz.encode": "lorenz_encode",
+    "cipher.lorenz.decode": "lorenz_decode",
     "cipher.m94.encode": "m94_encode",
     "cipher.m94.decode": "m94_decode",
     "cipher.jefferson.encode": "jefferson_encode",

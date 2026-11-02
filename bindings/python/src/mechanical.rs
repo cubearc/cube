@@ -1,5 +1,5 @@
 //! Native transport over Core-owned mechanical cipher implementations.
-use cube_core::ciphers::mechanical::{self, alberti, disks, kryha, wheatstone};
+use cube_core::ciphers::mechanical::{self, alberti, disks, kryha, lorenz, wheatstone};
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     py: Python<'_>,
@@ -8,6 +8,18 @@ fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     op: &'static str,
     run: fn(&str, &P) -> Result<R, cube_core::errors::OperationError>,
 ) -> PyResult<Py<PyAny>> {
+    let p = settings(py, parameters, op)?;
+    let report = run(text, &p).map_err(super::file_error)?;
+    super::structured(
+        py,
+        &serde_json::to_value(report).expect("typed mechanical report"),
+    )
+}
+fn settings<P: serde::de::DeserializeOwned>(
+    py: Python<'_>,
+    parameters: &Bound<'_, PyDict>,
+    op: &'static str,
+) -> PyResult<P> {
     let document = super::mono::document(
         py,
         parameters.as_any(),
@@ -15,12 +27,7 @@ fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
         op,
         "parameters",
     )?;
-    let p = mechanical::parse_parameters(&document, op).map_err(super::file_error)?;
-    let report = run(text, &p).map_err(super::file_error)?;
-    super::structured(
-        py,
-        &serde_json::to_value(report).expect("typed mechanical report"),
-    )
+    mechanical::parse_parameters(&document, op).map_err(super::file_error)
 }
 #[pyfunction]
 fn m94_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
@@ -142,7 +149,50 @@ fn alberti_decode(
         alberti::decode,
     )
 }
+fn lorenz_transform(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+    decode: bool,
+) -> PyResult<Py<PyAny>> {
+    let op = if decode {
+        "cipher.lorenz.decode"
+    } else {
+        "cipher.lorenz.encode"
+    };
+    let document = super::mono::document(py, codes, mechanical::MAX_OUTPUT, op, "codes")?;
+    let codes = lorenz::parse_codes(&document, op).map_err(super::file_error)?;
+    let p = settings(py, parameters, op)?;
+    let report = if decode {
+        lorenz::decode(&codes, &p)
+    } else {
+        lorenz::encode(&codes, &p)
+    }
+    .map_err(super::file_error)?;
+    super::structured(
+        py,
+        &serde_json::to_value(report).expect("typed Lorenz report"),
+    )
+}
+#[pyfunction]
+fn lorenz_encode(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    lorenz_transform(py, codes, parameters, false)
+}
+#[pyfunction]
+fn lorenz_decode(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    lorenz_transform(py, codes, parameters, true)
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(lorenz_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(lorenz_decode, module)?)?;
     module.add_function(wrap_pyfunction!(wheatstone_encode, module)?)?;
     module.add_function(wrap_pyfunction!(wheatstone_decode, module)?)?;
     module.add_function(wrap_pyfunction!(kryha_encode, module)?)?;

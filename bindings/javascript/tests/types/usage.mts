@@ -133,3 +133,11 @@ const albertiIndex:string=cube.execute({operation:'cipher.alberti.encode',versio
 void wheatstonePosition;void kryhaPosition;void albertiIndex;
 // @ts-expect-error The source-specific Kryha profile requires an explicit selector.
 cube.execute({operation:'cipher.kryha.encode',version:1,inputs:{text:'A',settings:{profile:'kryha_callimahos_1973_v1',plain_alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',cipher_alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',initial_state:{rotation:0}}}});
+
+const lorenzSettings={profile:'lorenz_sz42b_v1' as const,chi:['0'.repeat(41),'0'.repeat(31),'0'.repeat(29),'0'.repeat(26),'0'.repeat(23)] as const,psi:['0'.repeat(43),'0'.repeat(47),'0'.repeat(51),'0'.repeat(53),'0'.repeat(59)] as const,mu61:'1'.repeat(61),mu37:'0'.repeat(37),plaintext_limitation:true,initial_state:{chi:[0,0,0,0,0] as const,psi:[0,0,0,0,0] as const,mu61:0,mu37:0,chi2_previous:false,psi1_previous:false,plain5_previous:[false,false] as const}};
+const lorenz=cube.execute({operation:'cipher.lorenz.encode',version:1,inputs:{codes:[0,31],settings:lorenzSettings}});
+const lorenzCodes:readonly number[]=lorenz.codes;
+const previousPlainBit:boolean=lorenz.final_state.plain5_previous[0];
+void lorenzCodes;void previousPlainBit;
+// @ts-expect-error All twelve wheel settings and delayed history are required.
+cube.execute({operation:'cipher.lorenz.encode',version:1,inputs:{codes:[],settings:{profile:'lorenz_sz40_v1'}}});

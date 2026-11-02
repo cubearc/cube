@@ -9461,6 +9461,82 @@ Example:
 cube cipher --help
 ```
 
+## cipher.lorenz.decode
+
+Lorenz SZ40/SZ42a/SZ42b five-bit logical-contact profiles with explicit pins, starting indices, limitation histories and KT switch.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `codes` | `json` |
+| Input | `settings` | `json` |
+| Output | `codes` | `json` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher lorenz --help
+```
+
+## cipher.lorenz.encode
+
+Lorenz SZ40/SZ42a/SZ42b five-bit logical-contact profiles with explicit pins, starting indices, limitation histories and KT switch.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `codes` | `json` |
+| Input | `settings` | `json` |
+| Output | `codes` | `json` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher lorenz --help
+```
+
 ## cipher.m138a.decode
 
 M-138-A/CSP-845 raw30-track/100-strip mechanism with explicit selected strip identities; no automatic message procedure.

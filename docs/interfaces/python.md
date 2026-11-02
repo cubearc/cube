@@ -179,6 +179,11 @@ reports contain `text`, `trace` and a continuation state. Use the returned
 `final_index` and `initial_index`. See [clock and shifting disks](../reference/topics/stateful-disks.md)
 for exact profiles, prepared alphabets and limits.
 
+`cube.lorenz_encode(codes, settings)` and `cube.lorenz_decode(codes, settings)`
+use unpacked integers 0–31 and return `codes`, `final_state` and `trace`. The
+settings require complete wheel pins and delayed history, including the KT
+switch. See [Lorenz five-bit streams](../reference/topics/lorenz.md).
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

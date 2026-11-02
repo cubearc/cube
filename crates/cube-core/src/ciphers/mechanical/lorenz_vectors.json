@@ -1,0 +1,61 @@
+{
+  "source": "https://ep.liu.se/ecp/171/013/ecp2020_171_013.pdf",
+  "qualification": "Lasry 2020, appendix Bream pin facts; independently hand-read logical contact zero. This is a configured transition vector, not an intercepted message or physical-window setting. Chi codes 2,18,12,13; sampled Psi codes 12,16,16,15; key codes 14,2,28,2. Motor states after four symbols: M61=4,M37=3,Psi indices=3.",
+  "settings": {
+    "profile": "lorenz_sz40_v1",
+    "chi": [
+      "00011110000110000101100100110101101011110",
+      "1100111011000101011000100001110",
+      "00111011001000011100110110011",
+      "00110010110010011001001111",
+      "01000101100100011101110"
+    ],
+    "psi": [
+      "0010101010100100101101101010011011100111000",
+      "00101101010101010110011010010111100000111001011",
+      "101010101010100100110101011110000111000111011001001",
+      "10100110101010101011010000110011001101111101001000010",
+      "01010101011000101001110111101101000010001001101100110010101"
+    ],
+    "mu61": "1110101100110011000111101011011000110000111101100110001100001",
+    "mu37": "1011101010101001010111010101010101010",
+    "plaintext_limitation": false,
+    "initial_state": {
+      "chi": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "psi": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "mu61": 0,
+      "mu37": 0,
+      "chi2_previous": false,
+      "psi1_previous": false,
+      "plain5_previous": [
+        false,
+        false
+      ]
+    },
+    "trace": true
+  },
+  "codes": [
+    0,
+    1,
+    31,
+    2
+  ],
+  "expected": [
+    14,
+    3,
+    3,
+    0
+  ]
+}

@@ -2183,3 +2183,11 @@ def lorenz_encode(codes: list[int], parameters: dict[str, object]) -> dict[str, 
 def lorenz_decode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
     """Decode five-bit codes; KT feedback uses recovered plaintext history."""
     ...
+
+def hagelin_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher a precise Hagelin pin/lug profile using the Core implementation."""
+    ...
+
+def hagelin_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Decipher with the same required profile, pins, lugs and logical contacts."""
+    ...

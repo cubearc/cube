@@ -48,6 +48,7 @@
     - [Enigma I and M3](reference/topics/enigma.md)
     - [Disks and strips](reference/topics/disks-and-strips.md)
     - [Clock and shifting disks](reference/topics/stateful-disks.md)
+    - [Hagelin pin-and-lug profiles](reference/topics/hagelin.md)
     - [Lorenz five-bit streams](reference/topics/lorenz.md)
     - [Raw AES blocks](reference/topics/aes-blocks.md)
     - [Raw stream ciphers](reference/topics/stream-ciphers.md)

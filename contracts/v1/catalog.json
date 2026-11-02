@@ -32140,6 +32140,1252 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.hagelin.decode",
+      "category": "ciphers",
+      "description": "Explicit C-36 fixed25, C-38 standard27, M-209, C-52 C2/27 and later CX-52M-27 logical-contact profiles with required pins, lugs and starting indices.",
+      "example": "cube cipher hagelin --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "description": "Required, independently specified machine configuration; these are precise\nprofiles, not an assertion that all machines sharing a name interoperate.",
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "pins": {
+                    "description": "Left-to-right lengths25,23,21,19,17. One means an effective pin.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "c36_fixed25_bouch_v1"
+                  },
+                  "slide": {
+                    "description": "Numeric A=0..Z=25; reversed standard alphabets only.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "initial_state",
+                  "slide"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Complete27 printing-bar matrix, columns left-to-right wheels1..6.\nA true cell denotes a lug; each displaced bar contributes exactly once.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "c38_standard27_v1"
+                  },
+                  "slide": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state",
+                  "slide"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Each bar may have at most two effective lugs. Inactive positions are\nrepresented by false cells; physical lug ordering has no cipher effect.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "m209_standard_v1"
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Complete27 printing-bar matrix, columns left-to-right wheels1..6.\nA true cell denotes a lug; each displaced bar contributes exactly once.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "c52_c2_27_v1"
+                  },
+                  "slide": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state",
+                  "slide"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Complete27 printing-bar matrix, columns left-to-right wheels1..6.\nA true cell denotes a lug; each displaced bar contributes exactly once.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "cx52_m27_late_v1"
+                  },
+                  "slide": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state",
+                  "slide"
+                ]
+              }
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "PinPattern": {
+                "type": "string",
+                "pattern": "^[01]{17,47}$"
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 6,
+            "minItems": 5,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.hagelin.encode",
+      "category": "ciphers",
+      "description": "Explicit C-36 fixed25, C-38 standard27, M-209, C-52 C2/27 and later CX-52M-27 logical-contact profiles with required pins, lugs and starting indices.",
+      "example": "cube cipher hagelin --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "description": "Required, independently specified machine configuration; these are precise\nprofiles, not an assertion that all machines sharing a name interoperate.",
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "pins": {
+                    "description": "Left-to-right lengths25,23,21,19,17. One means an effective pin.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "c36_fixed25_bouch_v1"
+                  },
+                  "slide": {
+                    "description": "Numeric A=0..Z=25; reversed standard alphabets only.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "initial_state",
+                  "slide"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Complete27 printing-bar matrix, columns left-to-right wheels1..6.\nA true cell denotes a lug; each displaced bar contributes exactly once.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "c38_standard27_v1"
+                  },
+                  "slide": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state",
+                  "slide"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Each bar may have at most two effective lugs. Inactive positions are\nrepresented by false cells; physical lug ordering has no cipher effect.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "m209_standard_v1"
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Complete27 printing-bar matrix, columns left-to-right wheels1..6.\nA true cell denotes a lug; each displaced bar contributes exactly once.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "c52_c2_27_v1"
+                  },
+                  "slide": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state",
+                  "slide"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "initial_state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "lugs": {
+                    "description": "Complete27 printing-bar matrix, columns left-to-right wheels1..6.\nA true cell denotes a lug; each displaced bar contributes exactly once.",
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "boolean"
+                      },
+                      "maxItems": 6,
+                      "minItems": 6
+                    },
+                    "maxItems": 27,
+                    "minItems": 27
+                  },
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/PinPattern"
+                    },
+                    "maxItems": 6,
+                    "minItems": 6
+                  },
+                  "profile": {
+                    "type": "string",
+                    "const": "cx52_m27_late_v1"
+                  },
+                  "slide": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "trace": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "profile",
+                  "pins",
+                  "lugs",
+                  "initial_state",
+                  "slide"
+                ]
+              }
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "PinPattern": {
+                "type": "string",
+                "pattern": "^[01]{17,47}$"
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 6,
+            "minItems": 5,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "active_mask": {
+                    "description": "Guide-arm selection latched for this complete cycle.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 63,
+                    "minimum": 0
+                  },
+                  "displacement": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 27,
+                    "minimum": 0
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "Post-cycle logical contact indices; the next symbol starts here.",
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 6,
+                    "minItems": 5
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "active_mask",
+                  "displacement"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.headlines.decode",
       "category": "ciphers",
       "description": "Decode five caller Headlines with the qualified ACA base substitution rows.",

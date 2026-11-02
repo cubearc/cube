@@ -2,7 +2,7 @@
 use crate::Input;
 use clap::{Args, Subcommand};
 use cube_core::{
-    ciphers::mechanical::{self, alberti, disks, kryha, lorenz, wheatstone},
+    ciphers::mechanical::{self, alberti, disks, hagelin, kryha, lorenz, wheatstone},
     errors::{ErrorCode, OperationError},
 };
 use std::{error::Error, io::Read, path::PathBuf};
@@ -137,4 +137,14 @@ pub(crate) fn lorenz(command: Command) -> Result<String, Box<dyn Error>> {
         lorenz::encode(&codes, &p)
     }?;
     Ok(serde_json::to_string(&report)?)
+}
+
+pub(crate) fn hagelin(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.hagelin.encode",
+        "cipher.hagelin.decode",
+        hagelin::encode,
+        hagelin::decode,
+    )
 }

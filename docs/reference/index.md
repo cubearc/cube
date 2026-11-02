@@ -15,6 +15,7 @@ remain in each operation's reference.
 - [Classical ciphers](topics/classical-ciphers.md)
 - [Disks and strips](topics/disks-and-strips.md)
 - [Clock and shifting disks](topics/stateful-disks.md)
+- [Hagelin pin-and-lug profiles](topics/hagelin.md)
 - [Lorenz five-bit streams](topics/lorenz.md)
 - [Raw AES blocks](topics/aes-blocks.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)

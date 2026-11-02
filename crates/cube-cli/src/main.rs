@@ -483,6 +483,11 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Explicit C-36/C-38/M-209/C-52/CX-52 profiles and continuation state
+    Hagelin {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Unpacked five-bit JSON codes; explicit Lorenz model and complete settings
     Lorenz {
         #[command(subcommand)]
@@ -1037,6 +1042,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Wheatstone { command } => mechanicalcmd::wheatstone(command)?,
                 Cipher::Kryha { command } => mechanicalcmd::kryha(command)?,
                 Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
+                Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {

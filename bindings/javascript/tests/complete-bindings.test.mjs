@@ -267,3 +267,28 @@ test('bounded substitution and explainable families execute Core reports in Wasm
   assert.deepEqual(report.suggestions,[]);
   assert.ok(report.eligibility_failures.includes('outside_ascii_profile'));
 });
+
+test('five Hagelin profiles execute their manual answer and distinct advancement in actual Wasm', async () => {
+ const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/hagelin_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,text,settings)=>cube.execute({operation:`cipher.hagelin.${direction}`,version:1,inputs:{text,settings}});
+ assert.equal(execute('encode',v.text,v.settings).text,v.expected);
+ assert.equal(execute('decode',v.expected,v.settings).text,v.text);
+ const cases=[['c36_fixed25_bouch_v1',[25,23,21,19,17],[3,3,3,3,3]],['c38_standard27_v1',[26,25,23,21,19,17],[3,3,3,3,3,3]],['m209_standard_v1',[26,25,23,21,19,17],[3,3,3,3,3,3]],['c52_c2_27_v1',[26,25,46,42,38,34],[3,3,6,6,6,6]],['cx52_m27_late_v1',[47,47,47,47,47,47],[3,0,0,0,0,0]]];
+ for(const [profile,lengths,state] of cases) {
+  const settings={profile,pins:lengths.map(n=>'0'.repeat(n)),initial_state:lengths.map(()=>0)};
+  if(!profile.startsWith('c36_'))settings.lugs=Array.from({length:27},()=>Array(6).fill(false));
+  if(profile!=='m209_standard_v1')settings.slide=0;
+  const expected=profile==='m209_standard_v1'?'ZYX':'AZY';
+  const result=execute('encode','ABC',settings);
+  assert.equal(result.text,expected);assert.deepEqual(result.final_state,state);
+  assert.equal(execute('decode',expected,settings).text,'ABC');
+  assert.deepEqual(execute('encode','',settings).final_state,settings.initial_state);
+  const first=execute('encode','A',settings);
+  const second=execute('encode','BC',{...settings,initial_state:first.final_state});
+  assert.equal(first.text+second.text,expected);assert.deepEqual(second.final_state,state);
+  assert.throws(()=>execute('encode','SECRET_KEY',settings),{code:'invalid_input'});
+  assert.throws(()=>execute('encode','A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});
+  assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);
+  assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});
+ }
+});

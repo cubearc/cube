@@ -141,3 +141,8 @@ const previousPlainBit:boolean=lorenz.final_state.plain5_previous[0];
 void lorenzCodes;void previousPlainBit;
 // @ts-expect-error All twelve wheel settings and delayed history are required.
 cube.execute({operation:'cipher.lorenz.encode',version:1,inputs:{codes:[],settings:{profile:'lorenz_sz40_v1'}}});
+
+const hagelin=cube.execute({operation:'cipher.hagelin.encode',version:1,inputs:{text:'ABC',settings:{profile:'c36_fixed25_bouch_v1',pins:['0'.repeat(25),'0'.repeat(23),'0'.repeat(21),'0'.repeat(19),'0'.repeat(17)] as const,initial_state:[0,0,0,0,0] as const,slide:0}}});
+const hagelinText:string=hagelin.text;
+const hagelinState:readonly number[]=hagelin.final_state;
+void hagelinText;void hagelinState;

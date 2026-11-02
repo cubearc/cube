@@ -53,6 +53,7 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
                 "kryha",
                 "alberti",
                 "lorenz",
+                "hagelin",
             ]
             .contains(&parts[1])
         {
@@ -82,6 +83,6 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
         );
         tested += 1;
     }
-    assert_eq!(tested, 14);
+    assert_eq!(tested, 16);
     std::fs::remove_dir_all(dir).unwrap();
 }

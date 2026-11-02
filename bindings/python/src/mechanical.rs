@@ -1,5 +1,5 @@
 //! Native transport over Core-owned mechanical cipher implementations.
-use cube_core::ciphers::mechanical::{self, alberti, disks, kryha, lorenz, wheatstone};
+use cube_core::ciphers::mechanical::{self, alberti, disks, hagelin, kryha, lorenz, wheatstone};
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     py: Python<'_>,
@@ -190,7 +190,37 @@ fn lorenz_decode(
 ) -> PyResult<Py<PyAny>> {
     lorenz_transform(py, codes, parameters, true)
 }
+#[pyfunction]
+fn hagelin_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(
+        py,
+        text,
+        parameters,
+        "cipher.hagelin.encode",
+        hagelin::encode,
+    )
+}
+#[pyfunction]
+fn hagelin_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(
+        py,
+        text,
+        parameters,
+        "cipher.hagelin.decode",
+        hagelin::decode,
+    )
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(hagelin_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(hagelin_decode, module)?)?;
     module.add_function(wrap_pyfunction!(lorenz_encode, module)?)?;
     module.add_function(wrap_pyfunction!(lorenz_decode, module)?)?;
     module.add_function(wrap_pyfunction!(wheatstone_encode, module)?)?;

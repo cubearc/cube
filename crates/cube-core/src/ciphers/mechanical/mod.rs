@@ -3,6 +3,8 @@ pub mod alberti;
 mod alphabet;
 mod catalog;
 pub mod disks;
+pub mod hagelin;
+mod hagelin_catalog;
 pub mod kryha;
 pub mod lorenz;
 mod lorenz_catalog;
@@ -11,6 +13,8 @@ pub mod wheatstone;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
+pub(crate) use hagelin_catalog::MODULE as HAGELIN_MODULE;
+pub use hagelin_catalog::OPERATIONS as HAGELIN_OPERATIONS;
 pub(crate) use lorenz_catalog::MODULE as LORENZ_MODULE;
 pub use lorenz_catalog::OPERATIONS as LORENZ_OPERATIONS;
 use serde::{Serialize, de::DeserializeOwned};
@@ -29,6 +33,7 @@ fn descriptor(operation: &str) -> Option<&'static crate::operations::Descriptor>
         .iter()
         .chain(STATEFUL_OPERATIONS)
         .chain(LORENZ_OPERATIONS)
+        .chain(HAGELIN_OPERATIONS)
         .find(|d| d.id == operation)
 }
 pub(crate) fn execute(
@@ -36,6 +41,9 @@ pub(crate) fn execute(
     inputs: &serde_json::Value,
     parameters: &serde_json::Value,
 ) -> Result<serde_json::Value, OperationError> {
+    if HAGELIN_OPERATIONS.iter().any(|d| d.id == operation) {
+        return hagelin_catalog::execute(operation, inputs, parameters);
+    }
     if LORENZ_OPERATIONS.iter().any(|d| d.id == operation) {
         return lorenz_catalog::execute(operation, inputs, parameters);
     }

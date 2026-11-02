@@ -69,6 +69,16 @@ console.log('Installed package: Node '+process.version+'; all '+fixtures.length+
   await readFile(compiler);
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 'consumer.mts']);
   run(process.execPath, [join(directory, 'compiled-consumer/consumer.mjs')]);
+  await writeFile(join(directory, 'hagelin.mts'), `
+import {createCube} from '@cubearc/cube';
+const cube=await createCube();
+const result=cube.execute({operation:'cipher.hagelin.encode',version:1,inputs:{text:'ABC',settings:{profile:'c36_fixed25_bouch_v1',pins:['0'.repeat(25),'0'.repeat(23),'0'.repeat(21),'0'.repeat(19),'0'.repeat(17)] as const,initial_state:[0,0,0,0,0] as const,slide:0}}});
+const text:string=result.text;
+const state:readonly number[]=result.final_state;
+if(text!=='AZY'||state.join(',')!=='3,3,3,3,3')throw new Error('Packaged typed Hagelin result mismatch');
+`);
+  run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 'hagelin.mts']);
+  run(process.execPath, [join(directory, 'compiled-consumer/hagelin.mjs')]);
   const assets = join(directory, 'node_modules/@cubearc/cube');
   for (const file of ['dist/wasm/cube_wasm_bg.wasm', 'dist/LICENSE', 'dist/THIRD_PARTY_NOTICES', 'examples/static/index.html', 'examples/node.mjs', 'examples/node.mts']) await readFile(join(assets, file));
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));

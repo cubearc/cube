@@ -184,6 +184,15 @@ use unpacked integers 0–31 and return `codes`, `final_state` and `trace`. The
 settings require complete wheel pins and delayed history, including the KT
 switch. See [Lorenz five-bit streams](../reference/topics/lorenz.md).
 
+## Hagelin pin-and-lug profiles
+
+`cube.hagelin_encode(text, settings)` and `cube.hagelin_decode(text, settings)`
+accept a complete required C-36, C-38, M-209, C-52 C2 or later CX-52M-27
+configuration and prepared uppercase text. They return `text`, `final_state`
+and optional `trace`. Reuse the returned logical contact indices as
+`initial_state` for continuation. See [Hagelin pin-and-lug profiles](../reference/topics/hagelin.md)
+for precise hardware variants and independent Core/transport limits.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

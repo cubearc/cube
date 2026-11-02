@@ -15478,5 +15478,1201 @@
       ]
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "610acb028054ff5ce4557c1ddcf54f8b99927b1f431bdfba6063672cd2244df1",
+    "inputs": {
+      "settings": {
+        "initial_state": [
+          15,
+          14,
+          13,
+          12,
+          11,
+          10
+        ],
+        "lugs": [
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        ],
+        "pins": [
+          "11010001101011000011011000",
+          "0001101001110010011010100",
+          "11000011010111000111111",
+          "001011011000110100111",
+          "0101110110001101001",
+          "11010001001001101"
+        ],
+        "profile": "m209_standard_v1",
+        "trace": true
+      },
+      "text": "TKHRXCUYTKNOIKRJNTADTAIVPM"
+    },
+    "operation": "cipher.hagelin.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": [
+        15,
+        15,
+        16,
+        17,
+        18,
+        2
+      ],
+      "text": "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "trace": [
+        {
+          "active_mask": 46,
+          "displacement": 20,
+          "offset": 0,
+          "state": [
+            16,
+            15,
+            14,
+            13,
+            12,
+            11
+          ]
+        },
+        {
+          "active_mask": 24,
+          "displacement": 11,
+          "offset": 1,
+          "state": [
+            17,
+            16,
+            15,
+            14,
+            13,
+            12
+          ]
+        },
+        {
+          "active_mask": 16,
+          "displacement": 8,
+          "offset": 2,
+          "state": [
+            18,
+            17,
+            16,
+            15,
+            14,
+            13
+          ]
+        },
+        {
+          "active_mask": 43,
+          "displacement": 18,
+          "offset": 3,
+          "state": [
+            19,
+            18,
+            17,
+            16,
+            15,
+            14
+          ]
+        },
+        {
+          "active_mask": 55,
+          "displacement": 24,
+          "offset": 4,
+          "state": [
+            20,
+            19,
+            18,
+            17,
+            16,
+            15
+          ]
+        },
+        {
+          "active_mask": 4,
+          "displacement": 3,
+          "offset": 5,
+          "state": [
+            21,
+            20,
+            19,
+            18,
+            17,
+            16
+          ]
+        },
+        {
+          "active_mask": 47,
+          "displacement": 21,
+          "offset": 6,
+          "state": [
+            22,
+            21,
+            20,
+            19,
+            18,
+            0
+          ]
+        },
+        {
+          "active_mask": 61,
+          "displacement": 25,
+          "offset": 7,
+          "state": [
+            23,
+            22,
+            21,
+            20,
+            0,
+            1
+          ]
+        },
+        {
+          "active_mask": 46,
+          "displacement": 20,
+          "offset": 8,
+          "state": [
+            24,
+            23,
+            22,
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "active_mask": 20,
+          "displacement": 11,
+          "offset": 9,
+          "state": [
+            25,
+            24,
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "active_mask": 36,
+          "displacement": 14,
+          "offset": 10,
+          "state": [
+            0,
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "active_mask": 29,
+          "displacement": 15,
+          "offset": 11,
+          "state": [
+            1,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "active_mask": 17,
+          "displacement": 9,
+          "offset": 12,
+          "state": [
+            2,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "active_mask": 24,
+          "displacement": 11,
+          "offset": 13,
+          "state": [
+            3,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "active_mask": 43,
+          "displacement": 18,
+          "offset": 14,
+          "state": [
+            4,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "active_mask": 18,
+          "displacement": 10,
+          "offset": 15,
+          "state": [
+            5,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        {
+          "active_mask": 28,
+          "displacement": 14,
+          "offset": 16,
+          "state": [
+            6,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "active_mask": 46,
+          "displacement": 20,
+          "offset": 17,
+          "state": [
+            7,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "active_mask": 1,
+          "displacement": 1,
+          "offset": 18,
+          "state": [
+            8,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "active_mask": 5,
+          "displacement": 4,
+          "offset": 19,
+          "state": [
+            9,
+            9,
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "active_mask": 50,
+          "displacement": 20,
+          "offset": 20,
+          "state": [
+            10,
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "active_mask": 63,
+          "displacement": 27,
+          "offset": 21,
+          "state": [
+            11,
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "active_mask": 14,
+          "displacement": 9,
+          "offset": 22,
+          "state": [
+            12,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "active_mask": 53,
+          "displacement": 22,
+          "offset": 23,
+          "state": [
+            13,
+            13,
+            14,
+            15,
+            16,
+            0
+          ]
+        },
+        {
+          "active_mask": 41,
+          "displacement": 16,
+          "offset": 24,
+          "state": [
+            14,
+            14,
+            15,
+            16,
+            17,
+            1
+          ]
+        },
+        {
+          "active_mask": 34,
+          "displacement": 13,
+          "offset": 25,
+          "state": [
+            15,
+            15,
+            16,
+            17,
+            18,
+            2
+          ]
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "2e3b2f1da385bfb2ff58985a86800b2b8ec0780389d9e6c2133ff00c40f63afc",
+    "inputs": {
+      "settings": {
+        "initial_state": [
+          15,
+          14,
+          13,
+          12,
+          11,
+          10
+        ],
+        "lugs": [
+          [
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            true,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            true,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        ],
+        "pins": [
+          "11010001101011000011011000",
+          "0001101001110010011010100",
+          "11000011010111000111111",
+          "001011011000110100111",
+          "0101110110001101001",
+          "11010001001001101"
+        ],
+        "profile": "m209_standard_v1",
+        "trace": true
+      },
+      "text": "AAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "operation": "cipher.hagelin.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": [
+        15,
+        15,
+        16,
+        17,
+        18,
+        2
+      ],
+      "text": "TKHRXCUYTKNOIKRJNTADTAIVPM",
+      "trace": [
+        {
+          "active_mask": 46,
+          "displacement": 20,
+          "offset": 0,
+          "state": [
+            16,
+            15,
+            14,
+            13,
+            12,
+            11
+          ]
+        },
+        {
+          "active_mask": 24,
+          "displacement": 11,
+          "offset": 1,
+          "state": [
+            17,
+            16,
+            15,
+            14,
+            13,
+            12
+          ]
+        },
+        {
+          "active_mask": 16,
+          "displacement": 8,
+          "offset": 2,
+          "state": [
+            18,
+            17,
+            16,
+            15,
+            14,
+            13
+          ]
+        },
+        {
+          "active_mask": 43,
+          "displacement": 18,
+          "offset": 3,
+          "state": [
+            19,
+            18,
+            17,
+            16,
+            15,
+            14
+          ]
+        },
+        {
+          "active_mask": 55,
+          "displacement": 24,
+          "offset": 4,
+          "state": [
+            20,
+            19,
+            18,
+            17,
+            16,
+            15
+          ]
+        },
+        {
+          "active_mask": 4,
+          "displacement": 3,
+          "offset": 5,
+          "state": [
+            21,
+            20,
+            19,
+            18,
+            17,
+            16
+          ]
+        },
+        {
+          "active_mask": 47,
+          "displacement": 21,
+          "offset": 6,
+          "state": [
+            22,
+            21,
+            20,
+            19,
+            18,
+            0
+          ]
+        },
+        {
+          "active_mask": 61,
+          "displacement": 25,
+          "offset": 7,
+          "state": [
+            23,
+            22,
+            21,
+            20,
+            0,
+            1
+          ]
+        },
+        {
+          "active_mask": 46,
+          "displacement": 20,
+          "offset": 8,
+          "state": [
+            24,
+            23,
+            22,
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "active_mask": 20,
+          "displacement": 11,
+          "offset": 9,
+          "state": [
+            25,
+            24,
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "active_mask": 36,
+          "displacement": 14,
+          "offset": 10,
+          "state": [
+            0,
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "active_mask": 29,
+          "displacement": 15,
+          "offset": 11,
+          "state": [
+            1,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "active_mask": 17,
+          "displacement": 9,
+          "offset": 12,
+          "state": [
+            2,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "active_mask": 24,
+          "displacement": 11,
+          "offset": 13,
+          "state": [
+            3,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "active_mask": 43,
+          "displacement": 18,
+          "offset": 14,
+          "state": [
+            4,
+            4,
+            5,
+            6,
+            7,
+            8
+          ]
+        },
+        {
+          "active_mask": 18,
+          "displacement": 10,
+          "offset": 15,
+          "state": [
+            5,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        {
+          "active_mask": 28,
+          "displacement": 14,
+          "offset": 16,
+          "state": [
+            6,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        {
+          "active_mask": 46,
+          "displacement": 20,
+          "offset": 17,
+          "state": [
+            7,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "active_mask": 1,
+          "displacement": 1,
+          "offset": 18,
+          "state": [
+            8,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "active_mask": 5,
+          "displacement": 4,
+          "offset": 19,
+          "state": [
+            9,
+            9,
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "active_mask": 50,
+          "displacement": 20,
+          "offset": 20,
+          "state": [
+            10,
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "active_mask": 63,
+          "displacement": 27,
+          "offset": 21,
+          "state": [
+            11,
+            11,
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        {
+          "active_mask": 14,
+          "displacement": 9,
+          "offset": 22,
+          "state": [
+            12,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        },
+        {
+          "active_mask": 53,
+          "displacement": 22,
+          "offset": 23,
+          "state": [
+            13,
+            13,
+            14,
+            15,
+            16,
+            0
+          ]
+        },
+        {
+          "active_mask": 41,
+          "displacement": 16,
+          "offset": 24,
+          "state": [
+            14,
+            14,
+            15,
+            16,
+            17,
+            1
+          ]
+        },
+        {
+          "active_mask": 34,
+          "displacement": 13,
+          "offset": 25,
+          "state": [
+            15,
+            15,
+            16,
+            17,
+            18,
+            2
+          ]
+        }
+      ]
+    },
+    "parameters": {}
   }
 ]

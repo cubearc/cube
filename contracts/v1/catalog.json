@@ -36013,6 +36013,866 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.kl7.decode",
+      "category": "ciphers",
+      "description": "KL7 Rijmenants reference rotor/notch set with eight36-contact rotors, fixed fourth rotor, seven independent notch rings, explicit raw core state, old-notch post-stepping and bounded electrical re-entry.",
+      "example": "cube cipher kl7 --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "feedback_passes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 11,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "feedback_passes"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "notch_offsets": {
+                "description": "Raw notch offsets relative to each core, before the fixed +10 sensing arm.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Position"
+                },
+                "maxItems": 7,
+                "minItems": 7
+              },
+              "notch_rings": {
+                "description": "Distinct ring identities1..11 on moving slots1,2,3,5,6,7,8.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RingId"
+                },
+                "maxItems": 7,
+                "minItems": 7
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 8,
+                "minItems": 8
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "rotors",
+              "notch_rings",
+              "notch_offsets",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "kl7_rijmenants_v1"
+                ]
+              },
+              "RingId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 11,
+                "minimum": 1
+              },
+              "Rotor": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E",
+                  "F",
+                  "G",
+                  "H",
+                  "I",
+                  "J",
+                  "K",
+                  "L",
+                  "M"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "feedback_passes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 11,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "feedback_passes"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "core_positions": {
+                "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Position"
+                },
+                "maxItems": 8,
+                "minItems": 8
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "core_positions"
+            ],
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "feedback_passes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 11,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "feedback_passes"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.kl7.encode",
+      "category": "ciphers",
+      "description": "KL7 Rijmenants reference rotor/notch set with eight36-contact rotors, fixed fourth rotor, seven independent notch rings, explicit raw core state, old-notch post-stepping and bounded electrical re-entry.",
+      "example": "cube cipher kl7 --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "feedback_passes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 11,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "feedback_passes"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "notch_offsets": {
+                "description": "Raw notch offsets relative to each core, before the fixed +10 sensing arm.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Position"
+                },
+                "maxItems": 7,
+                "minItems": 7
+              },
+              "notch_rings": {
+                "description": "Distinct ring identities1..11 on moving slots1,2,3,5,6,7,8.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RingId"
+                },
+                "maxItems": 7,
+                "minItems": 7
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 8,
+                "minItems": 8
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "rotors",
+              "notch_rings",
+              "notch_offsets",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "kl7_rijmenants_v1"
+                ]
+              },
+              "RingId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 11,
+                "minimum": 1
+              },
+              "Rotor": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E",
+                  "F",
+                  "G",
+                  "H",
+                  "I",
+                  "J",
+                  "K",
+                  "L",
+                  "M"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "feedback_passes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 11,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "feedback_passes"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "core_positions": {
+                "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Position"
+                },
+                "maxItems": 8,
+                "minItems": 8
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "core_positions"
+            ],
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 35,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "core_positions": {
+                    "description": "Raw core displacements0..35 in physical rotor order1..8; rotor4 is fixed.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 8,
+                    "minItems": 8
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "core_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "feedback_passes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 11,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "feedback_passes"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.kryha.decode",
       "category": "ciphers",
       "description": "Kryha 17-sector source-specific profile from Callimahos 1973 Q.E.D., effective displacement table on pp. 20–21.",
@@ -51775,6 +52635,894 @@
       "policy": {
         "private_input": false,
         "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.sigaba.decode",
+      "category": "ciphers",
+      "description": "SIGABA CSP889 with qualified ten large and five index rotors, independently reversed banks, complete physical windows, four energized control inputs and post-symbol control/cipher stepping.",
+      "example": "cube cipher sigaba --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "State after the current symbol and all simultaneous post-step motion.",
+                    "$ref": "#/$defs/State"
+                  },
+                  "stepped_mask": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "stepped_mask"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cipher_rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "control_rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "index_rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/IndexRotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "cipher_rotors",
+              "control_rotors",
+              "index_rotors",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "IndexRotor": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 4,
+                    "minimum": 0
+                  },
+                  "reversed": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "reversed"
+                ]
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "sigaba_csp889_v1"
+                ]
+              },
+              "Rotor": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Reference-set identity0..9; all ten cipher/control rotors must be distinct.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 9,
+                    "minimum": 0
+                  },
+                  "reversed": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "reversed"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "State after the current symbol and all simultaneous post-step motion.",
+                    "$ref": "#/$defs/State"
+                  },
+                  "stepped_mask": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "stepped_mask"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "cipher_windows": {
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              },
+              "control_windows": {
+                "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              },
+              "index_windows": {
+                "type": "string",
+                "pattern": "^[0-9]{5}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "cipher_windows",
+              "control_windows",
+              "index_windows"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "State after the current symbol and all simultaneous post-step motion.",
+                    "$ref": "#/$defs/State"
+                  },
+                  "stepped_mask": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "stepped_mask"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.sigaba.encode",
+      "category": "ciphers",
+      "description": "SIGABA CSP889 with qualified ten large and five index rotors, independently reversed banks, complete physical windows, four energized control inputs and post-symbol control/cipher stepping.",
+      "example": "cube cipher sigaba --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "State after the current symbol and all simultaneous post-step motion.",
+                    "$ref": "#/$defs/State"
+                  },
+                  "stepped_mask": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "stepped_mask"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cipher_rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "control_rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "index_rotors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/IndexRotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "cipher_rotors",
+              "control_rotors",
+              "index_rotors",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "IndexRotor": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 4,
+                    "minimum": 0
+                  },
+                  "reversed": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "reversed"
+                ]
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "sigaba_csp889_v1"
+                ]
+              },
+              "Rotor": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Reference-set identity0..9; all ten cipher/control rotors must be distinct.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 9,
+                    "minimum": 0
+                  },
+                  "reversed": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "reversed"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "State after the current symbol and all simultaneous post-step motion.",
+                    "$ref": "#/$defs/State"
+                  },
+                  "stepped_mask": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "stepped_mask"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "cipher_windows": {
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              },
+              "control_windows": {
+                "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              },
+              "index_windows": {
+                "type": "string",
+                "pattern": "^[0-9]{5}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "cipher_windows",
+              "control_windows",
+              "index_windows"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_windows": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "control_windows": {
+                    "description": "Physical order: left stator, slow, fast, middle, right stator.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  },
+                  "index_windows": {
+                    "type": "string",
+                    "pattern": "^[0-9]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "cipher_windows",
+                  "control_windows",
+                  "index_windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "description": "State after the current symbol and all simultaneous post-step motion.",
+                    "$ref": "#/$defs/State"
+                  },
+                  "stepped_mask": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "stepped_mask"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
         "sensitive_parameters": [],
         "automatic_capture": false,
         "grants_filesystem_access": false,

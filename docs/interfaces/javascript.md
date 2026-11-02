@@ -261,3 +261,5 @@ See [Hagelin pin-and-lug profiles](../reference/topics/hagelin.md) for executabl
 [Swiss NEMA Model45](../reference/topics/nema.md) uses named `text` and `settings` inputs with explicit operational/training wheel choices and physical lower-row windows.
 
 Use the [Typex Mark22 reference](../reference/topics/typex.md) for complete caller wiring, reversed cores, stationary windows and prepared contact symbols.
+
+[SIGABA CSP889](../reference/topics/sigaba.md) and [KL7](../reference/topics/kl7.md) use the same direct `cube.execute` interface with required `text` and `settings`, exact named state/trace outputs and generated TypeScript contracts.

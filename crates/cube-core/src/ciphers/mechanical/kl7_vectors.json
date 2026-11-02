@@ -1,0 +1,71 @@
+{
+  "source": "Independent Dirk Rijmenants simulator reference retained in rmsk2/kl7_test.cpp at0cbcbde313a48f1bd1915b32ae20e0910aff430a. Raw A-Z keyboard contact prefix before figure shifts, space explicitly mapped to Z. Initial raw core positions include the published one preparatory cycle, no implicit preparation in Core.",
+  "settings": {
+    "profile": "kl7_rijmenants_v1",
+    "rotors": [
+      "A",
+      "B",
+      "C",
+      "L",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "notch_rings": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "notch_offsets": [
+      14,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "initial_state": {
+      "core_positions": [
+        34,
+        0,
+        1,
+        16,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "trace": true
+  },
+  "text": "HALLOZDIESZISTZWIEDERZEINZTESTZVVVZ",
+  "expected": "LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP",
+  "expected_final_state": {
+    "core_positions": [
+      22,
+      27,
+      25,
+      16,
+      33,
+      21,
+      26,
+      19
+    ]
+  },
+  "source_alphabet_offsets": [
+    26,
+    0,
+    0,
+    16,
+    0,
+    0,
+    0,
+    0
+  ]
+}

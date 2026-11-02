@@ -3,7 +3,7 @@ use crate::Input;
 use clap::{Args, Subcommand};
 use cube_core::{
     ciphers::mechanical::{
-        self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, typex, wheatstone,
+        self, alberti, disks, hagelin, kl7, kryha, lorenz, nema, sigaba, t52ab, typex, wheatstone,
     },
     errors::{ErrorCode, OperationError},
 };
@@ -189,5 +189,25 @@ pub(crate) fn typex(command: Command) -> Result<String, Box<dyn Error>> {
         "cipher.typex.decode",
         typex::encode,
         typex::decode,
+    )
+}
+
+pub(crate) fn sigaba(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.sigaba.encode",
+        "cipher.sigaba.decode",
+        sigaba::encode,
+        sigaba::decode,
+    )
+}
+
+pub(crate) fn kl7(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.kl7.encode",
+        "cipher.kl7.decode",
+        kl7::encode,
+        kl7::decode,
     )
 }

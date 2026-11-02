@@ -1,6 +1,6 @@
 //! Native transport over Core-owned mechanical cipher implementations.
 use cube_core::ciphers::mechanical::{
-    self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, typex, wheatstone,
+    self, alberti, disks, hagelin, kl7, kryha, lorenz, nema, sigaba, t52ab, typex, wheatstone,
 };
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
@@ -255,7 +255,35 @@ fn typex_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> P
 fn typex_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
     transform(py, text, parameters, "cipher.typex.decode", typex::decode)
 }
+#[pyfunction]
+fn sigaba_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.sigaba.encode", sigaba::encode)
+}
+#[pyfunction]
+fn sigaba_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.sigaba.decode", sigaba::decode)
+}
+#[pyfunction]
+fn kl7_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.kl7.encode", kl7::encode)
+}
+#[pyfunction]
+fn kl7_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.kl7.decode", kl7::decode)
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(sigaba_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(sigaba_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(kl7_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(kl7_decode, module)?)?;
     module.add_function(wrap_pyfunction!(typex_encode, module)?)?;
     module.add_function(wrap_pyfunction!(typex_decode, module)?)?;
     module.add_function(wrap_pyfunction!(nema_encode, module)?)?;

@@ -53,6 +53,8 @@
     - [Siemens T52a/b streams](reference/topics/t52ab.md)
     - [Swiss NEMA Model45](reference/topics/nema.md)
     - [Configured Typex Mark22](reference/topics/typex.md)
+    - [SIGABA CSP889](reference/topics/sigaba.md)
+    - [KL7 rotor and re-entry cipher](reference/topics/kl7.md)
     - [Raw AES blocks](reference/topics/aes-blocks.md)
     - [Raw stream ciphers](reference/topics/stream-ciphers.md)
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)

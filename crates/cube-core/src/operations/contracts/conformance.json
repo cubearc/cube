@@ -18322,5 +18322,329 @@
       ]
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "2062b05fb9370d6cc637822227ab5e5ca30e0677ef3fe15f437c7e6b61f7b840",
+    "inputs": {
+      "settings": {
+        "initial_state": {
+          "core_positions": [
+            34,
+            0,
+            1,
+            16,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "notch_offsets": [
+          14,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "notch_rings": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "profile": "kl7_rijmenants_v1",
+        "rotors": [
+          "A",
+          "B",
+          "C",
+          "L",
+          "D",
+          "E",
+          "F",
+          "G"
+        ],
+        "trace": false
+      },
+      "text": "LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP"
+    },
+    "operation": "cipher.kl7.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "core_positions": [
+          22,
+          27,
+          25,
+          16,
+          33,
+          21,
+          26,
+          19
+        ]
+      },
+      "text": "HALLOZDIESZISTZWIEDERZEINZTESTZVVVZ",
+      "trace": []
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "11f2d7bd3be5de56143113721f6645c2b0e76c8650f78baeff5486573de10365",
+    "inputs": {
+      "settings": {
+        "initial_state": {
+          "core_positions": [
+            34,
+            0,
+            1,
+            16,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "notch_offsets": [
+          14,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "notch_rings": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "profile": "kl7_rijmenants_v1",
+        "rotors": [
+          "A",
+          "B",
+          "C",
+          "L",
+          "D",
+          "E",
+          "F",
+          "G"
+        ],
+        "trace": false
+      },
+      "text": "HALLOZDIESZISTZWIEDERZEINZTESTZVVVZ"
+    },
+    "operation": "cipher.kl7.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "core_positions": [
+          22,
+          27,
+          25,
+          16,
+          33,
+          21,
+          26,
+          19
+        ]
+      },
+      "text": "LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP",
+      "trace": []
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "b23d0d40275800a5caa535e07f7de6d9067b16b5fd900e9728e66cd8fc20a52b",
+    "inputs": {
+      "settings": {
+        "cipher_rotors": [
+          {
+            "id": 0,
+            "reversed": false
+          },
+          {
+            "id": 1,
+            "reversed": false
+          },
+          {
+            "id": 2,
+            "reversed": true
+          },
+          {
+            "id": 3,
+            "reversed": false
+          },
+          {
+            "id": 4,
+            "reversed": false
+          }
+        ],
+        "control_rotors": [
+          {
+            "id": 5,
+            "reversed": false
+          },
+          {
+            "id": 6,
+            "reversed": false
+          },
+          {
+            "id": 7,
+            "reversed": true
+          },
+          {
+            "id": 8,
+            "reversed": false
+          },
+          {
+            "id": 9,
+            "reversed": false
+          }
+        ],
+        "index_rotors": [
+          {
+            "id": 0,
+            "reversed": false
+          },
+          {
+            "id": 1,
+            "reversed": false
+          },
+          {
+            "id": 2,
+            "reversed": true
+          },
+          {
+            "id": 3,
+            "reversed": false
+          },
+          {
+            "id": 4,
+            "reversed": false
+          }
+        ],
+        "initial_state": {
+          "cipher_windows": "LJQMJ",
+          "control_windows": "KOOON",
+          "index_windows": "09000"
+        },
+        "profile": "sigaba_csp889_v1",
+        "trace": false
+      },
+      "text": "HHHTITJPTHJBZLQRGNCBZIKAGMFXZUXGJPWPEJPUHCSWGKBLHJKGXHHESHMXNXSZAXPIHZCCYFNZIODORLPGIDXBWRCJKPMOMIUGXSZCI"
+    },
+    "operation": "cipher.sigaba.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "cipher_windows": "BJOXQ",
+        "control_windows": "KNPJN",
+        "index_windows": "09000"
+      },
+      "text": "DIESZISTZEINZTOLLERZTESTZFUERZDIEZSIGABAZPUNKTZDIEZAMISZHABENZDAMALSZGLATTZMITZLEERXEICHENZVERSCHLUESSELT",
+      "trace": []
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "e8c2a278ea004964281137676920151a2f2b81f84695463e0bee400565124277",
+    "inputs": {
+      "settings": {
+        "cipher_rotors": [
+          {
+            "id": 0,
+            "reversed": false
+          },
+          {
+            "id": 1,
+            "reversed": false
+          },
+          {
+            "id": 2,
+            "reversed": true
+          },
+          {
+            "id": 3,
+            "reversed": false
+          },
+          {
+            "id": 4,
+            "reversed": false
+          }
+        ],
+        "control_rotors": [
+          {
+            "id": 5,
+            "reversed": false
+          },
+          {
+            "id": 6,
+            "reversed": false
+          },
+          {
+            "id": 7,
+            "reversed": true
+          },
+          {
+            "id": 8,
+            "reversed": false
+          },
+          {
+            "id": 9,
+            "reversed": false
+          }
+        ],
+        "index_rotors": [
+          {
+            "id": 0,
+            "reversed": false
+          },
+          {
+            "id": 1,
+            "reversed": false
+          },
+          {
+            "id": 2,
+            "reversed": true
+          },
+          {
+            "id": 3,
+            "reversed": false
+          },
+          {
+            "id": 4,
+            "reversed": false
+          }
+        ],
+        "initial_state": {
+          "cipher_windows": "LJQMJ",
+          "control_windows": "KOOON",
+          "index_windows": "09000"
+        },
+        "profile": "sigaba_csp889_v1",
+        "trace": false
+      },
+      "text": "DIESZISTZEINZTOLLERZTESTZFUERZDIEZSIGABAZPUNKTZDIEZAMISZHABENZDAMALSZGLATTZMITZLEERXEICHENZVERSCHLUESSELT"
+    },
+    "operation": "cipher.sigaba.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "cipher_windows": "BJOXQ",
+        "control_windows": "KNPJN",
+        "index_windows": "09000"
+      },
+      "text": "HHHTITJPTHJBZLQRGNCBZIKAGMFXZUXGJPWPEJPUHCSWGKBLHJKGXHHESHMXNXSZAXPIHZCCYFNZIODORLPGIDXBWRCJKPMOMIUGXSZCI",
+      "trace": []
+    },
+    "parameters": {}
   }
 ]

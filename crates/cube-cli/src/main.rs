@@ -483,6 +483,16 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// SIGABA CSP889 cipher, control and index banks with explicit windows
+    Sigaba {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// KL7 reference rotor/notch set with explicit raw core positions
+    Kl7 {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Configured Typex Mk22 cores, stators, notch windows and arbitrary plugs
     Typex {
         #[command(subcommand)]
@@ -1059,6 +1069,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
                 Cipher::Nema { command } => mechanicalcmd::nema(command)?,
                 Cipher::Typex { command } => mechanicalcmd::typex(command)?,
+                Cipher::Sigaba { command } => mechanicalcmd::sigaba(command)?,
+                Cipher::Kl7 { command } => mechanicalcmd::kl7(command)?,
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,

@@ -218,6 +218,15 @@ Supply complete wiring and physical state; returned `final_state` resumes the
 next block. The operation accepts prepared A–Z contact symbols without automatic
 keyboard shifts or an inferred historical key.
 
+## SIGABA and KL7
+
+`cube.sigaba_encode(text, settings)` and `cube.sigaba_decode(text, settings)` run
+[SIGABA CSP889](../reference/topics/sigaba.md). `cube.kl7_encode(text, settings)`
+and `cube.kl7_decode(text, settings)` run [KL7](../reference/topics/kl7.md).
+All four functions use native Core with complete named-profile settings and
+return `final_state` for continuation. Input is prepared A–Z contact labels,
+without automatic keyboard shifts or message-key preparation.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

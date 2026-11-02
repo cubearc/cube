@@ -164,3 +164,15 @@ const typex=cube.execute({operation:'cipher.typex.encode',version:1,inputs:{text
 const typexText:string=typex.text;
 const typexWindows:string=typex.final_state.windows;
 void typexText;void typexWindows;
+
+const sigabaSettings={"profile":"sigaba_csp889_v1","cipher_rotors":[{"id":0,"reversed":false},{"id":1,"reversed":false},{"id":2,"reversed":true},{"id":3,"reversed":false},{"id":4,"reversed":false}],"control_rotors":[{"id":5,"reversed":false},{"id":6,"reversed":false},{"id":7,"reversed":true},{"id":8,"reversed":false},{"id":9,"reversed":false}],"index_rotors":[{"id":0,"reversed":false},{"id":1,"reversed":false},{"id":2,"reversed":true},{"id":3,"reversed":false},{"id":4,"reversed":false}],"initial_state":{"cipher_windows":"LJQMJ","control_windows":"KOOON","index_windows":"09000"},"trace":true} as const;
+const sigaba=cube.execute({operation:'cipher.sigaba.encode',version:1,inputs:{text:"DIESZISTZEINZTOLLERZTESTZFUERZDIEZSIGABAZPUNKTZDIEZAMISZHABENZDAMALSZGLATTZMITZLEERXEICHENZVERSCHLUESSELT",settings:sigabaSettings}});
+const sigabaText:string=sigaba.text;
+const sigabaState:string=sigaba.final_state.cipher_windows;
+void sigabaText;void sigabaState;
+
+const kl7Settings={"profile":"kl7_rijmenants_v1","rotors":["A","B","C","L","D","E","F","G"],"notch_rings":[1,2,3,4,5,6,7],"notch_offsets":[14,0,0,0,0,0,0],"initial_state":{"core_positions":[34,0,1,16,1,1,1,1]},"trace":true} as const;
+const kl7=cube.execute({operation:'cipher.kl7.encode',version:1,inputs:{text:"HALLOZDIESZISTZWIEDERZEINZTESTZVVVZ",settings:kl7Settings}});
+const kl7Text:string=kl7.text;
+const kl7State:readonly number[]=kl7.final_state.core_positions;
+void kl7Text;void kl7State;

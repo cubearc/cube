@@ -2215,3 +2215,19 @@ def typex_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
 def typex_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """Decipher from the same original configured Typex Mk22 windows."""
     ...
+
+def sigaba_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Run prepared A-Z contacts through the Core-owned SIGABA encode mechanism."""
+    ...
+
+def sigaba_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Run prepared A-Z contacts through the Core-owned SIGABA decode mechanism."""
+    ...
+
+def kl7_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Run prepared A-Z contacts through the Core-owned KL7 encode mechanism."""
+    ...
+
+def kl7_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Run prepared A-Z contacts through the Core-owned KL7 decode mechanism."""
+    ...

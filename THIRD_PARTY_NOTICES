@@ -2431,3 +2431,17 @@ https://github.com/rmsk2/rmsk2
 These are explicit simulator interoperability fixtures, not a supplied historical
 wartime key or a runtime dependency. Cube's Typex mechanism is implemented in
 Rust within Core; no upstream simulator source is included.
+
+
+SIGABA and KL7 contact, notch and motion reference
+================================================
+
+Contact/notch data and control equations are adapted from rmsk2/rmsk2,
+revision 0cbcbde313a48f1bd1915b32ae20e0910aff430a, sigaba.cpp, kl7.cpp,
+rotor_set.cpp and their independently sourced interoperability checks.
+Copyright 2015-2018 Martin Grap.
+Licensed under the Apache License, Version 2.0; see LICENSE in this package.
+https://github.com/rmsk2/rmsk2
+
+Cube implements these mechanisms in Rust within Core. The C++ simulator is not
+a runtime dependency; no graphical simulator or archival manual is bundled.

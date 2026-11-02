@@ -1,0 +1,85 @@
+{
+  "source": "CSG SIGABA simulator independent reference retained in rmsk2/sigaba_test.cpp at0cbcbde313a48f1bd1915b32ae20e0910aff430a. Prepared contact symbols replace historical space with Z explicitly.",
+  "settings": {
+    "profile": "sigaba_csp889_v1",
+    "cipher_rotors": [
+      {
+        "id": 0,
+        "reversed": false
+      },
+      {
+        "id": 1,
+        "reversed": false
+      },
+      {
+        "id": 2,
+        "reversed": true
+      },
+      {
+        "id": 3,
+        "reversed": false
+      },
+      {
+        "id": 4,
+        "reversed": false
+      }
+    ],
+    "control_rotors": [
+      {
+        "id": 5,
+        "reversed": false
+      },
+      {
+        "id": 6,
+        "reversed": false
+      },
+      {
+        "id": 7,
+        "reversed": true
+      },
+      {
+        "id": 8,
+        "reversed": false
+      },
+      {
+        "id": 9,
+        "reversed": false
+      }
+    ],
+    "index_rotors": [
+      {
+        "id": 0,
+        "reversed": false
+      },
+      {
+        "id": 1,
+        "reversed": false
+      },
+      {
+        "id": 2,
+        "reversed": true
+      },
+      {
+        "id": 3,
+        "reversed": false
+      },
+      {
+        "id": 4,
+        "reversed": false
+      }
+    ],
+    "initial_state": {
+      "cipher_windows": "LJQMJ",
+      "control_windows": "KOOON",
+      "index_windows": "09000"
+    },
+    "trace": true
+  },
+  "text": "DIESZISTZEINZTOLLERZTESTZFUERZDIEZSIGABAZPUNKTZDIEZAMISZHABENZDAMALSZGLATTZMITZLEERXEICHENZVERSCHLUESSELT",
+  "expected": "HHHTITJPTHJBZLQRGNCBZIKAGMFXZUXGJPWPEJPUHCSWGKBLHJKGXHHESHMXNXSZAXPIHZCCYFNZIODORLPGIDXBWRCJKPMOMIUGXSZCI",
+  "expected_final_state": {
+    "cipher_windows": "BJOXQ",
+    "control_windows": "KNPJN",
+    "index_windows": "09000"
+  }
+}

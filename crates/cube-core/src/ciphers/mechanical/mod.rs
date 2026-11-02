@@ -5,12 +5,19 @@ mod catalog;
 pub mod disks;
 pub mod hagelin;
 mod hagelin_catalog;
+pub mod kl7;
+mod kl7_catalog;
+mod kl7_data;
 pub mod kryha;
 pub mod lorenz;
 mod lorenz_catalog;
 pub mod nema;
 mod nema_catalog;
 mod nema_data;
+mod rotor_contacts;
+pub mod sigaba;
+mod sigaba_catalog;
+mod sigaba_data;
 mod stateful_catalog;
 pub mod t52ab;
 mod t52ab_catalog;
@@ -22,11 +29,15 @@ pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
 pub(crate) use hagelin_catalog::MODULE as HAGELIN_MODULE;
 pub use hagelin_catalog::OPERATIONS as HAGELIN_OPERATIONS;
+pub(crate) use kl7_catalog::MODULE as KL7_MODULE;
+pub use kl7_catalog::OPERATIONS as KL7_OPERATIONS;
 pub(crate) use lorenz_catalog::MODULE as LORENZ_MODULE;
 pub use lorenz_catalog::OPERATIONS as LORENZ_OPERATIONS;
 pub(crate) use nema_catalog::MODULE as NEMA_MODULE;
 pub use nema_catalog::OPERATIONS as NEMA_OPERATIONS;
 use serde::{Serialize, de::DeserializeOwned};
+pub(crate) use sigaba_catalog::MODULE as SIGABA_MODULE;
+pub use sigaba_catalog::OPERATIONS as SIGABA_OPERATIONS;
 pub(crate) use stateful_catalog::MODULE as STATEFUL_MODULE;
 pub use stateful_catalog::OPERATIONS as STATEFUL_OPERATIONS;
 pub(crate) use t52ab_catalog::MODULE as T52AB_MODULE;
@@ -50,6 +61,8 @@ fn descriptor(operation: &str) -> Option<&'static crate::operations::Descriptor>
         .chain(T52AB_OPERATIONS)
         .chain(NEMA_OPERATIONS)
         .chain(TYPEX_OPERATIONS)
+        .chain(SIGABA_OPERATIONS)
+        .chain(KL7_OPERATIONS)
         .find(|d| d.id == operation)
 }
 pub(crate) fn execute(
@@ -57,6 +70,12 @@ pub(crate) fn execute(
     inputs: &serde_json::Value,
     parameters: &serde_json::Value,
 ) -> Result<serde_json::Value, OperationError> {
+    if SIGABA_OPERATIONS.iter().any(|d| d.id == operation) {
+        return sigaba_catalog::execute(operation, inputs, parameters);
+    }
+    if KL7_OPERATIONS.iter().any(|d| d.id == operation) {
+        return kl7_catalog::execute(operation, inputs, parameters);
+    }
     if TYPEX_OPERATIONS.iter().any(|d| d.id == operation) {
         return typex_catalog::execute(operation, inputs, parameters);
     }

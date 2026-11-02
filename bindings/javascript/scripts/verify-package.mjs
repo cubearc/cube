@@ -111,6 +111,24 @@ if(text!=="HVDNGQYLGGHJOKKIOXPEQLFEMXNWIZAOMSSRMFSVVPUACYKUCN" || windows!=="BIY
 `);
   run(process.execPath,[compiler,'--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--outDir','compiled-consumer','typex.mts']);
   run(process.execPath,[join(directory,'compiled-consumer/typex.mjs')]);
+  await writeFile(join(directory,'sigaba.mts'), `
+import {createCube} from '@cubearc/cube';
+const cube=await createCube();const settings={"profile":"sigaba_csp889_v1","cipher_rotors":[{"id":0,"reversed":false},{"id":1,"reversed":false},{"id":2,"reversed":true},{"id":3,"reversed":false},{"id":4,"reversed":false}],"control_rotors":[{"id":5,"reversed":false},{"id":6,"reversed":false},{"id":7,"reversed":true},{"id":8,"reversed":false},{"id":9,"reversed":false}],"index_rotors":[{"id":0,"reversed":false},{"id":1,"reversed":false},{"id":2,"reversed":true},{"id":3,"reversed":false},{"id":4,"reversed":false}],"initial_state":{"cipher_windows":"LJQMJ","control_windows":"KOOON","index_windows":"09000"},"trace":true} as const;
+const result=cube.execute({operation:'cipher.sigaba.encode',version:1,inputs:{text:"DIESZISTZEINZTOLLERZTESTZFUERZDIEZSIGABAZPUNKTZDIEZAMISZHABENZDAMALSZGLATTZMITZLEERXEICHENZVERSCHLUESSELT",settings}});
+const text:string=result.text;const state:string=result.final_state.cipher_windows;
+if(text!=="HHHTITJPTHJBZLQRGNCBZIKAGMFXZUXGJPWPEJPUHCSWGKBLHJKGXHHESHMXNXSZAXPIHZCCYFNZIODORLPGIDXBWRCJKPMOMIUGXSZCI")throw new Error('Packaged SIGABA source answer mismatch');void state;
+`);
+  run(process.execPath,[compiler,'--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--outDir','compiled-consumer','sigaba.mts']);
+  run(process.execPath,[join(directory,'compiled-consumer/sigaba.mjs')]);
+  await writeFile(join(directory,'kl7.mts'), `
+import {createCube} from '@cubearc/cube';
+const cube=await createCube();const settings={"profile":"kl7_rijmenants_v1","rotors":["A","B","C","L","D","E","F","G"],"notch_rings":[1,2,3,4,5,6,7],"notch_offsets":[14,0,0,0,0,0,0],"initial_state":{"core_positions":[34,0,1,16,1,1,1,1]},"trace":true} as const;
+const result=cube.execute({operation:'cipher.kl7.encode',version:1,inputs:{text:"HALLOZDIESZISTZWIEDERZEINZTESTZVVVZ",settings}});
+const text:string=result.text;const state:readonly number[]=result.final_state.core_positions;
+if(text!=="LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP")throw new Error('Packaged KL7 source answer mismatch');void state;
+`);
+  run(process.execPath,[compiler,'--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--outDir','compiled-consumer','kl7.mts']);
+  run(process.execPath,[join(directory,'compiled-consumer/kl7.mjs')]);
   const assets = join(directory, 'node_modules/@cubearc/cube');
   for (const file of ['dist/wasm/cube_wasm_bg.wasm', 'dist/LICENSE', 'dist/THIRD_PARTY_NOTICES', 'examples/static/index.html', 'examples/node.mjs', 'examples/node.mts']) await readFile(join(assets, file));
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));

@@ -9461,6 +9461,82 @@ Example:
 cube cipher key-phrase --help
 ```
 
+## cipher.kl7.decode
+
+KL7 Rijmenants reference rotor/notch set with eight36-contact rotors, fixed fourth rotor, seven independent notch rings, explicit raw core state, old-notch post-stepping and bounded electrical re-entry.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher kl7 --help
+```
+
+## cipher.kl7.encode
+
+KL7 Rijmenants reference rotor/notch set with eight36-contact rotors, fixed fourth rotor, seven independent notch rings, explicit raw core state, old-notch post-stepping and bounded electrical re-entry.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher kl7 --help
+```
+
 ## cipher.kryha.decode
 
 Kryha 17-sector source-specific profile from Callimahos 1973 Q.E.D., effective displacement table on pp. 20–21.
@@ -15358,6 +15434,82 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.sigaba.decode
+
+SIGABA CSP889 with qualified ten large and five index rotors, independently reversed banks, complete physical windows, four energized control inputs and post-symbol control/cipher stepping.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher sigaba --help
+```
+
+## cipher.sigaba.encode
+
+SIGABA CSP889 with qualified ten large and five index rotors, independently reversed banks, complete physical windows, four energized control inputs and post-symbol control/cipher stepping.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher sigaba --help
 ```
 
 ## cipher.skip.decode

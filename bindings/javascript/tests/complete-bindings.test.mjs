@@ -3,6 +3,7 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
+const documentNodeCount=value=>1+(value&&typeof value==='object'?Object.values(value).reduce((sum,v)=>sum+documentNodeCount(v),0):0);
 test('historical wheel and strip profiles execute through actual Wasm with explicit rows', async()=>{
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const rows=fixtures.filter(r=>/^cipher\.(m94|jefferson|m138a)\./.test(r.operation));
@@ -52,9 +53,8 @@ test('Lorenz five-bit models execute their source pins, delayed KT history and c
   }
   for(const codes of [[32],[-1],[true]])assert.throws(()=>execute('encode',codes,v.settings),{code:'invalid_input'});
   const settings={...v.settings,trace:false};
-  const nodes=value=>1+(value&&typeof value==='object'?Object.values(value).reduce((sum,v)=>sum+nodes(v),0):0);
   const empty={operation:'cipher.lorenz.encode',version:1,inputs:{codes:[],settings},parameters:{}};
-  const maxCodes=cube.limits.direct.documentNodes-nodes(empty);
+  const maxCodes=cube.limits.direct.documentNodes-documentNodeCount(empty);
   assert.equal(execute('encode',Array(maxCodes).fill(31),settings).codes.length,maxCodes);
   assert.throws(()=>execute('encode',Array(maxCodes+1).fill(31),settings),{code:'resource_limit'});
   assert.throws(()=>execute('encode',Array(1048576).fill(31),settings),{code:'resource_limit'});
@@ -291,4 +291,27 @@ test('five Hagelin profiles execute their manual answer and distinct advancement
   assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);
   assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});
  }
+});
+
+test('T52a/b uses the primary pluggable switch network and inverse-before-XOR through actual Wasm',async()=>{
+ const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/t52ab_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,codes,settings)=>cube.execute({operation:`cipher.t52ab.${direction}`,version:1,inputs:{codes,settings}});
+ const result=execute('encode',v.codes,v.settings);
+ assert.deepEqual(result.codes,v.expected);assert.deepEqual(result.trace[0].permutation,[4,1,2,3,0]);
+ assert.deepEqual(execute('decode',v.expected,v.settings).codes,v.codes);
+ const codes=Array.from({length:32},(_,i)=>i),settings={...v.settings,trace:false};
+ const whole=execute('encode',codes,settings);
+ assert.deepEqual(execute('decode',whole.codes,settings).codes,codes);
+ const first=execute('encode',codes.slice(0,11),settings);
+ const second=execute('encode',codes.slice(11),{...settings,initial_state:first.final_state});
+ assert.deepEqual([...first.codes,...second.codes],whole.codes);assert.deepEqual(second.final_state,whole.final_state);
+ assert.deepEqual(execute('encode',[],settings).final_state,settings.initial_state);
+ for(const codes of [[32],[-1],[true]])assert.throws(()=>execute('encode',codes,settings),{code:'invalid_input'});
+ assert.throws(()=>execute('encode',[0],{...settings,kt:true}),{code:'invalid_input'});
+ const request={operation:'cipher.t52ab.encode',version:1,inputs:{codes:[],settings},parameters:{}};
+ const maximum=cube.limits.direct.documentNodes-documentNodeCount(request);
+ assert.equal(execute('encode',Array(maximum).fill(31),settings).codes.length,maximum);
+ assert.throws(()=>execute('encode',Array(maximum+1).fill(31),settings),{code:'resource_limit'});
+ assert.throws(()=>execute('encode',Array(1048577).fill(0),settings),{code:'resource_limit'});
+ assert.throws(()=>execute('encode',Array(65537).fill(0),{...settings,trace:true}),{code:'resource_limit'});
 });

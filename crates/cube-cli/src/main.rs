@@ -483,6 +483,11 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Siemens T52a/b five-bit XOR and pluggable switch network
+    T52ab {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Explicit C-36/C-38/M-209/C-52/CX-52 profiles and continuation state
     Hagelin {
         #[command(subcommand)]
@@ -1042,6 +1047,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Wheatstone { command } => mechanicalcmd::wheatstone(command)?,
                 Cipher::Kryha { command } => mechanicalcmd::kryha(command)?,
                 Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
+                Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),

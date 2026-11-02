@@ -1,5 +1,7 @@
 //! Native transport over Core-owned mechanical cipher implementations.
-use cube_core::ciphers::mechanical::{self, alberti, disks, hagelin, kryha, lorenz, wheatstone};
+use cube_core::ciphers::mechanical::{
+    self, alberti, disks, hagelin, kryha, lorenz, t52ab, wheatstone,
+};
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     py: Python<'_>,
@@ -149,29 +151,20 @@ fn alberti_decode(
         alberti::decode,
     )
 }
-fn lorenz_transform(
+fn codes_transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     py: Python<'_>,
     codes: &Bound<'_, PyAny>,
     parameters: &Bound<'_, PyDict>,
-    decode: bool,
+    op: &'static str,
+    run: fn(&[u8], &P) -> Result<R, cube_core::errors::OperationError>,
 ) -> PyResult<Py<PyAny>> {
-    let op = if decode {
-        "cipher.lorenz.decode"
-    } else {
-        "cipher.lorenz.encode"
-    };
     let document = super::mono::document(py, codes, mechanical::MAX_OUTPUT, op, "codes")?;
     let codes = lorenz::parse_codes(&document, op).map_err(super::file_error)?;
     let p = settings(py, parameters, op)?;
-    let report = if decode {
-        lorenz::decode(&codes, &p)
-    } else {
-        lorenz::encode(&codes, &p)
-    }
-    .map_err(super::file_error)?;
+    let report = run(&codes, &p).map_err(super::file_error)?;
     super::structured(
         py,
-        &serde_json::to_value(report).expect("typed Lorenz report"),
+        &serde_json::to_value(report).expect("typed five-bit report"),
     )
 }
 #[pyfunction]
@@ -180,7 +173,13 @@ fn lorenz_encode(
     codes: &Bound<'_, PyAny>,
     parameters: &Bound<'_, PyDict>,
 ) -> PyResult<Py<PyAny>> {
-    lorenz_transform(py, codes, parameters, false)
+    codes_transform(
+        py,
+        codes,
+        parameters,
+        "cipher.lorenz.encode",
+        lorenz::encode,
+    )
 }
 #[pyfunction]
 fn lorenz_decode(
@@ -188,7 +187,13 @@ fn lorenz_decode(
     codes: &Bound<'_, PyAny>,
     parameters: &Bound<'_, PyDict>,
 ) -> PyResult<Py<PyAny>> {
-    lorenz_transform(py, codes, parameters, true)
+    codes_transform(
+        py,
+        codes,
+        parameters,
+        "cipher.lorenz.decode",
+        lorenz::decode,
+    )
 }
 #[pyfunction]
 fn hagelin_encode(
@@ -218,7 +223,25 @@ fn hagelin_decode(
         hagelin::decode,
     )
 }
+#[pyfunction]
+fn t52ab_encode(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    codes_transform(py, codes, parameters, "cipher.t52ab.encode", t52ab::encode)
+}
+#[pyfunction]
+fn t52ab_decode(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    codes_transform(py, codes, parameters, "cipher.t52ab.decode", t52ab::decode)
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(t52ab_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(t52ab_decode, module)?)?;
     module.add_function(wrap_pyfunction!(hagelin_encode, module)?)?;
     module.add_function(wrap_pyfunction!(hagelin_decode, module)?)?;
     module.add_function(wrap_pyfunction!(lorenz_encode, module)?)?;

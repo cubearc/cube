@@ -26,3 +26,9 @@ const hagelinSettings={profile:'m209_standard_v1',pins:[26,25,23,21,19,17].map(n
 const hagelin=cube.execute({operation:'cipher.hagelin.encode',version:1,inputs:{text:'ABC',settings:hagelinSettings}});
 assert.equal(hagelin.text,'ZYX');
 assert.deepEqual(hagelin.final_state,[3,3,3,3,3,3]);
+
+// Synthetic all-active cam facts; callers identify their actual fixed cam set.
+const t52abSettings={profile:'siemens_t52ab_configured_v1',wheel_set_id:'synthetic-all-active',cam_patterns:[47,53,59,61,64,65,67,69,71,73].map(n=>'1'.repeat(n)),wheel_order:[0,1,2,3,4,5,6,7,8,9],socket_pairs:[[1,3],[2,10],[4,5],[6,7],[8,9]],initial_state:Array(10).fill(0)};
+const t52ab=cube.execute({operation:'cipher.t52ab.encode',version:1,inputs:{codes:[0,31,5],settings:t52abSettings}});
+assert.deepEqual(t52ab.codes,[31,0,26]);
+assert.deepEqual(t52ab.final_state,Array(10).fill(3));

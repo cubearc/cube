@@ -54271,6 +54271,956 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.t52ab.decode",
+      "category": "ciphers",
+      "description": "Siemens T52a/b configured logical-contact profile: required complete fixed cam facts and identity, wheel assignments and pluggable double-changeover circuit; XOR before permutation and regular advancement.",
+      "example": "cube cipher t52ab --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cam_patterns": {
+                "description": "Ascending wheel-length order47,53,59,61,64,65,67,69,71,73.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/CamPattern"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "initial_state": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "socket_pairs": {
+                "description": "Every socket1..10 occurs exactly once, split into five unordered pairs.\nActive cam1 passes straight; inactive cam0 crosses between paired plugs.",
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 255,
+                    "minimum": 0
+                  },
+                  "maxItems": 2,
+                  "minItems": 2
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              },
+              "wheel_order": {
+                "description": "Complete permutation of logical wheel IDs0..9: first five select XOR\nimpulses1..5; last five control the correspondingly ordered socket pairs.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "wheel_set_id": {
+                "description": "Required identity of the caller's measured/provenanced fixed cam set.",
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "wheel_set_id",
+              "cam_patterns",
+              "wheel_order",
+              "socket_pairs",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "CamPattern": {
+                "type": "string",
+                "pattern": "^[01]{47,73}$"
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "siemens_t52ab_configured_v1"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 10,
+            "minItems": 10,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4718592,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.t52ab.encode",
+      "category": "ciphers",
+      "description": "Siemens T52a/b configured logical-contact profile: required complete fixed cam facts and identity, wheel assignments and pluggable double-changeover circuit; XOR before permutation and regular advancement.",
+      "example": "cube cipher t52ab --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cam_patterns": {
+                "description": "Ascending wheel-length order47,53,59,61,64,65,67,69,71,73.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/CamPattern"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "initial_state": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "socket_pairs": {
+                "description": "Every socket1..10 occurs exactly once, split into five unordered pairs.\nActive cam1 passes straight; inactive cam0 crosses between paired plugs.",
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 255,
+                    "minimum": 0
+                  },
+                  "maxItems": 2,
+                  "minItems": 2
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              },
+              "wheel_order": {
+                "description": "Complete permutation of logical wheel IDs0..9: first five select XOR\nimpulses1..5; last five control the correspondingly ordered socket pairs.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "wheel_set_id": {
+                "description": "Required identity of the caller's measured/provenanced fixed cam set.",
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "wheel_set_id",
+              "cam_patterns",
+              "wheel_order",
+              "socket_pairs",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "CamPattern": {
+                "type": "string",
+                "pattern": "^[01]{47,73}$"
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "siemens_t52ab_configured_v1"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Code"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            },
+            "maxItems": 10,
+            "minItems": 10,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Code": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 31,
+                "minimum": 0
+              },
+              "Impulse": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 4,
+                "minimum": 0
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "permutation": {
+                    "description": "Input impulse index0..4 -> output impulse index0..4 before decoding.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Impulse"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5
+                  },
+                  "state": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "uint8",
+                      "maximum": 255,
+                      "minimum": 0
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  },
+                  "xor_code": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 31,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state",
+                  "xor_code",
+                  "permutation"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4718592,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.tri_square.decode",
       "category": "ciphers",
       "description": "Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.",

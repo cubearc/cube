@@ -17268,6 +17268,82 @@ Example:
 cube cipher --help
 ```
 
+## cipher.t52ab.decode
+
+Siemens T52a/b configured logical-contact profile: required complete fixed cam facts and identity, wheel assignments and pluggable double-changeover circuit; XOR before permutation and regular advancement.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `codes` | `json` |
+| Input | `settings` | `json` |
+| Output | `codes` | `json` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher t52ab --help
+```
+
+## cipher.t52ab.encode
+
+Siemens T52a/b configured logical-contact profile: required complete fixed cam facts and identity, wheel assignments and pluggable double-changeover circuit; XOR before permutation and regular advancement.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `codes` | `json` |
+| Input | `settings` | `json` |
+| Output | `codes` | `json` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher t52ab --help
+```
+
 ## cipher.tri_square.decode
 
 Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.

@@ -193,6 +193,15 @@ and optional `trace`. Reuse the returned logical contact indices as
 `initial_state` for continuation. See [Hagelin pin-and-lug profiles](../reference/topics/hagelin.md)
 for precise hardware variants and independent Core/transport limits.
 
+## Siemens T52a/b streams
+
+`cube.t52ab_encode(codes, settings)` and `cube.t52ab_decode(codes, settings)`
+use explicit fixed cam facts, wheel assignments and the actual pluggable
+switch network. Codes are unpacked integers 0–31. Results include `codes`,
+`final_state` and optional `trace`; decoding inverts permutation before XOR.
+See [Siemens T52a/b streams](../reference/topics/t52ab.md) for contact phase,
+configuration and host limits.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

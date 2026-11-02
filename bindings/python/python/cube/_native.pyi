@@ -2191,3 +2191,11 @@ def hagelin_encode(text: str, parameters: dict[str, object]) -> dict[str, object
 def hagelin_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """Decipher with the same required profile, pins, lugs and logical contacts."""
     ...
+
+def t52ab_encode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher unpacked codes through the Core T52a/b XOR/switch network."""
+    ...
+
+def t52ab_decode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
+    """Inverse-permute then XOR with the original explicit cam/plug settings."""
+    ...

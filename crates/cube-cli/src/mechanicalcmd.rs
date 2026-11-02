@@ -2,7 +2,7 @@
 use crate::Input;
 use clap::{Args, Subcommand};
 use cube_core::{
-    ciphers::mechanical::{self, alberti, disks, hagelin, kryha, lorenz, wheatstone},
+    ciphers::mechanical::{self, alberti, disks, hagelin, kryha, lorenz, t52ab, wheatstone},
     errors::{ErrorCode, OperationError},
 };
 use std::{error::Error, io::Read, path::PathBuf};
@@ -113,16 +113,19 @@ pub(crate) fn alberti(command: Command) -> Result<String, Box<dyn Error>> {
     )
 }
 
-pub(crate) fn lorenz(command: Command) -> Result<String, Box<dyn Error>> {
+type CodeTransform<P, R> = fn(&[u8], &P) -> Result<R, OperationError>;
+fn run_codes<P: serde::de::DeserializeOwned, R: serde::Serialize>(
+    command: Command,
+    encode_id: &'static str,
+    decode_id: &'static str,
+    encode: CodeTransform<P, R>,
+    decipher: CodeTransform<P, R>,
+) -> Result<String, Box<dyn Error>> {
     let (args, decode) = match command {
         Command::Encode(p) => (p, false),
         Command::Decode(p) => (p, true),
     };
-    let op = if decode {
-        "cipher.lorenz.decode"
-    } else {
-        "cipher.lorenz.encode"
-    };
+    let op = if decode { decode_id } else { encode_id };
     let p = settings(&args, op)?;
     let input = args.input.read_bounded(mechanical::MAX_OUTPUT, op)?;
     let document = std::str::from_utf8(&input).map_err(|_| {
@@ -132,11 +135,29 @@ pub(crate) fn lorenz(command: Command) -> Result<String, Box<dyn Error>> {
     })?;
     let codes = lorenz::parse_codes(document, op)?;
     let report = if decode {
-        lorenz::decode(&codes, &p)
+        decipher(&codes, &p)
     } else {
-        lorenz::encode(&codes, &p)
+        encode(&codes, &p)
     }?;
     Ok(serde_json::to_string(&report)?)
+}
+pub(crate) fn lorenz(command: Command) -> Result<String, Box<dyn Error>> {
+    run_codes(
+        command,
+        "cipher.lorenz.encode",
+        "cipher.lorenz.decode",
+        lorenz::encode,
+        lorenz::decode,
+    )
+}
+pub(crate) fn t52ab(command: Command) -> Result<String, Box<dyn Error>> {
+    run_codes(
+        command,
+        "cipher.t52ab.encode",
+        "cipher.t52ab.decode",
+        t52ab::encode,
+        t52ab::decode,
+    )
 }
 
 pub(crate) fn hagelin(command: Command) -> Result<String, Box<dyn Error>> {

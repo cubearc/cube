@@ -146,3 +146,9 @@ const hagelin=cube.execute({operation:'cipher.hagelin.encode',version:1,inputs:{
 const hagelinText:string=hagelin.text;
 const hagelinState:readonly number[]=hagelin.final_state;
 void hagelinText;void hagelinState;
+
+const t52abSettings={profile:'siemens_t52ab_configured_v1' as const,wheel_set_id:'synthetic-types',cam_patterns:['1'.repeat(47),'1'.repeat(53),'1'.repeat(59),'1'.repeat(61),'1'.repeat(64),'1'.repeat(65),'1'.repeat(67),'1'.repeat(69),'1'.repeat(71),'1'.repeat(73)] as const,wheel_order:[0,1,2,3,4,5,6,7,8,9] as const,socket_pairs:[[1,3],[2,10],[4,5],[6,7],[8,9]] as const,initial_state:[0,0,0,0,0,0,0,0,0,0] as const};
+const t52ab=cube.execute({operation:'cipher.t52ab.encode',version:1,inputs:{codes:[0,31],settings:t52abSettings}});
+const t52abCodes:readonly number[]=t52ab.codes;
+const t52abState:readonly number[]=t52ab.final_state;
+void t52abCodes;void t52abState;

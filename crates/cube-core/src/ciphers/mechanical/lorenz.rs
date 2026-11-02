@@ -38,9 +38,13 @@ pub struct State {
 struct PinPattern<'a>(#[schemars(regex(pattern = "^[01]{23,61}$"))] &'a str);
 #[derive(Clone, Copy, JsonSchema)]
 #[serde(transparent)]
-struct Code(#[schemars(range(max = 31))] u8);
+pub(super) struct Code(#[schemars(range(max = 31))] u8);
 impl Code {
-    fn parse(value: u8, op: &'static str, offset: usize) -> Result<Self, OperationError> {
+    pub(super) fn parse(
+        value: u8,
+        op: &'static str,
+        offset: usize,
+    ) -> Result<Self, OperationError> {
         if value > 31 {
             return Err(error(
                 op,

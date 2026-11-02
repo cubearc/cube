@@ -53,6 +53,7 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
                 "kryha",
                 "alberti",
                 "lorenz",
+                "t52ab",
                 "hagelin",
             ]
             .contains(&parts[1])
@@ -60,7 +61,7 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
             continue;
         }
         std::fs::write(&path, row["inputs"]["settings"].to_string()).unwrap();
-        let input = if parts[1] == "lorenz" {
+        let input = if matches!(parts[1], "lorenz" | "t52ab") {
             row["inputs"]["codes"].to_string()
         } else {
             row["inputs"]["text"].as_str().unwrap().to_owned()
@@ -83,6 +84,6 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
         );
         tested += 1;
     }
-    assert_eq!(tested, 16);
+    assert_eq!(tested, 18);
     std::fs::remove_dir_all(dir).unwrap();
 }

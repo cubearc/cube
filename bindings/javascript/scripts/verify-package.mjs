@@ -79,6 +79,17 @@ if(text!=='AZY'||state.join(',')!=='3,3,3,3,3')throw new Error('Packaged typed H
 `);
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 'hagelin.mts']);
   run(process.execPath, [join(directory, 'compiled-consumer/hagelin.mjs')]);
+  await writeFile(join(directory, 't52ab.mts'), `
+import {createCube} from '@cubearc/cube';
+const cube=await createCube();
+const settings={profile:'siemens_t52ab_configured_v1' as const,wheel_set_id:'synthetic-installed',cam_patterns:['1'.repeat(47),'1'.repeat(53),'1'.repeat(59),'1'.repeat(61),'1'.repeat(64),'1'.repeat(65),'1'.repeat(67),'1'.repeat(69),'1'.repeat(71),'1'.repeat(73)] as const,wheel_order:[0,1,2,3,4,5,6,7,8,9] as const,socket_pairs:[[1,3],[2,10],[4,5],[6,7],[8,9]] as const,initial_state:[0,0,0,0,0,0,0,0,0,0] as const};
+const result=cube.execute({operation:'cipher.t52ab.encode',version:1,inputs:{codes:[0,31],settings}});
+const codes:readonly number[]=result.codes;
+const state:readonly number[]=result.final_state;
+if(codes.join(',')!=='31,0'||state.some(n=>n!==2))throw new Error('Packaged typed T52a/b result mismatch');
+`);
+  run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 't52ab.mts']);
+  run(process.execPath, [join(directory, 'compiled-consumer/t52ab.mjs')]);
   const assets = join(directory, 'node_modules/@cubearc/cube');
   for (const file of ['dist/wasm/cube_wasm_bg.wasm', 'dist/LICENSE', 'dist/THIRD_PARTY_NOTICES', 'examples/static/index.html', 'examples/node.mjs', 'examples/node.mts']) await readFile(join(assets, file));
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));

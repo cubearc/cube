@@ -2416,3 +2416,18 @@ https://books.disney.com/content/uploads/2020/02/2484_1.pdf
 Source artwork is credited to Disney. The profile only identifies the 26 chart
 positions and their corresponding letters; no source PDF, artwork, font, prose,
 word-search, quiz or solutions are distributed.
+
+
+Typex configured interoperability fixtures
+==========================================
+
+SP02390 simulator wiring and configured test facts are adapted from
+rmsk2/rmsk2 at revision 0cbcbde313a48f1bd1915b32ae20e0910aff430a,
+enigrotorset.py and typex_test.cpp.
+Copyright 2017-2018 Martin Grap.
+Licensed under the Apache License, Version 2.0; see LICENSE in this package.
+https://github.com/rmsk2/rmsk2
+
+These are explicit simulator interoperability fixtures, not a supplied historical
+wartime key or a runtime dependency. Cube's Typex mechanism is implemented in
+Rust within Core; no upstream simulator source is included.

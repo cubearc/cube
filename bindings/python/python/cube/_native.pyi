@@ -2207,3 +2207,11 @@ def nema_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
 def nema_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """Reciprocal NEMA deciphering with original explicit wheel/window settings."""
     ...
+
+def typex_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher prepared A-Z contacts using complete configured Typex Mk22 settings."""
+    ...
+
+def typex_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Decipher from the same original configured Typex Mk22 windows."""
+    ...

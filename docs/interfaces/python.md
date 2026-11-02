@@ -210,6 +210,14 @@ windows. Results include `text`, `final_state.windows` and optional trace.
 See [Swiss NEMA Model45](../reference/topics/nema.md) for the complete source
 example, timing, window convention and chunk continuation.
 
+## Typex Mark22
+
+`cube.typex_encode(text, settings)` and `cube.typex_decode(text, settings)` run
+[configured Typex Mark22](../reference/topics/typex.md) through native Core.
+Supply complete wiring and physical state; returned `final_state` resumes the
+next block. The operation accepts prepared A–Z contact symbols without automatic
+keyboard shifts or an inferred historical key.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

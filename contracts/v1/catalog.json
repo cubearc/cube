@@ -58565,6 +58565,764 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.typex.decode",
+      "category": "ciphers",
+      "description": "Configured Typex Mark22 with three moving drums, two stators, reversible cores, arbitrary entry/plug permutation, paired reflector, explicit wiring/notches and physical window/ring settings.",
+      "example": "cube cipher typex --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "entry_wiring": {
+                "description": "Keyboard contacts A-Z to the right-hand entry plate, in the chosen frame.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "plugboard": {
+                "description": "Complete arbitrary input plug permutation; the return path is its inverse.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "reflector": {
+                "description": "Complete involution of thirteen pairs, without self contacts.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "ring_settings": {
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              },
+              "rotors": {
+                "description": "Physical left-to-right cores: three moving followed by two stationary.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              },
+              "turnover_windows": {
+                "description": "Old middle and fast window letters that permit turnover. Reversing a\nwiring core does not reverse its casing or these physical notch windows.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 2,
+                "minItems": 2
+              },
+              "wheel_set_id": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "wheel_set_id",
+              "rotors",
+              "ring_settings",
+              "turnover_windows",
+              "entry_wiring",
+              "plugboard",
+              "reflector",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "typex_mk22_configured_v1"
+                ]
+              },
+              "Rotor": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Distinct caller-supplied core identity, separate from its orientation.",
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+                  },
+                  "reversed": {
+                    "type": "boolean"
+                  },
+                  "wiring": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{26}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "wiring",
+                  "reversed"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "windows": {
+                "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "windows"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.typex.encode",
+      "category": "ciphers",
+      "description": "Configured Typex Mark22 with three moving drums, two stators, reversible cores, arbitrary entry/plug permutation, paired reflector, explicit wiring/notches and physical window/ring settings.",
+      "example": "cube cipher typex --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "entry_wiring": {
+                "description": "Keyboard contacts A-Z to the right-hand entry plate, in the chosen frame.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "plugboard": {
+                "description": "Complete arbitrary input plug permutation; the return path is its inverse.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "reflector": {
+                "description": "Complete involution of thirteen pairs, without self contacts.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "ring_settings": {
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              },
+              "rotors": {
+                "description": "Physical left-to-right cores: three moving followed by two stationary.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 5,
+                "minItems": 5
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              },
+              "turnover_windows": {
+                "description": "Old middle and fast window letters that permit turnover. Reversing a\nwiring core does not reverse its casing or these physical notch windows.",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 2,
+                "minItems": 2
+              },
+              "wheel_set_id": {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "wheel_set_id",
+              "rotors",
+              "ring_settings",
+              "turnover_windows",
+              "entry_wiring",
+              "plugboard",
+              "reflector",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "typex_mk22_configured_v1"
+                ]
+              },
+              "Rotor": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Distinct caller-supplied core identity, separate from its orientation.",
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+                  },
+                  "reversed": {
+                    "type": "boolean"
+                  },
+                  "wiring": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{26}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "wiring",
+                  "reversed"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "windows": {
+                "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                "type": "string",
+                "pattern": "^[A-Z]{5}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "windows"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Physical left-to-right slow, middle, fast, stator2, stator1 windows.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{5}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.ubchi.decode",
       "category": "ciphers",
       "description": "LANAKI1997 Ubchi: identical stable phrase keys in two incomplete Columnar passes, with exact caller nulls inserted between them, one per phrase word; inverse validates the suffix before reversing the first pass.",

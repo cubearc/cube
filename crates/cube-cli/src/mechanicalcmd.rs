@@ -2,7 +2,9 @@
 use crate::Input;
 use clap::{Args, Subcommand};
 use cube_core::{
-    ciphers::mechanical::{self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, wheatstone},
+    ciphers::mechanical::{
+        self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, typex, wheatstone,
+    },
     errors::{ErrorCode, OperationError},
 };
 use std::{error::Error, io::Read, path::PathBuf};
@@ -177,5 +179,15 @@ pub(crate) fn nema(command: Command) -> Result<String, Box<dyn Error>> {
         "cipher.nema.decode",
         nema::encode,
         nema::decode,
+    )
+}
+
+pub(crate) fn typex(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.typex.encode",
+        "cipher.typex.decode",
+        typex::encode,
+        typex::decode,
     )
 }

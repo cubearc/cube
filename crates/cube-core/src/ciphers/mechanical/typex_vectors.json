@@ -1,0 +1,156 @@
+[
+  {
+    "source": "Configured SP02390 simulator interoperability check in rmsk2 typex_test.cpp at0cbcbde313a48f1bd1915b32ae20e0910aff430a; a simulator set, not advertised as a surviving wartime key. Explicit keyboard keys converted to prepared A-Z contact symbols; no automatic keyboard preparation in Core.",
+    "settings": {
+      "profile": "typex_mk22_configured_v1",
+      "wheel_set_id": "rmsk2-SP02390-interoperability",
+      "rotors": [
+        {
+          "wiring": "RFNVBKTIHXQGCWAEOLSMPYDZUJ",
+          "reversed": false,
+          "id": "A"
+        },
+        {
+          "wiring": "OLTGENZUJDIBYPSAFWRQMCXKHV",
+          "reversed": false,
+          "id": "B"
+        },
+        {
+          "wiring": "TWBHQDURMLNIEAKSVOYCJGXFPZ",
+          "reversed": false,
+          "id": "C"
+        },
+        {
+          "wiring": "LYUMXSFBPZONKJCEQIATGWRHDV",
+          "reversed": false,
+          "id": "D"
+        },
+        {
+          "wiring": "KGBTYSOAIVXCJPRQZNHLFWUEMD",
+          "reversed": false,
+          "id": "E"
+        }
+      ],
+      "ring_settings": "AAAAA",
+      "entry_wiring": "JWULCMNOHPQZYXIRADKEGVBTSF",
+      "plugboard": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "reflector": "RYUHQSLDXPNGOKMJEAFWCZTIBV",
+      "initial_state": {
+        "windows": "AAAAA"
+      },
+      "trace": true,
+      "turnover_windows": [
+        "FMSZ",
+        "FMSZ"
+      ]
+    },
+    "text": "QWERTYUIOPASDFGHJKLXCBNMZQWERTYUIOPASDFGHJKLXCNMVA",
+    "expected": "HVDNGQYLGGHJOKKIOXPEQLFEMXNWIZAOMSSRMFSVVPUACYKUCN",
+    "expected_final_state": {
+      "windows": "BIYAA"
+    },
+    "windows": [
+      "AABAA",
+      "AACAA",
+      "AADAA",
+      "AAEAA",
+      "AAFAA",
+      "ABGAA",
+      "ABHAA",
+      "ABIAA",
+      "ABJAA",
+      "ABKAA",
+      "ABLAA",
+      "ABMAA",
+      "ACNAA",
+      "ACOAA",
+      "ACPAA",
+      "ACQAA",
+      "ACRAA",
+      "ACSAA",
+      "ADTAA",
+      "ADUAA",
+      "ADVAA",
+      "ADWAA",
+      "ADXAA",
+      "ADYAA",
+      "ADZAA",
+      "AEAAA",
+      "AEBAA",
+      "AECAA",
+      "AEDAA",
+      "AEEAA",
+      "AEFAA",
+      "AFGAA",
+      "BGHAA",
+      "BGIAA",
+      "BGJAA",
+      "BGKAA",
+      "BGLAA",
+      "BGMAA",
+      "BHNAA",
+      "BHOAA",
+      "BHPAA",
+      "BHQAA",
+      "BHRAA",
+      "BHSAA",
+      "BITAA",
+      "BIUAA",
+      "BIVAA",
+      "BIWAA",
+      "BIXAA",
+      "BIYAA"
+    ]
+  },
+  {
+    "source": "Configured SP02390 simulator interoperability check in rmsk2 typex_test.cpp at0cbcbde313a48f1bd1915b32ae20e0910aff430a; a simulator set, not advertised as a surviving wartime key. Explicit keyboard keys converted to prepared A-Z contact symbols; no automatic keyboard preparation in Core.",
+    "settings": {
+      "profile": "typex_mk22_configured_v1",
+      "wheel_set_id": "rmsk2-SP02390-interoperability",
+      "rotors": [
+        {
+          "wiring": "RFNVBKTIHXQGCWAEOLSMPYDZUJ",
+          "reversed": false,
+          "id": "A"
+        },
+        {
+          "wiring": "OLTGENZUJDIBYPSAFWRQMCXKHV",
+          "reversed": false,
+          "id": "B"
+        },
+        {
+          "wiring": "TWBHQDURMLNIEAKSVOYCJGXFPZ",
+          "reversed": true,
+          "id": "C"
+        },
+        {
+          "wiring": "LYUMXSFBPZONKJCEQIATGWRHDV",
+          "reversed": false,
+          "id": "D"
+        },
+        {
+          "wiring": "KGBTYSOAIVXCJPRQZNHLFWUEMD",
+          "reversed": false,
+          "id": "E"
+        }
+      ],
+      "ring_settings": "AAAAA",
+      "entry_wiring": "JWULCMNOHPQZYXIRADKEGVBTSF",
+      "plugboard": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "reflector": "RYUHQSLDXPNGOKMJEAFWCZTIBV",
+      "initial_state": {
+        "windows": "AAAAA"
+      },
+      "trace": true,
+      "turnover_windows": [
+        "FMSZ",
+        "FMSZ"
+      ]
+    },
+    "text": "QWERTYUIOPASDFGHJKLXCBNM",
+    "expected": "PTWCICHVMIJBKVCAZUSCHQYA",
+    "expected_final_state": {
+      "windows": "ADYAA"
+    }
+  }
+]

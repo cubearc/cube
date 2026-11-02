@@ -1,6 +1,6 @@
 //! Native transport over Core-owned mechanical cipher implementations.
 use cube_core::ciphers::mechanical::{
-    self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, wheatstone,
+    self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, typex, wheatstone,
 };
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
@@ -247,7 +247,17 @@ fn nema_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> Py
 fn nema_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
     transform(py, text, parameters, "cipher.nema.decode", nema::decode)
 }
+#[pyfunction]
+fn typex_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.typex.encode", typex::encode)
+}
+#[pyfunction]
+fn typex_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.typex.decode", typex::decode)
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(typex_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(typex_decode, module)?)?;
     module.add_function(wrap_pyfunction!(nema_encode, module)?)?;
     module.add_function(wrap_pyfunction!(nema_decode, module)?)?;
     module.add_function(wrap_pyfunction!(t52ab_encode, module)?)?;

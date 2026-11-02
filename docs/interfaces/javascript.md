@@ -259,3 +259,5 @@ See [Hagelin pin-and-lug profiles](../reference/topics/hagelin.md) for executabl
 [Siemens T52a/b streams](../reference/topics/t52ab.md) use named `codes` and `settings` inputs, explicit cam/plug facts and state continuation.
 
 [Swiss NEMA Model45](../reference/topics/nema.md) uses named `text` and `settings` inputs with explicit operational/training wheel choices and physical lower-row windows.
+
+Use the [Typex Mark22 reference](../reference/topics/typex.md) for complete caller wiring, reversed cores, stationary windows and prepared contact symbols.

@@ -14,6 +14,8 @@ mod nema_data;
 mod stateful_catalog;
 pub mod t52ab;
 mod t52ab_catalog;
+pub mod typex;
+mod typex_catalog;
 pub mod wheatstone;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
@@ -29,6 +31,8 @@ pub(crate) use stateful_catalog::MODULE as STATEFUL_MODULE;
 pub use stateful_catalog::OPERATIONS as STATEFUL_OPERATIONS;
 pub(crate) use t52ab_catalog::MODULE as T52AB_MODULE;
 pub use t52ab_catalog::OPERATIONS as T52AB_OPERATIONS;
+pub(crate) use typex_catalog::MODULE as TYPEX_MODULE;
+pub use typex_catalog::OPERATIONS as TYPEX_OPERATIONS;
 pub const MAX_INPUT: usize = 1024 * 1024;
 pub const MAX_PARAMETERS: usize = 512 * 1024;
 pub const MAX_TRACE: usize = 65536;
@@ -45,6 +49,7 @@ fn descriptor(operation: &str) -> Option<&'static crate::operations::Descriptor>
         .chain(HAGELIN_OPERATIONS)
         .chain(T52AB_OPERATIONS)
         .chain(NEMA_OPERATIONS)
+        .chain(TYPEX_OPERATIONS)
         .find(|d| d.id == operation)
 }
 pub(crate) fn execute(
@@ -52,6 +57,9 @@ pub(crate) fn execute(
     inputs: &serde_json::Value,
     parameters: &serde_json::Value,
 ) -> Result<serde_json::Value, OperationError> {
+    if TYPEX_OPERATIONS.iter().any(|d| d.id == operation) {
+        return typex_catalog::execute(operation, inputs, parameters);
+    }
     if NEMA_OPERATIONS.iter().any(|d| d.id == operation) {
         return nema_catalog::execute(operation, inputs, parameters);
     }

@@ -158,3 +158,9 @@ const nema=cube.execute({operation:'cipher.nema.encode',version:1,inputs:{text:'
 const nemaText:string=nema.text;
 const nemaWindows:string=nema.final_state.windows;
 void nemaText;void nemaWindows;
+
+const typexSettings={"profile":"typex_mk22_configured_v1","wheel_set_id":"rmsk2-SP02390-interoperability","rotors":[{"wiring":"RFNVBKTIHXQGCWAEOLSMPYDZUJ","reversed":false,"id":"A"},{"wiring":"OLTGENZUJDIBYPSAFWRQMCXKHV","reversed":false,"id":"B"},{"wiring":"TWBHQDURMLNIEAKSVOYCJGXFPZ","reversed":false,"id":"C"},{"wiring":"LYUMXSFBPZONKJCEQIATGWRHDV","reversed":false,"id":"D"},{"wiring":"KGBTYSOAIVXCJPRQZNHLFWUEMD","reversed":false,"id":"E"}],"ring_settings":"AAAAA","entry_wiring":"JWULCMNOHPQZYXIRADKEGVBTSF","plugboard":"ABCDEFGHIJKLMNOPQRSTUVWXYZ","reflector":"RYUHQSLDXPNGOKMJEAFWCZTIBV","initial_state":{"windows":"AAAAA"},"trace":true,"turnover_windows":["FMSZ","FMSZ"]} as const;
+const typex=cube.execute({operation:'cipher.typex.encode',version:1,inputs:{text:"QWERTYUIOPASDFGHJKLXCBNMZQWERTYUIOPASDFGHJKLXCNMVA",settings:typexSettings}});
+const typexText:string=typex.text;
+const typexWindows:string=typex.final_state.windows;
+void typexText;void typexWindows;

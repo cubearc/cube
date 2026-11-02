@@ -101,6 +101,16 @@ if(text!=='HRSBVOOTZUCRWLMGRMGVWYWOVNF'||windows!=='QPMKHPPJPU')throw new Error(
 `);
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 'nema.mts']);
   run(process.execPath, [join(directory, 'compiled-consumer/nema.mjs')]);
+  await writeFile(join(directory,'typex.mts'), `
+import {createCube} from '@cubearc/cube';
+const cube=await createCube();
+const settings={"profile":"typex_mk22_configured_v1","wheel_set_id":"rmsk2-SP02390-interoperability","rotors":[{"wiring":"RFNVBKTIHXQGCWAEOLSMPYDZUJ","reversed":false,"id":"A"},{"wiring":"OLTGENZUJDIBYPSAFWRQMCXKHV","reversed":false,"id":"B"},{"wiring":"TWBHQDURMLNIEAKSVOYCJGXFPZ","reversed":false,"id":"C"},{"wiring":"LYUMXSFBPZONKJCEQIATGWRHDV","reversed":false,"id":"D"},{"wiring":"KGBTYSOAIVXCJPRQZNHLFWUEMD","reversed":false,"id":"E"}],"ring_settings":"AAAAA","entry_wiring":"JWULCMNOHPQZYXIRADKEGVBTSF","plugboard":"ABCDEFGHIJKLMNOPQRSTUVWXYZ","reflector":"RYUHQSLDXPNGOKMJEAFWCZTIBV","initial_state":{"windows":"AAAAA"},"trace":true,"turnover_windows":["FMSZ","FMSZ"]} as const;
+const result=cube.execute({operation:'cipher.typex.encode',version:1,inputs:{text:"QWERTYUIOPASDFGHJKLXCBNMZQWERTYUIOPASDFGHJKLXCNMVA",settings}});
+const text:string=result.text;const windows:string=result.final_state.windows;
+if(text!=="HVDNGQYLGGHJOKKIOXPEQLFEMXNWIZAOMSSRMFSVVPUACYKUCN" || windows!=="BIYAA")throw new Error('Packaged typed Typex result mismatch');
+`);
+  run(process.execPath,[compiler,'--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--outDir','compiled-consumer','typex.mts']);
+  run(process.execPath,[join(directory,'compiled-consumer/typex.mjs')]);
   const assets = join(directory, 'node_modules/@cubearc/cube');
   for (const file of ['dist/wasm/cube_wasm_bg.wasm', 'dist/LICENSE', 'dist/THIRD_PARTY_NOTICES', 'examples/static/index.html', 'examples/node.mjs', 'examples/node.mts']) await readFile(join(assets, file));
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));

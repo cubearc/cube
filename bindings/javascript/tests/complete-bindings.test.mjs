@@ -337,3 +337,20 @@ test('NEMA Model45 operational and training mechanisms retain physical windows i
  assert.throws(()=>execute('encode','A'.repeat(1048577),training),{code:'resource_limit'});
  assert.throws(()=>execute('encode','A'.repeat(65537),{...training,trace:true}),{code:'resource_limit'});
 });
+
+
+test('configured Typex Mk22 preserves independent reversed-core checks and stationary windows in actual Wasm',async()=>{
+ const vectors=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/typex_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,text,settings)=>cube.execute({operation:`cipher.typex.${direction}`,version:1,inputs:{text,settings}});
+ for(const v of vectors){
+  const r=execute('encode',v.text,v.settings);assert.equal(r.text,v.expected);assert.deepEqual(r.final_state,v.expected_final_state);assert.equal(execute('decode',r.text,v.settings).text,v.text);
+  const first=execute('encode',v.text.slice(0,9),v.settings);const second=execute('encode',v.text.slice(9),{...v.settings,initial_state:first.final_state});assert.equal(first.text+second.text,v.expected);assert.deepEqual(second.final_state,r.final_state);
+  assert.deepEqual(execute('encode','',v.settings).final_state,v.settings.initial_state);
+ }
+ const settings={...vectors[0].settings,trace:false};
+ assert.throws(()=>execute('encode','A',{...settings,reflector:'ABCDEFGHIJKLMNOPQRSTUVWXYZ'}),{code:'invalid_parameter'});
+ assert.throws(()=>execute('encode','a',settings),{code:'invalid_input'});
+ assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);
+ assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});
+ assert.throws(()=>execute('encode','A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});
+});

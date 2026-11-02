@@ -18,6 +18,7 @@ remain in each operation's reference.
 - [Hagelin pin-and-lug profiles](topics/hagelin.md)
 - [Lorenz five-bit streams](topics/lorenz.md)
 - [Siemens T52a/b streams](topics/t52ab.md)
+- [Configured Typex Mark22](topics/typex.md)
 - [Swiss NEMA Model45](topics/nema.md)
 - [Raw AES blocks](topics/aes-blocks.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)

@@ -37,3 +37,7 @@ const nemaSettings={profile:'nema_model45_operational_v1',rotors:['A','B','C','D
 const nema=cube.execute({operation:'cipher.nema.encode',version:1,inputs:{text:'A'.repeat(27),settings:nemaSettings}});
 assert.equal(nema.text,'HRSBVOOTZUCRWLMGRMGVWYWOVNF');
 assert.equal(nema.final_state.windows,'QPMKHPPJPU');
+
+const typex=cube.execute({operation:'cipher.typex.encode',version:1,inputs:{text:"QWERTYUIOPASDFGHJKLXCBNMZQWERTYUIOPASDFGHJKLXCNMVA",settings:{"profile":"typex_mk22_configured_v1","wheel_set_id":"rmsk2-SP02390-interoperability","rotors":[{"wiring":"RFNVBKTIHXQGCWAEOLSMPYDZUJ","reversed":false,"id":"A"},{"wiring":"OLTGENZUJDIBYPSAFWRQMCXKHV","reversed":false,"id":"B"},{"wiring":"TWBHQDURMLNIEAKSVOYCJGXFPZ","reversed":false,"id":"C"},{"wiring":"LYUMXSFBPZONKJCEQIATGWRHDV","reversed":false,"id":"D"},{"wiring":"KGBTYSOAIVXCJPRQZNHLFWUEMD","reversed":false,"id":"E"}],"ring_settings":"AAAAA","entry_wiring":"JWULCMNOHPQZYXIRADKEGVBTSF","plugboard":"ABCDEFGHIJKLMNOPQRSTUVWXYZ","reflector":"RYUHQSLDXPNGOKMJEAFWCZTIBV","initial_state":{"windows":"AAAAA"},"trace":true,"turnover_windows":["FMSZ","FMSZ"]}}});
+assert.equal(typex.text,"HVDNGQYLGGHJOKKIOXPEQLFEMXNWIZAOMSSRMFSVVPUACYKUCN");assert.equal(typex.final_state.windows,"BIYAA");
+console.log('Typex:',typex.text);

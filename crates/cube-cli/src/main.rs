@@ -483,6 +483,11 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Configured Typex Mk22 cores, stators, notch windows and arbitrary plugs
+    Typex {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Swiss NEMA Model45 operational/training wheels and lower-row windows
     Nema {
         #[command(subcommand)]
@@ -1053,6 +1058,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Kryha { command } => mechanicalcmd::kryha(command)?,
                 Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
                 Cipher::Nema { command } => mechanicalcmd::nema(command)?,
+                Cipher::Typex { command } => mechanicalcmd::typex(command)?,
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,

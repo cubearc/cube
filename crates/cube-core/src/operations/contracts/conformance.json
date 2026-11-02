@@ -17602,5 +17602,725 @@
       ]
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "ac807343ba2e943932b2cfdc59d73c90e3c5ba4992fd2ab982c5808493f8cfbd",
+    "inputs": {
+      "settings": {
+        "entry_wiring": "JWULCMNOHPQZYXIRADKEGVBTSF",
+        "initial_state": {
+          "windows": "AAAAA"
+        },
+        "plugboard": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "profile": "typex_mk22_configured_v1",
+        "reflector": "RYUHQSLDXPNGOKMJEAFWCZTIBV",
+        "ring_settings": "AAAAA",
+        "rotors": [
+          {
+            "id": "A",
+            "reversed": false,
+            "wiring": "RFNVBKTIHXQGCWAEOLSMPYDZUJ"
+          },
+          {
+            "id": "B",
+            "reversed": false,
+            "wiring": "OLTGENZUJDIBYPSAFWRQMCXKHV"
+          },
+          {
+            "id": "C",
+            "reversed": false,
+            "wiring": "TWBHQDURMLNIEAKSVOYCJGXFPZ"
+          },
+          {
+            "id": "D",
+            "reversed": false,
+            "wiring": "LYUMXSFBPZONKJCEQIATGWRHDV"
+          },
+          {
+            "id": "E",
+            "reversed": false,
+            "wiring": "KGBTYSOAIVXCJPRQZNHLFWUEMD"
+          }
+        ],
+        "trace": true,
+        "turnover_windows": [
+          "FMSZ",
+          "FMSZ"
+        ],
+        "wheel_set_id": "rmsk2-SP02390-interoperability"
+      },
+      "text": "HVDNGQYLGGHJOKKIOXPEQLFEMXNWIZAOMSSRMFSVVPUACYKUCN"
+    },
+    "operation": "cipher.typex.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "windows": "BIYAA"
+      },
+      "text": "QWERTYUIOPASDFGHJKLXCBNMZQWERTYUIOPASDFGHJKLXCNMVA",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "windows": "AABAA"
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "windows": "AACAA"
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "windows": "AADAA"
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "windows": "AAEAA"
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "windows": "AAFAA"
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "windows": "ABGAA"
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "windows": "ABHAA"
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "windows": "ABIAA"
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "windows": "ABJAA"
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "windows": "ABKAA"
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "windows": "ABLAA"
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "windows": "ABMAA"
+          }
+        },
+        {
+          "offset": 12,
+          "state": {
+            "windows": "ACNAA"
+          }
+        },
+        {
+          "offset": 13,
+          "state": {
+            "windows": "ACOAA"
+          }
+        },
+        {
+          "offset": 14,
+          "state": {
+            "windows": "ACPAA"
+          }
+        },
+        {
+          "offset": 15,
+          "state": {
+            "windows": "ACQAA"
+          }
+        },
+        {
+          "offset": 16,
+          "state": {
+            "windows": "ACRAA"
+          }
+        },
+        {
+          "offset": 17,
+          "state": {
+            "windows": "ACSAA"
+          }
+        },
+        {
+          "offset": 18,
+          "state": {
+            "windows": "ADTAA"
+          }
+        },
+        {
+          "offset": 19,
+          "state": {
+            "windows": "ADUAA"
+          }
+        },
+        {
+          "offset": 20,
+          "state": {
+            "windows": "ADVAA"
+          }
+        },
+        {
+          "offset": 21,
+          "state": {
+            "windows": "ADWAA"
+          }
+        },
+        {
+          "offset": 22,
+          "state": {
+            "windows": "ADXAA"
+          }
+        },
+        {
+          "offset": 23,
+          "state": {
+            "windows": "ADYAA"
+          }
+        },
+        {
+          "offset": 24,
+          "state": {
+            "windows": "ADZAA"
+          }
+        },
+        {
+          "offset": 25,
+          "state": {
+            "windows": "AEAAA"
+          }
+        },
+        {
+          "offset": 26,
+          "state": {
+            "windows": "AEBAA"
+          }
+        },
+        {
+          "offset": 27,
+          "state": {
+            "windows": "AECAA"
+          }
+        },
+        {
+          "offset": 28,
+          "state": {
+            "windows": "AEDAA"
+          }
+        },
+        {
+          "offset": 29,
+          "state": {
+            "windows": "AEEAA"
+          }
+        },
+        {
+          "offset": 30,
+          "state": {
+            "windows": "AEFAA"
+          }
+        },
+        {
+          "offset": 31,
+          "state": {
+            "windows": "AFGAA"
+          }
+        },
+        {
+          "offset": 32,
+          "state": {
+            "windows": "BGHAA"
+          }
+        },
+        {
+          "offset": 33,
+          "state": {
+            "windows": "BGIAA"
+          }
+        },
+        {
+          "offset": 34,
+          "state": {
+            "windows": "BGJAA"
+          }
+        },
+        {
+          "offset": 35,
+          "state": {
+            "windows": "BGKAA"
+          }
+        },
+        {
+          "offset": 36,
+          "state": {
+            "windows": "BGLAA"
+          }
+        },
+        {
+          "offset": 37,
+          "state": {
+            "windows": "BGMAA"
+          }
+        },
+        {
+          "offset": 38,
+          "state": {
+            "windows": "BHNAA"
+          }
+        },
+        {
+          "offset": 39,
+          "state": {
+            "windows": "BHOAA"
+          }
+        },
+        {
+          "offset": 40,
+          "state": {
+            "windows": "BHPAA"
+          }
+        },
+        {
+          "offset": 41,
+          "state": {
+            "windows": "BHQAA"
+          }
+        },
+        {
+          "offset": 42,
+          "state": {
+            "windows": "BHRAA"
+          }
+        },
+        {
+          "offset": 43,
+          "state": {
+            "windows": "BHSAA"
+          }
+        },
+        {
+          "offset": 44,
+          "state": {
+            "windows": "BITAA"
+          }
+        },
+        {
+          "offset": 45,
+          "state": {
+            "windows": "BIUAA"
+          }
+        },
+        {
+          "offset": 46,
+          "state": {
+            "windows": "BIVAA"
+          }
+        },
+        {
+          "offset": 47,
+          "state": {
+            "windows": "BIWAA"
+          }
+        },
+        {
+          "offset": 48,
+          "state": {
+            "windows": "BIXAA"
+          }
+        },
+        {
+          "offset": 49,
+          "state": {
+            "windows": "BIYAA"
+          }
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "b20d216b0a7e8ce9bcc12b4bdc3689e25630430ac05698ee19249a008677c679",
+    "inputs": {
+      "settings": {
+        "entry_wiring": "JWULCMNOHPQZYXIRADKEGVBTSF",
+        "initial_state": {
+          "windows": "AAAAA"
+        },
+        "plugboard": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "profile": "typex_mk22_configured_v1",
+        "reflector": "RYUHQSLDXPNGOKMJEAFWCZTIBV",
+        "ring_settings": "AAAAA",
+        "rotors": [
+          {
+            "id": "A",
+            "reversed": false,
+            "wiring": "RFNVBKTIHXQGCWAEOLSMPYDZUJ"
+          },
+          {
+            "id": "B",
+            "reversed": false,
+            "wiring": "OLTGENZUJDIBYPSAFWRQMCXKHV"
+          },
+          {
+            "id": "C",
+            "reversed": false,
+            "wiring": "TWBHQDURMLNIEAKSVOYCJGXFPZ"
+          },
+          {
+            "id": "D",
+            "reversed": false,
+            "wiring": "LYUMXSFBPZONKJCEQIATGWRHDV"
+          },
+          {
+            "id": "E",
+            "reversed": false,
+            "wiring": "KGBTYSOAIVXCJPRQZNHLFWUEMD"
+          }
+        ],
+        "trace": true,
+        "turnover_windows": [
+          "FMSZ",
+          "FMSZ"
+        ],
+        "wheel_set_id": "rmsk2-SP02390-interoperability"
+      },
+      "text": "QWERTYUIOPASDFGHJKLXCBNMZQWERTYUIOPASDFGHJKLXCNMVA"
+    },
+    "operation": "cipher.typex.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "windows": "BIYAA"
+      },
+      "text": "HVDNGQYLGGHJOKKIOXPEQLFEMXNWIZAOMSSRMFSVVPUACYKUCN",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "windows": "AABAA"
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "windows": "AACAA"
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "windows": "AADAA"
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "windows": "AAEAA"
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "windows": "AAFAA"
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "windows": "ABGAA"
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "windows": "ABHAA"
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "windows": "ABIAA"
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "windows": "ABJAA"
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "windows": "ABKAA"
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "windows": "ABLAA"
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "windows": "ABMAA"
+          }
+        },
+        {
+          "offset": 12,
+          "state": {
+            "windows": "ACNAA"
+          }
+        },
+        {
+          "offset": 13,
+          "state": {
+            "windows": "ACOAA"
+          }
+        },
+        {
+          "offset": 14,
+          "state": {
+            "windows": "ACPAA"
+          }
+        },
+        {
+          "offset": 15,
+          "state": {
+            "windows": "ACQAA"
+          }
+        },
+        {
+          "offset": 16,
+          "state": {
+            "windows": "ACRAA"
+          }
+        },
+        {
+          "offset": 17,
+          "state": {
+            "windows": "ACSAA"
+          }
+        },
+        {
+          "offset": 18,
+          "state": {
+            "windows": "ADTAA"
+          }
+        },
+        {
+          "offset": 19,
+          "state": {
+            "windows": "ADUAA"
+          }
+        },
+        {
+          "offset": 20,
+          "state": {
+            "windows": "ADVAA"
+          }
+        },
+        {
+          "offset": 21,
+          "state": {
+            "windows": "ADWAA"
+          }
+        },
+        {
+          "offset": 22,
+          "state": {
+            "windows": "ADXAA"
+          }
+        },
+        {
+          "offset": 23,
+          "state": {
+            "windows": "ADYAA"
+          }
+        },
+        {
+          "offset": 24,
+          "state": {
+            "windows": "ADZAA"
+          }
+        },
+        {
+          "offset": 25,
+          "state": {
+            "windows": "AEAAA"
+          }
+        },
+        {
+          "offset": 26,
+          "state": {
+            "windows": "AEBAA"
+          }
+        },
+        {
+          "offset": 27,
+          "state": {
+            "windows": "AECAA"
+          }
+        },
+        {
+          "offset": 28,
+          "state": {
+            "windows": "AEDAA"
+          }
+        },
+        {
+          "offset": 29,
+          "state": {
+            "windows": "AEEAA"
+          }
+        },
+        {
+          "offset": 30,
+          "state": {
+            "windows": "AEFAA"
+          }
+        },
+        {
+          "offset": 31,
+          "state": {
+            "windows": "AFGAA"
+          }
+        },
+        {
+          "offset": 32,
+          "state": {
+            "windows": "BGHAA"
+          }
+        },
+        {
+          "offset": 33,
+          "state": {
+            "windows": "BGIAA"
+          }
+        },
+        {
+          "offset": 34,
+          "state": {
+            "windows": "BGJAA"
+          }
+        },
+        {
+          "offset": 35,
+          "state": {
+            "windows": "BGKAA"
+          }
+        },
+        {
+          "offset": 36,
+          "state": {
+            "windows": "BGLAA"
+          }
+        },
+        {
+          "offset": 37,
+          "state": {
+            "windows": "BGMAA"
+          }
+        },
+        {
+          "offset": 38,
+          "state": {
+            "windows": "BHNAA"
+          }
+        },
+        {
+          "offset": 39,
+          "state": {
+            "windows": "BHOAA"
+          }
+        },
+        {
+          "offset": 40,
+          "state": {
+            "windows": "BHPAA"
+          }
+        },
+        {
+          "offset": 41,
+          "state": {
+            "windows": "BHQAA"
+          }
+        },
+        {
+          "offset": 42,
+          "state": {
+            "windows": "BHRAA"
+          }
+        },
+        {
+          "offset": 43,
+          "state": {
+            "windows": "BHSAA"
+          }
+        },
+        {
+          "offset": 44,
+          "state": {
+            "windows": "BITAA"
+          }
+        },
+        {
+          "offset": 45,
+          "state": {
+            "windows": "BIUAA"
+          }
+        },
+        {
+          "offset": 46,
+          "state": {
+            "windows": "BIVAA"
+          }
+        },
+        {
+          "offset": 47,
+          "state": {
+            "windows": "BIWAA"
+          }
+        },
+        {
+          "offset": 48,
+          "state": {
+            "windows": "BIXAA"
+          }
+        },
+        {
+          "offset": 49,
+          "state": {
+            "windows": "BIYAA"
+          }
+        }
+      ]
+    },
+    "parameters": {}
   }
 ]

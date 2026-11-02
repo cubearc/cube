@@ -14312,5 +14312,745 @@
       "text": "JUKLDYKITZIIVCYCVUYVPYWHJYUYEZDHVUZDBQPOZMCFNBJJIXEAPTHYOWHKWWTNYGMPRZJIFADMEQRHBPOJTYUQNTW"
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "b4145613497b952a5cba28919b8f4e6af17c5a95a50b2e9e71be716b6951bcbf",
+    "inputs": {
+      "settings": {
+        "initial_index": "c",
+        "profile": "alberti_di_palma_2009_v1",
+        "trace": true
+      },
+      "text": "czdqpoqlhqluybeix&okapa"
+    },
+    "operation": "cipher.alberti.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_index": "o",
+      "text": "ALE4ISA1BEAVTI3FVL2CITI",
+      "trace": [
+        {
+          "index": "c",
+          "offset": 0
+        },
+        {
+          "index": "c",
+          "offset": 1
+        },
+        {
+          "index": "c",
+          "offset": 2
+        },
+        {
+          "index": "q",
+          "offset": 3
+        },
+        {
+          "index": "q",
+          "offset": 4
+        },
+        {
+          "index": "q",
+          "offset": 5
+        },
+        {
+          "index": "q",
+          "offset": 6
+        },
+        {
+          "index": "l",
+          "offset": 7
+        },
+        {
+          "index": "l",
+          "offset": 8
+        },
+        {
+          "index": "l",
+          "offset": 9
+        },
+        {
+          "index": "l",
+          "offset": 10
+        },
+        {
+          "index": "l",
+          "offset": 11
+        },
+        {
+          "index": "l",
+          "offset": 12
+        },
+        {
+          "index": "l",
+          "offset": 13
+        },
+        {
+          "index": "e",
+          "offset": 14
+        },
+        {
+          "index": "e",
+          "offset": 15
+        },
+        {
+          "index": "e",
+          "offset": 16
+        },
+        {
+          "index": "e",
+          "offset": 17
+        },
+        {
+          "index": "o",
+          "offset": 18
+        },
+        {
+          "index": "o",
+          "offset": 19
+        },
+        {
+          "index": "o",
+          "offset": 20
+        },
+        {
+          "index": "o",
+          "offset": 21
+        },
+        {
+          "index": "o",
+          "offset": 22
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "bd2f9fd8269ab5ed009a6b92b32965b496e33a9e0b0c933848689b113b7c8b92",
+    "inputs": {
+      "settings": {
+        "initial_index": "c",
+        "profile": "alberti_di_palma_2009_v1",
+        "trace": true
+      },
+      "text": "ALE4ISA1BEAVTI3FVL2CITI"
+    },
+    "operation": "cipher.alberti.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_index": "o",
+      "text": "czdqpoqlhqluybeix&okapa",
+      "trace": [
+        {
+          "index": "c",
+          "offset": 0
+        },
+        {
+          "index": "c",
+          "offset": 1
+        },
+        {
+          "index": "c",
+          "offset": 2
+        },
+        {
+          "index": "q",
+          "offset": 3
+        },
+        {
+          "index": "q",
+          "offset": 4
+        },
+        {
+          "index": "q",
+          "offset": 5
+        },
+        {
+          "index": "q",
+          "offset": 6
+        },
+        {
+          "index": "l",
+          "offset": 7
+        },
+        {
+          "index": "l",
+          "offset": 8
+        },
+        {
+          "index": "l",
+          "offset": 9
+        },
+        {
+          "index": "l",
+          "offset": 10
+        },
+        {
+          "index": "l",
+          "offset": 11
+        },
+        {
+          "index": "l",
+          "offset": 12
+        },
+        {
+          "index": "l",
+          "offset": 13
+        },
+        {
+          "index": "e",
+          "offset": 14
+        },
+        {
+          "index": "e",
+          "offset": 15
+        },
+        {
+          "index": "e",
+          "offset": 16
+        },
+        {
+          "index": "e",
+          "offset": 17
+        },
+        {
+          "index": "o",
+          "offset": 18
+        },
+        {
+          "index": "o",
+          "offset": 19
+        },
+        {
+          "index": "o",
+          "offset": 20
+        },
+        {
+          "index": "o",
+          "offset": 21
+        },
+        {
+          "index": "o",
+          "offset": 22
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "352c53f4ee290e71aa14887ac46d8ba7967e7dacc4197e3aba0b4bcb8f4b9a60",
+    "inputs": {
+      "settings": {
+        "cipher_alphabet": "HYDRAULICBEFGJKMNOPQSTVWXZ",
+        "initial_state": {
+          "rotation": 0,
+          "selector": 1
+        },
+        "plain_alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "profile": "kryha_callimahos_1973_v1",
+        "trace": true
+      },
+      "text": "HIJSZUGPHLNTYLJQX"
+    },
+    "operation": "cipher.kryha.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "rotation": 7,
+        "selector": 1
+      },
+      "text": "AAAAAAAAAAAAAAAAA",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "rotation": 7,
+            "selector": 2
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "rotation": 13,
+            "selector": 3
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "rotation": 20,
+            "selector": 4
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "rotation": 25,
+            "selector": 5
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "rotation": 5,
+            "selector": 6
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "rotation": 12,
+            "selector": 7
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "rotation": 18,
+            "selector": 8
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "rotation": 0,
+            "selector": 9
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "rotation": 6,
+            "selector": 10
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "rotation": 16,
+            "selector": 11
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "rotation": 21,
+            "selector": 12
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "rotation": 1,
+            "selector": 13
+          }
+        },
+        {
+          "offset": 12,
+          "state": {
+            "rotation": 6,
+            "selector": 14
+          }
+        },
+        {
+          "offset": 13,
+          "state": {
+            "rotation": 13,
+            "selector": 15
+          }
+        },
+        {
+          "offset": 14,
+          "state": {
+            "rotation": 19,
+            "selector": 16
+          }
+        },
+        {
+          "offset": 15,
+          "state": {
+            "rotation": 24,
+            "selector": 17
+          }
+        },
+        {
+          "offset": 16,
+          "state": {
+            "rotation": 7,
+            "selector": 1
+          }
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "8dc36b5f88540ff700f41eaac0523a2d6cf898eb3e871ea303e0758738d10991",
+    "inputs": {
+      "settings": {
+        "cipher_alphabet": "HYDRAULICBEFGJKMNOPQSTVWXZ",
+        "initial_state": {
+          "rotation": 0,
+          "selector": 1
+        },
+        "plain_alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "profile": "kryha_callimahos_1973_v1",
+        "trace": true
+      },
+      "text": "AAAAAAAAAAAAAAAAA"
+    },
+    "operation": "cipher.kryha.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "rotation": 7,
+        "selector": 1
+      },
+      "text": "HIJSZUGPHLNTYLJQX",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "rotation": 7,
+            "selector": 2
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "rotation": 13,
+            "selector": 3
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "rotation": 20,
+            "selector": 4
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "rotation": 25,
+            "selector": 5
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "rotation": 5,
+            "selector": 6
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "rotation": 12,
+            "selector": 7
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "rotation": 18,
+            "selector": 8
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "rotation": 0,
+            "selector": 9
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "rotation": 6,
+            "selector": 10
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "rotation": 16,
+            "selector": 11
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "rotation": 21,
+            "selector": 12
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "rotation": 1,
+            "selector": 13
+          }
+        },
+        {
+          "offset": 12,
+          "state": {
+            "rotation": 6,
+            "selector": 14
+          }
+        },
+        {
+          "offset": 13,
+          "state": {
+            "rotation": 13,
+            "selector": 15
+          }
+        },
+        {
+          "offset": 14,
+          "state": {
+            "rotation": 19,
+            "selector": 16
+          }
+        },
+        {
+          "offset": 15,
+          "state": {
+            "rotation": 24,
+            "selector": 17
+          }
+        },
+        {
+          "offset": 16,
+          "state": {
+            "rotation": 7,
+            "selector": 1
+          }
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3e1544192924854a0765b2d9de6f82df739bb1276c989d1468cc2280a2c640f6",
+    "inputs": {
+      "settings": {
+        "cipher_alphabet": "FBKSYRDLTZAGMUNHOVCIPWEJQX",
+        "initial_state": {
+          "cipher_position": 0,
+          "plain_position": 0
+        },
+        "profile": "wheatstone_1879_v1",
+        "trace": true
+      },
+      "text": "PZLSPQREQAJD"
+    },
+    "operation": "cipher.wheatstone.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "cipher_position": 6,
+        "plain_position": 0
+      },
+      "text": "THE+QUARTER+",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "cipher_position": 20,
+            "plain_position": 20
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "cipher_position": 9,
+            "plain_position": 8
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "cipher_position": 7,
+            "plain_position": 5
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "cipher_position": 3,
+            "plain_position": 0
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "cipher_position": 20,
+            "plain_position": 17
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "cipher_position": 24,
+            "plain_position": 21
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "cipher_position": 5,
+            "plain_position": 1
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "cipher_position": 22,
+            "plain_position": 18
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "cipher_position": 24,
+            "plain_position": 20
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "cipher_position": 10,
+            "plain_position": 5
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "cipher_position": 23,
+            "plain_position": 18
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "cipher_position": 6,
+            "plain_position": 0
+          }
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "4993d26bd9f81fd31f55347aa6a4d24b1a8ee88cd022889df1b2425ff7fcdad3",
+    "inputs": {
+      "settings": {
+        "cipher_alphabet": "FBKSYRDLTZAGMUNHOVCIPWEJQX",
+        "initial_state": {
+          "cipher_position": 0,
+          "plain_position": 0
+        },
+        "profile": "wheatstone_1879_v1",
+        "trace": true
+      },
+      "text": "THE+QUARTER+"
+    },
+    "operation": "cipher.wheatstone.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "cipher_position": 6,
+        "plain_position": 0
+      },
+      "text": "PZLSPQREQAJD",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "cipher_position": 20,
+            "plain_position": 20
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "cipher_position": 9,
+            "plain_position": 8
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "cipher_position": 7,
+            "plain_position": 5
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "cipher_position": 3,
+            "plain_position": 0
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "cipher_position": 20,
+            "plain_position": 17
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "cipher_position": 24,
+            "plain_position": 21
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "cipher_position": 5,
+            "plain_position": 1
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "cipher_position": 22,
+            "plain_position": 18
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "cipher_position": 24,
+            "plain_position": 20
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "cipher_position": 10,
+            "plain_position": 5
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "cipher_position": 23,
+            "plain_position": 18
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "cipher_position": 6,
+            "plain_position": 0
+          }
+        }
+      ]
+    },
+    "parameters": {}
   }
 ]

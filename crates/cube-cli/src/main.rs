@@ -468,6 +468,21 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Explicit source-qualified Wheatstone profile with state continuation
+    Wheatstone {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// Explicit source-qualified Kryha profile with state continuation
+    Kryha {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// Explicit source-qualified Alberti profile with state continuation
+    Alberti {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Hazardous raw AES blocks; key file only, no padding or authentication
     Aes {
         #[command(subcommand)]
@@ -1014,6 +1029,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::M94 { command } => mechanicalcmd::m94(command)?,
                 Cipher::Jefferson { command } => mechanicalcmd::jefferson(command)?,
                 Cipher::M138a { command } => mechanicalcmd::m138a(command)?,
+                Cipher::Wheatstone { command } => mechanicalcmd::wheatstone(command)?,
+                Cipher::Kryha { command } => mechanicalcmd::kryha(command)?,
+                Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(

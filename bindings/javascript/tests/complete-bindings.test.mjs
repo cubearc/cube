@@ -13,6 +13,24 @@ test('historical wheel and strip profiles execute through actual Wasm with expli
   assert.throws(()=>cube.execute({operation:'cipher.m94.encode',version:1,inputs:{text:'a',settings:{...settings,row_offsets:[1]}}}),{code:'invalid_input'});
   assert.throws(()=>cube.execute({operation:'cipher.m94.encode',version:1,inputs:{text:'A'.repeat(1048577),settings:{...settings,row_offsets:Array(41944).fill(1)}}}),{code:'resource_limit'});
 });
+test('stateful historical mechanisms preserve published answers, continuation and bounded traces in Wasm', async () => {
+  const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
+  const rows=fixtures.filter(r=>/^cipher\.(wheatstone|kryha|alberti)\./.test(r.operation));
+  assert.equal(rows.length,6);
+  for(const r of rows) {
+    assert.deepEqual(cube.execute({operation:r.operation,version:1,inputs:r.inputs,parameters:{}}),r.outputs,r.operation);
+    const settings={...r.inputs.settings,trace:false};
+    const call=(text,settings)=>cube.execute({operation:r.operation,version:1,inputs:{text,settings}});
+    const first=call(r.inputs.text.slice(0,3),settings);
+    const key=r.operation.includes('.alberti.')?'index':'state';
+    const second=call(r.inputs.text.slice(3),{...settings,[`initial_${key}`]:first[`final_${key}`]});
+    assert.equal(first.text+second.text,r.outputs.text);
+    assert.deepEqual(second[`final_${key}`],r.outputs[`final_${key}`]);
+    assert.throws(()=>call('秘密',settings),{code:'invalid_input'});
+    assert.throws(()=>call('A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});
+  }
+});
+
 test('numeric profiles execute exact fixtures and bounded multiset recovery in Wasm', async () => {
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const cases=fixtures.filter(r=>/^cipher\.(prime_number|prime_multiplication|modulo|triliteral)\./.test(r.operation));

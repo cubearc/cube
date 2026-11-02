@@ -1,12 +1,12 @@
 //! Native transport over Core-owned mechanical cipher implementations.
-use cube_core::ciphers::mechanical::{self, disks};
+use cube_core::ciphers::mechanical::{self, alberti, disks, kryha, wheatstone};
 use pyo3::{prelude::*, types::PyDict};
-fn transform<P: serde::de::DeserializeOwned>(
+fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     py: Python<'_>,
     text: &str,
     parameters: &Bound<'_, PyDict>,
     op: &'static str,
-    run: fn(&str, &P) -> Result<disks::Report, cube_core::errors::OperationError>,
+    run: fn(&str, &P) -> Result<R, cube_core::errors::OperationError>,
 ) -> PyResult<Py<PyAny>> {
     let document = super::mono::document(
         py,
@@ -19,7 +19,7 @@ fn transform<P: serde::de::DeserializeOwned>(
     let report = run(text, &p).map_err(super::file_error)?;
     super::structured(
         py,
-        &serde_json::to_value(report).expect("typed disk report"),
+        &serde_json::to_value(report).expect("typed mechanical report"),
     )
 }
 #[pyfunction]
@@ -78,7 +78,77 @@ fn m138a_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> P
         disks::m138a_decode,
     )
 }
+#[pyfunction]
+fn wheatstone_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(
+        py,
+        text,
+        parameters,
+        "cipher.wheatstone.encode",
+        wheatstone::encode,
+    )
+}
+#[pyfunction]
+fn wheatstone_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(
+        py,
+        text,
+        parameters,
+        "cipher.wheatstone.decode",
+        wheatstone::decode,
+    )
+}
+#[pyfunction]
+fn kryha_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.kryha.encode", kryha::encode)
+}
+#[pyfunction]
+fn kryha_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.kryha.decode", kryha::decode)
+}
+#[pyfunction]
+fn alberti_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(
+        py,
+        text,
+        parameters,
+        "cipher.alberti.encode",
+        alberti::encode,
+    )
+}
+#[pyfunction]
+fn alberti_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(
+        py,
+        text,
+        parameters,
+        "cipher.alberti.decode",
+        alberti::decode,
+    )
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(wheatstone_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(wheatstone_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(kryha_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(kryha_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(alberti_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(alberti_decode, module)?)?;
     module.add_function(wrap_pyfunction!(m94_encode, module)?)?;
     module.add_function(wrap_pyfunction!(m94_decode, module)?)?;
     module.add_function(wrap_pyfunction!(jefferson_encode, module)?)?;

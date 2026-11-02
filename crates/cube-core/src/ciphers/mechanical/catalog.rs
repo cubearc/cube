@@ -134,7 +134,7 @@ const TEXT: &[c::Port] = &[c::Port {
 }];
 #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
-struct NoParameters {}
+pub(super) struct NoParameters {}
 const fn inputs(settings_schema: fn() -> schemars::Schema) -> [c::Port; 2] {
     [
         c::Port {

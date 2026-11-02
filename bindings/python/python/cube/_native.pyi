@@ -2151,3 +2151,27 @@ def family_suggest(
 ) -> dict[str, object]:
     """Evidence and alternatives under the explicit ASCII classical profile."""
     ...
+
+def wheatstone_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Source-qualified Wheatstone encode; text, final alignment and optional trace."""
+    ...
+
+def wheatstone_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Source-qualified Wheatstone decode; text, final alignment and optional trace."""
+    ...
+
+def kryha_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Source-qualified Kryha encode; text, final alignment and optional trace."""
+    ...
+
+def kryha_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Source-qualified Kryha decode; text, final alignment and optional trace."""
+    ...
+
+def alberti_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Source-qualified Alberti encode; text, final alignment and optional trace."""
+    ...
+
+def alberti_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Source-qualified Alberti decode; text, final alignment and optional trace."""
+    ...

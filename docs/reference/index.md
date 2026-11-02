@@ -14,6 +14,7 @@ remain in each operation's reference.
 - [Position-aware transformations](topics/position-aware-transformations.md)
 - [Classical ciphers](topics/classical-ciphers.md)
 - [Disks and strips](topics/disks-and-strips.md)
+- [Clock and shifting disks](topics/stateful-disks.md)
 - [Raw AES blocks](topics/aes-blocks.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)

@@ -2,7 +2,7 @@
 use crate::Input;
 use clap::{Args, Subcommand};
 use cube_core::{
-    ciphers::mechanical::{self, disks},
+    ciphers::mechanical::{self, alberti, disks, kryha, wheatstone},
     errors::{ErrorCode, OperationError},
 };
 use std::{error::Error, io::Read, path::PathBuf};
@@ -19,13 +19,13 @@ pub(crate) struct Parameters {
     #[arg(long)]
     parameters: PathBuf,
 }
-type Transform<P> = fn(&str, &P) -> Result<disks::Report, OperationError>;
-fn run<P: serde::de::DeserializeOwned>(
+type Transform<P, R> = fn(&str, &P) -> Result<R, OperationError>;
+fn run<P: serde::de::DeserializeOwned, R: serde::Serialize>(
     command: Command,
     encode_id: &'static str,
     decode_id: &'static str,
-    encode: Transform<P>,
-    decipher: Transform<P>,
+    encode: Transform<P, R>,
+    decipher: Transform<P, R>,
 ) -> Result<String, Box<dyn Error>> {
     let (args, decode) = match command {
         Command::Encode(p) => (p, false),
@@ -74,5 +74,35 @@ pub(crate) fn m138a(command: Command) -> Result<String, Box<dyn Error>> {
         "cipher.m138a.decode",
         disks::m138a_encode,
         disks::m138a_decode,
+    )
+}
+
+pub(crate) fn wheatstone(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.wheatstone.encode",
+        "cipher.wheatstone.decode",
+        wheatstone::encode,
+        wheatstone::decode,
+    )
+}
+
+pub(crate) fn kryha(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.kryha.encode",
+        "cipher.kryha.decode",
+        kryha::encode,
+        kryha::decode,
+    )
+}
+
+pub(crate) fn alberti(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.alberti.encode",
+        "cipher.alberti.decode",
+        alberti::encode,
+        alberti::decode,
     )
 }

@@ -21217,6 +21217,496 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.alberti.decode",
+      "category": "ciphers",
+      "description": "Alberti digit-feedback profile from Di Palma 2009 museum reconstruction, exact 24-cell rings and explicit starting index.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "initial_index": {
+                "description": "Inner letter placed under fixed A; the publication's example uses c.",
+                "type": "string",
+                "pattern": "^[c&bmdgpfznxyutoskerlhaiq]$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "initial_index"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "alberti_di_palma_2009_v1"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "index"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_index",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1,
+            "minLength": 1,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "index"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "index"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.alberti.encode",
+      "category": "ciphers",
+      "description": "Alberti digit-feedback profile from Di Palma 2009 museum reconstruction, exact 24-cell rings and explicit starting index.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "initial_index": {
+                "description": "Inner letter placed under fixed A; the publication's example uses c.",
+                "type": "string",
+                "pattern": "^[c&bmdgpfznxyutoskerlhaiq]$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "initial_index"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "alberti_di_palma_2009_v1"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "index"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_index",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1,
+            "minLength": 1,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "index"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "index": {
+                    "type": "string",
+                    "maxLength": 1,
+                    "minLength": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "index"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.amsco.decode",
       "category": "ciphers",
       "description": "Amsco: explicit bounded decode; see typed profile guide for conventions.",
@@ -34268,6 +34758,636 @@
       "policy": {
         "private_input": false,
         "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.kryha.decode",
+      "category": "ciphers",
+      "description": "Kryha 17-sector source-specific profile from Callimahos 1973 Q.E.D., effective displacement table on pp. 20–21.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cipher_alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "plain_alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "plain_alphabet",
+              "cipher_alphabet",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "kryha_callimahos_1973_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "selector": {
+                    "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 17,
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotation",
+                  "selector"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "selector": {
+                    "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 17,
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotation",
+                  "selector"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "rotation": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 0
+              },
+              "selector": {
+                "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 17,
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "rotation",
+              "selector"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "selector": {
+                    "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 17,
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotation",
+                  "selector"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.kryha.encode",
+      "category": "ciphers",
+      "description": "Kryha 17-sector source-specific profile from Callimahos 1973 Q.E.D., effective displacement table on pp. 20–21.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cipher_alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "plain_alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "plain_alphabet",
+              "cipher_alphabet",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "kryha_callimahos_1973_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "selector": {
+                    "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 17,
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotation",
+                  "selector"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "selector": {
+                    "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 17,
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotation",
+                  "selector"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "rotation": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 0
+              },
+              "selector": {
+                "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 17,
+                "minimum": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "rotation",
+              "selector"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotation": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "selector": {
+                    "description": "Numbered sector 1..17 used for the next post-letter advance.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 17,
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotation",
+                  "selector"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
         "sensitive_parameters": [],
         "automatic_capture": false,
         "grants_filesystem_access": false,
@@ -55024,6 +56144,626 @@
       "policy": {
         "private_input": false,
         "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.wheatstone.decode",
+      "category": "ciphers",
+      "description": "Wheatstone 1879 original 27/26-cell clock cryptograph, with exact prepared text and explicit initial pointers.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cipher_alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "cipher_alphabet",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "wheatstone_1879_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_position": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "plain_position": {
+                    "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 26,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plain_position",
+                  "cipher_position"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_position": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "plain_position": {
+                    "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 26,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plain_position",
+                  "cipher_position"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "cipher_position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 0
+              },
+              "plain_position": {
+                "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 26,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "plain_position",
+              "cipher_position"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_position": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "plain_position": {
+                    "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 26,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plain_position",
+                  "cipher_position"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.wheatstone.encode",
+      "category": "ciphers",
+      "description": "Wheatstone 1879 original 27/26-cell clock cryptograph, with exact prepared text and explicit initial pointers.",
+      "example": "cube cipher --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "cipher_alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "cipher_alphabet",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "wheatstone_1879_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_position": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "plain_position": {
+                    "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 26,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plain_position",
+                  "cipher_position"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_position": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "plain_position": {
+                    "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 26,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plain_position",
+                  "cipher_position"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "cipher_position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 25,
+                "minimum": 0
+              },
+              "plain_position": {
+                "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 26,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "plain_position",
+              "cipher_position"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "cipher_position": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 25,
+                    "minimum": 0
+                  },
+                  "plain_position": {
+                    "description": "0 is the word separator +; 1..26 are A..Z on the fixed outer ring.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 26,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "plain_position",
+                  "cipher_position"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 65536,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
         "sensitive_parameters": [],
         "automatic_capture": false,
         "grants_filesystem_access": false,

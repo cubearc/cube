@@ -18,7 +18,7 @@ pub(super) fn supports(op: &str) -> bool {
         .chain(mono::historical::OPERATIONS)
         .any(|d| d.id == op)
         || op == "cipher.enigma"
-        || mechanical::OPERATIONS.iter().any(|d| d.id == op)
+        || mechanical::supports(op)
 }
 pub(super) fn execute(
     op: &str,
@@ -27,7 +27,7 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
-    if mechanical::OPERATIONS.iter().any(|d| d.id == op) {
+    if mechanical::supports(op) {
         return mechanical::execute(op, &i, &p);
     }
     if mono::historical::OPERATIONS.iter().any(|d| d.id == op) {

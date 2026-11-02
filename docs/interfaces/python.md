@@ -172,6 +172,13 @@ replace `parameters["windows"]` with the preceding `final_windows`; keep all
 other settings. Reset to the original windows for reciprocal decoding. See
 [Enigma settings and limits](../reference/topics/enigma.md).
 
+`cube.wheatstone_encode`, `cube.kryha_encode` and `cube.alberti_encode`
+(and their `_decode` counterparts) accept text and a settings dictionary. Their
+reports contain `text`, `trace` and a continuation state. Use the returned
+`final_state` as the next settings' `initial_state`; Alberti instead uses
+`final_index` and `initial_index`. See [clock and shifting disks](../reference/topics/stateful-disks.md)
+for exact profiles, prepared alphabets and limits.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

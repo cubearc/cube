@@ -32,7 +32,7 @@ fn m94_cli_uses_explicit_rows_and_bounded_typed_settings() {
 }
 
 #[test]
-fn every_disk_and_strip_fixture_executes_through_the_real_cli() {
+fn every_mechanical_fixture_executes_through_the_real_cli() {
     let fixtures: Vec<Value> = serde_json::from_str(include_str!(
         "../../cube-core/src/operations/contracts/conformance.json"
     ))
@@ -44,7 +44,17 @@ fn every_disk_and_strip_fixture_executes_through_the_real_cli() {
     for row in fixtures {
         let op = row["operation"].as_str().unwrap();
         let parts = op.split('.').collect::<Vec<_>>();
-        if parts.len() != 3 || !["m94", "jefferson", "m138a"].contains(&parts[1]) {
+        if parts.len() != 3
+            || ![
+                "m94",
+                "jefferson",
+                "m138a",
+                "wheatstone",
+                "kryha",
+                "alberti",
+            ]
+            .contains(&parts[1])
+        {
             continue;
         }
         std::fs::write(&path, row["inputs"]["settings"].to_string()).unwrap();
@@ -66,6 +76,6 @@ fn every_disk_and_strip_fixture_executes_through_the_real_cli() {
         );
         tested += 1;
     }
-    assert_eq!(tested, 6);
+    assert_eq!(tested, 12);
     std::fs::remove_dir_all(dir).unwrap();
 }

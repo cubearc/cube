@@ -3242,6 +3242,82 @@ Example:
 cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 ```
 
+## cipher.alberti.decode
+
+Alberti digit-feedback profile from Di Palma 2009 museum reconstruction, exact 24-cell rings and explicit starting index.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_index` | `text` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.alberti.encode
+
+Alberti digit-feedback profile from Di Palma 2009 museum reconstruction, exact 24-cell rings and explicit starting index.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_index` | `text` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
 ## cipher.amsco.decode
 
 Amsco: explicit bounded decode; see typed profile guide for conventions.
@@ -9307,6 +9383,82 @@ Example:
 
 ```sh
 cube cipher key-phrase --help
+```
+
+## cipher.kryha.decode
+
+Kryha 17-sector source-specific profile from Callimahos 1973 Q.E.D., effective displacement table on pp. 20–21.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.kryha.encode
+
+Kryha 17-sector source-specific profile from Callimahos 1973 Q.E.D., effective displacement table on pp. 20–21.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
 ```
 
 ## cipher.m138a.decode
@@ -19188,6 +19340,82 @@ Parameters:
     "multiplier"
   ],
   "x-cube-max-serialized-bytes": 2097152
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.wheatstone.decode
+
+Wheatstone 1879 original 27/26-cell clock cryptograph, with exact prepared text and explicit initial pointers.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher --help
+```
+
+## cipher.wheatstone.encode
+
+Wheatstone 1879 original 27/26-cell clock cryptograph, with exact prepared text and explicit initial pointers.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
 }
 ```
 

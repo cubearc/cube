@@ -101,3 +101,51 @@ def test_configured_wheel_and_strip_native_known_answers():
     p["strips"] = p["strips"][:99]
     with pytest.raises(ValueError):
         cube.m138a_encode("A" * 31, p)
+
+
+@pytest.mark.parametrize(
+    ("name", "plain", "cipher", "parameters"),
+    [
+        (
+            "wheatstone",
+            "THE+QUARTER+",
+            "PZLSPQREQAJD",
+            {
+                "profile": "wheatstone_1879_v1",
+                "cipher_alphabet": "FBKSYRDLTZAGMUNHOVCIPWEJQX",
+                "initial_state": {"plain_position": 0, "cipher_position": 0},
+            },
+        ),
+        (
+            "kryha",
+            "A" * 17,
+            "HIJSZUGPHLNTYLJQX",
+            {
+                "profile": "kryha_callimahos_1973_v1",
+                "plain_alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "cipher_alphabet": "HYDRAULICBEFGJKMNOPQSTVWXZ",
+                "initial_state": {"rotation": 0, "selector": 1},
+            },
+        ),
+        (
+            "alberti",
+            "ALE4ISA1BEAVTI3FVL2CITI",
+            "czdqpoqlhqluybeix&okapa",
+            {"profile": "alberti_di_palma_2009_v1", "initial_index": "c"},
+        ),
+    ],
+)
+def test_stateful_native_profiles(name, plain, cipher, parameters):
+    encode = getattr(cube, name + "_encode")
+    decode = getattr(cube, name + "_decode")
+    report = encode(plain, parameters)
+    assert report["text"] == cipher
+    assert decode(cipher, parameters)["text"] == plain
+    assert report["trace"] == []
+    traced = encode(plain, {**parameters, "trace": True})
+    assert len(traced["trace"]) == len(plain)
+    assert traced["trace"][-1]["offset"] == len(plain) - 1
+    with pytest.raises(ValueError) as caught:
+        encode("秘密", parameters)
+    assert caught.value.code == "invalid_input"
+    assert "秘密" not in str(caught.value)

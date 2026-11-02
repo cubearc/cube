@@ -125,3 +125,11 @@ void evidenceRule;
 cube.execute({operation:'analysis.substitution.solve',version:1,inputs:{request:{alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',ciphertext:'ABBA',outside:'preserve'}}});
 // @ts-expect-error Family guesses use finite reviewed rules, not arbitrary labels.
 cube.execute({operation:'analysis.family.suggest',version:1,inputs:{request:{profile:'ascii_classical_evidence_v1',text:'ABC',rules:['detect_aes']}}});
+
+const wheatstoneReport=cube.execute({operation:'cipher.wheatstone.encode',version:1,inputs:{text:'THE+QUARTER+',settings:{profile:'wheatstone_1879_v1',cipher_alphabet:'FBKSYRDLTZAGMUNHOVCIPWEJQX',initial_state:{plain_position:0,cipher_position:0},trace:true}}});
+const wheatstonePosition:number=wheatstoneReport.final_state.plain_position;
+const kryhaPosition:number=cube.execute({operation:'cipher.kryha.decode',version:1,inputs:{text:'H',settings:{profile:'kryha_callimahos_1973_v1',plain_alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',cipher_alphabet:'HYDRAULICBEFGJKMNOPQSTVWXZ',initial_state:{rotation:0,selector:1}}}}).final_state.selector;
+const albertiIndex:string=cube.execute({operation:'cipher.alberti.encode',version:1,inputs:{text:'A4',settings:{profile:'alberti_di_palma_2009_v1',initial_index:'c'}}}).final_index;
+void wheatstonePosition;void kryhaPosition;void albertiIndex;
+// @ts-expect-error The source-specific Kryha profile requires an explicit selector.
+cube.execute({operation:'cipher.kryha.encode',version:1,inputs:{text:'A',settings:{profile:'kryha_callimahos_1973_v1',plain_alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',cipher_alphabet:'ABCDEFGHIJKLMNOPQRSTUVWXYZ',initial_state:{rotation:0}}}});

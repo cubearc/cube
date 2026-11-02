@@ -1,6 +1,6 @@
 //! Native transport over Core-owned mechanical cipher implementations.
 use cube_core::ciphers::mechanical::{
-    self, alberti, disks, hagelin, kryha, lorenz, t52ab, wheatstone,
+    self, alberti, disks, hagelin, kryha, lorenz, nema, t52ab, wheatstone,
 };
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
@@ -239,7 +239,17 @@ fn t52ab_decode(
 ) -> PyResult<Py<PyAny>> {
     codes_transform(py, codes, parameters, "cipher.t52ab.decode", t52ab::decode)
 }
+#[pyfunction]
+fn nema_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.nema.encode", nema::encode)
+}
+#[pyfunction]
+fn nema_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.nema.decode", nema::decode)
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(nema_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(nema_decode, module)?)?;
     module.add_function(wrap_pyfunction!(t52ab_encode, module)?)?;
     module.add_function(wrap_pyfunction!(t52ab_decode, module)?)?;
     module.add_function(wrap_pyfunction!(hagelin_encode, module)?)?;

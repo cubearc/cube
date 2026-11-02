@@ -483,6 +483,11 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Swiss NEMA Model45 operational/training wheels and lower-row windows
+    Nema {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// Siemens T52a/b five-bit XOR and pluggable switch network
     T52ab {
         #[command(subcommand)]
@@ -1047,6 +1052,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Wheatstone { command } => mechanicalcmd::wheatstone(command)?,
                 Cipher::Kryha { command } => mechanicalcmd::kryha(command)?,
                 Cipher::Alberti { command } => mechanicalcmd::alberti(command)?,
+                Cipher::Nema { command } => mechanicalcmd::nema(command)?,
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,

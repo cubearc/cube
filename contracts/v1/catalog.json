@@ -40569,6 +40569,684 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.nema.decode",
+      "category": "ciphers",
+      "description": "Swiss NEMA Model45 operational/training profiles with measured A-F contact wiring, moving reflector, distinct drive/red-notch sets, fixed Army blocking arms and explicit lower-row window state.",
+      "example": "cube cipher nema --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "drive_wheels": {
+                "description": "Complete distinct paired drive-wheel identities, left to right.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 4,
+                "minItems": 4
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "rotors": {
+                "description": "Complete distinct contact-wheel identities, left to right.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 4,
+                "minItems": 4
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "rotors",
+              "drive_wheels",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "nema_model45_operational_v1",
+                  "nema_model45_training_v1"
+                ]
+              },
+              "Rotor": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E",
+                  "F"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "windows": {
+                "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                "type": "string",
+                "pattern": "^[A-Z]{10}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "windows"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.nema.encode",
+      "category": "ciphers",
+      "description": "Swiss NEMA Model45 operational/training profiles with measured A-F contact wiring, moving reflector, distinct drive/red-notch sets, fixed Army blocking arms and explicit lower-row window state.",
+      "example": "cube cipher nema --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "drive_wheels": {
+                "description": "Complete distinct paired drive-wheel identities, left to right.",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "maximum": 255,
+                  "minimum": 0
+                },
+                "maxItems": 4,
+                "minItems": 4
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "rotors": {
+                "description": "Complete distinct contact-wheel identities, left to right.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Rotor"
+                },
+                "maxItems": 4,
+                "minItems": 4
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "rotors",
+              "drive_wheels",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "nema_model45_operational_v1",
+                  "nema_model45_training_v1"
+                ]
+              },
+              "Rotor": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E",
+                  "F"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "windows": {
+                "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                "type": "string",
+                "pattern": "^[A-Z]{10}$"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "windows"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "windows": {
+                    "description": "Ten lower-row window letters, physically left to right: UKW through red.",
+                    "type": "string",
+                    "pattern": "^[A-Z]{10}$"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "windows"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.nicodemus.decode",
       "category": "ciphers",
       "description": "Vigenere columns emitted by stable key order in explicit depth blocks, retaining incomplete column lengths.",

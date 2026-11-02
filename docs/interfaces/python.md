@@ -202,6 +202,14 @@ switch network. Codes are unpacked integers 0–31. Results include `codes`,
 See [Siemens T52a/b streams](../reference/topics/t52ab.md) for contact phase,
 configuration and host limits.
 
+## Swiss NEMA Model45
+
+`cube.nema_encode(text, settings)` and `cube.nema_decode(text, settings)` use
+explicit operational/training wheel selections and ten physical lower-row
+windows. Results include `text`, `final_state.windows` and optional trace.
+See [Swiss NEMA Model45](../reference/topics/nema.md) for the complete source
+example, timing, window convention and chunk continuation.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

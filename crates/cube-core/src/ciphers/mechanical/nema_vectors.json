@@ -1,0 +1,56 @@
+{
+  "source": "Sullivan simulator reference retained in rmsk2/nema_test.cpp,blob7c2e9037f90333e6bb106528a63217d0e5d95c60; source letters uppercased for prepared A-Z. Sullivan/Weierud1999 Figure7 supplies all26 stepping states. Contact wiring B uses the independently measured J->O, correcting the duplicated17 in Figure3.",
+  "settings": {
+    "profile": "nema_model45_operational_v1",
+    "rotors": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "drive_wheels": [
+      12,
+      13,
+      14,
+      15
+    ],
+    "initial_state": {
+      "windows": "MQQPZQSOEV"
+    },
+    "trace": true
+  },
+  "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "expected": "HRSBVOOTZUCRWLMGRMGVWYWOVNF",
+  "expected_final_state": {
+    "windows": "QPMKHPPJPU"
+  },
+  "step_windows": [
+    "AAAAAAAAAA",
+    "ZZAAZZAAZZ",
+    "YYAAYYAAYY",
+    "YXAAXXAAYX",
+    "YWAAWWAAXW",
+    "YVAAVVAAWV",
+    "XUAAUUAAWU",
+    "WTAATTAAVT",
+    "VSAASSAAVS",
+    "URZZSRZZVR",
+    "TQZZRQZZUQ",
+    "SPZZQPZZTP",
+    "ROZZPOZZTO",
+    "QNZZONZZSN",
+    "PMZZOMZZSM",
+    "OLZZNLZZSL",
+    "NKZZNKZZRK",
+    "NJYYNJYYQJ",
+    "MIYYMIYYQI",
+    "LHYXMHXXQH",
+    "KGXWLGXWPG",
+    "JFXWLFXWOF",
+    "IEXWKEXWNE",
+    "HDXWKDXWND",
+    "HCXWKCXWNC",
+    "GBXWJBXWMB",
+    "FAWVJAWVLA"
+  ]
+}

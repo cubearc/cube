@@ -17206,5 +17206,401 @@
       ]
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "1f25585a125cb82cc970fb15249dcafb2bf1bc99fca80bcc97181ff270044bca",
+    "inputs": {
+      "settings": {
+        "drive_wheels": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "initial_state": {
+          "windows": "MQQPZQSOEV"
+        },
+        "profile": "nema_model45_operational_v1",
+        "rotors": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "trace": true
+      },
+      "text": "HRSBVOOTZUCRWLMGRMGVWYWOVNF"
+    },
+    "operation": "cipher.nema.decode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "windows": "QPMKHPPJPU"
+      },
+      "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "windows": "LPQPYPSOEU"
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "windows": "KOQPXOSODT"
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "windows": "JNQPWNSODS"
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "windows": "IMPOWMRNDR"
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "windows": "HLPOVLRNCQ"
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "windows": "GKPOVKRNBP"
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "windows": "GJPOVJRNBO"
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "windows": "FIPOUIRNAN"
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "windows": "EHPOUHRNAM"
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "windows": "DGPOTGRNAL"
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "windows": "CFPOTFRNZK"
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "windows": "BEONSEQMYJ"
+          }
+        },
+        {
+          "offset": 12,
+          "state": {
+            "windows": "ADONSDQMYI"
+          }
+        },
+        {
+          "offset": 13,
+          "state": {
+            "windows": "ACNMSCQLYH"
+          }
+        },
+        {
+          "offset": 14,
+          "state": {
+            "windows": "ZBNLRBQKXG"
+          }
+        },
+        {
+          "offset": 15,
+          "state": {
+            "windows": "YANLRAQKWF"
+          }
+        },
+        {
+          "offset": 16,
+          "state": {
+            "windows": "XZNLQZQKVE"
+          }
+        },
+        {
+          "offset": 17,
+          "state": {
+            "windows": "WYNLPYQKVD"
+          }
+        },
+        {
+          "offset": 18,
+          "state": {
+            "windows": "WXNLOXQKVC"
+          }
+        },
+        {
+          "offset": 19,
+          "state": {
+            "windows": "WWNLNWQKUB"
+          }
+        },
+        {
+          "offset": 20,
+          "state": {
+            "windows": "WVMKMVPJTA"
+          }
+        },
+        {
+          "offset": 21,
+          "state": {
+            "windows": "VUMKLUPJSZ"
+          }
+        },
+        {
+          "offset": 22,
+          "state": {
+            "windows": "UTMKKTPJRY"
+          }
+        },
+        {
+          "offset": 23,
+          "state": {
+            "windows": "TSMKJSPJRX"
+          }
+        },
+        {
+          "offset": 24,
+          "state": {
+            "windows": "SRMKJRPJQW"
+          }
+        },
+        {
+          "offset": 25,
+          "state": {
+            "windows": "RQMKIQPJPV"
+          }
+        },
+        {
+          "offset": 26,
+          "state": {
+            "windows": "QPMKHPPJPU"
+          }
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "c44f3b1bf3643a79465da8adf24b92fd10f3a0232de6630af0926dd374da6035",
+    "inputs": {
+      "settings": {
+        "drive_wheels": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "initial_state": {
+          "windows": "MQQPZQSOEV"
+        },
+        "profile": "nema_model45_operational_v1",
+        "rotors": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "trace": true
+      },
+      "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "operation": "cipher.nema.encode",
+    "operation_version": 1,
+    "outputs": {
+      "final_state": {
+        "windows": "QPMKHPPJPU"
+      },
+      "text": "HRSBVOOTZUCRWLMGRMGVWYWOVNF",
+      "trace": [
+        {
+          "offset": 0,
+          "state": {
+            "windows": "LPQPYPSOEU"
+          }
+        },
+        {
+          "offset": 1,
+          "state": {
+            "windows": "KOQPXOSODT"
+          }
+        },
+        {
+          "offset": 2,
+          "state": {
+            "windows": "JNQPWNSODS"
+          }
+        },
+        {
+          "offset": 3,
+          "state": {
+            "windows": "IMPOWMRNDR"
+          }
+        },
+        {
+          "offset": 4,
+          "state": {
+            "windows": "HLPOVLRNCQ"
+          }
+        },
+        {
+          "offset": 5,
+          "state": {
+            "windows": "GKPOVKRNBP"
+          }
+        },
+        {
+          "offset": 6,
+          "state": {
+            "windows": "GJPOVJRNBO"
+          }
+        },
+        {
+          "offset": 7,
+          "state": {
+            "windows": "FIPOUIRNAN"
+          }
+        },
+        {
+          "offset": 8,
+          "state": {
+            "windows": "EHPOUHRNAM"
+          }
+        },
+        {
+          "offset": 9,
+          "state": {
+            "windows": "DGPOTGRNAL"
+          }
+        },
+        {
+          "offset": 10,
+          "state": {
+            "windows": "CFPOTFRNZK"
+          }
+        },
+        {
+          "offset": 11,
+          "state": {
+            "windows": "BEONSEQMYJ"
+          }
+        },
+        {
+          "offset": 12,
+          "state": {
+            "windows": "ADONSDQMYI"
+          }
+        },
+        {
+          "offset": 13,
+          "state": {
+            "windows": "ACNMSCQLYH"
+          }
+        },
+        {
+          "offset": 14,
+          "state": {
+            "windows": "ZBNLRBQKXG"
+          }
+        },
+        {
+          "offset": 15,
+          "state": {
+            "windows": "YANLRAQKWF"
+          }
+        },
+        {
+          "offset": 16,
+          "state": {
+            "windows": "XZNLQZQKVE"
+          }
+        },
+        {
+          "offset": 17,
+          "state": {
+            "windows": "WYNLPYQKVD"
+          }
+        },
+        {
+          "offset": 18,
+          "state": {
+            "windows": "WXNLOXQKVC"
+          }
+        },
+        {
+          "offset": 19,
+          "state": {
+            "windows": "WWNLNWQKUB"
+          }
+        },
+        {
+          "offset": 20,
+          "state": {
+            "windows": "WVMKMVPJTA"
+          }
+        },
+        {
+          "offset": 21,
+          "state": {
+            "windows": "VUMKLUPJSZ"
+          }
+        },
+        {
+          "offset": 22,
+          "state": {
+            "windows": "UTMKKTPJRY"
+          }
+        },
+        {
+          "offset": 23,
+          "state": {
+            "windows": "TSMKJSPJRX"
+          }
+        },
+        {
+          "offset": 24,
+          "state": {
+            "windows": "SRMKJRPJQW"
+          }
+        },
+        {
+          "offset": 25,
+          "state": {
+            "windows": "RQMKIQPJPV"
+          }
+        },
+        {
+          "offset": 26,
+          "state": {
+            "windows": "QPMKHPPJPU"
+          }
+        }
+      ]
+    },
+    "parameters": {}
   }
 ]

@@ -152,3 +152,9 @@ const t52ab=cube.execute({operation:'cipher.t52ab.encode',version:1,inputs:{code
 const t52abCodes:readonly number[]=t52ab.codes;
 const t52abState:readonly number[]=t52ab.final_state;
 void t52abCodes;void t52abState;
+
+const nemaSettings={profile:'nema_model45_operational_v1' as const,rotors:['A','B','C','D'] as const,drive_wheels:[12,13,14,15] as const,initial_state:{windows:'MQQPZQSOEV'}};
+const nema=cube.execute({operation:'cipher.nema.encode',version:1,inputs:{text:'A'.repeat(27),settings:nemaSettings}});
+const nemaText:string=nema.text;
+const nemaWindows:string=nema.final_state.windows;
+void nemaText;void nemaWindows;

@@ -68,6 +68,8 @@ SDK_BINDINGS = {
     "cipher.alberti.decode": "alberti_decode",
     "cipher.hagelin.encode": "hagelin_encode",
     "cipher.hagelin.decode": "hagelin_decode",
+    "cipher.nema.encode": "nema_encode",
+    "cipher.nema.decode": "nema_decode",
     "cipher.t52ab.encode": "t52ab_encode",
     "cipher.t52ab.decode": "t52ab_decode",
     "cipher.lorenz.encode": "lorenz_encode",

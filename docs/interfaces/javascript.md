@@ -55,7 +55,7 @@ with each declared Node.js runtime. The package carries the unchanged project
 license and third-party notices alongside its Wasm assets.
 
 The packaged `examples/mechanical.mjs` executes M-94, Wheatstone, Kryha,
-Alberti, Lorenz, Hagelin and Siemens T52a/b known answers through `cube.execute`. These calls use typed `text` and
+Alberti, Lorenz, Hagelin, Siemens T52a/b and NEMA known answers through `cube.execute`. These calls use typed `text` and
 `settings` inputs and reuse Core algorithms. See [clock and shifting disks](../reference/topics/stateful-disks.md)
 for continuation state and [disks and strips](../reference/topics/disks-and-strips.md)
 for explicit row selection.
@@ -257,3 +257,5 @@ runtime and test identities rather than inferring delivery from this guide.
 See [Hagelin pin-and-lug profiles](../reference/topics/hagelin.md) for executable C-36/C-38/M-209/C-52/CX-52 settings, logical contacts and continuation.
 
 [Siemens T52a/b streams](../reference/topics/t52ab.md) use named `codes` and `settings` inputs, explicit cam/plug facts and state continuation.
+
+[Swiss NEMA Model45](../reference/topics/nema.md) uses named `text` and `settings` inputs with explicit operational/training wheel choices and physical lower-row windows.

@@ -2199,3 +2199,11 @@ def t52ab_encode(codes: list[int], parameters: dict[str, object]) -> dict[str, o
 def t52ab_decode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
     """Inverse-permute then XOR with the original explicit cam/plug settings."""
     ...
+
+def nema_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Encipher with Model45 operational/training wheels and lower-row windows."""
+    ...
+
+def nema_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Reciprocal NEMA deciphering with original explicit wheel/window settings."""
+    ...

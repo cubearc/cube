@@ -10545,6 +10545,82 @@ Example:
 cube cipher --help
 ```
 
+## cipher.nema.decode
+
+Swiss NEMA Model45 operational/training profiles with measured A-F contact wiring, moving reflector, distinct drive/red-notch sets, fixed Army blocking arms and explicit lower-row window state.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher nema --help
+```
+
+## cipher.nema.encode
+
+Swiss NEMA Model45 operational/training profiles with measured A-F contact wiring, moving reflector, distinct drive/red-notch sets, fixed Army blocking arms and explicit lower-row window state.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher nema --help
+```
+
 ## cipher.nicodemus.decode
 
 Vigenere columns emitted by stable key order in explicit depth blocks, retaining incomplete column lengths.

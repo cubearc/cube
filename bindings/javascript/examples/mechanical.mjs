@@ -32,3 +32,8 @@ const t52abSettings={profile:'siemens_t52ab_configured_v1',wheel_set_id:'synthet
 const t52ab=cube.execute({operation:'cipher.t52ab.encode',version:1,inputs:{codes:[0,31,5],settings:t52abSettings}});
 assert.deepEqual(t52ab.codes,[31,0,26]);
 assert.deepEqual(t52ab.final_state,Array(10).fill(3));
+
+const nemaSettings={profile:'nema_model45_operational_v1',rotors:['A','B','C','D'],drive_wheels:[12,13,14,15],initial_state:{windows:'MQQPZQSOEV'}};
+const nema=cube.execute({operation:'cipher.nema.encode',version:1,inputs:{text:'A'.repeat(27),settings:nemaSettings}});
+assert.equal(nema.text,'HRSBVOOTZUCRWLMGRMGVWYWOVNF');
+assert.equal(nema.final_state.windows,'QPMKHPPJPU');

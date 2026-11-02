@@ -8,6 +8,9 @@ mod hagelin_catalog;
 pub mod kryha;
 pub mod lorenz;
 mod lorenz_catalog;
+pub mod nema;
+mod nema_catalog;
+mod nema_data;
 mod stateful_catalog;
 pub mod t52ab;
 mod t52ab_catalog;
@@ -19,6 +22,8 @@ pub(crate) use hagelin_catalog::MODULE as HAGELIN_MODULE;
 pub use hagelin_catalog::OPERATIONS as HAGELIN_OPERATIONS;
 pub(crate) use lorenz_catalog::MODULE as LORENZ_MODULE;
 pub use lorenz_catalog::OPERATIONS as LORENZ_OPERATIONS;
+pub(crate) use nema_catalog::MODULE as NEMA_MODULE;
+pub use nema_catalog::OPERATIONS as NEMA_OPERATIONS;
 use serde::{Serialize, de::DeserializeOwned};
 pub(crate) use stateful_catalog::MODULE as STATEFUL_MODULE;
 pub use stateful_catalog::OPERATIONS as STATEFUL_OPERATIONS;
@@ -39,6 +44,7 @@ fn descriptor(operation: &str) -> Option<&'static crate::operations::Descriptor>
         .chain(LORENZ_OPERATIONS)
         .chain(HAGELIN_OPERATIONS)
         .chain(T52AB_OPERATIONS)
+        .chain(NEMA_OPERATIONS)
         .find(|d| d.id == operation)
 }
 pub(crate) fn execute(
@@ -46,6 +52,9 @@ pub(crate) fn execute(
     inputs: &serde_json::Value,
     parameters: &serde_json::Value,
 ) -> Result<serde_json::Value, OperationError> {
+    if NEMA_OPERATIONS.iter().any(|d| d.id == operation) {
+        return nema_catalog::execute(operation, inputs, parameters);
+    }
     if T52AB_OPERATIONS.iter().any(|d| d.id == operation) {
         return t52ab_catalog::execute(operation, inputs, parameters);
     }

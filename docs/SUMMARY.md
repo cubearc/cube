@@ -51,6 +51,7 @@
     - [Hagelin pin-and-lug profiles](reference/topics/hagelin.md)
     - [Lorenz five-bit streams](reference/topics/lorenz.md)
     - [Siemens T52a/b streams](reference/topics/t52ab.md)
+    - [Swiss NEMA Model45](reference/topics/nema.md)
     - [Raw AES blocks](reference/topics/aes-blocks.md)
     - [Raw stream ciphers](reference/topics/stream-ciphers.md)
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)

@@ -315,3 +315,25 @@ test('T52a/b uses the primary pluggable switch network and inverse-before-XOR th
  assert.throws(()=>execute('encode',Array(1048577).fill(0),settings),{code:'resource_limit'});
  assert.throws(()=>execute('encode',Array(65537).fill(0),{...settings,trace:true}),{code:'resource_limit'});
 });
+
+test('NEMA Model45 operational and training mechanisms retain physical windows in actual Wasm',async()=>{
+ const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/nema_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,text,settings)=>cube.execute({operation:`cipher.nema.${direction}`,version:1,inputs:{text,settings}});
+ const result=execute('encode',v.text,v.settings);
+ assert.equal(result.text,v.expected);assert.deepEqual(result.final_state,v.expected_final_state);
+ assert.equal(execute('decode',v.expected,v.settings).text,v.text);
+ const steps=execute('encode','A'.repeat(26),{...v.settings,initial_state:{windows:'AAAAAAAAAA'}});
+ assert.deepEqual(steps.trace.map(r=>r.state.windows),v.step_windows.slice(1));
+ const training={...v.settings,profile:'nema_model45_training_v1',drive_wheels:[16,19,20,21],trace:false};
+ const text='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+ assert.equal(execute('decode',execute('encode',text,training).text,training).text,text);
+ const first=execute('encode',text.slice(0,9),training);
+ const second=execute('encode',text.slice(9),{...training,initial_state:first.final_state});
+ assert.equal(first.text+second.text,execute('encode',text,training).text);
+ assert.deepEqual(execute('encode','',training).final_state,training.initial_state);
+ assert.throws(()=>execute('encode','A',{...training,rotors:['A','B','C','F']}),{code:'invalid_parameter'});
+ assert.throws(()=>execute('encode','PRIVATE_TEXT',training),{code:'invalid_input'});
+ assert.equal(execute('encode','A'.repeat(262144),training).text.length,262144);
+ assert.throws(()=>execute('encode','A'.repeat(1048577),training),{code:'resource_limit'});
+ assert.throws(()=>execute('encode','A'.repeat(65537),{...training,trace:true}),{code:'resource_limit'});
+});

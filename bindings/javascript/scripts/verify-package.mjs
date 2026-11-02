@@ -90,6 +90,17 @@ if(codes.join(',')!=='31,0'||state.some(n=>n!==2))throw new Error('Packaged type
 `);
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 't52ab.mts']);
   run(process.execPath, [join(directory, 'compiled-consumer/t52ab.mjs')]);
+  await writeFile(join(directory, 'nema.mts'), `
+import {createCube} from '@cubearc/cube';
+const cube=await createCube();
+const settings={profile:'nema_model45_operational_v1' as const,rotors:['A','B','C','D'] as const,drive_wheels:[12,13,14,15] as const,initial_state:{windows:'MQQPZQSOEV'}};
+const result=cube.execute({operation:'cipher.nema.encode',version:1,inputs:{text:'A'.repeat(27),settings}});
+const text:string=result.text;
+const windows:string=result.final_state.windows;
+if(text!=='HRSBVOOTZUCRWLMGRMGVWYWOVNF'||windows!=='QPMKHPPJPU')throw new Error('Packaged typed NEMA result mismatch');
+`);
+  run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled-consumer', 'nema.mts']);
+  run(process.execPath, [join(directory, 'compiled-consumer/nema.mjs')]);
   const assets = join(directory, 'node_modules/@cubearc/cube');
   for (const file of ['dist/wasm/cube_wasm_bg.wasm', 'dist/LICENSE', 'dist/THIRD_PARTY_NOTICES', 'examples/static/index.html', 'examples/node.mjs', 'examples/node.mts']) await readFile(join(assets, file));
   const notices = await readFile(join(assets, 'dist/THIRD_PARTY_NOTICES'));

@@ -30135,6 +30135,788 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.fialka.decode",
+      "category": "ciphers",
+      "description": "Fialka M-125 6K PROTON I full thirty-contact electrical path, complete punched card, ten distinct rotors, explicit rings and post-symbol counter-rotating pin-controlled banks.",
+      "example": "cube cipher fialka --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Contact"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "punch_card": {
+                "description": "Complete permutation of thirty punched-card input contacts.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Contact"
+                },
+                "maxItems": 30,
+                "minItems": 30
+              },
+              "ring_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Contact"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "rotor_order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RotorId"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "rotor_order",
+              "ring_offsets",
+              "punch_card",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "fialka_m125_6k_proton_i_v1"
+                ]
+              },
+              "RotorId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 10,
+                "minimum": 1
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Contact"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "rotor_positions": {
+                "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Contact"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "rotor_positions"
+            ],
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4718592,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.fialka.encode",
+      "category": "ciphers",
+      "description": "Fialka M-125 6K PROTON I full thirty-contact electrical path, complete punched card, ten distinct rotors, explicit rings and post-symbol counter-rotating pin-controlled banks.",
+      "example": "cube cipher fialka --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Contact"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "punch_card": {
+                "description": "Complete permutation of thirty punched-card input contacts.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Contact"
+                },
+                "maxItems": 30,
+                "minItems": 30
+              },
+              "ring_offsets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Contact"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "rotor_order": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/RotorId"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "rotor_order",
+              "ring_offsets",
+              "punch_card",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "fialka_m125_6k_proton_i_v1"
+                ]
+              },
+              "RotorId": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 10,
+                "minimum": 1
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "codes",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Contact"
+            },
+            "maxItems": 1048576,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "rotor_positions": {
+                "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Contact"
+                },
+                "maxItems": 10,
+                "minItems": 10
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "rotor_positions"
+            ],
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Contact": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 29,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "rotor_positions": {
+                    "description": "Raw rotor offsets, physical left (reflector) to right (entry disk).",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Contact"
+                    },
+                    "maxItems": 10,
+                    "minItems": 10
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "rotor_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 4718592,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.four_square.decode",
       "category": "ciphers",
       "description": "I/J Four-square with fixed straight plaintext squares and explicit keyed top-right/bottom-left squares.",
@@ -48400,6 +49182,800 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.purple.decode",
+      "category": "ciphers",
+      "description": "PURPLE Type B with qualified twenty-five-position sixes and twenties switches, complete plugboard and physical switch state, latched post-symbol movement.",
+      "example": "cube cipher purple --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "advanced_switch": {
+                    "description": "Physical twenties switch 1, 2 or 3 which advanced after this symbol.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 3,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "advanced_switch"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "description": "Six input/output letters followed by the twenty remaining letters.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "fast_switch": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 3,
+                "minimum": 1
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "middle_switch": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 3,
+                "minimum": 1
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "alphabet",
+              "fast_switch",
+              "middle_switch",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "purple_type_b_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "advanced_switch": {
+                    "description": "Physical twenties switch 1, 2 or 3 which advanced after this symbol.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 3,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "advanced_switch"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "switch_positions": {
+                "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Position"
+                },
+                "maxItems": 4,
+                "minItems": 4
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "switch_positions"
+            ],
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "advanced_switch": {
+                    "description": "Physical twenties switch 1, 2 or 3 which advanced after this symbol.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 3,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "advanced_switch"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.purple.encode",
+      "category": "ciphers",
+      "description": "PURPLE Type B with qualified twenty-five-position sixes and twenties switches, complete plugboard and physical switch state, latched post-symbol movement.",
+      "example": "cube cipher purple --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "advanced_switch": {
+                    "description": "Physical twenties switch 1, 2 or 3 which advanced after this symbol.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 3,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "advanced_switch"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "description": "Six input/output letters followed by the twenty remaining letters.",
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "fast_switch": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 3,
+                "minimum": 1
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "middle_switch": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 3,
+                "minimum": 1
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "alphabet",
+              "fast_switch",
+              "middle_switch",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "purple_type_b_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "advanced_switch": {
+                    "description": "Physical twenties switch 1, 2 or 3 which advanced after this symbol.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 3,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "advanced_switch"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "switch_positions": {
+                "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Position"
+                },
+                "maxItems": 4,
+                "minItems": 4
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "switch_positions"
+            ],
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              }
+            }
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "Position": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 24,
+                "minimum": 0
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "switch_positions": {
+                    "description": "Zero-based sixes, twenties 1, twenties 2, twenties 3 positions.",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/Position"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "switch_positions"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "advanced_switch": {
+                    "description": "Physical twenties switch 1, 2 or 3 which advanced after this symbol.",
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 3,
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "advanced_switch"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.quagmire.decode",
       "category": "ciphers",
       "description": "Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated indicator key.",
@@ -49407,6 +50983,844 @@
       "policy": {
         "private_input": false,
         "private_output": false,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.red.decode",
+      "category": "ciphers",
+      "description": "RED Type A qualified Vigenere-wired sixes and twenties half-rotors, explicit 47-pin breakwheel, shared plugboard and direct or reverse motion.",
+      "example": "cube cipher red --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  },
+                  "steps": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 47,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "steps"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "direction": {
+                "$ref": "#/$defs/Direction"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "pins": {
+                "description": "Forty-seven physical pins in zero-based order; 1 present, 0 absent.",
+                "type": "string",
+                "pattern": "^[01]{47}$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "alphabet",
+              "pins",
+              "direction",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Direction": {
+                "type": "string",
+                "enum": [
+                  "direct",
+                  "reverse"
+                ]
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "red_type_a_vigenere_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  },
+                  "steps": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 47,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "steps"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "breakwheel": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 46,
+                "minimum": 0
+              },
+              "sixes": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 5,
+                "minimum": 0
+              },
+              "twenties": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 19,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "breakwheel",
+              "sixes",
+              "twenties"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  },
+                  "steps": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 47,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "steps"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.red.encode",
+      "category": "ciphers",
+      "description": "RED Type A qualified Vigenere-wired sixes and twenties half-rotors, explicit 47-pin breakwheel, shared plugboard and direct or reverse motion.",
+      "example": "cube cipher red --help",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  },
+                  "steps": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 47,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "steps"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "settings",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Settings",
+            "type": "object",
+            "properties": {
+              "alphabet": {
+                "type": "string",
+                "pattern": "^[A-Z]{26}$"
+              },
+              "direction": {
+                "$ref": "#/$defs/Direction"
+              },
+              "initial_state": {
+                "$ref": "#/$defs/State"
+              },
+              "pins": {
+                "description": "Forty-seven physical pins in zero-based order; 1 present, 0 absent.",
+                "type": "string",
+                "pattern": "^[01]{47}$"
+              },
+              "profile": {
+                "$ref": "#/$defs/Profile"
+              },
+              "trace": {
+                "type": "boolean",
+                "default": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "alphabet",
+              "pins",
+              "direction",
+              "initial_state"
+            ],
+            "x-cube-max-serialized-bytes": 524288,
+            "$defs": {
+              "Direction": {
+                "type": "string",
+                "enum": [
+                  "direct",
+                  "reverse"
+                ]
+              },
+              "Profile": {
+                "type": "string",
+                "enum": [
+                  "red_type_a_vigenere_v1"
+                ]
+              },
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "NoParameters",
+        "type": "object",
+        "additionalProperties": false
+      },
+      "outputs": [
+        {
+          "name": "text",
+          "semantic_type": "text",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 1048576,
+            "x-cube-max-utf8-bytes": 1048576,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  },
+                  "steps": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 47,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "steps"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "name": "final_state",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "State",
+            "type": "object",
+            "properties": {
+              "breakwheel": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 46,
+                "minimum": 0
+              },
+              "sixes": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 5,
+                "minimum": 0
+              },
+              "twenties": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 19,
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "breakwheel",
+              "sixes",
+              "twenties"
+            ]
+          }
+        },
+        {
+          "name": "trace",
+          "semantic_type": "json",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Trace"
+            },
+            "maxItems": 65536,
+            "$defs": {
+              "State": {
+                "type": "object",
+                "properties": {
+                  "breakwheel": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 46,
+                    "minimum": 0
+                  },
+                  "sixes": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 5,
+                    "minimum": 0
+                  },
+                  "twenties": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 19,
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "breakwheel",
+                  "sixes",
+                  "twenties"
+                ]
+              },
+              "Trace": {
+                "type": "object",
+                "properties": {
+                  "offset": {
+                    "type": "integer",
+                    "format": "uint32",
+                    "maximum": 1048575,
+                    "minimum": 0
+                  },
+                  "state": {
+                    "$ref": "#/$defs/State"
+                  },
+                  "steps": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 47,
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "offset",
+                  "state",
+                  "steps"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1572864,
+        "max_output_bytes": 4194304,
+        "max_items": 1048576,
+        "max_work": null,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
         "sensitive_parameters": [],
         "automatic_capture": false,
         "grants_filesystem_access": false,

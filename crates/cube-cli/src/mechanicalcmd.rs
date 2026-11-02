@@ -3,7 +3,8 @@ use crate::Input;
 use clap::{Args, Subcommand};
 use cube_core::{
     ciphers::mechanical::{
-        self, alberti, disks, hagelin, kl7, kryha, lorenz, nema, sigaba, t52ab, typex, wheatstone,
+        self, alberti, disks, fialka, hagelin, kl7, kryha, lorenz, nema, purple, red, sigaba,
+        t52ab, typex, wheatstone,
     },
     errors::{ErrorCode, OperationError},
 };
@@ -209,5 +210,35 @@ pub(crate) fn kl7(command: Command) -> Result<String, Box<dyn Error>> {
         "cipher.kl7.decode",
         kl7::encode,
         kl7::decode,
+    )
+}
+
+pub(crate) fn red(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.red.encode",
+        "cipher.red.decode",
+        red::encode,
+        red::decode,
+    )
+}
+
+pub(crate) fn purple(command: Command) -> Result<String, Box<dyn Error>> {
+    run(
+        command,
+        "cipher.purple.encode",
+        "cipher.purple.decode",
+        purple::encode,
+        purple::decode,
+    )
+}
+
+pub(crate) fn fialka(command: Command) -> Result<String, Box<dyn Error>> {
+    run_codes(
+        command,
+        "cipher.fialka.encode",
+        "cipher.fialka.decode",
+        fialka::encode,
+        fialka::decode,
     )
 }

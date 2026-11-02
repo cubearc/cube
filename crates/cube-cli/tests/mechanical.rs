@@ -58,6 +58,9 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
                 "typex",
                 "sigaba",
                 "kl7",
+                "fialka",
+                "red",
+                "purple",
                 "hagelin",
             ]
             .contains(&parts[1])
@@ -65,7 +68,7 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
             continue;
         }
         std::fs::write(&path, row["inputs"]["settings"].to_string()).unwrap();
-        let input = if matches!(parts[1], "lorenz" | "t52ab") {
+        let input = if row["inputs"].get("codes").is_some() {
             row["inputs"]["codes"].to_string()
         } else {
             row["inputs"]["text"].as_str().unwrap().to_owned()
@@ -88,6 +91,6 @@ fn every_mechanical_fixture_executes_through_the_real_cli() {
         );
         tested += 1;
     }
-    assert_eq!(tested, 26);
+    assert_eq!(tested, 32);
     std::fs::remove_dir_all(dir).unwrap();
 }

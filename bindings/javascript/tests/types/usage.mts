@@ -176,3 +176,15 @@ const kl7=cube.execute({operation:'cipher.kl7.encode',version:1,inputs:{text:"HA
 const kl7Text:string=kl7.text;
 const kl7State:readonly number[]=kl7.final_state.core_positions;
 void kl7Text;void kl7State;
+
+const fialkaSettings={"profile":"fialka_m125_6k_proton_i_v1","rotor_order":[1,2,3,4,5,6,7,8,9,10],"ring_offsets":[0,0,0,0,0,0,0,0,0,0],"punch_card":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29],"initial_state":{"rotor_positions":[0,1,2,3,4,5,6,7,8,9]},"trace":true} as const;
+const fialka=cube.execute({operation:'cipher.fialka.encode',version:1,inputs:{codes:[5, 18, 25, 5, 5, 18, 25, 5, 5, 18, 25, 5, 5, 18, 25, 5],settings:fialkaSettings}});
+const fialkaResult:readonly number[]=fialka.codes;const fialkaState:readonly number[]=fialka.final_state.rotor_positions;void fialkaResult;void fialkaState;
+
+const redSettings={"profile":"red_type_a_vigenere_v1","alphabet":"LZVEYKWIHQPSOXMRDGFBUNAJCT","pins":"11110111111111111110111111111101101111111111111","direction":"direct","initial_state":{"breakwheel":38,"sixes":0,"twenties":10},"trace":true} as const;
+const red=cube.execute({operation:'cipher.red.encode',version:1,inputs:{text:"JKTRYVLBZWDVJDOLVQDZ",settings:redSettings}});
+const redResult:string=red.text;const redState:number=red.final_state.breakwheel;void redResult;void redState;
+
+const purpleSettings={"profile":"purple_type_b_v1","alphabet":"NOKTYUXEQLHBRMPDICJASVWGZF","fast_switch":2,"middle_switch":3,"initial_state":{"switch_positions":[8,0,23,5]},"trace":true} as const;
+const purple=cube.execute({operation:'cipher.purple.encode',version:1,inputs:{text:"FOVTATAKIDASINIMUIMINOMOXIWOIRUBESIFYXXFCKZZR",settings:purpleSettings}});
+const purpleResult:string=purple.text;const purpleState:readonly number[]=purple.final_state.switch_positions;void purpleResult;void purpleState;

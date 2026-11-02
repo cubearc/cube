@@ -7423,6 +7423,82 @@ Example:
 cube cipher enigma --parameters settings.json --text AAAAA
 ```
 
+## cipher.fialka.decode
+
+Fialka M-125 6K PROTON I full thirty-contact electrical path, complete punched card, ten distinct rotors, explicit rings and post-symbol counter-rotating pin-controlled banks.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `codes` | `json` |
+| Input | `settings` | `json` |
+| Output | `codes` | `json` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher fialka --help
+```
+
+## cipher.fialka.encode
+
+Fialka M-125 6K PROTON I full thirty-contact electrical path, complete punched card, ten distinct rotors, explicit rings and post-symbol counter-rotating pin-controlled banks.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `codes` | `json` |
+| Input | `settings` | `json` |
+| Output | `codes` | `json` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher fialka --help
+```
+
 ## cipher.four_square.decode
 
 I/J Four-square with fixed straight plaintext squares and explicit keyed top-right/bottom-left squares.
@@ -13149,6 +13225,82 @@ Example:
 cube cipher --help
 ```
 
+## cipher.purple.decode
+
+PURPLE Type B with qualified twenty-five-position sixes and twenties switches, complete plugboard and physical switch state, latched post-symbol movement.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher purple --help
+```
+
+## cipher.purple.encode
+
+PURPLE Type B with qualified twenty-five-position sixes and twenties switches, complete plugboard and physical switch state, latched post-symbol movement.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher purple --help
+```
+
 ## cipher.quagmire.decode
 
 Explicit Quagmire I-IV plain/cipher alphabets, indicator alignment and repeated indicator key.
@@ -13729,6 +13881,82 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.red.decode
+
+RED Type A qualified Vigenere-wired sixes and twenties half-rotors, explicit 47-pin breakwheel, shared plugboard and direct or reverse motion.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher red --help
+```
+
+## cipher.red.encode
+
+RED Type A qualified Vigenere-wired sixes and twenties half-rotors, explicit 47-pin breakwheel, shared plugboard and direct or reverse motion.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `text` | `text` |
+| Input | `settings` | `json` |
+| Output | `text` | `text` |
+| Output | `final_state` | `json` |
+| Output | `trace` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube cipher red --help
 ```
 
 ## cipher.redefence.decode

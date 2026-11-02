@@ -488,6 +488,21 @@ enum Cipher {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
     },
+    /// Run the qualified Fialka historical mechanism.
+    Fialka {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// Run the qualified Red historical mechanism.
+    Red {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
+    /// Run the qualified Purple historical mechanism.
+    Purple {
+        #[command(subcommand)]
+        command: mechanicalcmd::Command,
+    },
     /// KL7 reference rotor/notch set with explicit raw core positions
     Kl7 {
         #[command(subcommand)]
@@ -1070,6 +1085,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Nema { command } => mechanicalcmd::nema(command)?,
                 Cipher::Typex { command } => mechanicalcmd::typex(command)?,
                 Cipher::Sigaba { command } => mechanicalcmd::sigaba(command)?,
+                Cipher::Fialka { command } => mechanicalcmd::fialka(command)?,
+                Cipher::Red { command } => mechanicalcmd::red(command)?,
+                Cipher::Purple { command } => mechanicalcmd::purple(command)?,
                 Cipher::Kl7 { command } => mechanicalcmd::kl7(command)?,
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,

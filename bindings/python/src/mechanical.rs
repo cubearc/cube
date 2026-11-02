@@ -1,6 +1,7 @@
 //! Native transport over Core-owned mechanical cipher implementations.
 use cube_core::ciphers::mechanical::{
-    self, alberti, disks, hagelin, kl7, kryha, lorenz, nema, sigaba, t52ab, typex, wheatstone,
+    self, alberti, disks, fialka, hagelin, kl7, kryha, lorenz, nema, purple, red, sigaba, t52ab,
+    typex, wheatstone,
 };
 use pyo3::{prelude::*, types::PyDict};
 fn transform<P: serde::de::DeserializeOwned, R: serde::Serialize>(
@@ -279,7 +280,65 @@ fn kl7_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyR
 fn kl7_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
     transform(py, text, parameters, "cipher.kl7.decode", kl7::decode)
 }
+#[pyfunction]
+fn red_encode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.red.encode", red::encode)
+}
+#[pyfunction]
+fn red_decode(py: Python<'_>, text: &str, parameters: &Bound<'_, PyDict>) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.red.decode", red::decode)
+}
+#[pyfunction]
+fn purple_encode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.purple.encode", purple::encode)
+}
+#[pyfunction]
+fn purple_decode(
+    py: Python<'_>,
+    text: &str,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    transform(py, text, parameters, "cipher.purple.decode", purple::decode)
+}
+#[pyfunction]
+fn fialka_encode(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    codes_transform(
+        py,
+        codes,
+        parameters,
+        "cipher.fialka.encode",
+        fialka::encode,
+    )
+}
+#[pyfunction]
+fn fialka_decode(
+    py: Python<'_>,
+    codes: &Bound<'_, PyAny>,
+    parameters: &Bound<'_, PyDict>,
+) -> PyResult<Py<PyAny>> {
+    codes_transform(
+        py,
+        codes,
+        parameters,
+        "cipher.fialka.decode",
+        fialka::decode,
+    )
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(red_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(red_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(purple_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(purple_decode, module)?)?;
+    module.add_function(wrap_pyfunction!(fialka_encode, module)?)?;
+    module.add_function(wrap_pyfunction!(fialka_decode, module)?)?;
     module.add_function(wrap_pyfunction!(sigaba_encode, module)?)?;
     module.add_function(wrap_pyfunction!(sigaba_decode, module)?)?;
     module.add_function(wrap_pyfunction!(kl7_encode, module)?)?;

@@ -263,3 +263,9 @@ See [Hagelin pin-and-lug profiles](../reference/topics/hagelin.md) for executabl
 Use the [Typex Mark22 reference](../reference/topics/typex.md) for complete caller wiring, reversed cores, stationary windows and prepared contact symbols.
 
 [SIGABA CSP889](../reference/topics/sigaba.md) and [KL7](../reference/topics/kl7.md) use the same direct `cube.execute` interface with required `text` and `settings`, exact named state/trace outputs and generated TypeScript contracts.
+
+[Fialka M-125](../reference/topics/fialka.md), [RED Type A](../reference/topics/red.md)
+and [PURPLE Type B](../reference/topics/purple.md) also execute through Core in
+WebAssembly. Fialka takes named `codes` and `settings`; RED and PURPLE take
+`text` and `settings`. Generated TypeScript contracts preserve their respective
+contact/text outputs, complete `final_state` and optional trace structure.

@@ -1,4 +1,4 @@
-//! Fixed-size contact permutations, shared by the two complete US rotor machines.
+//! Fixed-size contact permutations, shared by qualified historical rotor modules.
 //! This handles finite wiring math only; each machine owns its motion and state.
 #[derive(Clone, Copy, Debug)]
 pub(super) struct Wiring<const N: usize> {

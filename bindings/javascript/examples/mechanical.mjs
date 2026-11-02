@@ -47,3 +47,12 @@ assert.equal(sigaba.text,"HHHTITJPTHJBZLQRGNCBZIKAGMFXZUXGJPWPEJPUHCSWGKBLHJKGXH
 
 const kl7=cube.execute({operation:'cipher.kl7.encode',version:1,inputs:{text:"HALLOZDIESZISTZWIEDERZEINZTESTZVVVZ",settings:{"profile":"kl7_rijmenants_v1","rotors":["A","B","C","L","D","E","F","G"],"notch_rings":[1,2,3,4,5,6,7],"notch_offsets":[14,0,0,0,0,0,0],"initial_state":{"core_positions":[34,0,1,16,1,1,1,1]},"trace":true}}});
 assert.equal(kl7.text,"LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP");console.log('KL7:',kl7.text);
+
+const fialka=cube.execute({operation:'cipher.fialka.encode',version:1,inputs:{codes:[5, 18, 25, 5, 5, 18, 25, 5, 5, 18, 25, 5, 5, 18, 25, 5],settings:{"profile": "fialka_m125_6k_proton_i_v1", "rotor_order": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "ring_offsets": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "punch_card": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "initial_state": {"rotor_positions": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}, "trace": true}}});
+assert.deepEqual(fialka.codes,[7, 15, 19, 0, 9, 29, 18, 26, 21, 21, 27, 8, 27, 22, 9, 1]);console.log('FIALKA:',fialka.codes);
+
+const red=cube.execute({operation:'cipher.red.encode',version:1,inputs:{text:"JKTRYVLBZWDVJDOLVQDZ",settings:{"profile": "red_type_a_vigenere_v1", "alphabet": "LZVEYKWIHQPSOXMRDGFBUNAJCT", "pins": "11110111111111111110111111111101101111111111111", "direction": "direct", "initial_state": {"breakwheel": 38, "sixes": 0, "twenties": 10}, "trace": true}}});
+assert.deepEqual(red.text,"XYXALELAKIDENXIVENIK");console.log('RED:',red.text);
+
+const purple=cube.execute({operation:'cipher.purple.encode',version:1,inputs:{text:"FOVTATAKIDASINIMUIMINOMOXIWOIRUBESIFYXXFCKZZR",settings:{"profile": "purple_type_b_v1", "alphabet": "NOKTYUXEQLHBRMPDICJASVWGZF", "fast_switch": 2, "middle_switch": 3, "initial_state": {"switch_positions": [8, 0, 23, 5]}, "trace": true}}});
+assert.deepEqual(purple.text,"ZTXODNWKCCMAVNZXYWEETUQTCIMNVEUVIWBLUAXRRTLVA");console.log('PURPLE:',purple.text);

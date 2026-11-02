@@ -372,3 +372,39 @@ test('KL7 preserves independent source results, physical state and explicit cont
  const first=execute('encode',v.text.slice(0,9),v.settings);const second=execute('encode',v.text.slice(9),{...v.settings,initial_state:first.final_state});assert.equal(first.text+second.text,v.expected);assert.deepEqual(second.final_state,r.final_state);assert.deepEqual(execute('encode','',v.settings).final_state,v.settings.initial_state);
  const settings={...v.settings,trace:false};assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});assert.throws(()=>execute('encode','A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});assert.throws(()=>execute('encode','PRIVATE_TEXT',settings),{code:'invalid_input'});
 });
+
+test('FIALKA executes independent source answers and stateful boundaries in actual Wasm',async()=>{
+ const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/fialka_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,input,settings)=>cube.execute({operation:`cipher.fialka.${direction}`,version:1,inputs:{codes:input,settings}});
+ const r=execute('encode',v.codes,v.settings);assert.deepEqual(r.codes,v.expected);assert.deepEqual(r.final_state,v.expected_final_state);assert.deepEqual(execute('decode',r.codes,v.settings).codes,v.codes);
+ const first=execute('encode',v.codes.slice(0,9),v.settings);const second=execute('encode',v.codes.slice(9),{...v.settings,initial_state:first.final_state});
+ assert.deepEqual([...first.codes,...second.codes],v.expected);assert.deepEqual(second.final_state,r.final_state);
+ assert.deepEqual(execute('encode',[],v.settings).final_state,v.settings.initial_state);
+ const settings={...v.settings,trace:false};
+ const request={operation:'cipher.fialka.encode',version:1,inputs:{codes:[],settings},parameters:{}};const maximum=cube.limits.direct.documentNodes-documentNodeCount(request);assert.equal(execute('encode',Array(maximum).fill(0),settings).codes.length,maximum);assert.throws(()=>execute('encode',Array(maximum+1).fill(0),settings),{code:'resource_limit'});
+ assert.throws(()=>execute('encode',[30],settings),{code:'invalid_input'});
+});
+
+test('RED executes independent source answers and stateful boundaries in actual Wasm',async()=>{
+ const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/red_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,input,settings)=>cube.execute({operation:`cipher.red.${direction}`,version:1,inputs:{text:input,settings}});
+ const r=execute('encode',v.text,v.settings);assert.deepEqual(r.text,v.expected);assert.deepEqual(r.final_state,v.expected_final_state);assert.deepEqual(execute('decode',r.text,v.settings).text,v.text);
+ const first=execute('encode',v.text.slice(0,9),v.settings);const second=execute('encode',v.text.slice(9),{...v.settings,initial_state:first.final_state});
+ assert.deepEqual(first.text+second.text,v.expected);assert.deepEqual(second.final_state,r.final_state);
+ assert.deepEqual(execute('encode','',v.settings).final_state,v.settings.initial_state);
+ const settings={...v.settings,trace:false};
+ assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});assert.throws(()=>execute('encode','A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});
+ assert.throws(()=>execute('encode','PRIVATE_TEXT',settings),{code:'invalid_input'});
+});
+
+test('PURPLE executes independent source answers and stateful boundaries in actual Wasm',async()=>{
+ const v=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/mechanical/purple_vectors.json',import.meta.url),'utf8'));
+ const execute=(direction,input,settings)=>cube.execute({operation:`cipher.purple.${direction}`,version:1,inputs:{text:input,settings}});
+ const r=execute('encode',v.text,v.settings);assert.deepEqual(r.text,v.expected);assert.deepEqual(r.final_state,v.expected_final_state);assert.deepEqual(execute('decode',r.text,v.settings).text,v.text);
+ const first=execute('encode',v.text.slice(0,9),v.settings);const second=execute('encode',v.text.slice(9),{...v.settings,initial_state:first.final_state});
+ assert.deepEqual(first.text+second.text,v.expected);assert.deepEqual(second.final_state,r.final_state);
+ assert.deepEqual(execute('encode','',v.settings).final_state,v.settings.initial_state);
+ const settings={...v.settings,trace:false};
+ assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});assert.throws(()=>execute('encode','A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});
+ assert.throws(()=>execute('encode','PRIVATE_TEXT',settings),{code:'invalid_input'});
+});

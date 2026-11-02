@@ -1,0 +1,27 @@
+{
+  "settings": {
+    "profile": "purple_type_b_v1",
+    "alphabet": "NOKTYUXEQLHBRMPDICJASVWGZF",
+    "fast_switch": 2,
+    "middle_switch": 3,
+    "initial_state": {
+      "switch_positions": [
+        8,
+        0,
+        23,
+        5
+      ]
+    },
+    "trace": true
+  },
+  "text": "FOVTATAKIDASINIMUIMINOMOXIWOIRUBESIFYXXFCKZZR",
+  "expected": "ZTXODNWKCCMAVNZXYWEETUQTCIMNVEUVIWBLUAXRRTLVA",
+  "expected_final_state": {
+    "switch_positions": [
+      3,
+      0,
+      16,
+      7
+    ]
+  }
+}

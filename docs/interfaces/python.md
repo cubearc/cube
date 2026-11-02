@@ -227,6 +227,15 @@ All four functions use native Core with complete named-profile settings and
 return `final_state` for continuation. Input is prepared A–Z contact labels,
 without automatic keyboard shifts or message-key preparation.
 
+`cube.fialka_encode(codes, settings)` and `cube.fialka_decode(codes, settings)`
+run the [Fialka M-125 thirty-contact mechanism](../reference/topics/fialka.md).
+`cube.red_encode(text, settings)` / `cube.red_decode(text, settings)` and
+`cube.purple_encode(text, settings)` / `cube.purple_decode(text, settings)` run
+[RED Type A](../reference/topics/red.md) and [PURPLE Type B](../reference/topics/purple.md).
+All use native Core, explicit key/state dictionaries and returned `final_state`
+for continuation. Fialka uses integer contacts 0–29; RED and PURPLE use prepared
+uppercase A–Z. Their references define exact profiles and independent limits.
+
 ## Raw stream transforms
 
 Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit

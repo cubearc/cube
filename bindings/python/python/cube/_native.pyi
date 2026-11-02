@@ -2231,3 +2231,27 @@ def kl7_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
 def kl7_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """Run prepared A-Z contacts through the Core-owned KL7 decode mechanism."""
     ...
+
+def fialka_encode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
+    """Execute the Core-owned FIALKA encode mechanism with explicit state."""
+    ...
+
+def fialka_decode(codes: list[int], parameters: dict[str, object]) -> dict[str, object]:
+    """Execute the Core-owned FIALKA decode mechanism with explicit state."""
+    ...
+
+def red_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Execute the Core-owned RED encode mechanism with explicit state."""
+    ...
+
+def red_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Execute the Core-owned RED decode mechanism with explicit state."""
+    ...
+
+def purple_encode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Execute the Core-owned PURPLE encode mechanism with explicit state."""
+    ...
+
+def purple_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
+    """Execute the Core-owned PURPLE decode mechanism with explicit state."""
+    ...

@@ -3,6 +3,9 @@ pub mod alberti;
 mod alphabet;
 mod catalog;
 pub mod disks;
+pub mod fialka;
+mod fialka_catalog;
+mod fialka_data;
 pub mod hagelin;
 mod hagelin_catalog;
 pub mod kl7;
@@ -14,6 +17,11 @@ mod lorenz_catalog;
 pub mod nema;
 mod nema_catalog;
 mod nema_data;
+pub mod purple;
+mod purple_catalog;
+mod purple_data;
+pub mod red;
+mod red_catalog;
 mod rotor_contacts;
 pub mod sigaba;
 mod sigaba_catalog;
@@ -27,6 +35,8 @@ pub mod wheatstone;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
+pub(crate) use fialka_catalog::MODULE as FIALKA_MODULE;
+pub use fialka_catalog::OPERATIONS as FIALKA_OPERATIONS;
 pub(crate) use hagelin_catalog::MODULE as HAGELIN_MODULE;
 pub use hagelin_catalog::OPERATIONS as HAGELIN_OPERATIONS;
 pub(crate) use kl7_catalog::MODULE as KL7_MODULE;
@@ -35,6 +45,10 @@ pub(crate) use lorenz_catalog::MODULE as LORENZ_MODULE;
 pub use lorenz_catalog::OPERATIONS as LORENZ_OPERATIONS;
 pub(crate) use nema_catalog::MODULE as NEMA_MODULE;
 pub use nema_catalog::OPERATIONS as NEMA_OPERATIONS;
+pub(crate) use purple_catalog::MODULE as PURPLE_MODULE;
+pub use purple_catalog::OPERATIONS as PURPLE_OPERATIONS;
+pub(crate) use red_catalog::MODULE as RED_MODULE;
+pub use red_catalog::OPERATIONS as RED_OPERATIONS;
 use serde::{Serialize, de::DeserializeOwned};
 pub(crate) use sigaba_catalog::MODULE as SIGABA_MODULE;
 pub use sigaba_catalog::OPERATIONS as SIGABA_OPERATIONS;
@@ -63,6 +77,9 @@ fn descriptor(operation: &str) -> Option<&'static crate::operations::Descriptor>
         .chain(TYPEX_OPERATIONS)
         .chain(SIGABA_OPERATIONS)
         .chain(KL7_OPERATIONS)
+        .chain(PURPLE_OPERATIONS)
+        .chain(RED_OPERATIONS)
+        .chain(FIALKA_OPERATIONS)
         .find(|d| d.id == operation)
 }
 pub(crate) fn execute(
@@ -70,6 +87,15 @@ pub(crate) fn execute(
     inputs: &serde_json::Value,
     parameters: &serde_json::Value,
 ) -> Result<serde_json::Value, OperationError> {
+    if FIALKA_OPERATIONS.iter().any(|d| d.id == operation) {
+        return fialka_catalog::execute(operation, inputs, parameters);
+    }
+    if RED_OPERATIONS.iter().any(|d| d.id == operation) {
+        return red_catalog::execute(operation, inputs, parameters);
+    }
+    if PURPLE_OPERATIONS.iter().any(|d| d.id == operation) {
+        return purple_catalog::execute(operation, inputs, parameters);
+    }
     if SIGABA_OPERATIONS.iter().any(|d| d.id == operation) {
         return sigaba_catalog::execute(operation, inputs, parameters);
     }
@@ -169,6 +195,7 @@ pub(crate) fn preflight(operation: &str, inputs: &serde_json::Value) -> Result<(
     if let Some(d) = LORENZ_OPERATIONS
         .iter()
         .chain(T52AB_OPERATIONS)
+        .chain(FIALKA_OPERATIONS)
         .find(|d| d.id == operation)
     {
         if let Some(codes) = inputs.get("codes").and_then(serde_json::Value::as_array) {

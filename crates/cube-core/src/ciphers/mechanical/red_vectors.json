@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "profile": "red_type_a_vigenere_v1",
+    "alphabet": "LZVEYKWIHQPSOXMRDGFBUNAJCT",
+    "pins": "11110111111111111110111111111101101111111111111",
+    "direction": "direct",
+    "initial_state": {
+      "breakwheel": 38,
+      "sixes": 0,
+      "twenties": 10
+    },
+    "trace": true
+  },
+  "text": "JKTRYVLBZWDVJDOLVQDZ",
+  "expected": "XYXALELAKIDENXIVENIK",
+  "expected_final_state": {
+    "breakwheel": 12,
+    "sixes": 3,
+    "twenties": 11
+  }
+}

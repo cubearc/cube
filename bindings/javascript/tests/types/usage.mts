@@ -198,3 +198,8 @@ cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:ne
 cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'des_fips46_v1',key_hex:'0113b970fd34f2ce',effective_key_bits:64}});
 // @ts-expect-error Family names cannot guess exact profiles.
 cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'DES',key_hex:'0113b970fd34f2ce'}});
+
+const speck48: Uint8Array=cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(6)},parameters:{profile:'speck48_72_be_v1',key_hex:'1211100a0908020100'}}).output;
+const rijndael160: Uint8Array=cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(20)},parameters:{profile:'rijndael_160_v1',key_hex:'00'.repeat(20)}}).output;
+const gostTest: Uint8Array=cube.execute({operation:'cipher.block.decrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'gost28147_test_le_v1',key_hex:'00'.repeat(32)}}).output;
+void [speck48,rijndael160,gostTest];

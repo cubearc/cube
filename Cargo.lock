@@ -100,6 +100,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "aria"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9bec52899928da457033f0a6ea707bd11a16f5642ef91ddfcd809cd30f824536"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -202,6 +211,33 @@ name = "byteorder-lite"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f1fe948ff07f4bd06c30984e69f5b4899c516a3ef74f34df92a2df2ab535495"
+
+[[package]]
+name = "camellia"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3ed33f9863ee76491bbe0d7e16a225c694d8525287e320dc7fbe71ee212254c"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
+name = "cast5"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1ed80521f830bbce4d3a4857d6f2b91a8339bf0b65711fe189ab6f8d7a2f629e"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
+name = "cast6"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6196963fa0e98083ddfd59354a17a640dc2dd2b1cbf1af945a728c8d1460e209"
+dependencies = [
+ "cipher",
+]
 
 [[package]]
 name = "cfg-if"
@@ -397,15 +433,20 @@ name = "cube-core"
 version = "0.18.0"
 dependencies = [
  "aes",
+ "aria",
  "base64",
  "blowfish",
  "bs58",
+ "camellia",
+ "cast5",
+ "cast6",
  "chacha20",
  "crc",
  "crc32fast",
  "csv-core",
  "data-encoding",
  "des",
+ "gift-cipher",
  "hex",
  "html5gum",
  "idea",
@@ -413,24 +454,33 @@ dependencies = [
  "jsonschema",
  "k256",
  "kamadak-exif",
+ "kuznyechik",
  "lofty",
+ "magma",
  "md-5",
  "num-bigint 0.5.1",
  "png",
  "quircs",
  "rc2",
+ "rc5",
+ "rc6",
  "ripemd",
  "rustfft",
  "salsa20",
  "schemars",
  "serde",
  "serde_json",
+ "serpent",
  "sha1",
  "sha2",
  "sha3",
+ "sm4",
+ "speck-cipher",
  "syn 2.0.119",
+ "twofish",
  "unicode-general-category",
  "unicode-normalization",
+ "xtea",
  "zeroize",
 ]
 
@@ -630,6 +680,15 @@ checksum = "ee8cfcc411d9adbbaba82fb72661cc1bcca13e8bba98b364e62b2dba8f960159"
 dependencies = [
  "color_quant",
  "weezl",
+]
+
+[[package]]
+name = "gift-cipher"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "56dc3d591368c3987976bc499e987faf2e63c9e5b3905aa6ae270dd8eb86d711"
+dependencies = [
+ "cipher",
 ]
 
 [[package]]
@@ -836,6 +895,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "kuznyechik"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "003764d77f5f2e2a57a4d17dc6547e0595f14a3c289283c9eeaf7170d3a4ff83"
+dependencies = [
+ "cfg-if",
+ "cipher",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.191"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -887,6 +956,15 @@ name = "log"
 version = "0.4.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
+
+[[package]]
+name = "magma"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "84fcdd6a71a6af65297be074d9d26cda7a2e98b86294ee0de0732b00c2063a61"
+dependencies = [
+ "cipher",
+]
 
 [[package]]
 name = "md-5"
@@ -1280,6 +1358,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "rc5"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc60c8a02c3364acb0deb07338718fff1463db5b765b9c8734dc6925d13d69f3"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
+name = "rc6"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "500557e7832a3ef49ee07975f930c2df56b4016e80be3a125521004bb6d845c9"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
 name = "redox_syscall"
 version = "0.5.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1504,6 +1600,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serpent"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "940b28a5f6693dd27b89c8a36c496814f50b66f22a1a83950f52c2029676c59c"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
 name = "sha1"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1543,10 +1648,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3a219298ac11a56ea9a6d2120044824d6f01aeb034955e7af7bc16858527deea"
 
 [[package]]
+name = "sm4"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ff2d621883cdeeaee6759d39f4bc8cd314b29db72b6ac3d6714b31422512ee11"
+dependencies = [
+ "cipher",
+]
+
+[[package]]
 name = "smallvec"
 version = "1.16.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0d5d4b1981b8bbbb7aed204cae5726d683d5d6ac7e74ec54122ea28f315e7c8"
+
+[[package]]
+name = "speck-cipher"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eda7efdab3e820a9170ee4b8ef02e7121913d0815b52357b695241f515d0c9d1"
+dependencies = [
+ "cipher",
+]
 
 [[package]]
 name = "sponge-cursor"
@@ -1655,6 +1778,15 @@ checksum = "1ad61aed86bc3faea4300c7aee358b4c6d0c8d6ccc36524c96e4c92ccf26e77e"
 dependencies = [
  "num-integer",
  "strength_reduce",
+]
+
+[[package]]
+name = "twofish"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0218ef702a91e18ba84dd516edf8df33a9f9fb4431d6ada13e6f9502c3bcb6fc"
+dependencies = [
+ "cipher",
 ]
 
 [[package]]
@@ -1803,6 +1935,15 @@ dependencies = [
  "group",
  "hybrid-array",
  "primefield",
+]
+
+[[package]]
+name = "xtea"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f6d155751793947b57642656b5578b150f3f417696ce3cd8e9eaf62cb0d0362"
+dependencies = [
+ "cipher",
 ]
 
 [[package]]

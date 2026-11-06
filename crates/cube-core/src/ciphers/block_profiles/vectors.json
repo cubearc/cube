@@ -104,5 +104,958 @@
     "plaintext_hex": "0000000000000000",
     "ciphertext_hex": "5b78d3a43dfff1f1",
     "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "camellia_rfc3713_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "6c227f749319a3aa7da235a9bba05a2c",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/camellia/tests/data/camellia128.blb",
+    "source_sha256": "9cce1949c68fd16c41027323297d46a1a393c5d9ecb722e6739bdad24285217c"
+  },
+  {
+    "profile": "camellia_rfc3713_v1",
+    "key_hex": "2bd6459f82c5b300952c49104881ff48",
+    "plaintext_hex": "78357866fd8b2caed4d1bba3cfd5340a",
+    "ciphertext_hex": "ea024714ad5c4d84ea024714ad5c4d84",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/camellia/tests/data/camellia128.blb",
+    "source_sha256": "9cce1949c68fd16c41027323297d46a1a393c5d9ecb722e6739bdad24285217c"
+  },
+  {
+    "profile": "camellia_rfc3713_v1",
+    "key_hex": "800000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "1b6220d365c2176c1d41a5826520fca1",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/camellia/tests/data/camellia192.blb",
+    "source_sha256": "e4e81d51026c9f314b37ec1f061924dfae3d2b5670eb4d885342d4837da3e80b"
+  },
+  {
+    "profile": "camellia_rfc3713_v1",
+    "key_hex": "2bd6459f82c5b300952c49104881ff482bd6459f82c5b300",
+    "plaintext_hex": "292c5bbfd772ad279509120f3f0acd48",
+    "ciphertext_hex": "ea024714ad5c4d84ea024714ad5c4d84",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/camellia/tests/data/camellia192.blb",
+    "source_sha256": "e4e81d51026c9f314b37ec1f061924dfae3d2b5670eb4d885342d4837da3e80b"
+  },
+  {
+    "profile": "camellia_rfc3713_v1",
+    "key_hex": "8000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "2136fabda091dfb5171b94b8efbb5d08",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/camellia/tests/data/camellia256.blb",
+    "source_sha256": "7f04a345289511c34b8e770314359304af80128ef1a236feb2fd2c1b27392b27"
+  },
+  {
+    "profile": "camellia_rfc3713_v1",
+    "key_hex": "2bd6459f82c5b300952c49104881ff482bd6459f82c5b300952c49104881ff48",
+    "plaintext_hex": "e684421716fc0b01aeb5c6765120f95f",
+    "ciphertext_hex": "ea024714ad5c4d84ea024714ad5c4d84",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/camellia/tests/data/camellia256.blb",
+    "source_sha256": "7f04a345289511c34b8e770314359304af80128ef1a236feb2fd2c1b27392b27"
+  },
+  {
+    "profile": "serpent_final_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "264e5481eff42a4606abda06c0bfda3d",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/serpent/tests/data/serpent128.blb",
+    "source_sha256": "2ef7ea31a12998f35671b1e73808fe6e00dbfa1c2963de5f355f7ec89aa7c806"
+  },
+  {
+    "profile": "serpent_final_v1",
+    "key_hex": "2bd6459f82c5b300952c49104881ff48",
+    "plaintext_hex": "ea024714ad5c4d84ea024714ad5c4d84",
+    "ciphertext_hex": "92d7f8ef2c36c53409f275902f06539f",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/serpent/tests/data/serpent128.blb",
+    "source_sha256": "2ef7ea31a12998f35671b1e73808fe6e00dbfa1c2963de5f355f7ec89aa7c806"
+  },
+  {
+    "profile": "serpent_final_v1",
+    "key_hex": "800000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "9e274ead9b737bb21efcfca548602689",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/serpent/tests/data/serpent192.blb",
+    "source_sha256": "6e78fdfd614133c3e020859733bd1453273ba6b4a9e9402362590f9cebb2f415"
+  },
+  {
+    "profile": "serpent_final_v1",
+    "key_hex": "2bd6459f82c5b300952c49104881ff482bd6459f82c5b300",
+    "plaintext_hex": "ea024714ad5c4d84ea024714ad5c4d84",
+    "ciphertext_hex": "827b18c2678a239dfc5512842000e204",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/serpent/tests/data/serpent192.blb",
+    "source_sha256": "6e78fdfd614133c3e020859733bd1453273ba6b4a9e9402362590f9cebb2f415"
+  },
+  {
+    "profile": "serpent_final_v1",
+    "key_hex": "8000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "a223aa1288463c0e2be38ebd825616c0",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/serpent/tests/data/serpent256.blb",
+    "source_sha256": "08f0f1896e78e88f4cce6d185befb7131915924888912bb0ae7300048705bcc8"
+  },
+  {
+    "profile": "serpent_final_v1",
+    "key_hex": "2bd6459f82c5b300952c49104881ff482bd6459f82c5b300952c49104881ff48",
+    "plaintext_hex": "ea024714ad5c4d84ea024714ad5c4d84",
+    "ciphertext_hex": "3e507730776b93fdea661235e1dd99f0",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/serpent/tests/data/serpent256.blb",
+    "source_sha256": "08f0f1896e78e88f4cce6d185befb7131915924888912bb0ae7300048705bcc8"
+  },
+  {
+    "profile": "cast128_rfc2144_v1",
+    "key_hex": "0123456712345678234567893456789a",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "238b4fe5847e44b2",
+    "source": "https://www.rfc-editor.org/rfc/rfc2144.txt"
+  },
+  {
+    "profile": "cast128_rfc2144_v1",
+    "key_hex": "01234567123456782345",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "eb6a711a2c02271b",
+    "source": "https://www.rfc-editor.org/rfc/rfc2144.txt"
+  },
+  {
+    "profile": "cast128_rfc2144_v1",
+    "key_hex": "0123456712",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "7ac816d16e9b302e",
+    "source": "https://www.rfc-editor.org/rfc/rfc2144.txt"
+  },
+  {
+    "profile": "cast256_rfc2612_v1",
+    "key_hex": "2342bb9efa38542c0af75647f29f615d",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c842a08972b43d20836c91d1b7530f6b",
+    "source": "https://www.rfc-editor.org/rfc/rfc2612.txt"
+  },
+  {
+    "profile": "cast256_rfc2612_v1",
+    "key_hex": "2342bb9efa38542cbed0ac83940ac298bac77a7717942863",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "1b386c0210dcadcbdd0e41aa08a7a7e8",
+    "source": "https://www.rfc-editor.org/rfc/rfc2612.txt"
+  },
+  {
+    "profile": "cast256_rfc2612_v1",
+    "key_hex": "2342bb9efa38542cbed0ac83940ac2988d7c47ce264908461cc1b5137ae6b604",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "4f6a2038286897b9c9870136553317fa",
+    "source": "https://www.rfc-editor.org/rfc/rfc2612.txt"
+  },
+  {
+    "profile": "aria_rfc5794_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "00112233445566778899aabbccddeeff",
+    "ciphertext_hex": "d718fbd6ab644c739da95f3be6451778",
+    "source": "https://www.rfc-editor.org/rfc/rfc5794.txt"
+  },
+  {
+    "profile": "aria_rfc5794_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f1011121314151617",
+    "plaintext_hex": "00112233445566778899aabbccddeeff",
+    "ciphertext_hex": "26449c1805dbe7aa25a468ce263a9e79",
+    "source": "https://www.rfc-editor.org/rfc/rfc5794.txt"
+  },
+  {
+    "profile": "aria_rfc5794_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "00112233445566778899aabbccddeeff",
+    "ciphertext_hex": "f92bd7c79fb72e2f2b8f80c1972d24fc",
+    "source": "https://www.rfc-editor.org/rfc/rfc5794.txt"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "9f589f5cf6122c32b6bfec2f2ae8c35a",
+    "source": "https://www.schneier.com/academic/twofish/"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "efa71f788965bd4453f860178fc19101",
+    "source": "https://www.schneier.com/academic/twofish/"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "57ff739d4dc92c1bd7fc01700cc8216f",
+    "source": "https://www.schneier.com/academic/twofish/"
+  },
+  {
+    "profile": "sm4_gmt0002_v1",
+    "key_hex": "0123456789abcdeffedcba9876543210",
+    "plaintext_hex": "0123456789abcdeffedcba9876543210",
+    "ciphertext_hex": "681edf34d206965e86b3e94f536e4246",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/sm4/tests/mod.rs"
+  },
+  {
+    "profile": "kuznyechik_rfc7801_v1",
+    "key_hex": "8899aabbccddeeff0011223344556677fedcba98765432100123456789abcdef",
+    "plaintext_hex": "1122334455667700ffeeddccbbaa9988",
+    "ciphertext_hex": "7f679d90bebc24305a468d42b9d4edcd",
+    "source": "https://www.rfc-editor.org/rfc/rfc7801.txt"
+  },
+  {
+    "profile": "magma_rfc8891_v1",
+    "key_hex": "ffeeddccbbaa99887766554433221100f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
+    "plaintext_hex": "fedcba9876543210",
+    "ciphertext_hex": "4ee901e5c2d8ca3d",
+    "source": "https://www.rfc-editor.org/rfc/rfc8891.txt"
+  },
+  {
+    "profile": "gift128_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "cd0bd738388ad3f668b15a36ceb6ff92",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/gift-cipher/tests/mod.rs"
+  },
+  {
+    "profile": "gift128_v1",
+    "key_hex": "fedcba9876543210fedcba9876543210",
+    "plaintext_hex": "fedcba9876543210fedcba9876543210",
+    "ciphertext_hex": "8422241a6dbf5a9346af468409ee0152",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/gift-cipher/tests/mod.rs"
+  },
+  {
+    "profile": "gift128_v1",
+    "key_hex": "d0f5c59a7700d3e799028fa9f90ad837",
+    "plaintext_hex": "e39c141fa57dba43f08a85b6a91f86c1",
+    "ciphertext_hex": "13ede67cbdcc3dbf400a62d6977265ea",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/gift-cipher/tests/mod.rs"
+  },
+  {
+    "profile": "xtea32_le_v1",
+    "key_hex": "30313233343536373839303132333435",
+    "plaintext_hex": "4142434445464748",
+    "ciphertext_hex": "ea0c3d7c1c22557f",
+    "source": "https://github.com/RustCrypto/block-ciphers/blob/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee/xtea/tests/mod.rs"
+  },
+  {
+    "profile": "rc5_32_12_16_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "0001020304050607",
+    "ciphertext_hex": "c8d3b3c486700cfa",
+    "source": "https://www.ietf.org/archive/id/draft-krovetz-rc6-rc5-vectors-00.txt"
+  },
+  {
+    "profile": "speck32_64_be_v1",
+    "key_hex": "1918111009080100",
+    "plaintext_hex": "6574694c",
+    "ciphertext_hex": "a86842f2",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck48_72_be_v1",
+    "key_hex": "1211100a0908020100",
+    "plaintext_hex": "20796c6c6172",
+    "ciphertext_hex": "c049a5385adc",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck48_96_be_v1",
+    "key_hex": "1a19181211100a0908020100",
+    "plaintext_hex": "6d2073696874",
+    "ciphertext_hex": "735e10b6445d",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck64_96_be_v1",
+    "key_hex": "131211100b0a090803020100",
+    "plaintext_hex": "74614620736e6165",
+    "ciphertext_hex": "9f7952ec4175946c",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck64_128_be_v1",
+    "key_hex": "1b1a1918131211100b0a090803020100",
+    "plaintext_hex": "3b7265747475432d",
+    "ciphertext_hex": "8c6fa548454e028b",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck96_96_be_v1",
+    "key_hex": "0d0c0b0a0908050403020100",
+    "plaintext_hex": "65776f68202c656761737520",
+    "ciphertext_hex": "9e4d09ab717862bdde8f79aa",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck96_144_be_v1",
+    "key_hex": "1514131211100d0c0b0a0908050403020100",
+    "plaintext_hex": "656d6974206e69202c726576",
+    "ciphertext_hex": "2bf31072228a7ae440252ee6",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck128_128_be_v1",
+    "key_hex": "0f0e0d0c0b0a09080706050403020100",
+    "plaintext_hex": "6c617669757165207469206564616d20",
+    "ciphertext_hex": "a65d9851797832657860fedf5c570d18",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck128_192_be_v1",
+    "key_hex": "17161514131211100f0e0d0c0b0a09080706050403020100",
+    "plaintext_hex": "726148206665696843206f7420746e65",
+    "ciphertext_hex": "1be4cf3a13135566f9bc185de03c1886",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "speck128_256_be_v1",
+    "key_hex": "1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100",
+    "plaintext_hex": "65736f6874206e49202e72656e6f6f70",
+    "ciphertext_hex": "4109010405c0f53e4eeeb48d9c188f43",
+    "source": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "rc6_32_20_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "80000000000000000000000000000000",
+    "ciphertext_hex": "f71f65e7b80c0c6966fee607984b5cdf",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RC6Test.java"
+  },
+  {
+    "profile": "rc6_32_20_v1",
+    "key_hex": "000000000000000000000000000000008000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "dd04c176440bbc6686c90aee775bd368",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RC6Test.java"
+  },
+  {
+    "profile": "rc6_32_20_v1",
+    "key_hex": "000000000000000000000000000000000000001000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "937fe02d20fcb72f0f57201012b88ba4",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RC6Test.java"
+  },
+  {
+    "profile": "rc6_32_20_v1",
+    "key_hex": "00000001000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "8a380594d7396453771a1dfbe2914c8e",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RC6Test.java"
+  },
+  {
+    "profile": "rc6_32_20_v1",
+    "key_hex": "1000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "11395d4bfe4c8258979ee2bf2d24dff4",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RC6Test.java"
+  },
+  {
+    "profile": "rc6_32_20_v1",
+    "key_hex": "0000000000000000000000000000000000080000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "3d6f7e99f6512553bb983e8f75672b97",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RC6Test.java"
+  },
+  {
+    "profile": "rijndael_128_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "0edd33d3c621e546455bd8ba1418bec8",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_128_v1",
+    "key_hex": "00000000000000000000000000000080",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "172aeab3d507678ecaf455c12587adb7",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_128_v1",
+    "key_hex": "000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "80000000000000000000000000000000",
+    "ciphertext_hex": "6cd02513e8d4dc986b4afe087a60bd0c",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_128_v1",
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "80000000000000000000000000000000",
+    "ciphertext_hex": "ddc6bf790c15760d8d9aeb6f9a75fd4e",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_160_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a409382",
+    "ciphertext_hex": "16e73aec921314c29df905432bc8968ab64b1f51",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_160_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a409382",
+    "ciphertext_hex": "0553eb691670dd8a5a5b5addf1aa7450f7a0e587",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_160_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da5",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a409382",
+    "ciphertext_hex": "73cd6f3423036790463aa9e19cfcde894ea16623",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_160_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d90",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a409382",
+    "ciphertext_hex": "601b5dcd1cf4ece954c740445340bf0afdc048df",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_160_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfe",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a409382",
+    "ciphertext_hex": "579e930b36c1529aa3e86628bacfe146942882cf",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_192_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d",
+    "ciphertext_hex": "b24d275489e82bb8f7375e0d5fcdb1f481757c538b65148a",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_192_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da5",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d",
+    "ciphertext_hex": "725ae43b5f3161de806a7c93e0bca93c967ec1ae1b71e1cf",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_192_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d90",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d",
+    "ciphertext_hex": "bbfc14180afbf6a36382a061843f0b63e769acdc98769130",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_192_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfe",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d",
+    "ciphertext_hex": "0ebacf199e3315c2e34b24fcc7c46ef4388aa475d66c194c",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_224_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa9",
+    "ciphertext_hex": "b0a8f78f6b3c66213f792ffd2a61631f79331407a5e5c8d3793aceb1",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_224_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa9",
+    "ciphertext_hex": "08b99944edfce33a2acb131183ab0168446b2d15e958480010f545e3",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_224_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da5",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa9",
+    "ciphertext_hex": "be4c597d8f7efe22a2f7e5b1938e2564d452a5bfe72399c7af1101e2",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_224_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d90",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa9",
+    "ciphertext_hex": "ef529598ecbce297811b49bbed2c33bbe1241d6e1a833dbe119569e8",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_224_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfe",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa9",
+    "ciphertext_hex": "02fafc200176ed05deb8edb82a3555b0b10d47a388dfd59cab2f6c11",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_256_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c8",
+    "ciphertext_hex": "7d15479076b69a46ffb3b3beae97ad8313f622f67fedb487de9f06b9ed9c8f19",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_256_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c8",
+    "ciphertext_hex": "514f93fb296b5ad16aa7df8b577abcbd484decacccc7fb1f18dc567309ceeffd",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_256_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da5",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c8",
+    "ciphertext_hex": "5d7101727bb25781bf6715b0e6955282b9610e23a43c2eb062699f0ebf5887b2",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_256_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d90",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c8",
+    "ciphertext_hex": "d56c5a63627432579e1dd308b2c8f157b40a4bfb56fea1377b25d3ed3d6dbf80",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "rijndael_256_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c762e7160f38b4da56a784d9045190cfe",
+    "plaintext_hex": "3243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c8",
+    "ciphertext_hex": "a49406115dfb30a40418aafa4869b7c6a886ff31602a7dd19c889dc64f7e4e7a",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/RijndaelTest.java"
+  },
+  {
+    "profile": "lea_v1",
+    "key_hex": "07ab6305b025d83f79addaa63ac8ad00",
+    "plaintext_hex": "f28ae3256aad23b415e028063b610c60",
+    "ciphertext_hex": "64d908fcb7ebfef90fd670106de7c7c5",
+    "source": "https://github.com/weidai11/cryptopp/blob/master/TestVectors/lea.txt"
+  },
+  {
+    "profile": "lea_v1",
+    "key_hex": "56cec76dbd39f3eb7f7ad2a492c991a0",
+    "plaintext_hex": "2d8cce99726d59af50b0375da8c3edacae17fba6932fa60e61f7fa4e265610b1",
+    "ciphertext_hex": "381d0bdbc808c408d1bd0c791fb08469f19f6319329f9ecd5cd6cfd0c3892bec",
+    "source": "https://github.com/weidai11/cryptopp/blob/master/TestVectors/lea.txt"
+  },
+  {
+    "profile": "lea_v1",
+    "key_hex": "1437af533069bd7525c1560c78bad2a1e534671c007ef27c",
+    "plaintext_hex": "1cb4f4cb6c4bdb5168ea8409727bfd51",
+    "ciphertext_hex": "69725c6df912f8b70eb511e6663c5870",
+    "source": "https://github.com/weidai11/cryptopp/blob/master/TestVectors/lea.txt"
+  },
+  {
+    "profile": "lea_v1",
+    "key_hex": "ba838fe55faefc0ed7af051790462f01d7a2c778faea2405",
+    "plaintext_hex": "a9172c84a2041ad98ec87edf254384a199f77acd32198d6535e8d3b80b3e8f91",
+    "ciphertext_hex": "c6c5f98e4c633e7463518815bf9087c0289deb0a1b16a9af31fee64455a1d025",
+    "source": "https://github.com/weidai11/cryptopp/blob/master/TestVectors/lea.txt"
+  },
+  {
+    "profile": "lea_v1",
+    "key_hex": "4f6779e2bd1e9319c63015acffefd7a791f0ed59df1b700769fe82e2f0668c35",
+    "plaintext_hex": "dc31cae3da5e0a11c966b020d7cffede",
+    "ciphertext_hex": "eda2042098f667e857a02db8caa7dff2",
+    "source": "https://github.com/weidai11/cryptopp/blob/master/TestVectors/lea.txt"
+  },
+  {
+    "profile": "lea_v1",
+    "key_hex": "e7fe92fd374d30c43f5dc204dcae9d4ead6c0663bd8cf5ec6318196b67c71b72",
+    "plaintext_hex": "66d127137801a9970f0c5472232169778cc13649afd1dd125cee5677f700b7cb",
+    "ciphertext_hex": "16bff149dfa234bf7fbe2c59ae88a1e99a1bf8d91910a7f67d088432e1c6d790",
+    "source": "https://github.com/weidai11/cryptopp/blob/master/TestVectors/lea.txt"
+  },
+  {
+    "profile": "skipjack_nist_v1",
+    "key_hex": "00998877665544332211",
+    "plaintext_hex": "33221100ddccbbaa",
+    "ciphertext_hex": "2587cae27a12d300",
+    "source": "https://csrc.nist.gov/Projects/skipjack"
+  },
+  {
+    "profile": "noekeon_direct_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "b1656851699e29fa24b70148503d2dfc",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/NoekeonTest.java"
+  },
+  {
+    "profile": "noekeon_direct_v1",
+    "key_hex": "ffffffffffffffffffffffffffffffff",
+    "plaintext_hex": "ffffffffffffffffffffffffffffffff",
+    "ciphertext_hex": "2a78421b87c7d0924f26113f1d1349b2",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/NoekeonTest.java"
+  },
+  {
+    "profile": "noekeon_direct_v1",
+    "key_hex": "b1656851699e29fa24b70148503d2dfc",
+    "plaintext_hex": "2a78421b87c7d0924f26113f1d1349b2",
+    "ciphertext_hex": "e2f687e07b75660ffc372233bc47532c",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/NoekeonTest.java"
+  },
+  {
+    "profile": "present80_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "5579c1387b228445",
+    "source": "https://github.com/openluopworld/block-ciphers/tree/30555b1d3b5e1cd58bd8acbf7e0729074fa5bd43/present"
+  },
+  {
+    "profile": "present128_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "96db702a2e6900af",
+    "source": "https://github.com/openluopworld/block-ciphers/tree/30555b1d3b5e1cd58bd8acbf7e0729074fa5bd43/present"
+  },
+  {
+    "profile": "present80_v1",
+    "key_hex": "12345678901234567890",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "aa710d9d6ac6d477",
+    "source": "https://github.com/openluopworld/block-ciphers/tree/30555b1d3b5e1cd58bd8acbf7e0729074fa5bd43/present"
+  },
+  {
+    "profile": "rijndael_128_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f10111213",
+    "plaintext_hex": "00112233445566778899aabbccddeeff",
+    "ciphertext_hex": "8c92fbee297745ecdef3ce7bd6771a97",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/rijndael"
+  },
+  {
+    "profile": "rijndael_128_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b",
+    "plaintext_hex": "00112233445566778899aabbccddeeff",
+    "ciphertext_hex": "73ba76e0120cf3f29b6a564a3448e900",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/rijndael"
+  },
+  {
+    "profile": "rijndael_192_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f10111213",
+    "plaintext_hex": "00112233445566778899aabbccddeeff1021324354657687",
+    "ciphertext_hex": "c1fa59c492db48c86b93506a7face6ff7aea8775afa1b938",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/rijndael"
+  },
+  {
+    "profile": "gost28147_test_le_v1",
+    "key_hex": "75713134b60fec45a607bb83aa3746af4ff99da6d1b53b5b1b402a1baa030d1b",
+    "plaintext_hex": "1122334455667788",
+    "ciphertext_hex": "03251e14f9d28acb",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_test_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "ffeeddccbbaa9988",
+    "ciphertext_hex": "8acb79ffdb757aee",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_cryptopro_a_le_v1",
+    "key_hex": "75713134b60fec45a607bb83aa3746af4ff99da6d1b53b5b1b402a1baa030d1b",
+    "plaintext_hex": "1122334455667788",
+    "ciphertext_hex": "e87dabf206c60542",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_cryptopro_a_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "ffeeddccbbaa9988",
+    "ciphertext_hex": "094e90535f77ff31",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_cryptopro_b_le_v1",
+    "key_hex": "75713134b60fec45a607bb83aa3746af4ff99da6d1b53b5b1b402a1baa030d1b",
+    "plaintext_hex": "1122334455667788",
+    "ciphertext_hex": "ae34a2a24dda5e9a",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_cryptopro_b_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "ffeeddccbbaa9988",
+    "ciphertext_hex": "b251c582f94f2f80",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_cryptopro_c_le_v1",
+    "key_hex": "75713134b60fec45a607bb83aa3746af4ff99da6d1b53b5b1b402a1baa030d1b",
+    "plaintext_hex": "1122334455667788",
+    "ciphertext_hex": "2e3648bb57e2c17f",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "profile": "gost28147_cryptopro_c_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "ffeeddccbbaa9988",
+    "ciphertext_hex": "62aa8b2031785fcd",
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/gost"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "4b58a771afc7e5e8",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/kasumi/kasumi_test.go",
+    "source_sha256": "b6579d52d6d0ee6470497ac08facd33dbbfbc53d53f13f2ce211915a7f1bdd31",
+    "profile": "kasumi_3gpp_v1"
+  },
+  {
+    "key_hex": "00800000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "7eef113c95bb5a77",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/kasumi/kasumi_test.go",
+    "source_sha256": "b6579d52d6d0ee6470497ac08facd33dbbfbc53d53f13f2ce211915a7f1bdd31",
+    "profile": "kasumi_3gpp_v1"
+  },
+  {
+    "key_hex": "00008000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "5f140686d7ad5a39",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/kasumi/kasumi_test.go",
+    "source_sha256": "b6579d52d6d0ee6470497ac08facd33dbbfbc53d53f13f2ce211915a7f1bdd31",
+    "profile": "kasumi_3gpp_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000001",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "2e1491cf70aa465d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/kasumi/kasumi_test.go",
+    "source_sha256": "b6579d52d6d0ee6470497ac08facd33dbbfbc53d53f13f2ce211915a7f1bdd31",
+    "profile": "kasumi_3gpp_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000100",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "b54586f4ab9ae546",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/kasumi/kasumi_test.go",
+    "source_sha256": "b6579d52d6d0ee6470497ac08facd33dbbfbc53d53f13f2ce211915a7f1bdd31",
+    "profile": "kasumi_3gpp_v1"
+  },
+  {
+    "key_hex": "00112233445566778899aabbccddeeff",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "8b1da5f56ab3d07c",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/misty1/misty1_test.go",
+    "source_sha256": "6e3123e5384c9b9079799987eeb31626f2118dfe34b55ca49c05d79d98b44419",
+    "profile": "misty1_rfc2994_v1"
+  },
+  {
+    "key_hex": "00112233445566778899aabbccddeeff",
+    "plaintext_hex": "fedcba9876543210",
+    "ciphertext_hex": "04b68240b13be95d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/misty1/misty1_test.go",
+    "source_sha256": "6e3123e5384c9b9079799987eeb31626f2118dfe34b55ca49c05d79d98b44419",
+    "profile": "misty1_rfc2994_v1"
+  },
+  {
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+    "plaintext_hex": "98bcc10405ab0bfc686bececaad01ac19b452511bceb9cb094f905c51ca45430",
+    "ciphertext_hex": "00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "361ab6322fa9e7a7bb23818d839e01bddafdf47305426edd297aedb9f6202bae",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "8000000000000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "361ab6322fa9e7a7bb23818d839e01bddafdf47305426edd297aedb9f6202bae",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "361ab6322fa9e7a7bb23818d839e01bddafdf47305426edd297aedb9f6202bae",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "40000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "f3baf53e5301e08813f8be6f651bb19e9722151ff15063ba42a6fef7cf3bf3d7",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "e485005217441b60ee5b48ee8af924b268b6b952d7f593e6102ac83d7da72838",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "00100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "77cec8ea64bb7fae966d030fe4cf318c318dbebaeb896f31faa3c9cba0ae125d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "00000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "b38604950fa73165f940d4db527d09cd0b233276cd3808b5cadccb9fa859aeeb",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c",
+    "plaintext_hex": "2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c",
+    "ciphertext_hex": "dbf9b56bbf2e50df321ca687f8be0e6222e7df52b4a142174058cc119d9ec0da",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d",
+    "plaintext_hex": "2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d",
+    "ciphertext_hex": "8b2757374f778fe0b30d11ad7116ce37e2ab858a4e1c50d1115b6e328f3635f5",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "50505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050505050",
+    "plaintext_hex": "5050505050505050505050505050505050505050505050505050505050505050",
+    "ciphertext_hex": "be28cb05eeeeda8fd8971e9970ecbca25856f66e95ac8b987c69f04be3276cd7",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+    "plaintext_hex": "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+    "ciphertext_hex": "5f45e7f72a64c66269f83714a88a0701561c3e7af33bb48887d4439f5de4a82d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8",
+    "plaintext_hex": "f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8",
+    "ciphertext_hex": "b67638d30578ab2319fe275d0b833b50d7abf01e8760f566d0d441d8eafdf8aa",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "plaintext_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "ciphertext_hex": "0598127baf11706f77402000d730c54a0b84c868a98c6ca4d7f3c0fa06a78b7a",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "67c6697351ff4aec29cdbaabf2fbe3467cc254f81be8e78d765a2e63339fc99a",
+    "plaintext_hex": "66320db73158a35a255d051758e95ed4abb2cdc69bb454110e827441213ddc8770e93ea141e1fc673e017e97eadc6b968f385c2aecb03bfb32af3c54ec18db5c021afe43fbfaaa3afb29d1e6053c7c9475d8be6189f95cbba8990f95b1ebf1b305eff700e9a13ae5ca0bcbd0484764bd1f231ea81c7b64c514735ac55e4b79633b706424119e09dcaad4acf21b10af3b33cde3504847155cbb6f2219ba9b7df50be11a1c7f23f829f8a41b13b5ca4ee8983238e0794d3d34bc5f4e77facb6c05ac86212baa1a55a2be70b5733b045cd33694b3afe2f0e49e4f321549fd824ea90870d4b28a2954489a0abcd50e18a844ac5bf38e4cd72d9b0942e506c433afcda3847f2dadd47647de321cec4ac430f62023856cfbb20704f4ec0bb920ba86c33e05f1ecd96733b79950a3e314d3d934f75ea0f210a8f6059401beb4bc4478fa4969e623d01ada696a7e4c7e5125b34884533a94fb319990325744ee9bbce9e525cf08f5e9e25e5360aad2b2d085fa54d835e8d466826498d9a8877565705a8a3f62802944de7ca5894e5759d351adac869580ec17e485f18c0c66f17cc07cbb22fce466da610b63af62bc83b4692f3affaf271693ac071fb86d11342d8def4f89d4b66335c1c7e4248367d8ed9612ec453902d8e50af89d7709d1a596c1f41f95aa82ca6c49ae90cd1668baac7aa6f2b4a8ca99b2c2372acb08cf61c9c3805e",
+    "ciphertext_hex": "3e60f958f89e79df1e70ecf03ce6244a71d892d1855833296e4b245fa3cc18f688f97d9e44af7cd887bb95db93c34de08cac4f6cc5e41e53f7733bff48c19c12f06b00ea2517d735a5f939b89b908c281b9121a6c1b26ca6c5465fc0bdcd07ca0c9284a9014bf58395875a4bcffa523131e84f77d288fefcee1b4d4229fb0f31075573250c08ed6a5870c6e3779df375f869401b4c4abd4407011ea2f5540a7e572ac2edad80f94c5d35c322d2c2934f305b2cdb31b6b890595c80464aa5b32721fbb204ef72ac1f11384318d73d3c79d05a9946103416c4881374182e4d569ec2729610d02993d8888985eb4d1334449d5421ed3e9fe81efdc5b2f28863f8e480cab18845d48a436fba35c1a920443aca8dd4a5f0d88f0e10c87e45409c28654cb5e630f173453af4d4540aa85db48a242b779fbcf6f602700ee165af5d8775db665cfa858f92f66b471220c117a5a9a3b51f6c7de5e41c8551ed101930a57fe38d81f36e7457d0f447023c8a09d97e30760aa0317559c5180239c616539164433a10d6db2d2d69d23b8506e5d6d9b51b7501458f760b8d17b49324a9931d2a6911b75cfb4aadd58af1928f723e939bee1048da8ca8f1fe7749fddce1f707af151bb88431695926fd81f871a0148c63ba2bd7b369d8c797c71fd86d4f5572820204037132a2bed192fbb4d88edf6fbd12d43d91e8363ef026056e684a8eb9b5",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/shacal2/shacal2_test.go",
+    "source_sha256": "a3516b104b4218405edec2d04bbc14709306f99900a46b9d35fa4dbb254dd631",
+    "profile": "shacal2_be_v1"
+  },
+  {
+    "key_hex": "00112233445566778899",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "7c1f0f80b1df9c28",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/twine/twine_test.go",
+    "source_sha256": "e4f79483721ecda64c1538e8fa572e615454294b9a51706b601a81b04f2bf3ad",
+    "profile": "twine80_v1"
+  },
+  {
+    "key_hex": "00112233445566778899aabbccddeeff",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "979ff9b379b5a9b8",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/twine/twine_test.go",
+    "source_sha256": "e4f79483721ecda64c1538e8fa572e615454294b9a51706b601a81b04f2bf3ad",
+    "profile": "twine128_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "842dc7a5b57b7af3",
+    "ciphertext_hex": "6e950f179e145921",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/hight/hight_test.go",
+    "profile": "hight_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "41ea3a0a94baa940",
+    "source": "https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/test/java/org/bouncycastle/crypto/test/TEATest.java",
+    "profile": "tea32_be_v1"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "9f589f5cf6122c32b6bfec2f2ae8c35a",
+    "ciphertext_hex": "d491db16e7b1c39e86cb086b789f5419",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/twofishv.dat"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "9f589f5cf6122c32b6bfec2f2ae8c35a",
+    "plaintext_hex": "d491db16e7b1c39e86cb086b789f5419",
+    "ciphertext_hex": "019f9809de1711858faac3a3ba20fbc3",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/twofishv.dat"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "d491db16e7b1c39e86cb086b789f5419",
+    "plaintext_hex": "019f9809de1711858faac3a3ba20fbc3",
+    "ciphertext_hex": "6363977de839486297e661c6c9d668eb",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/twofishv.dat"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "efa71f788965bd4453f860178fc191010000000000000000",
+    "plaintext_hex": "88b2b2706b105e36b446bb6d731a1e88",
+    "ciphertext_hex": "39da69d6ba4997d585b6dc073ca341b2",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/twofishv.dat"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "88b2b2706b105e36b446bb6d731a1e88efa71f788965bd44",
+    "plaintext_hex": "39da69d6ba4997d585b6dc073ca341b2",
+    "ciphertext_hex": "182b02d81497ea45f9daacdc29193a65",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/twofishv.dat"
+  },
+  {
+    "profile": "twofish_v1",
+    "key_hex": "d43bb7556ea32e46f2a282b7d45b4e0d57ff739d4dc92c1bd7fc01700cc8216f",
+    "plaintext_hex": "90afe91bb288544f2c32dc239b2635e6",
+    "ciphertext_hex": "6cb4561c40bf0a9705931cb6d408e7fa",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/twofishv.dat"
+  },
+  {
+    "profile": "hight_v1",
+    "key_hex": "88e34f8f081779f1e9f394370ad40589",
+    "plaintext_hex": "d76d0d18327ec562",
+    "ciphertext_hex": "e4bc2e312277e4dd",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestVectors/hight.txt"
+  },
+  {
+    "profile": "hight_v1",
+    "key_hex": "2923be84e16cd6ae529049f1f1bbe9eb",
+    "plaintext_hex": "b3a6db3c870c3e99",
+    "ciphertext_hex": "23cad1a3cddf7eab",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestVectors/hight.txt"
+  },
+  {
+    "profile": "hight_v1",
+    "key_hex": "245e0d1c06b747deb3124dc843bb8ba6",
+    "plaintext_hex": "1f035a7d0938251f",
+    "ciphertext_hex": "52bd91bb26f8ed99",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestVectors/hight.txt"
+  },
+  {
+    "profile": "present128_v1",
+    "key_hex": "12345678901234561234567890123456",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "d9e1206977a3194b",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/present/present_test.go"
   }
 ]

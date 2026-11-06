@@ -4732,13 +4732,11 @@ Parameters:
   "additionalProperties": false,
   "oneOf": [
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
         },
         "profile": {
           "const": "des_fips46_v1"
@@ -4748,30 +4746,14 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
         },
         "profile": {
           "const": "tdes_ede2_v1"
@@ -4781,30 +4763,14 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){24,24}$"
+          "pattern": "^(?:[0-9A-Fa-f]{48})$"
         },
         "profile": {
           "const": "tdes_ede3_v1"
@@ -4814,25 +4780,9 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
@@ -4847,30 +4797,14 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
         },
         "profile": {
           "const": "idea_v1"
@@ -4880,25 +4814,9 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "effective_key_bits": {
@@ -4919,21 +4837,755 @@ Parameters:
         "profile",
         "key_hex",
         "effective_key_bits"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
           "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "camellia_rfc3713_v1"
         }
-      }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "serpent_final_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){5,16}$"
+        },
+        "profile": {
+          "const": "cast128_rfc2144_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "cast256_rfc2612_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "aria_rfc5794_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "twofish_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "sm4_gmt0002_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "kuznyechik_rfc7801_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "magma_rfc8891_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "gift128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "xtea32_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "rc5_32_12_16_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rc6_32_20_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
+        },
+        "profile": {
+          "const": "speck32_64_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{18})$"
+        },
+        "profile": {
+          "const": "speck48_72_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "speck48_96_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "speck64_96_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "speck64_128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "speck96_96_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{36})$"
+        },
+        "profile": {
+          "const": "speck96_144_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "speck128_128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{48})$"
+        },
+        "profile": {
+          "const": "speck128_192_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "speck128_256_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_160_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_192_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_224_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_256_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "skipjack_nist_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "noekeon_direct_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "lea_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "present80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "present128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_test_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_cryptopro_a_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_cryptopro_b_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_cryptopro_c_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "tea32_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64}|[0-9A-Fa-f]{72}|[0-9A-Fa-f]{80}|[0-9A-Fa-f]{88}|[0-9A-Fa-f]{96}|[0-9A-Fa-f]{104}|[0-9A-Fa-f]{112}|[0-9A-Fa-f]{120}|[0-9A-Fa-f]{128})$"
+        },
+        "profile": {
+          "const": "shacal2_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "twine80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "twine128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "hight_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "misty1_rfc2994_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "kasumi_3gpp_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
     }
   ],
   "required": [
@@ -4942,7 +5594,7 @@ Parameters:
   ],
   "$defs": {
     "Profile": {
-      "description": "Exact full-round profiles; there is no default or family-name inference.",
+      "description": "Exact full-round profiles; no default or family-name inference.",
       "type": "string",
       "enum": [
         "des_fips46_v1",
@@ -4950,7 +5602,51 @@ Parameters:
         "tdes_ede3_v1",
         "blowfish_be_v1",
         "idea_v1",
-        "rc2_rfc2268_v1"
+        "rc2_rfc2268_v1",
+        "camellia_rfc3713_v1",
+        "serpent_final_v1",
+        "cast128_rfc2144_v1",
+        "cast256_rfc2612_v1",
+        "aria_rfc5794_v1",
+        "twofish_v1",
+        "sm4_gmt0002_v1",
+        "kuznyechik_rfc7801_v1",
+        "magma_rfc8891_v1",
+        "gift128_v1",
+        "xtea32_le_v1",
+        "rc5_32_12_16_le_v1",
+        "rc6_32_20_v1",
+        "speck32_64_be_v1",
+        "speck48_72_be_v1",
+        "speck48_96_be_v1",
+        "speck64_96_be_v1",
+        "speck64_128_be_v1",
+        "speck96_96_be_v1",
+        "speck96_144_be_v1",
+        "speck128_128_be_v1",
+        "speck128_192_be_v1",
+        "speck128_256_be_v1",
+        "rijndael_128_v1",
+        "rijndael_160_v1",
+        "rijndael_192_v1",
+        "rijndael_224_v1",
+        "rijndael_256_v1",
+        "skipjack_nist_v1",
+        "noekeon_direct_v1",
+        "lea_v1",
+        "present80_v1",
+        "present128_v1",
+        "gost28147_test_le_v1",
+        "gost28147_cryptopro_a_le_v1",
+        "gost28147_cryptopro_b_le_v1",
+        "gost28147_cryptopro_c_le_v1",
+        "tea32_be_v1",
+        "shacal2_be_v1",
+        "twine80_v1",
+        "twine128_v1",
+        "hight_v1",
+        "misty1_rfc2994_v1",
+        "kasumi_3gpp_v1"
       ]
     }
   }
@@ -5009,13 +5705,11 @@ Parameters:
   "additionalProperties": false,
   "oneOf": [
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
         },
         "profile": {
           "const": "des_fips46_v1"
@@ -5025,30 +5719,14 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
         },
         "profile": {
           "const": "tdes_ede2_v1"
@@ -5058,30 +5736,14 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){24,24}$"
+          "pattern": "^(?:[0-9A-Fa-f]{48})$"
         },
         "profile": {
           "const": "tdes_ede3_v1"
@@ -5091,25 +5753,9 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
@@ -5124,30 +5770,14 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "key_hex": {
           "type": "string",
-          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
         },
         "profile": {
           "const": "idea_v1"
@@ -5157,25 +5787,9 @@ Parameters:
       "required": [
         "profile",
         "key_hex"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
-          "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
-        }
-      }
+      ]
     },
     {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "title": "Parameters",
       "type": "object",
       "properties": {
         "effective_key_bits": {
@@ -5196,21 +5810,755 @@ Parameters:
         "profile",
         "key_hex",
         "effective_key_bits"
-      ],
-      "$defs": {
-        "Profile": {
-          "description": "Exact full-round profiles; there is no default or family-name inference.",
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
           "type": "string",
-          "enum": [
-            "des_fips46_v1",
-            "tdes_ede2_v1",
-            "tdes_ede3_v1",
-            "blowfish_be_v1",
-            "idea_v1",
-            "rc2_rfc2268_v1"
-          ]
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "camellia_rfc3713_v1"
         }
-      }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "serpent_final_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){5,16}$"
+        },
+        "profile": {
+          "const": "cast128_rfc2144_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "cast256_rfc2612_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "aria_rfc5794_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "twofish_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "sm4_gmt0002_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "kuznyechik_rfc7801_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "magma_rfc8891_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "gift128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "xtea32_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "rc5_32_12_16_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rc6_32_20_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
+        },
+        "profile": {
+          "const": "speck32_64_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{18})$"
+        },
+        "profile": {
+          "const": "speck48_72_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "speck48_96_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "speck64_96_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "speck64_128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "speck96_96_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{36})$"
+        },
+        "profile": {
+          "const": "speck96_144_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "speck128_128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{48})$"
+        },
+        "profile": {
+          "const": "speck128_192_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "speck128_256_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_160_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_192_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_224_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "rijndael_256_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "skipjack_nist_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "noekeon_direct_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "lea_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "present80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "present128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_test_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_cryptopro_a_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_cryptopro_b_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "gost28147_cryptopro_c_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "tea32_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{40}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{56}|[0-9A-Fa-f]{64}|[0-9A-Fa-f]{72}|[0-9A-Fa-f]{80}|[0-9A-Fa-f]{88}|[0-9A-Fa-f]{96}|[0-9A-Fa-f]{104}|[0-9A-Fa-f]{112}|[0-9A-Fa-f]{120}|[0-9A-Fa-f]{128})$"
+        },
+        "profile": {
+          "const": "shacal2_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "twine80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "twine128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "hight_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "misty1_rfc2994_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "kasumi_3gpp_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
     }
   ],
   "required": [
@@ -5219,7 +6567,7 @@ Parameters:
   ],
   "$defs": {
     "Profile": {
-      "description": "Exact full-round profiles; there is no default or family-name inference.",
+      "description": "Exact full-round profiles; no default or family-name inference.",
       "type": "string",
       "enum": [
         "des_fips46_v1",
@@ -5227,7 +6575,51 @@ Parameters:
         "tdes_ede3_v1",
         "blowfish_be_v1",
         "idea_v1",
-        "rc2_rfc2268_v1"
+        "rc2_rfc2268_v1",
+        "camellia_rfc3713_v1",
+        "serpent_final_v1",
+        "cast128_rfc2144_v1",
+        "cast256_rfc2612_v1",
+        "aria_rfc5794_v1",
+        "twofish_v1",
+        "sm4_gmt0002_v1",
+        "kuznyechik_rfc7801_v1",
+        "magma_rfc8891_v1",
+        "gift128_v1",
+        "xtea32_le_v1",
+        "rc5_32_12_16_le_v1",
+        "rc6_32_20_v1",
+        "speck32_64_be_v1",
+        "speck48_72_be_v1",
+        "speck48_96_be_v1",
+        "speck64_96_be_v1",
+        "speck64_128_be_v1",
+        "speck96_96_be_v1",
+        "speck96_144_be_v1",
+        "speck128_128_be_v1",
+        "speck128_192_be_v1",
+        "speck128_256_be_v1",
+        "rijndael_128_v1",
+        "rijndael_160_v1",
+        "rijndael_192_v1",
+        "rijndael_224_v1",
+        "rijndael_256_v1",
+        "skipjack_nist_v1",
+        "noekeon_direct_v1",
+        "lea_v1",
+        "present80_v1",
+        "present128_v1",
+        "gost28147_test_le_v1",
+        "gost28147_cryptopro_a_le_v1",
+        "gost28147_cryptopro_b_le_v1",
+        "gost28147_cryptopro_c_le_v1",
+        "tea32_be_v1",
+        "shacal2_be_v1",
+        "twine80_v1",
+        "twine128_v1",
+        "hight_v1",
+        "misty1_rfc2994_v1",
+        "kasumi_3gpp_v1"
       ]
     }
   }

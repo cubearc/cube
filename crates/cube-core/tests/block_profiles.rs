@@ -168,11 +168,94 @@ fn exact_limits_whole_blocks_and_private_contracts_are_preserved() {
         for length in 0usize..=32 {
             let input =
                 json!({"input":{"base64":cube_core::encoding::base64_encode(&vec![255;length])}});
-            assert_eq!(
-                c.validate_inputs(&input).is_ok(),
-                length.is_multiple_of(8),
-                "{length}"
-            );
+            assert!(c.validate_inputs(&input).is_ok(), "{length}");
         }
     }
+}
+
+#[test]
+fn selected_gost_sboxes_use_the_explicit_little_endian_convention() {
+    let parameters = json!({"profile":"gost28147_test_le_v1","key_hex":"75713134b60fec45a607bb83aa3746af4ff99da6d1b53b5b1b402a1baa030d1b"});
+    let input = hex::decode("1122334455667788").unwrap();
+    let actual = execution::execute(
+        block_profiles::ENCRYPT,
+        1,
+        &json!({"input":{"base64":cube_core::encoding::base64_encode(&input)}}),
+        &parameters,
+        Budget::default(),
+    )
+    .unwrap();
+    assert_eq!(
+        actual,
+        json!({"output":{"base64":cube_core::encoding::base64_encode(&hex::decode("03251e14f9d28acb").unwrap())}})
+    );
+}
+
+#[test]
+fn variable_width_alignment_key_gaps_and_reference_limits_are_enforced() {
+    for profile in Profile::ALL {
+        let vector = vectors()
+            .into_iter()
+            .find(|v| Profile::parse(v["profile"].as_str().unwrap()).unwrap() == *profile)
+            .unwrap();
+        let key = hex::decode(vector["key_hex"].as_str().unwrap()).unwrap();
+        let bits = vector["effective_key_bits"].as_u64().map(|n| n as u16);
+        let settings = Settings::new(*profile, &key, bits).unwrap();
+        for length in [profile.block_bytes() - 1, profile.block_bytes() + 1] {
+            assert_eq!(
+                block_profiles::encrypt(&vec![0; length], &settings)
+                    .unwrap_err()
+                    .code,
+                ErrorCode::InvalidInput
+            );
+            assert_eq!(
+                block_profiles::decrypt(&vec![0; length], &settings)
+                    .unwrap_err()
+                    .code,
+                ErrorCode::InvalidInput
+            );
+        }
+        assert_eq!(
+            block_profiles::encrypt(&vec![0; profile.max_input_bytes() + 1], &settings)
+                .unwrap_err()
+                .code,
+            ErrorCode::ResourceLimit
+        );
+    }
+    for (profile, key_size) in [
+        (Profile::Rijndael128, 17),
+        (Profile::Camellia, 20),
+        (Profile::Cast256, 18),
+        (Profile::Shacal2, 18),
+        (Profile::Speck48_72, 10),
+    ] {
+        assert!(Settings::new(profile, &vec![0; key_size], None).is_err());
+    }
+    // Original Rijndael's five key widths for each of five block widths have
+    // independently expected bytes, including the three non-AES gaps.
+    let tuples: std::collections::BTreeSet<_> = vectors()
+        .into_iter()
+        .filter(|v| v["profile"].as_str().unwrap().starts_with("rijndael_"))
+        .map(|v| {
+            (
+                v["profile"].as_str().unwrap().to_string(),
+                v["key_hex"].as_str().unwrap().len() / 2,
+            )
+        })
+        .collect();
+    assert_eq!(tuples.len(), 25);
+    let settings = Settings::new(Profile::Present80, &[0; 10], None).unwrap();
+    let exact = vec![0; 64 * 1024];
+    let encrypted = block_profiles::encrypt(&exact, &settings).unwrap();
+    assert_eq!(
+        block_profiles::decrypt(&encrypted, &settings).unwrap(),
+        exact
+    );
+    let settings = Settings::new(Profile::Rijndael224, &[0; 20], None).unwrap();
+    let aligned = vec![0; (64 * 1024 / 28) * 28];
+    let encrypted = block_profiles::encrypt(&aligned, &settings).unwrap();
+    assert_eq!(
+        block_profiles::decrypt(&encrypted, &settings).unwrap(),
+        aligned
+    );
 }

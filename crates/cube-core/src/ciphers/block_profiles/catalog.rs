@@ -8,7 +8,9 @@ const PARAMETERS: &[o::Parameter] = &[
         description: "Required exact full-round block profile; no default.",
         required: true,
         default: None,
-        constraints: o::ParameterType::Text { choices: &[] },
+        constraints: o::ParameterType::Text {
+            choices: Profile::NAMES,
+        },
     },
     o::Parameter {
         name: "key_hex",
@@ -62,11 +64,11 @@ const fn row(
                 alphabet: "Exact bytes; no text conversion.",
                 key: "Explicit required profile and exact key bytes. DES parity bits are ignored, not corrected; weak and degenerate keys remain accepted for forensic compatibility.",
                 key_advancement: "Independent whole blocks. No IV, counter, padding, nonce, KDF, RNG or mode.",
-                block_bits: Some(64),
+                block_bits: None,
                 output_bits: None,
             },
             resources: &[],
-            resource_notes: "Input/output at most 1 MiB, whole profile blocks; empty identity after settings validation. Private JSON at most 4096 bytes. One output allocation plus fixed backend state. Owned key and expanded schedules wiped on drop; upstream temporary stacks, caller/parser/interpreter/OS copies are not guaranteed erased. No pipeline or automatic capture. Host transport budgets remain independent.",
+            resource_notes: "Input/output at most 1 MiB (64 KiB for educational reference implementations), whole profile blocks; empty identity after settings validation. Private JSON at most 4096 bytes. One output allocation plus fixed backend state. Owned key and supported expanded schedules wiped on drop; upstream temporary stacks, caller/parser/interpreter/OS copies are not guaranteed erased. No pipeline or automatic capture. Host transport budgets remain independent.",
             rust_api: api,
             python_api,
             references: &[
@@ -106,6 +108,9 @@ fn parameters_schema() -> schemars::Schema {
             .iter()
             .map(|p| {
                 let mut row = base.clone();
+                for redundant in ["$defs", "$schema", "title"] {
+                    row.as_object_mut().unwrap().remove(redundant);
+                }
                 row["properties"]["profile"] = json!({"const":p});
                 row["properties"]["key_hex"]["pattern"] = json!(p.key_pattern());
                 if *p == Profile::Rc2 {
@@ -128,10 +133,7 @@ fn bytes_schema() -> schemars::Schema {
     let mut schema = c::schema::<c::values::Bytes>().to_value();
     schema["properties"]["base64"]["maxLength"] = json!(MAX_INPUT.div_ceil(3) * 4);
     schema["properties"]["base64"]["x-cube-max-decoded-bytes"] = json!(MAX_INPUT);
-    schema["properties"]["base64"]["pattern"] = json!(
-        "^(?:[A-Za-z0-9+/]{32})*(?:[A-Za-z0-9+/]{10}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/]{21}[AQgw]==)?$"
-    );
-    schemars::Schema::try_from(schema).expect("bounded whole eight-byte blocks")
+    schemars::Schema::try_from(schema).expect("bounded canonical byte transport")
 }
 const INPUT: c::Port = c::Port {
     name: "input",
@@ -153,8 +155,8 @@ const fn contract(index: usize, fixture: fn() -> Result<c::Fixture, OperationErr
         limits: c::Limits {
             max_input_bytes: Some(MAX_INPUT as u64),
             max_output_bytes: Some(MAX_INPUT as u64),
-            max_items: Some((MAX_INPUT / 8) as u64),
-            max_work: Some((MAX_INPUT / 8) as u64),
+            max_items: Some((MAX_INPUT / 4) as u64),
+            max_work: Some((MAX_INPUT / 4) as u64),
             max_memory_bytes: None,
         },
         fixture,

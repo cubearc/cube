@@ -17,8 +17,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .parent()
         .and_then(Path::parent)
         .ok_or("repository root missing")?;
-    let mut catalog = serde_json::to_string_pretty(&document)?;
-    catalog.push('\n');
+    let catalog = contracts::serialize_document(&document)?;
     let fixtures: Vec<serde_json::Value> =
         serde_json::from_str(include_str!("../src/operations/contracts/conformance.json"))?;
     let mut reference = String::from(

@@ -7,6 +7,20 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+aria={ version="=0.2.0", features=["zeroize"] }
+camellia={ version="=0.2.1", features=["zeroize"] }
+cast5={ version="=0.12.0", features=["zeroize"] }
+cast6={ version="=0.2.0", features=["zeroize"] }
+gift-cipher={ version="=0.1.0", features=["zeroize"] }
+kuznyechik={ version="=0.9.0", features=["zeroize"] }
+magma={ version="=0.10.0", features=["zeroize"] }
+rc5={ version="=0.1.0", features=["zeroize"] }
+rc6={ version="=0.1.0", features=["zeroize"] }
+serpent={ version="=0.6.0", features=["zeroize"] }
+sm4={ version="=0.6.0", features=["zeroize"] }
+speck-cipher={ version="=0.1.0", features=["zeroize"] }
+twofish={ version="=0.8.0", features=["zeroize"] }
+xtea={ version="=0.1.0", features=["zeroize"] }
 aes = { version = "=0.9.3", features = ["zeroize"] }
 des = { version = "=0.9.0", features = ["zeroize"] }
 blowfish = { version = "=0.10.0", features = ["zeroize"] }

@@ -9,20 +9,85 @@ produces bytes on decryption.
 ## Operations and profiles
 
 `cipher.block.encrypt_blocks` and `cipher.block.decrypt_blocks` return exact
-bytes under the selected full-round profile. Every profile below uses eight-byte
-blocks. There is no default profile or key.
+bytes under the selected full-round profile. Block widths and key lengths are
+explicit below. There is no default profile or key.
+
+### Legacy interoperability
+
+| Profile | Block bytes | Key bytes | Definition |
+| --- | --- | --- | --- |
+| `des_fips46_v1` | 8 | 8 | DES, 16 rounds; parity bits ignored |
+| `tdes_ede2_v1` | 8 | 16 | Triple DES EDE with K1/K2/K1 |
+| `tdes_ede3_v1` | 8 | 24 | Triple DES EDE with K1/K2/K3 |
+| `blowfish_be_v1` | 8 | 4..56 | Blowfish, 16 rounds, big-endian words |
+| `idea_v1` | 8 | 16 | IDEA, eight rounds plus output, big-endian words |
+| `rc2_rfc2268_v1` | 8 | 1..128 | RFC 2268, little-endian words; explicit effective bits |
+| `cast128_rfc2144_v1` | 8 | 5..16 | CAST-128; 12 rounds for keys up to 10 bytes, otherwise 16 |
+| `cast256_rfc2612_v1` | 16 | 16, 20, 24, 28, 32 | CAST-256, 48 rounds, big-endian words |
+| `rc5_32_12_16_le_v1` | 8 | 16 | RC5, 32-bit words, 12 rounds, little-endian bytes |
+| `rc6_32_20_v1` | 16 | 16, 24, 32 | RC6, 32-bit words, 20 rounds, little-endian bytes |
+| `skipjack_nist_v1` | 8 | 10 | NIST SKIPJACK, 32 rounds, big-endian words |
+
+### Full-round 128-bit block profiles
 
 | Profile | Key bytes | Definition |
 | --- | --- | --- |
-| `des_fips46_v1` | 8 | DES, 16 rounds; parity bits ignored |
-| `tdes_ede2_v1` | 16 | Two-key Triple DES, encrypt K1 / decrypt K2 / encrypt K1 |
-| `tdes_ede3_v1` | 24 | Three-key Triple DES, encrypt K1 / decrypt K2 / encrypt K3 |
-| `blowfish_be_v1` | 4..56 | Blowfish, 16 rounds, big-endian words |
-| `idea_v1` | 16 | IDEA, eight rounds and output transformation, big-endian words |
-| `rc2_rfc2268_v1` | 1..128 | RFC 2268 RC2; little-endian words, 16 mixing rounds |
+| `camellia_rfc3713_v1` | 16, 24, 32 | RFC 3713; 18 or 24 rounds |
+| `serpent_final_v1` | 16, 24, 32 | Final Serpent, 32 rounds; standard external bytes |
+| `twofish_v1` | 16, 24, 32 | Original Twofish, 16 rounds; little-endian words |
+| `aria_rfc5794_v1` | 16, 24, 32 | RFC 5794; 12, 14 or 16 rounds |
+| `sm4_gmt0002_v1` | 16 | GM/T 0002 SM4, 32 rounds; big-endian words |
+| `kuznyechik_rfc7801_v1` | 32 | RFC 7801 Kuznyechik, ten round keys |
+| `noekeon_direct_v1` | 16 | Direct-key NOEKEON, 16 rounds plus final key step |
+| `lea_v1` | 16, 24, 32 | LEA, 24, 28 or 32 rounds; little-endian words |
+| `gift128_v1` | 16 | GIFT-128, 40 rounds; original byte representation |
 
+### Original Rijndael widths
+
+| Profile | Block bytes | Key bytes |
+| --- | --- | --- |
+| `rijndael_128_v1` | 16 | 16, 20, 24, 28, 32 |
+| `rijndael_160_v1` | 20 | 16, 20, 24, 28, 32 |
+| `rijndael_192_v1` | 24 | 16, 20, 24, 28, 32 |
+| `rijndael_224_v1` | 28 | 16, 20, 24, 28, 32 |
+| `rijndael_256_v1` | 32 | 16, 20, 24, 28, 32 |
+
+Rijndael uses column-major bytes and `max(block bytes, key bytes) / 4 + 6`
+rounds. Its 224-bit block uses row shifts 0/1/2/4; its 256-bit block uses
+0/1/3/4. Standard AES tuples use the separate AES backend internally.
+
+### Small and variable block profiles
+
+| Profile | Block bytes | Key bytes | Definition |
+| --- | --- | --- | --- |
+| `gost28147_test_le_v1` | 8 | 32 | GOST 28147-89 Applied Cryptography test S-box; little-endian words |
+| `gost28147_cryptopro_a_le_v1` | 8 | 32 | GOST 28147-89 CryptoPro A; little-endian words |
+| `gost28147_cryptopro_b_le_v1` | 8 | 32 | GOST 28147-89 CryptoPro B; little-endian words |
+| `gost28147_cryptopro_c_le_v1` | 8 | 32 | GOST 28147-89 CryptoPro C; little-endian words |
+| `tea32_be_v1` | 8 | 16 | Original TEA, 32 cycles; big-endian words |
+| `shacal2_be_v1` | 32 | 16..64, multiples of 4 | SHACAL-2, 64 rounds; big-endian words and key zero-fill to 64 bytes |
+| `twine80_v1` | 8 | 10 | TWINE-80, 36 rounds; high nibble first |
+| `twine128_v1` | 8 | 16 | TWINE-128, 36 rounds; high nibble first |
+| `hight_v1` | 8 | 16 | HIGHT, 32 rounds and whitening; original byte ordering |
+| `misty1_rfc2994_v1` | 8 | 16 | RFC 2994 MISTY1, eight rounds and final FL; big-endian words |
+| `kasumi_3gpp_v1` | 8 | 16 | 3GPP KASUMI, eight rounds; big-endian words |
+| `magma_rfc8891_v1` | 8 | 32 | RFC 8891, fixed TC26 S-box; big-endian words |
+| `xtea32_le_v1` | 8 | 16 | XTEA, 32 cycles; little-endian words |
+| `present80_v1` | 8 | 10 | PRESENT-80, 31 rounds plus whitening; big-endian bytes |
+| `present128_v1` | 8 | 16 | PRESENT-128, 31 rounds plus whitening; big-endian bytes |
+| `speck32_64_be_v1` | 4 | 8 | Original full-round SPECK 32/64; big-endian word tuple |
+| `speck48_72_be_v1` | 6 | 9 | Original full-round SPECK 48/72; big-endian word tuple |
+| `speck48_96_be_v1` | 6 | 12 | Original full-round SPECK 48/96; big-endian word tuple |
+| `speck64_96_be_v1` | 8 | 12 | Original full-round SPECK 64/96; big-endian word tuple |
+| `speck64_128_be_v1` | 8 | 16 | Original full-round SPECK 64/128; big-endian word tuple |
+| `speck96_96_be_v1` | 12 | 12 | Original full-round SPECK 96/96; big-endian word tuple |
+| `speck96_144_be_v1` | 12 | 18 | Original full-round SPECK 96/144; big-endian word tuple |
+| `speck128_128_be_v1` | 16 | 16 | Original full-round SPECK 128/128; big-endian word tuple |
+| `speck128_192_be_v1` | 16 | 24 | Original full-round SPECK 128/192; big-endian word tuple |
+| `speck128_256_be_v1` | 16 | 32 | Original full-round SPECK 128/256; big-endian word tuple |
 RC2 requires `effective_key_bits` in 1..1024, independently of the key length.
-Other profiles reject that setting. No effective-bit count is inferred from
+Other profiles reject that setting. GOST selects a fixed named S-box; none is
+inferred from a family name or supplied as an arbitrary table. No effective-bit count is inferred from
 the key. DES-family parity is not validated or repaired. Weak and degenerate keys
 are accepted for compatibility with historical data and test vectors.
 
@@ -66,7 +131,8 @@ generated profile-specific parameter types. All interfaces execute Core.
 | Resource or failure | Rule |
 | --- | --- |
 | Input and output | At most 1 MiB each; output has the input length |
-| Work | At most 131,072 independent eight-byte blocks plus fixed key expansion |
+| Educational reference cap | 64 KiB for Rijndael, SKIPJACK, NOEKEON, LEA, PRESENT, TEA, SHACAL-2, TWINE, HIGHT, MISTY1 and KASUMI |
+| Work | At most 262,144 independent blocks; each profile also enforces its byte ceiling and width |
 | Private parameter JSON | At most 4096 UTF-8 bytes |
 | Invalid profile, key or settings | `invalid_parameter`; no secret excerpts |
 | Partial block | `invalid_input`; no output or padding |
@@ -82,7 +148,7 @@ explicit private-output retention policy; key parameters and literal inputs stay
 out of saved configuration and provenance. Byte outputs use the existing viewer.
 No network access or automatic capture is introduced.
 
-Owned decoded keys and backend schedules are wiped on drop. Temporary backend
+Owned decoded keys and supported backend schedules are wiped on drop. Temporary backend
 key-expansion arrays, caller buffers, parser/interpreter/compiler copies and OS
 memory are not guaranteed erased. Returned bytes belong to the caller. Small
 block sizes, obsolete algorithms and weak keys retain their original weaknesses.

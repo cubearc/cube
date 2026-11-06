@@ -404,7 +404,6 @@ pub fn discovery_document(
     format: super::DiscoveryFormat,
     maximum: usize,
 ) -> Result<String, OperationError> {
-    use std::io::Write;
     if maximum > MAX_DOCUMENT_BYTES {
         return Err(invalid("contract discovery limit exceeds four MiB"));
     }
@@ -455,6 +454,18 @@ pub fn discovery_document(
             }
         }
     };
+    bounded_json(&value, maximum)
+}
+
+/// Serialize the complete canonical catalog as compact JSON within four MiB.
+/// Every contract and full-width integer schema is retained. The trailing
+/// newline counts toward the same transport ceiling used by discovery.
+pub fn serialize_document(document: &Document) -> Result<String, OperationError> {
+    bounded_json(document, MAX_DOCUMENT_BYTES)
+}
+
+fn bounded_json(value: &impl Serialize, maximum: usize) -> Result<String, OperationError> {
+    use std::io::Write;
     struct Output {
         data: Vec<u8>,
         maximum: usize,
@@ -477,7 +488,7 @@ pub fn discovery_document(
         data: Vec::new(),
         maximum,
     };
-    serde_json::to_writer(&mut output, &value).map_err(|_| {
+    serde_json::to_writer(&mut output, value).map_err(|_| {
         OperationError::new(
             ErrorCode::ResourceLimit,
             "complete contract discovery exceeds output budget",

@@ -15,12 +15,27 @@ AES retains its separate backend and API.
 | `idea` | 0.6.0 | `zeroize` | Rust 1.85 |
 | `rc2` | 0.9.0 | `zeroize` | Rust 1.85 |
 
-All four are maintained in
+| `aria` | 0.2.0 | `zeroize` | Rust 1.85 |
+| `camellia` | 0.2.1 | `zeroize` | Rust 1.85 |
+| `cast5` | 0.12.0 | `zeroize` | Rust 1.85 |
+| `cast6` | 0.2.0 | `zeroize` | Rust 1.85 |
+| `gift-cipher` | 0.1.0 | `zeroize` | Rust 1.85 |
+| `kuznyechik` | 0.9.0 | `zeroize` | Rust 1.85 |
+| `magma` | 0.10.0 | `zeroize` | Rust 1.85 |
+| `rc5` | 0.1.0 | `zeroize` | Rust 1.85 |
+| `rc6` | 0.1.0 | `zeroize` | Rust 1.85 |
+| `serpent` | 0.6.0 | `zeroize` | Rust 1.85 |
+| `sm4` | 0.6.0 | `zeroize` | Rust 1.85 |
+| `speck-cipher` | 0.1.0 | `zeroize` | Rust 1.85 |
+| `twofish` | 0.8.0 | `zeroize` | Rust 1.85 |
+| `xtea` | 0.1.0 | `zeroize` | Rust 1.85 |
+
+These packages are maintained in
 [RustCrypto/block-ciphers at 9a84f2f](https://github.com/RustCrypto/block-ciphers/tree/9a84f2f8b581f62bcd00e16b5e11a2f6251916ee)
 under MIT OR Apache-2.0. They are pure Rust, `no_std`, forbid unsafe code and
 require no C library, system crypto service or runtime CPU feature. The lockfile
 records registry checksums. The shared `cipher` 0.5 API supplies block traits;
-Cube owns profile validation, not primitive algorithms.
+Cube owns exact profile validation; these packages own their primitive algorithms.
 
 The upstream project explicitly states that its non-AES ciphers have not
 received formal security review and are not constant-time implementations.
@@ -69,3 +84,61 @@ partial input, exact/one-over byte and parameter limits, canonical schemas,
 private retention and forbidden capture. Generated TypeScript requires RC2's
 effective length and refuses it on other profiles. Platform/browser CI remains
 the evidence for those hosts; local execution alone does not prove them.
+
+## Maintained and educational reference profiles
+
+The additional pinned packages use the same `cipher` 0.5 block traits and
+`zeroize` feature. Each registry archive was checked against its recorded
+lockfile checksum. On 2026-11-06 the RustSec snapshot
+[`26fd2d4`](https://github.com/RustSec/advisory-db/tree/26fd2d43f7280a1fb925a3743ec463017afe7119)
+had no package-specific advisory path for these fourteen additional packages.
+This source inspection is not a vulnerability audit.
+
+Original Rijndael's non-AES widths, NIST SKIPJACK, direct NOEKEON, LEA and
+PRESENT, TEA, SHACAL-2, TWINE, HIGHT, MISTY1 and KASUMI have explicit
+educational/forensic reference implementations in Core.
+They do not establish a production-security or constant-time backend. Their
+64 KiB per-call limit bounds their slower software work before key expansion
+and output allocation. Standard AES key/block tuples reuse `aes`; no separate
+handwritten AES path is exposed. Neither SDK contains a primitive implementation.
+
+The reference implementations were reviewed against their original schedules
+and published BC/NIST/Gladman, KISA and CHES known answers. The pinned
+[Go source](https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher)
+is Apache-2.0; its arithmetic was rewritten in safe Rust with attribution.
+It supplies only independently checked oracle cases. It is not a runtime
+or build dependency. The PRESENT-80 nonzero-key source example has a high-key
+parsing defect; the accepted corrected value was verified independently with
+[the MIT C80 reference](https://github.com/openluopworld/block-ciphers/tree/30555b1d3b5e1cd58bd8acbf7e0729074fa5bd43/present).
+That C program is qualification-only. Go Rijndael's 224-bit block shifts also
+differ from the original proposal; only original BC expected bytes qualify
+that width. Neither source defect is reproduced in the Core profiles.
+
+The shared corpus includes RFC 2144/2612/3713/5794/7801/8891 cases, author
+Twofish/SPECK vectors, NESSIE Camellia/Serpent cases, and the published GIFT,
+RC5/RC6 and XTEA byte conventions. Canonical profile choices, exact key patterns,
+Core alignment checks, installed Python and actual Wasm execution all refer to
+the same finite profile declaration and independent expected corpus.
+
+GOST 28147-89 fixes the Applied Cryptography test or CryptoPro A/B/C S-box
+in each exact ID. The RustCrypto backend has big-endian right-first Feistel
+blocks; these legacy wire profiles have little-endian key words and left-first
+blocks. The adapter reverses each four-byte key word and each complete eight-byte
+block, with eight independently checked oracle cases across the four fixed
+S-boxes. Magma retains its separate RFC 8891 big-endian profile. No unqualified
+S-box table is inferred from a similarly named source.
+
+TWINE includes both author-published key widths, MISTY1 includes RFC 2994 answers,
+and KASUMI executes the published single-bit-key cases. SHACAL-2 uses the full
+SHA-256-derived round function without digest feed-forward and zero-fills
+16..64-byte keys whose lengths are multiples of four. It accepts no larger key
+and never truncates extra bytes. HIGHT includes nonzero-key KISA reference
+answers preserved in Crypto++; Twofish covers nonzero keys at all three widths,
+and PRESENT-128 includes a nonzero-key case. TEA includes a nonidentity answer;
+all reference schedules and inverses execute solely in Core.
+
+The canonical catalog and Wasm snapshot use Core's bounded compact JSON writer.
+The four MiB discovery ceiling includes the trailing newline. Pretty indentation
+is kept in the generated human reference, not in the machine transport. This
+avoids exhausting the catalog budget as exact profiles are added while retaining
+every contract, local schema definition and full-width integer representation.

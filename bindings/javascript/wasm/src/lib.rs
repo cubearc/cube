@@ -204,14 +204,7 @@ pub fn decode_base64(input: &str) -> Result<Vec<u8>, String> {
 }
 
 fn serialize_catalog(document: &contracts::Document) -> Result<String, String> {
-    let output = serde_json::to_string_pretty(document).expect("canonical catalog is serializable");
-    if output.len() > contracts::MAX_DOCUMENT_BYTES {
-        return Err(error(OperationError::new(
-            ErrorCode::ResourceLimit,
-            "catalog exceeds its serialized budget",
-        )));
-    }
-    Ok(output)
+    contracts::serialize_document(document).map_err(error)
 }
 
 #[wasm_bindgen]
@@ -304,6 +297,26 @@ pub fn run_recipe_json(
 mod binding_tests {
     use super::*;
     use serde_json::{Value, json};
+
+    #[test]
+    fn complete_catalog_fits_the_unchanged_serialized_transport_budget() {
+        let document = contracts::document().unwrap();
+        let encoded = catalog_json().unwrap();
+        assert!(encoded.len() <= contracts::MAX_DOCUMENT_BYTES);
+        assert_eq!(
+            serde_json::from_str::<Value>(&encoded).unwrap(),
+            serde_json::to_value(document).unwrap()
+        );
+    }
+
+    #[test]
+    fn oversized_catalog_is_refused_without_expanding_the_transport_ceiling() {
+        let mut document = contracts::document().unwrap();
+        document.operations[0].description = "x".repeat(contracts::MAX_DOCUMENT_BYTES);
+        let failure: Value =
+            serde_json::from_str(&serialize_catalog(&document).unwrap_err()).unwrap();
+        assert_eq!(failure["code"], "resource_limit");
+    }
 
     #[test]
     fn direct_errors_keep_safe_parameter_context() {

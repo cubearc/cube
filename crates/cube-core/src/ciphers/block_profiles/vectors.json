@@ -1,0 +1,108 @@
+[
+  {
+    "profile": "des_fips46_v1",
+    "key_hex": "0113b970fd34f2ce",
+    "plaintext_hex": "059b5e0851cf143a",
+    "ciphertext_hex": "86a560f10ec6d85b",
+    "source": "https://github.com/randombit/botan/blob/master/src/tests/data/block/des.vec"
+  },
+  {
+    "profile": "tdes_ede2_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "fafd5084374fce34",
+    "source": "https://github.com/libtom/libtomcrypt/blob/develop/src/ciphers/des.c#L2054"
+  },
+  {
+    "profile": "tdes_ede3_v1",
+    "key_hex": "616263646566676831323334353637384142434445464748",
+    "plaintext_hex": "3132333435363738",
+    "ciphertext_hex": "dbd092def834ff58",
+    "source": "https://github.com/golang/go/blob/master/src/crypto/des/des_test.go"
+  },
+  {
+    "profile": "blowfish_be_v1",
+    "key_hex": "0000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "4ef997456198dd78",
+    "source": "https://www.schneier.com/wp-content/uploads/2015/12/vectors-2.txt"
+  },
+  {
+    "profile": "blowfish_be_v1",
+    "key_hex": "f0e1d2c3",
+    "plaintext_hex": "fedcba9876543210",
+    "ciphertext_hex": "be1e639408640f05",
+    "source": "https://www.schneier.com/wp-content/uploads/2015/12/vectors-2.txt"
+  },
+  {
+    "profile": "idea_v1",
+    "key_hex": "00010002000300040005000600070008",
+    "plaintext_hex": "000000010002000301020304050607080019324b647d96aff5202d5b9c671b08",
+    "ciphertext_hex": "11fbed2b01986de5540e5fea18c2f8b19f0a0ab6e10ced78cf18fd7355e2c5c5",
+    "source": "https://github.com/randombit/botan/blob/master/src/tests/data/block/idea.vec"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "0000000000000000",
+    "effective_key_bits": 63,
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "ebb773f993278eff",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "ffffffffffffffff",
+    "effective_key_bits": 64,
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "278b27e42e2f0d49",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "3000000000000000",
+    "effective_key_bits": 64,
+    "plaintext_hex": "1000000000000001",
+    "ciphertext_hex": "30649edf9be7d2c2",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "88",
+    "effective_key_bits": 64,
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "61a8a244adacccf0",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "88bca90e90875a",
+    "effective_key_bits": 64,
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "6ccf4308974c267f",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "88bca90e90875a7f0f79c384627bafb2",
+    "effective_key_bits": 64,
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "1a807d272bbe5db1",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "88bca90e90875a7f0f79c384627bafb2",
+    "effective_key_bits": 128,
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "2269552ab0f85ca6",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  },
+  {
+    "profile": "rc2_rfc2268_v1",
+    "key_hex": "88bca90e90875a7f0f79c384627bafb216f80a6f85920584c42fceb0be255daf1e",
+    "effective_key_bits": 129,
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "5b78d3a43dfff1f1",
+    "source": "https://www.rfc-editor.org/rfc/rfc2268#section-5"
+  }
+]

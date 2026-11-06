@@ -188,3 +188,13 @@ const redResult:string=red.text;const redState:number=red.final_state.breakwheel
 const purpleSettings={"profile":"purple_type_b_v1","alphabet":"NOKTYUXEQLHBRMPDICJASVWGZF","fast_switch":2,"middle_switch":3,"initial_state":{"switch_positions":[8,0,23,5]},"trace":true} as const;
 const purple=cube.execute({operation:'cipher.purple.encode',version:1,inputs:{text:"FOVTATAKIDASINIMUIMINOMOXIWOIRUBESIFYXXFCKZZR",settings:purpleSettings}});
 const purpleResult:string=purple.text;const purpleState:readonly number[]=purple.final_state.switch_positions;void purpleResult;void purpleState;
+
+const rawBlock: Uint8Array=cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'des_fips46_v1',key_hex:'0113b970fd34f2ce'}}).output;
+const rc2Block: Uint8Array=cube.execute({operation:'cipher.block.decrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'rc2_rfc2268_v1',key_hex:'88',effective_key_bits:64}}).output;
+void rawBlock;void rc2Block;
+// @ts-expect-error RC2 requires an explicit effective bit count.
+cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'rc2_rfc2268_v1',key_hex:'88'}});
+// @ts-expect-error DES does not accept an RC2 effective-bit field.
+cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'des_fips46_v1',key_hex:'0113b970fd34f2ce',effective_key_bits:64}});
+// @ts-expect-error Family names cannot guess exact profiles.
+cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'DES',key_hex:'0113b970fd34f2ce'}});

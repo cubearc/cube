@@ -24649,6 +24649,778 @@
     {
       "schema_version": 1,
       "operation_version": 1,
+      "operation": "cipher.block.decrypt_blocks",
+      "category": "ciphers",
+      "description": "Explicit full-round raw block reference profiles; no padding, authentication or secure message-encryption claim.",
+      "example": "cube cipher block decrypt --profile des_fips46_v1 --key-file key.bin --file blocks.bin",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104,
+                "pattern": "^(?:[A-Za-z0-9+/]{32})*(?:[A-Za-z0-9+/]{10}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/]{21}[AQgw]==)?$",
+                "x-cube-max-decoded-bytes": 1048576
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "effective_key_bits": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint16",
+            "maximum": 1024,
+            "minimum": 1
+          },
+          "key_hex": {
+            "type": "string",
+            "pattern": "^(?:[0-9A-Fa-f]{2}){1,128}$"
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+              },
+              "profile": {
+                "const": "des_fips46_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+              },
+              "profile": {
+                "const": "tdes_ede2_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){24,24}$"
+              },
+              "profile": {
+                "const": "tdes_ede3_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){4,56}$"
+              },
+              "profile": {
+                "const": "blowfish_be_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+              },
+              "profile": {
+                "const": "idea_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "effective_key_bits": {
+                "type": "integer",
+                "maximum": 1024,
+                "minimum": 1
+              },
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){1,128}$"
+              },
+              "profile": {
+                "const": "rc2_rfc2268_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex",
+              "effective_key_bits"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          }
+        ],
+        "required": [
+          "profile",
+          "key_hex"
+        ],
+        "$defs": {
+          "Profile": {
+            "description": "Exact full-round profiles; there is no default or family-name inference.",
+            "type": "string",
+            "enum": [
+              "des_fips46_v1",
+              "tdes_ede2_v1",
+              "tdes_ede3_v1",
+              "blowfish_be_v1",
+              "idea_v1",
+              "rc2_rfc2268_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104,
+                "pattern": "^(?:[A-Za-z0-9+/]{32})*(?:[A-Za-z0-9+/]{10}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/]{21}[AQgw]==)?$",
+                "x-cube-max-decoded-bytes": 1048576
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 131072,
+        "max_work": 131072,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [
+          "key_hex"
+        ],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
+      "operation": "cipher.block.encrypt_blocks",
+      "category": "ciphers",
+      "description": "Explicit full-round raw block reference profiles; no padding, authentication or secure message-encryption claim.",
+      "example": "cube cipher block encrypt --profile des_fips46_v1 --key-file key.bin --file blocks.bin",
+      "deterministic": true,
+      "reversible": true,
+      "pipeline_adapter": null,
+      "inputs": [
+        {
+          "name": "input",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104,
+                "pattern": "^(?:[A-Za-z0-9+/]{32})*(?:[A-Za-z0-9+/]{10}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/]{21}[AQgw]==)?$",
+                "x-cube-max-decoded-bytes": 1048576
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "parameters": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "Parameters",
+        "type": "object",
+        "properties": {
+          "effective_key_bits": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint16",
+            "maximum": 1024,
+            "minimum": 1
+          },
+          "key_hex": {
+            "type": "string",
+            "pattern": "^(?:[0-9A-Fa-f]{2}){1,128}$"
+          },
+          "profile": {
+            "$ref": "#/$defs/Profile"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+              },
+              "profile": {
+                "const": "des_fips46_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+              },
+              "profile": {
+                "const": "tdes_ede2_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){24,24}$"
+              },
+              "profile": {
+                "const": "tdes_ede3_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){4,56}$"
+              },
+              "profile": {
+                "const": "blowfish_be_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+              },
+              "profile": {
+                "const": "idea_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Parameters",
+            "type": "object",
+            "properties": {
+              "effective_key_bits": {
+                "type": "integer",
+                "maximum": 1024,
+                "minimum": 1
+              },
+              "key_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9A-Fa-f]{2}){1,128}$"
+              },
+              "profile": {
+                "const": "rc2_rfc2268_v1"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "profile",
+              "key_hex",
+              "effective_key_bits"
+            ],
+            "$defs": {
+              "Profile": {
+                "description": "Exact full-round profiles; there is no default or family-name inference.",
+                "type": "string",
+                "enum": [
+                  "des_fips46_v1",
+                  "tdes_ede2_v1",
+                  "tdes_ede3_v1",
+                  "blowfish_be_v1",
+                  "idea_v1",
+                  "rc2_rfc2268_v1"
+                ]
+              }
+            }
+          }
+        ],
+        "required": [
+          "profile",
+          "key_hex"
+        ],
+        "$defs": {
+          "Profile": {
+            "description": "Exact full-round profiles; there is no default or family-name inference.",
+            "type": "string",
+            "enum": [
+              "des_fips46_v1",
+              "tdes_ede2_v1",
+              "tdes_ede3_v1",
+              "blowfish_be_v1",
+              "idea_v1",
+              "rc2_rfc2268_v1"
+            ]
+          }
+        }
+      },
+      "outputs": [
+        {
+          "name": "output",
+          "semantic_type": "bytes",
+          "required": true,
+          "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "title": "Bytes",
+            "type": "object",
+            "properties": {
+              "base64": {
+                "type": "string",
+                "contentEncoding": "base64",
+                "maxLength": 1398104,
+                "pattern": "^(?:[A-Za-z0-9+/]{32})*(?:[A-Za-z0-9+/]{10}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/]{21}[AQgw]==)?$",
+                "x-cube-max-decoded-bytes": 1048576
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "base64"
+            ]
+          }
+        }
+      ],
+      "errors": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "OperationError",
+        "description": "Operation failure with safe context and an optional original cause.",
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "uint64",
+            "minimum": 0
+          },
+          "operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameter": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "$defs": {
+          "ErrorCode": {
+            "description": "Machine-readable failure category. New categories may be added compatibly.",
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "invalid_input",
+                  "invalid_parameter",
+                  "unsupported_format",
+                  "resource_limit",
+                  "io"
+                ]
+              },
+              {
+                "description": "Cooperative pipeline cancellation at a bounded operation boundary.",
+                "type": "string",
+                "const": "cancelled"
+              }
+            ]
+          }
+        }
+      },
+      "limits": {
+        "max_input_bytes": 1048576,
+        "max_output_bytes": 1048576,
+        "max_items": 131072,
+        "max_work": 131072,
+        "max_memory_bytes": null
+      },
+      "policy": {
+        "private_input": true,
+        "private_output": true,
+        "sensitive_parameters": [
+          "key_hex"
+        ],
+        "automatic_capture": false,
+        "grants_filesystem_access": false,
+        "grants_network_access": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "operation_version": 1,
       "operation": "cipher.book.decode",
       "category": "ciphers",
       "description": "Decode caller-supplied book coordinates to exact Unicode scalars; source/coordinates <=1 MiB, <=65536 coordinates/indexed units; no source retrieval.",

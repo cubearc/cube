@@ -8,6 +8,10 @@ repository.workspace = true
 
 [dependencies]
 aes = { version = "=0.9.3", features = ["zeroize"] }
+des = { version = "=0.9.0", features = ["zeroize"] }
+blowfish = { version = "=0.10.0", features = ["zeroize"] }
+idea = { version = "=0.6.0", features = ["zeroize"] }
+rc2 = { version = "=0.9.0", features = ["zeroize"] }
 zeroize = "1.9"
 base64 = "0.23"
 bs58 = "0.5"

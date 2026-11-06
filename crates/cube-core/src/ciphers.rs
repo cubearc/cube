@@ -2,6 +2,7 @@
 
 pub mod aes_blocks;
 pub mod bacon;
+pub mod block_profiles;
 pub mod book;
 pub mod classical;
 pub mod enigma;

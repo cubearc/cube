@@ -10,6 +10,7 @@ mod alphabet;
 mod audio;
 mod base58check;
 mod binaryops;
+mod block_profiles;
 mod blockchain;
 mod boolean;
 mod candidates;
@@ -612,6 +613,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     enigma::register(module)?;
     mechanical::register(module)?;
     aes_blocks::register(module)?;
+    block_profiles::register(module)?;
     stream::register(module)?;
     fraction::register(module)?;
     puzzlecodes::register(module)?;

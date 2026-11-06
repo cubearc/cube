@@ -19048,5 +19048,43 @@
       "trace": []
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "ffcb65ee17c551518f2087305eaa7206a8cf698670079701892d9e860c2ccab8",
+    "inputs": {
+      "input": {
+        "base64": "hqVg8Q7G2Fs="
+      }
+    },
+    "operation": "cipher.block.decrypt_blocks",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "BZteCFHPFDo="
+      }
+    },
+    "parameters": {
+      "key_hex": "0113b970fd34f2ce",
+      "profile": "des_fips46_v1"
+    }
+  },
+  {
+    "contract_sha256": "59e4645c99b1371c8d0d20c09b4486276e2ca47e3fa588a19219f94be1834020",
+    "inputs": {
+      "input": {
+        "base64": "BZteCFHPFDo="
+      }
+    },
+    "operation": "cipher.block.encrypt_blocks",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "hqVg8Q7G2Fs="
+      }
+    },
+    "parameters": {
+      "key_hex": "0113b970fd34f2ce",
+      "profile": "des_fips46_v1"
+    }
   }
 ]

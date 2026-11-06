@@ -4,6 +4,40 @@ from collections.abc import Iterator
 from os import PathLike
 from typing import Any, BinaryIO, Literal, NotRequired, TypedDict
 
+def block_encrypt_blocks(
+    data: bytes,
+    key: bytes,
+    profile: Literal[
+        "des_fips46_v1",
+        "tdes_ede2_v1",
+        "tdes_ede3_v1",
+        "blowfish_be_v1",
+        "idea_v1",
+        "rc2_rfc2268_v1",
+    ],
+    *,
+    effective_key_bits: int | None = None,
+) -> bytes:
+    """Raw reference blocks without padding or authentication."""
+    ...
+
+def block_decrypt_blocks(
+    data: bytes,
+    key: bytes,
+    profile: Literal[
+        "des_fips46_v1",
+        "tdes_ede2_v1",
+        "tdes_ede3_v1",
+        "blowfish_be_v1",
+        "idea_v1",
+        "rc2_rfc2268_v1",
+    ],
+    *,
+    effective_key_bits: int | None = None,
+) -> bytes:
+    """Raw reference blocks; success does not verify the key or integrity."""
+    ...
+
 class PrimeIndex(TypedDict):
     alphabet: str
     first_index: int

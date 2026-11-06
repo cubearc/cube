@@ -26,6 +26,7 @@ mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
 mod aescmd;
+mod blockcmd;
 mod cryptanalysiscmd;
 mod enigmacmd;
 mod fractioncmd;
@@ -532,6 +533,11 @@ enum Cipher {
     Lorenz {
         #[command(subcommand)]
         command: mechanicalcmd::Command,
+    },
+    /// Explicit legacy raw-block reference profiles; private key file only
+    Block {
+        #[command(subcommand)]
+        command: blockcmd::Command,
     },
     /// Hazardous raw AES blocks; key file only, no padding or authentication
     Aes {
@@ -1093,6 +1099,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
+                Cipher::Block { command } => return blockcmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(
                         Some(ciphers::stream::Profile::ChaCha8),

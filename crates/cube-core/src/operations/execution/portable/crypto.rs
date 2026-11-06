@@ -1,7 +1,7 @@
 //! Raw cipher profiles forward exact bytes and explicit key material to Core.
 use super::{bytes, field};
 use crate::{
-    ciphers::{aes_blocks, stream},
+    ciphers::{aes_blocks, block_profiles, stream},
     errors::{ErrorCode, OperationError},
 };
 use serde_json::{Value, json};
@@ -12,6 +12,8 @@ pub(super) fn supports(op: &str) -> bool {
             "cipher.vernam"
                 | "cipher.aes.encrypt_blocks"
                 | "cipher.aes.decrypt_blocks"
+                | block_profiles::ENCRYPT
+                | block_profiles::DECRYPT
                 | "encoding.base58check.decode"
         )
 }
@@ -42,6 +44,13 @@ pub(super) fn execute(
         )?
     } else if op == "cipher.vernam" {
         stream::vernam(&input, &bytes(&i["key"])?)?
+    } else if matches!(op, block_profiles::ENCRYPT | block_profiles::DECRYPT) {
+        let settings = block_profiles::Settings::parse(&p.to_string())?;
+        if op == block_profiles::ENCRYPT {
+            block_profiles::encrypt(&input, &settings)?
+        } else {
+            block_profiles::decrypt(&input, &settings)?
+        }
     } else {
         let key = aes_blocks::parse_key(&p.to_string())?;
         if op == "cipher.aes.encrypt_blocks" {

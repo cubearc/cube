@@ -3,7 +3,20 @@
 //! These non-AES backends are unaudited and do not promise constant-time
 //! execution. They are not a message-encryption scheme. No mode, padding,
 //! authentication, key derivation or random generation is performed.
+mod anubis;
 mod backend;
+mod clefia;
+mod crypton;
+mod e2;
+mod finite_field;
+mod khazad;
+mod mars;
+mod safer;
+mod seed;
+mod simon;
+mod skinny;
+mod square;
+
 mod catalog;
 mod hight;
 mod kasumi;

@@ -94,6 +94,37 @@ profiles! {
     (Hight, "hight_v1", 8, Set(&[16])),
     (Misty1, "misty1_rfc2994_v1", 8, Set(&[16])),
     (Kasumi, "kasumi_3gpp_v1", 8, Set(&[16])),
+    (Simon32_64, "simon32_64_be_v1", 4, Set(&[8])),
+    (Simon48_72, "simon48_72_be_v1", 6, Set(&[9])),
+    (Simon48_96, "simon48_96_be_v1", 6, Set(&[12])),
+    (Simon64_96, "simon64_96_be_v1", 8, Set(&[12])),
+    (Simon64_128, "simon64_128_be_v1", 8, Set(&[16])),
+    (Simon96_96, "simon96_96_be_v1", 12, Set(&[12])),
+    (Simon96_144, "simon96_144_be_v1", 12, Set(&[18])),
+    (Simon128_128, "simon128_128_be_v1", 16, Set(&[16])),
+    (Simon128_192, "simon128_192_be_v1", 16, Set(&[24])),
+    (Simon128_256, "simon128_256_be_v1", 16, Set(&[32])),
+    (Skinny64_64, "skinny64_64_v1", 8, Set(&[8])),
+    (Skinny64_128, "skinny64_128_v1", 8, Set(&[16])),
+    (Skinny64_192, "skinny64_192_v1", 8, Set(&[24])),
+    (Skinny128_128, "skinny128_128_v1", 16, Set(&[16])),
+    (Skinny128_256, "skinny128_256_v1", 16, Set(&[32])),
+    (Skinny128_384, "skinny128_384_v1", 16, Set(&[48])),
+    (SaferK646, "safer_k64_6_v1", 8, Set(&[8])),
+    (SaferK12812, "safer_k128_12_v1", 8, Set(&[16])),
+    (SaferSk646, "safer_sk64_6_v1", 8, Set(&[8])),
+    (SaferSk12810, "safer_sk128_10_v1", 8, Set(&[16])),
+    (SaferK12810, "safer_k128_10_v1", 8, Set(&[16])),
+    (SaferSk648, "safer_sk64_8_v1", 8, Set(&[8])),
+    (AnubisOriginal, "anubis_original_v1", 16, Set(&[16, 20, 24, 28, 32, 36, 40])),
+    (AnubisTweaked, "anubis_tweaked_v1", 16, Set(&[16, 20, 24, 28, 32, 36, 40])),
+    (Khazad, "khazad_v1", 8, Set(&[16])),
+    (Square, "square_v1", 16, Set(&[16])),
+    (Seed, "seed_rfc4269_v1", 16, Set(&[16])),
+    (Clefia, "clefia_rfc6114_v1", 16, Set(&[16, 24, 32])),
+    (Mars, "mars_final_le_v1", 16, Set(&[16, 24, 32])),
+    (Crypton, "crypton10_le_v1", 16, Set(&[16, 24, 32])),
+    (E2, "e2_ntt_v1", 16, Set(&[16, 24, 32])),
 }
 impl Profile {
     /// Parse only a supported exact profile identifier.
@@ -127,7 +158,38 @@ impl Profile {
             | Self::Twine128
             | Self::Hight
             | Self::Misty1
-            | Self::Kasumi => 64 * 1024,
+            | Self::Kasumi
+            | Self::Simon32_64
+            | Self::Simon48_72
+            | Self::Simon48_96
+            | Self::Simon64_96
+            | Self::Simon64_128
+            | Self::Simon96_96
+            | Self::Simon96_144
+            | Self::Simon128_128
+            | Self::Simon128_192
+            | Self::Simon128_256
+            | Self::Skinny64_64
+            | Self::Skinny64_128
+            | Self::Skinny64_192
+            | Self::Skinny128_128
+            | Self::Skinny128_256
+            | Self::Skinny128_384
+            | Self::SaferK646
+            | Self::SaferK12812
+            | Self::SaferSk646
+            | Self::SaferSk12810
+            | Self::SaferK12810
+            | Self::SaferSk648
+            | Self::AnubisOriginal
+            | Self::AnubisTweaked
+            | Self::Khazad
+            | Self::Square
+            | Self::Seed
+            | Self::Clefia
+            | Self::Mars
+            | Self::Crypton
+            | Self::E2 => 64 * 1024,
             _ => super::MAX_INPUT,
         }
     }

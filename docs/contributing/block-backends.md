@@ -142,3 +142,28 @@ The four MiB discovery ceiling includes the trailing newline. Pretty indentation
 is kept in the generated human reference, not in the machine transport. This
 avoids exhausting the catalog budget as exact profiles are added while retaining
 every contract, local schema definition and full-width integer representation.
+
+
+SIMON covers all ten original paper tuples in big-endian word notation; SKINNY
+covers the six full-round block/tweakey tuples. The entire SKINNY tweakey is
+required key material; this API never supplies an implicit public tweak. The
+SAFER IDs fix both K/SK scheduling and round count: K64/6, K128/10 or /12,
+SK64/6 or /8, and SK128/10. Published Crypto++ groups and independently checked
+fixed-round oracle cases distinguish these profiles.
+
+SEED uses the RFC 4269 128-bit-key standard, not a later 256-bit-key extension;
+CLEFIA uses all three RFC 6114 key widths. Anubis keeps original and tweaked
+S-boxes separate and covers every 128..320-bit key width. Khazad and Square
+retain their full original rounds. The shared corpus includes independently
+published Crypto++ final MARS answers, including its multiplication-key tweak.
+MARS accepts the qualified 128/192/256-bit key subset in this profile.
+
+CRYPTON is version 1.0, twelve rounds, little-endian words. E2 is the original
+twelve-round NTT construction with its input/output transformations. Frozen
+Gladman C references are used only as independent academic qualification
+oracles; product code has no C dependency. Core's rewritten safe Rust is
+reviewed against the Apache-2.0 Go arithmetic, with the original schedule
+semantics checked independently: CRYPTON loads every shorter key slice for
+192-/256-bit keys and E2 retains cumulative schedule state. Go's missing C
+switch fallthrough and pass-by-value key reset are not copied. All these
+educational profiles retain the explicit 64 KiB work ceiling.

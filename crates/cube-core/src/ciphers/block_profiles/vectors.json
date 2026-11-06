@@ -1,5 +1,857 @@
 [
   {
+    "profile": "simon32_64_be_v1",
+    "key_hex": "1918111009080100",
+    "plaintext_hex": "65656877",
+    "ciphertext_hex": "c69be9bb",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon48_72_be_v1",
+    "key_hex": "1211100a0908020100",
+    "plaintext_hex": "6120676e696c",
+    "ciphertext_hex": "dae5ac292cac",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon48_96_be_v1",
+    "key_hex": "1a19181211100a0908020100",
+    "plaintext_hex": "72696320646e",
+    "ciphertext_hex": "6e06a5acf156",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon64_96_be_v1",
+    "key_hex": "131211100b0a090803020100",
+    "plaintext_hex": "6f7220676e696c63",
+    "ciphertext_hex": "5ca2e27f111a8fc8",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon64_128_be_v1",
+    "key_hex": "1b1a1918131211100b0a090803020100",
+    "plaintext_hex": "656b696c20646e75",
+    "ciphertext_hex": "44c8fc20b9dfa07a",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon96_96_be_v1",
+    "key_hex": "0d0c0b0a0908050403020100",
+    "plaintext_hex": "2072616c6c69702065687420",
+    "ciphertext_hex": "602807a462b469063d8ff082",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon96_144_be_v1",
+    "key_hex": "1514131211100d0c0b0a0908050403020100",
+    "plaintext_hex": "74616874207473756420666f",
+    "ciphertext_hex": "ecad1c6c451e3f59c5db1ae9",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon128_128_be_v1",
+    "key_hex": "0f0e0d0c0b0a09080706050403020100",
+    "plaintext_hex": "63736564207372656c6c657661727420",
+    "ciphertext_hex": "49681b1e1e54fe3f65aa832af84e0bbc",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon128_192_be_v1",
+    "key_hex": "17161514131211100f0e0d0c0b0a09080706050403020100",
+    "plaintext_hex": "206572656874206e6568772065626972",
+    "ciphertext_hex": "c4ac61effcdc0d4f6c9c8d6e2597b85b",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "simon128_256_be_v1",
+    "key_hex": "1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100",
+    "plaintext_hex": "74206e69206d6f6f6d69732061207369",
+    "ciphertext_hex": "8d2b5579afc8a3a03bf72a87efe7b868",
+    "source": "https://github.com/inmcm/Simon_Speck_Ciphers/blob/9eec98160fa27e73a6f3938c1af988caddb158a9/Python/simonspeckciphers/tests/test_simonspeck.py",
+    "original_specification": "https://eprint.iacr.org/2013/404"
+  },
+  {
+    "profile": "skinny64_64_v1",
+    "plaintext_hex": "06034f957724d19d",
+    "ciphertext_hex": "bb39dfb2429b8ac7",
+    "key_hex": "f5269826fc681238",
+    "source": "https://github.com/rweather/skinny-c/blob/99b80702071ee6417e81c4bcfcc07cfc5f1426ba/test/test-skinny.c",
+    "original_specification": "https://eprint.iacr.org/2016/660"
+  },
+  {
+    "profile": "skinny64_128_v1",
+    "plaintext_hex": "cf16cfe8fd0f98aa",
+    "ciphertext_hex": "6ceda1f43de92b9e",
+    "key_hex": "9eb93640d088da6376a39d1c8bea71e1",
+    "source": "https://github.com/rweather/skinny-c/blob/99b80702071ee6417e81c4bcfcc07cfc5f1426ba/test/test-skinny.c",
+    "original_specification": "https://eprint.iacr.org/2016/660"
+  },
+  {
+    "profile": "skinny64_192_v1",
+    "plaintext_hex": "530c61d35e8663c3",
+    "ciphertext_hex": "dd2cf1a8f330303c",
+    "key_hex": "ed00c85b120d68618753e24bfd908f60b2dbb41b422dfcd0",
+    "source": "https://github.com/rweather/skinny-c/blob/99b80702071ee6417e81c4bcfcc07cfc5f1426ba/test/test-skinny.c",
+    "original_specification": "https://eprint.iacr.org/2016/660"
+  },
+  {
+    "profile": "skinny128_128_v1",
+    "plaintext_hex": "f20adb0eb08b648a3b2eeed1f0adda14",
+    "ciphertext_hex": "22ff30d498ea62d7e45b476e33675b74",
+    "key_hex": "4f55cfb0520cac52fd92c15f37073e93",
+    "source": "https://github.com/rweather/skinny-c/blob/99b80702071ee6417e81c4bcfcc07cfc5f1426ba/test/test-skinny.c",
+    "original_specification": "https://eprint.iacr.org/2016/660"
+  },
+  {
+    "profile": "skinny128_256_v1",
+    "plaintext_hex": "3a0c47767a26a68dd382a695e7022e25",
+    "ciphertext_hex": "b731d98a4bde147a7ed4a6f16b9b587f",
+    "key_hex": "009cec81605d4ac1d2ae9e3085d7a1f31ac123ebfc00fddcf01046ceeddfcab3",
+    "source": "https://github.com/rweather/skinny-c/blob/99b80702071ee6417e81c4bcfcc07cfc5f1426ba/test/test-skinny.c",
+    "original_specification": "https://eprint.iacr.org/2016/660"
+  },
+  {
+    "profile": "skinny128_384_v1",
+    "plaintext_hex": "a3994b66ad85a3459f44e92b08f550cb",
+    "ciphertext_hex": "94ecf589e2017c601b38c6346a10dcfa",
+    "key_hex": "df889548cfc7ea52d296339301797449ab588a34a47f1ab2dfe9c8293fbea9a5ab1afac2611012cd8cef952618c3ebe8",
+    "source": "https://github.com/rweather/skinny-c/blob/99b80702071ee6417e81c4bcfcc07cfc5f1426ba/test/test-skinny.c",
+    "original_specification": "https://eprint.iacr.org/2016/660"
+  },
+  {
+    "profile": "safer_k64_6_v1",
+    "key_hex": "0000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "032808c90ee7ab7f",
+    "rounds": 6,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k64_6_v1",
+    "key_hex": "0000000000000000",
+    "plaintext_hex": "0102030405060708",
+    "ciphertext_hex": "7d28038633b92eb4",
+    "rounds": 6,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k64_6_v1",
+    "key_hex": "0102030405060708",
+    "plaintext_hex": "1011121314151617",
+    "ciphertext_hex": "71e5cf7f083a59c5",
+    "rounds": 6,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k64_6_v1",
+    "key_hex": "0102030405060708",
+    "plaintext_hex": "18191a1b1c1d1e1f",
+    "ciphertext_hex": "356f702cc7fa8161",
+    "rounds": 6,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k128_12_v1",
+    "key_hex": "08070605040302010807060504030201",
+    "plaintext_hex": "5051525354555657",
+    "ciphertext_hex": "38e64dbf6e0f896e",
+    "rounds": 12,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k128_12_v1",
+    "key_hex": "08070605040302010807060504030201",
+    "plaintext_hex": "58595a5b5c5d5e5f",
+    "ciphertext_hex": "7d8f014a902480fe",
+    "rounds": 12,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k128_12_v1",
+    "key_hex": "01020304050607080807060504030201",
+    "plaintext_hex": "6061626364656667",
+    "ciphertext_hex": "113511c22e7936df",
+    "rounds": 12,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k128_12_v1",
+    "key_hex": "01020304050607080807060504030201",
+    "plaintext_hex": "68696a6b6c6d6e6f",
+    "ciphertext_hex": "9eeb2d17c0581437",
+    "rounds": 12,
+    "strengthened": false,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk64_6_v1",
+    "key_hex": "0000000000000001",
+    "plaintext_hex": "7071727374757677",
+    "ciphertext_hex": "9abe2c85be2d7614",
+    "rounds": 6,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk64_6_v1",
+    "key_hex": "0000000000000001",
+    "plaintext_hex": "78797a7b7c7d7e7f",
+    "ciphertext_hex": "ebc4a9c6c25cf215",
+    "rounds": 6,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk64_6_v1",
+    "key_hex": "0102030405060708",
+    "plaintext_hex": "8081828384858687",
+    "ciphertext_hex": "54e72ba2d744c566",
+    "rounds": 6,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk64_6_v1",
+    "key_hex": "0102030405060708",
+    "plaintext_hex": "88898a8b8c8d8e8f",
+    "ciphertext_hex": "57f55d0f7eb6f8fe",
+    "rounds": 6,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk128_10_v1",
+    "key_hex": "00000000000000010000000000000001",
+    "plaintext_hex": "9091929394959697",
+    "ciphertext_hex": "9eaa4df1e0eff445",
+    "rounds": 10,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk128_10_v1",
+    "key_hex": "00000000000000010000000000000001",
+    "plaintext_hex": "98999a9b9c9d9e9f",
+    "ciphertext_hex": "4cc14838399e532d",
+    "rounds": 10,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk128_10_v1",
+    "key_hex": "01020304050607080000000000000000",
+    "plaintext_hex": "a0a1a2a3a4a5a6a7",
+    "ciphertext_hex": "41246b65f1dc6afa",
+    "rounds": 10,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_sk128_10_v1",
+    "key_hex": "00000000000000000102030405060708",
+    "plaintext_hex": "a0a1a2a3a4a5a6a7",
+    "ciphertext_hex": "5cbd77b03626fe3b",
+    "rounds": 10,
+    "strengthened": true,
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/saferval.dat",
+    "interpretation_source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/validat4.cpp"
+  },
+  {
+    "profile": "safer_k64_6_v1",
+    "key_hex": "0807060504030201",
+    "plaintext_hex": "0102030405060708",
+    "ciphertext_hex": "c8f29cdd87783ed9",
+    "rounds": 6,
+    "strengthened": false,
+    "source": "https://github.com/libtom/libtomcrypt/blob/6c6d5104de66f3ca0dfd7b68540ef86869982b07/src/ciphers/safer/safer.c"
+  },
+  {
+    "profile": "safer_k128_10_v1",
+    "key_hex": "00112233445566778899aabbccddeeff",
+    "plaintext_hex": "ffecd9c6b3a08d7a",
+    "ciphertext_hex": "ef8f132ad66c6a1b",
+    "rounds": 10,
+    "strengthened": false,
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/safer"
+  },
+  {
+    "profile": "safer_k128_10_v1",
+    "key_hex": "031425364758697a8b9cadbecfe0f102",
+    "plaintext_hex": "e0cdbaa794816e5b",
+    "ciphertext_hex": "40cadd80eaccaf81",
+    "rounds": 10,
+    "strengthened": false,
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/safer"
+  },
+  {
+    "profile": "safer_sk64_8_v1",
+    "key_hex": "0011223344556677",
+    "plaintext_hex": "ffecd9c6b3a08d7a",
+    "ciphertext_hex": "13b657776e1c1915",
+    "rounds": 8,
+    "strengthened": true,
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/safer"
+  },
+  {
+    "profile": "safer_sk64_8_v1",
+    "key_hex": "031425364758697a",
+    "plaintext_hex": "e0cdbaa794816e5b",
+    "ciphertext_hex": "fe07f92fbc5a93e6",
+    "rounds": 8,
+    "strengthened": true,
+    "source": "https://github.com/deatil/go-cryptobin/tree/e938a8032604741a6b5ac21127f648648b86b084/cipher/safer"
+  },
+  {
+    "profile": "seed_rfc4269_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "5ebac6e0054e166819aff1cc6d346cdb",
+    "source": "https://www.rfc-editor.org/rfc/rfc4269.txt"
+  },
+  {
+    "profile": "seed_rfc4269_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c11f22f20140505084483597e4370f43",
+    "source": "https://www.rfc-editor.org/rfc/rfc4269.txt"
+  },
+  {
+    "profile": "seed_rfc4269_v1",
+    "key_hex": "4706480851e61be85d74bfb3fd956185",
+    "plaintext_hex": "83a2f8a288641fb9a4e9a5cc2f131c7d",
+    "ciphertext_hex": "ee54d13ebcae706d226bc3142cd40d4a",
+    "source": "https://www.rfc-editor.org/rfc/rfc4269.txt"
+  },
+  {
+    "profile": "seed_rfc4269_v1",
+    "key_hex": "28dbc3bc49ffd87dcfa509b11d422be7",
+    "plaintext_hex": "b41e6be2eba84a148e2eed84593c5ec7",
+    "ciphertext_hex": "9b9b7bfcd1813cb95d0b3618f40f5122",
+    "source": "https://www.rfc-editor.org/rfc/rfc4269.txt"
+  },
+  {
+    "profile": "clefia_rfc6114_v1",
+    "key_hex": "ffeeddccbbaa99887766554433221100",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "de2bf2fd9b74aacdf1298555459494fd",
+    "source": "https://www.rfc-editor.org/rfc/rfc6114.txt"
+  },
+  {
+    "profile": "clefia_rfc6114_v1",
+    "key_hex": "ffeeddccbbaa99887766554433221100f0e0d0c0b0a09080",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "e2482f649f028dc480dda184fde181ad",
+    "source": "https://www.rfc-editor.org/rfc/rfc6114.txt"
+  },
+  {
+    "profile": "clefia_rfc6114_v1",
+    "key_hex": "ffeeddccbbaa99887766554433221100f0e0d0c0b0a090807060504030201000",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "a1397814289de80c10da46d1fa48b38a",
+    "source": "https://www.rfc-editor.org/rfc/rfc6114.txt"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "dcc07b8dfb0738d6e30a22dfcf27e886",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "dcc07b8dfb0738d6e30a22dfcf27e886",
+    "ciphertext_hex": "33caffbddc7f1dda0f9c15fa2f30e2ff",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "cb14a1776abbc1cdafe7243def2cea02",
+    "plaintext_hex": "f94512a9b42d034ec4792204d708a69b",
+    "ciphertext_hex": "225da2cb64b73f79069f21a5e3cb8522",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "86edf4da31824cabef6a4637c40b0bab",
+    "plaintext_hex": "4df955ad5b398d66408d620a2b27e1a9",
+    "ciphertext_hex": "a4b737340ae6d2cafd930ba97d86129f",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "ciphertext_hex": "97778747d60e425c2b4202599db856fb",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "d158860838874d9500000000000000000000000000000000",
+    "plaintext_hex": "93a953a82c10411dd158860838874d95",
+    "ciphertext_hex": "4fa0e5f64893131712f01408d233e9f7",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "791739a58b04581a93a953a82c10411dd158860838874d95",
+    "plaintext_hex": "6761c42d3e6142d2a84fbfadb383158f",
+    "ciphertext_hex": "f706bc0fd97e28b6f1af4e17d8755fff",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "62e45b4cf3477f1dd65063729d9aba8f",
+    "ciphertext_hex": "0f4b897ea014d21fbc20f1054a42f719",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "mars_final_le_v1",
+    "key_hex": "fba167983e7aef22317ce28c02aae1a3e8e5cc3cedbea82a99dbc39ad65e7227",
+    "plaintext_hex": "1344aba4d3c44708a8a72116d4f49384",
+    "ciphertext_hex": "458335d95ea42a9f4dccd41aecc2390d",
+    "source": "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/TestData/marsval.dat"
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "eb195fb347aef6beb7542c635e7421fc",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "cf7765084dbdb10363267adf33cf8bdf",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c4daa9a4f775fec8877464f14815804e",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "eb195fb347aef6beb7542c635e7421fc",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f1011121314151617",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "4ba016e78aaf118732a7dc4def24d160",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "800000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c4daa9a4f775fec8877464f14815804e",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "eb195fb347aef6beb7542c635e7421fc",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "11c5088c50f36307386e6b76bd127c67",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "crypton10_le_v1",
+    "key_hex": "8000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c4daa9a4f775fec8877464f14815804e",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton1.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c2883490b9d9d5e5a03f216edb815fff",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "970d8074edb81537cef6c7c74a58002f",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "7548d23e069c701fb3702c59556b4b5a",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "882f80269d3c146d6ebb9addc4715b4c",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f1011121314151617",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "4d74cbdd334d5e2a94c29a26481b47e5",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "800000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "1182604ba567d9e4d685d4f072f6b3eb",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "5002cb8cd878f26fbab9f52e6c96501e",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "dff330c9ebbd520262ee310b1feed4dd",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "profile": "e2_ntt_v1",
+    "key_hex": "8000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "1afeb356ae10f7bb2c3221223fb6bd8a",
+    "source": "https://github.com/scorpiondefense/encryption/blob/d4b0763a860fa4462402a32a51c87a8a5679ad2d/E2/e2.c",
+    "qualification": "Executed frozen independent 32-bit C reference; academic verification only, no C runtime or source distribution in product."
+  },
+  {
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "b835bdc334829d8371bfa371e4b3c4fd",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "00000000000000000200000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "7899f4f9fda441b23c8c6dcb95d421ec",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "2000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f821ae3bb8fa31bd6f54fe6e1d3d52c4",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "fefefefefefefefefefefefefefefefefefefefe",
+    "plaintext_hex": "fefefefefefefefefefefefefefefefe",
+    "ciphertext_hex": "83da3d4d34e1dfaed77629fcedd3b9cb",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "020000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "3e451f4425cea9de37ffe0134bd5693b",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "fefefefefefefefefefefefefefefefefefefefefefefefe",
+    "plaintext_hex": "fefefefefefefefefefefefefefefefe",
+    "ciphertext_hex": "ba6072f91c7fde342397fdc15607a941",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "08000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "680228a3f94b520b53ce7cf614373418",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "plaintext_hex": "ffffffffffffffffffffffffffffffff",
+    "ciphertext_hex": "5f67506b32d3a8f2944fa65ae79218c3",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "0100000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "59bf80daca4ba8a520678ccfa6763065",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "fdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd",
+    "plaintext_hex": "fdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd",
+    "ciphertext_hex": "ad2c6ae8add786f1b853bfe1995af58d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "000800000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "81cfe0332b0923aeac27ec96623d6581",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "fafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafa",
+    "plaintext_hex": "fafafafafafafafafafafafafafafafa",
+    "ciphertext_hex": "cc3254263a92774ac7a5e085ef6ead46",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "00001000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "b5865def7a0e9e3206e2523ba07c37cc",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7",
+    "plaintext_hex": "f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7",
+    "ciphertext_hex": "d301c5f818349203a5a952e3ff767227",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis/anubis_test.go",
+    "source_sha256": "d9edb9136e847d7effa06ba3c153feb8f7f0cf89abda0a2c56f86e91bba54ae4",
+    "profile": "anubis_original_v1"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f06860fc6730e818f132c78af4132afe",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "a866848007745c89fc5eb5bad4fe326d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "8000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "bd5e32be5167a8e272d7950f83c68c31",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "0000000000000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "4c1f862e11ebceebfeb973c9dfef7adb",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "800000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "17ac57449d596166d0c79e047cc758f0",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "000000000000000000000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "7152b4eb1daa36fd57145f57049f7074",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "a2f0a6b917932a3bef08e87a58d6f853",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f0cafc788b4b4e538bc4326af5b91b5f",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "8000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "e086ac456b3ce513edf5dfddd63b7193",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "5001b9f521c1c12900d5ec982b9ee821",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "800000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "e8f4af2b21a0879b4195b9717579047c",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "000000000000000000000000000000000000000000000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "e6a6a5bc8b636fe2bda7a753ab4022e0",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "1704d72cc68576024bcc3980d822eaa4",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000001",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "7a41e67d4fd864f044a83c73817e53d8",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/anubis2/anubis_test.go",
+    "source_sha256": "c3fd55d320acdedf834ec2c4797bd7860a58c29022972a0c8160c2bb78b8d884",
+    "profile": "anubis_tweaked_v1"
+  },
+  {
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "49a4ce32ac190e3f",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/khazad/khazad_test.go",
+    "source_sha256": "67a5d9de88eb9ad90afeb7bb9475ea7a1c4d72492cf1bef446f98493215b9c85",
+    "profile": "khazad_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000001",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "645d773e40abdd53",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/khazad/khazad_test.go",
+    "source_sha256": "67a5d9de88eb9ad90afeb7bb9475ea7a1c4d72492cf1bef446f98493215b9c85",
+    "profile": "khazad_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "8000000000000000",
+    "ciphertext_hex": "9e399864f78eca02",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/khazad/khazad_test.go",
+    "source_sha256": "67a5d9de88eb9ad90afeb7bb9475ea7a1c4d72492cf1bef446f98493215b9c85",
+    "profile": "khazad_v1"
+  },
+  {
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000001",
+    "ciphertext_hex": "a9df3d2c64d3ea28",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/khazad/khazad_test.go",
+    "source_sha256": "67a5d9de88eb9ad90afeb7bb9475ea7a1c4d72492cf1bef446f98493215b9c85",
+    "profile": "khazad_v1"
+  },
+  {
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "7c3491d94994e70f0ec2e7a5ccb5a14f",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/square/square_test.go",
+    "profile": "square_v1"
+  },
+  {
     "profile": "des_fips46_v1",
     "key_hex": "0113b970fd34f2ce",
     "plaintext_hex": "059b5e0851cf143a",

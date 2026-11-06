@@ -71,6 +71,37 @@ rounds. Its 224-bit block uses row shifts 0/1/2/4; its 256-bit block uses
 | `hight_v1` | 8 | 16 | HIGHT, 32 rounds and whitening; original byte ordering |
 | `misty1_rfc2994_v1` | 8 | 16 | RFC 2994 MISTY1, eight rounds and final FL; big-endian words |
 | `kasumi_3gpp_v1` | 8 | 16 | 3GPP KASUMI, eight rounds; big-endian words |
+| `simon32_64_be_v1` | 4 | 8 | Original SIMON full-round tuple; big-endian paper words |
+| `simon48_72_be_v1` | 6 | 9 | Original SIMON full-round tuple; big-endian paper words |
+| `simon48_96_be_v1` | 6 | 12 | Original SIMON full-round tuple; big-endian paper words |
+| `simon64_96_be_v1` | 8 | 12 | Original SIMON full-round tuple; big-endian paper words |
+| `simon64_128_be_v1` | 8 | 16 | Original SIMON full-round tuple; big-endian paper words |
+| `simon96_96_be_v1` | 12 | 12 | Original SIMON full-round tuple; big-endian paper words |
+| `simon96_144_be_v1` | 12 | 18 | Original SIMON full-round tuple; big-endian paper words |
+| `simon128_128_be_v1` | 16 | 16 | Original SIMON full-round tuple; big-endian paper words |
+| `simon128_192_be_v1` | 16 | 24 | Original SIMON full-round tuple; big-endian paper words |
+| `simon128_256_be_v1` | 16 | 32 | Original SIMON full-round tuple; big-endian paper words |
+| `skinny64_64_v1` | 8 | 8 | Original SKINNY full-round tuple; complete required tweakey bytes |
+| `skinny64_128_v1` | 8 | 16 | Original SKINNY full-round tuple; complete required tweakey bytes |
+| `skinny64_192_v1` | 8 | 24 | Original SKINNY full-round tuple; complete required tweakey bytes |
+| `skinny128_128_v1` | 16 | 16 | Original SKINNY full-round tuple; complete required tweakey bytes |
+| `skinny128_256_v1` | 16 | 32 | Original SKINNY full-round tuple; complete required tweakey bytes |
+| `skinny128_384_v1` | 16 | 48 | Original SKINNY full-round tuple; complete required tweakey bytes |
+| `safer_k64_6_v1` | 8 | 8 | SAFER K; exactly 6 rounds |
+| `safer_k128_12_v1` | 8 | 16 | SAFER K; exactly 12 rounds |
+| `safer_sk64_6_v1` | 8 | 8 | SAFER SK; exactly 6 rounds |
+| `safer_sk128_10_v1` | 8 | 16 | SAFER SK; exactly 10 rounds |
+| `safer_k128_10_v1` | 8 | 16 | SAFER K; exactly 10 rounds |
+| `safer_sk64_8_v1` | 8 | 8 | SAFER SK; exactly 8 rounds |
+| `anubis_original_v1` | 16 | 16, 20, 24, 28, 32, 36, 40 | Original Anubis S-box; 8 + key words rounds |
+| `anubis_tweaked_v1` | 16 | 16, 20, 24, 28, 32, 36, 40 | Tweaked Anubis S-box; 8 + key words rounds |
+| `khazad_v1` | 8 | 16 | Khazad; full eight rounds, big-endian bytes |
+| `square_v1` | 16 | 16 | Square; full eight rounds, big-endian bytes |
+| `seed_rfc4269_v1` | 16 | 16 | SEED RFC 4269; 128-bit key, sixteen rounds |
+| `clefia_rfc6114_v1` | 16 | 16, 24, 32 | CLEFIA RFC 6114; 18/22/26 rounds |
+| `mars_final_le_v1` | 16 | 16, 24, 32 | Final MARS multiplication-key tweak; little-endian words |
+| `crypton10_le_v1` | 16 | 16, 24, 32 | CRYPTON version 1.0; twelve rounds, little-endian words |
+| `e2_ntt_v1` | 16 | 16, 24, 32 | E2 full twelve rounds and original cumulative key state; standard bytes |
 | `magma_rfc8891_v1` | 8 | 32 | RFC 8891, fixed TC26 S-box; big-endian words |
 | `xtea32_le_v1` | 8 | 16 | XTEA, 32 cycles; little-endian words |
 | `present80_v1` | 8 | 10 | PRESENT-80, 31 rounds plus whitening; big-endian bytes |
@@ -131,7 +162,7 @@ generated profile-specific parameter types. All interfaces execute Core.
 | Resource or failure | Rule |
 | --- | --- |
 | Input and output | At most 1 MiB each; output has the input length |
-| Educational reference cap | 64 KiB for Rijndael, SKIPJACK, NOEKEON, LEA, PRESENT, TEA, SHACAL-2, TWINE, HIGHT, MISTY1 and KASUMI |
+| Educational reference cap | 64 KiB for Rijndael, SKIPJACK, NOEKEON, LEA, PRESENT, TEA, SHACAL-2, TWINE, HIGHT, MISTY1, KASUMI, SIMON, SKINNY, SAFER, Anubis, Khazad, Square, SEED, CLEFIA, MARS, CRYPTON and E2 |
 | Work | At most 262,144 independent blocks; each profile also enforces its byte ceiling and width |
 | Private parameter JSON | At most 4096 UTF-8 bytes |
 | Invalid profile, key or settings | `invalid_parameter`; no secret excerpts |

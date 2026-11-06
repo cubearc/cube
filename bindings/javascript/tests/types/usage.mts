@@ -203,3 +203,8 @@ const speck48: Uint8Array=cube.execute({operation:'cipher.block.encrypt_blocks',
 const rijndael160: Uint8Array=cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(20)},parameters:{profile:'rijndael_160_v1',key_hex:'00'.repeat(20)}}).output;
 const gostTest: Uint8Array=cube.execute({operation:'cipher.block.decrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'gost28147_test_le_v1',key_hex:'00'.repeat(32)}}).output;
 void [speck48,rijndael160,gostTest];
+
+const skinnyFullTweakey: Uint8Array = cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(16)},parameters:{profile:'skinny128_384_v1',key_hex:'00'.repeat(48)}}).output;
+const saferExplicitRounds: Uint8Array = cube.execute({operation:'cipher.block.decrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'safer_sk64_8_v1',key_hex:'00'.repeat(8)}}).output;
+const clefia256: Uint8Array = cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(16)},parameters:{profile:'clefia_rfc6114_v1',key_hex:'00'.repeat(32)}}).output;
+void [skinnyFullTweakey, saferExplicitRounds, clefia256];

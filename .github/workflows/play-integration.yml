@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: cubearc/play
-          ref: aff016bbbde4e7b71f9edd204bfd238f2b9b6c90
+          ref: 1be748626f7c3d84fcf766d1d1279044577a43f2
           path: play
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable

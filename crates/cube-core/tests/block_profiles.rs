@@ -13,66 +13,81 @@ fn vectors() -> Vec<Value> {
 }
 #[test]
 fn every_reference_vector_executes_both_directions_and_preserves_blocks() {
-    let mut profiles = std::collections::BTreeSet::new();
-    for vector in vectors() {
-        let profile = vector["profile"].as_str().unwrap();
-        profiles.insert(profile.to_string());
-        let key = hex::decode(vector["key_hex"].as_str().unwrap()).unwrap();
-        let bits = vector["effective_key_bits"].as_u64().map(|n| n as u16);
-        let tweak = vector["tweak_hex"]
-            .as_str()
-            .map(|t| hex::decode(t).unwrap());
-        let settings = Settings::new_with_tweak(
-            Profile::parse(profile).unwrap(),
-            &key,
-            bits,
-            tweak.as_deref(),
-        )
-        .unwrap();
-        let mut parameters = json!({"profile":profile,"key_hex":vector["key_hex"]});
-        if let Some(bits) = bits {
-            parameters["effective_key_bits"] = json!(bits);
+    let vectors = vectors();
+    let profiles: std::collections::BTreeSet<_> = vectors
+        .iter()
+        .map(|v| v["profile"].as_str().unwrap())
+        .collect();
+    assert_eq!(profiles, Profile::NAMES.iter().copied().collect());
+    let workers = std::thread::available_parallelism()
+        .map_or(1, |n| n.get())
+        .min(4);
+    std::thread::scope(|scope| {
+        for chunk in vectors.chunks(vectors.len().div_ceil(workers)) {
+            scope.spawn(move || {
+                for vector in chunk {
+                    assert_reference_vector(vector);
+                }
+            });
         }
-        if let Some(tweak) = vector.get("tweak_hex") {
-            parameters["tweak_hex"] = tweak.clone();
-        }
-        let plain = hex::decode(vector["plaintext_hex"].as_str().unwrap()).unwrap();
-        let encrypted = hex::decode(vector["ciphertext_hex"].as_str().unwrap()).unwrap();
-        for (operation, input, expected) in [
-            (block_profiles::ENCRYPT, &plain, &encrypted),
-            (block_profiles::DECRYPT, &encrypted, &plain),
-        ] {
-            let invoke = |input: &[u8]| {
-                execution::execute(
-                    operation,
-                    1,
-                    &json!({"input":{"base64":cube_core::encoding::base64_encode(input)}}),
-                    &parameters,
-                    Budget::default(),
-                )
-                .unwrap_or_else(|e| panic!("{profile} {operation}: {e:?}"))
-            };
-            assert_eq!(
-                invoke(input),
-                json!({"output":{"base64":cube_core::encoding::base64_encode(expected)}}),
-                "{profile} {operation}"
-            );
-            assert_eq!(
-                invoke(&input.repeat(3)),
-                json!({"output":{"base64":cube_core::encoding::base64_encode(&expected.repeat(3))}})
-            );
-            assert_eq!(invoke(&[]), json!({"output":{"base64":""}}));
-        }
-        assert_eq!(
-            block_profiles::encrypt(&plain, &settings).unwrap(),
-            encrypted
-        );
-        assert_eq!(
-            block_profiles::decrypt(&encrypted, &settings).unwrap(),
-            plain
-        );
+    });
+}
+fn assert_reference_vector(vector: &Value) {
+    let profile = vector["profile"].as_str().unwrap();
+    let key = hex::decode(vector["key_hex"].as_str().unwrap()).unwrap();
+    let bits = vector["effective_key_bits"].as_u64().map(|n| n as u16);
+    let tweak = vector["tweak_hex"]
+        .as_str()
+        .map(|t| hex::decode(t).unwrap());
+    let settings = Settings::new_with_tweak(
+        Profile::parse(profile).unwrap(),
+        &key,
+        bits,
+        tweak.as_deref(),
+    )
+    .unwrap();
+    let mut parameters = json!({"profile":profile,"key_hex":vector["key_hex"]});
+    if let Some(bits) = bits {
+        parameters["effective_key_bits"] = json!(bits);
     }
-    assert_eq!(profiles.len(), Profile::ALL.len());
+    if let Some(tweak) = vector.get("tweak_hex") {
+        parameters["tweak_hex"] = tweak.clone();
+    }
+    let plain = hex::decode(vector["plaintext_hex"].as_str().unwrap()).unwrap();
+    let encrypted = hex::decode(vector["ciphertext_hex"].as_str().unwrap()).unwrap();
+    for (operation, input, expected) in [
+        (block_profiles::ENCRYPT, &plain, &encrypted),
+        (block_profiles::DECRYPT, &encrypted, &plain),
+    ] {
+        let invoke = |input: &[u8]| {
+            execution::execute(
+                operation,
+                1,
+                &json!({"input":{"base64":cube_core::encoding::base64_encode(input)}}),
+                &parameters,
+                Budget::default(),
+            )
+            .unwrap_or_else(|e| panic!("{profile} {operation}: {e:?}"))
+        };
+        assert_eq!(
+            invoke(input),
+            json!({"output":{"base64":cube_core::encoding::base64_encode(expected)}}),
+            "{profile} {operation}"
+        );
+        assert_eq!(
+            invoke(&input.repeat(3)),
+            json!({"output":{"base64":cube_core::encoding::base64_encode(&expected.repeat(3))}})
+        );
+        assert_eq!(invoke(&[]), json!({"output":{"base64":""}}));
+    }
+    assert_eq!(
+        block_profiles::encrypt(&plain, &settings).unwrap(),
+        encrypted
+    );
+    assert_eq!(
+        block_profiles::decrypt(&encrypted, &settings).unwrap(),
+        plain
+    );
 }
 #[test]
 fn invalid_keys_and_profile_settings_fail_without_private_excerpts() {

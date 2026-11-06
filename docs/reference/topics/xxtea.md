@@ -55,8 +55,8 @@ pipeline adapter or automatic capture permission.
 
 Fourteen independent raw-kernel answers cover both directions, nonzero keys
 and multiple word counts. CLI, installed native Python, packaged Wasm and native
-Play consume the same corpus. See the [backend qualification
-record](../../contributing/block-backends.md), [canonical
-contracts](../../../contracts/v1/catalog.json), and the
+Play consume the same corpus. See the
+[backend qualification record](../../contributing/block-backends.md),
+[canonical contracts](../operations.md), and the
 [block-profile reference](block-profiles.md) for TEA and XTEA's distinct fixed
 block profiles.

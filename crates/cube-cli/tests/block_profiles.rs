@@ -26,6 +26,7 @@ fn reference_blocks_use_raw_key_files_binary_stdout_and_explicit_settings() {
     std::fs::create_dir(&directory.0).unwrap();
     let key = directory.0.join("key.bin");
     let input = directory.0.join("input.bin");
+    let tweak = directory.0.join("tweak.bin");
     for v in vectors {
         std::fs::write(&key, hex_bytes(v["key_hex"].as_str().unwrap())).unwrap();
         for (mode, source, expected) in [
@@ -49,6 +50,10 @@ fn reference_blocks_use_raw_key_files_binary_stdout_and_explicit_settings() {
                 .arg(&input);
             if let Some(bits) = v["effective_key_bits"].as_u64() {
                 command.arg("--effective-key-bits").arg(bits.to_string());
+            }
+            if let Some(value) = v["tweak_hex"].as_str() {
+                std::fs::write(&tweak, hex_bytes(value)).unwrap();
+                command.arg("--tweak-file").arg(&tweak);
             }
             let result = command.output().unwrap();
             assert!(
@@ -126,4 +131,51 @@ fn reference_blocks_use_raw_key_files_binary_stdout_and_explicit_settings() {
             .success()
     );
     assert!(!capture.exists());
+}
+
+#[test]
+fn xxtea_cli_uses_exact_key_files_and_one_complete_word_sequence() {
+    let rows: Vec<Value> = serde_json::from_str(include_str!(
+        "../../cube-core/src/ciphers/xxtea/vectors.json"
+    ))
+    .unwrap();
+    let directory =
+        Temporary(std::env::temp_dir().join(format!("cube-xxtea-{}", std::process::id())));
+    std::fs::create_dir(&directory.0).unwrap();
+    let key = directory.0.join("key.bin");
+    let input = directory.0.join("words.bin");
+    for v in rows {
+        std::fs::write(&key, hex_bytes(v["key_hex"].as_str().unwrap())).unwrap();
+        for (mode, source, expected) in [
+            ("encrypt", &v["plaintext_hex"], &v["ciphertext_hex"]),
+            ("decrypt", &v["ciphertext_hex"], &v["plaintext_hex"]),
+        ] {
+            std::fs::write(&input, hex_bytes(source.as_str().unwrap())).unwrap();
+            let result = Command::new(env!("CARGO_BIN_EXE_cube"))
+                .args(["cipher", "xxtea", mode, "--key-file"])
+                .arg(&key)
+                .arg("--file")
+                .arg(&input)
+                .output()
+                .unwrap();
+            assert!(
+                result.status.success(),
+                "{}",
+                String::from_utf8_lossy(&result.stderr)
+            );
+            assert_eq!(result.stdout, hex_bytes(expected.as_str().unwrap()));
+        }
+    }
+    std::fs::write(&input, [0; 4]).unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_cube"))
+        .args(["--json-errors", "cipher", "xxtea", "encrypt", "--key-file"])
+        .arg(&key)
+        .arg("--file")
+        .arg(&input)
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(output.stdout.is_empty());
+    let error: Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(error["error"]["code"], "invalid_input");
 }

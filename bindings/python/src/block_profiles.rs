@@ -9,7 +9,12 @@ use pyo3::{
 };
 use zeroize::Zeroizing;
 
-fn settings(profile: &str, key: &[u8], bits: Option<&Bound<'_, PyAny>>) -> PyResult<Settings> {
+fn settings(
+    profile: &str,
+    key: &[u8],
+    bits: Option<&Bound<'_, PyAny>>,
+    tweak: Option<&[u8]>,
+) -> PyResult<Settings> {
     let invalid = || {
         super::file_error(
             OperationError::new(
@@ -27,35 +32,38 @@ fn settings(profile: &str, key: &[u8], bits: Option<&Bound<'_, PyAny>>) -> PyRes
             value.extract::<u16>().map_err(|_| invalid())
         })
         .transpose()?;
-    Settings::new(
+    Settings::new_with_tweak(
         Profile::parse(profile).map_err(super::file_error)?,
         key,
         bits,
+        tweak,
     )
     .map_err(super::file_error)
 }
-#[pyfunction(signature=(data,key,profile,*,effective_key_bits=None))]
+#[pyfunction(signature=(data,key,profile,*,effective_key_bits=None,tweak=None))]
 fn block_encrypt_blocks<'py>(
     py: Python<'py>,
     data: &[u8],
     key: &[u8],
     profile: &str,
     effective_key_bits: Option<&Bound<'_, PyAny>>,
+    tweak: Option<&[u8]>,
 ) -> PyResult<Bound<'py, PyBytes>> {
-    let settings = settings(profile, key, effective_key_bits)?;
+    let settings = settings(profile, key, effective_key_bits, tweak)?;
     let output =
         Zeroizing::new(block_profiles::encrypt(data, &settings).map_err(super::file_error)?);
     Ok(PyBytes::new(py, &output))
 }
-#[pyfunction(signature=(data,key,profile,*,effective_key_bits=None))]
+#[pyfunction(signature=(data,key,profile,*,effective_key_bits=None,tweak=None))]
 fn block_decrypt_blocks<'py>(
     py: Python<'py>,
     data: &[u8],
     key: &[u8],
     profile: &str,
     effective_key_bits: Option<&Bound<'_, PyAny>>,
+    tweak: Option<&[u8]>,
 ) -> PyResult<Bound<'py, PyBytes>> {
-    let settings = settings(profile, key, effective_key_bits)?;
+    let settings = settings(profile, key, effective_key_bits, tweak)?;
     let output =
         Zeroizing::new(block_profiles::decrypt(data, &settings).map_err(super::file_error)?);
     Ok(PyBytes::new(py, &output))

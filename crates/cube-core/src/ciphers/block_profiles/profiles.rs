@@ -125,6 +125,34 @@ profiles! {
     (Mars, "mars_final_le_v1", 16, Set(&[16, 24, 32])),
     (Crypton, "crypton10_le_v1", 16, Set(&[16, 24, 32])),
     (E2, "e2_ntt_v1", 16, Set(&[16, 24, 32])),
+    (Craft, "craft_2020_v1", 8, Set(&[16])),
+    (CryptonOriginal, "crypton_original_le_v1", 16, Set(&[16,24,32])),
+    (Boron128, "boron128_v1", 8, Set(&[16])),
+    (Boron80, "boron80_v1", 8, Set(&[10])),
+    (Gift64, "gift64_v1", 8, Set(&[16])),
+    (Hierocrypt32001Be, "hierocrypt3_2001_be_v1", 16, Set(&[16, 24, 32])),
+    (HierocryptL1NessieBe, "hierocrypt_l1_nessie_be_v1", 8, Set(&[16])),
+    (Katan32Be, "katan32_be_v1", 4, Set(&[10])),
+    (Katan48Be, "katan48_be_v1", 6, Set(&[10])),
+    (Katan64Be, "katan64_be_v1", 8, Set(&[10])),
+    (Klein64, "klein64_v1", 8, Set(&[8])),
+    (Klein80, "klein80_v1", 8, Set(&[10])),
+    (Klein96, "klein96_v1", 8, Set(&[12])),
+    (Ktantan32Be, "ktantan32_be_v1", 4, Set(&[10])),
+    (Ktantan48Be, "ktantan48_be_v1", 6, Set(&[10])),
+    (Ktantan64Be, "ktantan64_be_v1", 8, Set(&[10])),
+    (LblockCorrected, "lblock_corrected_v1", 8, Set(&[10])),
+    (Led128, "led128_v1", 8, Set(&[16])),
+    (Led64, "led64_v1", 8, Set(&[8])),
+    (Midori128, "midori128_v1", 16, Set(&[16])),
+    (Midori64, "midori64_v1", 8, Set(&[16])),
+    (NoekeonIndirectBe, "noekeon_indirect_be_v1", 16, Set(&[16])),
+    (Piccolo128Be, "piccolo128_be_v1", 8, Set(&[16])),
+    (Piccolo80Be, "piccolo80_be_v1", 8, Set(&[10])),
+    (PrideOriginal, "pride_original_v1", 8, Set(&[16])),
+    (PrinceOriginal, "prince_original_v1", 8, Set(&[16])),
+    (Rectangle128Be, "rectangle128_be_v1", 8, Set(&[16])),
+    (Rectangle80Be, "rectangle80_be_v1", 8, Set(&[10])),
 }
 impl Profile {
     /// Parse only a supported exact profile identifier.
@@ -142,7 +170,9 @@ impl Profile {
     /// Slow educational reference implementations have a smaller explicit cap.
     pub const fn max_input_bytes(self) -> usize {
         match self {
-            Self::Rijndael128
+            Self::CryptonOriginal
+            | Self::Craft
+            | Self::Rijndael128
             | Self::Rijndael160
             | Self::Rijndael192
             | Self::Rijndael224
@@ -189,7 +219,33 @@ impl Profile {
             | Self::Clefia
             | Self::Mars
             | Self::Crypton
-            | Self::E2 => 64 * 1024,
+            | Self::E2
+            | Self::Boron128
+            | Self::Boron80
+            | Self::Gift64
+            | Self::Hierocrypt32001Be
+            | Self::HierocryptL1NessieBe
+            | Self::Katan32Be
+            | Self::Katan48Be
+            | Self::Katan64Be
+            | Self::Klein64
+            | Self::Klein80
+            | Self::Klein96
+            | Self::Ktantan32Be
+            | Self::Ktantan48Be
+            | Self::Ktantan64Be
+            | Self::LblockCorrected
+            | Self::Led128
+            | Self::Led64
+            | Self::Midori128
+            | Self::Midori64
+            | Self::NoekeonIndirectBe
+            | Self::Piccolo128Be
+            | Self::Piccolo80Be
+            | Self::PrideOriginal
+            | Self::PrinceOriginal
+            | Self::Rectangle128Be
+            | Self::Rectangle80Be => 64 * 1024,
             _ => super::MAX_INPUT,
         }
     }

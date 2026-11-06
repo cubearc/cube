@@ -26,6 +26,13 @@ const PARAMETERS: &[o::Parameter] = &[
         default: None,
         constraints: o::ParameterType::Integer { min: 1, max: 1024 },
     },
+    o::Parameter {
+        name: "tweak_hex",
+        description: "CRAFT only: required exact eight-byte hexadecimal tweak. Forbidden for other profiles; no implicit zero tweak.",
+        required: false,
+        default: None,
+        constraints: o::ParameterType::Text { choices: &[] },
+    },
 ];
 const fn row(
     id: &'static str,
@@ -57,7 +64,7 @@ const fn row(
                 limitations: "Unaudited non-constant-time reference backends for legacy interoperability and education. Small blocks and weak keys remain insecure. No authentication; decryption does not verify key or integrity.",
                 private_input: true,
                 private_output: true,
-                sensitive_parameters: &["key_hex"],
+                sensitive_parameters: &["key_hex", "tweak_hex"],
             },
             profile: m::Profile {
                 variant: DESCRIPTION,
@@ -98,10 +105,14 @@ const PROFILED: [m::Entry; 2] = [
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
 fn parameters_schema() -> schemars::Schema {
     let mut schema = c::schema::<Parameters>().to_value();
-    schema["properties"]["effective_key_bits"]
-        .as_object_mut()
-        .unwrap()
-        .remove("default");
+    // Missing profile-specific settings stay absent; configuration must not
+    // inject null into a profile that forbids the setting.
+    for field in ["effective_key_bits", "tweak_hex"] {
+        schema["properties"][field]
+            .as_object_mut()
+            .unwrap()
+            .remove("default");
+    }
     let base = schema.clone();
     schema["oneOf"] = json!(
         Profile::ALL
@@ -113,6 +124,16 @@ fn parameters_schema() -> schemars::Schema {
                 }
                 row["properties"]["profile"] = json!({"const":p});
                 row["properties"]["key_hex"]["pattern"] = json!(p.key_pattern());
+                if *p == Profile::Craft {
+                    row["properties"]["tweak_hex"] =
+                        json!({"type":"string","pattern":"^[0-9A-Fa-f]{16}$"});
+                    row["required"] = json!(["profile", "key_hex", "tweak_hex"]);
+                } else {
+                    row["properties"]
+                        .as_object_mut()
+                        .unwrap()
+                        .remove("tweak_hex");
+                }
                 if *p == Profile::Rc2 {
                     row["required"] = json!(["profile", "key_hex", "effective_key_bits"]);
                     row["properties"]["effective_key_bits"] =

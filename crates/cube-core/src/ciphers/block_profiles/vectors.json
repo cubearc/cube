@@ -1,5 +1,751 @@
 [
   {
+    "profile": "boron80_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "c7010e2906662c55",
+    "source": "Independent nibble/bit-array evaluation of original BORON Tables1\u20133, Algorithm1 and section2.4; explicitly equation-qualified nonuniform key cases"
+  },
+  {
+    "profile": "boron80_v1",
+    "key_hex": "8091a2b3c4d5e6f70819",
+    "plaintext_hex": "d0c3b6a99c8f8275",
+    "ciphertext_hex": "7e8fd73bf277c240",
+    "source": "Independent nibble/bit-array evaluation of original BORON Tables1\u20133, Algorithm1 and section2.4; explicitly equation-qualified nonuniform key cases"
+  },
+  {
+    "profile": "boron128_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "ac00c7cd873255c8",
+    "source": "Independent nibble/bit-array evaluation of original BORON Tables1\u20133, Algorithm1 and section2.4; explicitly equation-qualified nonuniform key cases"
+  },
+  {
+    "profile": "boron128_v1",
+    "key_hex": "8091a2b3c4d5e6f708192a3b4c5d6e7f",
+    "plaintext_hex": "d0c3b6a99c8f8275",
+    "ciphertext_hex": "2cbff4377d60636b",
+    "source": "Independent nibble/bit-array evaluation of original BORON Tables1\u20133, Algorithm1 and section2.4; explicitly equation-qualified nonuniform key cases"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ec62e539bb6bbc811a60c06faccb7ec8",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "5ddba4ea1a6656d32f965be8134a5715",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "80000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f5bed75159c5251816ea1ec89b4f18b0",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ec62e539bb6bbc811a60c06faccb7ec8",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f1011121314151617",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "8ffec931b17143cb15ca5af63dc79015",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "800000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f5bed75159c5251816ea1ec89b4f18b0",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ec62e539bb6bbc811a60c06faccb7ec8",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "f492525dec52b41aa180a2477d8c3e7b",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "crypton_original_le_v1",
+    "key_hex": "8000000000000000000000000000000000000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f5bed75159c5251816ea1ec89b4f18b0",
+    "source": "Frozen independent Gladman original CRYPTON C d4b0763a860fa4462402a32a51c87a8a5679ad2d, executed 32-bit-word oracle both ways"
+  },
+  {
+    "profile": "craft_2020_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "tweak_hex": "0123456789abcdef",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "42b05270e21b3fff",
+    "source": "BSD designer hardware emsec/ImpeccableCircuits 33619f778107187e8428bc277d23b6ab78cfebf2 CRAFT testbench"
+  },
+  {
+    "profile": "craft_2020_v1",
+    "key_hex": "18f4eebdfced7841d9e0e38cfe6a9405",
+    "tweak_hex": "17f291a9a3aa0400",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "111df5062a8d88c9",
+    "source": "BSD designer hardware emsec/ImpeccableCircuits 33619f778107187e8428bc277d23b6ab78cfebf2 CRAFT testbench"
+  },
+  {
+    "profile": "craft_2020_v1",
+    "key_hex": "ffffffffffffffffffffffffffffffff",
+    "tweak_hex": "f0f0f0f0f0f0f0f0",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "f2735a9abbd27175",
+    "source": "BSD designer hardware emsec/ImpeccableCircuits 33619f778107187e8428bc277d23b6ab78cfebf2 CRAFT testbench"
+  },
+  {
+    "profile": "craft_2020_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "tweak_hex": "0000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "f630538883063100",
+    "source": "BSD designer hardware emsec/ImpeccableCircuits 33619f778107187e8428bc277d23b6ab78cfebf2 CRAFT testbench with explicit zero tweak"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "818665aa0d02dfda",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "604ae6ca03c20ada",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "ffffffffffffffff0000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "9fb51935fc3df524",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "0000000000000000ffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "78a54cbe737bb7ef",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "0000000000000000fedcba9876543210",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "ae25ad3ca8fa9ccf",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "00112233445566778899aabbccddeeff",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "d6dcb5978de756ee",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "0112233445566778899aabbccddeeff0",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "392f599f46761cd3",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "0112233445566778899aabbccddeeff0",
+    "plaintext_hex": "f0123456789abcde",
+    "ciphertext_hex": "4fb5e332b9b409bb",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "prince_original_v1",
+    "key_hex": "d8cdb78070b4c55a818665aa0d02dfda",
+    "plaintext_hex": "69c4e0d86a7b0430",
+    "ciphertext_hex": "43c6b256d79de7e8",
+    "source": "https://github.com/secworks/prince/blob/f40631db7a3fe2eb7a09d63696ad610b133db163/src/tb/tb_prince.v"
+  },
+  {
+    "profile": "led64_v1",
+    "key_hex": "0000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "39c2401003a0c798",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/LED64/1-LED64_no_protection/TestBench/test_LED64Enc.vhd"
+  },
+  {
+    "profile": "led64_v1",
+    "key_hex": "0123456789abcdef",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "a003551e3893fc58",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/LED64/1-LED64_no_protection/TestBench/test_LED64Enc.vhd"
+  },
+  {
+    "profile": "led128_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "3decb2a0850cdba1",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/LED128/1-LED128_no_protection/TestBench/test_LED128Enc.vhd"
+  },
+  {
+    "profile": "led128_v1",
+    "key_hex": "0123456789abcdef0123456789abcdef",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "d6b824587f014fc2",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/LED128/1-LED128_no_protection/TestBench/test_LED128Enc.vhd"
+  },
+  {
+    "profile": "midori64_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "3c9cceda2bbd449a",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/Midori/1-Midori64_no_protection/TestBench/test_Midori64Enc.vhd"
+  },
+  {
+    "profile": "midori64_v1",
+    "key_hex": "687ded3b3c85b3f35b1009863e2a8cbf",
+    "plaintext_hex": "42c20fd3b586879e",
+    "ciphertext_hex": "66bcdc6270d901cd",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/Midori/1-Midori64_no_protection/TestBench/test_Midori64Enc.vhd"
+  },
+  {
+    "profile": "midori64_v1",
+    "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "1104f12cf2d42a76",
+    "source": "https://github.com/emsec/ImpeccableCircuits/blob/33619f778107187e8428bc277d23b6ab78cfebf2/Midori/1-Midori64_no_protection/TestBench/test_Midori64Enc.vhd"
+  },
+  {
+    "profile": "gift64_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "f62bc3ef34f775ac",
+    "source": "https://github.com/giftcipher/gift/blob/f43c6b3e214e39c22dc0ae5efcc39297809d9b68/implementations/test%20vectors/GIFT64_test_vector_1.txt"
+  },
+  {
+    "profile": "gift64_v1",
+    "key_hex": "fedcba9876543210fedcba9876543210",
+    "plaintext_hex": "fedcba9876543210",
+    "ciphertext_hex": "c1b71f66160ff587",
+    "source": "https://github.com/giftcipher/gift/blob/f43c6b3e214e39c22dc0ae5efcc39297809d9b68/implementations/test%20vectors/GIFT64_test_vector_2.txt"
+  },
+  {
+    "profile": "gift64_v1",
+    "key_hex": "bd91731eb6bc2713a1f9f6ffc75044e7",
+    "plaintext_hex": "c450c7727a9b8a7d",
+    "ciphertext_hex": "e3272885fa94ba8b",
+    "source": "https://github.com/giftcipher/gift/blob/f43c6b3e214e39c22dc0ae5efcc39297809d9b68/implementations/test%20vectors/GIFT64_test_vector_3.txt"
+  },
+  {
+    "profile": "midori128_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "c055cbb95996d14902b60574d5e728d6",
+    "source": "https://github.com/isec-tugraz/AutoDiVer/blob/b4a509e9189372f21f4067c5e69ebd5e76d0f51a/tests/src/autodiver_ciphers/midori128/midori128.c",
+    "original_specification": "https://eprint.iacr.org/2015/1142 Appendix A"
+  },
+  {
+    "profile": "midori128_v1",
+    "key_hex": "687ded3b3c85b3f35b1009863e2a8cbf",
+    "plaintext_hex": "51084ce6e73a5ca2ec87d7babc297543",
+    "ciphertext_hex": "1e0ac4fddff71b4c1801b73ee4afc83d",
+    "source": "https://github.com/isec-tugraz/AutoDiVer/blob/b4a509e9189372f21f4067c5e69ebd5e76d0f51a/tests/src/autodiver_ciphers/midori128/midori128.c",
+    "original_specification": "https://eprint.iacr.org/2015/1142 Appendix A"
+  },
+  {
+    "profile": "katan32_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "00000000",
+    "ciphertext_hex": "7e1ff945",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan32_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffff",
+    "ciphertext_hex": "432e61da",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan32_be_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "00010203",
+    "ciphertext_hex": "fd5964cd",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan32_be_v1",
+    "key_hex": "2b3c4d5e6f8091a2b3c4",
+    "plaintext_hex": "c5baafa4",
+    "ciphertext_hex": "4e0e8387",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan48_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "000000000000",
+    "ciphertext_hex": "4b7efcfb8659",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan48_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffffffff",
+    "ciphertext_hex": "a4bd196d0b85",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan48_be_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "000102030405",
+    "ciphertext_hex": "46697ccd1f88",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan48_be_v1",
+    "key_hex": "2b3c4d5e6f8091a2b3c4",
+    "plaintext_hex": "c5baafa4998e",
+    "ciphertext_hex": "25d693d5871e",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan64_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "21f2e99c0fab828a",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan64_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "c956100dbeb64ba8",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan64_be_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "0001020304050607",
+    "ciphertext_hex": "e363bd801774be2f",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "katan64_be_v1",
+    "key_hex": "2b3c4d5e6f8091a2b3c4",
+    "plaintext_hex": "c5baafa4998e8378",
+    "ciphertext_hex": "e00f904e77d9bbc2",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan32_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "00000000",
+    "ciphertext_hex": "22ea3988",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan32_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffff",
+    "ciphertext_hex": "432e61da",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan32_be_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "00010203",
+    "ciphertext_hex": "4a1ec2d3",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan32_be_v1",
+    "key_hex": "2b3c4d5e6f8091a2b3c4",
+    "plaintext_hex": "c5baafa4",
+    "ciphertext_hex": "ba51c2d1",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan48_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "000000000000",
+    "ciphertext_hex": "936d0fa33a05",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan48_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffffffff",
+    "ciphertext_hex": "a4bd196d0b85",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan48_be_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "000102030405",
+    "ciphertext_hex": "2cacd482a23d",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan48_be_v1",
+    "key_hex": "2b3c4d5e6f8091a2b3c4",
+    "plaintext_hex": "c5baafa4998e",
+    "ciphertext_hex": "fda9cc62d8a4",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan64_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "c02de05bfa194b16",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan64_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "c956100dbeb64ba8",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan64_be_v1",
+    "key_hex": "00010203040506070809",
+    "plaintext_hex": "0001020304050607",
+    "ciphertext_hex": "38dc9c5e2ef576a5",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "ktantan64_be_v1",
+    "key_hex": "2b3c4d5e6f8091a2b3c4",
+    "plaintext_hex": "c5baafa4998e8378",
+    "ciphertext_hex": "13ad16bb8f1f0f47",
+    "source": "https://github.com/ethz-spylab/cryptanalysis-benchmark/blob/f55e8abb009d2a85e30db91d011eee8b24f13edb/algorithms/Cbase_katan/environment/algorithm_src/katan.c",
+    "qualification": "Executed frozen original-author C, both directions; KTANTAN64 checked against independent ImpeccableCircuits literals. No C runtime or source redistribution in product."
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "82b4109fcc70bd1f",
+    "source": "https://github.com/cryptolu/FELICS/blob/4f07ea33d8304ab02d227eec92be0c0c73893a2b/block_ciphers/source/ciphers/PRIDE_64_128_v01/source/test_vectors.c",
+    "specification": "https://informatik.rub.de/wp-content/uploads/2021/11/Thesis_Kavun.pdf Chapter10"
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "d70e60680a17b956",
+    "source": "https://github.com/cryptolu/FELICS/blob/4f07ea33d8304ab02d227eec92be0c0c73893a2b/block_ciphers/source/ciphers/PRIDE_64_128_v01/source/test_vectors.c",
+    "specification": "https://informatik.rub.de/wp-content/uploads/2021/11/Thesis_Kavun.pdf Chapter10"
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "ffffffffffffffff0000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "28f19f97f5e846a9",
+    "source": "https://github.com/cryptolu/FELICS/blob/4f07ea33d8304ab02d227eec92be0c0c73893a2b/block_ciphers/source/ciphers/PRIDE_64_128_v01/source/test_vectors.c",
+    "specification": "https://informatik.rub.de/wp-content/uploads/2021/11/Thesis_Kavun.pdf Chapter10"
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "0000000000000000ffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "d123ebaf368fce62",
+    "source": "https://github.com/cryptolu/FELICS/blob/4f07ea33d8304ab02d227eec92be0c0c73893a2b/block_ciphers/source/ciphers/PRIDE_64_128_v01/source/test_vectors.c",
+    "specification": "https://informatik.rub.de/wp-content/uploads/2021/11/Thesis_Kavun.pdf Chapter10"
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "0000000000000000fedcba9876543210",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "d1372929712d336e",
+    "source": "https://github.com/cryptolu/FELICS/blob/4f07ea33d8304ab02d227eec92be0c0c73893a2b/block_ciphers/source/ciphers/PRIDE_64_128_v01/source/test_vectors.c",
+    "specification": "https://informatik.rub.de/wp-content/uploads/2021/11/Thesis_Kavun.pdf Chapter10"
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "b8f653fa05f4f9c39889ce4bb9015865",
+    "plaintext_hex": "19cb6e3cc15d254f",
+    "ciphertext_hex": "8b8cc44779935cf2",
+    "source": "https://eprint.iacr.org/2017/910.pdf Section4.1"
+  },
+  {
+    "profile": "pride_original_v1",
+    "key_hex": "485a895ac53577e7ffbd140564f5ca45",
+    "plaintext_hex": "32c46c37168a7248",
+    "ciphertext_hex": "5b2569f55b45e69c",
+    "source": "https://eprint.iacr.org/2017/910.pdf Section4.1"
+  },
+  {
+    "profile": "klein64_v1",
+    "key_hex": "0000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "cdc0b51f14722bbe",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein64_v1",
+    "key_hex": "ffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "6456764e8602e154",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein64_v1",
+    "key_hex": "1234567890abcdef",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "592356c4997176c8",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein64_v1",
+    "key_hex": "0000000000000000",
+    "plaintext_hex": "1234567890abcdef",
+    "ciphertext_hex": "629f9d6dff95800e",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein80_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "6677e20d1a53a431",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein80_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "82247502273dcc5f",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein80_v1",
+    "key_hex": "1234567890abcdef1234",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "3f210f67cb23687a",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein80_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "1234567890abcdef",
+    "ciphertext_hex": "ba5239e93e784366",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein96_v1",
+    "key_hex": "000000000000000000000000",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "db9fa7d33d8e8e36",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein96_v1",
+    "key_hex": "ffffffffffffffffffffffff",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "15a3a03386a7fec6",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein96_v1",
+    "key_hex": "1234567890abcdef12345678",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "79687798afda0bc3",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "klein96_v1",
+    "key_hex": "000000000000000000000000",
+    "plaintext_hex": "1234567890abcdef",
+    "ciphertext_hex": "5006a987a500bfdd",
+    "source": "https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf Appendix A"
+  },
+  {
+    "profile": "lblock_corrected_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "c218185308e75bcd",
+    "source": "https://eprint.iacr.org/2011/345 Appendix I, corrected S-box revision"
+  },
+  {
+    "profile": "lblock_corrected_v1",
+    "key_hex": "0123456789abcdeffedc",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "4b7179d8ebee0c26",
+    "source": "https://eprint.iacr.org/2011/345 Appendix I, corrected S-box revision"
+  },
+  {
+    "profile": "rectangle80_be_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "2d96e354e8b10874",
+    "source": "https://eprint.iacr.org/2014/084 Table10, revised 2016-01-06",
+    "byte_convention": "Four paper rows in order, each big-endian16-bit word;128-bit keys use four big-endian32-bit rows."
+  },
+  {
+    "profile": "rectangle80_be_v1",
+    "key_hex": "ffffffffffffffffffff",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "9945aa34ae3d0112",
+    "source": "https://eprint.iacr.org/2014/084 Table10, revised 2016-01-06",
+    "byte_convention": "Four paper rows in order, each big-endian16-bit word;128-bit keys use four big-endian32-bit rows."
+  },
+  {
+    "profile": "rectangle128_be_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "aee6361344a499ee",
+    "source": "https://eprint.iacr.org/2014/084 Table10, revised 2016-01-06",
+    "byte_convention": "Four paper rows in order, each big-endian16-bit word;128-bit keys use four big-endian32-bit rows."
+  },
+  {
+    "profile": "rectangle128_be_v1",
+    "key_hex": "ffffffffffffffffffffffffffffffff",
+    "plaintext_hex": "ffffffffffffffff",
+    "ciphertext_hex": "e83eefee4a157a46",
+    "source": "https://eprint.iacr.org/2014/084 Table10, revised 2016-01-06",
+    "byte_convention": "Four paper rows in order, each big-endian16-bit word;128-bit keys use four big-endian32-bit rows."
+  },
+  {
+    "profile": "boron80_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "3cf72a8b7518e6f7",
+    "source": "https://jzus.zju.edu.cn/opentxt.php?doi=10.1631%2FFITEE.1500415 Appendix Tables A1/A2"
+  },
+  {
+    "profile": "boron80_v1",
+    "key_hex": "00000000000000000000",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "5a664928b961c619",
+    "source": "https://jzus.zju.edu.cn/opentxt.php?doi=10.1631%2FFITEE.1500415 Appendix Tables A1/A2"
+  },
+  {
+    "profile": "boron128_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0000000000000000",
+    "ciphertext_hex": "94a105a7d1f2de42",
+    "source": "BORON original paper Tables 1\u20133 and Algorithm 1 / section 2.4; independent nibble-array qualification"
+  },
+  {
+    "profile": "boron128_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "953be55bd5f268ba",
+    "source": "https://jzus.zju.edu.cn/opentxt.php?doi=10.1631%2FFITEE.1500415 Appendix Tables A1/A2"
+  },
+  {
+    "profile": "piccolo80_be_v1",
+    "key_hex": "00112233445566778899",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "8d2bff9935f84056",
+    "source": "https://www.iacr.org/archive/ches2011/69170343/69170343.pdf Appendix A"
+  },
+  {
+    "profile": "piccolo128_be_v1",
+    "key_hex": "00112233445566778899aabbccddeeff",
+    "plaintext_hex": "0123456789abcdef",
+    "ciphertext_hex": "5ec42cea657b89ff",
+    "source": "BSD emsec/ImpeccableCircuits 33619f778107187e8428bc277d23b6ab78cfebf2 Piccolo128 testbench"
+  },
+  {
+    "profile": "piccolo128_be_v1",
+    "key_hex": "db31aed0d8e19ecf6aaff558163eba35",
+    "plaintext_hex": "ce299d020edff761",
+    "ciphertext_hex": "910a6a80e9322653",
+    "source": "BSD emsec/ImpeccableCircuits 33619f778107187e8428bc277d23b6ab78cfebf2 Piccolo128 testbench"
+  },
+  {
+    "profile": "hierocrypt_l1_nessie_be_v1",
+    "key_hex": "4703c87e817842c4ce6b167d43701b76",
+    "plaintext_hex": "85693846db4c1b34",
+    "ciphertext_hex": "0cb19444abd24347",
+    "source": "Toshiba original 2000 spec section 4 / NESSIE published KAT; exact H4=8af5def7 reference-byte convention"
+  },
+  {
+    "profile": "hierocrypt3_2001_be_v1",
+    "key_hex": "4703c87e817842c4ce6b167d43701b76",
+    "plaintext_hex": "85693846db4c1b3487272e555761c7f5",
+    "ciphertext_hex": "5c5f4b00aec36d893cf1041e7fa8bae8",
+    "source": "Toshiba Hierocrypt-3 specification section 4, 128-bit key"
+  },
+  {
+    "profile": "hierocrypt3_2001_be_v1",
+    "key_hex": "7742a03889b58601f74d551388872377324fbc1d30c54fc6",
+    "plaintext_hex": "544066209d931b330c9089fdb4cb8259",
+    "ciphertext_hex": "1d3105988dbbd50cb0a17193ea5ba244",
+    "source": "Toshiba Hierocrypt-3 specification section 4, 192-bit key"
+  },
+  {
+    "profile": "hierocrypt3_2001_be_v1",
+    "key_hex": "11a180269a78dda4994746213b5a6dd6e34ffe0cc465d583aff66e1329419c94",
+    "plaintext_hex": "c16d7efca1cbafc7625cbe9c2593de2d",
+    "ciphertext_hex": "c86cd3b4a3185232e3457d638c6515c9",
+    "source": "Toshiba Hierocrypt-3 specification section 4, 256-bit key"
+  },
+  {
+    "profile": "noekeon_indirect_be_v1",
+    "key_hex": "00000000000000000000000000000000",
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ba6933819299c71699a99f08f678178b",
+    "source": "https://gro.noekeon.org/Noekeon_ref.zip NoekeonTestVectors.txt indirect-key mode"
+  },
+  {
+    "profile": "noekeon_indirect_be_v1",
+    "key_hex": "ffffffffffffffffffffffffffffffff",
+    "plaintext_hex": "ffffffffffffffffffffffffffffffff",
+    "ciphertext_hex": "52f88a7b283c1f7bdf7b6faa5011c7d8",
+    "source": "https://gro.noekeon.org/Noekeon_ref.zip NoekeonTestVectors.txt indirect-key mode"
+  },
+  {
+    "profile": "noekeon_indirect_be_v1",
+    "key_hex": "ba6933819299c71699a99f08f678178b",
+    "plaintext_hex": "52f88a7b283c1f7bdf7b6faa5011c7d8",
+    "ciphertext_hex": "5096f2bfc82ae6e2d9495515c277fa70",
+    "source": "https://gro.noekeon.org/Noekeon_ref.zip NoekeonTestVectors.txt indirect-key mode"
+  },
+  {
     "profile": "simon32_64_be_v1",
     "key_hex": "1918111009080100",
     "plaintext_hex": "65656877",

@@ -23,3 +23,16 @@ const wide = cube.execute({
 if (Array.from(wide, byte => byte.toString(16).padStart(2, '0')).join('') !== '16e73aec921314c29df905432bc8968ab64b1f51') {
   throw new Error('Original Rijndael reference answer differs');
 }
+
+
+// CRAFT keeps its tweak explicit and separate from its private key.
+const craft=cube.execute({operation:'cipher.block.encrypt_blocks',version:1,
+  inputs:{input:publicBytes('0123456789abcdef')},
+  parameters:{profile:'craft_2020_v1',key_hex:'18f4eebdfced7841d9e0e38cfe6a9405',tweak_hex:'17f291a9a3aa0400'},
+}).output;
+if(Array.from(craft,b=>b.toString(16).padStart(2,'0')).join('')!=='111df5062a8d88c9')throw new Error('CRAFT answer differs');
+// XXTEA treats all words as one block, with no hidden length suffix.
+const xxtea=cube.execute({operation:'cipher.xxtea.encrypt_words',version:1,
+  inputs:{input:new Uint8Array(8)},parameters:{key_hex:'00'.repeat(16)},
+}).output;
+if(Array.from(xxtea,b=>b.toString(16).padStart(2,'0')).join('')!=='ab043705808c5d57')throw new Error('XXTEA answer differs');

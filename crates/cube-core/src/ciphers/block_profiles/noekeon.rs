@@ -67,3 +67,9 @@ pub(super) fn transform(data: &[u8], key: &[u8], decrypting: bool) -> Vec<u8> {
     }
     output
 }
+
+/// NESSIE indirect schedule: encrypt the supplied key under the zero working key.
+pub(super) fn transform_indirect(data: &[u8], key: &[u8], inverse: bool) -> Vec<u8> {
+    let working = Zeroizing::new(transform(key, &[0u8; 16], false));
+    transform(data, &working, inverse)
+}

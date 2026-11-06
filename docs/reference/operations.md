@@ -4727,6 +4727,13 @@ Parameters:
     },
     "profile": {
       "$ref": "#/$defs/Profile"
+    },
+    "tweak_hex": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9A-Fa-f]{16}$"
     }
   },
   "additionalProperties": false,
@@ -6113,6 +6120,487 @@ Parameters:
         "profile",
         "key_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "craft_2020_v1"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{16}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "crypton_original_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "boron128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "boron80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "gift64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "hierocrypt3_2001_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "hierocrypt_l1_nessie_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "katan32_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "katan48_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "katan64_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
+        },
+        "profile": {
+          "const": "klein64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "klein80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "klein96_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "ktantan32_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "ktantan48_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "ktantan64_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "lblock_corrected_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "led128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
+        },
+        "profile": {
+          "const": "led64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "midori128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "midori64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "noekeon_indirect_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "piccolo128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "piccolo80_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "pride_original_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "prince_original_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "rectangle128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "rectangle80_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
     }
   ],
   "required": [
@@ -6204,7 +6692,35 @@ Parameters:
         "clefia_rfc6114_v1",
         "mars_final_le_v1",
         "crypton10_le_v1",
-        "e2_ntt_v1"
+        "e2_ntt_v1",
+        "craft_2020_v1",
+        "crypton_original_le_v1",
+        "boron128_v1",
+        "boron80_v1",
+        "gift64_v1",
+        "hierocrypt3_2001_be_v1",
+        "hierocrypt_l1_nessie_be_v1",
+        "katan32_be_v1",
+        "katan48_be_v1",
+        "katan64_be_v1",
+        "klein64_v1",
+        "klein80_v1",
+        "klein96_v1",
+        "ktantan32_be_v1",
+        "ktantan48_be_v1",
+        "ktantan64_be_v1",
+        "lblock_corrected_v1",
+        "led128_v1",
+        "led64_v1",
+        "midori128_v1",
+        "midori64_v1",
+        "noekeon_indirect_be_v1",
+        "piccolo128_be_v1",
+        "piccolo80_be_v1",
+        "pride_original_v1",
+        "prince_original_v1",
+        "rectangle128_be_v1",
+        "rectangle80_be_v1"
       ]
     }
   }
@@ -6258,6 +6774,13 @@ Parameters:
     },
     "profile": {
       "$ref": "#/$defs/Profile"
+    },
+    "tweak_hex": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9A-Fa-f]{16}$"
     }
   },
   "additionalProperties": false,
@@ -7644,6 +8167,487 @@ Parameters:
         "profile",
         "key_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "craft_2020_v1"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{16}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "crypton_original_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "boron128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "boron80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "gift64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "profile": {
+          "const": "hierocrypt3_2001_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "hierocrypt_l1_nessie_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "katan32_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "katan48_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "katan64_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
+        },
+        "profile": {
+          "const": "klein64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "klein80_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{24})$"
+        },
+        "profile": {
+          "const": "klein96_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "ktantan32_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "ktantan48_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "ktantan64_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "lblock_corrected_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "led128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{16})$"
+        },
+        "profile": {
+          "const": "led64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "midori128_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "midori64_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "noekeon_indirect_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "piccolo128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "piccolo80_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "pride_original_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "prince_original_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32})$"
+        },
+        "profile": {
+          "const": "rectangle128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{20})$"
+        },
+        "profile": {
+          "const": "rectangle80_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex"
+      ]
     }
   ],
   "required": [
@@ -7735,7 +8739,35 @@ Parameters:
         "clefia_rfc6114_v1",
         "mars_final_le_v1",
         "crypton10_le_v1",
-        "e2_ntt_v1"
+        "e2_ntt_v1",
+        "craft_2020_v1",
+        "crypton_original_le_v1",
+        "boron128_v1",
+        "boron80_v1",
+        "gift64_v1",
+        "hierocrypt3_2001_be_v1",
+        "hierocrypt_l1_nessie_be_v1",
+        "katan32_be_v1",
+        "katan48_be_v1",
+        "katan64_be_v1",
+        "klein64_v1",
+        "klein80_v1",
+        "klein96_v1",
+        "ktantan32_be_v1",
+        "ktantan48_be_v1",
+        "ktantan64_be_v1",
+        "lblock_corrected_v1",
+        "led128_v1",
+        "led64_v1",
+        "midori128_v1",
+        "midori64_v1",
+        "noekeon_indirect_be_v1",
+        "piccolo128_be_v1",
+        "piccolo80_be_v1",
+        "pride_original_v1",
+        "prince_original_v1",
+        "rectangle128_be_v1",
+        "rectangle80_be_v1"
       ]
     }
   }
@@ -23304,6 +24336,94 @@ Example:
 
 ```sh
 cube cipher xchacha20 --key-file key.bin --nonce-hex 000000000000000000000000000000000000000000000000 --counter 0 --input message.bin --stdout
+```
+
+## cipher.xxtea.decrypt_words
+
+Raw Corrected Block TEA over one complete little-endian word sequence; no padding, length suffix or authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{32}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key_hex"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher xxtea decrypt --key-file key.bin --file words.bin
+```
+
+## cipher.xxtea.encrypt_words
+
+Raw Corrected Block TEA over one complete little-endian word sequence; no padding, length suffix or authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{32}$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "key_hex"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher xxtea encrypt --key-file key.bin --file words.bin
 ```
 
 ## encoding.base32.decode

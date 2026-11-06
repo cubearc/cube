@@ -102,6 +102,34 @@ rounds. Its 224-bit block uses row shifts 0/1/2/4; its 256-bit block uses
 | `mars_final_le_v1` | 16 | 16, 24, 32 | Final MARS multiplication-key tweak; little-endian words |
 | `crypton10_le_v1` | 16 | 16, 24, 32 | CRYPTON version 1.0; twelve rounds, little-endian words |
 | `e2_ntt_v1` | 16 | 16, 24, 32 | E2 full twelve rounds and original cumulative key state; standard bytes |
+| `craft_2020_v1` | 8 | 16 | Full 32 rounds; explicit required 8-byte tweak |
+| `crypton_original_le_v1` | 16 | 16, 24, 32 | Original AES submission; distinct from revised version 1.0 |
+| `boron128_v1` | 8 | 16 | Original 25-round BORON; Appendix zero128 discrepancy documented below |
+| `boron80_v1` | 8 | 10 | Original 25-round BORON; Appendix zero128 discrepancy documented below |
+| `gift64_v1` | 8 | 16 | Original GIFT64, 28 rounds |
+| `hierocrypt3_2001_be_v1` | 16 | 16, 24, 32 | Exact NESSIE L1 H4 / Toshiba 2001 Hierocrypt-3; separate profiles |
+| `hierocrypt_l1_nessie_be_v1` | 8 | 16 | Exact NESSIE L1 H4 / Toshiba 2001 Hierocrypt-3; separate profiles |
+| `katan32_be_v1` | 4 | 10 | Full 254-round original KATAN / KTANTAN; numeric big-endian bytes |
+| `katan48_be_v1` | 6 | 10 | Full 254-round original KATAN / KTANTAN; numeric big-endian bytes |
+| `katan64_be_v1` | 8 | 10 | Full 254-round original KATAN / KTANTAN; numeric big-endian bytes |
+| `klein64_v1` | 8 | 8 | Original KLEIN 12/16/20 rounds |
+| `klein80_v1` | 8 | 10 | Original KLEIN 12/16/20 rounds |
+| `klein96_v1` | 8 | 12 | Original KLEIN 12/16/20 rounds |
+| `ktantan32_be_v1` | 4 | 10 | Full 254-round original KATAN / KTANTAN; numeric big-endian bytes |
+| `ktantan48_be_v1` | 6 | 10 | Full 254-round original KATAN / KTANTAN; numeric big-endian bytes |
+| `ktantan64_be_v1` | 8 | 10 | Full 254-round original KATAN / KTANTAN; numeric big-endian bytes |
+| `lblock_corrected_v1` | 8 | 10 | Corrected original LBlock full 32 rounds |
+| `led128_v1` | 8 | 16 | Original LED-64/128 full 32/48 rounds |
+| `led64_v1` | 8 | 8 | Original LED-64/128 full 32/48 rounds |
+| `midori128_v1` | 16 | 16 | Original Midori128, 20 rounds |
+| `midori64_v1` | 8 | 16 | Original Midori64, 16 rounds |
+| `noekeon_indirect_be_v1` | 16 | 16 | Original NESSIE indirect working-key derivation, separate from direct |
+| `piccolo128_be_v1` | 8 | 16 | Original Piccolo 25/31 rounds; paper BE branch convention |
+| `piccolo80_be_v1` | 8 | 10 | Original Piccolo 25/31 rounds; paper BE branch convention |
+| `pride_original_v1` | 8 | 16 | Original PRIDE full twenty rounds; published byte convention |
+| `prince_original_v1` | 8 | 16 | Original PRINCE full twelve rounds |
+| `rectangle128_be_v1` | 8 | 16 | Revised 2016 RECTANGLE full25 rounds; paper BE rows |
+| `rectangle80_be_v1` | 8 | 10 | Revised 2016 RECTANGLE full25 rounds; paper BE rows |
 | `magma_rfc8891_v1` | 8 | 32 | RFC 8891, fixed TC26 S-box; big-endian words |
 | `xtea32_le_v1` | 8 | 16 | XTEA, 32 cycles; little-endian words |
 | `present80_v1` | 8 | 10 | PRESENT-80, 31 rounds plus whitening; big-endian bytes |
@@ -126,7 +154,8 @@ Equal input blocks produce equal output blocks. Input length must be a multiple
 of the profile's block width; empty input returns empty bytes after settings
 validation. No mode, padding, IV, nonce, counter, KDF, RNG, tag or serialized
 message format is added. See [raw AES blocks](aes-blocks.md) for the separate
-FIPS 197 interface.
+FIPS 197 interface, and [XXTEA word sequences](xxtea.md) for its distinct
+variable-width raw-block convention.
 
 ## Inputs and results
 
@@ -134,8 +163,9 @@ Both version 1 operations name their byte input `input` and byte result `output`
 Canonical JSON uses `{"base64":"..."}` for each byte port and requires
 `profile` and `key_hex` parameters. Keys use exact hexadecimal byte pairs,
 without prefixes or separators; upper- and lowercase hex letters are accepted.
-RC2 additionally requires `effective_key_bits`. Unknown or duplicate fields and
-null effective-bit values are rejected.
+RC2 additionally requires `effective_key_bits`. CRAFT additionally requires
+`tweak_hex` containing exactly eight hexadecimal bytes. Other profiles reject
+the tweak field. Unknown or duplicate fields and null settings are rejected.
 
 The CLI reads a raw key file and a payload file or stdin. It writes binary stdout:
 
@@ -150,9 +180,10 @@ With the public eight-byte key `0113b970fd34f2ce` and input
 `059b5e0851cf143a`, encryption produces `86a560f10ec6d85b`. The hexadecimal
 strings describe bytes; the files contain the corresponding raw bytes.
 
-Rust calls `ciphers::block_profiles::Settings::new` or `Settings::parse`, then
+Rust calls `ciphers::block_profiles::Settings::new`, `Settings::new_with_tweak`
+for CRAFT, or `Settings::parse`, then
 `encrypt(data, &settings)` or `decrypt(data, &settings)`. Native Python calls
-`block_encrypt_blocks(data, key, profile, *, effective_key_bits=None)` or
+`block_encrypt_blocks(data, key, profile, *, effective_key_bits=None, tweak=None)` or
 `block_decrypt_blocks` with the same arguments. JavaScript and TypeScript use
 the operation IDs through `cube.execute`, with `Uint8Array` byte ports and the
 generated profile-specific parameter types. All interfaces execute Core.
@@ -162,7 +193,7 @@ generated profile-specific parameter types. All interfaces execute Core.
 | Resource or failure | Rule |
 | --- | --- |
 | Input and output | At most 1 MiB each; output has the input length |
-| Educational reference cap | 64 KiB for Rijndael, SKIPJACK, NOEKEON, LEA, PRESENT, TEA, SHACAL-2, TWINE, HIGHT, MISTY1, KASUMI, SIMON, SKINNY, SAFER, Anubis, Khazad, Square, SEED, CLEFIA, MARS, CRYPTON and E2 |
+| Educational reference cap | 64 KiB for Rijndael, SKIPJACK, NOEKEON, LEA, PRESENT, TEA, SHACAL-2, TWINE, HIGHT, MISTY1, KASUMI, SIMON, SKINNY, SAFER, Anubis, Khazad, Square, SEED, CLEFIA, MARS, CRYPTON, E2, PRINCE, LED, Midori, GIFT64, KATAN/KTANTAN, PRIDE, KLEIN, LBlock, RECTANGLE, BORON, Piccolo, Hierocrypt and CRAFT |
 | Work | At most 262,144 independent blocks; each profile also enforces its byte ceiling and width |
 | Private parameter JSON | At most 4096 UTF-8 bytes |
 | Invalid profile, key or settings | `invalid_parameter`; no secret excerpts |
@@ -187,3 +218,25 @@ block sizes, obsolete algorithms and weak keys retain their original weaknesses.
 Sources: [RustCrypto qualification](../../contributing/block-backends.md),
 [RC2 specification and vectors](https://www.rfc-editor.org/rfc/rfc2268.txt),
 [Blowfish author vectors](https://www.schneier.com/wp-content/uploads/2015/12/vectors-2.txt).
+
+
+BORON follows the original 25-round equations. Its published Appendix A zero-key,
+zero-plaintext 128-bit answer prints `94a105a7d2f2de42`; two independent evaluations
+of the specified equations give `94a105a7d1f2de42`. Both reproduce the other three
+Appendix answers, including the nonzero-plaintext BORON-128 answer. The shared
+corpus labels the inconsistent zero case as equation-derived, not a published
+known answer. The algorithm is never modified to fit that digit.
+
+`hierocrypt_l1_nessie_be_v1` explicitly fixes the NESSIE reference convention
+`H4 = 0x8af5def7`, which reproduces Toshiba's original section 4 answer. The
+September 2001 PDF prints `0xf7def58a`; that literal-constant variant gives other
+bytes and is not silently substituted. Hierocrypt-3 retains its distinct
+128-bit blocks and all three full-round key widths. Noekeon's direct and
+indirect schedules have separate IDs and separate author-published answers.
+
+
+CRAFT requires an explicit eight-byte tweak for every call. Python accepts the
+keyword `tweak=...`, the canonical JS/TS/Wasm request requires `tweak_hex`, and
+CLI requires `--tweak-file`. The tweak is separate from the128-bit key. There
+is no implicit zero tweak; other profiles reject a tweak. An explicit zero
+value is valid reference input. This raw tweakable permutation is not AEAD.

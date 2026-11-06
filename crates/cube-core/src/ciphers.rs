@@ -11,6 +11,7 @@ pub mod mechanical;
 pub mod mono;
 pub mod poly;
 pub mod polybius;
+pub mod xxtea;
 pub use classical::{
     affine_decode, affine_encode, atbash, beaufort, vigenere_decode, vigenere_encode,
 };

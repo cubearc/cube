@@ -140,6 +140,42 @@ pub(super) fn transform(data: &[u8], settings: &Settings, decrypting: bool) -> V
         Profile::Mars => super::mars::transform(data, key, decrypting),
         Profile::Crypton => super::crypton::transform(data, key, decrypting),
         Profile::E2 => super::e2::transform(data, key, decrypting),
+        Profile::Boron128 => super::boron::transform(data, key, decrypting),
+        Profile::Boron80 => super::boron::transform(data, key, decrypting),
+        Profile::Gift64 => super::gift64::transform(data, key, decrypting),
+        Profile::Hierocrypt32001Be => super::hierocrypt::transform(data, key, false, decrypting),
+        Profile::HierocryptL1NessieBe => super::hierocrypt::transform(data, key, true, decrypting),
+        Profile::Katan32Be => super::katan::transform(data, key, 4, false, decrypting),
+        Profile::Katan48Be => super::katan::transform(data, key, 6, false, decrypting),
+        Profile::Katan64Be => super::katan::transform(data, key, 8, false, decrypting),
+        Profile::Klein64 => super::klein::transform(data, key, decrypting),
+        Profile::Klein80 => super::klein::transform(data, key, decrypting),
+        Profile::Klein96 => super::klein::transform(data, key, decrypting),
+        Profile::Ktantan32Be => super::katan::transform(data, key, 4, true, decrypting),
+        Profile::Ktantan48Be => super::katan::transform(data, key, 6, true, decrypting),
+        Profile::Ktantan64Be => super::katan::transform(data, key, 8, true, decrypting),
+        Profile::LblockCorrected => super::lblock::transform(data, key, decrypting),
+        Profile::Led128 => super::led::transform(data, key, decrypting),
+        Profile::Led64 => super::led::transform(data, key, decrypting),
+        Profile::Midori128 => super::midori128::transform(data, key, decrypting),
+        Profile::Midori64 => super::midori::transform(data, key, decrypting),
+        Profile::NoekeonIndirectBe => super::noekeon::transform_indirect(data, key, decrypting),
+        Profile::Piccolo128Be => super::piccolo::transform(data, key, decrypting),
+        Profile::Piccolo80Be => super::piccolo::transform(data, key, decrypting),
+        Profile::PrideOriginal => super::pride::transform(data, key, decrypting),
+        Profile::PrinceOriginal => super::prince::transform(data, key, decrypting),
+        Profile::Rectangle128Be => super::rectangle::transform(data, key, decrypting),
+        Profile::Rectangle80Be => super::rectangle::transform(data, key, decrypting),
+        Profile::Craft => super::craft::transform(
+            data,
+            key,
+            settings
+                .tweak
+                .as_ref()
+                .expect("validated required CRAFT tweak"),
+            decrypting,
+        ),
+        Profile::CryptonOriginal => super::crypton_original::transform(data, key, decrypting),
         // Standard AES tuples reuse the independently reviewed AES backend.
         Profile::Rijndael128 if matches!(key.len(), 16 | 24 | 32) => {
             sized!(key, data, decrypting, aes::Aes128, aes::Aes192, aes::Aes256)

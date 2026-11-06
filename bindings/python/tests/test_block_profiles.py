@@ -24,6 +24,8 @@ def test_independent_answers_empty_and_multiple_blocks(vector):
         if "effective_key_bits" in vector
         else {}
     )
+    if "tweak_hex" in vector:
+        options["tweak"] = bytes.fromhex(vector["tweak_hex"])
     for function, data, expected in [
         (cube.block_encrypt_blocks, plain, encrypted),
         (cube.block_decrypt_blocks, encrypted, plain),
@@ -80,3 +82,17 @@ def test_exact_native_byte_limit():
     data = bytes(1048576)
     encrypted = cube.block_encrypt_blocks(data, bytes(16), "idea_v1")
     assert cube.block_decrypt_blocks(encrypted, bytes(16), "idea_v1") == data
+
+
+def test_craft_requires_exact_tweak_and_other_profiles_reject_it():
+    for function in (cube.block_encrypt_blocks, cube.block_decrypt_blocks):
+        for profile, options in [
+            ("craft_2020_v1", {}),
+            ("craft_2020_v1", {"tweak": b"SECRET"}),
+            ("craft_2020_v1", {"tweak": bytes(9)}),
+            ("idea_v1", {"tweak": bytes(8)}),
+        ]:
+            with pytest.raises(ValueError) as caught:
+                function(b"", bytes(16), profile, **options)
+            assert caught.value.code == "invalid_parameter"
+            assert "SECRET" not in str(caught.value)

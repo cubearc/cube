@@ -5,8 +5,23 @@
 //! authentication, key derivation or random generation is performed.
 mod anubis;
 mod backend;
+mod boron;
+mod gift64;
+mod hierocrypt;
+mod katan;
+mod klein;
+mod lblock;
+mod led;
+mod midori;
+mod midori128;
+mod piccolo;
+mod pride;
+mod prince;
+mod rectangle;
+
 mod clefia;
 mod crypton;
+mod crypton_original;
 mod e2;
 mod finite_field;
 mod khazad;
@@ -18,6 +33,7 @@ mod skinny;
 mod square;
 
 mod catalog;
+mod craft;
 mod hight;
 mod kasumi;
 mod lea;
@@ -53,6 +69,12 @@ struct Parameters {
     #[serde(default, deserialize_with = "effective_bits")]
     #[schemars(range(min = 1, max = 1024))]
     effective_key_bits: Option<u16>,
+    #[serde(default, deserialize_with = "required_string")]
+    #[schemars(regex(pattern = "^[0-9A-Fa-f]{16}$"))]
+    tweak_hex: Option<String>,
+}
+fn required_string<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<String>, D::Error> {
+    String::deserialize(d).map(Some)
 }
 fn effective_bits<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<u16>, D::Error> {
     u16::deserialize(d).map(Some)
@@ -60,6 +82,7 @@ fn effective_bits<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<u16>,
 impl Drop for Parameters {
     fn drop(&mut self) {
         self.key_hex.zeroize();
+        self.tweak_hex.zeroize();
     }
 }
 
@@ -70,12 +93,14 @@ pub struct Settings {
     profile: Profile,
     key: Zeroizing<Vec<u8>>,
     effective_key_bits: Option<u16>,
+    tweak: Option<Zeroizing<Vec<u8>>>,
 }
 impl std::fmt::Debug for Settings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Settings")
             .field("profile", &self.profile)
             .field("key", &"[REDACTED]")
+            .field("tweak", &"[REDACTED]")
             .finish()
     }
 }
@@ -86,6 +111,15 @@ impl Settings {
         profile: Profile,
         key: &[u8],
         effective_key_bits: Option<u16>,
+    ) -> Result<Self, OperationError> {
+        Self::new_with_tweak(profile, key, effective_key_bits, None)
+    }
+    /// Validate required explicit CRAFT tweak bytes; all other profiles forbid a tweak.
+    pub fn new_with_tweak(
+        profile: Profile,
+        key: &[u8],
+        effective_key_bits: Option<u16>,
+        tweak: Option<&[u8]>,
     ) -> Result<Self, OperationError> {
         if !profile.accepts_key(key.len()) {
             return Err(invalid(
@@ -104,10 +138,22 @@ impl Settings {
                 "RC2 requires 1..1024 effective bits; other profiles forbid this field",
             ));
         }
+        let valid_tweak = if profile == Profile::Craft {
+            tweak.is_some_and(|t| t.len() == 8)
+        } else {
+            tweak.is_none()
+        };
+        if !valid_tweak {
+            return Err(invalid(
+                "tweak_hex",
+                "CRAFT requires an explicit eight-byte tweak; other profiles forbid it",
+            ));
+        }
         Ok(Self {
             profile,
             key: Zeroizing::new(key.to_vec()),
             effective_key_bits,
+            tweak: tweak.map(|t| Zeroizing::new(t.to_vec())),
         })
     }
     /// Parse bounded private JSON, rejecting duplicates, unknown fields and null
@@ -134,7 +180,32 @@ impl Settings {
         let mut key = Zeroizing::new(vec![0; p.key_hex.len() / 2]);
         hex::decode_to_slice(&p.key_hex, &mut key[..])
             .map_err(|_| invalid("key_hex", "key must contain exact hexadecimal byte pairs"))?;
-        Self::new(p.profile, &key, p.effective_key_bits)
+        let tweak = p
+            .tweak_hex
+            .as_ref()
+            .map(|s| {
+                if s.len() != 16 {
+                    return Err(invalid(
+                        "tweak_hex",
+                        "CRAFT tweak must contain exactly eight hexadecimal bytes",
+                    ));
+                }
+                let mut bytes = Zeroizing::new(vec![0u8; 8]);
+                hex::decode_to_slice(s, &mut bytes[..]).map_err(|_| {
+                    invalid(
+                        "tweak_hex",
+                        "CRAFT tweak must contain exactly eight hexadecimal bytes",
+                    )
+                })?;
+                Ok(bytes)
+            })
+            .transpose()?;
+        Self::new_with_tweak(
+            p.profile,
+            &key,
+            p.effective_key_bits,
+            tweak.as_deref().map(|t| &t[..]),
+        )
     }
 }
 fn invalid(parameter: &'static str, message: &'static str) -> OperationError {

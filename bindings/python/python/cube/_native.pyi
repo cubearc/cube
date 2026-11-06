@@ -89,9 +89,38 @@ def block_encrypt_blocks(
         "mars_final_le_v1",
         "crypton10_le_v1",
         "e2_ntt_v1",
+        "craft_2020_v1",
+        "crypton_original_le_v1",
+        "boron128_v1",
+        "boron80_v1",
+        "gift64_v1",
+        "hierocrypt3_2001_be_v1",
+        "hierocrypt_l1_nessie_be_v1",
+        "katan32_be_v1",
+        "katan48_be_v1",
+        "katan64_be_v1",
+        "klein64_v1",
+        "klein80_v1",
+        "klein96_v1",
+        "ktantan32_be_v1",
+        "ktantan48_be_v1",
+        "ktantan64_be_v1",
+        "lblock_corrected_v1",
+        "led128_v1",
+        "led64_v1",
+        "midori128_v1",
+        "midori64_v1",
+        "noekeon_indirect_be_v1",
+        "piccolo128_be_v1",
+        "piccolo80_be_v1",
+        "pride_original_v1",
+        "prince_original_v1",
+        "rectangle128_be_v1",
+        "rectangle80_be_v1",
     ],
     *,
     effective_key_bits: int | None = None,
+    tweak: bytes | None = None,
 ) -> bytes:
     """Raw reference blocks without padding or authentication."""
     ...
@@ -181,9 +210,38 @@ def block_decrypt_blocks(
         "mars_final_le_v1",
         "crypton10_le_v1",
         "e2_ntt_v1",
+        "craft_2020_v1",
+        "crypton_original_le_v1",
+        "boron128_v1",
+        "boron80_v1",
+        "gift64_v1",
+        "hierocrypt3_2001_be_v1",
+        "hierocrypt_l1_nessie_be_v1",
+        "katan32_be_v1",
+        "katan48_be_v1",
+        "katan64_be_v1",
+        "klein64_v1",
+        "klein80_v1",
+        "klein96_v1",
+        "ktantan32_be_v1",
+        "ktantan48_be_v1",
+        "ktantan64_be_v1",
+        "lblock_corrected_v1",
+        "led128_v1",
+        "led64_v1",
+        "midori128_v1",
+        "midori64_v1",
+        "noekeon_indirect_be_v1",
+        "piccolo128_be_v1",
+        "piccolo80_be_v1",
+        "pride_original_v1",
+        "prince_original_v1",
+        "rectangle128_be_v1",
+        "rectangle80_be_v1",
     ],
     *,
     effective_key_bits: int | None = None,
+    tweak: bytes | None = None,
 ) -> bytes:
     """Raw reference blocks; success does not verify the key or integrity."""
     ...
@@ -2438,4 +2496,12 @@ def purple_encode(text: str, parameters: dict[str, object]) -> dict[str, object]
 
 def purple_decode(text: str, parameters: dict[str, object]) -> dict[str, object]:
     """Execute the Core-owned PURPLE decode mechanism with explicit state."""
+    ...
+
+def xxtea_encrypt_words(data: bytes, key: bytes) -> bytes:
+    """Encrypt one complete little-endian word sequence; no padding or suffix."""
+    ...
+
+def xxtea_decrypt_words(data: bytes, key: bytes) -> bytes:
+    """Decrypt one complete word sequence; success does not verify integrity."""
     ...

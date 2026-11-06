@@ -60,6 +60,7 @@
     - [KL7 rotor and re-entry cipher](reference/topics/kl7.md)
     - [Raw AES blocks](reference/topics/aes-blocks.md)
     - [Raw block reference profiles](reference/topics/block-profiles.md)
+    - [XXTEA word sequences](reference/topics/xxtea.md)
     - [Raw stream ciphers](reference/topics/stream-ciphers.md)
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)
     - [Binary transformations](reference/topics/binary-transformations.md)

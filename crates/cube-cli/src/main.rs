@@ -49,6 +49,7 @@ mod valuescmd;
 mod videocmd;
 mod webcmd;
 mod wordcmd;
+mod xxteacmd;
 
 #[derive(Parser)]
 #[command(
@@ -538,6 +539,11 @@ enum Cipher {
     Block {
         #[command(subcommand)]
         command: blockcmd::Command,
+    },
+    /// Corrected Block TEA over a whole word sequence; private key file only
+    Xxtea {
+        #[command(subcommand)]
+        command: xxteacmd::Command,
     },
     /// Hazardous raw AES blocks; key file only, no padding or authentication
     Aes {
@@ -1100,6 +1106,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::Block { command } => return blockcmd::run(command, &mut output),
+                Cipher::Xxtea { command } => return xxteacmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(
                         Some(ciphers::stream::Profile::ChaCha8),

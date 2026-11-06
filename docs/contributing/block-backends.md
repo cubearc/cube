@@ -167,3 +167,48 @@ semantics checked independently: CRYPTON loads every shorter key slice for
 192-/256-bit keys and E2 retains cumulative schedule state. Go's missing C
 switch fallthrough and pass-by-value key reset are not copied. All these
 educational profiles retain the explicit 64 KiB work ceiling.
+
+
+The remaining finite reference profiles cover original PRINCE, LED64/128,
+Midori64/128, GIFT64, corrected LBlock, KLEIN64/80/96, PRIDE, revised RECTANGLE,
+BORON80/128, Piccolo80/128, all six KATAN/KTANTAN profiles, Hierocrypt-L1 and
+Hierocrypt-3, plus Noekeon's indirect schedule. They are independent safe-Rust
+mathematical implementations under the same explicit educational 64 KiB ceiling.
+The shared corpus retains original designer paper or hardware literal answers;
+all six KATAN/KTANTAN profiles additionally match executed original-author C
+qualification oracles, including the two published KTANTAN bug fixes. No such
+C implementation is distributed or required at runtime.
+
+Primary specifications: [PRINCE](https://eprint.iacr.org/2012/529),
+[KLEIN Appendix A](https://rfid-cusp.org/rfidsec/files/RFIDSec2011DraftPapers/GongEtAl.pdf),
+[Piccolo Appendix A](https://www.iacr.org/archive/ches2011/69170343/69170343.pdf),
+[BORON](https://jzus.zju.edu.cn/opentxt.php?doi=10.1631%2FFITEE.1500415),
+[Hierocrypt-L1](https://www.global.toshiba/content/dam/toshiba/ww/technology/corporate/rdc/security/hcl1_01espec.pdf),
+[Hierocrypt-3](https://www.global.toshiba/content/dam/toshiba/ww/technology/corporate/rdc/security/hc3_01espec.pdf),
+[Noekeon author code and answers](https://gro.noekeon.org/).
+The task reference records the exact BORON printed-answer discrepancy and L1
+NESSIE H4 convention; neither is silently treated as the literal printed PDF.
+The original COSIC L1 C archive could not be downloaded during qualification;
+no execution of that archive is claimed. All four original Toshiba L1/3 literal
+answers pass the selected exact profiles in both directions.
+
+
+Original CRYPTON and revised1.0 have separate IDs and independent nine-case
+32-bit-word C oracle corpora across 128/192/256-bit keys. The original profile
+retains its distinct S-boxes and key schedule. The safe Rust mathematical
+rewrite acknowledges Dr Brian Gladman's independent implementation dated
+14 January 1999, frozen at scorpiondefense/encryption
+`d4b0763a860fa4462402a32a51c87a8a5679ad2d/CRYPTON/crypton.c`.
+CRAFT follows the full 32-round construction with explicit required 64-bit tweak,
+128-bit key and original row-major nibble notation. Four designer BSD hardware
+answers cover nonzero key/tweak, explicit zero tweak and both directions. The
+same private transport policy protects its tweak parameter as its key.
+
+
+XXTEA has separate whole-word operations, not a fixed eight-byte profile.
+The pure Core kernel was independently qualified against MIT-licensed
+xxtea/xxtea-c `7ec961540996934d939572d885ea1d5b21689688` using its raw uint32
+kernel, with no string wrapper or appended length. Fourteen frozen answers
+cover seven word counts and two key patterns; all interfaces reuse that corpus.
+There is no C runtime dependency. Exactly sixteen key bytes, empty identity,
+minimum two words, 64 KiB work ceiling and 4096-byte parameter ceiling are explicit.

@@ -19050,7 +19050,7 @@
     "parameters": {}
   },
   {
-    "contract_sha256": "d8f549e275c54c68fd6c5f7d0e7c8f72b287ee04647f1c6f90dc4b63f66e4e21",
+    "contract_sha256": "efcb3c2ff12c4947633bc971c78a4d36a1b505c8463d53491c3e1f988bee8ff9",
     "inputs": {
       "input": {
         "base64": "hqVg8Q7G2Fs="
@@ -19069,7 +19069,7 @@
     }
   },
   {
-    "contract_sha256": "5721dc67dad68cd3d3cf284f28a984f16988268ee71b28c85592abbd56f8f7ae",
+    "contract_sha256": "cce91a4bef6a15510ad12b3b5087b130813ae760aa80991339b6a24a1e2dbee5",
     "inputs": {
       "input": {
         "base64": "BZteCFHPFDo="
@@ -19085,6 +19085,42 @@
     "parameters": {
       "key_hex": "0113b970fd34f2ce",
       "profile": "des_fips46_v1"
+    }
+  },
+  {
+    "contract_sha256": "31186a18ec624f51cc1c685dc1b405093fa97e9e2e7778204a05fb06b7fa2715",
+    "inputs": {
+      "input": {
+        "base64": "AAAAAAAAAAA="
+      }
+    },
+    "operation": "cipher.xxtea.encrypt_words",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "qwQ3BYCMXVc="
+      }
+    },
+    "parameters": {
+      "key_hex": "00000000000000000000000000000000"
+    }
+  },
+  {
+    "contract_sha256": "fb7e14d85bbf80fd6acd8988e9ea80ef473ee6c33b6aca5de0c5bf4a536ad053",
+    "inputs": {
+      "input": {
+        "base64": "qwQ3BYCMXVc="
+      }
+    },
+    "operation": "cipher.xxtea.decrypt_words",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "AAAAAAAAAAA="
+      }
+    },
+    "parameters": {
+      "key_hex": "00000000000000000000000000000000"
     }
   }
 ]

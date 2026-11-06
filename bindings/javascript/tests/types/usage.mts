@@ -208,3 +208,14 @@ const skinnyFullTweakey: Uint8Array = cube.execute({operation:'cipher.block.encr
 const saferExplicitRounds: Uint8Array = cube.execute({operation:'cipher.block.decrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'safer_sk64_8_v1',key_hex:'00'.repeat(8)}}).output;
 const clefia256: Uint8Array = cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(16)},parameters:{profile:'clefia_rfc6114_v1',key_hex:'00'.repeat(32)}}).output;
 void [skinnyFullTweakey, saferExplicitRounds, clefia256];
+
+const craftTweak:Uint8Array=cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'craft_2020_v1',key_hex:'00'.repeat(16),tweak_hex:'00'.repeat(8)}}).output;
+// @ts-expect-error CRAFT requires an explicit tweak
+cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'craft_2020_v1',key_hex:'00'.repeat(16)}});
+// @ts-expect-error other profiles forbid a tweak
+cube.execute({operation:'cipher.block.encrypt_blocks',version:1,inputs:{input:new Uint8Array(8)},parameters:{profile:'idea_v1',key_hex:'00'.repeat(16),tweak_hex:'00'.repeat(8)}});
+void craftTweak;
+
+const xxteaWords: Uint8Array=cube.execute({operation:'cipher.xxtea.encrypt_words',version:1,inputs:{input:new Uint8Array(12)},parameters:{key_hex:'00'.repeat(16)}}).output;
+const xxteaBack: Uint8Array=cube.execute({operation:'cipher.xxtea.decrypt_words',version:1,inputs:{input:xxteaWords},parameters:{key_hex:'00'.repeat(16)}}).output;
+void xxteaBack;

@@ -392,6 +392,8 @@ from ._native import (
     word_values,
     xor,
     xor_exact,
+    xxtea_decrypt_words,
+    xxtea_encrypt_words,
 )
 
 __all__ = [
@@ -573,6 +575,8 @@ __all__ = [
     "aes_encrypt_blocks",
     "aes_decrypt_blocks",
     "block_encrypt_blocks",
+    "xxtea_encrypt_words",
+    "xxtea_decrypt_words",
     "block_decrypt_blocks",
     "stream_transform",
     "vernam",

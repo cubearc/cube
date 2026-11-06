@@ -29,6 +29,9 @@ pub(crate) struct Parameters {
     /// RC2 only: required effective key length in bits, 1..1024
     #[arg(long)]
     effective_key_bits: Option<u16>,
+    /// CRAFT only: required raw eight-byte tweak file; no implicit zero tweak
+    #[arg(long)]
+    tweak_file: Option<PathBuf>,
     /// Exact whole blocks, at most 1 MiB; omit to read stdin
     #[arg(short = 'f', long, visible_alias = "input")]
     file: Option<PathBuf>,
@@ -45,7 +48,24 @@ pub(crate) fn run(command: Command, writer: &mut impl Write) -> Result<(), Box<d
         .take(129)
         .read_to_end(&mut key)
         .map_err(|e| OperationError::io(e).operation(operation))?;
-    let settings = Settings::new(profile, &key, args.effective_key_bits)?;
+    let tweak = args
+        .tweak_file
+        .as_ref()
+        .map(|path| {
+            let mut bytes = Zeroizing::new(Vec::new());
+            cube_core::forensics::open_regular(path)?
+                .take(9)
+                .read_to_end(&mut bytes)
+                .map_err(OperationError::io)?;
+            Ok::<_, OperationError>(bytes)
+        })
+        .transpose()?;
+    let settings = Settings::new_with_tweak(
+        profile,
+        &key,
+        args.effective_key_bits,
+        tweak.as_deref().map(|t| &t[..]),
+    )?;
     let input = Zeroizing::new(
         crate::Input::file_or_stdin(args.file)
             .read_bounded(block_profiles::MAX_INPUT, operation)?,

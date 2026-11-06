@@ -96,6 +96,8 @@ SDK_BINDINGS = {
     "cipher.aes.decrypt_blocks": "aes_decrypt_blocks",
     "cipher.block.encrypt_blocks": "block_encrypt_blocks",
     "cipher.block.decrypt_blocks": "block_decrypt_blocks",
+    "cipher.xxtea.encrypt_words": "xxtea_encrypt_words",
+    "cipher.xxtea.decrypt_words": "xxtea_decrypt_words",
     "cipher.chacha8": "stream_transform",
     "cipher.chacha12": "stream_transform",
     "cipher.chacha20": "stream_transform",

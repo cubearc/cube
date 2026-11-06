@@ -55,6 +55,7 @@ mod vigenere_keys;
 mod web;
 mod word;
 mod word_codes;
+mod xxtea;
 
 fn invalid_input(error: cube_core::Error) -> PyErr {
     Python::attach(|py| {
@@ -614,6 +615,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     mechanical::register(module)?;
     aes_blocks::register(module)?;
     block_profiles::register(module)?;
+    xxtea::register(module)?;
     stream::register(module)?;
     fraction::register(module)?;
     puzzlecodes::register(module)?;

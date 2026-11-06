@@ -19,10 +19,22 @@ fn every_reference_vector_executes_both_directions_and_preserves_blocks() {
         profiles.insert(profile.to_string());
         let key = hex::decode(vector["key_hex"].as_str().unwrap()).unwrap();
         let bits = vector["effective_key_bits"].as_u64().map(|n| n as u16);
-        let settings = Settings::new(Profile::parse(profile).unwrap(), &key, bits).unwrap();
+        let tweak = vector["tweak_hex"]
+            .as_str()
+            .map(|t| hex::decode(t).unwrap());
+        let settings = Settings::new_with_tweak(
+            Profile::parse(profile).unwrap(),
+            &key,
+            bits,
+            tweak.as_deref(),
+        )
+        .unwrap();
         let mut parameters = json!({"profile":profile,"key_hex":vector["key_hex"]});
         if let Some(bits) = bits {
             parameters["effective_key_bits"] = json!(bits);
+        }
+        if let Some(tweak) = vector.get("tweak_hex") {
+            parameters["tweak_hex"] = tweak.clone();
         }
         let plain = hex::decode(vector["plaintext_hex"].as_str().unwrap()).unwrap();
         let encrypted = hex::decode(vector["ciphertext_hex"].as_str().unwrap()).unwrap();
@@ -149,11 +161,14 @@ fn exact_limits_whole_blocks_and_private_contracts_are_preserved() {
         let c = operations::require(operation).unwrap().contract().unwrap();
         assert!(c.policy.private_input && c.policy.private_output && !c.policy.automatic_capture);
         assert!(c.pipeline_adapter.is_none());
-        assert_eq!(c.policy.sensitive_parameters, ["key_hex"]);
+        assert_eq!(c.policy.sensitive_parameters, ["key_hex", "tweak_hex"]);
         for v in vectors() {
             let mut p = json!({"profile":v["profile"],"key_hex":v["key_hex"]});
             if let Some(bits) = v.get("effective_key_bits") {
                 p["effective_key_bits"] = bits.clone();
+            }
+            if let Some(tweak) = v.get("tweak_hex") {
+                p["tweak_hex"] = tweak.clone();
             }
             c.validate_parameters(&p).unwrap();
         }
@@ -200,7 +215,10 @@ fn variable_width_alignment_key_gaps_and_reference_limits_are_enforced() {
             .unwrap();
         let key = hex::decode(vector["key_hex"].as_str().unwrap()).unwrap();
         let bits = vector["effective_key_bits"].as_u64().map(|n| n as u16);
-        let settings = Settings::new(*profile, &key, bits).unwrap();
+        let tweak = vector["tweak_hex"]
+            .as_str()
+            .map(|t| hex::decode(t).unwrap());
+        let settings = Settings::new_with_tweak(*profile, &key, bits, tweak.as_deref()).unwrap();
         for length in [profile.block_bytes() - 1, profile.block_bytes() + 1] {
             assert_eq!(
                 block_profiles::encrypt(&vec![0; length], &settings)

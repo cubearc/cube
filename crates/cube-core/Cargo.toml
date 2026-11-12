@@ -24,7 +24,7 @@ sm4={ version="=0.6.0", features=["zeroize"] }
 speck-cipher={ version="=0.1.0", features=["zeroize"] }
 twofish={ version="=0.8.0", features=["zeroize"] }
 xtea={ version="=0.1.0", features=["zeroize"] }
-aes = { version = "=0.9.3", features = ["zeroize"] }
+aes = { version = "=0.9.4", features = ["zeroize"] }
 des = { version = "=0.9.0", features = ["zeroize"] }
 blowfish = { version = "=0.10.0", features = ["zeroize"] }
 idea = { version = "=0.6.0", features = ["zeroize"] }
@@ -36,7 +36,7 @@ crc32fast = "1.5"
 crc = "3.4"
 data-encoding = "2.11"
 hex = "0.4"
-html5gum = { version = "0.8.4", default-features = false }
+html5gum = { version = "0.9.1", default-features = false }
 kamadak-exif = "0.6"
 lofty = "0.25.4"
 md-5 = "0.11"
@@ -56,7 +56,7 @@ k256 = { version = "0.14.0", default-features = false, features = ["arithmetic"]
 sha3 = { version = "0.12.0", default-features = false }
 ripemd = { version = "0.2.0", default-features = false }
 schemars = "=1.2.3"
-jsonschema = { version = "=0.60.2", default-features = false }
+jsonschema = { version = "=0.61.0", default-features = false }
 chacha20 = { version = "=0.10.2", features = ["xchacha", "zeroize"] }
 salsa20 = { path = "../../vendor/salsa20", version = "=0.11.0", features = ["zeroize"] }
 
@@ -64,4 +64,4 @@ salsa20 = { path = "../../vendor/salsa20", version = "=0.11.0", features = ["zer
 workspace = true
 
 [dev-dependencies]
-syn = { version = "2", features = ["full", "visit"] }
+syn = { version = "3", features = ["full", "visit"] }

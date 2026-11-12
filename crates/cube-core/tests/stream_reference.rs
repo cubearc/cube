@@ -27,11 +27,15 @@ fn independent_answers_execute_both_directions_with_exact_profile_coverage() {
             (reference::DECRYPT, &ciphertext, &plain),
         ] {
             let invoke = |input: &[u8]| {
+                let mut parameters = p.clone();
+                if let Some(n) = p["data_bits"].as_u64() {
+                    parameters["data_bits"] = json!(n.min((input.len() * 8) as u64));
+                }
                 execution::execute(
                     id,
                     1,
                     &json!({"input":{"base64":cube_core::encoding::base64_encode(input)}}),
-                    p,
+                    &parameters,
                     Budget::default(),
                 )
                 .unwrap()
@@ -90,7 +94,7 @@ fn each_profile_rejects_invalid_material_in_schema_and_runtime() {
 }
 
 #[test]
-fn every_profile_preserves_its_full_byte_limit_and_refuses_one_over() {
+fn every_profile_preserves_its_declared_limit_and_refuses_one_over() {
     use cube_core::{
         ciphers::stream::reference::{self, Settings},
         errors::ErrorCode,
@@ -98,14 +102,30 @@ fn every_profile_preserves_its_full_byte_limit_and_refuses_one_over() {
     let vectors: Vec<serde_json::Value> =
         serde_json::from_str(include_str!("../src/ciphers/stream/reference/vectors.json")).unwrap();
     let mut seen = std::collections::BTreeSet::new();
-    let data: Vec<u8> = (0..reference::MAX_INPUT)
-        .map(|i| i.wrapping_mul(97) as u8)
-        .collect();
     for v in vectors {
-        let p = &v["parameters"];
-        if !seen.insert(p["profile"].as_str().unwrap().to_owned()) {
+        let mut p = v["parameters"].clone();
+        let profile = p["profile"].as_str().unwrap().to_owned();
+        if !seen.insert(profile.clone()) {
             continue;
         }
+        let maximum = if profile.starts_with("a5") {
+            228
+        } else {
+            reference::MAX_INPUT * 8
+        };
+        if p.get("data_bits").is_some() {
+            p["data_bits"] = json!(maximum);
+            let mut over = p.clone();
+            over["data_bits"] = json!(maximum + 1);
+            assert!(Settings::parse(&over.to_string()).is_err());
+        }
+        let mut data: Vec<u8> = (0..maximum.div_ceil(8))
+            .map(|i| i.wrapping_mul(97) as u8)
+            .collect();
+        if maximum % 8 != 0 {
+            *data.last_mut().unwrap() &= u8::MAX << (8 - maximum % 8);
+        }
+
         let s = Settings::parse(&p.to_string()).unwrap();
         let c = reference::encrypt(&data, &s).unwrap();
         assert_eq!(
@@ -224,4 +244,77 @@ fn seal_last_position_is_complete_and_exhaustion_returns_no_output() {
             }
         }
     }
+}
+
+#[test]
+fn packed_bit_settings_and_padding_are_exact() {
+    use cube_core::ciphers::stream::reference::{self, Settings};
+    let vectors: Vec<serde_json::Value> =
+        serde_json::from_str(include_str!("../src/ciphers/stream/reference/vectors.json")).unwrap();
+    let contract = cube_core::operations::require(reference::ENCRYPT)
+        .unwrap()
+        .contract()
+        .unwrap();
+    let mut seen = std::collections::BTreeSet::new();
+    for v in vectors {
+        let mut p = v["parameters"].clone();
+        let profile = p["profile"].as_str().unwrap().to_owned();
+        if !seen.insert(profile.clone()) {
+            continue;
+        }
+        if p.get("data_bits").is_none() {
+            p["data_bits"] = json!(0);
+            assert!(contract.validate_parameters(&p).is_err());
+            assert!(Settings::parse(&p.to_string()).is_err());
+            continue;
+        }
+        for replacement in [None, Some(json!(null)), Some(json!(524289))] {
+            let mut bad = p.clone();
+            if let Some(value) = replacement {
+                bad["data_bits"] = value;
+            } else {
+                bad.as_object_mut().unwrap().remove("data_bits");
+            }
+            assert!(contract.validate_parameters(&bad).is_err());
+            assert!(Settings::parse(&bad.to_string()).is_err());
+        }
+        p["data_bits"] = json!(1);
+        let settings = Settings::parse(&p.to_string()).unwrap();
+        let plain = if profile.starts_with("e0_") {
+            [1]
+        } else {
+            [128]
+        };
+        let cipher = reference::encrypt(&plain, &settings).unwrap();
+        assert_eq!(reference::decrypt(&cipher, &settings).unwrap(), plain);
+        for function in [reference::encrypt, reference::decrypt] {
+            assert!(function(&[0, 0], &settings).is_err());
+            assert!(function(&[0x81], &settings).is_err());
+        }
+    }
+    let good = json!({"profile":"mickey20_estream_msb_v1","key_hex":"00".repeat(10),"nonce_hex":"80","nonce_bits":1,"data_bits":0});
+    assert!(Settings::parse(&good.to_string()).is_ok());
+    for (name, value) in [
+        ("nonce_hex", json!("81")),
+        ("nonce_bits", json!(0)),
+        ("nonce_bits", json!(81)),
+        ("nonce_bits", json!(null)),
+    ] {
+        let mut p = good.clone();
+        p[name] = value;
+        assert!(Settings::parse(&p.to_string()).is_err());
+    }
+    for profile in [
+        "a51_gsm_count22_be_key_msb_v1",
+        "a52_gsm_count22_be_key_msb_v1",
+        "a53_gsm_count22_be_key_msb_v1",
+        "a54_gsm_count22_be_key_msb_v1",
+    ] {
+        let p = json!({"profile":profile,"key_hex":"00".repeat(if profile.starts_with("a54"){16}else{8}),"nonce_hex":"400000","data_bits":0});
+        assert!(Settings::parse(&p.to_string()).is_err());
+        assert!(contract.validate_parameters(&p).is_err());
+    }
+    let e0 = json!({"profile":"e0_core54_session128_lsb_v1","key_hex":"00".repeat(16),"nonce_hex":"00000000000000000004","data_bits":0});
+    assert!(Settings::parse(&e0.to_string()).is_err());
+    assert!(contract.validate_parameters(&e0).is_err());
 }

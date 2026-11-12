@@ -12,7 +12,8 @@ test('stream references execute independent answers in actual Wasm',()=>{
     for(const [mode,input,expected] of [['encrypt',v.plaintext_hex,v.ciphertext_hex],['decrypt',v.ciphertext_hex,v.plaintext_hex]]){
       const execute=input=>cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input},parameters:v.parameters}).output;
       assert.deepEqual(execute(bytes(input)),bytes(expected),v.parameters.profile);
-      assert.deepEqual(execute(new Uint8Array()),new Uint8Array());
+      const empty={...v.parameters};if('data_bits'in empty)empty.data_bits=0;
+      assert.deepEqual(cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input:new Uint8Array()},parameters:empty}).output,new Uint8Array());
       for(const change of [{key_hex:''},{key_hex:'00'.repeat(257)},{nonce_hex:null}]){
         assert.throws(()=>cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input:new Uint8Array()},parameters:{...v.parameters,...change}}),{code:'invalid_parameter'});
       }
@@ -39,4 +40,16 @@ test('SEAL exposes the full last position and rejects counter wrap',()=>{
   assert.equal(invoke(4096).length,4096);
   assert.throws(()=>invoke(4097),{code:'resource_limit'});
  }
+});
+
+test('packed bit profiles preserve padding and reject mismatched lengths',()=>{
+ const seen=new Set();
+ for(const v of vectors){if(!('data_bits'in v.parameters)||seen.has(v.parameters.profile))continue;seen.add(v.parameters.profile);
+  const parameters={...v.parameters,data_bits:1};const plain=new Uint8Array([parameters.profile.startsWith('e0_')?1:128]);
+  const invoke=(mode,input,p=parameters)=>cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input},parameters:p}).output;
+  assert.deepEqual(invoke('decrypt',invoke('encrypt',plain)),plain);
+  for(const mode of ['encrypt','decrypt'])for(const input of [new Uint8Array(),new Uint8Array([129]),new Uint8Array(2)])assert.throws(()=>invoke(mode,input),{code:'invalid_parameter'});
+  for(const data_bits of [null,524289])assert.throws(()=>invoke('encrypt',new Uint8Array(),{...parameters,data_bits}),{code:'invalid_parameter'});
+ }
+ assert.equal(seen.size,7);
 });

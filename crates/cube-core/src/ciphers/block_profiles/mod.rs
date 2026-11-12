@@ -35,7 +35,7 @@ mod square;
 mod catalog;
 mod craft;
 mod hight;
-mod kasumi;
+pub(crate) mod kasumi;
 mod lea;
 mod misty1;
 mod noekeon;

@@ -10,7 +10,7 @@ use zeroize::Zeroizing;
 
 #[derive(Subcommand)]
 pub(crate) enum Command {
-    /// Encrypt exact bytes with explicit private stream settings
+    /// Encrypt exact bytes or packed bits with explicit private stream settings
     Encrypt(Parameters),
     /// Decrypt the same exact profile; no authenticity verification
     Decrypt(Parameters),
@@ -20,7 +20,7 @@ pub(crate) struct Parameters {
     /// Private JSON settings file, at most 4096 bytes; never secret argv values
     #[arg(long)]
     parameters_file: PathBuf,
-    /// Input bytes, at most 64 KiB; omit to read stdin
+    /// Input bytes, at most 64 KiB; bit profiles require exact counts in settings
     #[arg(short = 'f', long, visible_alias = "input")]
     file: Option<PathBuf>,
 }

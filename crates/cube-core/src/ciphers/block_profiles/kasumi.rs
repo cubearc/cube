@@ -87,7 +87,7 @@ fn fl(input: u32, k: &[u16; 8]) -> u32 {
     a ^= (b | k[1]).rotate_left(1);
     ((a as u32) << 16) | (b as u32)
 }
-pub(super) fn transform(data: &[u8], key: &[u8], decrypting: bool) -> Vec<u8> {
+pub(crate) fn transform(data: &[u8], key: &[u8], decrypting: bool) -> Vec<u8> {
     assert!(data.len().is_multiple_of(8));
     let keys = schedule(key);
     let mut output = data.to_vec();

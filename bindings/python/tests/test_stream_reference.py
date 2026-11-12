@@ -21,8 +21,11 @@ def test_independent_stream_answers(vector):
     encrypted = bytes.fromhex(vector["ciphertext_hex"])
     assert cube.stream_encrypt(plain, parameters) == encrypted
     assert cube.stream_decrypt(encrypted, parameters) == plain
+    empty = dict(vector["parameters"])
+    if "data_bits" in empty:
+        empty["data_bits"] = 0
     for function in (cube.stream_encrypt, cube.stream_decrypt):
-        assert function(b"", parameters) == b""
+        assert function(b"", json.dumps(empty)) == b""
     for field, value in [("key_hex", ""), ("key_hex", "00" * 257), ("nonce_hex", None)]:
         invalid = dict(vector["parameters"], **{field: value})
         for function in (cube.stream_encrypt, cube.stream_decrypt):
@@ -57,3 +60,33 @@ def test_seal_last_position_and_exhaustion(profile):
         assert len(function(bytes(4096), parameters)) == 4096
         with pytest.raises(ValueError, match="counter exhausted"):
             function(bytes(4097), parameters)
+
+
+@pytest.mark.parametrize(
+    "profile",
+    [
+        "mickey20_estream_msb_v1",
+        "grain128a_skew2011_decimated_msb_v1",
+        "a51_gsm_count22_be_key_msb_v1",
+        "a52_gsm_count22_be_key_msb_v1",
+        "a53_gsm_count22_be_key_msb_v1",
+        "a54_gsm_count22_be_key_msb_v1",
+        "e0_core54_session128_lsb_v1",
+    ],
+)
+def test_packed_bit_boundaries(profile):
+    p = dict(
+        next(v["parameters"] for v in VECTORS if v["parameters"]["profile"] == profile)
+    )
+    p["data_bits"] = 1
+    plain = b"\x01" if profile.startswith("e0_") else b"\x80"
+    parameters = json.dumps(p)
+    encrypted = cube.stream_encrypt(plain, parameters)
+    assert cube.stream_decrypt(encrypted, parameters) == plain
+    for function in (cube.stream_encrypt, cube.stream_decrypt):
+        for invalid in (b"", b"\x81", b"\x00\x00"):
+            with pytest.raises(ValueError):
+                function(invalid, parameters)
+    for value in (None, 524289):
+        with pytest.raises(ValueError):
+            cube.stream_encrypt(b"", json.dumps(dict(p, data_bits=value)))

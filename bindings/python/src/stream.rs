@@ -34,6 +34,7 @@ fn vernam<'py>(py: Python<'py>, data: &[u8], pad: &[u8]) -> PyResult<Bound<'py, 
     let output = Zeroizing::new(stream::vernam(data, pad).map_err(super::file_error)?);
     Ok(PyBytes::new(py, &output))
 }
+/// Encrypt a raw profile; packed-bit profiles require data_bits and zero unused bits.
 #[pyfunction]
 fn stream_encrypt<'py>(
     py: Python<'py>,
@@ -46,6 +47,7 @@ fn stream_encrypt<'py>(
         Zeroizing::new(stream::reference::encrypt(data, &settings).map_err(super::file_error)?);
     Ok(PyBytes::new(py, &output))
 }
+/// Decrypt the same raw profile and packed bit count; output has no authentication.
 #[pyfunction]
 fn stream_decrypt<'py>(
     py: Python<'py>,

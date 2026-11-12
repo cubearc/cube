@@ -253,3 +253,13 @@ for (const profile of ['decim_v2_estream64_lsb_v1','cryptmt3_256_256_le_v1'] as 
  const output:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile,key_hex:'00'.repeat(profile==='decim_v2_estream64_lsb_v1'?10:32),nonce_hex:'00'.repeat(profile==='decim_v2_estream64_lsb_v1'?8:32)}}).output;
  void output;
 }
+
+for (const profile of ['mickey20_estream_msb_v1','grain128a_skew2011_decimated_msb_v1','a51_gsm_count22_be_key_msb_v1','a52_gsm_count22_be_key_msb_v1','a53_gsm_count22_be_key_msb_v1','a54_gsm_count22_be_key_msb_v1','e0_core54_session128_lsb_v1'] as const) {
+ const material={profile,key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(12),data_bits:1};
+ const output:Uint8Array=profile==='mickey20_estream_msb_v1'?cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array([128])},parameters:{...material,profile,nonce_bits:80}}).output:cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array([128])},parameters:{...material,profile}}).output;
+ void output;
+}
+// @ts-expect-error Packed MICKEY requires an explicit IV bit count.
+cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'mickey20_estream_msb_v1',key_hex:'00'.repeat(10),nonce_hex:'',data_bits:0}});
+// @ts-expect-error A GSM profile requires its exact packed data bit count.
+cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'a51_gsm_count22_be_key_msb_v1',key_hex:'00'.repeat(8),nonce_hex:'000000'}});

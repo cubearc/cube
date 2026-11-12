@@ -2322,11 +2322,11 @@ def frequency_compare(
     ...
 
 def stream_encrypt(data: bytes, parameters_json: str) -> bytes:
-    """Encrypt an exact raw stream profile from bounded private JSON settings."""
+    """Encrypt a raw profile with exact packed bit counts and zero padding."""
     ...
 
 def stream_decrypt(data: bytes, parameters_json: str) -> bytes:
-    """Decrypt the same exact raw profile; raw output is unauthenticated."""
+    """Decrypt raw bytes or packed bits; output has no authentication."""
     ...
 
 def stream_transform(

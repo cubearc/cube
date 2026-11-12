@@ -216,3 +216,49 @@ undersized typed array view; SIMD uses `-fno-inline` to avoid duplicate CPUID
 assembly labels. Those changes do not alter the reference arithmetic. This
 qualification is interoperability evidence, not a security audit or a claim
 that CryptMT is suitable as a system random-number source.
+
+
+## Packed-bit MICKEY, Grain, GSM and E0 qualification
+
+MICKEY 2.0 uses 80 key bits, IV lengths 0–80 and two 100-bit registers. Core owns
+portable register equations and zeroizing state. Eighteen independent answers
+use both the designers' word-oriented and bit-by-bit June 2006 implementations,
+mirrored at QuickBMS `5315ffe664b88dc09ae783ad17d9dfd252b1c927`. Both references
+agree across IV lengths 0, 1, 7, 8, 39, 40, 63, 79 and 80. Their C code remains
+validation-only; MICKEY-128's 160-bit registers are not substituted.
+
+Grain-128a follows the [designers' SKEW 2011 paper](https://lucris.lub.lu.se/ws/portalfiles/portal/6156802/1981684.pdf),
+including the extra degree-three/four feedback terms, final zero LFSR bit,
+256-step setup, 64 initial pre-output bits and decimated output. An independent
+Python bit-array transcription reproduces both published 128-bit streams. The
+Rust implementation uses packed integer registers. The paper's nonzero-key
+empty-message MAC is printed as `c7c1c655`, but its published accumulator
+`f88720c1` XOR register `3f46e6a4` gives `c7c1c665`. Visual inspection confirmed
+the printed discrepancy; the other nine MAC literals agree with the equations.
+This evidence is retained explicitly rather than rewriting a published literal.
+The raw named profile is distinct from authenticated transport and later AEAD.
+
+All four A5 profiles use raw COUNT22, explicit key widths and MSB-first packed
+DL/UL concatenation. A5/1/2 own their specified feedback/majority state machines.
+A5/3/4 reuse the existing Core KASUMI implementation, with complete KGCORE
+preprocessing and output feedback. Thirty-eight expected answers use the
+[independent Osmocom implementation](https://github.com/osmocom/libosmocore/blob/1b72c0288c3f6fcec916cc439623af1c1c4b5d4c/src/gsm/a5.c),
+including all fourteen fixed DL/UL cases (twelve from TS55.217/55.218), burst
+boundaries and the last COUNT. Its GPL C sources are validation tools only and
+are not vendored into Core or an SDK. The oracle's frame-count adapter is explicit;
+no FN conversion is silently applied by these profiles. A5/1/2 are broken, and
+no radio, interception or telecommunications certification is provided.
+
+E0 follows [Bluetooth Core5.4 Vol2H4.4–4.6](https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Core-54/out/en/br-edr-controller/security-specification.html).
+Figures4.5/4.6 were inspected to fix octet/bit order, feedback enable times and
+parallel reload. An independent bit-array oracle matches all1460 published state
+rows in the [four official sample sets](https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Core-54/out/en/br-edr-controller/sample-data.html),
+including all four125-bit cipher streams. Twenty-five additional oracle answers
+exercise address-octet and clock-bit boundaries plus partial LSB-packed input.
+Core uses a separate portable four-word implementation with zeroizing registers,
+blend state and temporary initialization output. The official full traces anchor
+the transcription; no independently maintained general E0 backend was qualified,
+and this is not a Bluetooth certification. The session128 profile supplies
+K_session directly; its raw-generator bound does not assert packet-format support.
+All packed inputs and contexts have exact counts and zero unused bits; no SDK
+implements its own cipher or bit-order conversion.

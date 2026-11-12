@@ -20948,6 +20948,15 @@ Parameters:
   "title": "Parameters",
   "type": "object",
   "properties": {
+    "data_bits": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 524288,
+      "minimum": 0
+    },
     "discard_bytes": {
       "type": [
         "integer",
@@ -20960,6 +20969,15 @@ Parameters:
     "key_hex": {
       "type": "string",
       "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+    },
+    "nonce_bits": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 80,
+      "minimum": 0
     },
     "nonce_hex": {
       "type": "string",
@@ -21680,6 +21698,208 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 524288,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_bits": {
+          "type": "integer",
+          "maximum": 80,
+          "minimum": 0
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,10}$"
+        },
+        "profile": {
+          "const": "mickey20_estream_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits",
+        "nonce_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 524288,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){12,12}$"
+        },
+        "profile": {
+          "const": "grain128a_skew2011_decimated_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a51_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a52_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a53_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a54_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 524288,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){9}0[0-3]$"
+        },
+        "profile": {
+          "const": "e0_core54_session128_lsb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
     }
   ],
   "required": [
@@ -21723,7 +21943,14 @@ Parameters:
         "ffcsr_h_2005_iv80_be_v1",
         "lex_v2_estream128_le_iv_words_v1",
         "decim_v2_estream64_lsb_v1",
-        "cryptmt3_256_256_le_v1"
+        "cryptmt3_256_256_le_v1",
+        "mickey20_estream_msb_v1",
+        "grain128a_skew2011_decimated_msb_v1",
+        "a51_gsm_count22_be_key_msb_v1",
+        "a52_gsm_count22_be_key_msb_v1",
+        "a53_gsm_count22_be_key_msb_v1",
+        "a54_gsm_count22_be_key_msb_v1",
+        "e0_core54_session128_lsb_v1"
       ]
     }
   }
@@ -21762,6 +21989,15 @@ Parameters:
   "title": "Parameters",
   "type": "object",
   "properties": {
+    "data_bits": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 524288,
+      "minimum": 0
+    },
     "discard_bytes": {
       "type": [
         "integer",
@@ -21774,6 +22010,15 @@ Parameters:
     "key_hex": {
       "type": "string",
       "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+    },
+    "nonce_bits": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 80,
+      "minimum": 0
     },
     "nonce_hex": {
       "type": "string",
@@ -22494,6 +22739,208 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 524288,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_bits": {
+          "type": "integer",
+          "maximum": 80,
+          "minimum": 0
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,10}$"
+        },
+        "profile": {
+          "const": "mickey20_estream_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits",
+        "nonce_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 524288,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){12,12}$"
+        },
+        "profile": {
+          "const": "grain128a_skew2011_decimated_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a51_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a52_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a53_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 228,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$"
+        },
+        "profile": {
+          "const": "a54_gsm_count22_be_key_msb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "data_bits": {
+          "type": "integer",
+          "maximum": 524288,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){9}0[0-3]$"
+        },
+        "profile": {
+          "const": "e0_core54_session128_lsb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "data_bits"
+      ]
     }
   ],
   "required": [
@@ -22537,7 +22984,14 @@ Parameters:
         "ffcsr_h_2005_iv80_be_v1",
         "lex_v2_estream128_le_iv_words_v1",
         "decim_v2_estream64_lsb_v1",
-        "cryptmt3_256_256_le_v1"
+        "cryptmt3_256_256_le_v1",
+        "mickey20_estream_msb_v1",
+        "grain128a_skew2011_decimated_msb_v1",
+        "a51_gsm_count22_be_key_msb_v1",
+        "a52_gsm_count22_be_key_msb_v1",
+        "a53_gsm_count22_be_key_msb_v1",
+        "a54_gsm_count22_be_key_msb_v1",
+        "e0_core54_session128_lsb_v1"
       ]
     }
   }

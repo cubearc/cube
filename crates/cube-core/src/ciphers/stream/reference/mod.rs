@@ -1,11 +1,16 @@
 //! Explicit historical stream profiles. Raw output has no authentication or
 //! constant-time guarantee; RC4 is broken. No state is retained between calls.
+mod a5;
+mod bits;
 mod catalog;
 mod cryptmt;
 mod decim;
+mod e0;
 mod fcsr;
+mod grain128a;
 mod grain_isaac;
 mod hc128;
+mod mickey;
 mod panama;
 mod permutation;
 mod seal;
@@ -76,6 +81,42 @@ profiles! {
     (Lex, "lex_v2_estream128_le_iv_words_v1", 16, 16, 16, 16),
     (Decim, "decim_v2_estream64_lsb_v1", 10, 10, 8, 8),
     (Cryptmt, "cryptmt3_256_256_le_v1", 32, 32, 32, 32),
+    (Mickey, "mickey20_estream_msb_v1", 10, 10, 0, 10),
+    (Grain128a, "grain128a_skew2011_decimated_msb_v1", 16, 16, 12, 12),
+    (A51, "a51_gsm_count22_be_key_msb_v1", 8, 8, 3, 3),
+    (A52, "a52_gsm_count22_be_key_msb_v1", 8, 8, 3, 3),
+    (A53, "a53_gsm_count22_be_key_msb_v1", 8, 8, 3, 3),
+    (A54, "a54_gsm_count22_be_key_msb_v1", 16, 16, 3, 3),
+    (E0, "e0_core54_session128_lsb_v1", 16, 16, 10, 10),
+}
+
+impl Profile {
+    fn requires_bits(self) -> bool {
+        matches!(
+            self,
+            Self::Mickey
+                | Self::Grain128a
+                | Self::A51
+                | Self::A52
+                | Self::A53
+                | Self::A54
+                | Self::E0
+        )
+    }
+    fn max_bits(self) -> usize {
+        if matches!(self, Self::A51 | Self::A52 | Self::A53 | Self::A54) {
+            228
+        } else {
+            MAX_INPUT * 8
+        }
+    }
+    fn packing(self) -> bits::Packing {
+        if self == Self::E0 {
+            bits::Packing::Lsb
+        } else {
+            bits::Packing::Msb
+        }
+    }
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -86,11 +127,17 @@ struct Parameters {
     key_hex: String,
     #[schemars(regex(pattern = "^(?:[0-9A-Fa-f]{2}){0,256}$"))]
     nonce_hex: String,
-    #[serde(default, deserialize_with = "discard")]
+    #[serde(default, deserialize_with = "unsigned")]
     #[schemars(range(min = 0, max = 65536))]
     discard_bytes: Option<usize>,
+    #[serde(default, deserialize_with = "unsigned")]
+    #[schemars(range(min = 0, max = 524288))]
+    data_bits: Option<usize>,
+    #[serde(default, deserialize_with = "unsigned")]
+    #[schemars(range(min = 0, max = 80))]
+    nonce_bits: Option<usize>,
 }
-fn discard<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<usize>, D::Error> {
+fn unsigned<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Option<usize>, D::Error> {
     usize::deserialize(d).map(Some)
 }
 impl Drop for Parameters {
@@ -108,6 +155,8 @@ pub struct Settings {
     key: Zeroizing<Vec<u8>>,
     nonce: Zeroizing<Vec<u8>>,
     discard_bytes: usize,
+    data_bits: Option<usize>,
+    nonce_bits: Option<usize>,
 }
 impl std::fmt::Debug for Settings {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -123,6 +172,8 @@ impl Settings {
     /// wrong key/nonce widths and unrelated drop settings are rejected without
     /// echoing parser excerpts. Nonce is explicit, including an empty nonce for
     /// constructions with no IV. RC4-drop requires its explicit discard count.
+    /// Packed-bit profiles require data_bits; MICKEY also requires nonce_bits.
+    /// Bytes must match the count exactly and unused tail bits must be zero.
     pub fn parse(document: &str) -> Result<Self, OperationError> {
         if document.len() > MAX_PARAMETERS {
             return Err(OperationError::new(
@@ -141,6 +192,31 @@ impl Settings {
         if !(iv_min..=iv_max).contains(&nonce.len()) {
             return Err(invalid("nonce_hex"));
         }
+        let data_bits = match (p.profile.requires_bits(), p.data_bits) {
+            (true, Some(n)) if n <= p.profile.max_bits() => Some(n),
+            (false, None) => None,
+            _ => return Err(invalid("data_bits")),
+        };
+        let nonce_bits = match (p.profile, p.nonce_bits) {
+            (Profile::Mickey, Some(n))
+                if n <= 80 && bits::packed(&nonce, n, bits::Packing::Msb) =>
+            {
+                Some(n)
+            }
+            (Profile::Mickey, _) => return Err(invalid("nonce_bits")),
+            (_, None) => None,
+            _ => return Err(invalid("nonce_bits")),
+        };
+        if matches!(
+            p.profile,
+            Profile::A51 | Profile::A52 | Profile::A53 | Profile::A54
+        ) && nonce[0] & 0xc0 != 0
+        {
+            return Err(invalid("nonce_hex"));
+        }
+        if p.profile == Profile::E0 && nonce[9] & 0xfc != 0 {
+            return Err(invalid("nonce_hex"));
+        }
         let discard_bytes = match (p.profile, p.discard_bytes) {
             (Profile::Rc4Drop, Some(n)) if n <= MAX_DISCARD => n,
             (Profile::Rc4Drop, _) => return Err(invalid("discard_bytes")),
@@ -152,6 +228,8 @@ impl Settings {
             key,
             nonce,
             discard_bytes,
+            data_bits,
+            nonce_bits,
         })
     }
 }
@@ -170,7 +248,8 @@ fn invalid(parameter: &'static str) -> OperationError {
     )
     .parameter(parameter)
 }
-/// Encrypt at most 64 KiB with exact profile settings. No nonce generation,
+/// Encrypt at most 64 KiB with exact profile settings. Packed-bit profiles
+/// require their exact bit count and zero unused tail bits; GSM has 228 bits. No nonce generation,
 /// padding, KDF, authentication or persistent key/position tracking occurs.
 pub fn encrypt(input: &[u8], settings: &Settings) -> Result<Vec<u8>, OperationError> {
     transform(input, settings, false)
@@ -187,8 +266,48 @@ fn transform(input: &[u8], s: &Settings, decrypting: bool) -> Result<Vec<u8>, Op
             "stream input exceeds 64 KiB",
         ));
     }
+    if let Some(n) = s.data_bits
+        && !bits::packed(input, n, s.profile.packing())
+    {
+        return Err(invalid("data_bits"));
+    }
     let mut output = input.to_vec();
     match s.profile {
+        Profile::Mickey => mickey::apply(
+            &mut output,
+            &s.key,
+            &s.nonce,
+            s.nonce_bits.expect("validated nonce bit count"),
+            s.data_bits.expect("validated data bit count"),
+        ),
+        Profile::Grain128a => {
+            grain128a::apply(
+                &mut output,
+                &s.key,
+                &s.nonce,
+                s.data_bits.expect("validated data bit count"),
+                decrypting,
+            );
+        }
+        Profile::A51 | Profile::A52 | Profile::A53 | Profile::A54 => a5::apply(
+            &mut output,
+            &s.key,
+            &s.nonce,
+            s.data_bits.expect("validated data bit count"),
+            match s.profile {
+                Profile::A51 => 1,
+                Profile::A52 => 2,
+                Profile::A53 => 3,
+                Profile::A54 => 4,
+                _ => unreachable!(),
+            },
+        ),
+        Profile::E0 => e0::apply(
+            &mut output,
+            &s.key,
+            &s.nonce,
+            s.data_bits.expect("validated data bit count"),
+        ),
         Profile::Cryptmt => cryptmt::apply(&mut output, &s.key, &s.nonce),
         Profile::Decim => decim::apply(&mut output, &s.key, &s.nonce).map_err(|_| {
             OperationError::new(

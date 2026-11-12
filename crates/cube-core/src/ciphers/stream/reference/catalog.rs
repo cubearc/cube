@@ -36,6 +36,23 @@ const PARAMETERS: &[o::Parameter] = &[
             max: MAX_DISCARD as u64,
         },
     },
+    o::Parameter {
+        name: "data_bits",
+        description: "Required only by packed-bit profiles: exact data length, with zero unused tail bits. GSM at most228bits; other bit profiles at most524288bits.",
+        required: false,
+        default: None,
+        constraints: o::ParameterType::Unsigned {
+            min: 0,
+            max: (MAX_INPUT * 8) as u64,
+        },
+    },
+    o::Parameter {
+        name: "nonce_bits",
+        description: "Required only by MICKEY2.0: exact0..80-bit IV length. Packed bytes are MSB-first with zero unused tail bits.",
+        required: false,
+        default: None,
+        constraints: o::ParameterType::Unsigned { min: 0, max: 80 },
+    },
 ];
 const fn row(
     id: &'static str,
@@ -78,7 +95,7 @@ const fn row(
                 output_bits: None,
             },
             resources: &[],
-            resource_notes: "Input/output at most64KiB; private JSON at most4096bytes. RC4 discard at most65536bytes. Initialization and state are finite. Owned key/nonce and supported backend schedules are wiped; parser/caller/interpreter/OS copies are not guaranteed erased. No automatic capture or linear recipe adapter.",
+            resource_notes: "Input/output at most64KiB; GSM at most228packedbits. Bit profiles require exactdata_bits and zero unusedbits; MICKEY also requires nonce_bits0..80; private JSON at most4096bytes. RC4 discard at most65536bytes. Initialization and state are finite. Owned key/nonce and supported backend schedules are wiped; parser/caller/interpreter/OS copies are not guaranteed erased. No automatic capture or linear recipe adapter.",
             rust_api: api,
             python_api,
             references: &[
@@ -91,6 +108,9 @@ const fn row(
                 "https://cr.yp.to/streamciphers/trivium/desc.pdf",
                 "https://www.rocq.inria.fr/secret/Anne.Canteaut/Publications/sosemanuk.pdf",
                 "https://www.burtleburtle.net/bob/rand/isaacafa.html",
+                "https://lucris.lub.lu.se/ws/portalfiles/portal/6156802/1981684.pdf",
+                "https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Core-54/out/en/br-edr-controller/security-specification.html",
+                "https://www.ecrypt.eu.org/stream/p3ciphers/mickey/mickey_p3.pdf",
                 "https://www.rocq.inria.fr/secret/Anne.Canteaut/Publications/BBC08b.pdf",
                 "https://github.com/floodyberry/supercop/blob/a351f2c29235512a042d4b6989d241a67e86ad23/crypto_stream/cryptmtv3/e/v3/e/cryptmt-v3.c",
                 "https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/seal.cpp",
@@ -122,10 +142,12 @@ const PROFILED: [m::Entry; 2] = [
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
 fn parameters_schema() -> schemars::Schema {
     let mut schema = c::schema::<Parameters>().to_value();
-    schema["properties"]["discard_bytes"]
-        .as_object_mut()
-        .unwrap()
-        .remove("default");
+    for name in ["discard_bytes", "data_bits", "nonce_bits"] {
+        schema["properties"][name]
+            .as_object_mut()
+            .unwrap()
+            .remove("default");
+    }
     let base = schema.clone();
     schema["oneOf"] = json!(
         Profile::ALL
@@ -143,6 +165,13 @@ fn parameters_schema() -> schemars::Schema {
                     let (min, max) = p.nonce_range();
                     json!(format!("^(?:[0-9A-Fa-f]{{2}}){{{min},{max}}}$"))
                 };
+                if matches!(p, Profile::A51 | Profile::A52 | Profile::A53 | Profile::A54) {
+                    row["properties"]["nonce_hex"]["pattern"] =
+                        json!("^[0-3][0-9A-Fa-f](?:[0-9A-Fa-f]{2}){2}$");
+                } else if *p == Profile::E0 {
+                    row["properties"]["nonce_hex"]["pattern"] =
+                        json!("^(?:[0-9A-Fa-f]{2}){9}0[0-3]$");
+                }
                 if *p == Profile::Rc4Drop {
                     row["required"] = json!(["profile", "key_hex", "nonce_hex", "discard_bytes"]);
                     row["properties"]["discard_bytes"] =
@@ -152,6 +181,32 @@ fn parameters_schema() -> schemars::Schema {
                         .as_object_mut()
                         .unwrap()
                         .remove("discard_bytes");
+                }
+                if p.requires_bits() {
+                    row["properties"]["data_bits"] =
+                        json!({"type":"integer","minimum":0,"maximum":p.max_bits()});
+                    row["required"]
+                        .as_array_mut()
+                        .unwrap()
+                        .push(json!("data_bits"));
+                } else {
+                    row["properties"]
+                        .as_object_mut()
+                        .unwrap()
+                        .remove("data_bits");
+                }
+                if *p == Profile::Mickey {
+                    row["properties"]["nonce_bits"] =
+                        json!({"type":"integer","minimum":0,"maximum":80});
+                    row["required"]
+                        .as_array_mut()
+                        .unwrap()
+                        .push(json!("nonce_bits"));
+                } else {
+                    row["properties"]
+                        .as_object_mut()
+                        .unwrap()
+                        .remove("nonce_bits");
                 }
                 row
             })

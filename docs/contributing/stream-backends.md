@@ -74,3 +74,44 @@ revision above, with Spritz's three published eight-byte answers checked as well
 Corpora include nonzero input, variable key/IV boundaries, odd output lengths and
 HC-128 table transitions. Oracles remain validation tools and are never SDK
 runtime dependencies.
+
+
+## Additional portable reference profiles
+
+SOSEMANUK follows the [designers' specification](https://www.rocq.inria.fr/secret/Anne.Canteaut/Publications/sosemanuk.pdf),
+with full Serpent24 initialization, snapshots after rounds 12/18/24, Serpent S2
+output filtering and the specified field arithmetic. Core computes those steps
+in portable Rust. The independent C++ reference is frozen at CryptoStreams
+`b92d96ad16679c24a9402b0d33378d1f318db23a`. Its benchmark setting 25 includes
+all 24 Serpent rounds and all five output groups; setting 24 omits the final group.
+Seven published eSTREAM literals were checked before generating nonzero input
+and intermediate key-length answers. The C++ code is a validation oracle only.
+
+Grain v1 and ISAAC32 fixed answers use independently compiled Bouncy Castle 1.83.
+The [Grain v1 upstream engine](https://github.com/bcgit/bc-java/blob/e40316b6e25816c1e302c98b5fc1ba6e2dfdfc0c/core/src/main/java/org/bouncycastle/crypto/engines/Grainv1Engine.java)
+identifies the exact 80-bit revision. ISAAC follows
+[Jenkins' state generator](https://www.burtleburtle.net/bob/rand/isaacafa.html)
+and the explicitly named BC seed/output convention; it does not claim an
+interchangeable seed API or a system random source. Core implementations own
+and wipe their state; Java is never a runtime dependency.
+
+Strumok-256/512 follows DSTU 8845's reference state transitions and explicit
+little-endian words. Lookup tables retain the MIT notice from
+[`dstu8845` 1.0.0](https://github.com/alexyer/dstu8845/tree/9c1099c469fd03edfcabcf33d9e8ced58b94e41b)
+and the BSD-2-Clause attribution of the
+[C reference](https://github.com/outspace/dstu8845/tree/752b1e0c5f69f95e128738cf3c450ac8b49675a2).
+Both notices ship in `THIRD_PARTY_NOTICES`. The upstream crate's native-endian
+transmutation and big-endian panic are replaced with safe explicit LE loads.
+Its marker-only `ZeroizeOnDrop` implementation is not used as an erasure claim:
+Core owns `Zeroizing` state arrays. Fourteen C-reference answers include eight
+external fixed literals and cross-block odd-length data. This establishes
+interoperability with the pinned sources, not independent certification to the
+regional standard or a security audit.
+
+PANAMA follows the [Daemen/Clapp 1998 reset/push/pull construction](https://jacobfilipp.com/DrDobbs/articles/DDJ/1998/9812/9812c/9812c.htm).
+The Go reference supplies a fixed key-only literal. Its existing IV initializer
+is reached through a validation-only adapter, without modifying arithmetic.
+Little-endian oracle values explicitly convert each key/IV/output word from the
+reference's big-endian representation. Both key-only and IV profiles use the
+full 32 discarded pull rounds. The broken PANAMA hashing construction is separate
+from these raw stream profiles.

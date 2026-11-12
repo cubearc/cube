@@ -89,6 +89,10 @@ const fn row(
                 "https://people.csail.mit.edu/rivest/pubs/RS14.pdf",
                 "https://www.esat.kuleuven.be/cosic/publications/article-40.pdf",
                 "https://cr.yp.to/streamciphers/trivium/desc.pdf",
+                "https://www.rocq.inria.fr/secret/Anne.Canteaut/Publications/sosemanuk.pdf",
+                "https://www.burtleburtle.net/bob/rand/isaacafa.html",
+                "https://github.com/outspace/dstu8845/tree/752b1e0c5f69f95e128738cf3c450ac8b49675a2",
+                "https://jacobfilipp.com/DrDobbs/articles/DDJ/1998/9812/9812c/9812c.htm",
             ],
         }),
     }

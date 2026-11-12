@@ -90,6 +90,40 @@ fn each_profile_rejects_invalid_material_in_schema_and_runtime() {
 }
 
 #[test]
+fn every_profile_preserves_its_full_byte_limit_and_refuses_one_over() {
+    use cube_core::{
+        ciphers::stream::reference::{self, Settings},
+        errors::ErrorCode,
+    };
+    let vectors: Vec<serde_json::Value> =
+        serde_json::from_str(include_str!("../src/ciphers/stream/reference/vectors.json")).unwrap();
+    let mut seen = std::collections::BTreeSet::new();
+    let data: Vec<u8> = (0..reference::MAX_INPUT)
+        .map(|i| i.wrapping_mul(97) as u8)
+        .collect();
+    for v in vectors {
+        let p = &v["parameters"];
+        if !seen.insert(p["profile"].as_str().unwrap().to_owned()) {
+            continue;
+        }
+        let s = Settings::parse(&p.to_string()).unwrap();
+        let c = reference::encrypt(&data, &s).unwrap();
+        assert_eq!(
+            reference::decrypt(&c, &s).unwrap(),
+            data,
+            "{}",
+            p["profile"]
+        );
+        for op in [reference::encrypt, reference::decrypt] {
+            assert_eq!(
+                op(&vec![0; reference::MAX_INPUT + 1], &s).unwrap_err().code,
+                ErrorCode::ResourceLimit
+            );
+        }
+    }
+}
+
+#[test]
 fn settings_boundaries_and_errors_preserve_private_material() {
     use cube_core::{
         ciphers::stream::reference::{self, Settings},

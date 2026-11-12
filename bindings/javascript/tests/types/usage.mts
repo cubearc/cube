@@ -232,5 +232,9 @@ cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint
 const spritzBytes:Uint8Array=cube.execute({operation:'cipher.stream.decrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'spritz_rs2014_add_iv_v1',key_hex:'414243',nonce_hex:''}}).output;
 const vmpcBytes:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'vmpc_ksa3_iv_v1',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(16)}}).output;
 void [spritzBytes,vmpcBytes];
+const sosemanukBytes:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'sosemanuk_estream_le_v1',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(16)}}).output;
+const strumokBytes:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'strumok512_dstu8845_le_v1',key_hex:'00'.repeat(64),nonce_hex:'00'.repeat(32)}}).output;
+const panamaBytes:Uint8Array=cube.execute({operation:'cipher.stream.decrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'panama_1998_le_iv256_v1',key_hex:'00'.repeat(32),nonce_hex:'00'.repeat(32)}}).output;
+void [sosemanukBytes,strumokBytes,panamaBytes];
 // @ts-expect-error A VMPC profile forbids RC4-drop settings.
 cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'vmpc_zoltak2004_iv_v1',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(16),discard_bytes:0}});

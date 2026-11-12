@@ -1,8 +1,12 @@
 //! Explicit historical stream profiles. Raw output has no authentication or
 //! constant-time guarantee; RC4 is broken. No state is retained between calls.
 mod catalog;
+mod grain_isaac;
 mod hc128;
+mod panama;
 mod permutation;
+mod sosemanuk;
+mod strumok;
 mod trivium;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
@@ -44,6 +48,15 @@ profiles! {
     (SpritzIv, "spritz_rs2014_add_iv_v1", 1, 256, 0, 256),
     (Hc128, "hc128_wu2008_le_v1", 16, 16, 16, 16),
     (Trivium, "trivium_estream80_v1", 10, 10, 10, 10),
+    (Sosemanuk, "sosemanuk_estream_le_v1", 16, 32, 16, 16),
+    (GrainV1, "grain_v1_estream_le_v1", 10, 10, 8, 8),
+    (Isaac32, "isaac32_bc_le_seed_be_v1", 32, 32, 0, 0),
+    (Strumok256, "strumok256_dstu8845_le_v1", 32, 32, 32, 32),
+    (Strumok512, "strumok512_dstu8845_le_v1", 64, 64, 32, 32),
+    (PanamaBeKeyOnly, "panama_1998_be_key_only_v1", 32, 32, 0, 0),
+    (PanamaLeKeyOnly, "panama_1998_le_key_only_v1", 32, 32, 0, 0),
+    (PanamaBeIv, "panama_1998_be_iv256_v1", 32, 32, 32, 32),
+    (PanamaLeIv, "panama_1998_le_iv256_v1", 32, 32, 32, 32),
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -157,6 +170,19 @@ fn transform(input: &[u8], s: &Settings, decrypting: bool) -> Result<Vec<u8>, Op
     }
     let mut output = input.to_vec();
     match s.profile {
+        Profile::Sosemanuk => sosemanuk::apply(&mut output, &s.key, &s.nonce),
+        Profile::GrainV1 => grain_isaac::grain(&mut output, &s.key, &s.nonce),
+        Profile::Isaac32 => grain_isaac::isaac(&mut output, &s.key),
+        Profile::Strumok256 | Profile::Strumok512 => strumok::apply(&mut output, &s.key, &s.nonce),
+        Profile::PanamaBeKeyOnly
+        | Profile::PanamaLeKeyOnly
+        | Profile::PanamaBeIv
+        | Profile::PanamaLeIv => panama::apply(
+            &mut output,
+            &s.key,
+            &s.nonce,
+            matches!(s.profile, Profile::PanamaLeKeyOnly | Profile::PanamaLeIv),
+        ),
         Profile::Rc4a => permutation::rc4a(&mut output, &s.key),
         Profile::Vmpc | Profile::VmpcKsa3 => permutation::vmpc(
             &mut output,

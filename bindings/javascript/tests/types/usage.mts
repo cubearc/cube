@@ -248,3 +248,8 @@ for (const profile of ['seal3_be_l32768_v1','seal3_le_l32768_v1','ffcsr_h_2005_i
  const output:Uint8Array=cube.execute({operation:'cipher.stream.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile,key_hex:'00'.repeat(20),nonce_hex:'00'.repeat(4)}}).output;
  void output;
 }
+
+for (const profile of ['decim_v2_estream64_lsb_v1','cryptmt3_256_256_le_v1'] as const) {
+ const output:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile,key_hex:'00'.repeat(profile==='decim_v2_estream64_lsb_v1'?10:32),nonce_hex:'00'.repeat(profile==='decim_v2_estream64_lsb_v1'?8:32)}}).output;
+ void output;
+}

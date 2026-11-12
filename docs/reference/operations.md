@@ -21636,6 +21636,50 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "profile": {
+          "const": "decim_v2_estream64_lsb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "profile": {
+          "const": "cryptmt3_256_256_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
     }
   ],
   "required": [
@@ -21677,7 +21721,9 @@ Parameters:
         "seal3_be_l32768_v1",
         "seal3_le_l32768_v1",
         "ffcsr_h_2005_iv80_be_v1",
-        "lex_v2_estream128_le_iv_words_v1"
+        "lex_v2_estream128_le_iv_words_v1",
+        "decim_v2_estream64_lsb_v1",
+        "cryptmt3_256_256_le_v1"
       ]
     }
   }
@@ -22404,6 +22450,50 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
+        },
+        "profile": {
+          "const": "decim_v2_estream64_lsb_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "profile": {
+          "const": "cryptmt3_256_256_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
     }
   ],
   "required": [
@@ -22445,7 +22535,9 @@ Parameters:
         "seal3_be_l32768_v1",
         "seal3_le_l32768_v1",
         "ffcsr_h_2005_iv80_be_v1",
-        "lex_v2_estream128_le_iv_words_v1"
+        "lex_v2_estream128_le_iv_words_v1",
+        "decim_v2_estream64_lsb_v1",
+        "cryptmt3_256_256_le_v1"
       ]
     }
   }

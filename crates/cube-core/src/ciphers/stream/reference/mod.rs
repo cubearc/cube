@@ -1,6 +1,8 @@
 //! Explicit historical stream profiles. Raw output has no authentication or
 //! constant-time guarantee; RC4 is broken. No state is retained between calls.
 mod catalog;
+mod cryptmt;
+mod decim;
 mod fcsr;
 mod grain_isaac;
 mod hc128;
@@ -72,6 +74,8 @@ profiles! {
     (SealLe, "seal3_le_l32768_v1", 20, 20, 4, 4),
     (Fcsr, "ffcsr_h_2005_iv80_be_v1", 10, 10, 10, 10),
     (Lex, "lex_v2_estream128_le_iv_words_v1", 16, 16, 16, 16),
+    (Decim, "decim_v2_estream64_lsb_v1", 10, 10, 8, 8),
+    (Cryptmt, "cryptmt3_256_256_le_v1", 32, 32, 32, 32),
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -185,6 +189,13 @@ fn transform(input: &[u8], s: &Settings, decrypting: bool) -> Result<Vec<u8>, Op
     }
     let mut output = input.to_vec();
     match s.profile {
+        Profile::Cryptmt => cryptmt::apply(&mut output, &s.key, &s.nonce),
+        Profile::Decim => decim::apply(&mut output, &s.key, &s.nonce).map_err(|_| {
+            OperationError::new(
+                ErrorCode::ResourceLimit,
+                "DECIM initialization or buffer work limit exceeded",
+            )
+        })?,
         Profile::SealBe | Profile::SealLe => {
             seal::apply(&mut output, &s.key, &s.nonce, s.profile == Profile::SealLe).map_err(
                 |_| {

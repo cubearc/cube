@@ -180,3 +180,39 @@ IVs, multiple 40-byte blocks and odd tails. Only the complete AES-128 profile is
 exposed: the reference's fixed 44-word key schedule must not be mistaken for
 safe support of its comments' 192/256-bit key suggestions. Full notices for all
 three reference sources ship with the SDK package.
+
+
+## DECIM v2 and CryptMT v3 qualification
+
+DECIM v2 follows the [designers' specification, sections 3.1–3.4](https://www.rocq.inria.fr/secret/Anne.Canteaut/Publications/BBC08b.pdf).
+Core uses safe three-word state arithmetic, the specified quadratic filter,
+a finite-state ABSG and a bounded 32-bit queue. The 768 nonlinear setup clocks
+and initial four-clock queue-filling groups match the eSTREAM byte convention.
+Initialization permits at most 65,536 queue-fill clocks. Queue underflow returns
+an explicit resource error; no alternative undecimated stream is substituted.
+A private exhaustion test verifies the failure path. The contract's work bound
+includes at most 32 generation clocks per input byte, the queue-fill budget and
+initialization, rather than treating DECIM as one clock per bit.
+
+Eight answers use the designers' original C implementation mirrored in
+[QuickBMS at a frozen revision](https://github.com/LittleBigBug/QuickBMS/blob/5315ffe664b88dc09ae783ad17d9dfd252b1c927/src/libs/ecrypt/submissions/decim/v2/decim-v2.c).
+That restricted reference source remains a local validation tool; it is not
+vendored or ported into an SDK. Its overlapping register-shift `memcpy` calls
+are changed to `memmove` in the oracle, with arithmetic unchanged. Core follows
+the published mathematical specification. The profile accepts the specified
+80-bit key and 64-bit IV and does not infer DECIM-128 or the original DECIM.
+
+CryptMT v3 uses parameter set `magi06.20060628.01` and fixed 256-bit key/IV
+widths. Core owns portable safe state transitions, booter and multiplicative
+filter; no C code or architecture intrinsics are linked. Eleven oracle answers
+use the [designers' C reference frozen in SUPERCOP](https://github.com/floodyberry/supercop/blob/a351f2c29235512a042d4b6989d241a67e86ad23/crypto_stream/cryptmtv3/e/v3/e/cryptmt-v3.c).
+Both scalar and SSE2 implementations agree on full 1248-byte blocks. The
+upstream partial-block path is inconsistent with full-stream prefixes for some
+lengths, including 3, 7, 8 and 2501 bytes. Oracles therefore generate whole blocks
+and truncate afterwards; Core generates that consistent full-block stream for
+all byte lengths. Tests cover those tails, SFMT transitions and nonzero data.
+The validation-only reference also fixes `sizeof(pointer)` clearing and its
+undersized typed array view; SIMD uses `-fno-inline` to avoid duplicate CPUID
+assembly labels. Those changes do not alter the reference arithmetic. This
+qualification is interoperability evidence, not a security audit or a claim
+that CryptMT is suitable as a system random-number source.

@@ -1,6 +1,9 @@
 //! Explicit historical stream profiles. Raw output has no authentication or
 //! constant-time guarantee; RC4 is broken. No state is retained between calls.
 mod catalog;
+mod hc128;
+mod permutation;
+mod trivium;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
@@ -16,7 +19,7 @@ pub const ENCRYPT: &str = "cipher.stream.encrypt";
 pub const DECRYPT: &str = "cipher.stream.decrypt";
 
 macro_rules! profiles {
-    ($(($variant:ident, $name:literal, $min:literal, $max:literal, $iv:literal)),+ $(,)?) => {
+    ($(($variant:ident, $name:literal, $min:literal, $max:literal, $iv_min:literal, $iv_max:literal)),+ $(,)?) => {
         /// Exact named construction and initialization; there is no default.
         #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
         pub enum Profile { $(#[serde(rename=$name)] $variant,)+ }
@@ -24,16 +27,23 @@ macro_rules! profiles {
             pub const ALL: &[Self] = &[$(Self::$variant,)+];
             pub const NAMES: &[&str] = &[$($name,)+];
             fn key_range(self) -> (usize, usize) { match self { $(Self::$variant => ($min,$max),)+ } }
-            fn nonce_bytes(self) -> usize { match self { $(Self::$variant => $iv,)+ } }
+            fn nonce_range(self) -> (usize,usize) { match self { $(Self::$variant => ($iv_min,$iv_max),)+ } }
         }
     }
 }
 profiles! {
-    (Rc4, "rc4_rfc6229_v1", 1, 256, 0),
-    (Rc4Drop, "rc4_drop_v1", 1, 256, 0),
-    (Hc256, "hc256_wu2004_v1", 32, 32, 32),
-    (Rabbit, "rabbit_rfc4503_iv_le_v1", 16, 16, 8),
-    (RabbitKeyOnly, "rabbit_rfc4503_key_only_le_v1", 16, 16, 0),
+    (Rc4, "rc4_rfc6229_v1", 1, 256, 0, 0),
+    (Rc4Drop, "rc4_drop_v1", 1, 256, 0, 0),
+    (Hc256, "hc256_wu2004_v1", 32, 32, 32, 32),
+    (Rabbit, "rabbit_rfc4503_iv_le_v1", 16, 16, 8, 8),
+    (RabbitKeyOnly, "rabbit_rfc4503_key_only_le_v1", 16, 16, 0, 0),
+    (Rc4a, "rc4a_fse2004_rc4_k2_same_length_v1", 1, 256, 0, 0),
+    (Vmpc, "vmpc_zoltak2004_iv_v1", 16, 64, 16, 64),
+    (VmpcKsa3, "vmpc_ksa3_iv_v1", 16, 64, 16, 64),
+    (Spritz, "spritz_rs2014_add_key_only_v1", 1, 256, 0, 0),
+    (SpritzIv, "spritz_rs2014_add_iv_v1", 1, 256, 0, 256),
+    (Hc128, "hc128_wu2008_le_v1", 16, 16, 16, 16),
+    (Trivium, "trivium_estream80_v1", 10, 10, 10, 10),
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -95,7 +105,8 @@ impl Settings {
         if !(min..=max).contains(&key.len()) {
             return Err(invalid("key_hex"));
         }
-        if nonce.len() != p.profile.nonce_bytes() {
+        let (iv_min, iv_max) = p.profile.nonce_range();
+        if !(iv_min..=iv_max).contains(&nonce.len()) {
             return Err(invalid("nonce_hex"));
         }
         let discard_bytes = match (p.profile, p.discard_bytes) {
@@ -130,14 +141,14 @@ fn invalid(parameter: &'static str) -> OperationError {
 /// Encrypt at most 64 KiB with exact profile settings. No nonce generation,
 /// padding, KDF, authentication or persistent key/position tracking occurs.
 pub fn encrypt(input: &[u8], settings: &Settings) -> Result<Vec<u8>, OperationError> {
-    transform(input, settings)
+    transform(input, settings, false)
 }
 /// Decrypt the same exact raw profile. Successful byte production does not
 /// establish authenticity or correct key selection.
 pub fn decrypt(input: &[u8], settings: &Settings) -> Result<Vec<u8>, OperationError> {
-    transform(input, settings)
+    transform(input, settings, true)
 }
-fn transform(input: &[u8], s: &Settings) -> Result<Vec<u8>, OperationError> {
+fn transform(input: &[u8], s: &Settings, decrypting: bool) -> Result<Vec<u8>, OperationError> {
     if input.len() > MAX_INPUT {
         return Err(OperationError::new(
             ErrorCode::ResourceLimit,
@@ -146,6 +157,21 @@ fn transform(input: &[u8], s: &Settings) -> Result<Vec<u8>, OperationError> {
     }
     let mut output = input.to_vec();
     match s.profile {
+        Profile::Rc4a => permutation::rc4a(&mut output, &s.key),
+        Profile::Vmpc | Profile::VmpcKsa3 => permutation::vmpc(
+            &mut output,
+            &s.key,
+            &s.nonce,
+            s.profile == Profile::VmpcKsa3,
+        ),
+        Profile::Spritz | Profile::SpritzIv => permutation::spritz(
+            &mut output,
+            &s.key,
+            (s.profile == Profile::SpritzIv).then_some(&s.nonce),
+            decrypting,
+        ),
+        Profile::Hc128 => hc128::apply(&mut output, &s.key, &s.nonce),
+        Profile::Trivium => trivium::apply(&mut output, &s.key, &s.nonce),
         Profile::Rc4 | Profile::Rc4Drop => {
             let mut c = rc4::Rc4::new_from_slice(&s.key).expect("validated key");
             let mut scratch = Zeroizing::new([0u8; 64]);

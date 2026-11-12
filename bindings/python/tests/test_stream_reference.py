@@ -23,6 +23,11 @@ def test_independent_stream_answers(vector):
     assert cube.stream_decrypt(encrypted, parameters) == plain
     for function in (cube.stream_encrypt, cube.stream_decrypt):
         assert function(b"", parameters) == b""
+    for field, value in [("key_hex", ""), ("key_hex", "00" * 257), ("nonce_hex", None)]:
+        invalid = dict(vector["parameters"], **{field: value})
+        for function in (cube.stream_encrypt, cube.stream_decrypt):
+            with pytest.raises(ValueError):
+                function(b"", json.dumps(invalid))
 
 
 def test_stream_errors_do_not_echo_private_settings():

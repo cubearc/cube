@@ -13,6 +13,9 @@ test('stream references execute independent answers in actual Wasm',()=>{
       const execute=input=>cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input},parameters:v.parameters}).output;
       assert.deepEqual(execute(bytes(input)),bytes(expected),v.parameters.profile);
       assert.deepEqual(execute(new Uint8Array()),new Uint8Array());
+      for(const change of [{key_hex:''},{key_hex:'00'.repeat(257)},{nonce_hex:null}]){
+        assert.throws(()=>cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input:new Uint8Array()},parameters:{...v.parameters,...change}}),{code:'invalid_parameter'});
+      }
     }
   }
   const contract=JSON.parse(cube.catalogJson()).operations.find(o=>o.operation==='cipher.stream.encrypt');

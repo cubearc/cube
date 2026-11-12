@@ -20980,7 +20980,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{0}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
         },
         "profile": {
           "const": "rc4_rfc6229_v1"
@@ -21007,7 +21007,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{0}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
         },
         "profile": {
           "const": "rc4_drop_v1"
@@ -21030,7 +21030,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{64}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
         },
         "profile": {
           "const": "hc256_wu2004_v1"
@@ -21052,7 +21052,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{16}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
         },
         "profile": {
           "const": "rabbit_rfc4503_iv_le_v1"
@@ -21074,10 +21074,164 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{0}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
         },
         "profile": {
           "const": "rabbit_rfc4503_key_only_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
+        },
+        "profile": {
+          "const": "rc4a_fse2004_rc4_k2_same_length_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "profile": {
+          "const": "vmpc_zoltak2004_iv_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "profile": {
+          "const": "vmpc_ksa3_iv_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
+        },
+        "profile": {
+          "const": "spritz_rs2014_add_key_only_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,256}$"
+        },
+        "profile": {
+          "const": "spritz_rs2014_add_iv_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "hc128_wu2008_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "profile": {
+          "const": "trivium_estream80_v1"
         }
       },
       "additionalProperties": false,
@@ -21102,7 +21256,14 @@ Parameters:
         "rc4_drop_v1",
         "hc256_wu2004_v1",
         "rabbit_rfc4503_iv_le_v1",
-        "rabbit_rfc4503_key_only_le_v1"
+        "rabbit_rfc4503_key_only_le_v1",
+        "rc4a_fse2004_rc4_k2_same_length_v1",
+        "vmpc_zoltak2004_iv_v1",
+        "vmpc_ksa3_iv_v1",
+        "spritz_rs2014_add_key_only_v1",
+        "spritz_rs2014_add_iv_v1",
+        "hc128_wu2008_le_v1",
+        "trivium_estream80_v1"
       ]
     }
   }
@@ -21173,7 +21334,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{0}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
         },
         "profile": {
           "const": "rc4_rfc6229_v1"
@@ -21200,7 +21361,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{0}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
         },
         "profile": {
           "const": "rc4_drop_v1"
@@ -21223,7 +21384,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{64}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
         },
         "profile": {
           "const": "hc256_wu2004_v1"
@@ -21245,7 +21406,7 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{16}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){8,8}$"
         },
         "profile": {
           "const": "rabbit_rfc4503_iv_le_v1"
@@ -21267,10 +21428,164 @@ Parameters:
         },
         "nonce_hex": {
           "type": "string",
-          "pattern": "^[0-9A-Fa-f]{0}$"
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
         },
         "profile": {
           "const": "rabbit_rfc4503_key_only_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
+        },
+        "profile": {
+          "const": "rc4a_fse2004_rc4_k2_same_length_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "profile": {
+          "const": "vmpc_zoltak2004_iv_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,64}$"
+        },
+        "profile": {
+          "const": "vmpc_ksa3_iv_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,0}$"
+        },
+        "profile": {
+          "const": "spritz_rs2014_add_key_only_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){0,256}$"
+        },
+        "profile": {
+          "const": "spritz_rs2014_add_iv_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "hc128_wu2008_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "profile": {
+          "const": "trivium_estream80_v1"
         }
       },
       "additionalProperties": false,
@@ -21295,7 +21610,14 @@ Parameters:
         "rc4_drop_v1",
         "hc256_wu2004_v1",
         "rabbit_rfc4503_iv_le_v1",
-        "rabbit_rfc4503_key_only_le_v1"
+        "rabbit_rfc4503_key_only_le_v1",
+        "rc4a_fse2004_rc4_k2_same_length_v1",
+        "vmpc_zoltak2004_iv_v1",
+        "vmpc_ksa3_iv_v1",
+        "spritz_rs2014_add_key_only_v1",
+        "spritz_rs2014_add_iv_v1",
+        "hc128_wu2008_le_v1",
+        "trivium_estream80_v1"
       ]
     }
   }

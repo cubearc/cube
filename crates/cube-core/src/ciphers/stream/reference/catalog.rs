@@ -1,6 +1,7 @@
 use super::*;
 use crate::operations::{self as o, contracts as c, metadata as m};
 use serde_json::json;
+const DESCRIPTION: &str = "Exact raw historical stream profiles with explicit keys and initialization; no authentication.";
 const PARAMETERS: &[o::Parameter] = &[
     o::Parameter {
         name: "profile",
@@ -47,7 +48,7 @@ const fn row(
         descriptor: o::Descriptor {
             id,
             category: "ciphers",
-            description: "Exact raw historical stream profiles with explicit keys and initialization; no authentication.",
+            description: DESCRIPTION,
             input_type: "bytes",
             output_type: "bytes",
             parameters: PARAMETERS,
@@ -69,7 +70,7 @@ const fn row(
                 sensitive_parameters: &["key_hex"],
             },
             profile: m::Profile {
-                variant: "Explicit raw stream construction",
+                variant: DESCRIPTION,
                 alphabet: "Exact bytes.",
                 key: "Required exact key and explicit nonce bytes, including an empty nonce for a key-only profile.",
                 key_advancement: "Fresh full initialization for each call. RC4-drop requires its explicit skipped-byte count. No hidden counter, nonce generation or KDF.",
@@ -84,6 +85,10 @@ const fn row(
                 "https://www.rfc-editor.org/rfc/rfc6229",
                 "https://www.rfc-editor.org/rfc/rfc4503",
                 "https://personal.ntu.edu.sg/wuhj/research/hc/index.html",
+                "https://www.vmpcfunction.com/vmpc.pdf",
+                "https://people.csail.mit.edu/rivest/pubs/RS14.pdf",
+                "https://www.esat.kuleuven.be/cosic/publications/article-40.pdf",
+                "https://cr.yp.to/streamciphers/trivium/desc.pdf",
             ],
         }),
     }
@@ -124,8 +129,10 @@ fn parameters_schema() -> schemars::Schema {
                 let (min, max) = p.key_range();
                 row["properties"]["key_hex"]["pattern"] =
                     json!(format!("^(?:[0-9A-Fa-f]{{2}}){{{min},{max}}}$"));
-                row["properties"]["nonce_hex"]["pattern"] =
-                    json!(format!("^[0-9A-Fa-f]{{{}}}$", 2 * p.nonce_bytes()));
+                row["properties"]["nonce_hex"]["pattern"] = {
+                    let (min, max) = p.nonce_range();
+                    json!(format!("^(?:[0-9A-Fa-f]{{2}}){{{min},{max}}}$"))
+                };
                 if *p == Profile::Rc4Drop {
                     row["required"] = json!(["profile", "key_hex", "nonce_hex", "discard_bytes"]);
                     row["properties"]["discard_bytes"] =

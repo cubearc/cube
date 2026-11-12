@@ -14,6 +14,11 @@ fn independent_answers_execute_both_directions_with_exact_profile_coverage() {
     assert_eq!(profiles, Profile::NAMES.iter().copied().collect());
     for v in vectors {
         let p = &v["parameters"];
+        let contract = cube_core::operations::require(reference::ENCRYPT)
+            .unwrap()
+            .contract()
+            .unwrap();
+        contract.validate_parameters(p).unwrap();
         let settings = Settings::parse(&p.to_string()).unwrap();
         let plain = hex::decode(v["plaintext_hex"].as_str().unwrap()).unwrap();
         let ciphertext = hex::decode(v["ciphertext_hex"].as_str().unwrap()).unwrap();
@@ -45,6 +50,42 @@ fn independent_answers_execute_both_directions_with_exact_profile_coverage() {
         }
         assert_eq!(reference::encrypt(&plain, &settings).unwrap(), ciphertext);
         assert_eq!(reference::decrypt(&ciphertext, &settings).unwrap(), plain);
+    }
+}
+
+#[test]
+fn each_profile_rejects_invalid_material_in_schema_and_runtime() {
+    use cube_core::ciphers::stream::reference::{self, Settings};
+    let contract = cube_core::operations::require(reference::ENCRYPT)
+        .unwrap()
+        .contract()
+        .unwrap();
+    let vectors: Vec<serde_json::Value> =
+        serde_json::from_str(include_str!("../src/ciphers/stream/reference/vectors.json")).unwrap();
+    let mut seen = std::collections::BTreeSet::new();
+    for v in vectors {
+        let p = &v["parameters"];
+        if !seen.insert(p["profile"].as_str().unwrap().to_owned()) {
+            continue;
+        }
+        for (field, value) in [
+            ("key_hex", json!("")),
+            ("key_hex", json!("00".repeat(257))),
+            ("nonce_hex", json!("00".repeat(257))),
+            ("nonce_hex", json!(null)),
+            ("key_hex", json!("SECRET")),
+            ("unrelated", json!(true)),
+        ] {
+            let mut changed = p.clone();
+            changed[field] = value;
+            assert!(
+                contract.validate_parameters(&changed).is_err(),
+                "{field}:{}",
+                p["profile"]
+            );
+            let e = Settings::parse(&changed.to_string()).unwrap_err();
+            assert!(!format!("{e:?}").contains("SECRET"));
+        }
     }
 }
 

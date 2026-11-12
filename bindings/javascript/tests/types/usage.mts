@@ -228,3 +228,9 @@ cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint
 cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'rc4_drop_v1',key_hex:'00',nonce_hex:''}});
 // @ts-expect-error HC-256 does not accept an RC4 skip setting.
 cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'hc256_wu2004_v1',key_hex:'00',nonce_hex:'00',discard_bytes:0}});
+
+const spritzBytes:Uint8Array=cube.execute({operation:'cipher.stream.decrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'spritz_rs2014_add_iv_v1',key_hex:'414243',nonce_hex:''}}).output;
+const vmpcBytes:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array(7)},parameters:{profile:'vmpc_ksa3_iv_v1',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(16)}}).output;
+void [spritzBytes,vmpcBytes];
+// @ts-expect-error A VMPC profile forbids RC4-drop settings.
+cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'vmpc_zoltak2004_iv_v1',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(16),discard_bytes:0}});

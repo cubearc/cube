@@ -181,3 +181,33 @@ pub(super) fn transform(data: &[u8], key: &[u8], width: usize, decrypting: bool)
     }
     output
 }
+
+/// LEX v2's full AES128 initialization and ten leaky rounds per40 bytes.
+/// The eSTREAM wrapper uses LE IV/output words and BE key words.
+pub(crate) fn lex128(output: &mut [u8], key: &[u8], iv: &[u8]) {
+    let schedule = Schedule::new(key, 16);
+    let mut state = Zeroizing::new([0u8; 16]);
+    state.copy_from_slice(iv);
+    for word in state.as_chunks_mut::<4>().0 {
+        word.reverse();
+    }
+    schedule.apply(&mut state[..], false);
+    for chunk in output.chunks_mut(40) {
+        for (round, bytes) in (1..=10).zip(chunk.chunks_mut(4)) {
+            for b in state.iter_mut() {
+                *b = SBOX[*b as usize];
+            }
+            schedule.shifts(&mut state[..], false);
+            mix_columns(&mut state[..], false);
+            schedule.add_key(&mut state[..], round);
+            let indices = if round & 1 != 0 {
+                [10, 2, 8, 0]
+            } else {
+                [11, 3, 9, 1]
+            };
+            for (b, i) in bytes.iter_mut().zip(indices) {
+                *b ^= state[i];
+            }
+        }
+    }
+}

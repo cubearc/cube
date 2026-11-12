@@ -31,3 +31,12 @@ test('stream settings and byte limits fail without private excerpts',()=>{
     assert.throws(()=>invoke(new Uint8Array(65537),good),{code:'resource_limit'});
   }
 });
+
+test('SEAL exposes the full last position and rejects counter wrap',()=>{
+ for(const profile of ['seal3_be_l32768_v1','seal3_le_l32768_v1'])for(const mode of ['encrypt','decrypt']){
+  const parameters={profile,key_hex:'00'.repeat(20),nonce_hex:'ffffffff'};
+  const invoke=n=>cube.execute({operation:`cipher.stream.${mode}`,version:1,inputs:{input:new Uint8Array(n)},parameters}).output;
+  assert.equal(invoke(4096).length,4096);
+  assert.throws(()=>invoke(4097),{code:'resource_limit'});
+ }
+});

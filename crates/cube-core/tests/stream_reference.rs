@@ -198,3 +198,30 @@ fn rc4_rfc6229_executes_through_the_public_registry() {
         json!({"output": {"base64": cube_core::encoding::base64_encode(&expected)}})
     );
 }
+
+#[test]
+fn seal_last_position_is_complete_and_exhaustion_returns_no_output() {
+    use cube_core::ciphers::stream::reference::{self, Settings};
+    use cube_core::errors::ErrorCode;
+    for profile in ["seal3_be_l32768_v1", "seal3_le_l32768_v1"] {
+        for (nonce, available) in [("ffffffff", 4096), ("fffffffe", 8192)] {
+            let settings = Settings::parse(
+                &json!({"profile":profile,"key_hex":"00".repeat(20),"nonce_hex":nonce}).to_string(),
+            )
+            .unwrap();
+            for function in [reference::encrypt, reference::decrypt] {
+                assert_eq!(function(&[], &settings).unwrap(), Vec::<u8>::new());
+                assert_eq!(
+                    function(&vec![0; available], &settings).unwrap().len(),
+                    available
+                );
+                assert_eq!(
+                    function(&vec![0; available + 1], &settings)
+                        .unwrap_err()
+                        .code,
+                    ErrorCode::ResourceLimit
+                );
+            }
+        }
+    }
+}

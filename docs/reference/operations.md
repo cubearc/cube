@@ -21548,6 +21548,94 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){20,20}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){4,4}$"
+        },
+        "profile": {
+          "const": "seal3_be_l32768_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){20,20}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){4,4}$"
+        },
+        "profile": {
+          "const": "seal3_le_l32768_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "profile": {
+          "const": "ffcsr_h_2005_iv80_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "lex_v2_estream128_le_iv_words_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
     }
   ],
   "required": [
@@ -21585,7 +21673,11 @@ Parameters:
         "snow20_256_be_v1",
         "snow3g_sage11_words_be_v1",
         "zuc128_3gpp16_be_v1",
-        "sober128_rose2003_le_iv32_v1"
+        "sober128_rose2003_le_iv32_v1",
+        "seal3_be_l32768_v1",
+        "seal3_le_l32768_v1",
+        "ffcsr_h_2005_iv80_be_v1",
+        "lex_v2_estream128_le_iv_words_v1"
       ]
     }
   }
@@ -22224,6 +22316,94 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){20,20}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){4,4}$"
+        },
+        "profile": {
+          "const": "seal3_be_l32768_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){20,20}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){4,4}$"
+        },
+        "profile": {
+          "const": "seal3_le_l32768_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){10,10}$"
+        },
+        "profile": {
+          "const": "ffcsr_h_2005_iv80_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "lex_v2_estream128_le_iv_words_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
     }
   ],
   "required": [
@@ -22261,7 +22441,11 @@ Parameters:
         "snow20_256_be_v1",
         "snow3g_sage11_words_be_v1",
         "zuc128_3gpp16_be_v1",
-        "sober128_rose2003_le_iv32_v1"
+        "sober128_rose2003_le_iv32_v1",
+        "seal3_be_l32768_v1",
+        "seal3_le_l32768_v1",
+        "ffcsr_h_2005_iv80_be_v1",
+        "lex_v2_estream128_le_iv_words_v1"
       ]
     }
   }

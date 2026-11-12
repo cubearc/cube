@@ -144,3 +144,39 @@ the published `test key 128bits` case and nonzero odd-length input. Core owns an
 wipes the register state and bounds constant generation to 65,536 iterations;
 a private budget-exhaustion test verifies explicit failure rather than a partial
 stream. The C reference is a validation tool only.
+
+
+## SEAL, F-FCSR and LEX qualification
+
+SEAL 3.0 follows the public-domain Wei Dai/Leonard Janke
+[Crypto++ reference](https://github.com/weidai11/cryptopp/blob/5873a73a231c95771f5bbf3466a484952fb22780/seal.cpp),
+with fixed L=32768 bits per outside position. Core reuses RustCrypto SHA1's
+compression function with the exact key-derived initial state and unpadded index
+block; using a complete SHA1 hash would be a different construction. A separate
+C++ oracle mechanically adapts the upstream SEAL body and uses an independently
+written FIPS180 compression. Its complete 4096-byte published Crypto++ literal
+was checked before generating eight answers, including two position increments,
+odd lengths, both output word orders and the final position. Core rejects
+position exhaustion before returning any output; it never wraps the counter.
+The oracle adaptation and published anchor are interoperability evidence, not
+an independent security audit. SHA1 is used only as specified inside historical
+SEAL, without a collision-resistance claim.
+
+F-FCSR-H follows the permissively licensed FCSR project 2005 reference, frozen
+in [CryptoStreams](https://github.com/crocs-muni/CryptoStreams/blob/b92d96ad16679c24a9402b0d33378d1f318db23a/streams/stream_ciphers/estream/f-fcsr/f-fcsr-h.cpp).
+All five state words and all 160 initialization clocks are used. Its wrapper's
+128-bit size macros disagree with the actual ten-byte key/IV loads; Core accepts
+exactly those ten-byte inputs and names this 2005 revision explicitly. Six C++
+reference answers include nonzero data and the all-zero degenerate state. This
+broken historical construction is distinct from the later H-v2/16 setup.
+
+LEX follows the public-domain February 2008 version 2.0
+[designer reference](https://github.com/crocs-muni/CryptoStreams/blob/b92d96ad16679c24a9402b0d33378d1f318db23a/streams/stream_ciphers/estream/lex/lex.cpp).
+Core's existing Rijndael module owns the key schedule, substitution, row shifts
+and column mixing used by LEX. Ordinary AES initialization remains unchanged;
+only the explicit LEX helper exposes its different leaky-round construction.
+Five independently compiled C++ reference answers cover both zero and nonzero
+IVs, multiple 40-byte blocks and odd tails. Only the complete AES-128 profile is
+exposed: the reference's fixed 44-word key schedule must not be mistaken for
+safe support of its comments' 192/256-bit key suggestions. Full notices for all
+three reference sources ship with the SDK package.

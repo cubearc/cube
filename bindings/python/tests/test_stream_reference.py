@@ -46,3 +46,14 @@ def test_rc4_native_execution_and_inverse():
     expected = bytes.fromhex("b2396305f03dc027ccc3524a0a1118a8")
     assert cube.stream_encrypt(bytes(16), parameters) == expected
     assert cube.stream_decrypt(expected, parameters) == bytes(16)
+
+
+@pytest.mark.parametrize("profile", ["seal3_be_l32768_v1", "seal3_le_l32768_v1"])
+def test_seal_last_position_and_exhaustion(profile):
+    parameters = json.dumps(
+        dict(profile=profile, key_hex="00" * 20, nonce_hex="ffffffff")
+    )
+    for function in (cube.stream_encrypt, cube.stream_decrypt):
+        assert len(function(bytes(4096), parameters)) == 4096
+        with pytest.raises(ValueError, match="counter exhausted"):
+            function(bytes(4097), parameters)

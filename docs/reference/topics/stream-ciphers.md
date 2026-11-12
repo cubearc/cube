@@ -103,6 +103,10 @@ values. RC4 is broken; these raw transforms provide no authenticity.
 | `snow3g_sage11_words_be_v1` | 16 | 16 | SAGE 1.1 raw SNOW 3G, ascending key/IV words, each big-endian |
 | `zuc128_3gpp16_be_v1` | 16 | 16 | ZUC-128 v1.6 raw generator, big-endian output words |
 | `sober128_rose2003_le_iv32_v1` | 16 | 4 | SOBER-128 with 128-bit key, 32-bit IV and little-endian words |
+| `seal3_be_l32768_v1` | 20 | 4 | SEAL 3.0, 32,768 bits per position; big-endian stream words |
+| `seal3_le_l32768_v1` | 20 | 4 | Same SEAL construction, little-endian stream words |
+| `ffcsr_h_2005_iv80_be_v1` | 10 | 10 | F-FCSR-H 2005, fixed 80-bit IV, 160 setup clocks |
+| `lex_v2_estream128_le_iv_words_v1` | 16 | 16 | LEX 2.0 February 2008, AES-128 key, little-endian IV/stream words |
 
 Rabbit keys, IVs and each generated 128-bit block use least-significant-byte-first
 order. RFC 4503 Appendix A prints integers in the opposite octet order; reverse
@@ -153,6 +157,20 @@ step. No telecommunications certification is claimed.
 SOBER-128 loads key/IV words little-endian, folds their byte lengths and performs
 all 17 diffusion steps. Constant generation is bounded to 65,536 steps; exceeding
 that bound returns `resource_limit` before any output is returned.
+
+SEAL always reads its key and four-byte position counter big-endian. Its named
+byte order applies only to generated words. Each position provides exactly 4096
+bytes (four 1024-byte subblocks), then the position increments. Position
+`ffffffff` permits 4096 bytes; 4097 bytes fail with `resource_limit` before output
+is returned. There is no implicit wrap or caller-selected L parameter.
+
+F-FCSR-H's named profile fixes the 2005 initialization and 80-bit IV, distinct
+from H-v2 and F-FCSR-16. It is cryptographically broken; an all-zero key and IV
+produce an all-zero stream. No nonce, key or weak-state repair is inferred.
+LEX's key words are big-endian, its IV words are little-endian, and each leaked
+word is emitted little-endian. Initialization uses ordinary AES-128, followed by
+ten full leaky rounds per 40-byte block; these rounds include MixColumns in the
+last round and omit the ordinary AES initial key addition.
 
 Each call starts a fresh stream. No key/nonce reuse tracking or nonce generation
 is performed. Empty input still requires valid settings. Private JSON is bounded

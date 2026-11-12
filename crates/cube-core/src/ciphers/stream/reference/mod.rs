@@ -1,10 +1,12 @@
 //! Explicit historical stream profiles. Raw output has no authentication or
 //! constant-time guarantee; RC4 is broken. No state is retained between calls.
 mod catalog;
+mod fcsr;
 mod grain_isaac;
 mod hc128;
 mod panama;
 mod permutation;
+mod seal;
 mod snow;
 mod sober;
 mod sosemanuk;
@@ -66,6 +68,10 @@ profiles! {
     (Snow3g, "snow3g_sage11_words_be_v1", 16, 16, 16, 16),
     (Zuc128, "zuc128_3gpp16_be_v1", 16, 16, 16, 16),
     (Sober128, "sober128_rose2003_le_iv32_v1", 16, 16, 4, 4),
+    (SealBe, "seal3_be_l32768_v1", 20, 20, 4, 4),
+    (SealLe, "seal3_le_l32768_v1", 20, 20, 4, 4),
+    (Fcsr, "ffcsr_h_2005_iv80_be_v1", 10, 10, 10, 10),
+    (Lex, "lex_v2_estream128_le_iv_words_v1", 16, 16, 16, 16),
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -179,6 +185,17 @@ fn transform(input: &[u8], s: &Settings, decrypting: bool) -> Result<Vec<u8>, Op
     }
     let mut output = input.to_vec();
     match s.profile {
+        Profile::SealBe | Profile::SealLe => {
+            seal::apply(&mut output, &s.key, &s.nonce, s.profile == Profile::SealLe).map_err(
+                |_| {
+                    OperationError::new(ErrorCode::ResourceLimit, "SEAL position counter exhausted")
+                },
+            )?
+        }
+        Profile::Fcsr => fcsr::apply(&mut output, &s.key, &s.nonce),
+        Profile::Lex => {
+            crate::ciphers::block_profiles::rijndael::lex128(&mut output, &s.key, &s.nonce)
+        }
         Profile::Snow20_128 | Profile::Snow20_256 | Profile::Snow3g => {
             snow::apply(&mut output, &s.key, &s.nonce, s.profile == Profile::Snow3g)
         }

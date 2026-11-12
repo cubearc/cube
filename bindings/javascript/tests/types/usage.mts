@@ -243,3 +243,8 @@ for (const profile of ['snow20_128_be_v1','snow20_256_be_v1','snow3g_sage11_word
  const output:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile,key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(profile==='sober128_rose2003_le_iv32_v1'?4:16)}}).output;
  void output;
 }
+
+for (const profile of ['seal3_be_l32768_v1','seal3_le_l32768_v1','ffcsr_h_2005_iv80_be_v1','lex_v2_estream128_le_iv_words_v1'] as const) {
+ const output:Uint8Array=cube.execute({operation:'cipher.stream.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile,key_hex:'00'.repeat(20),nonce_hex:'00'.repeat(4)}}).output;
+ void output;
+}

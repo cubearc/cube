@@ -34,35 +34,6 @@ fn linear(x: &mut [u32; 4]) {
     x[0] = x[0].rotate_left(5);
     x[2] = x[2].rotate_left(22);
 }
-const fn gf_mul(mut a: u8, mut b: u8) -> u8 {
-    let mut r = 0;
-    while b != 0 {
-        if b & 1 != 0 {
-            r ^= a;
-        }
-        a = (a << 1) ^ if a & 128 != 0 { 0xa9 } else { 0 };
-        b >>= 1;
-    }
-    r
-}
-const fn masks(coeff: [u8; 4]) -> [u32; 256] {
-    let mut table = [0; 256];
-    let mut i = 0;
-    while i < 256 {
-        table[i] = u32::from_be_bytes([
-            gf_mul(i as u8, coeff[0]),
-            gf_mul(i as u8, coeff[1]),
-            gf_mul(i as u8, coeff[2]),
-            gf_mul(i as u8, coeff[3]),
-        ]);
-        i += 1;
-    }
-    table
-}
-// beta^23, beta^245, beta^48, beta^239 over x^8+x^7+x^5+x^3+1.
-const MUL: [u32; 256] = masks([0xe1, 0x9f, 0xcf, 0x13]);
-// Inverse alpha derived in the same field: beta^16, beta^39, beta^6, beta^64.
-const DIV: [u32; 256] = masks([0x18, 0x0f, 0x40, 0xcd]);
 fn schedule(key: &[u8]) -> Zeroizing<[[u32; 4]; 25]> {
     let mut padded = Zeroizing::new([0u8; 32]);
     padded[..key.len()].copy_from_slice(key);
@@ -128,11 +99,7 @@ pub(super) fn apply(output: &mut [u8], key: &[u8], iv: &[u8]) {
             r[0] = next_r1;
             f[i] = s[9].wrapping_add(r[0]) ^ r[1];
             dropped[i] = s[0];
-            let next = (s[0] << 8)
-                ^ MUL[(s[0] >> 24) as usize]
-                ^ (s[3] >> 8)
-                ^ DIV[(s[3] & 255) as usize]
-                ^ s[9];
+            let next = super::word_field::mul(s[0]) ^ super::word_field::div(s[3]) ^ s[9];
             s.copy_within(1..10, 0);
             s[9] = next;
         }

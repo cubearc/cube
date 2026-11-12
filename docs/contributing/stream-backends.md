@@ -115,3 +115,32 @@ Little-endian oracle values explicitly convert each key/IV/output word from the
 reference's big-endian representation. Both key-only and IV profiles use the
 full 32 discarded pull rounds. The broken PANAMA hashing construction is separate
 from these raw stream profiles.
+
+
+## SNOW, ZUC and SOBER qualification
+
+SNOW 2.0 follows the designers' reference state transitions, using the shared
+SOSEMANUK field arithmetic and Core's existing Rijndael S-box. Independent answers
+use the original C reference frozen in SUPERCOP at
+`a351f2c29235512a042d4b6989d241a67e86ad23`; its eSTREAM wrapper's IV/output
+word conversion is explicit in the validation oracle. SNOW 3G uses the
+[SAGE 1.1 Annex 4 reference mirror](https://github.com/P1sec/CryptoMobile/blob/e53b92924ca8f43e8caf45b31aff5785414e3d93/C_alg/SNOW_3G.c),
+with the ascending key/IV word-array convention independently checked against all
+four fixed raw-generator test sets, including the 10,000-byte case. Neither C
+implementation is linked into Core or an SDK.
+
+ZUC-128's 256-byte substitution tables retain the Bouncy Castle MIT notice in
+`THIRD_PARTY_NOTICES`. Core owns the portable modulo-2^31-minus-1 recurrence,
+bit reorganization and nonlinear function. Independent Bouncy Castle 1.83 answers
+include all four fixed GSMA raw-generator cases and odd-length nonzero data.
+The profile's 64 KiB raw-generator bound does not imply support for the separate
+EEA3 framing protocol or its bounds. SNOW and ZUC are historical interoperability
+profiles without a certification or constant-time guarantee.
+
+SOBER-128 follows the
+[LibTomCrypt reference](https://github.com/libtom/libtomcrypt/blob/6c6d5104de66f3ca0dfd7b68540ef86869982b07/src/stream/sober128/sober128_stream.c)
+under its public-domain dedication. Four independent C-reference answers include
+the published `test key 128bits` case and nonzero odd-length input. Core owns and
+wipes the register state and bounds constant generation to 65,536 iterations;
+a private budget-exhaustion test verifies explicit failure rather than a partial
+stream. The C reference is a validation tool only.

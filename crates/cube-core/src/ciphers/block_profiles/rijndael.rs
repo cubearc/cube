@@ -43,7 +43,7 @@ const fn substitution() -> [u8; 256] {
     }
     table
 }
-const SBOX: [u8; 256] = substitution();
+pub(crate) const SBOX: [u8; 256] = substitution();
 const fn inverse_substitution() -> [u8; 256] {
     let mut table = [0; 256];
     let mut i = 0;

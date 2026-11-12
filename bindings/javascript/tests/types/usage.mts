@@ -238,3 +238,8 @@ const panamaBytes:Uint8Array=cube.execute({operation:'cipher.stream.decrypt',ver
 void [sosemanukBytes,strumokBytes,panamaBytes];
 // @ts-expect-error A VMPC profile forbids RC4-drop settings.
 cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'vmpc_zoltak2004_iv_v1',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(16),discard_bytes:0}});
+
+for (const profile of ['snow20_128_be_v1','snow20_256_be_v1','snow3g_sage11_words_be_v1','zuc128_3gpp16_be_v1','sober128_rose2003_le_iv32_v1'] as const) {
+ const output:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile,key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(profile==='sober128_rose2003_le_iv32_v1'?4:16)}}).output;
+ void output;
+}

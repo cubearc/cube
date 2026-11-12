@@ -5,9 +5,13 @@ mod grain_isaac;
 mod hc128;
 mod panama;
 mod permutation;
+mod snow;
+mod sober;
 mod sosemanuk;
 mod strumok;
 mod trivium;
+mod word_field;
+mod zuc;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
@@ -57,6 +61,11 @@ profiles! {
     (PanamaLeKeyOnly, "panama_1998_le_key_only_v1", 32, 32, 0, 0),
     (PanamaBeIv, "panama_1998_be_iv256_v1", 32, 32, 32, 32),
     (PanamaLeIv, "panama_1998_le_iv256_v1", 32, 32, 32, 32),
+    (Snow20_128, "snow20_128_be_v1", 16, 16, 16, 16),
+    (Snow20_256, "snow20_256_be_v1", 32, 32, 16, 16),
+    (Snow3g, "snow3g_sage11_words_be_v1", 16, 16, 16, 16),
+    (Zuc128, "zuc128_3gpp16_be_v1", 16, 16, 16, 16),
+    (Sober128, "sober128_rose2003_le_iv32_v1", 16, 16, 4, 4),
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -170,6 +179,16 @@ fn transform(input: &[u8], s: &Settings, decrypting: bool) -> Result<Vec<u8>, Op
     }
     let mut output = input.to_vec();
     match s.profile {
+        Profile::Snow20_128 | Profile::Snow20_256 | Profile::Snow3g => {
+            snow::apply(&mut output, &s.key, &s.nonce, s.profile == Profile::Snow3g)
+        }
+        Profile::Zuc128 => zuc::apply(&mut output, &s.key, &s.nonce),
+        Profile::Sober128 => sober::apply(&mut output, &s.key, &s.nonce).map_err(|_| {
+            OperationError::new(
+                ErrorCode::ResourceLimit,
+                "SOBER-128 initialization work limit exceeded",
+            )
+        })?,
         Profile::Sosemanuk => sosemanuk::apply(&mut output, &s.key, &s.nonce),
         Profile::GrainV1 => grain_isaac::grain(&mut output, &s.key, &s.nonce),
         Profile::Isaac32 => grain_isaac::isaac(&mut output, &s.key),

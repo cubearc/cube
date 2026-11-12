@@ -21438,6 +21438,116 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "snow20_128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "snow20_256_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "snow3g_sage11_words_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "zuc128_3gpp16_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){4,4}$"
+        },
+        "profile": {
+          "const": "sober128_rose2003_le_iv32_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
     }
   ],
   "required": [
@@ -21470,7 +21580,12 @@ Parameters:
         "panama_1998_be_key_only_v1",
         "panama_1998_le_key_only_v1",
         "panama_1998_be_iv256_v1",
-        "panama_1998_le_iv256_v1"
+        "panama_1998_le_iv256_v1",
+        "snow20_128_be_v1",
+        "snow20_256_be_v1",
+        "snow3g_sage11_words_be_v1",
+        "zuc128_3gpp16_be_v1",
+        "sober128_rose2003_le_iv32_v1"
       ]
     }
   }
@@ -21999,6 +22114,116 @@ Parameters:
         "key_hex",
         "nonce_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "snow20_128_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "snow20_256_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "snow3g_sage11_words_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "profile": {
+          "const": "zuc128_3gpp16_be_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){4,4}$"
+        },
+        "profile": {
+          "const": "sober128_rose2003_le_iv32_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
     }
   ],
   "required": [
@@ -22031,7 +22256,12 @@ Parameters:
         "panama_1998_be_key_only_v1",
         "panama_1998_le_key_only_v1",
         "panama_1998_be_iv256_v1",
-        "panama_1998_le_iv256_v1"
+        "panama_1998_le_iv256_v1",
+        "snow20_128_be_v1",
+        "snow20_256_be_v1",
+        "snow3g_sage11_words_be_v1",
+        "zuc128_3gpp16_be_v1",
+        "sober128_rose2003_le_iv32_v1"
       ]
     }
   }

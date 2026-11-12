@@ -98,6 +98,11 @@ values. RC4 is broken; these raw transforms provide no authenticity.
 | `panama_1998_le_key_only_v1` | 32 | Empty | Same key-only construction, little-endian words |
 | `panama_1998_be_iv256_v1` | 32 | 32 | Key push, IV push and 32 discarded pull rounds; big-endian words |
 | `panama_1998_le_iv256_v1` | 32 | 32 | Same IV construction, little-endian words |
+| `snow20_128_be_v1` | 16 | 16 | SNOW 2.0, big-endian key/IV integers and output words |
+| `snow20_256_be_v1` | 32 | 16 | SNOW 2.0 with its distinct 256-bit key initialization |
+| `snow3g_sage11_words_be_v1` | 16 | 16 | SAGE 1.1 raw SNOW 3G, ascending key/IV words, each big-endian |
+| `zuc128_3gpp16_be_v1` | 16 | 16 | ZUC-128 v1.6 raw generator, big-endian output words |
+| `sober128_rose2003_le_iv32_v1` | 16 | 4 | SOBER-128 with 128-bit key, 32-bit IV and little-endian words |
 
 Rabbit keys, IVs and each generated 128-bit block use least-significant-byte-first
 order. RFC 4503 Appendix A prints integers in the opposite octet order; reverse
@@ -137,6 +142,18 @@ PANAMA word order applies to key, IV and generated stream words. An absent IV
 and an all-zero 32-byte IV are distinct initializations. The raw stream
 construction does not expose PANAMA hashing, padding or its broken hash mode.
 
+SNOW 2.0 loads the first key word as k3 (128-bit key) or k7 (256-bit key),
+and the first IV word as IV3. SNOW 3G instead uses the ascending SAGE word-array
+convention: the first supplied key word is k0 and the first IV word is IV0.
+Every word uses big-endian bytes. These profiles expose raw generators;
+COUNT/BEARER/DIRECTION framing and telecommunications integrity operations are
+separate constructions. ZUC uses all 32 setup rounds and the discarded first
+step. No telecommunications certification is claimed.
+
+SOBER-128 loads key/IV words little-endian, folds their byte lengths and performs
+all 17 diffusion steps. Constant generation is bounded to 65,536 steps; exceeding
+that bound returns `resource_limit` before any output is returned.
+
 Each call starts a fresh stream. No key/nonce reuse tracking or nonce generation
 is performed. Empty input still requires valid settings. Private JSON is bounded
 to 4096 bytes; unknown fields, duplicates, null settings and wrong widths fail
@@ -147,6 +164,8 @@ Rust uses `ciphers::stream::reference::{Settings, encrypt, decrypt}`. Python use
 `cube.stream_encrypt(data, parameters_json)` and `cube.stream_decrypt`.
 JavaScript/TypeScript/WebAssembly use the same named operations through `execute`,
 with `input` as bytes and the JSON fields as parameters. Core owns all algorithms.
+Play's native graph applies its existing 8 KiB aggregate input bound,
+including the serialized parameter document.
 Private output retention in Play requires explicit consent; no linear recipe
 adapter or automatic capture is enabled. These backends have no independent audit
 or constant-time guarantee.

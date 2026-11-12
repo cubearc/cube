@@ -91,6 +91,8 @@ const fn row(
                 "https://cr.yp.to/streamciphers/trivium/desc.pdf",
                 "https://www.rocq.inria.fr/secret/Anne.Canteaut/Publications/sosemanuk.pdf",
                 "https://www.burtleburtle.net/bob/rand/isaacafa.html",
+                "https://www.gsma.com/security/wp-content/uploads/2019/05/snow3gspec.pdf",
+                "https://www.gsma.com/security/wp-content/uploads/2019/05/eea3eia3zucv16.pdf",
                 "https://github.com/outspace/dstu8845/tree/752b1e0c5f69f95e128738cf3c450ac8b49675a2",
                 "https://jacobfilipp.com/DrDobbs/articles/DDJ/1998/9812/9812c/9812c.htm",
             ],

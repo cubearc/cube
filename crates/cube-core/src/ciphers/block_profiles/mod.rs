@@ -45,7 +45,7 @@ mod tea;
 mod twine;
 
 mod profiles;
-mod rijndael;
+pub(crate) mod rijndael;
 mod skipjack;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;

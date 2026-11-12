@@ -1,6 +1,9 @@
 # Install Cube from source
 
-Use Git, stable Rust and a C linker. Install Rust through [rustup](https://rustup.rs/).
+Use Git, a C linker and [rustup](https://rustup.rs/). The checkout pins a stable
+Rust release and its components in [rust-toolchain.toml](../rust-toolchain.toml);
+rustup installs them automatically. This keeps compiler-owned Unicode tables and
+canonical known answers reproducible across native and WebAssembly builds.
 On Windows, use the Visual Studio C++ build tools.
 These instructions build the checked-out source; they do not assume published packages.
 

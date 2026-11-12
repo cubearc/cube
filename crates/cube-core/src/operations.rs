@@ -499,6 +499,7 @@ const MODULES: &[Module] = &[
     crate::ciphers::xxtea::MODULE,
     crate::ciphers::stream::MODULE,
     crate::ciphers::stream::reference::MODULE,
+    crate::ciphers::stream::reference::authentication::MODULE,
     crate::composition::MODULE,
     crate::composition::structured::MODULE,
     crate::image::dimensions::MODULE,

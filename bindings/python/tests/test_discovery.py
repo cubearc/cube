@@ -105,6 +105,8 @@ SDK_BINDINGS = {
     "cipher.salsa20_12": "stream_transform",
     "cipher.salsa20": "stream_transform",
     "cipher.vernam": "vernam",
+    "cipher.stream.auth.encrypt": "stream_auth_encrypt",
+    "cipher.stream.auth.decrypt": "stream_auth_decrypt",
     "cipher.stream.encrypt": "stream_encrypt",
     "cipher.stream.decrypt": "stream_decrypt",
     "cipher.book.encode": "book_encode",

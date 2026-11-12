@@ -19162,5 +19162,55 @@
       "nonce_hex": "",
       "profile": "rc4_rfc6229_v1"
     }
+  },
+  {
+    "contract_sha256": "49b68284ab02d46c3daf984ca7ce6428f6bdc6c7520c9137b8a14dc661058291",
+    "inputs": {
+      "input": {
+        "base64": "EjRWeJ6A"
+      }
+    },
+    "operation": "cipher.stream.auth.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "akkfb1aA"
+      },
+      "tag": {
+        "base64": "TI3KsQ=="
+      }
+    },
+    "parameters": {
+      "data_bits": 41,
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "profile": "grain128a_skew2011_msb_v1",
+      "tag_bits": 32
+    }
+  },
+  {
+    "contract_sha256": "feecb5833338c861d04a174d9fa267e3c782843450c3c2ef2447191628e2a309",
+    "inputs": {
+      "input": {
+        "base64": "akkfb1aA"
+      },
+      "tag": {
+        "base64": "TI3KsQ=="
+      }
+    },
+    "operation": "cipher.stream.auth.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "EjRWeJ6A"
+      }
+    },
+    "parameters": {
+      "data_bits": 41,
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "profile": "grain128a_skew2011_msb_v1",
+      "tag_bits": 32
+    }
   }
 ]

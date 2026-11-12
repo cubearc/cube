@@ -5,6 +5,7 @@ use crate::{
     errors::{ErrorCode, OperationError},
 };
 use serde_json::{Value, json};
+use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
     stream::Profile::from_id(op).is_some()
         || matches!(
@@ -18,6 +19,8 @@ pub(super) fn supports(op: &str) -> bool {
                 | xxtea::DECRYPT
                 | stream::reference::ENCRYPT
                 | stream::reference::DECRYPT
+                | authentication::ENCRYPT
+                | authentication::DECRYPT
                 | "encoding.base58check.decode"
         )
 }
@@ -34,6 +37,18 @@ pub(super) fn execute(
         );
     }
     let input = bytes(&i["input"])?;
+    if matches!(op, authentication::ENCRYPT | authentication::DECRYPT) {
+        let settings = authentication::Settings::parse(&p.to_string())?;
+        return if op == authentication::ENCRYPT {
+            let result = authentication::encrypt(&input, &settings)?;
+            Ok(
+                json!({"output":{"base64":crate::encoding::base64_encode(&result.ciphertext)},"tag":{"base64":crate::encoding::base64_encode(&result.tag)}}),
+            )
+        } else {
+            let result = authentication::decrypt(&input, &bytes(&i["tag"])?, &settings)?;
+            Ok(json!({"output":{"base64":crate::encoding::base64_encode(&result)}}))
+        };
+    }
     let output = if let Some(profile) = stream::Profile::from_id(op) {
         let counter = p["counter"]
             .as_u64()

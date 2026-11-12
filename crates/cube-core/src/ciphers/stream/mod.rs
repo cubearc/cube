@@ -1,5 +1,6 @@
-//! Exact raw stream profiles for offline interoperability. All transforms are
-//! unauthenticated and malleable. Callers must prevent key/nonce/position reuse.
+//! Stream profiles for offline interoperability. Raw transforms have no
+//! authentication; reference::authentication exposes original Grain128a MACs.
+//! Callers must prevent key/nonce/position reuse.
 mod catalog;
 pub mod reference;
 use crate::errors::{ErrorCode, OperationError};

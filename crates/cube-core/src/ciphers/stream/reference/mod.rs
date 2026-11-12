@@ -1,6 +1,7 @@
 //! Explicit historical stream profiles. Raw output has no authentication or
 //! constant-time guarantee; RC4 is broken. No state is retained between calls.
 mod a5;
+pub mod authentication;
 mod bits;
 mod catalog;
 mod cryptmt;

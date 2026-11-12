@@ -263,3 +263,13 @@ for (const profile of ['mickey20_estream_msb_v1','grain128a_skew2011_decimated_m
 cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'mickey20_estream_msb_v1',key_hex:'00'.repeat(10),nonce_hex:'',data_bits:0}});
 // @ts-expect-error A GSM profile requires its exact packed data bit count.
 cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'a51_gsm_count22_be_key_msb_v1',key_hex:'00'.repeat(8),nonce_hex:'000000'}});
+
+const authenticatedSettings={profile:'grain128a_skew2011_msb_v1' as const,key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(12),data_bits:0,tag_bits:32};
+const authenticatedStream=cube.execute({operation:'cipher.stream.auth.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:authenticatedSettings});
+const detachedTag:Uint8Array=authenticatedStream.tag;
+const authenticatedPlaintext:Uint8Array=cube.execute({operation:'cipher.stream.auth.decrypt',version:1,inputs:{input:authenticatedStream.output,tag:detachedTag},parameters:authenticatedSettings}).output;
+void authenticatedPlaintext;
+// @ts-expect-error Detached authenticated decryption requires its tag port.
+cube.execute({operation:'cipher.stream.auth.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:authenticatedSettings});
+// @ts-expect-error The tag is exact bytes, not hexadecimal text.
+cube.execute({operation:'cipher.stream.auth.decrypt',version:1,inputs:{input:new Uint8Array(),tag:'d6401a29'},parameters:authenticatedSettings});

@@ -60,7 +60,41 @@ fn stream_decrypt<'py>(
         Zeroizing::new(stream::reference::decrypt(data, &settings).map_err(super::file_error)?);
     Ok(PyBytes::new(py, &output))
 }
+
+/// Return exact packed ciphertext and detached original Grain128a MAC bytes.
+#[pyfunction]
+fn stream_auth_encrypt<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    parameters_json: &str,
+) -> PyResult<(Bound<'py, PyBytes>, Bound<'py, PyBytes>)> {
+    let settings = stream::reference::authentication::Settings::parse(parameters_json)
+        .map_err(super::file_error)?;
+    let result =
+        stream::reference::authentication::encrypt(data, &settings).map_err(super::file_error)?;
+    let ciphertext = Zeroizing::new(result.ciphertext);
+    let tag = Zeroizing::new(result.tag);
+    Ok((PyBytes::new(py, &ciphertext), PyBytes::new(py, &tag)))
+}
+/// Verify the detached tag before returning any plaintext bytes.
+#[pyfunction]
+fn stream_auth_decrypt<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    tag: &[u8],
+    parameters_json: &str,
+) -> PyResult<Bound<'py, PyBytes>> {
+    let settings = stream::reference::authentication::Settings::parse(parameters_json)
+        .map_err(super::file_error)?;
+    let result = Zeroizing::new(
+        stream::reference::authentication::decrypt(data, tag, &settings)
+            .map_err(super::file_error)?,
+    );
+    Ok(PyBytes::new(py, &result))
+}
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
+    module.add_function(wrap_pyfunction!(stream_auth_encrypt, module)?)?;
+    module.add_function(wrap_pyfunction!(stream_auth_decrypt, module)?)?;
     module.add_function(wrap_pyfunction!(stream_encrypt, module)?)?;
     module.add_function(wrap_pyfunction!(stream_decrypt, module)?)?;
     module.add_function(wrap_pyfunction!(stream_transform, module)?)?;

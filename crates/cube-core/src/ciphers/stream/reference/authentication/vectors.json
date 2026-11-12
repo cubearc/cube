@@ -1,0 +1,1068 @@
+[
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "data_bits": 0,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "d6401a29",
+    "source": "Designers SKEW2011 Table3 tag(m0)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "data_bits": 1,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "00",
+    "tag_hex": "ece0b535",
+    "source": "Designers SKEW2011 Table3 tag(m1)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "data_bits": 1,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "80",
+    "ciphertext_hex": "80",
+    "tag_hex": "fa80d03e",
+    "source": "Designers SKEW2011 Table3 tag(m2)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "data_bits": 20,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "123400",
+    "ciphertext_hex": "6a4940",
+    "tag_hex": "359f67d1",
+    "source": "Designers SKEW2011 Table3 tag(m3)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "data_bits": 41,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "123456789e80",
+    "ciphertext_hex": "6a491f6f5680",
+    "tag_hex": "4c8dcab1",
+    "source": "Designers SKEW2011 Table3 tag(m4)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "0123456789abcdef123456789abcdef0",
+      "nonce_hex": "0123456789abcdef12345678",
+      "data_bits": 0,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "c7c1c665",
+    "source": "Designers SKEW2011 Table3 tag(m0); printed nonzero-key empty-message c7c1c655 is inconsistent with published accumulator f88720c1 XOR register3f46e6a4; expected c7c1c665 follows equations and independently checked setup"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "0123456789abcdef123456789abcdef0",
+      "nonce_hex": "0123456789abcdef12345678",
+      "data_bits": 1,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "00",
+    "tag_hex": "860aed89",
+    "source": "Designers SKEW2011 Table3 tag(m1)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "0123456789abcdef123456789abcdef0",
+      "nonce_hex": "0123456789abcdef12345678",
+      "data_bits": 1,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "80",
+    "ciphertext_hex": "80",
+    "tag_hex": "b94c0b2d",
+    "source": "Designers SKEW2011 Table3 tag(m2)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "0123456789abcdef123456789abcdef0",
+      "nonce_hex": "0123456789abcdef12345678",
+      "data_bits": 20,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "123400",
+    "ciphertext_hex": "73caa0",
+    "tag_hex": "4934b8ad",
+    "source": "Designers SKEW2011 Table3 tag(m3)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "0123456789abcdef123456789abcdef0",
+      "nonce_hex": "0123456789abcdef12345678",
+      "data_bits": 41,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "123456789e80",
+    "ciphertext_hex": "73caf74a0900",
+    "tag_hex": "3c3c9320",
+    "source": "Designers SKEW2011 Table3 tag(m4)"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "de",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "ef",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "f780",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "1bde",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "0def",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "86f780",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "92ce1bde",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "00254a6f94b9de03284d7297bce1062b",
+      "nonce_hex": "00478ed51c63aaf1387fc60d",
+      "data_bits": 0,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "49670def",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "00",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "14",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "8a",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "4500",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "7114",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "b88a",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "5c4500",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "9ef57114",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 1,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "80",
+    "tag_hex": "4f7ab88a",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "3e",
+    "tag_hex": "80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "06",
+    "ciphertext_hex": "38",
+    "tag_hex": "c6",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "08",
+    "ciphertext_hex": "36",
+    "tag_hex": "f6",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "08",
+    "ciphertext_hex": "36",
+    "tag_hex": "fb00",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "0e",
+    "ciphertext_hex": "30",
+    "tag_hex": "5aa4",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "10",
+    "ciphertext_hex": "2e",
+    "tag_hex": "0f5f",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "10",
+    "ciphertext_hex": "2e",
+    "tag_hex": "87af80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "1e",
+    "ciphertext_hex": "20",
+    "tag_hex": "082b6594",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "072c51769bc0e50a2f54799ec3e80d32",
+      "nonce_hex": "074e95dc236ab1f83f86cd14",
+      "data_bits": 7,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "20",
+    "ciphertext_hex": "1e",
+    "tag_hex": "6e0b1f0b",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "01",
+    "ciphertext_hex": "8f",
+    "tag_hex": "80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "07",
+    "ciphertext_hex": "89",
+    "tag_hex": "04",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "08",
+    "ciphertext_hex": "86",
+    "tag_hex": "1b",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "09",
+    "ciphertext_hex": "87",
+    "tag_hex": "f800",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "0f",
+    "ciphertext_hex": "81",
+    "tag_hex": "a5fe",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "10",
+    "ciphertext_hex": "9e",
+    "tag_hex": "a358",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "11",
+    "ciphertext_hex": "9f",
+    "tag_hex": "785980",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "1f",
+    "ciphertext_hex": "91",
+    "tag_hex": "132dcf82",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "082d52779cc1e60b30557a9fc4e90e33",
+      "nonce_hex": "084f96dd246bb2f94087ce15",
+      "data_bits": 8,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "20",
+    "ciphertext_hex": "ae",
+    "tag_hex": "abca4cf9",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "0100",
+    "ciphertext_hex": "da00",
+    "tag_hex": "00",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "0700",
+    "ciphertext_hex": "dc00",
+    "tag_hex": "be",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "0800",
+    "ciphertext_hex": "d300",
+    "tag_hex": "10",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "0900",
+    "ciphertext_hex": "d200",
+    "tag_hex": "6a00",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "0f00",
+    "ciphertext_hex": "d400",
+    "tag_hex": "ce0e",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "1000",
+    "ciphertext_hex": "cb00",
+    "tag_hex": "b964",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "1100",
+    "ciphertext_hex": "ca00",
+    "tag_hex": "65d000",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "1f00",
+    "ciphertext_hex": "c400",
+    "tag_hex": "32d1c056",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "092e53789dc2e70c31567ba0c5ea0f34",
+      "nonce_hex": "095097de256cb3fa4188cf16",
+      "data_bits": 9,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "2000",
+    "ciphertext_hex": "fb00",
+    "tag_hex": "b1883dde",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "010e10",
+    "ciphertext_hex": "82fc40",
+    "tag_hex": "80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "071420",
+    "ciphertext_hex": "84e670",
+    "tag_hex": "96",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "081520",
+    "ciphertext_hex": "8be770",
+    "tag_hex": "5c",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "091620",
+    "ciphertext_hex": "8ae470",
+    "tag_hex": "d880",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "0f1c20",
+    "ciphertext_hex": "8cee70",
+    "tag_hex": "8df8",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "101d20",
+    "ciphertext_hex": "93ef70",
+    "tag_hex": "0e9a",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "111e20",
+    "ciphertext_hex": "92ec70",
+    "tag_hex": "413b80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "1f2c30",
+    "ciphertext_hex": "9cde60",
+    "tag_hex": "35d4c926",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "14395e83a8cdf2173c6186abd0f51a3f",
+      "nonce_hex": "145ba2e93077be054c93da21",
+      "data_bits": 20,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "202d30",
+    "ciphertext_hex": "a3df60",
+    "tag_hex": "1a580c4d",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "010e1b283500",
+    "ciphertext_hex": "89aa78dec380",
+    "tag_hex": "00",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "0714212e3b00",
+    "ciphertext_hex": "8fb042d8cd80",
+    "tag_hex": "f6",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "0815222f3c00",
+    "ciphertext_hex": "80b141d9ca80",
+    "tag_hex": "ea",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "091623303d00",
+    "ciphertext_hex": "81b240c6cb80",
+    "tag_hex": "1780",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "0f1c29364300",
+    "ciphertext_hex": "87b84ac0b580",
+    "tag_hex": "e8ec",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "101d2a374400",
+    "ciphertext_hex": "98b949c1b280",
+    "tag_hex": "b6b8",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "111e2b384500",
+    "ciphertext_hex": "99ba48ceb380",
+    "tag_hex": "fda300",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "1f2c39465300",
+    "ciphertext_hex": "97885ab0a580",
+    "tag_hex": "809e5fdc",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "294e7398bde2072c51769bc0e50a2f54",
+      "nonce_hex": "2970b7fe458cd31a61a8ef36",
+      "data_bits": 41,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "202d3a475400",
+    "ciphertext_hex": "a88959b1a280",
+    "tag_hex": "bf77964f",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 1
+    },
+    "plaintext_hex": "010e1b2835424f5c697683909daab7c4d1deebf805121f2c394653606d7a879480",
+    "ciphertext_hex": "80c6e5a272e3a11581a6ed1ee814391667b177ae752fd0d5b489ce4cf42771eb00",
+    "tag_hex": "00",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 7
+    },
+    "plaintext_hex": "0714212e3b4855626f7c8996a3b0bdcad7e4f1fe0b1825323f4c596673808d9a80",
+    "ciphertext_hex": "86dcdfa47ce9bb2b87ace718d60e3318618b6da87b25eacbb283c44aeadd7be500",
+    "tag_hex": "c6",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 8
+    },
+    "plaintext_hex": "0815222f3c495663707d8a97a4b1becbd8e5f2ff0c192633404d5a6774818e9b80",
+    "ciphertext_hex": "89dddca57be8b82a98ade419d10f30196e8a6ea97c24e9cacd82c74beddc78e400",
+    "tag_hex": "48",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 9
+    },
+    "plaintext_hex": "091623303d4a5764717e8b98a5b2bfccd9e6f3000d1a2734414e5b6875828f9c80",
+    "ciphertext_hex": "88deddba7aebb92d99aee516d00c311e6f896f567d27e8cdcc81c644ecdf79e300",
+    "tag_hex": "d600",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 15
+    },
+    "plaintext_hex": "0f1c293643505d6a7784919eabb8c5d2dfecf90613202d3a4754616e7b8895a280",
+    "ciphertext_hex": "8ed4d7bc04f1b3239f54ff10de064b0069836550631de2c3ca9bfc42e2d563dd00",
+    "tag_hex": "d724",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 16
+    },
+    "plaintext_hex": "101d2a3744515e6b7885929facb9c6d3e0edfa0714212e3b4855626f7c8996a380",
+    "ciphertext_hex": "91d5d4bd03f0b0229055fc11d907480156826651641ce1c2c59aff43e5d460dc00",
+    "tag_hex": "8f13",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 17
+    },
+    "plaintext_hex": "111e2b3845525f6c798693a0adbac7d4e1eefb0815222f3c495663707d8a97a480",
+    "ciphertext_hex": "90d6d5b202f3b1259156fd2ed80449065781675e651fe0c5c499fe5ce4d761db00",
+    "tag_hex": "c7ff80",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 31
+    },
+    "plaintext_hex": "1f2c394653606d7a8794a1aebbc8d5e2effc091623303d4a5764717e8b98a5b280",
+    "ciphertext_hex": "9ee4c7cc14c183336f44cf20ce765b3059939540530df2b3daabec5212c553cd00",
+    "tag_hex": "a0dcf7a4",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  },
+  {
+    "parameters": {
+      "profile": "grain128a_skew2011_msb_v1",
+      "key_hex": "01264b7095badf04294e7398bde2072c",
+      "nonce_hex": "01488fd61d64abf23980c70e",
+      "data_bits": 257,
+      "tag_bits": 32
+    },
+    "plaintext_hex": "202d3a4754616e7b8895a2afbcc9d6e3f0fd0a1724313e4b5865727f8c99a6b380",
+    "ciphertext_hex": "a1e5c4cd13c080326045cc21c977583146929641540cf1b2d5aaef5315c450cc00",
+    "tag_hex": "a3818341",
+    "source": "Independent bit-array transcription of designers SKEW2011 equations, shortened tags use rightmost wbits packedMSB; fixed keystreams/nine MACs checked and one printedtypo recorded"
+  }
+]

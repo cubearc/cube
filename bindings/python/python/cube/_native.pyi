@@ -2321,6 +2321,14 @@ def frequency_compare(
     """Compare caller frequencies with explicit counts/proportions; no p-value."""
     ...
 
+def stream_auth_encrypt(data: bytes, parameters_json: str) -> tuple[bytes, bytes]:
+    """Return packed ciphertext and detached original Grain128a tag bytes."""
+    ...
+
+def stream_auth_decrypt(data: bytes, tag: bytes, parameters_json: str) -> bytes:
+    """Verify the complete detached tag before returning packed plaintext."""
+    ...
+
 def stream_encrypt(data: bytes, parameters_json: str) -> bytes:
     """Encrypt a raw profile with exact packed bit counts and zero padding."""
     ...

@@ -20922,6 +20922,212 @@ Example:
 cube cipher straddling --help
 ```
 
+## cipher.stream.auth.decrypt
+
+Original SKEW2011 Grain128a encryption with detached1..32-bit plaintext authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `tag` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "data_bits": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 524288,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 524288,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 524288,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){16}$"
+    },
+    "nonce_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){12}$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "tag_bits": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 32,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_hex",
+    "nonce_hex",
+    "data_bits",
+    "tag_bits"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "grain128a_skew2011_msb_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher stream auth decrypt --parameters-file settings.json --file encrypted.bits --tag-file tag.bits
+```
+
+## cipher.stream.auth.encrypt
+
+Original SKEW2011 Grain128a encryption with detached1..32-bit plaintext authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+| Output | `tag` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "data_bits": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 524288,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 524288,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 524288,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){16}$"
+    },
+    "nonce_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){12}$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "tag_bits": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 32,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_hex",
+    "nonce_hex",
+    "data_bits",
+    "tag_bits"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "grain128a_skew2011_msb_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher stream auth encrypt --parameters-file settings.json --file message.bits
+```
+
 ## cipher.stream.decrypt
 
 Exact raw historical stream profiles with explicit keys and initialization; no authentication.

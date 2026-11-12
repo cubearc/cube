@@ -262,3 +262,16 @@ and this is not a Bluetooth certification. The session128 profile supplies
 K_session directly; its raw-generator bound does not assert packet-format support.
 All packed inputs and contexts have exact counts and zero unused bits; no SDK
 implements its own cipher or bit-order conversion.
+
+
+The original Grain-128a MAC also has a separate authenticated operation pair.
+Eighty-two independent bit-array oracle answers cover published MACs and message
+lengths 0, 1, 7, 8, 9, 20, 41 and 257 bits with tag widths
+1, 7, 8, 9, 15, 16, 17, 31 and 32 bits. The shortened tag selects the low MAC
+bits before MSB packing, including the published 16-bit `cab1` example. Core,
+actual native Python, real CLI, actual WebAssembly and the native Play graph
+exercise the same corpus. Negative cases change ciphertext, key, nonce, tag,
+unused padding and required settings. Decryption holds tentative plaintext in a
+zeroizing owned buffer and returns it only after checking the full supplied tag;
+this is not a constant-time audit claim. No reference C or Python code ships as
+an SDK implementation.

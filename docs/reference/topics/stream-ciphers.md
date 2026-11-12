@@ -243,6 +243,53 @@ Private output retention in Play requires explicit consent; no linear recipe
 adapter or automatic capture is enabled. These backends have no independent audit
 or constant-time guarantee.
 
+## Grain-128a detached authentication
+
+`cipher.stream.auth.encrypt` returns named byte outputs `output` (ciphertext)
+and `tag`; `cipher.stream.auth.decrypt` takes byte inputs `input` and `tag`
+and returns `output` only after successful verification. The exact profile is
+`grain128a_skew2011_msb_v1`, using the original SKEW 2011 MAC. It is distinct
+from the raw decimated profile and later Grain-128AEAD.
+
+Private JSON requires all five fields: `profile`, `key_hex` (16 bytes),
+`nonce_hex` (12 bytes), `data_bits` (0–524288) and `tag_bits` (1–32).
+Ciphertext and plaintext occupy exactly `ceil(data_bits / 8)` bytes, MSB first,
+with unused low bits zero. The detached tag takes the rightmost `tag_bits` of
+the 32-bit MAC and packs them MSB first with zero unused low bits. A 16-bit tag
+from full MAC `4c8dcab1`, for example, is `cab1`. No associated data, automatic
+nonce generation, encrypted padding or key/nonce reuse tracking is supplied.
+The input limit is 64 KiB; the private JSON limit is 4096 UTF-8 bytes.
+
+Write these settings to a private `auth.json` file:
+
+```json
+{"profile":"grain128a_skew2011_msb_v1","key_hex":"00000000000000000000000000000000","nonce_hex":"000000000000000000000000","data_bits":41,"tag_bits":32}
+```
+
+For the six packed bytes `123456789e80`, this command returns JSON containing
+`ciphertext_hex` and `tag_hex`, with tag `4c8dcab1`:
+
+```sh
+cube cipher stream auth encrypt --parameters-file auth.json --file plain.bits
+cube cipher stream auth decrypt --parameters-file auth.json --file cipher.bits --tag-file tag.bits
+```
+
+The decrypt command takes binary ciphertext and a binary detached tag file,
+and writes verified plaintext bytes. A wrong or malformed tag fails with
+`invalid_input` / `authentication failed`, with no plaintext result or stdout.
+Invalid packed input and private parameters also fail explicitly.
+
+Python uses `ciphertext, tag = cube.stream_auth_encrypt(data, parameters_json)`
+and `cube.stream_auth_decrypt(ciphertext, tag, parameters_json)`. Rust uses
+`ciphers::stream::reference::authentication::{Settings, encrypt, decrypt}`;
+`encrypt` returns `Encrypted { ciphertext, tag }`. JavaScript/TypeScript/WebAssembly
+execute the two named operations with typed byte ports; the packaged
+`examples/stream-authentication.mjs` verifies the published tag and rejection of
+a modified tag. All interfaces call Core. Play can connect both named encryption
+outputs to decryption; private retention requires consent and its existing
+8 KiB aggregate input bound still applies. These historical short tags do not
+provide a modern AEAD security guarantee or an independent implementation audit.
+
 ## Educational Vernam
 
 `cipher.vernam` and `cube.vernam(data, pad)` reuse exact-length XOR. Both operands

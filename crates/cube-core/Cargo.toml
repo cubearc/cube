@@ -7,6 +7,9 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+rc4 = { version = "=0.2.0", features = ["zeroize"] }
+hc-256 = { version = "=0.6.0", features = ["zeroize"] }
+rabbit = { version = "=0.5.0", features = ["zeroize"] }
 aria={ version="=0.2.0", features=["zeroize"] }
 camellia={ version="=0.2.1", features=["zeroize"] }
 cast5={ version="=0.12.0", features=["zeroize"] }

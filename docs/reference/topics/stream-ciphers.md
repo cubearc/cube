@@ -1,14 +1,14 @@
 # Raw stream ciphers
 
-Transform exact bytes using an explicit key, nonce and initial block counter.
-Applying the same profile and state to the result restores the input. These raw
+Transform exact bytes using an explicit profile and key. Initialization follows
+the selected construction. These raw
 transforms are unauthenticated and malleable; they do not detect a wrong key,
 wrong nonce or modified ciphertext. The caller must prevent reuse of a
 key/nonce/position combination across messages.
 
 ## Profiles
 
-Every stream key is exactly 32 bytes. Nonce and counter are required; neither
+The ChaCha and Salsa profiles below use exactly 32-byte keys. Nonce and counter are required; neither
 has a default. Counters count 64-byte blocks, starting at the supplied index.
 
 | Operation | Rounds | Nonce | Block counter |
@@ -53,6 +53,55 @@ Play accepts named `input` and `key` byte ports, with `nonce` as a byte array an
 transport. Inputs stay private and result retention requires a per-run choice.
 The byte viewer supports preview and explicit export. No pipeline or recipe
 adapter is enabled.
+
+## Historical reference profiles
+
+`cipher.stream.encrypt` and `cipher.stream.decrypt` transform at most 64 KiB.
+Choose an exact profile and supply private JSON settings in a regular file:
+
+```json
+{"profile":"rc4_rfc6229_v1","key_hex":"0102030405","nonce_hex":""}
+```
+
+For an interoperability check, encrypt sixteen zero bytes:
+
+```sh
+cube decode hex 00000000000000000000000000000000 > zeros.bin
+cube cipher stream encrypt --parameters-file settings.json --file zeros.bin > encrypted.bin
+```
+
+The hexadecimal display of the output is `b2396305f03dc027ccc3524a0a1118a8`.
+Use `cipher stream decrypt` with the same settings to restore the input.
+Omit `--file` to read exact stdin. Settings are never supplied as secret argv
+values. RC4 is broken; these raw transforms provide no authenticity.
+
+| Profile | Key bytes | Explicit nonce bytes | Initialization |
+| --- | --- | --- | --- |
+| `rc4_rfc6229_v1` | 1–256 | Empty | Original RC4, no drop |
+| `rc4_drop_v1` | 1–256 | Empty | Required `discard_bytes`, 0–65,536 |
+| `hc256_wu2004_v1` | 32 | 32 | Original HC-256 initialization |
+| `rabbit_rfc4503_iv_le_v1` | 16 | 8 | Rabbit key and IV setup |
+| `rabbit_rfc4503_key_only_le_v1` | 16 | Empty | Rabbit key setup without IV setup |
+
+Rabbit keys, IVs and each generated 128-bit block use least-significant-byte-first
+order. RFC 4503 Appendix A prints integers in the opposite octet order; reverse
+each printed key, IV and output block when using those vectors. An empty Rabbit
+nonce selects no-IV initialization only through its named key-only profile;
+it is distinct from an all-zero eight-byte IV.
+
+Each call starts a fresh stream. No key/nonce reuse tracking or nonce generation
+is performed. Empty input still requires valid settings. Private JSON is bounded
+to 4096 bytes; unknown fields, duplicates, null settings and wrong widths fail
+without including private excerpts. `discard_bytes` is required only for
+RC4-drop and is forbidden for the other profiles. Dropping bytes does not repair RC4.
+
+Rust uses `ciphers::stream::reference::{Settings, encrypt, decrypt}`. Python uses
+`cube.stream_encrypt(data, parameters_json)` and `cube.stream_decrypt`.
+JavaScript/TypeScript/WebAssembly use the same named operations through `execute`,
+with `input` as bytes and the JSON fields as parameters. Core owns all algorithms.
+Private output retention in Play requires explicit consent; no linear recipe
+adapter or automatic capture is enabled. These backends have no independent audit
+or constant-time guarantee.
 
 ## Educational Vernam
 

@@ -2321,6 +2321,14 @@ def frequency_compare(
     """Compare caller frequencies with explicit counts/proportions; no p-value."""
     ...
 
+def stream_encrypt(data: bytes, parameters_json: str) -> bytes:
+    """Encrypt an exact raw stream profile from bounded private JSON settings."""
+    ...
+
+def stream_decrypt(data: bytes, parameters_json: str) -> bytes:
+    """Decrypt the same exact raw profile; raw output is unauthenticated."""
+    ...
+
 def stream_transform(
     profile: str, data: bytes, key: bytes, nonce: bytes, counter: int
 ) -> bytes:

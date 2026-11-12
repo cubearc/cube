@@ -105,6 +105,8 @@ SDK_BINDINGS = {
     "cipher.salsa20_12": "stream_transform",
     "cipher.salsa20": "stream_transform",
     "cipher.vernam": "vernam",
+    "cipher.stream.encrypt": "stream_encrypt",
+    "cipher.stream.decrypt": "stream_decrypt",
     "cipher.book.encode": "book_encode",
     "text.keyboard.coordinates.encode": "keyboard_coordinates_encode",
     "text.keyboard.coordinates.decode": "keyboard_coordinates_decode",

@@ -42,6 +42,7 @@ mod puzzlecmd;
 mod puzzlecodescmd;
 mod recipecmd;
 mod streamcmd;
+mod streamrefcmd;
 mod textcmd;
 mod traversalcmd;
 mod unicodecmd;
@@ -359,6 +360,11 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Explicit raw stream profiles with bounded private JSON settings
+    Stream {
+        #[command(subcommand)]
+        command: streamrefcmd::Command,
+    },
     /// Exact private raw transform; requires explicit key file and destination
     #[command(name = "chacha8")]
     ChaCha8(streamcmd::Parameters),
@@ -1106,6 +1112,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::Block { command } => return blockcmd::run(command, &mut output),
+                Cipher::Stream { command } => return streamrefcmd::run(command, &mut output),
                 Cipher::Xxtea { command } => return xxteacmd::run(command, &mut output),
                 Cipher::ChaCha8(args) => {
                     return streamcmd::run(

@@ -1,6 +1,7 @@
 //! Exact raw stream profiles for offline interoperability. All transforms are
 //! unauthenticated and malleable. Callers must prevent key/nonce/position reuse.
 mod catalog;
+pub mod reference;
 use crate::errors::{ErrorCode, OperationError};
 pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;

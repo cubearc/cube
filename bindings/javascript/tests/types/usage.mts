@@ -219,3 +219,12 @@ void craftTweak;
 const xxteaWords: Uint8Array=cube.execute({operation:'cipher.xxtea.encrypt_words',version:1,inputs:{input:new Uint8Array(12)},parameters:{key_hex:'00'.repeat(16)}}).output;
 const xxteaBack: Uint8Array=cube.execute({operation:'cipher.xxtea.decrypt_words',version:1,inputs:{input:xxteaWords},parameters:{key_hex:'00'.repeat(16)}}).output;
 void xxteaBack;
+
+const referenceBytes:Uint8Array=cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array(16)},parameters:{profile:'rc4_rfc6229_v1',key_hex:'0102030405',nonce_hex:''}}).output;
+void referenceBytes;
+// @ts-expect-error A nonce is explicit even for a profile whose nonce is empty.
+cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'rc4_rfc6229_v1',key_hex:'00'}});
+// @ts-expect-error RC4-drop requires its explicit skip count.
+cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'rc4_drop_v1',key_hex:'00',nonce_hex:''}});
+// @ts-expect-error HC-256 does not accept an RC4 skip setting.
+cube.execute({operation:'cipher.stream.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'hc256_wu2004_v1',key_hex:'00',nonce_hex:'00',discard_bytes:0}});

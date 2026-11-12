@@ -101,5 +101,6 @@
     - [Resource accounting](resource-accounting.md)
     - [Contract internals](contracts.md)
     - [Block backend qualification](contributing/block-backends.md)
+    - [Stream backend qualification](contributing/stream-backends.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
     - [Classical analysis research](research/classical-analysis-evaluation.md)

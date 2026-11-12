@@ -20922,6 +20922,392 @@ Example:
 cube cipher straddling --help
 ```
 
+## cipher.stream.decrypt
+
+Exact raw historical stream profiles with explicit keys and initialization; no authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "discard_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+    },
+    "nonce_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){0,256}$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{0}$"
+        },
+        "profile": {
+          "const": "rc4_rfc6229_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "discard_bytes": {
+          "type": "integer",
+          "maximum": 65536,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{0}$"
+        },
+        "profile": {
+          "const": "rc4_drop_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "discard_bytes"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "profile": {
+          "const": "hc256_wu2004_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{16}$"
+        },
+        "profile": {
+          "const": "rabbit_rfc4503_iv_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{0}$"
+        },
+        "profile": {
+          "const": "rabbit_rfc4503_key_only_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    }
+  ],
+  "required": [
+    "profile",
+    "key_hex",
+    "nonce_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "description": "Exact named construction and initialization; there is no default.",
+      "type": "string",
+      "enum": [
+        "rc4_rfc6229_v1",
+        "rc4_drop_v1",
+        "hc256_wu2004_v1",
+        "rabbit_rfc4503_iv_le_v1",
+        "rabbit_rfc4503_key_only_le_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher stream decrypt --parameters-file settings.json --file encrypted.bin
+```
+
+## cipher.stream.encrypt
+
+Exact raw historical stream profiles with explicit keys and initialization; no authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "discard_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 65536,
+      "minimum": 0
+    },
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+    },
+    "nonce_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{2}){0,256}$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{0}$"
+        },
+        "profile": {
+          "const": "rc4_rfc6229_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "discard_bytes": {
+          "type": "integer",
+          "maximum": 65536,
+          "minimum": 0
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){1,256}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{0}$"
+        },
+        "profile": {
+          "const": "rc4_drop_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex",
+        "discard_bytes"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){32,32}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "profile": {
+          "const": "hc256_wu2004_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{16}$"
+        },
+        "profile": {
+          "const": "rabbit_rfc4503_iv_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{2}){16,16}$"
+        },
+        "nonce_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{0}$"
+        },
+        "profile": {
+          "const": "rabbit_rfc4503_key_only_le_v1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "key_hex",
+        "nonce_hex"
+      ]
+    }
+  ],
+  "required": [
+    "profile",
+    "key_hex",
+    "nonce_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "description": "Exact named construction and initialization; there is no default.",
+      "type": "string",
+      "enum": [
+        "rc4_rfc6229_v1",
+        "rc4_drop_v1",
+        "hc256_wu2004_v1",
+        "rabbit_rfc4503_iv_le_v1",
+        "rabbit_rfc4503_key_only_le_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher stream encrypt --parameters-file settings.json --file message.bin
+```
+
 ## cipher.substitution.decode
 
 Decode exact Unicode scalars using a validated bijective alphabet; reject by default, <=1 MiB input/4 MiB output.

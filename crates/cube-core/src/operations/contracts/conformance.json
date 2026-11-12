@@ -19122,5 +19122,45 @@
     "parameters": {
       "key_hex": "00000000000000000000000000000000"
     }
+  },
+  {
+    "contract_sha256": "dbc93ee2c64e85884c6f2be954b4c1e2dde24eb4771aa5ed02b7eed6abc8a244",
+    "inputs": {
+      "input": {
+        "base64": "u/MW6NlArwrT"
+      }
+    },
+    "operation": "cipher.stream.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "UGxhaW50ZXh0"
+      }
+    },
+    "parameters": {
+      "key_hex": "4b6579",
+      "nonce_hex": "",
+      "profile": "rc4_rfc6229_v1"
+    }
+  },
+  {
+    "contract_sha256": "c24ff6881dc745dde4125dc633cfd20ba2b7fd6ac9b0241f206c1a322f61dbc3",
+    "inputs": {
+      "input": {
+        "base64": "UGxhaW50ZXh0"
+      }
+    },
+    "operation": "cipher.stream.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "u/MW6NlArwrT"
+      }
+    },
+    "parameters": {
+      "key_hex": "4b6579",
+      "nonce_hex": "",
+      "profile": "rc4_rfc6229_v1"
+    }
   }
 ]

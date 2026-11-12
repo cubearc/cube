@@ -16,6 +16,8 @@ pub(super) fn supports(op: &str) -> bool {
                 | block_profiles::DECRYPT
                 | xxtea::ENCRYPT
                 | xxtea::DECRYPT
+                | stream::reference::ENCRYPT
+                | stream::reference::DECRYPT
                 | "encoding.base58check.decode"
         )
 }
@@ -44,6 +46,13 @@ pub(super) fn execute(
             &field::<Vec<u8>>(&p, "nonce")?,
             counter,
         )?
+    } else if matches!(op, stream::reference::ENCRYPT | stream::reference::DECRYPT) {
+        let settings = stream::reference::Settings::parse(&p.to_string())?;
+        if op == stream::reference::ENCRYPT {
+            stream::reference::encrypt(&input, &settings)?
+        } else {
+            stream::reference::decrypt(&input, &settings)?
+        }
     } else if op == "cipher.vernam" {
         stream::vernam(&input, &bytes(&i["key"])?)?
     } else if matches!(op, xxtea::ENCRYPT | xxtea::DECRYPT) {

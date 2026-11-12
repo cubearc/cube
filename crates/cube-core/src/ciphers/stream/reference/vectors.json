@@ -1,0 +1,423 @@
+[
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "0102030405",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "b2396305f03dc027ccc3524a0a1118a8",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405",
+      "nonce_hex": "",
+      "discard_bytes": 16
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "6982944f18fc82d589c403a47a0d0919",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "d8729db41882259bee4f825325f5a130",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "01020304050607",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "293f02d47f37c9b633f2af5285feb46b",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "01020304050607",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "78b272c96e42eab4c60bd914e39d06e3",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "0102030405060708",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "97ab8a1bf0afb96132f2f67258da15a8",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405060708",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "8369e1a965610be887fbd0c79162aafb",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "0102030405060708090a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ede3b04643e586cc907dc21851709902",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405060708090a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "8a0feddbac865a09bcd127fb562ed60a",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "0102030405060708090a0b0c0d0e0f10",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "9ac7cc9a609d1ef7b2932899cde41b97",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405060708090a0b0c0d0e0f10",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ffa0b514647ec04f6306b892ae661181",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "0102030405060708090a0b0c0d0e0f101112131415161718",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "0595e57fe5f0bb3c706edac8a4b2db11",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405060708090a0b0c0d0e0f101112131415161718",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "0e317b3d1c73b9e9a4688f296d133a19",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "eaa6bd25880bf93d3f5d1e4ca2611d91",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "3e34135c79db010200767651cf263073",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "80ad97bdc973df8a2e879e92a497efda",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "6251d87fd4aaae9a7e4ad5c217d3f300",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "1910833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "bc9222dbd3274d8fc66d14ccbda6690b",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "1910833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "f70f14122a1c98a3155d28b8a0a8a41d",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "641910833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "bbf609de9413172d07660cb680716926",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "641910833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "d0168616861907d482e36cdac8cf5749",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "8b37641910833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "ab65c26eddb287600db2fda10d1e605c",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "8b37641910833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "3c0778a7b5f72d3c23a3135c7d67b9f4",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "ebb46227c6cc8b37641910833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "720c94b63edf44e131d950ca211a5a30",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "ebb46227c6cc8b37641910833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "1175da6ee756de46a53e2b075660b770",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "c109163908ebe51debb46227c6cc8b37641910833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "54b64e6b5a20b5e2ec84593dc7989da7",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "c109163908ebe51debb46227c6cc8b37641910833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "baefe6d9ceb651842260e0d1e05e3b90",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_rfc6229_v1",
+      "key_hex": "1ada31d5cf688221c109163908ebe51debb46227c6cc8b37641910833222772a",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "dd5bcb0018e922d494759d7c395d02d3",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rc4_drop_v1",
+      "key_hex": "1ada31d5cf688221c109163908ebe51debb46227c6cc8b37641910833222772a",
+      "nonce_hex": "",
+      "discard_bytes": 1536
+    },
+    "plaintext_hex": "00000000000000000000000000000000",
+    "ciphertext_hex": "8c3c13f8c2388bb73f38576e65b7c446",
+    "source": "https://www.rfc-editor.org/rfc/rfc6229#section-2"
+  },
+  {
+    "parameters": {
+      "profile": "rabbit_rfc4503_key_only_le_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "02f74a1c26456bf5ecd6a536f05457b1a78ac689476c697b390c9cc515d8e88896d6731688d168da51d40c70c3a116f4",
+    "source": "https://www.rfc-editor.org/rfc/rfc4503#appendix-A",
+    "representation": "RFC integer octets converted to little-endian key/IV bytes and each output block"
+  },
+  {
+    "parameters": {
+      "profile": "rabbit_rfc4503_key_only_le_v1",
+      "key_hex": "acc351dcf162fc3bfe363d2e29132891",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "9c51e28784c37fe9a127f63ec8f32d3d19fc5485aa53bf96885b40f461cd76f55e4c4d20203be58a5043dbfb737454e5",
+    "source": "https://www.rfc-editor.org/rfc/rfc4503#appendix-A",
+    "representation": "RFC integer octets converted to little-endian key/IV bytes and each output block"
+  },
+  {
+    "parameters": {
+      "profile": "rabbit_rfc4503_key_only_le_v1",
+      "key_hex": "43009bc001abe9e933c7e08715749583",
+      "nonce_hex": ""
+    },
+    "plaintext_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "9b60d002fd5ceb32accd41a0cd0db10cad3eff4c1192707b5a01170fca9ffc952874943aad4741923f7ffc8bdee54996",
+    "source": "https://www.rfc-editor.org/rfc/rfc4503#appendix-A",
+    "representation": "RFC integer octets converted to little-endian key/IV bytes and each output block"
+  },
+  {
+    "parameters": {
+      "profile": "rabbit_rfc4503_iv_le_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "0000000000000000"
+    },
+    "plaintext_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "edb70567375dcd7cd89554f85e27a7c68d4adc7032298f7bd4eff504aca6295f668fbf478adb2be51e6cde292b82de2a",
+    "source": "https://www.rfc-editor.org/rfc/rfc4503#appendix-A",
+    "representation": "RFC integer octets converted to little-endian key/IV bytes and each output block"
+  },
+  {
+    "parameters": {
+      "profile": "rabbit_rfc4503_iv_le_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "597e26c175f573c3"
+    },
+    "plaintext_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "6d7d012292ccdce0e2120058b94ecd1f2e6f93edff99247b012521d1104e5fa7a79b0212d0bd56233938e793c312c1eb",
+    "source": "https://www.rfc-editor.org/rfc/rfc4503#appendix-A",
+    "representation": "RFC integer octets converted to little-endian key/IV bytes and each output block"
+  },
+  {
+    "parameters": {
+      "profile": "rabbit_rfc4503_iv_le_v1",
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "2717f4d21a56eba6"
+    },
+    "plaintext_hex": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "4d1051a123afb670bf8d8505c8d85a44035bc3acc667aeae5b2cf44779f2c896cb5115f034f03d31171ca75f89fccb9f",
+    "source": "https://www.rfc-editor.org/rfc/rfc4503#appendix-A",
+    "representation": "RFC integer octets converted to little-endian key/IV bytes and each output block"
+  },
+  {
+    "parameters": {
+      "profile": "hc256_wu2004_v1",
+      "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce_hex": "0000000008000000000000000000000000000000000000000000000000000000"
+    },
+    "plaintext_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "b89065fe0b458c64fd6edc6a893c8c8183578e7d37be97e6ff82e45110a2596049a817cde859b67b56cb80768d6dd2756ec368fbabc35c8b51c62ac92f913281",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/hc/hc_test.go"
+  },
+  {
+    "parameters": {
+      "profile": "hc256_wu2004_v1",
+      "key_hex": "0000000000000000000000000000000000000000200000000000000000000000",
+      "nonce_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "plaintext_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "689e48a85a40bd161bec710f9b2457fd276f1156ebc10bb851a8517afdbd692de4827baaff218af886439ed976147ebbbb1074bd599a80f6324c87bac987b8c5",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/hc/hc_test.go"
+  },
+  {
+    "parameters": {
+      "profile": "hc256_wu2004_v1",
+      "key_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce_hex": "0000000000000000000000000000000000000000200000000000000000000000"
+    },
+    "plaintext_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "b090cc267b29a95adfaf6be3e147d64721ecacbf6b7d0c4061d17fb7de0a66626d6f9fc167fb3fff237c240aa03fad5513b6da848f22796db501a8fb89f2b85d",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/hc/hc_test.go"
+  },
+  {
+    "parameters": {
+      "profile": "hc256_wu2004_v1",
+      "key_hex": "3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e",
+      "nonce_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "plaintext_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "804025a410effba58647a9f4b443bfc61cddc30ca04da8dab3ec6a098a830d682683b59b76c60c09938e67cb41385315e2504b024db808923b0909efc25f0927",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/hc/hc_test.go"
+  },
+  {
+    "parameters": {
+      "profile": "hc256_wu2004_v1",
+      "key_hex": "0f62b5085bae0154a7fa4da0f34699ec3f92e5388bde3184d72a7dd02376c91c",
+      "nonce_hex": "288ff65dc42b92f960c72e95fc63ca3198ff66cd349b0269d0379e056cd33aa1"
+    },
+    "plaintext_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "ciphertext_hex": "c8632038da61679c4685288b37d3e2327bc2d28c266b041fe0ca0d3cfeed8fd5753259bab757168f85ea96adabd823ca4684e918423e091565713fedde2ccfe0",
+    "source": "https://github.com/deatil/go-cryptobin/blob/e938a8032604741a6b5ac21127f648648b86b084/cipher/hc/hc_test.go"
+  }
+]

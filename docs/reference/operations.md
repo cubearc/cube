@@ -15441,6 +15441,136 @@ Example:
 cube cipher homophonic --help
 ```
 
+## cipher.ies.decrypt
+
+Complete ephemeral P-256 ECIES or ffdhe2048 DHIES using BC1.83 KDF2-SHA256 streaming XOR and HMAC-SHA256.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "derivation_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 512,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "encoding_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 512,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ecies_p256_bc183_sha256_kdf2_hmac256",
+        "dhies_ffdhe2048_bc183_sha256_kdf2_hmac256"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher ies decrypt --parameters-file settings.json --key-file secret.bin --file ciphertext.bin
+```
+
+## cipher.ies.encrypt
+
+Complete ephemeral P-256 ECIES or ffdhe2048 DHIES using BC1.83 KDF2-SHA256 streaming XOR and HMAC-SHA256.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "derivation_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 512,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "encoding_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 512,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ecies_p256_bc183_sha256_kdf2_hmac256",
+        "dhies_ffdhe2048_bc183_sha256_kdf2_hmac256"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher ies encrypt --parameters-file settings.json --key-file public.bin --file message.bin
+```
+
 ## cipher.interrupted_key.decode
 
 ACA Vigenere with explicit strictly increasing ASCII-letter reset offsets; preserve case and nonletters.

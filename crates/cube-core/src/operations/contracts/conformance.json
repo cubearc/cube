@@ -19752,5 +19752,73 @@
     "parameters": {
       "profile": "sm2_sm3_c1c3c2"
     }
+  },
+  {
+    "contract_sha256": "282ccc1895e432597948136171ace6eb8c01cf9de1ca85cd6c4e6ff125217028",
+    "inputs": {
+      "input": {
+        "base64": "AAECAwQFBgcI"
+      },
+      "key": {
+        "base64": "BNrQtlOUIhz5sFHh/spXh9CY3+Y3/JC575RdDDdyWBGAUnGgRhzbglLWHxxFb6PlmrH0WzOsz19YOJ4Fd7iZC7M="
+      }
+    },
+    "operation": "cipher.ies.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "BNxNl1udGAj1zXvPTlHAl1bJ1LyKAi5dg83AbU7um/1RcoRJm0tTbPcIFP22uW7Tpmn9c2r8T7PxNGSxOJ6LoFxCmkrqSuFobU8GJ1GjBnwyY61aom4J1M6Q5U7aRGWMwu3+uimfLyx1Sw=="
+      }
+    },
+    "parameters": {
+      "derivation_hex": "",
+      "encoding_hex": "",
+      "profile": "ecies_p256_bc183_sha256_kdf2_hmac256"
+    },
+    "verification": {
+      "kind": "inverse",
+      "operation": "cipher.ies.decrypt",
+      "operation_version": 1,
+      "parameters": {
+        "derivation_hex": "",
+        "encoding_hex": "",
+        "profile": "ecies_p256_bc183_sha256_kdf2_hmac256"
+      },
+      "inputs": {
+        "key": {
+          "base64": "yI8B9RDZrD9wopLaojFt5UTpqriv6EBJxiqcV4YtFDM="
+        }
+      },
+      "input_port": "input",
+      "output_port": "output",
+      "expected_outputs": {
+        "output": {
+          "base64": "AAECAwQFBgcI"
+        }
+      }
+    }
+  },
+  {
+    "contract_sha256": "8c5f1b239d31871527cf97082043ead3449ecfeffcb966c97a375097b16f9072",
+    "inputs": {
+      "input": {
+        "base64": "BMKe0D99dQTZtrUPQwLad0P2oLlmXBJmmlfIibaGQwJvhOvooz52F1Pbt7kc9hjlbtd6U3ZRG0KPaoQZWe9NBYx0Y1P5VqN7vaFce7bHUdne9N6GhPOwDiyrjVqeC5/4BRM1GcwvwZXCcg=="
+      },
+      "key": {
+        "base64": "yI8B9RDZrD9wopLaojFt5UTpqriv6EBJxiqcV4YtFDM="
+      }
+    },
+    "operation": "cipher.ies.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "AAECAwQFBgcI"
+      }
+    },
+    "parameters": {
+      "derivation_hex": "",
+      "encoding_hex": "",
+      "profile": "ecies_p256_bc183_sha256_kdf2_hmac256"
+    }
   }
 ]

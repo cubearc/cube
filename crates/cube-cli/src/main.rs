@@ -36,6 +36,7 @@ mod enigmacmd;
 mod fpecmd;
 mod fractioncmd;
 mod historicalcmd;
+mod iescmd;
 mod keywrapcmd;
 mod mechanicalcmd;
 mod modularcmd;
@@ -559,6 +560,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Complete ephemeral ECIES/DHIES suites
+    Ies {
+        #[command(subcommand)]
+        command: iescmd::Command,
     },
     /// Explicit SM2/SM3 encryption and authenticated decryption
     Sm2 {
@@ -1159,6 +1165,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Ies { command } => return iescmd::run(command, &mut output),
                 Cipher::Sm2 { command } => return sm2cmd::run(command, &mut output),
                 Cipher::Rsa { command } => return rsacmd::run(command, &mut output),
                 Cipher::Dh { command } => return dhcmd::run(command, &mut output),

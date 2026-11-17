@@ -355,3 +355,7 @@ cube.execute({operation:'crypto.dh.agree',version:1,inputs:{input:new Uint8Array
 cube.execute({operation:'cipher.sm2.encrypt',version:1,inputs:{input:new Uint8Array([1]),key:new Uint8Array(65)},parameters:{profile:'sm2_sm3_der'}});
 // @ts-expect-error SM2 requires an exact representation; format guessing is unavailable.
 cube.execute({operation:'cipher.sm2.decrypt',version:1,inputs:{input:new Uint8Array(98),key:new Uint8Array(32)},parameters:{profile:'auto'}});
+
+cube.execute({operation:'cipher.ies.encrypt',version:1,inputs:{input:new Uint8Array([1]),key:new Uint8Array(65)},parameters:{profile:'ecies_p256_bc183_sha256_kdf2_hmac256',derivation_hex:'',encoding_hex:'0102'}});
+// @ts-expect-error HPKE is a distinct suite and cannot be selected as an IES alias.
+cube.execute({operation:'cipher.ies.decrypt',version:1,inputs:{input:new Uint8Array(98),key:new Uint8Array(32)},parameters:{profile:'hpke'}});

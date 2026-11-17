@@ -31,6 +31,7 @@ mod fraction;
 mod graph;
 mod headlines;
 mod historical;
+mod ies;
 mod image;
 mod investigation;
 mod key_wrap;
@@ -630,6 +631,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     ecdh::register(module)?;
     rsa::register(module)?;
     sm2::register(module)?;
+    ies::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

@@ -2590,3 +2590,9 @@ def sm2_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
 
 def sm2_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
     """Validate SM2/SM3 ciphertext before returning any recovered bytes."""
+
+def ies_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Encrypt with an exact ephemeral ECIES/DHIES KDF2/HMAC-SHA256 suite."""
+
+def ies_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Authenticate the full IES ciphertext and context before returning bytes."""

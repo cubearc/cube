@@ -82,7 +82,15 @@ impl Settings {
             return Err(limit());
         }
         let p: Parameters = serde_json::from_str(document).map_err(|_| invalid())?;
-        let (bits, length) = p.profile.sizes();
+        Self::from_private_key(p.profile, key)
+    }
+    /// Validate the exact private exponent encoding for a typed named profile.
+    /// Key generation, authentication and KDFs remain outside raw agreement.
+    pub fn from_private_key(profile: Profile, key: &[u8]) -> Result<Self, OperationError> {
+        if key.len() > MAX_PRIVATE_KEY {
+            return Err(limit());
+        }
+        let (bits, length) = profile.sizes();
         if key.len() != length {
             return Err(invalid());
         }
@@ -92,10 +100,10 @@ impl Settings {
         if *secret <= BoxedUint::one_with_precision((length * 8) as u32) {
             return Err(invalid());
         }
-        let modulus = p.profile.modulus();
+        let modulus = profile.modulus();
         debug_assert_eq!(modulus.bits_precision(), bits);
         Ok(Self {
-            profile: p.profile,
+            profile,
             secret,
             params: BoxedMontyParams::new_vartime(Odd::new(modulus).expect("odd safe prime")),
         })
@@ -119,26 +127,37 @@ impl Settings {
 /// Secret exponentiation uses crypto-bigint's fixed-window constant-time path
 /// at a public per-profile exponent width. No authentication, RNG or KDF occurs.
 pub fn agree(peer: &[u8], s: &Settings) -> Result<Vec<u8>, OperationError> {
+    let base = peer_form(peer, &s.params)?;
+    let shared = Zeroizing::new(base.pow(&s.secret));
+    Ok(Zeroizing::new(shared.retrieve()).to_be_bytes().into_vec())
+}
+/// Check exact public encoding, range and prime-order subgroup membership
+/// without a private operation. Only the five typed named groups are accepted.
+pub fn validate_peer(peer: &[u8], profile: Profile) -> Result<(), OperationError> {
+    let params =
+        BoxedMontyParams::new_vartime(Odd::new(profile.modulus()).expect("odd safe prime"));
+    peer_form(peer, &params).map(|_| ())
+}
+fn peer_form(peer: &[u8], params: &BoxedMontyParams) -> Result<BoxedMontyForm, OperationError> {
     if peer.len() > MAX_PUBLIC_KEY {
         return Err(limit());
     }
-    let bits = s.params.bits_precision();
+    let bits = params.bits_precision();
     if peer.len() != bits as usize / 8 {
         return Err(failed());
     }
     let public = BoxedUint::from_be_slice(peer, bits).map_err(|_| failed())?;
     let one = BoxedUint::one_with_precision(bits);
-    let p_minus_one = s.profile.modulus().wrapping_sub(&one);
+    let p_minus_one = params.modulus().as_ref().wrapping_sub(&one);
     if public <= one || public >= p_minus_one {
         return Err(failed());
     }
-    let base = BoxedMontyForm::new(public, &s.params);
+    let base = BoxedMontyForm::new(public, params);
     let order = p_minus_one.unbounded_shr_vartime(1);
     if base.pow(&order).retrieve() != one {
         return Err(failed());
     }
-    let shared = Zeroizing::new(base.pow(&s.secret));
-    Ok(Zeroizing::new(shared.retrieve()).to_be_bytes().into_vec())
+    Ok(base)
 }
 fn invalid() -> OperationError {
     OperationError::new(

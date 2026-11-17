@@ -60,7 +60,13 @@ impl Settings {
         }
         let mut secret = Zeroizing::new([0u8; 32]);
         hex::decode_to_slice(&p.private_key_hex, &mut secret[..]).map_err(|_| invalid())?;
-        let key = match p.profile {
+        Self::from_private_key(p.profile, &secret[..])
+    }
+    /// Validate a typed profile and exactly32 raw private bytes without a JSON
+    /// serialization round trip. This does not generate keys or apply a KDF.
+    pub fn from_private_key(profile: Profile, key: &[u8]) -> Result<Self, OperationError> {
+        let secret = Zeroizing::new(<[u8; 32]>::try_from(key).map_err(|_| invalid())?);
+        let key = match profile {
             Profile::X25519 => Key::X25519(x25519_dalek::StaticSecret::from(*secret)),
             Profile::P256 => {
                 Key::P256(p256::SecretKey::from_slice(&secret[..]).map_err(|_| invalid())?)
@@ -71,9 +77,16 @@ impl Settings {
     /// Return the matching public key: raw32-byte X25519 or compressed SEC1 P-256.
     /// This helper performs no generation and does not return private material.
     pub fn public_key(&self) -> Vec<u8> {
+        self.public_encoding(true)
+    }
+    /// Return65-byte uncompressed SEC1 P-256, or unchanged raw32-byte X25519.
+    pub fn public_key_uncompressed(&self) -> Vec<u8> {
+        self.public_encoding(false)
+    }
+    fn public_encoding(&self, compressed: bool) -> Vec<u8> {
         match &self.key {
             Key::X25519(s) => x25519_dalek::PublicKey::from(s).as_bytes().to_vec(),
-            Key::P256(s) => s.public_key().to_sec1_point(true).as_bytes().to_vec(),
+            Key::P256(s) => s.public_key().to_sec1_point(compressed).as_bytes().to_vec(),
         }
     }
 }

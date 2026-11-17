@@ -373,6 +373,7 @@ const MODULES: &[Module] = &[
     crate::asymmetric::ecdh::MODULE,
     crate::asymmetric::rsa::MODULE,
     crate::asymmetric::sm2::MODULE,
+    crate::asymmetric::ies::MODULE,
     crate::encoding::MODULE,
     crate::ciphers::MODULE,
     crate::hashing::MODULE,

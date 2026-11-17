@@ -369,6 +369,7 @@ impl Descriptor {
 /// Collect metadata from its owning modules in legacy command order.
 /// This is metadata assembly, not a dispatcher. Consumers may sort by stable ID.
 const MODULES: &[Module] = &[
+    crate::asymmetric::dh::MODULE,
     crate::asymmetric::ecdh::MODULE,
     crate::asymmetric::rsa::MODULE,
     crate::encoding::MODULE,

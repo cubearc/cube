@@ -2581,3 +2581,6 @@ def rsa_oaep_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
 def rsa_pkcs1_v1_5_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
     """Return unauthenticated legacy bytes, including implicit-rejection bytes."""
     ...
+
+def dh_agree(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Compute a raw RFC7919 secret with exact named-group encodings and no KDF."""

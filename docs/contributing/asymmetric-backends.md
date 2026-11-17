@@ -91,3 +91,9 @@ record the inverse-result comparison and hashes. Private outputs remain redacted
 These helpers are test tooling; no verifier endpoint, production RNG seed or
 fixture dispatcher is added to the runtime API. Existing exact comparisons and
 complete catalog coverage remain required.
+
+## Finite-field DH qualification
+
+The five RFC7919 Appendix A safe primes and generator 2 are pinned locally; their hexadecimal constants were independently checked against the RFC's formula using a 2,700-digit decimal calculation. Test-only Python integer exponentiation supplies independent public keys and shared secrets for every group. Production uses existing `crypto-bigint` 0.7.11 (Apache-2.0 OR MIT), including its fixed-window constant-time Montgomery exponentiation at fixed per-profile private widths. Variable-time Montgomery setup operates only on public named constants. No handwritten secret exponentiation, prime search, deterministic random generation or new arithmetic dependency is introduced.
+
+The supported raw profile requires prime-order subgroup membership in addition to the RFC's range check. It exposes neither peer authentication nor a KDF. This qualification is implementation evidence, not a timing audit or certification; see the [key-agreement reference](../reference/topics/key-agreement.md) for exact encodings and bounds.

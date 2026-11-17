@@ -344,3 +344,10 @@ cube.execute({operation:'cipher.rsa.oaep.encrypt',version:1,inputs:{input:new Ui
 cube.execute({operation:'cipher.rsa.pkcs1_v1_5.decrypt',version:1,inputs:{input:new Uint8Array(),key:new Uint8Array()},parameters:{profile:'rsaes_pkcs1_v1_5_implicit_rejection_cfrg10',key_format:'pkcs8_der',label_hex:''}});
 // @ts-expect-error A binary key input is required.
 cube.execute({operation:'cipher.rsa.oaep.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'rsa_oaep_sha256_mgf1_sha256_cfrg10',key_format:'pkcs8_der'}});
+
+// Finite-field DH consumes a separate private key byte port.
+cube.execute({operation:'crypto.dh.agree',version:1,inputs:{input:new Uint8Array(256),key:new Uint8Array(32)},parameters:{profile:'ffdhe2048_rfc7919_raw'}});
+// @ts-expect-error DH private material must be provided as a separate byte port.
+cube.execute({operation:'crypto.dh.agree',version:1,inputs:{input:new Uint8Array(256)},parameters:{profile:'ffdhe2048_rfc7919_raw'}});
+// @ts-expect-error Arbitrary/weak groups are unavailable.
+cube.execute({operation:'crypto.dh.agree',version:1,inputs:{input:new Uint8Array(256),key:new Uint8Array(32)},parameters:{profile:'modp1024'}});

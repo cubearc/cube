@@ -20,6 +20,7 @@ mod combinatorics;
 mod composition;
 mod constants;
 mod cryptanalysis;
+mod dh;
 mod digital;
 mod discrete_transport;
 mod ecdh;
@@ -624,6 +625,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     key_wrap::register(module)?;
     openssl::register(module)?;
     age::register(module)?;
+    dh::register(module)?;
     ecdh::register(module)?;
     rsa::register(module)?;
     fpe::register(module)?;

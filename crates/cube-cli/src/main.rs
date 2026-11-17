@@ -30,6 +30,7 @@ mod aescmd;
 mod agecmd;
 mod blockcmd;
 mod cryptanalysiscmd;
+mod dhcmd;
 mod ecdhcmd;
 mod enigmacmd;
 mod fpecmd;
@@ -562,6 +563,11 @@ enum Cipher {
     Rsa {
         #[command(subcommand)]
         command: rsacmd::Command,
+    },
+    /// Explicit RFC7919 finite-field agreement, returning a raw shared secret
+    Dh {
+        #[command(subcommand)]
+        command: dhcmd::Command,
     },
     /// Explicit X25519/P-256 key agreement, returning a raw shared secret
     Ecdh {
@@ -1148,6 +1154,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
                 Cipher::Rsa { command } => return rsacmd::run(command, &mut output),
+                Cipher::Dh { command } => return dhcmd::run(command, &mut output),
                 Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),
                 Cipher::Age { command } => return agecmd::run(command, &mut output),
                 Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),

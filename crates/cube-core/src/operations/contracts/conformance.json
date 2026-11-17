@@ -19669,5 +19669,26 @@
       "key_format": "pkcs8_der",
       "profile": "rsaes_pkcs1_v1_5_implicit_rejection_cfrg10"
     }
+  },
+  {
+    "contract_sha256": "89b9267e0d3d03efd26b883ff1407ec7bccb0aa981c43b272caf8f9e406a385a",
+    "inputs": {
+      "input": {
+        "base64": "WCJi7d94PdpOtiL1ObcG9OJfCIPjIJTQguBUdg5okFn6PHvjWQ64Onvk4sv2kXVdnQbt5NgwN2TaGY61+AAysaHQyCN8WW5w6EHok3WFTQG0mQK1w+Mxn4jHr/ymI0hDojviyURwVM+Xa79u6bdv5QhxAq44F4RSpi1pKuMMpEOREJPcdTv516QPYz1joLnFCrqmqTozOaFx8V+UwZLu1CJ/eFN/Apx9Qz9ha/SxbqQSB0faxVAX1qtdmGBLoOKHLwL3aF0s55YTbOfNffFBjOeRhFiHnymo8592swtraL5Bz906ZdNXhSZnIOskEgndlPFAof+fPcPrIDeZ1qiAew=="
+      },
+      "key": {
+        "base64": "eNpsX+pjPaqpW53pOzCF+DwDP2ZJSRyvmK0a+QF4NjM="
+      }
+    },
+    "operation": "crypto.dh.agree",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "1LRSJjgI/6i7MhLnmfGh2gGRUfu3mBCK/v7M6QdhdJ7JBjgBhwsqQmGR71DPL8PzWwuxXLv1pOukN4EBwPnigYxQwIXIisEgVvbDQom47ODsiMdsGr/a258ffWWOJZpxFSf6hAGVw19yOxhuH2lNWUp4vYK8PNtjUkw45yOVa6mNycWP7t1/CjqEXOM8XfiNnldTB3pmUF91vHSM4FMXuj+jQArVIZjdBmEG/Bg6z1d6RGaT1gPRJ1ROQBcGb9KhYydh2fE3j5VxJHneGAeQiEZB4dGx5UtuGHj7laulavdLpGmAxtScsmP6/pvFDvwx70U0A/Z1sAUbFtFwMWDZbA=="
+      }
+    },
+    "parameters": {
+      "profile": "ffdhe2048_rfc7919_raw"
+    }
   }
 ]

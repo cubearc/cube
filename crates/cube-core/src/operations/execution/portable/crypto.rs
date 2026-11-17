@@ -15,7 +15,8 @@ pub(super) fn supports(op: &str) -> bool {
         crate::asymmetric::rsa::ENCRYPT
             | crate::asymmetric::rsa::DECRYPT
             | crate::asymmetric::rsa::LEGACY_DECRYPT
-    ) || op == crate::asymmetric::ecdh::AGREE
+    ) || op == crate::asymmetric::dh::AGREE
+        || op == crate::asymmetric::ecdh::AGREE
         || stream::Profile::from_id(op).is_some()
         || matches!(
             op,
@@ -71,6 +72,13 @@ pub(super) fn execute(
             }
             _ => rsa::legacy_decrypt(&input, &rsa::LegacySettings::parse(&document, &key)?)?,
         });
+        return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
+    }
+    if op == crate::asymmetric::dh::AGREE {
+        use crate::asymmetric::dh;
+        let key = zeroize::Zeroizing::new(bytes(&i["key"])?);
+        let settings = dh::Settings::parse(&p.to_string(), &key)?;
+        let output = zeroize::Zeroizing::new(dh::agree(&bytes(&i["input"])?, &settings)?);
         return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
     }
     if op == crate::asymmetric::ecdh::AGREE {

@@ -29214,6 +29214,62 @@ Example:
 cube cipher xxtea encrypt --key-file key.bin --file words.bin
 ```
 
+## crypto.dh.agree
+
+RFC7919 named finite-field raw agreement with subgroup validation; no authentication or KDF.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ffdhe2048_rfc7919_raw",
+        "ffdhe3072_rfc7919_raw",
+        "ffdhe4096_rfc7919_raw",
+        "ffdhe6144_rfc7919_raw",
+        "ffdhe8192_rfc7919_raw"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher dh agree --parameters-file settings.json --key-file secret.bin --file peer.bin
+```
+
 ## crypto.ecdh.agree
 
 Explicit X25519 or P-256 raw key agreement; no encryption, authentication or implicit KDF.

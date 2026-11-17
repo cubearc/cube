@@ -65,7 +65,7 @@
     - [OpenSSL legacy files](reference/topics/openssl-legacy.md)
     - [Format-preserving encryption](reference/topics/format-preserving-encryption.md)
     - [AES key wrapping](reference/topics/key-wrapping.md)
-    - [Elliptic-curve key agreement](reference/topics/key-agreement.md)
+    - [Raw key agreement](reference/topics/key-agreement.md)
     - [RSA encryption profiles](reference/topics/rsa.md)
     - [Raw block reference profiles](reference/topics/block-profiles.md)
     - [XXTEA word sequences](reference/topics/xxtea.md)

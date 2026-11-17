@@ -13,6 +13,7 @@ SDK_BINDINGS = {
     "cipher.rsa.oaep.encrypt": "rsa_oaep_encrypt",
     "cipher.rsa.oaep.decrypt": "rsa_oaep_decrypt",
     "cipher.rsa.pkcs1_v1_5.decrypt": "rsa_pkcs1_v1_5_decrypt",
+    "crypto.dh.agree": "dh_agree",
     "crypto.ecdh.agree": "ecdh_agree",
     "cipher.age.decrypt": "age_decrypt",
     "cipher.openssl.decrypt": "openssl_decrypt",

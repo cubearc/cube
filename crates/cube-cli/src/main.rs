@@ -30,6 +30,7 @@ mod aescmd;
 mod blockcmd;
 mod cryptanalysiscmd;
 mod enigmacmd;
+mod fpecmd;
 mod fractioncmd;
 mod historicalcmd;
 mod keywrapcmd;
@@ -552,6 +553,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Explicit FF1 and historical FF3/FF3-1 digit profiles
+    Fpe {
+        #[command(subcommand)]
+        command: fpecmd::Command,
     },
     /// Explicit authenticated byte profiles with detached tags and required AAD
     Aead {
@@ -1117,6 +1123,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Fpe { command } => return fpecmd::run(command, &mut output),
                 Cipher::Aead { command } => return aeadcmd::run(command, &mut output),
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::Block { command } => return blockcmd::run(command, &mut output),

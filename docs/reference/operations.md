@@ -13705,6 +13705,148 @@ Example:
 cube cipher --help
 ```
 
+## cipher.fpe.decrypt
+
+Exact FF1 and historical FF3/FF3-1 numeral-string profiles, without authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `json` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "radix": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 65536,
+      "minimum": 2
+    },
+    "tweak_hex": {
+      "type": "string",
+      "maxLength": 131072,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "radix",
+    "key_hex",
+    "tweak_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ff1_sp800_38g_integer",
+        "ff3_sp800_38g_historical",
+        "ff3_1_2019_draft_historical"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher fpe decrypt --parameters-file settings.json --file digits.json
+```
+
+## cipher.fpe.encrypt
+
+Exact FF1 and historical FF3/FF3-1 numeral-string profiles, without authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `json` |
+| Output | `output` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "radix": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 65536,
+      "minimum": 2
+    },
+    "tweak_hex": {
+      "type": "string",
+      "maxLength": 131072,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "radix",
+    "key_hex",
+    "tweak_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ff1_sp800_38g_integer",
+        "ff3_sp800_38g_historical",
+        "ff3_1_2019_draft_historical"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher fpe encrypt --parameters-file settings.json --file digits.json
+```
+
 ## cipher.fractionated_morse.decode
 
 Fractionated Morse: explicit bounded decode; see typed profile guide for conventions.

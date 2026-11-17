@@ -23,6 +23,7 @@ mod digital;
 mod discrete_transport;
 mod enigma;
 mod esolang;
+mod fpe;
 mod fraction;
 mod graph;
 mod headlines;
@@ -617,6 +618,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     mechanical::register(module)?;
     aes_blocks::register(module)?;
     key_wrap::register(module)?;
+    fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;
     xxtea::register(module)?;

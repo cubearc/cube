@@ -1,7 +1,7 @@
 //! Exact cipher profiles forward byte ports and private settings to Core.
 use super::{bytes, field};
 use crate::{
-    ciphers::{aes_blocks, aes_modes, block_profiles, key_wrap, modern_aead, stream, xxtea},
+    ciphers::{aes_blocks, aes_modes, block_profiles, fpe, key_wrap, modern_aead, stream, xxtea},
     errors::{ErrorCode, OperationError},
 };
 use serde_json::{Value, json};
@@ -13,6 +13,8 @@ pub(super) fn supports(op: &str) -> bool {
             "cipher.vernam"
                 | "cipher.aes.encrypt_blocks"
                 | "cipher.aes.decrypt_blocks"
+                | fpe::ENCRYPT
+                | fpe::DECRYPT
                 | key_wrap::WRAP
                 | key_wrap::UNWRAP
                 | modern_aead::ENCRYPT
@@ -43,6 +45,17 @@ pub(super) fn execute(
         return Ok(
             json!({"output":crate::encoding::base58check::decode(&field::<String>(&i,"input")?)?}),
         );
+    }
+    if matches!(op, fpe::ENCRYPT | fpe::DECRYPT) {
+        let document = zeroize::Zeroizing::new(p.to_string());
+        let settings = fpe::Settings::parse(&document)?;
+        let input = zeroize::Zeroizing::new(field::<Vec<u16>>(&i, "input")?);
+        let output = if op == fpe::ENCRYPT {
+            fpe::encrypt(&input, &settings)?
+        } else {
+            fpe::decrypt(&input, &settings)?
+        };
+        return Ok(json!({"output":output}));
     }
     let input = bytes(&i["input"])?;
     if matches!(

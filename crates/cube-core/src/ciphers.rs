@@ -321,3 +321,6 @@ pub mod fractionation;
 pub mod transposition;
 
 pub mod stream;
+
+/// Exact format-preserving numeral-string profiles.
+pub mod fpe;

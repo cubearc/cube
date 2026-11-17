@@ -28,6 +28,7 @@ remain in each operation's reference.
 - [Raw AES blocks](topics/aes-blocks.md)
 - [AES byte modes](topics/aes-modes.md)
 - [Authenticated byte encryption](topics/authenticated-ciphers.md)
+- [Format-preserving encryption](topics/format-preserving-encryption.md)
 - [AES key wrapping](topics/key-wrapping.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)

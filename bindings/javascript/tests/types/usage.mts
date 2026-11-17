@@ -311,3 +311,7 @@ const unwrappedKey:Uint8Array=cube.execute({operation:'cipher.aes.key_wrap.unwra
 void unwrappedKey;
 // @ts-expect-error a wrapping profile and KEK are always required
 cube.execute({operation:'cipher.aes.key_wrap.wrap',version:1,inputs:{input:new Uint8Array([1])}});
+
+cube.execute({operation:'cipher.fpe.encrypt',version:1,inputs:{input:[0,1,2,3,4,5]},parameters:{profile:'ff1_sp800_38g_integer',radix:10,key_hex:'00'.repeat(16),tweak_hex:''}});
+// @ts-expect-error required exact FPE radix and tweak cannot be omitted
+cube.execute({operation:'cipher.fpe.encrypt',version:1,inputs:{input:[0,1,2,3,4,5]},parameters:{profile:'ff1_sp800_38g_integer',key_hex:'00'.repeat(16)}});

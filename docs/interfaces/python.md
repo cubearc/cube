@@ -266,3 +266,8 @@ Use `cube.stream_transform(profile, data, key, nonce, counter)` for explicit
 ChaCha/Salsa interoperability and `cube.vernam(data, pad)` for educational
 exact-pad XOR. Inputs and results are bytes. See [profiles and limits](../reference/topics/stream-ciphers.md)
 for required nonce/counter sizes, privacy and backend qualification.
+
+### Exact numeral-string FPE
+
+`fpe_encrypt(digits, parameters_json)` and `fpe_decrypt` use required numeric
+radix, exact key/tweak and profile settings. See [FPE profiles](../reference/topics/format-preserving-encryption.md) for historical status, domain limits and the published example.

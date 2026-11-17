@@ -19444,5 +19444,83 @@
       "key_hex": "000102030405060708090a0b0c0d0e0f",
       "profile": "aes_kw_rfc3394"
     }
+  },
+  {
+    "contract_sha256": "faabfebab1ccb7c5ff52662ac79963018ac827e88e204e77110f52dded28018e",
+    "inputs": {
+      "input": [
+        2,
+        4,
+        3,
+        3,
+        4,
+        7,
+        7,
+        4,
+        8,
+        4
+      ]
+    },
+    "operation": "cipher.fpe.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "parameters": {
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "profile": "ff1_sp800_38g_integer",
+      "radix": 10,
+      "tweak_hex": ""
+    }
+  },
+  {
+    "contract_sha256": "0a7fcc181f9fcebfab045b8ada8b751055e5ff28783de96623082e767f0af7f4",
+    "inputs": {
+      "input": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    "operation": "cipher.fpe.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": [
+        2,
+        4,
+        3,
+        3,
+        4,
+        7,
+        7,
+        4,
+        8,
+        4
+      ]
+    },
+    "parameters": {
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "profile": "ff1_sp800_38g_integer",
+      "radix": 10,
+      "tweak_hex": ""
+    }
   }
 ]

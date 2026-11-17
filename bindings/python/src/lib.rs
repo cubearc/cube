@@ -32,6 +32,7 @@ mod graph;
 mod group_encryption;
 mod headlines;
 mod historical;
+mod historical_public_key;
 mod ies;
 mod image;
 mod investigation;
@@ -634,6 +635,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     sm2::register(module)?;
     ies::register(module)?;
     group_encryption::register(module)?;
+    historical_public_key::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

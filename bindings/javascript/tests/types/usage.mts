@@ -364,3 +364,9 @@ cube.execute({operation:'cipher.elgamal.encrypt',version:1,inputs:{input:new Uin
 cube.execute({operation:'cipher.cramer_shoup.decrypt',version:1,inputs:{input:new Uint8Array(1024),key:new Uint8Array(1280)},parameters:{profile:'cramer_shoup_ffdhe2048_sha256_raw_v1',label_hex:'00ff'}});
 // @ts-expect-error ElGamal does not accept the Cramer-Shoup label parameter.
 cube.execute({operation:'cipher.elgamal.encrypt',version:1,inputs:{input:new Uint8Array(256),key:new Uint8Array(256)},parameters:{profile:'elgamal_ffdhe2048_raw_v1',label_hex:''}});
+
+const rabinRoots:ReadonlyArray<ReadonlyArray<string>>=cube.execute({operation:'cipher.rabin.decrypt',version:1,inputs:{tokens:['15'],key:new Uint8Array(20)},parameters:{profile:'rabin_blum_reference_v1'}}).candidates;
+void rabinRoots;
+cube.execute({operation:'cipher.goldwasser_micali.encrypt',version:1,inputs:{tokens:['0','1'],key:new Uint8Array(20)},parameters:{profile:'goldwasser_micali_reference_v1',max_work:10000,max_memory_bytes:1048576}});
+// @ts-expect-error Exact reference integers use strings, never rounded numeric tokens.
+cube.execute({operation:'cipher.benaloh.encrypt',version:1,inputs:{tokens:[1],key:new Uint8Array(20)},parameters:{profile:'benaloh_prime_r_reference_v1'}});

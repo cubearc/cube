@@ -6546,6 +6546,258 @@ Example:
 cube cipher --help
 ```
 
+## cipher.benaloh.decrypt
+
+Exact prime-r Benaloh reference encryption with corrected private order checks and bounded finite decryption table.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "benaloh_prime_r_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher benaloh decrypt --parameters-file settings.json --key-file key.json --file tokens.json
+```
+
+## cipher.benaloh.encrypt
+
+Exact prime-r Benaloh reference encryption with corrected private order checks and bounded finite decryption table.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "benaloh_prime_r_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher benaloh encrypt --parameters-file settings.json --key-file key.json --file tokens.json
+```
+
 ## cipher.bifid.decode
 
 Bifid: explicit bounded decode; see typed profile guide for conventions.
@@ -14268,6 +14520,258 @@ Example:
 cube cipher --help
 ```
 
+## cipher.goldwasser_micali.decrypt
+
+One-bit-per-residue Goldwasser-Micali reference encryption with explicit unit coins and Legendre decoding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "goldwasser_micali_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher goldwasser-micali decrypt --parameters-file settings.json --key-file key.json --file tokens.json
+```
+
+## cipher.goldwasser_micali.encrypt
+
+One-bit-per-residue Goldwasser-Micali reference encryption with explicit unit coins and Legendre decoding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "goldwasser_micali_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher goldwasser-micali encrypt --parameters-file settings.json --key-file key.json --file tokens.json
+```
+
 ## cipher.grandpre.decode
 
 Decode repeated-letter 8/9/10-square coordinates with explicit digit labels; null represents each space.
@@ -16579,6 +17083,258 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.merkle_hellman.decrypt
+
+Broken Merkle-Hellman reference with exact binary blocks, explicit private permutation and checked greedy decoding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "merkle_hellman_permuted_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher merkle-hellman decrypt --parameters-file settings.json --key-file key.json --file tokens.json
+```
+
+## cipher.merkle_hellman.encrypt
+
+Broken Merkle-Hellman reference with exact binary blocks, explicit private permutation and checked greedy decoding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "merkle_hellman_permuted_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher merkle-hellman encrypt --parameters-file settings.json --key-file key.json --file tokens.json
 ```
 
 ## cipher.modulo.decode
@@ -20232,6 +20988,258 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.rabin.decrypt
+
+Raw Rabin modular squaring and complete sorted root sets; no root selection or secure padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `candidates` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "rabin_blum_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher rabin decrypt --parameters-file settings.json --key-file key.json --file tokens.json
+```
+
+## cipher.rabin.encrypt
+
+Raw Rabin modular squaring and complete sorted root sets; no root selection or secure padding.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Input | `key` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "max_memory_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 67108864,
+          "maximum": 67108864,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 67108864,
+            "format": "uint64",
+            "maximum": 67108864,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 67108864,
+      "x-cube-integer": {
+        "default": 67108864,
+        "format": "uint64",
+        "maximum": 67108864,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "max_work": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 4194304,
+          "maximum": 4194304,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 4194304,
+            "format": "uint64",
+            "maximum": 4194304,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 4194304,
+      "x-cube-integer": {
+        "default": 4194304,
+        "format": "uint64",
+        "maximum": 4194304,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "rabin_blum_reference_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher rabin encrypt --parameters-file settings.json --key-file key.json --file tokens.json
 ```
 
 ## cipher.ragbaby.decode

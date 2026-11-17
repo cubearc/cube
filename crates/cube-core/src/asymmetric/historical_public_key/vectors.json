@@ -1,0 +1,303 @@
+[
+  {
+    "scheme": "rabin",
+    "parameters": {
+      "profile": "rabin_blum_reference_v1"
+    },
+    "public_key": {
+      "n": "77"
+    },
+    "private_key": {
+      "p": "7",
+      "q": "11"
+    },
+    "tokens": [
+      "20",
+      "0",
+      "7",
+      "76"
+    ],
+    "ciphertext_tokens": [
+      "15",
+      "0",
+      "49",
+      "1"
+    ],
+    "candidate_tokens": [
+      [
+        "13",
+        "20",
+        "57",
+        "64"
+      ],
+      [
+        "0"
+      ],
+      [
+        "7",
+        "70"
+      ],
+      [
+        "1",
+        "34",
+        "43",
+        "76"
+      ]
+    ],
+    "source": "Independent Python stdlib modular squaring; roots exhaustively enumerated over the complete small test modulus, not CRT"
+  },
+  {
+    "scheme": "rabin",
+    "parameters": {
+      "profile": "rabin_blum_reference_v1"
+    },
+    "public_key": {
+      "n": "272953"
+    },
+    "private_key": {
+      "p": "499",
+      "q": "547"
+    },
+    "tokens": [
+      "0",
+      "1",
+      "12345",
+      "272952"
+    ],
+    "ciphertext_tokens": [
+      "0",
+      "1",
+      "91251",
+      "1"
+    ],
+    "candidate_tokens": [
+      [
+        "0"
+      ],
+      [
+        "1",
+        "56887",
+        "216066",
+        "272952"
+      ],
+      [
+        "12345",
+        "38054",
+        "234899",
+        "260608"
+      ],
+      [
+        "1",
+        "56887",
+        "216066",
+        "272952"
+      ]
+    ],
+    "source": "Independent Python stdlib modular squaring; roots exhaustively enumerated over the complete small test modulus, not CRT"
+  },
+  {
+    "scheme": "goldwasser_micali",
+    "parameters": {
+      "profile": "goldwasser_micali_reference_v1"
+    },
+    "public_key": {
+      "n": "272953",
+      "y": "2"
+    },
+    "private_key": {
+      "p": "499",
+      "q": "547",
+      "y": "2"
+    },
+    "tokens": [
+      "0",
+      "1",
+      "1",
+      "0"
+    ],
+    "ciphertext_tokens": [
+      "4",
+      "18",
+      "50",
+      "49"
+    ],
+    "source": "Independent Python stdlib modular arithmetic and Legendre symbols; fixed synthetic test-only unit coins"
+  },
+  {
+    "scheme": "benaloh",
+    "parameters": {
+      "profile": "benaloh_prime_r_reference_v1"
+    },
+    "public_key": {
+      "n": "707",
+      "y": "2",
+      "r": 3
+    },
+    "private_key": {
+      "p": "7",
+      "q": "101",
+      "y": "2",
+      "r": 3
+    },
+    "tokens": [
+      "0",
+      "1",
+      "2",
+      "1"
+    ],
+    "ciphertext_tokens": [
+      "8",
+      "54",
+      "256",
+      "250"
+    ],
+    "source": "Independent Python stdlib arithmetic; exact prime-r order/table checked exhaustively; fixed synthetic test-only unit coins"
+  },
+  {
+    "scheme": "benaloh",
+    "parameters": {
+      "profile": "benaloh_prime_r_reference_v1"
+    },
+    "public_key": {
+      "n": "1133",
+      "y": "2",
+      "r": 5
+    },
+    "private_key": {
+      "p": "11",
+      "q": "103",
+      "y": "2",
+      "r": 5
+    },
+    "tokens": [
+      "0",
+      "1",
+      "4",
+      "2"
+    ],
+    "ciphertext_tokens": [
+      "32",
+      "486",
+      "522",
+      "37"
+    ],
+    "source": "Independent Python stdlib arithmetic; exact prime-r order/table checked exhaustively; fixed synthetic test-only unit coins"
+  },
+  {
+    "scheme": "benaloh",
+    "parameters": {
+      "profile": "benaloh_prime_r_reference_v1"
+    },
+    "public_key": {
+      "n": "10403",
+      "y": "2",
+      "r": 17
+    },
+    "private_key": {
+      "p": "103",
+      "q": "101",
+      "y": "2",
+      "r": 17
+    },
+    "tokens": [
+      "0",
+      "1",
+      "16",
+      "8"
+    ],
+    "ciphertext_tokens": [
+      "6236",
+      "5045",
+      "2524",
+      "6249"
+    ],
+    "source": "Independent Python stdlib arithmetic; exact prime-r order/table checked exhaustively; fixed synthetic test-only unit coins"
+  },
+  {
+    "scheme": "benaloh",
+    "parameters": {
+      "profile": "benaloh_prime_r_reference_v1"
+    },
+    "public_key": {
+      "n": "155843",
+      "y": "2",
+      "r": 257
+    },
+    "private_key": {
+      "p": "1543",
+      "q": "101",
+      "y": "2",
+      "r": 257
+    },
+    "tokens": [
+      "0",
+      "1",
+      "256",
+      "128"
+    ],
+    "ciphertext_tokens": [
+      "28455",
+      "26229",
+      "81008",
+      "95363"
+    ],
+    "source": "Independent Python stdlib arithmetic; exact prime-r order/table checked exhaustively; fixed synthetic test-only unit coins"
+  },
+  {
+    "scheme": "merkle_hellman",
+    "parameters": {
+      "profile": "merkle_hellman_permuted_reference_v1"
+    },
+    "public_key": {
+      "weights": [
+        "471",
+        "287",
+        "373",
+        "82",
+        "10",
+        "123",
+        "248",
+        "83"
+      ]
+    },
+    "private_key": {
+      "weights": [
+        "2",
+        "3",
+        "7",
+        "14",
+        "30",
+        "57",
+        "120",
+        "251"
+      ],
+      "modulus": "491",
+      "multiplier": "41",
+      "permutation": [
+        7,
+        2,
+        5,
+        0,
+        6,
+        1,
+        4,
+        3
+      ]
+    },
+    "tokens": [
+      "00000000",
+      "10101010",
+      "11111111",
+      "00000001",
+      "10000000"
+    ],
+    "ciphertext_tokens": [
+      "0",
+      "1102",
+      "1677",
+      "83",
+      "471"
+    ],
+    "source": "Independent Python stdlib exact subset sums, modular inverse and private greedy/permutation verification"
+  }
+]

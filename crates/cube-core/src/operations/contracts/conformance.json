@@ -19947,5 +19947,286 @@
       "label_hex": "",
       "profile": "cramer_shoup_ffdhe2048_sha256_raw_v1"
     }
+  },
+  {
+    "contract_sha256": "ac462fad7b330e2fe5cb04db83781c7242b09a32c4cf3173ddacd6e93e465c62",
+    "inputs": {
+      "key": {
+        "base64": "eyJuIjoiNzcifQ=="
+      },
+      "tokens": [
+        "20",
+        "0",
+        "7",
+        "76"
+      ]
+    },
+    "operation": "cipher.rabin.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "15",
+        "0",
+        "49",
+        "1"
+      ]
+    },
+    "parameters": {
+      "profile": "rabin_blum_reference_v1"
+    }
+  },
+  {
+    "contract_sha256": "d1baaadd846d1c1cecbef8b469419a50bcb6391ebaa5afb7d866ecfd36f74182",
+    "inputs": {
+      "key": {
+        "base64": "eyJwIjoiNyIsInEiOiIxMSJ9"
+      },
+      "tokens": [
+        "15",
+        "0",
+        "49",
+        "1"
+      ]
+    },
+    "operation": "cipher.rabin.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "candidates": [
+        [
+          "13",
+          "20",
+          "57",
+          "64"
+        ],
+        [
+          "0"
+        ],
+        [
+          "7",
+          "70"
+        ],
+        [
+          "1",
+          "34",
+          "43",
+          "76"
+        ]
+      ]
+    },
+    "parameters": {
+      "profile": "rabin_blum_reference_v1"
+    }
+  },
+  {
+    "contract_sha256": "ad3d7aa27b7639795e8eaa6c610801addda1f283ddc16aa3f35c465b617ba414",
+    "inputs": {
+      "key": {
+        "base64": "eyJuIjoiMjcyOTUzIiwieSI6IjIifQ=="
+      },
+      "tokens": [
+        "0",
+        "1",
+        "1",
+        "0"
+      ]
+    },
+    "operation": "cipher.goldwasser_micali.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "229971",
+        "38945",
+        "143248",
+        "7651"
+      ]
+    },
+    "parameters": {
+      "profile": "goldwasser_micali_reference_v1"
+    },
+    "verification": {
+      "kind": "inverse",
+      "operation": "cipher.goldwasser_micali.decrypt",
+      "operation_version": 1,
+      "parameters": {
+        "profile": "goldwasser_micali_reference_v1"
+      },
+      "inputs": {
+        "key": {
+          "base64": "eyJwIjoiNDk5IiwicSI6IjU0NyIsInkiOiIyIn0="
+        }
+      },
+      "input_port": "tokens",
+      "output_port": "tokens",
+      "expected_outputs": {
+        "tokens": [
+          "0",
+          "1",
+          "1",
+          "0"
+        ]
+      }
+    }
+  },
+  {
+    "contract_sha256": "511d93e945c4051dd81e928ec43eead23200de04258026db260923343eb54455",
+    "inputs": {
+      "key": {
+        "base64": "eyJwIjoiNDk5IiwicSI6IjU0NyIsInkiOiIyIn0="
+      },
+      "tokens": [
+        "4",
+        "18",
+        "50",
+        "49"
+      ]
+    },
+    "operation": "cipher.goldwasser_micali.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "0",
+        "1",
+        "1",
+        "0"
+      ]
+    },
+    "parameters": {
+      "profile": "goldwasser_micali_reference_v1"
+    }
+  },
+  {
+    "contract_sha256": "b2085f7ab07c2b631abd6b9d38801a81e0d44fb37314b90e7ff8b0c0e28e4572",
+    "inputs": {
+      "key": {
+        "base64": "eyJuIjoiNzA3IiwiciI6MywieSI6IjIifQ=="
+      },
+      "tokens": [
+        "0",
+        "1",
+        "2",
+        "1"
+      ]
+    },
+    "operation": "cipher.benaloh.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "426",
+        "439",
+        "612",
+        "68"
+      ]
+    },
+    "parameters": {
+      "profile": "benaloh_prime_r_reference_v1"
+    },
+    "verification": {
+      "kind": "inverse",
+      "operation": "cipher.benaloh.decrypt",
+      "operation_version": 1,
+      "parameters": {
+        "profile": "benaloh_prime_r_reference_v1"
+      },
+      "inputs": {
+        "key": {
+          "base64": "eyJwIjoiNyIsInEiOiIxMDEiLCJ5IjoiMiIsInIiOjN9"
+        }
+      },
+      "input_port": "tokens",
+      "output_port": "tokens",
+      "expected_outputs": {
+        "tokens": [
+          "0",
+          "1",
+          "2",
+          "1"
+        ]
+      }
+    }
+  },
+  {
+    "contract_sha256": "48690d3e1e33000fbe95841eab489e141ffc4aa5d9c8e3fe80aa0e980fd681ea",
+    "inputs": {
+      "key": {
+        "base64": "eyJwIjoiNyIsInEiOiIxMDEiLCJyIjozLCJ5IjoiMiJ9"
+      },
+      "tokens": [
+        "8",
+        "54",
+        "256",
+        "250"
+      ]
+    },
+    "operation": "cipher.benaloh.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "0",
+        "1",
+        "2",
+        "1"
+      ]
+    },
+    "parameters": {
+      "profile": "benaloh_prime_r_reference_v1"
+    }
+  },
+  {
+    "contract_sha256": "9ba926c5bc6cc904e790a1c9ba02f18e86c64b9e4104635e84f8555e747af9da",
+    "inputs": {
+      "key": {
+        "base64": "eyJ3ZWlnaHRzIjpbIjQ3MSIsIjI4NyIsIjM3MyIsIjgyIiwiMTAiLCIxMjMiLCIyNDgiLCI4MyJdfQ=="
+      },
+      "tokens": [
+        "00000000",
+        "10101010",
+        "11111111",
+        "00000001",
+        "10000000"
+      ]
+    },
+    "operation": "cipher.merkle_hellman.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "0",
+        "1102",
+        "1677",
+        "83",
+        "471"
+      ]
+    },
+    "parameters": {
+      "profile": "merkle_hellman_permuted_reference_v1"
+    }
+  },
+  {
+    "contract_sha256": "74f7a5b27c77caaf9ec547644fa1ffa283a2b97501f56459698c79b1eea39af3",
+    "inputs": {
+      "key": {
+        "base64": "eyJtb2R1bHVzIjoiNDkxIiwibXVsdGlwbGllciI6IjQxIiwicGVybXV0YXRpb24iOls3LDIsNSwwLDYsMSw0LDNdLCJ3ZWlnaHRzIjpbIjIiLCIzIiwiNyIsIjE0IiwiMzAiLCI1NyIsIjEyMCIsIjI1MSJdfQ=="
+      },
+      "tokens": [
+        "0",
+        "1102",
+        "1677",
+        "83",
+        "471"
+      ]
+    },
+    "operation": "cipher.merkle_hellman.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        "00000000",
+        "10101010",
+        "11111111",
+        "00000001",
+        "10000000"
+      ]
+    },
+    "parameters": {
+      "profile": "merkle_hellman_permuted_reference_v1"
+    }
   }
 ]

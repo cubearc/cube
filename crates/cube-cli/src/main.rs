@@ -37,6 +37,7 @@ mod fpecmd;
 mod fractioncmd;
 mod groupcmd;
 mod historicalcmd;
+mod historicalpublickeycmd;
 mod iescmd;
 mod keywrapcmd;
 mod mechanicalcmd;
@@ -561,6 +562,26 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Explicit educational reference; unsuitable for live secrets
+    Rabin {
+        #[command(subcommand)]
+        command: historicalpublickeycmd::Command,
+    },
+    /// Explicit educational reference; unsuitable for live secrets
+    GoldwasserMicali {
+        #[command(subcommand)]
+        command: historicalpublickeycmd::Command,
+    },
+    /// Explicit educational reference; unsuitable for live secrets
+    Benaloh {
+        #[command(subcommand)]
+        command: historicalpublickeycmd::Command,
+    },
+    /// Explicit educational reference; unsuitable for live secrets
+    MerkleHellman {
+        #[command(subcommand)]
+        command: historicalpublickeycmd::Command,
     },
     /// Raw prime-order ElGamal group messages; unauthenticated
     #[command(name = "elgamal")]
@@ -1177,6 +1198,34 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Rabin { command } => {
+                    return historicalpublickeycmd::run(
+                        command,
+                        historicalpublickeycmd::Family::Rabin,
+                        &mut output,
+                    );
+                }
+                Cipher::GoldwasserMicali { command } => {
+                    return historicalpublickeycmd::run(
+                        command,
+                        historicalpublickeycmd::Family::GoldwasserMicali,
+                        &mut output,
+                    );
+                }
+                Cipher::Benaloh { command } => {
+                    return historicalpublickeycmd::run(
+                        command,
+                        historicalpublickeycmd::Family::Benaloh,
+                        &mut output,
+                    );
+                }
+                Cipher::MerkleHellman { command } => {
+                    return historicalpublickeycmd::run(
+                        command,
+                        historicalpublickeycmd::Family::MerkleHellman,
+                        &mut output,
+                    );
+                }
                 Cipher::ElGamal { command } => {
                     return groupcmd::run(command, groupcmd::Family::ElGamal, &mut output);
                 }

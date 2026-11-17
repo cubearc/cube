@@ -2608,3 +2608,35 @@ def cramer_shoup_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes
 
 def cramer_shoup_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
     """Apply the exact raw prime-order group profile without text or padding guesses."""
+
+def rabin_encrypt(data: list[str], key: bytes, parameters_json: str) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def rabin_decrypt(data: list[str], key: bytes, parameters_json: str) -> list[list[str]]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def goldwasser_micali_encrypt(
+    data: list[str], key: bytes, parameters_json: str
+) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def goldwasser_micali_decrypt(
+    data: list[str], key: bytes, parameters_json: str
+) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def benaloh_encrypt(data: list[str], key: bytes, parameters_json: str) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def benaloh_decrypt(data: list[str], key: bytes, parameters_json: str) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def merkle_hellman_encrypt(
+    data: list[str], key: bytes, parameters_json: str
+) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""
+
+def merkle_hellman_decrypt(
+    data: list[str], key: bytes, parameters_json: str
+) -> list[str]:
+    """Apply a bounded educational reference profile to exact tokens."""

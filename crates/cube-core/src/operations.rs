@@ -375,6 +375,7 @@ const MODULES: &[Module] = &[
     crate::asymmetric::sm2::MODULE,
     crate::asymmetric::ies::MODULE,
     crate::asymmetric::group_encryption::MODULE,
+    crate::asymmetric::historical_public_key::MODULE,
     crate::encoding::MODULE,
     crate::ciphers::MODULE,
     crate::hashing::MODULE,

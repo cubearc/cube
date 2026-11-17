@@ -10,6 +10,9 @@ use crate::{
 use serde_json::{Value, json};
 use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
+    if crate::asymmetric::historical_public_key::supports(op) {
+        return true;
+    }
     matches!(
         op,
         crate::asymmetric::group_encryption::ELGAMAL_ENCRYPT
@@ -61,6 +64,13 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    if crate::asymmetric::historical_public_key::supports(op) {
+        use crate::asymmetric::historical_public_key as h;
+        let key = zeroize::Zeroizing::new(bytes(&i["key"])?);
+        let tokens = zeroize::Zeroizing::new(field::<Vec<String>>(&i, "tokens")?);
+        let p = h::bounded_parameters(p, _budget)?;
+        return h::execute(op, &tokens, &key, &p.to_string());
+    }
     {
         use crate::asymmetric::group_encryption as g;
         if matches!(

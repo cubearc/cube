@@ -369,13 +369,6 @@ impl Descriptor {
 /// Collect metadata from its owning modules in legacy command order.
 /// This is metadata assembly, not a dispatcher. Consumers may sort by stable ID.
 const MODULES: &[Module] = &[
-    crate::asymmetric::dh::MODULE,
-    crate::asymmetric::ecdh::MODULE,
-    crate::asymmetric::rsa::MODULE,
-    crate::asymmetric::sm2::MODULE,
-    crate::asymmetric::ies::MODULE,
-    crate::asymmetric::group_encryption::MODULE,
-    crate::asymmetric::historical_public_key::MODULE,
     crate::encoding::MODULE,
     crate::ciphers::MODULE,
     crate::hashing::MODULE,
@@ -516,6 +509,13 @@ const MODULES: &[Module] = &[
     crate::composition::MODULE,
     crate::composition::structured::MODULE,
     crate::image::dimensions::MODULE,
+    crate::asymmetric::dh::MODULE,
+    crate::asymmetric::ecdh::MODULE,
+    crate::asymmetric::rsa::MODULE,
+    crate::asymmetric::sm2::MODULE,
+    crate::asymmetric::ies::MODULE,
+    crate::asymmetric::group_encryption::MODULE,
+    crate::asymmetric::historical_public_key::MODULE,
 ];
 pub fn catalog() -> Vec<&'static Descriptor> {
     MODULES

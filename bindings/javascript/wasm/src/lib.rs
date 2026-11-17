@@ -294,6 +294,10 @@ pub fn run_recipe_json(
 }
 
 #[cfg(test)]
+#[path = "../../../../crates/cube-core/tests/support/randomized_fixture.rs"]
+mod randomized_fixture;
+
+#[cfg(test)]
 mod binding_tests {
     use super::*;
     use serde_json::{Value, json};
@@ -415,11 +419,10 @@ mod binding_tests {
             match execute_json(&request.to_string()) {
                 Ok(value) => {
                     let actual: Value = serde_json::from_str(&value).unwrap();
-                    if actual != fixture["outputs"] {
-                        failures.push(format!(
-                            "{op}: actual {actual} != expected {}",
-                            fixture["outputs"]
-                        ));
+                    if fixture.get("verification").is_some() {
+                        randomized_fixture::assert_inverse(&fixture, &actual);
+                    } else if actual != fixture["outputs"] {
+                        failures.push(format!("{op}: independent known-answer mismatch"));
                     }
                 }
                 Err(error) => failures.push(format!("{op}: {error}")),

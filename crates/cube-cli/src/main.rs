@@ -25,6 +25,7 @@ mod logiccmd;
 mod multisetcmd;
 mod probabilitycmd;
 use input::Input;
+mod aeadcmd;
 mod aescmd;
 mod blockcmd;
 mod cryptanalysiscmd;
@@ -550,6 +551,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Explicit authenticated byte profiles with detached tags and required AAD
+    Aead {
+        #[command(subcommand)]
+        command: aeadcmd::Command,
     },
     /// Hazardous raw AES blocks; key file only, no padding or authentication
     Aes {
@@ -1110,6 +1116,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Aead { command } => return aeadcmd::run(command, &mut output),
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),
                 Cipher::Block { command } => return blockcmd::run(command, &mut output),
                 Cipher::Stream { command } => return streamrefcmd::run(command, &mut output),

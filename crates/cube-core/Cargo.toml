@@ -7,6 +7,17 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+aes-gcm = { version = "=0.11.1", default-features = false, features = ["aes", "zeroize"] }
+chacha20poly1305 = { version = "=0.11.0", default-features = false, features = ["zeroize"] }
+aes-siv = { version = "=0.8.0", default-features = false }
+aes-gcm-siv = { version = "=0.12.1", default-features = false, features = ["aes"] }
+ascon-aead = { version = "=0.6.0", features = ["zeroize"] }
+ccm = { version = "=0.6.1", default-features = false }
+eax = { version = "=0.5.0", default-features = false }
+aes08 = { package = "aes", version = "=0.8.4", features = ["zeroize"] }
+ocb3 = { version = "=0.2.0", default-features = false }
+aegis = { version = "=0.9.20", default-features = false, features = ["std", "pure-rust", "rustcrypto-traits-06"] }
+deoxys = { version = "=0.2.1", default-features = false }
 cbc = { version = "=0.2.1", features = ["zeroize"] }
 ecb = { version = "=0.2.1", features = ["zeroize"] }
 cfb-mode = { version = "=0.9.1", features = ["zeroize"] }

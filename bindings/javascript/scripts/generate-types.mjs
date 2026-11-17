@@ -12,7 +12,13 @@ function schemaType(schema, output = false, root = schema, seen = new Set()) {
   if (schema.const !== undefined) return JSON.stringify(schema.const);
   if (schema.enum) return schema.enum.map(value => JSON.stringify(value)).join(' | ');
   if (schema.anyOf || schema.oneOf) return `(${(schema.anyOf ?? schema.oneOf).map(item => schemaType(item, output, root, seen)).join(' | ')})`;
-  if (schema.allOf) return `(${schema.allOf.map(item => schemaType(item, output, root, seen)).join(' & ')})`;
+  if (schema.allOf) {
+    const { allOf, ...base } = schema;
+    // Conditional length/pattern checks remain runtime constraints. Preserve
+    // the common required fields and enums alongside structural intersections.
+    const branches = allOf.filter(item => !item.if || item.type || item.$ref || item.properties);
+    return `(${[base, ...branches].map(item => schemaType(item, output, root, seen)).join(' & ')})`;
+  }
   if (Array.isArray(schema.type)) return `(${schema.type.map(type => schemaType({ ...schema, type }, output, root, seen)).join(' | ')})`;
   switch (schema.type) {
     case 'null': return 'null';

@@ -9,6 +9,7 @@ pub mod classical;
 pub mod enigma;
 pub(crate) mod execution;
 pub mod mechanical;
+pub mod modern_aead;
 pub mod mono;
 pub mod poly;
 pub mod polybius;

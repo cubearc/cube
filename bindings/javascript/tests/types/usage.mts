@@ -278,3 +278,20 @@ const aesModeOutput:Uint8Array=cube.execute({operation:'cipher.aes.mode.encrypt'
 void aesModeOutput;
 // @ts-expect-error ECB/CBC padding is mandatory
 cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{mode:'cbc',key_hex:'00'.repeat(16),iv_hex:'24'.repeat(16)}});
+
+const aeadSettings={profile:'aes128_gcm' as const,key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(12)};
+const aeadCipher=cube.execute({operation:'cipher.aead.encrypt',version:1,inputs:{input:new Uint8Array(),aad:new Uint8Array()},parameters:aeadSettings});
+const aeadTag:Uint8Array=aeadCipher.tag;
+const aeadPlain:Uint8Array=cube.execute({operation:'cipher.aead.decrypt',version:1,inputs:{input:aeadCipher.output,aad:new Uint8Array(),tag:aeadTag},parameters:aeadSettings}).output;
+void aeadPlain;
+// @ts-expect-error associated data is a required exact byte port
+cube.execute({operation:'cipher.aead.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:aeadSettings});
+// @ts-expect-error no implicit nonce
+cube.execute({operation:'cipher.aead.encrypt',version:1,inputs:{input:new Uint8Array(),aad:new Uint8Array()},parameters:{profile:'aes128_gcm',key_hex:'00'.repeat(16)}});
+// @ts-expect-error exact supported profile names only
+cube.execute({operation:'cipher.aead.encrypt',version:1,inputs:{input:new Uint8Array(),aad:new Uint8Array()},parameters:{profile:'guess',key_hex:'00'.repeat(16),nonce_hex:'00'.repeat(12)}});
+const sivOutput=cube.execute({operation:'cipher.aes.siv.encrypt',version:1,inputs:{input:new Uint8Array(),aad_components:[[1,2],[]]},parameters:{profile:'aes128_siv_cmac_nonce_free',key_hex:'00'.repeat(32)}});
+const sivTag:Uint8Array=sivOutput.tag;
+void sivTag;
+// @ts-expect-error SIV nonce-free parameters forbid nonce fields
+cube.execute({operation:'cipher.aes.siv.encrypt',version:1,inputs:{input:new Uint8Array(),aad_components:[]},parameters:{profile:'aes128_siv_cmac_nonce_free',key_hex:'00'.repeat(32),nonce_hex:'00'.repeat(16)}});

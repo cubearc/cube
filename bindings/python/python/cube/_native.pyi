@@ -2529,3 +2529,27 @@ def aes_mode_encrypt(data: bytes, parameters_json: str) -> bytes:
 def aes_mode_decrypt(data: bytes, parameters_json: str) -> bytes:
     """Return bytes only after complete padding validation; padding is not integrity."""
     ...
+
+def aead_encrypt(
+    data: bytes, associated_data: bytes, parameters_json: str
+) -> tuple[bytes, bytes]:
+    """Return ciphertext and a full detached tag for an explicit profile."""
+    ...
+
+def aead_decrypt(
+    data: bytes, associated_data: bytes, tag: bytes, parameters_json: str
+) -> bytes:
+    """Verify the complete ciphertext/AAD/tag before returning any plaintext."""
+    ...
+
+def aes_siv_encrypt(
+    data: bytes, associated_data: list[bytes], parameters_json: str
+) -> tuple[bytes, bytes]:
+    """Encrypt with nonce-free SIV and ordered AAD components."""
+    ...
+
+def aes_siv_decrypt(
+    data: bytes, associated_data: list[bytes], tag: bytes, parameters_json: str
+) -> bytes:
+    """Authenticate SIV and ordered AAD components before returning plaintext."""
+    ...

@@ -134,6 +134,15 @@ Core limits apply in addition to Python transport checks. Read
 [complete and partial results](../concepts/results.md) before interpreting a
 resource stop; the operation reference defines its fields and failure policy.
 
+## Authenticated byte encryption
+
+`cube.aead_encrypt(data, associated_data, parameters_json)` returns a
+`(ciphertext, tag)` pair. `cube.aead_decrypt(data, associated_data, tag,
+parameters_json)` returns bytes only after complete verification.
+Nonce-free `aes_siv_encrypt` and `aes_siv_decrypt` accept `list[bytes]` for ordered
+associated-data components. See [authenticated byte encryption](../reference/topics/authenticated-ciphers.md)
+for exact profiles, private settings and limits.
+
 ## AES byte modes
 
 `cube.aes_mode_encrypt(data, parameters_json)` and

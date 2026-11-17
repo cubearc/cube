@@ -1,7 +1,7 @@
-//! Raw cipher profiles forward exact bytes and explicit key material to Core.
+//! Exact cipher profiles forward byte ports and private settings to Core.
 use super::{bytes, field};
 use crate::{
-    ciphers::{aes_blocks, aes_modes, block_profiles, stream, xxtea},
+    ciphers::{aes_blocks, aes_modes, block_profiles, modern_aead, stream, xxtea},
     errors::{ErrorCode, OperationError},
 };
 use serde_json::{Value, json};
@@ -13,6 +13,10 @@ pub(super) fn supports(op: &str) -> bool {
             "cipher.vernam"
                 | "cipher.aes.encrypt_blocks"
                 | "cipher.aes.decrypt_blocks"
+                | modern_aead::ENCRYPT
+                | modern_aead::DECRYPT
+                | modern_aead::SIV_ENCRYPT
+                | modern_aead::SIV_DECRYPT
                 | aes_modes::ENCRYPT
                 | aes_modes::DECRYPT
                 | block_profiles::ENCRYPT
@@ -39,6 +43,15 @@ pub(super) fn execute(
         );
     }
     let input = bytes(&i["input"])?;
+    if matches!(
+        op,
+        modern_aead::ENCRYPT
+            | modern_aead::DECRYPT
+            | modern_aead::SIV_ENCRYPT
+            | modern_aead::SIV_DECRYPT
+    ) {
+        return authenticated(op, &input, &i, &p);
+    }
     if matches!(op, authentication::ENCRYPT | authentication::DECRYPT) {
         let settings = authentication::Settings::parse(&p.to_string())?;
         return if op == authentication::ENCRYPT {
@@ -108,4 +121,32 @@ fn invalid() -> OperationError {
         ErrorCode::InvalidParameter,
         "use the exact key, nonce and counter fields",
     )
+}
+
+fn authenticated(op: &str, input: &[u8], i: &Value, p: &Value) -> Result<Value, OperationError> {
+    let document = zeroize::Zeroizing::new(p.to_string());
+    if matches!(op, modern_aead::SIV_ENCRYPT | modern_aead::SIV_DECRYPT) {
+        let s = modern_aead::SivSettings::parse(&document)?;
+        let components = field::<Vec<Vec<u8>>>(i, "aad_components")?;
+        if op == modern_aead::SIV_ENCRYPT {
+            let result = modern_aead::siv_encrypt(input, &components, &s)?;
+            Ok(detached(result))
+        } else {
+            let plain = modern_aead::siv_decrypt(input, &components, &bytes(&i["tag"])?, &s)?;
+            Ok(json!({"output":{"base64":crate::encoding::base64_encode(&plain)}}))
+        }
+    } else {
+        let s = modern_aead::Settings::parse(&document)?;
+        let aad = bytes(&i["aad"])?;
+        if op == modern_aead::ENCRYPT {
+            let result = modern_aead::encrypt(input, &aad, &s)?;
+            Ok(detached(result))
+        } else {
+            let plain = modern_aead::decrypt(input, &aad, &bytes(&i["tag"])?, &s)?;
+            Ok(json!({"output":{"base64":crate::encoding::base64_encode(&plain)}}))
+        }
+    }
+}
+fn detached(result: modern_aead::Detached) -> Value {
+    json!({"output":{"base64":crate::encoding::base64_encode(&result.ciphertext)},"tag":{"base64":crate::encoding::base64_encode(&result.tag)}})
 }

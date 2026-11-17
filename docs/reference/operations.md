@@ -3002,6 +3002,1014 @@ Example:
 cube cipher --help
 ```
 
+## cipher.aead.decrypt
+
+Explicit authenticated byte profiles with exact associated data and detached tags; authenticate completely before plaintext release.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `aad` | `bytes` |
+| Input | `tag` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "nonce_hex": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_gcm"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_gcm"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "chacha20poly1305_ietf"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "xchacha20poly1305"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{48}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_gcm_siv"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_gcm_siv"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "ascon_aead128_nist_sp800_232"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_ccm_nonce13_tag8"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{26}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_ccm_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_ccm_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_eax_nonce16_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_eax_nonce16_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_ocb3_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_ocb3_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis128l_rfc10032_tag128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis128l_rfc10032_tag256"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis256_rfc10032_tag128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis256_rfc10032_tag256"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "deoxys_ii_128_128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{30}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "deoxys_ii_256_128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{30}$"
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "profile",
+    "key_hex",
+    "nonce_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aes128_gcm",
+        "aes256_gcm",
+        "chacha20poly1305_ietf",
+        "xchacha20poly1305",
+        "aes128_gcm_siv",
+        "aes256_gcm_siv",
+        "ascon_aead128_nist_sp800_232",
+        "aes128_ccm_nonce13_tag8",
+        "aes128_ccm_nonce12_tag16",
+        "aes256_ccm_nonce12_tag16",
+        "aes128_eax_nonce16_tag16",
+        "aes256_eax_nonce16_tag16",
+        "aes128_ocb3_nonce12_tag16",
+        "aes256_ocb3_nonce12_tag16",
+        "aegis128l_rfc10032_tag128",
+        "aegis128l_rfc10032_tag256",
+        "aegis256_rfc10032_tag128",
+        "aegis256_rfc10032_tag256",
+        "deoxys_ii_128_128",
+        "deoxys_ii_256_128"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aead encrypt --parameters-file settings.json --aad-file context.bin --file input.bin
+```
+
+## cipher.aead.encrypt
+
+Explicit authenticated byte profiles with exact associated data and detached tags; authenticate completely before plaintext release.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `aad` | `bytes` |
+| Output | `output` | `bytes` |
+| Output | `tag` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "nonce_hex": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_gcm"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_gcm"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "chacha20poly1305_ietf"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "xchacha20poly1305"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{48}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_gcm_siv"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_gcm_siv"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "ascon_aead128_nist_sp800_232"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_ccm_nonce13_tag8"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{26}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_ccm_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_ccm_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_eax_nonce16_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_eax_nonce16_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_ocb3_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_ocb3_nonce12_tag16"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{24}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis128l_rfc10032_tag128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis128l_rfc10032_tag256"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis256_rfc10032_tag128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aegis256_rfc10032_tag256"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "deoxys_ii_128_128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{32}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{30}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "deoxys_ii_256_128"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          },
+          "nonce_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{30}$"
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "profile",
+    "key_hex",
+    "nonce_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aes128_gcm",
+        "aes256_gcm",
+        "chacha20poly1305_ietf",
+        "xchacha20poly1305",
+        "aes128_gcm_siv",
+        "aes256_gcm_siv",
+        "ascon_aead128_nist_sp800_232",
+        "aes128_ccm_nonce13_tag8",
+        "aes128_ccm_nonce12_tag16",
+        "aes256_ccm_nonce12_tag16",
+        "aes128_eax_nonce16_tag16",
+        "aes256_eax_nonce16_tag16",
+        "aes128_ocb3_nonce12_tag16",
+        "aes256_ocb3_nonce12_tag16",
+        "aegis128l_rfc10032_tag128",
+        "aegis128l_rfc10032_tag256",
+        "aegis256_rfc10032_tag128",
+        "aegis256_rfc10032_tag256",
+        "deoxys_ii_128_128",
+        "deoxys_ii_256_128"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aead encrypt --parameters-file settings.json --aad-file context.bin --file input.bin
+```
+
 ## cipher.aes.decrypt_blocks
 
 Raw FIPS 197 AES whole blocks; no padding, nonce, authentication or message format.
@@ -3424,6 +4432,196 @@ Example:
 
 ```sh
 cube cipher aes mode encrypt --parameters-file settings.json --file input.bin
+```
+
+## cipher.aes.siv.decrypt
+
+RFC5297 deterministic nonce-free AES-SIV-CMAC with ordered associated-data components and a detached16-byte synthetic IV.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `aad_components` | `json` |
+| Input | `tag` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "profile": {
+      "$ref": "#/$defs/SivProfile"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_siv_cmac_nonce_free"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_siv_cmac_nonce_free"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{128}$"
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "profile",
+    "key_hex"
+  ],
+  "$defs": {
+    "SivProfile": {
+      "type": "string",
+      "enum": [
+        "aes128_siv_cmac_nonce_free",
+        "aes256_siv_cmac_nonce_free"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aead siv encrypt --parameters-file settings.json --aad-components-file components.json --file input.bin
+```
+
+## cipher.aes.siv.encrypt
+
+RFC5297 deterministic nonce-free AES-SIV-CMAC with ordered associated-data components and a detached16-byte synthetic IV.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `aad_components` | `json` |
+| Output | `output` | `bytes` |
+| Output | `tag` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "profile": {
+      "$ref": "#/$defs/SivProfile"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes128_siv_cmac_nonce_free"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{64}$"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "aes256_siv_cmac_nonce_free"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "pattern": "^[0-9A-Fa-f]{128}$"
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "profile",
+    "key_hex"
+  ],
+  "$defs": {
+    "SivProfile": {
+      "type": "string",
+      "enum": [
+        "aes128_siv_cmac_nonce_free",
+        "aes256_siv_cmac_nonce_free"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aead siv encrypt --parameters-file settings.json --aad-components-file components.json --file input.bin
 ```
 
 ## cipher.affine.decode

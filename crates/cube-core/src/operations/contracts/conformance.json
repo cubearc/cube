@@ -19254,5 +19254,157 @@
       "mode": "cbc",
       "padding": "none"
     }
+  },
+  {
+    "contract_sha256": "7a3d2492f0a2289382c605f4ab4b96dd1637a38db2d4639a00235ae09f8ce0f5",
+    "inputs": {
+      "aad": {
+        "base64": ""
+      },
+      "input": {
+        "base64": ""
+      },
+      "tag": {
+        "base64": "WOL8zvp+MGE2fx1XpOdFWg=="
+      }
+    },
+    "operation": "cipher.aead.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": ""
+      }
+    },
+    "parameters": {
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "profile": "aes128_gcm"
+    }
+  },
+  {
+    "contract_sha256": "27e209e75e1a8b8c4f7cefee25969bb14b7df0bd25aa437682fe88583fc5878d",
+    "inputs": {
+      "aad": {
+        "base64": ""
+      },
+      "input": {
+        "base64": ""
+      }
+    },
+    "operation": "cipher.aead.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": ""
+      },
+      "tag": {
+        "base64": "WOL8zvp+MGE2fx1XpOdFWg=="
+      }
+    },
+    "parameters": {
+      "key_hex": "00000000000000000000000000000000",
+      "nonce_hex": "000000000000000000000000",
+      "profile": "aes128_gcm"
+    }
+  },
+  {
+    "contract_sha256": "d4f7afdef3888d033707480b3287056931492054278937546450fe4d1916bcc7",
+    "inputs": {
+      "aad_components": [
+        [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ]
+      ],
+      "input": {
+        "base64": "QMArlpDE3ATa739q/lw="
+      },
+      "tag": {
+        "base64": "hWMtB8bo83+VCs0yCi7Mkw=="
+      }
+    },
+    "operation": "cipher.aes.siv.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "ESIzRFVmd4iZqrvM3e4="
+      }
+    },
+    "parameters": {
+      "key_hex": "fffefdfcfbfaf9f8f7f6f5f4f3f2f1f0f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
+      "profile": "aes128_siv_cmac_nonce_free"
+    }
+  },
+  {
+    "contract_sha256": "52889706ca7f428d891c6a8c1ca701ea04f66ceacef2339d0bdbe6f65fa03d3c",
+    "inputs": {
+      "aad_components": [
+        [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ]
+      ],
+      "input": {
+        "base64": "ESIzRFVmd4iZqrvM3e4="
+      }
+    },
+    "operation": "cipher.aes.siv.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "QMArlpDE3ATa739q/lw="
+      },
+      "tag": {
+        "base64": "hWMtB8bo83+VCs0yCi7Mkw=="
+      }
+    },
+    "parameters": {
+      "key_hex": "fffefdfcfbfaf9f8f7f6f5f4f3f2f1f0f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
+      "profile": "aes128_siv_cmac_nonce_free"
+    }
   }
 ]

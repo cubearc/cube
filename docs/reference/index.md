@@ -27,6 +27,7 @@ remain in each operation's reference.
 - [Swiss NEMA Model45](topics/nema.md)
 - [Raw AES blocks](topics/aes-blocks.md)
 - [AES byte modes](topics/aes-modes.md)
+- [Authenticated byte encryption](topics/authenticated-ciphers.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)
 - [Text operations](topics/text-operations.md)

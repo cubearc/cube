@@ -1,0 +1,242 @@
+[
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "fffefdfcfbfaf9f8f7f6f5f4f3f2f1f0f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+    },
+    "aad_components_hex": [
+      "101112131415161718191a1b1c1d1e1f2021222324252627"
+    ],
+    "plaintext_hex": "112233445566778899aabbccddee",
+    "ciphertext_hex": "40c02b9690c4dc04daef7f6afe5c",
+    "tag_hex": "85632d07c6e8f37f950acd320a2ecc93"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "2b27e429fb6c02678e589ccc4437c5adfb44b331ab6d21ea321727e6ec03d354"
+    },
+    "aad_components_hex": [
+      ""
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "b2b2354e3724dcdaa85ecf029b49a90c"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 2,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "e40992eb4f649e5d49134652aecc24bafa6b45ce8dd9e9d371ede7d5de84fa72"
+    },
+    "aad_components_hex": [
+      "8268c5194a71aed0fc1dafe3"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "92bc07ee200fbd488b7f70a10da26a21"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 3,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "99037935e620da1d67faf1e26d5a0e2c5ac2eae5eec7cbb7b7a613056f6719e3"
+    },
+    "aad_components_hex": [
+      "24ab40e7966c5bfe8a5d2b0a6a9765"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "f44934d6f5ba77122f198599cd0e5e52"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 4,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "7bf9e536b66a215c22233fe2daaa743a898b9acb9f7802de70b40e3d6e43ef97"
+    },
+    "aad_components_hex": [
+      "9ffff196befb5ffba01afa9235418d57"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "c11ab0ae193018d2c9c7985aec3f8a5b"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 5,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "ea7081db53ce49559f9fd2b53e00f91b68c2bdba946961da1a5bc70918297a43"
+    },
+    "aad_components_hex": [
+      "a9efd155159b533f2b649b2e5fbf87e6a2c11ee8"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "cf52a3c9e2d3d99a66f74135f39e28bb"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 6,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "1e225cafb90339bba1b24076d4206c3e79c355805d851682bc818baa4f5a7779"
+    },
+    "aad_components_hex": [
+      "896dcdb367f3c76d60093dc5ae09bc4f30e5cb88e3434e6eb0f0700ac752cd97"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "8f603b65e767ef178b4dd11db6c114c1"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-256_pass.blb",
+    "source_sha256": "6bb3566f122d163f17e7a7c0039006a4374d2aa4e4c5a0a8ac6a113107d6db8c",
+    "source_case": 7,
+    "parameters": {
+      "profile": "aes128_siv_cmac_nonce_free",
+      "key_hex": "612e837843ceae7f61d49625faa7e7494f9253e20cb3adcea686512b043936cd"
+    },
+    "aad_components_hex": [
+      "865d39ae9b5e9ff8d6308e00208745bc"
+    ],
+    "plaintext_hex": "cc37fae15f745a2f40e2c8b192f2b38d",
+    "ciphertext_hex": "8fbd6099718991fe775bf5a659d30a24",
+    "tag_hex": "c79c86cd7509e60a16ca8cec6bcaa1c5"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "bc7635c1fd566aa8357fd103714bfaee1c9e5b3c578b3980401a981030254a54b1756a8c96e600b7252fd0aab12f39d115d256b3f3e7c2c41a7fece72ba7c3c4"
+    },
+    "aad_components_hex": [
+      ""
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "44b1c6fe8a8c07dee5377b161f283c31"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "aff6388fdd2908e0c3b610e3dcd410c8146a268d6befd5c45ffdd23508b5b311cc3a9d8f838f456436b289018682151dd57d8d65d1a823c06eca8ab8ee01da01"
+    },
+    "aad_components_hex": [
+      "d0bb2949a411e22d32964526"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "e288d802a0e56ed7544a2e5775459389"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 2,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "484261ebf7e1fb66e0bcafe8f4ccf9c5accc908fdb23eb7c5254d614072f26e106b34501d13c1dad1f14648c6a142132dd7f2f1268dd6b70fbcde2fe98f03245"
+    },
+    "aad_components_hex": [
+      "1d5ce9288627a12f8f5d809167a3b2"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "f8083e55307932d971bfc2a8913c1951"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 3,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "0b6aaf05f9b5221e539940cd83cb29d2bcc7a0aa472d8fc67bedd0108869394e33c9f233d4b2cc9c6a59e8ce9cd268a0f3f2857e08fe1eb329ef347dace1557d"
+    },
+    "aad_components_hex": [
+      "76aade95964f074c693886f245fa57f9"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "f1ad6ea998a2a438acaf90bad0cb9f9f"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 4,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "d47ab6d51f99f4249da56c93d1f09e856231f3fed777b303111ad31079270839e4bc4b5d8623162d4738d70803934a75f457fdbf4a277b828cb6e2753e88702a"
+    },
+    "aad_components_hex": [
+      "41257da6108bedbb150d4e290b6b9a76d11092c6"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "a8d27944a84317098eed170631f4c867"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 5,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "eef6bcf16ef7ae17326a33f22d1406ec1bd3f866505f4b2e4fe8b45bd62ccbd85032a9899facf2db0c93a2345cb8892afb74db549781211dd8881a8c8e25c171"
+    },
+    "aad_components_hex": [
+      "e941d15fadebaf4671e0e3d6d835f87bfb1cc7028f149930daa69c3de446c423"
+    ],
+    "plaintext_hex": "",
+    "ciphertext_hex": "",
+    "tag_hex": "b754ecb55c1e124de0c8a973d033bd7f"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 6,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "c25cafc6018b98dfbb79a40ec89c575a4f88c4116489bba27707479800c0130235334a45dbe8d8dae3da8dcb45bbe5dce031b0f68ded544fda7eca30d6749442"
+    },
+    "aad_components_hex": [
+      "deeb0ccf3aef47a296ed1ca8f4ae5907"
+    ],
+    "plaintext_hex": "beec61030fa3d670337196beade6aeaa",
+    "ciphertext_hex": "a2626aae22f5c17c9aad4b501f4416e4",
+    "tag_hex": "5865208eab9163db85cab9f96d846234"
+  },
+  {
+    "source_file": "aes-siv-0.8.0/tests/data/wycheproof-512_pass.blb",
+    "source_sha256": "ed62a73d9122f49b957ff7c23ebb3f0e9e5f394e34d4ab31ff76756f83908f85",
+    "source_case": 7,
+    "parameters": {
+      "profile": "aes256_siv_cmac_nonce_free",
+      "key_hex": "27faf97fb303aa4f2f364edd23997f4c77b8e51ebb8293c59dfb1d24f0fb629f6c820fc2d91bf48f0035eeec347e37ec4fb0cb36102bcdc5a248c47a2f97eab9"
+    },
+    "aad_components_hex": [
+      "cc94f64e14df90265f7f12a8a0386d0a"
+    ],
+    "plaintext_hex": "6b1db0f5a43376885002dc98bd556f1dac9b66b66213a9fa6069df995a123384",
+    "ciphertext_hex": "b7703a028a0cfc312cf61cbe22b91e3cf20b7d4c9308ee15f18b4eba00889284",
+    "tag_hex": "d0016d675b49f11ea873707412d45709"
+  }
+]

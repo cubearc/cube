@@ -31,6 +31,7 @@ mod image;
 mod investigation;
 mod lexical;
 mod mechanical;
+mod modern_aead;
 mod modular;
 mod mono;
 mod multiset;
@@ -614,6 +615,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     enigma::register(module)?;
     mechanical::register(module)?;
     aes_blocks::register(module)?;
+    modern_aead::register(module)?;
     block_profiles::register(module)?;
     xxtea::register(module)?;
     stream::register(module)?;

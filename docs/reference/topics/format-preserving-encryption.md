@@ -25,7 +25,8 @@ The radix is2..65536 and every digit is an integer0..radix-1. Input length is
 2..4096 digits and the domain `radix^length` must be at least1,000,000.
 FF3/FF3-1 additionally require `radix^ceil(length/2) <= 2^96`. These limits are
 checked using integers before rounds run. Settings JSON is capped at132096
-UTF-8 bytes. FF1 uses10 rounds; FF3 variants use8. Native Play can impose lower
+UTF-8 bytes. The CLI accepts at most24578 bytes of serialized digit-array JSON,
+including whitespace. FF1 uses10 rounds; FF3 variants use8. Native Play can impose lower
 transport limits. These private operations require the existing explicit private-retention policy in Play.
 
 As checked on2026-11-17, the [NIST2025 second public draft](https://csrc.nist.gov/pubs/sp/800/38/g/r1/2pd)

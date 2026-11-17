@@ -383,3 +383,31 @@ const kyberShared: Uint8Array = cube.execute({operation:'crypto.kyber.decapsulat
 void kyberShared;
 // @ts-expect-error Final ML-KEM parameters cannot select a historical Kyber profile.
 cube.execute({operation:'crypto.kyber.decapsulate',version:1,inputs:{ciphertext:new Uint8Array(768),private_key:new Uint8Array(1632)},parameters:{profile:'ml_kem_512_fips203'}});
+
+const bfvCiphertext: Uint8Array = cube.execute({
+    operation: 'cipher.bfv.add',
+    version: 1,
+    inputs: {left: new Uint8Array(16388), right: new Uint8Array(16388)},
+    parameters: {profile: 'bfv_seal412_degree1024_t17_raw_v1'},
+}).ciphertext;
+const negatedBoolean: Uint8Array = cube.execute({
+    operation: 'cipher.tfhe.not',
+    version: 1,
+    inputs: {ciphertext: new Uint8Array(3228)},
+    parameters: {profile: 'tfhe_rs182_boolean_default_lwe805_raw_v1'},
+}).ciphertext;
+void [bfvCiphertext, negatedBoolean];
+
+const paillierCiphertext: Uint8Array = cube.execute({
+    operation: 'cipher.paillier.add',
+    version: 1,
+    inputs: {left: new Uint8Array(512), right: new Uint8Array(512), public_modulus: new Uint8Array(256)},
+    parameters: {profile: 'paillier_g_n_plus_1_be_v1'},
+}).ciphertext;
+const regevBit: Uint8Array = cube.execute({
+    operation: 'cipher.regev.decrypt',
+    version: 1,
+    inputs: {input: new Uint8Array(5), private_key: new Uint8Array(4)},
+    parameters: {profile: 'regev_educational_n4_m16_q97'},
+}).output;
+void [paillierCiphertext, regevBit];

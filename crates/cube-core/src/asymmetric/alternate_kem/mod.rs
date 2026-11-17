@@ -11,6 +11,8 @@ use zeroize::{Zeroize, Zeroizing};
 pub const FRODO: &str = "crypto.frodo_kem.decapsulate";
 pub const HQC: &str = "crypto.hqc.decapsulate";
 pub const MCELIECE: &str = "crypto.classic_mceliece.decapsulate";
+pub const BIKE: &str = "crypto.bike.decapsulate";
+pub const NTRU_KEM: &str = "crypto.ntru_kem.decapsulate";
 pub const MAX_PARAMETERS: usize = 256;
 
 /// Exact raw-key decapsulation profile.
@@ -19,6 +21,8 @@ pub enum Profile {
     Frodo640Shake,
     Hqc128February2026,
     McEliece460896f,
+    NtruHps2048509,
+    BikeL1,
 }
 
 #[derive(Deserialize)]
@@ -33,6 +37,8 @@ impl Profile {
             Self::Frodo640Shake => FRODO,
             Self::Hqc128February2026 => HQC,
             Self::McEliece460896f => MCELIECE,
+            Self::NtruHps2048509 => NTRU_KEM,
+            Self::BikeL1 => BIKE,
         }
     }
 
@@ -41,6 +47,8 @@ impl Profile {
             Self::Frodo640Shake => "frodokem640_shake_salted",
             Self::Hqc128February2026 => "hqc128_20260210_submission",
             Self::McEliece460896f => "mceliece460896f_round4",
+            Self::NtruHps2048509 => "ntru_hps2048509_round3",
+            Self::BikeL1 => "bike_l1_round4",
         }
     }
 
@@ -49,6 +57,8 @@ impl Profile {
             FRODO => Some(Self::Frodo640Shake),
             HQC => Some(Self::Hqc128February2026),
             MCELIECE => Some(Self::McEliece460896f),
+            NTRU_KEM => Some(Self::NtruHps2048509),
+            BIKE => Some(Self::BikeL1),
             _ => None,
         }
     }
@@ -59,6 +69,8 @@ impl Profile {
             Self::Frodo640Shake => (19888, 9752, 16),
             Self::Hqc128February2026 => (2321, 4433, 32),
             Self::McEliece460896f => (13608, 156, 32),
+            Self::NtruHps2048509 => (935, 699, 32),
+            Self::BikeL1 => (5223, 1573, 32),
         }
     }
 
@@ -98,6 +110,8 @@ pub fn decapsulate(
         Profile::Frodo640Shake => frodo(ciphertext, private_key),
         Profile::Hqc128February2026 => hqc(ciphertext, private_key),
         Profile::McEliece460896f => mceliece(ciphertext, private_key),
+        Profile::NtruHps2048509 => ntru_kem(ciphertext, private_key),
+        Profile::BikeL1 => bike(ciphertext, private_key),
     }
 }
 
@@ -137,6 +151,37 @@ fn mceliece(ciphertext: &[u8], key: &[u8]) -> Result<Zeroizing<Vec<u8>>, Operati
         .decapsulate(&key, &ciphertext)
         .map_err(|_| invalid())?;
     Ok(Zeroizing::new(shared.value().to_vec()))
+}
+
+fn bike(ciphertext: &[u8], key: &[u8]) -> Result<Zeroizing<Vec<u8>>, OperationError> {
+    use OQSNativeBIKE::BIKE;
+    use OQSNativeDomain::KeyEncapsulating;
+
+    // Two lists of 71 little-endian positions precede the packed polynomials.
+    // Reject out-of-domain rotations before passing the key to the decoder.
+    let (positions, _) = key[..568].as_chunks::<4>();
+    let mut invalid_position = false;
+    for position in positions {
+        invalid_position |= u32::from_le_bytes(*position) >= 12_323;
+    }
+    if invalid_position {
+        return Err(invalid());
+    }
+
+    let shared = BIKE::bikeL1
+        .decapsulate(ciphertext, key)
+        .map_err(|_| invalid())?;
+    Ok(Zeroizing::new(shared.bytes().to_vec()))
+}
+
+fn ntru_kem(ciphertext: &[u8], key: &[u8]) -> Result<Zeroizing<Vec<u8>>, OperationError> {
+    use OQSNativeDomain::KeyEncapsulating;
+    use OQSNativeNTRU::NTRU;
+
+    let shared = NTRU::ntruHPS2048509
+        .decapsulate(ciphertext, key)
+        .map_err(|_| invalid())?;
+    Ok(Zeroizing::new(shared.bytes().to_vec()))
 }
 
 fn limit() -> OperationError {

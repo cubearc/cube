@@ -2667,7 +2667,55 @@ def hqc_decapsulate(
 ) -> bytes:
     """Decapsulate one raw ciphertext with the explicit hqc profile."""
 
+def bike_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Decapsulate a raw BIKE-L1 Round 4 ciphertext in its explicit profile."""
+
+def ntru_kem_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Decapsulate a raw NTRU-HPS-2048-509 ciphertext in its explicit profile."""
+
+def paillier_add(
+    left: bytes, right: bytes, public_modulus: bytes, parameters_json: str
+) -> bytes:
+    """Add two canonical ciphertexts using the explicit public modulus and profile."""
+
+def damgard_jurik_add(
+    left: bytes, right: bytes, public_modulus: bytes, parameters_json: str
+) -> bytes:
+    """Add two canonical ciphertexts using the explicit public modulus and profile."""
+
+def ntru_encrypt_encrypt(
+    input: bytes, public_key: bytes, parameters_json: str
+) -> bytes:
+    """Encrypt one bounded educational lattice example."""
+
+def ntru_encrypt_decrypt(
+    input: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Decrypt one bounded educational lattice example."""
+
+def regev_encrypt(input: bytes, public_key: bytes, parameters_json: str) -> bytes:
+    """Encrypt one bounded educational lattice example."""
+
+def regev_decrypt(input: bytes, private_key: bytes, parameters_json: str) -> bytes:
+    """Decrypt one bounded educational lattice example."""
+
 def classic_mceliece_decapsulate(
     ciphertext: bytes, private_key: bytes, parameters_json: str
 ) -> bytes:
     """Decapsulate one raw ciphertext with the explicit classic mceliece profile."""
+
+def bfv_add(left: bytes, right: bytes, parameters_json: str) -> bytes:
+    """Evaluate a public homomorphic operation in the fixed named profile."""
+
+def bgv_add(left: bytes, right: bytes, parameters_json: str) -> bytes:
+    """Evaluate a public homomorphic operation in the fixed named profile."""
+
+def ckks_add(left: bytes, right: bytes, parameters_json: str) -> bytes:
+    """Evaluate a public homomorphic operation in the fixed named profile."""
+
+def tfhe_not(ciphertext: bytes, parameters_json: str) -> bytes:
+    """Evaluate a public homomorphic operation in the fixed named profile."""

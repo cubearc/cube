@@ -68,6 +68,8 @@
     - [Raw key agreement](reference/topics/key-agreement.md)
     - [ML-KEM key encapsulation](reference/topics/ml-kem.md)
     - [Alternate KEM profiles](reference/topics/alternate-kem.md)
+    - [Homomorphic ciphertext evaluation](reference/topics/homomorphic-evaluation.md)
+    - [Educational lattice encryption](reference/topics/lattice-encryption-examples.md)
     - [Historical public-key references](reference/topics/historical-public-key.md)
     - [Raw ElGamal and Cramer–Shoup](reference/topics/group-encryption.md)
     - [ECIES and DHIES](reference/topics/ies.md)

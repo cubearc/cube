@@ -38,9 +38,11 @@ mod fractioncmd;
 mod groupcmd;
 mod historicalcmd;
 mod historicalpublickeycmd;
+mod homomorphiccmd;
 mod iescmd;
 mod kemcmd;
 mod keywrapcmd;
+mod latticecmd;
 mod mechanicalcmd;
 mod modularcmd;
 mod monocmd;
@@ -644,6 +646,56 @@ enum Cipher {
     ClassicMceliece {
         #[command(subcommand)]
         command: kemcmd::RawKemCommand,
+    },
+    /// BIKE-L1 Round 4 raw decapsulation
+    Bike {
+        #[command(subcommand)]
+        command: kemcmd::RawKemCommand,
+    },
+    /// NTRU-HPS-2048-509 raw decapsulation
+    NtruKem {
+        #[command(subcommand)]
+        command: kemcmd::RawKemCommand,
+    },
+    /// Add Paillier ciphertexts
+    Paillier {
+        #[command(subcommand)]
+        command: homomorphiccmd::AdditiveCommand,
+    },
+    /// Add Damgård–Jurik ciphertexts
+    DamgardJurik {
+        #[command(subcommand)]
+        command: homomorphiccmd::AdditiveCommand,
+    },
+    /// Educational NTRUEncrypt
+    NtruEncrypt {
+        #[command(subcommand)]
+        command: latticecmd::Command,
+    },
+    /// Educational Regev PKE
+    Regev {
+        #[command(subcommand)]
+        command: latticecmd::Command,
+    },
+    /// Add BFV ciphertexts in a fixed SEAL format
+    Bfv {
+        #[command(subcommand)]
+        command: homomorphiccmd::AddCommand,
+    },
+    /// Add BGV ciphertexts in a fixed SEAL format
+    Bgv {
+        #[command(subcommand)]
+        command: homomorphiccmd::AddCommand,
+    },
+    /// Add CKKS ciphertexts in a fixed SEAL format
+    Ckks {
+        #[command(subcommand)]
+        command: homomorphiccmd::AddCommand,
+    },
+    /// Negate a TFHE encrypted Boolean
+    Tfhe {
+        #[command(subcommand)]
+        command: homomorphiccmd::NotCommand,
     },
     /// Authenticate a bounded binary agev1/X25519 file before output
     Age {
@@ -1263,6 +1315,28 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Rsa { command } => return rsacmd::run(command, &mut output),
                 Cipher::Dh { command } => return dhcmd::run(command, &mut output),
                 Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),
+                Cipher::Tfhe { command } => return homomorphiccmd::run_not(command, &mut output),
+                Cipher::Ckks { command } => {
+                    return homomorphiccmd::run_add(
+                        command,
+                        cube_core::asymmetric::homomorphic::Profile::Ckks,
+                        &mut output,
+                    );
+                }
+                Cipher::Bgv { command } => {
+                    return homomorphiccmd::run_add(
+                        command,
+                        cube_core::asymmetric::homomorphic::Profile::Bgv,
+                        &mut output,
+                    );
+                }
+                Cipher::Bfv { command } => {
+                    return homomorphiccmd::run_add(
+                        command,
+                        cube_core::asymmetric::homomorphic::Profile::Bfv,
+                        &mut output,
+                    );
+                }
                 Cipher::MlKem { command } => return kemcmd::run(command, &mut output),
                 Cipher::Kyber { command } => return kemcmd::run_kyber(command, &mut output),
                 Cipher::FrodoKem { command } => {
@@ -1283,6 +1357,48 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                     return kemcmd::run_alternate(
                         command,
                         cube_core::asymmetric::alternate_kem::Profile::McEliece460896f,
+                        &mut output,
+                    );
+                }
+                Cipher::Bike { command } => {
+                    return kemcmd::run_alternate(
+                        command,
+                        cube_core::asymmetric::alternate_kem::Profile::BikeL1,
+                        &mut output,
+                    );
+                }
+                Cipher::NtruKem { command } => {
+                    return kemcmd::run_alternate(
+                        command,
+                        cube_core::asymmetric::alternate_kem::Profile::NtruHps2048509,
+                        &mut output,
+                    );
+                }
+                Cipher::Paillier { command } => {
+                    return homomorphiccmd::run_additive(
+                        command,
+                        cube_core::asymmetric::additive::Profile::Paillier,
+                        &mut output,
+                    );
+                }
+                Cipher::DamgardJurik { command } => {
+                    return homomorphiccmd::run_additive(
+                        command,
+                        cube_core::asymmetric::additive::Profile::DamgardJurik,
+                        &mut output,
+                    );
+                }
+                Cipher::NtruEncrypt { command } => {
+                    return latticecmd::run(
+                        command,
+                        cube_core::asymmetric::lattice_reference::Profile::NtruEncrypt,
+                        &mut output,
+                    );
+                }
+                Cipher::Regev { command } => {
+                    return latticecmd::run(
+                        command,
+                        cube_core::asymmetric::lattice_reference::Profile::Regev,
                         &mut output,
                     );
                 }

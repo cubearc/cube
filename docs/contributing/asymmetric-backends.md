@@ -52,6 +52,8 @@ encoding and recognized reference bytes are part of each profile.
 | Salted FrodoKEM-640-SHAKE | `frodo-kem` 0.1.0 (`c1dfcd2ddf55b48218bfda359f3138b32d5ff5cd`) | Microsoft `PQCrypto-LWEKE` `a2f9dec8917ccc3464b3378d46b140fa7353320d`, salted SHAKE KAT count 0 |
 | HQC-128, February 2026 submission | `hqc-kem` 0.1.0-rc.0 (`1a50023ab1dcebaaf500646589c76a3f0efade1f`) | HQC reference `161cd4f`, level 1 KAT count 0 |
 | Classic McEliece 460896f, Round 4 | `pq-mceliece` 0.3.0 (`e34039fc546a70db3991b98ef1f7ec6ccf734f3c`) | liboqs 0.15.0 portable reference, deterministic NIST KAT seed stream |
+| BIKE-L1, Round 4 | `oqs-native-bike` 0.16.0 (MIT and Apache-2.0) | liboqs 0.15.0 independent C answers for valid and modified ciphertexts |
+| NTRU-HPS-2048-509, Round 3 | `oqs-native-ntru` 0.16.0 (MIT) | liboqs 0.15.0 independent C answers for valid and modified ciphertexts |
 
 The two RustCrypto backends and `pq-mceliece` provide Apache-2.0 or MIT
 licensing. Notices accompany the source and SDK packages. Only the selected
@@ -64,6 +66,47 @@ modified ciphertexts, short and oversized inputs, and wrong profiles. Core
 wipes its owned shared-secret buffers and discards and wipes FrodoKEM's
 internal decoded message. Backend and caller copies may persist. See
 [alternate KEM profiles](../reference/topics/alternate-kem.md) for API bounds.
+
+BIKE and NTRU use the independent portable Rust port of liboqs at
+[`b4e41be8f4edba98ef1193db81c7a7d3f3c9ed96`](https://github.com/DeveloperBeau/liboqs-rust/tree/b4e41be8f4edba98ef1193db81c7a7d3f3c9ed96).
+Both compiled for WebAssembly and matched the C reference including implicit
+rejection. A single optimized x86-64 macOS probe measured about 5.4 ms for
+BIKE and 0.32 ms for NTRU. These are compatibility profiles. Treat BIKE as
+having the security claims documented by upstream, which does not claim
+IND-CCA for this profile.
+
+## Homomorphic ciphertext qualification
+
+Reviewed on 2026-11-17. Microsoft SEAL 4.1.2 produced a distinct ciphertext
+pair and evaluator result for BFV, BGV and CKKS. The SEAL oracle imported
+the actual CLI output and recovered 3 modulo 17 for BFV and BGV, and
+(4.75, 2.125) within 10⁻⁵ for CKKS. The tagged wire profiles use the
+official modulus tables and the fixed domain and level described in the
+[reference](../reference/topics/homomorphic-evaluation.md). The TFHE-rs 1.8.2
+Boolean reference verified the linear NOT result, including decryption.
+An AND probe serialized a 130,479,476-byte server key and exceeded the
+16 MiB proposal. The default NOT gate needs no server key and is 3,228
+bytes including the tag. SEAL and TFHE-rs were reference executables
+only. Cube ships synthetic test vectors and public ciphertext arithmetic.
+
+Paillier and Damgård–Jurik use the shared maintained `num-bigint` and
+`num-integer` arithmetic on public operands only. Independent Python
+integer calculations with OpenSSL-generated synthetic keys encrypted
+inputs that cross the plaintext modulus, then decrypted the product to
+5 in both profiles. The implementation covers deterministic public
+evaluation of one pair with a 256 KiB direct memory reservation. Validated
+public moduli and private operations remain with the source library.
+
+## Educational lattice qualification
+
+The original [NTRU paper](https://www.ntru.org/f/hps98.pdf) and
+[Regev paper](https://cims.nyu.edu/~regev/papers/qcrypto.pdf) define the
+construction. Independent small Python oracles generated synthetic keys
+and exact ciphertexts for the documented teaching parameter sets.
+Core uses bounded system randomness in normal calls. Conformance verifies
+the known ciphertext as well as each fresh result with the matching inverse
+operation. These are arithmetic demonstrations with no implementation-derived
+security claim. Details are in the [educational lattice guide](../reference/topics/lattice-encryption-examples.md).
 
 ## ECDH profiles
 

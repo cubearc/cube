@@ -77,6 +77,10 @@ raw_decapsulator!(frodo_kem_decapsulate, Frodo640Shake);
 raw_decapsulator!(hqc_decapsulate, Hqc128February2026);
 raw_decapsulator!(classic_mceliece_decapsulate, McEliece460896f);
 
+raw_decapsulator!(bike_decapsulate, BikeL1);
+
+raw_decapsulator!(ntru_kem_decapsulate, NtruHps2048509);
+
 pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(ml_kem_keygen, module)?)?;
     module.add_function(wrap_pyfunction!(ml_kem_encapsulate, module)?)?;
@@ -84,5 +88,7 @@ pub(crate) fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(kyber_decapsulate, module)?)?;
     module.add_function(wrap_pyfunction!(frodo_kem_decapsulate, module)?)?;
     module.add_function(wrap_pyfunction!(hqc_decapsulate, module)?)?;
+    module.add_function(wrap_pyfunction!(bike_decapsulate, module)?)?;
+    module.add_function(wrap_pyfunction!(ntru_kem_decapsulate, module)?)?;
     module.add_function(wrap_pyfunction!(classic_mceliece_decapsulate, module)?)
 }

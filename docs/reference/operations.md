@@ -6798,6 +6798,96 @@ Example:
 cube cipher benaloh encrypt --parameters-file settings.json --key-file key.json --file tokens.json
 ```
 
+## cipher.bfv.add
+
+Add BFV ciphertexts
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `bytes` |
+| Input | `right` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required fixed ciphertext format.",
+      "type": "string",
+      "enum": [
+        "bfv_seal412_degree1024_t17_raw_v1"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher bfv add --parameters-file settings.json --left a.bin --right b.bin
+```
+
+## cipher.bgv.add
+
+Add BGV ciphertexts
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `bytes` |
+| Input | `right` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required fixed ciphertext format.",
+      "type": "string",
+      "enum": [
+        "bgv_seal412_degree1024_t17_ntt_raw_v1"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher bgv add --parameters-file settings.json --left a.bin --right b.bin
+```
+
 ## cipher.bifid.decode
 
 Bifid: explicit bounded decode; see typed profile guide for conventions.
@@ -12304,6 +12394,51 @@ Example:
 cube cipher --help
 ```
 
+## cipher.ckks.add
+
+Add CKKS ciphertexts
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `bytes` |
+| Input | `right` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required fixed ciphertext format.",
+      "type": "string",
+      "enum": [
+        "ckks_seal412_degree2048_scale32_ntt_raw_v1"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher ckks add --parameters-file settings.json --left a.bin --right b.bin
+```
+
 ## cipher.cm_bifid.decode
 
 ACA conjugated-matrix Bifid with two explicit independent I/J squares and bounded periods; decode inverts the coordinate stream, not encryption with swapped squares.
@@ -13326,6 +13461,52 @@ Example:
 
 ```sh
 cube cipher cramer-shoup encrypt --parameters-file settings.json --key-file public.bin --file group.bin
+```
+
+## cipher.damgard_jurik.add
+
+Add Damgård–Jurik ciphertexts
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `bytes` |
+| Input | `right` | `bytes` |
+| Input | `public_modulus` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required generator and extension profile.",
+      "type": "string",
+      "enum": [
+        "damgard_jurik_s2_g_n_plus_1_be_v1"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher damgard-jurik add --parameters-file settings.json --modulus modulus.bin --left a.bin --right b.bin
 ```
 
 ## cipher.digrafid.decode
@@ -18964,6 +19145,100 @@ Example:
 cube cipher --help
 ```
 
+## cipher.ntru_encrypt.decrypt
+
+Decrypt a polynomial with educational NTRUEncrypt
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required educational parameter set.",
+      "type": "string",
+      "enum": [
+        "ntru_encrypt_educational_n11_p3_q32"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher ntru-encrypt decrypt --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## cipher.ntru_encrypt.encrypt
+
+Encrypt a polynomial with educational NTRUEncrypt
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `public_key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required educational parameter set.",
+      "type": "string",
+      "enum": [
+        "ntru_encrypt_educational_n11_p3_q32"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher ntru-encrypt encrypt --parameters-file settings.json --key-file public.bin --file message.bin
+```
+
 ## cipher.numbered_key.decode
 
 Decode exact ACA Numbered Key tokens with the complete repeated-position table.
@@ -19318,6 +19593,73 @@ Example:
 
 ```sh
 cube cipher openssl decrypt --parameters-file settings.json --file encrypted.bin
+```
+
+## cipher.paillier.add
+
+Add Paillier ciphertexts
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `bytes` |
+| Input | `right` | `bytes` |
+| Input | `public_modulus` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "base64": "RR2hJSHbpDMBWtvU6cOLWfNYkzb8+1TovRgiwt2UKUndTb/2YPRu/YJzAad2LxE12PclcBO1/DraSCoPcXuNJagLihG/iEuX5+vXvvZz/H8hUJWv3M6a5iMG+KpTGD3/IMxx1El2+PL5C03mEUtcoYQHdBaAri9SoJ9/jFJsPqgA/xQXSNqrFNLFg/KUn3rETEESQPlzJCC+2gqdwMnt83rsLomDNEo+vx4aMewFbz1uH8GrXbSpfJSW5R9/sh+DpXpiAINz7or8EKoegCNWLSUnCoiyqCJ9DjBJs7GC6Yh9/CmxQltMxZ+vAxCXW1lhUp4USo9RXZ8zfn9nZZCJHPm+JQfWHJE7G08BiYfkwzNq6lEa7QeUsGwvwpmdd83YA2yq2aJZYD2/rH0JQiUuGJJ/DGhQOSIRYKeu2kkYmJi+vjLELP1WnarcZ6fpF1I/rPoLcxjKR2V8ZgLTxFV2Yl3UpO5qxMNIviWMnrQcSgZTfXRdTBUaq2mNSMeXRm3FelvRqaDuhPhhHD0EZNwReTP2ipvlhtUldk1e3YnjHQPqX0FGRwyViHSUM606Ts6+RYqJ8PPiyDQMlhR5DymQDpvLBpGOhhVZFAcNXlqnlxQhH14TIbyGJB0pr4ZW6/PE0sDPE9IAasPzdUxNusjhZb2p8QhVg+g/dHRuUB4SFHA="
+    },
+    "public_modulus": {
+      "base64": "4ayfWzfVU0S3WhKsv2YTcyenyjFfe3bWrHr2DlUA/LCvc7xyZln4MSq9n9Xc1jAmxDAB6PGpG2jK9zgkEByDQTW/l6zPChz/jD9noA1xmHfon224PopAB+EZgYU2nXlGeU4hglhHcQCb4Ea1WIrD5J0yFAkBm9T7JXi6XE/Waj4OP7e1f5HSDBFuD4FeoTObSCmt+BnDJFLHlcMNSRWHULtMBmK7/7ueY5YDmLdjviDKHaT7ZLO6IFTFQNayHJiJVuqptlWjHfTJQsaPnInKgTD3Wa2t+e8t8dY+UJqP9J9zFdyA8iKUIq8dga26x6ic0un99OxBjPSqG9djijhZQQ=="
+    },
+    "right": {
+      "base64": "hi9YUNDuMB7DIKV0YLGorNU/NJi7hXg3fhH+azfWm3RqfuNgrQY795I2uiaCNnS8uwClBxEaTbGw9xaLBv5aucsGsllHlyJXfgL16mZeTAaAdY04PfuvdTZEM4qwZAB7syyVsj801GFQcPusUxJr23MVUCinfCM6fkBkx4tDe7T5eW8WvGQRHxMCzyWAfTpAWlCcFu0qlsITA8VEYaZaZlf+bnDkh/Sw7NF63/4Ycnfa3m69NXaH0vEBmtfJPo3Xb+NNojLpKYH4WzUQNScNEcb5BxnwB65si9c5KPpZ22XTEmR6dtlB7YoAw+FX1yzW5gBWdv5qS8Q+hR4QVhj+3eBU5fkWO/2GgrZfePL/FO/L41aZ4Ku+S12oeEyW2WFl6lN+dozxP3ativcEVhMuYVmlhvZbQEqoTxWzXWZo07/wSWqeow7/yQeuUIguBCktyJhPQ2zme55zDuabMeyfV3baznKzzEsWyddlL3MtvS2xqg+t6WDOgE49mYcMfTakOVY1pvj+GKasmfQgSxJ34oKfv3zqK3rN7/An8SMxbwWd0Lc9COHLUC6U2paO9YMYVOL+fsjKdO8K+/WutHxU45dHYuvWSfHpP6OwcW7wBmIyXVK1pzgc3pTeJYBBmlIOV+M7GT98O4k1DE73yDM6wPGl63+5XBeutS78ABrcqkw="
+    }
+  },
+  "parameters": {
+    "profile": "paillier_g_n_plus_1_be_v1"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required generator and extension profile.",
+      "type": "string",
+      "enum": [
+        "paillier_g_n_plus_1_be_v1"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher paillier add --parameters-file settings.json --modulus modulus.bin --left a.bin --right b.bin
 ```
 
 ## cipher.periodic_gromark.decode
@@ -22058,6 +22400,100 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.regev.decrypt
+
+Decrypt a bit with educational Regev PKE
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required educational parameter set.",
+      "type": "string",
+      "enum": [
+        "regev_educational_n4_m16_q97"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher regev decrypt --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## cipher.regev.encrypt
+
+Encrypt a bit with educational Regev PKE
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `public_key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required educational parameter set.",
+      "type": "string",
+      "enum": [
+        "regev_educational_n4_m16_q97"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher regev encrypt --parameters-file settings.json --key-file public.bin --file bit.bin
 ```
 
 ## cipher.rot13
@@ -28148,6 +28584,50 @@ Example:
 cube cipher t52ab --help
 ```
 
+## cipher.tfhe.not
+
+Negate a TFHE encrypted Boolean
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required fixed ciphertext format.",
+      "type": "string",
+      "enum": [
+        "tfhe_rs182_boolean_default_lwe805_raw_v1"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher tfhe not --parameters-file settings.json --file ciphertext.bin
+```
+
 ## cipher.tri_square.decode
 
 Explicit three I/J squares with deterministic cycles or caller-owned row/column choices; complete triples required.
@@ -30680,6 +31160,53 @@ Example:
 cube cipher xxtea encrypt --key-file key.bin --file words.bin
 ```
 
+## crypto.bike.decapsulate
+
+Decapsulate BIKE-L1 Round 4
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required exact raw KEM profile.",
+      "type": "string",
+      "enum": [
+        "bike_l1_round4"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher bike decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
 ## crypto.classic_mceliece.decapsulate
 
 Decapsulate Classic McEliece 460896f
@@ -31151,6 +31678,53 @@ Example:
 
 ```sh
 cube cipher ml-kem keygen --parameters-file settings.json
+```
+
+## crypto.ntru_kem.decapsulate
+
+Decapsulate NTRU-HPS-2048-509
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required exact raw KEM profile.",
+      "type": "string",
+      "enum": [
+        "ntru_hps2048509_round3"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher ntru-kem decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
 ```
 
 ## encoding.base32.decode

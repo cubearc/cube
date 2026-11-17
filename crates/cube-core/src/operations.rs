@@ -519,6 +519,9 @@ const MODULES: &[Module] = &[
     crate::asymmetric::ml_kem::MODULE,
     crate::asymmetric::kyber::MODULE,
     crate::asymmetric::alternate_kem::MODULE,
+    crate::asymmetric::homomorphic::MODULE,
+    crate::asymmetric::additive::MODULE,
+    crate::asymmetric::lattice_reference::MODULE,
 ];
 pub fn catalog() -> Vec<&'static Descriptor> {
     MODULES

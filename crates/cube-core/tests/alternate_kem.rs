@@ -19,6 +19,14 @@ fn independent_portable_kem_answers_and_exact_byte_boundaries() {
             Profile::McEliece460896f,
             include_str!("../src/asymmetric/alternate_kem/mceliece460896f.json"),
         ),
+        (
+            Profile::BikeL1,
+            include_str!("../src/asymmetric/alternate_kem/bike-l1.json"),
+        ),
+        (
+            Profile::NtruHps2048509,
+            include_str!("../src/asymmetric/alternate_kem/ntruhps2048509.json"),
+        ),
     ] {
         let case: Value = serde_json::from_str(document).unwrap();
         let raw = |field: &str| hex::decode(case[field].as_str().unwrap()).unwrap();
@@ -47,4 +55,18 @@ fn independent_portable_kem_answers_and_exact_byte_boundaries() {
             ErrorCode::ResourceLimit
         );
     }
+}
+
+#[test]
+fn bike_rejects_out_of_domain_key_rotations() {
+    let (key_bytes, ciphertext_bytes, _) = Profile::BikeL1.widths();
+    let mut key = vec![0; key_bytes];
+    key[..4].copy_from_slice(&12_323_u32.to_le_bytes());
+    let ciphertext = vec![0; ciphertext_bytes];
+    assert_eq!(
+        alternate_kem::decapsulate(&ciphertext, &key, Profile::BikeL1)
+            .unwrap_err()
+            .code,
+        ErrorCode::InvalidInput
+    );
 }

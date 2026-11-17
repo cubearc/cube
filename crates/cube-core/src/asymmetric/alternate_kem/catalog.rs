@@ -9,9 +9,15 @@ pub(crate) const MEMORY_RESERVATION: usize = 4 * 1024 * 1024;
 const FRODO_PROFILE: Profile = Profile::Frodo640Shake;
 const HQC_PROFILE: Profile = Profile::Hqc128February2026;
 const MCELIECE_PROFILE: Profile = Profile::McEliece460896f;
+const BIKE_PROFILE: Profile = Profile::BikeL1;
+const NTRU_KEM_PROFILE: Profile = Profile::NtruHps2048509;
 const FRODO_CHOICES: &[&str] = &[FRODO_PROFILE.name()];
 const HQC_CHOICES: &[&str] = &[HQC_PROFILE.name()];
 const MCELIECE_CHOICES: &[&str] = &[MCELIECE_PROFILE.name()];
+
+const BIKE_CHOICES: &[&str] = &[BIKE_PROFILE.name()];
+
+const NTRU_KEM_CHOICES: &[&str] = &[NTRU_KEM_PROFILE.name()];
 
 const fn row(
     id: &'static str,
@@ -68,6 +74,8 @@ const fn parameters(profile: Profile) -> o::Parameter {
         Profile::Frodo640Shake => FRODO_CHOICES,
         Profile::Hqc128February2026 => HQC_CHOICES,
         Profile::McEliece460896f => MCELIECE_CHOICES,
+        Profile::NtruHps2048509 => NTRU_KEM_CHOICES,
+        Profile::BikeL1 => BIKE_CHOICES,
     };
     o::Parameter {
         name: "profile",
@@ -82,7 +90,11 @@ const FRODO_PARAMETERS: [o::Parameter; 1] = [parameters(FRODO_PROFILE)];
 const HQC_PARAMETERS: [o::Parameter; 1] = [parameters(HQC_PROFILE)];
 const MCELIECE_PARAMETERS: [o::Parameter; 1] = [parameters(MCELIECE_PROFILE)];
 
-const PROFILED: [m::Entry; 3] = [
+const BIKE_PARAMETERS: [o::Parameter; 1] = [parameters(BIKE_PROFILE)];
+
+const NTRU_KEM_PARAMETERS: [o::Parameter; 1] = [parameters(NTRU_KEM_PROFILE)];
+
+const PROFILED: [m::Entry; 5] = [
     row(
         FRODO,
         &FRODO_PARAMETERS,
@@ -115,6 +127,28 @@ const PROFILED: [m::Entry; 3] = [
             "cube cipher classic-mceliece decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin",
         ),
         "classic_mceliece_decapsulate",
+    ),
+    row(
+        BIKE,
+        &BIKE_PARAMETERS,
+        "Decapsulate BIKE-L1 Round 4",
+        &["https://bikesuite.org/"],
+        (
+            "cipher bike decapsulate",
+            "cube cipher bike decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin",
+        ),
+        "bike_decapsulate",
+    ),
+    row(
+        NTRU_KEM,
+        &NTRU_KEM_PARAMETERS,
+        "Decapsulate NTRU-HPS-2048-509",
+        &["https://github.com/jschanck/ntru/tree/6d96ed37"],
+        (
+            "cipher ntru-kem decapsulate",
+            "cube cipher ntru-kem decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin",
+        ),
+        "ntru_kem_decapsulate",
     ),
 ];
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
@@ -166,6 +200,8 @@ const CONTRACTS: &[c::Entry] = &[
     contract_for!(0, FRODO_PROFILE, "frodo640.json"),
     contract_for!(1, HQC_PROFILE, "hqc128.json"),
     contract_for!(2, MCELIECE_PROFILE, "mceliece460896f.json"),
+    contract_for!(3, BIKE_PROFILE, "bike-l1.json"),
+    contract_for!(4, NTRU_KEM_PROFILE, "ntruhps2048509.json"),
 ];
 pub(crate) const MODULE: o::Module =
     o::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);

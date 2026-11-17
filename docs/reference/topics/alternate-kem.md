@@ -9,10 +9,13 @@ separate byte ports. The result has one `shared_secret` byte port.
 | `frodokem640_shake_salted` | 19,888 | 9,752 | 16 |
 | `hqc128_20260210_submission` | 2,321 | 4,433 | 32 |
 | `mceliece460896f_round4` | 13,608 | 156 | 32 |
+| `bike_l1_round4` | 5,223 | 1,573 | 32 |
+| `ntru_hps2048509_round3` | 935 | 699 | 32 |
 
 The FrodoKEM profile expects the salted SHAKE format. The HQC profile fixes
 the February 2026 submission encoding. The Classic McEliece profile uses the
-Round 4 ciphertext format. Use the same peer implementation and edition as
+Round 4 ciphertext format. BIKE-L1 fixes the Round 4 additional submission
+encoding. NTRU-HPS fixes the Round 3 reference encoding. Use the same peer implementation and edition as
 the sender. Each settings object requires the exact `profile` and has a
 256-byte limit.
 
@@ -26,10 +29,9 @@ cube cipher frodo-kem decapsulate --parameters-file settings.json \
   --key-file private.bin --file ciphertext.bin
 ```
 
-The CLI encodes `shared_secret.base64` in the result JSON. Substitute `hqc` or
-`classic-mceliece` for the corresponding profile and operation. The native
-Python functions are `frodo_kem_decapsulate`, `hqc_decapsulate` and
-`classic_mceliece_decapsulate`, each taking `(ciphertext, private_key,
+The CLI encodes `shared_secret.base64` in the result JSON. Substitute `hqc`, `classic-mceliece`, `bike` or `ntru-kem` for the corresponding profile and operation. The native
+Python functions are `frodo_kem_decapsulate`, `hqc_decapsulate`,
+`classic_mceliece_decapsulate`, `bike_decapsulate` and `ntru_kem_decapsulate`, each taking `(ciphertext, private_key,
 parameters_json)`. JavaScript accepts `Uint8Array` for both named byte ports
 and returns a `Uint8Array` shared secret.
 

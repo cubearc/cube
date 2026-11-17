@@ -59,6 +59,8 @@ def test_historical_kyber_vectors(index):
 @pytest.mark.parametrize(
     ("operation", "name", "profile"),
     [
+        (cube.bike_decapsulate, "bike-l1", "bike_l1_round4"),
+        (cube.ntru_kem_decapsulate, "ntruhps2048509", "ntru_hps2048509_round3"),
         (cube.frodo_kem_decapsulate, "frodo640", "frodokem640_shake_salted"),
         (cube.hqc_decapsulate, "hqc128", "hqc128_20260210_submission"),
         (

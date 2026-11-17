@@ -61,7 +61,7 @@ test('Kyber Round 3 uses the exact historical shared secret and implicit rejecti
 test('alternate KEM profiles match external key and ciphertext vectors in Wasm', async () => {
   const fixtures = JSON.parse(await readFile(new URL(`${path}operations/contracts/conformance.json`, import.meta.url), 'utf8'));
   const execute = sdkWireExecutor(cube);
-  for (const family of ['frodo_kem', 'hqc', 'classic_mceliece']) {
+  for (const family of ['frodo_kem', 'hqc', 'classic_mceliece', 'bike', 'ntru_kem']) {
     const operation = `crypto.${family}.decapsulate`;
     const fixture = fixtures.find(row => row.operation === operation);
     const request = { operation, version: 1, inputs: fixture.inputs, parameters: fixture.parameters };

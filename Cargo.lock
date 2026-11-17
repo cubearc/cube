@@ -990,6 +990,9 @@ dependencies = [
  "num-integer",
  "ocb3",
  "ofb",
+ "oqs-native-bike",
+ "oqs-native-domain",
+ "oqs-native-ntru",
  "p256 0.14.0",
  "pbkdf2 0.13.0",
  "png",
@@ -2546,6 +2549,56 @@ name = "opaque-debug"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08d65885ee38876c4f86fa503fb49d7b507c2b62552df7c70b2fce627e06381"
+
+[[package]]
+name = "oqs-native-bike"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "742c9b818763b0dac818209d8c8cf704ae362aa4f80392080ab5f07f75e6046f"
+dependencies = [
+ "oqs-native-domain",
+ "oqs-native-entities",
+ "oqs-native-sha3",
+]
+
+[[package]]
+name = "oqs-native-domain"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bed9655ce0ec542e2079f732eb645c84a42be212f56afe148e9f722f8ea97c7a"
+dependencies = [
+ "oqs-native-entities",
+]
+
+[[package]]
+name = "oqs-native-entities"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ea6338295c34b7e2337baf9844c3cfcc1c1c140d9e236fa608f34169bb47d1fd"
+
+[[package]]
+name = "oqs-native-ntru"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d29b0b19c0e029d1e1ddac9d527db420bdefb46ee057e47ce7d5fbe417365ba"
+dependencies = [
+ "oqs-native-domain",
+ "oqs-native-entities",
+ "oqs-native-sha3",
+ "oqs-native-sorting-network",
+]
+
+[[package]]
+name = "oqs-native-sha3"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3296e7fd90d5442cb99df905b117cf8c80314dcea0de11c928c6efaa786aeca1"
+
+[[package]]
+name = "oqs-native-sorting-network"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e421727b00ff460f689e8a61490c7e08bc30b1bfe7dd41c149e8a0c8d1496de9"
 
 [[package]]
 name = "outref"

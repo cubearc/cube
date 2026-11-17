@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test:qualification": "node --test --test-concurrency=1 tests/qualification.test.mjs tests/pipeline-qualification.test.mjs tests/direct-qualification.test.mjs tests/complete-bindings.test.mjs tests/type-generation.test.mjs tests/crypto-vectors.test.mjs tests/rsa.test.mjs tests/ecdh.test.mjs tests/dh.test.mjs tests/sm2.test.mjs tests/ies.test.mjs tests/age.test.mjs tests/openssl.test.mjs tests/fpe.test.mjs tests/key-wrap.test.mjs tests/modern-aead.test.mjs tests/aes-modes.test.mjs tests/block-profiles.test.mjs tests/stream-profiles.test.mjs tests/stream-authentication.test.mjs tests/binding-limits.test.mjs tests/sdk.test.mjs tests/initialization.test.mjs tests/memory.test.mjs tests/worker-failure.test.mjs tests/transport-budget.test.mjs tests/qualification-report.test.mjs",
+    "test:qualification": "node --test --test-concurrency=1 tests/qualification.test.mjs tests/pipeline-qualification.test.mjs tests/direct-qualification.test.mjs tests/complete-bindings.test.mjs tests/type-generation.test.mjs tests/crypto-vectors.test.mjs tests/rsa.test.mjs tests/ecdh.test.mjs tests/dh.test.mjs tests/sm2.test.mjs tests/ies.test.mjs tests/group-encryption.test.mjs tests/age.test.mjs tests/openssl.test.mjs tests/fpe.test.mjs tests/key-wrap.test.mjs tests/modern-aead.test.mjs tests/aes-modes.test.mjs tests/block-profiles.test.mjs tests/stream-profiles.test.mjs tests/stream-authentication.test.mjs tests/binding-limits.test.mjs tests/sdk.test.mjs tests/initialization.test.mjs tests/memory.test.mjs tests/worker-failure.test.mjs tests/transport-budget.test.mjs tests/qualification-report.test.mjs",
     "test:types": "tsc -p tests/types/tsconfig.json"
   },
   "devDependencies": {

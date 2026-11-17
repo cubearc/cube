@@ -2596,3 +2596,15 @@ def ies_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
 
 def ies_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
     """Authenticate the full IES ciphertext and context before returning bytes."""
+
+def elgamal_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Apply the exact raw prime-order group profile without text or padding guesses."""
+
+def elgamal_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Apply the exact raw prime-order group profile without text or padding guesses."""
+
+def cramer_shoup_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Apply the exact raw prime-order group profile without text or padding guesses."""
+
+def cramer_shoup_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Apply the exact raw prime-order group profile without text or padding guesses."""

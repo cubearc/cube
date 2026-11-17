@@ -359,3 +359,8 @@ cube.execute({operation:'cipher.sm2.decrypt',version:1,inputs:{input:new Uint8Ar
 cube.execute({operation:'cipher.ies.encrypt',version:1,inputs:{input:new Uint8Array([1]),key:new Uint8Array(65)},parameters:{profile:'ecies_p256_bc183_sha256_kdf2_hmac256',derivation_hex:'',encoding_hex:'0102'}});
 // @ts-expect-error HPKE is a distinct suite and cannot be selected as an IES alias.
 cube.execute({operation:'cipher.ies.decrypt',version:1,inputs:{input:new Uint8Array(98),key:new Uint8Array(32)},parameters:{profile:'hpke'}});
+
+cube.execute({operation:'cipher.elgamal.encrypt',version:1,inputs:{input:new Uint8Array(256),key:new Uint8Array(256)},parameters:{profile:'elgamal_ffdhe2048_raw_v1'}});
+cube.execute({operation:'cipher.cramer_shoup.decrypt',version:1,inputs:{input:new Uint8Array(1024),key:new Uint8Array(1280)},parameters:{profile:'cramer_shoup_ffdhe2048_sha256_raw_v1',label_hex:'00ff'}});
+// @ts-expect-error ElGamal does not accept the Cramer-Shoup label parameter.
+cube.execute({operation:'cipher.elgamal.encrypt',version:1,inputs:{input:new Uint8Array(256),key:new Uint8Array(256)},parameters:{profile:'elgamal_ffdhe2048_raw_v1',label_hex:''}});

@@ -12,7 +12,11 @@ use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
     matches!(
         op,
-        crate::asymmetric::ies::ENCRYPT
+        crate::asymmetric::group_encryption::ELGAMAL_ENCRYPT
+            | crate::asymmetric::group_encryption::ELGAMAL_DECRYPT
+            | crate::asymmetric::group_encryption::CRAMER_SHOUP_ENCRYPT
+            | crate::asymmetric::group_encryption::CRAMER_SHOUP_DECRYPT
+            | crate::asymmetric::ies::ENCRYPT
             | crate::asymmetric::ies::DECRYPT
             | crate::asymmetric::sm2::ENCRYPT
             | crate::asymmetric::sm2::DECRYPT
@@ -57,6 +61,39 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    {
+        use crate::asymmetric::group_encryption as g;
+        if matches!(
+            op,
+            g::ELGAMAL_ENCRYPT
+                | g::ELGAMAL_DECRYPT
+                | g::CRAMER_SHOUP_ENCRYPT
+                | g::CRAMER_SHOUP_DECRYPT
+        ) {
+            let document = p.to_string();
+            let input = zeroize::Zeroizing::new(bytes(&i["input"])?);
+            let key = zeroize::Zeroizing::new(bytes(&i["key"])?);
+            let output = zeroize::Zeroizing::new(match op {
+                g::ELGAMAL_ENCRYPT => g::elgamal_encrypt(
+                    &input,
+                    &g::ElGamalEncryptionSettings::parse(&document, &key)?,
+                )?,
+                g::ELGAMAL_DECRYPT => g::elgamal_decrypt(
+                    &input,
+                    &g::ElGamalDecryptionSettings::parse(&document, &key)?,
+                )?,
+                g::CRAMER_SHOUP_ENCRYPT => g::cramer_shoup_encrypt(
+                    &input,
+                    &g::CramerShoupEncryptionSettings::parse(&document, &key)?,
+                )?,
+                _ => g::cramer_shoup_decrypt(
+                    &input,
+                    &g::CramerShoupDecryptionSettings::parse(&document, &key)?,
+                )?,
+            });
+            return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
+        }
+    }
     if matches!(
         op,
         crate::asymmetric::ies::ENCRYPT | crate::asymmetric::ies::DECRYPT

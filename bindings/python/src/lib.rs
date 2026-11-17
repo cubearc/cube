@@ -29,6 +29,7 @@ mod esolang;
 mod fpe;
 mod fraction;
 mod graph;
+mod group_encryption;
 mod headlines;
 mod historical;
 mod ies;
@@ -632,6 +633,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     rsa::register(module)?;
     sm2::register(module)?;
     ies::register(module)?;
+    group_encryption::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

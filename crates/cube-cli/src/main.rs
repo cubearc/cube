@@ -35,6 +35,7 @@ mod ecdhcmd;
 mod enigmacmd;
 mod fpecmd;
 mod fractioncmd;
+mod groupcmd;
 mod historicalcmd;
 mod iescmd;
 mod keywrapcmd;
@@ -560,6 +561,17 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Raw prime-order ElGamal group messages; unauthenticated
+    #[command(name = "elgamal")]
+    ElGamal {
+        #[command(subcommand)]
+        command: groupcmd::Command,
+    },
+    /// Exact authenticated Cramer-Shoup group-message profile
+    CramerShoup {
+        #[command(subcommand)]
+        command: groupcmd::Command,
     },
     /// Complete ephemeral ECIES/DHIES suites
     Ies {
@@ -1165,6 +1177,12 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::ElGamal { command } => {
+                    return groupcmd::run(command, groupcmd::Family::ElGamal, &mut output);
+                }
+                Cipher::CramerShoup { command } => {
+                    return groupcmd::run(command, groupcmd::Family::CramerShoup, &mut output);
+                }
                 Cipher::Ies { command } => return iescmd::run(command, &mut output),
                 Cipher::Sm2 { command } => return sm2cmd::run(command, &mut output),
                 Cipher::Rsa { command } => return rsacmd::run(command, &mut output),

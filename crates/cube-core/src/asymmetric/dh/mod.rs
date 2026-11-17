@@ -139,6 +139,16 @@ pub fn validate_peer(peer: &[u8], profile: Profile) -> Result<(), OperationError
     peer_form(peer, &params).map(|_| ())
 }
 fn peer_form(peer: &[u8], params: &BoxedMontyParams) -> Result<BoxedMontyForm, OperationError> {
+    subgroup_element(peer, params, false)
+}
+pub(super) fn ffdhe2048_modulus() -> BoxedUint {
+    Profile::Ffdhe2048.modulus()
+}
+pub(super) fn subgroup_element(
+    peer: &[u8],
+    params: &BoxedMontyParams,
+    allow_identity: bool,
+) -> Result<BoxedMontyForm, OperationError> {
     if peer.len() > MAX_PUBLIC_KEY {
         return Err(limit());
     }
@@ -148,6 +158,9 @@ fn peer_form(peer: &[u8], params: &BoxedMontyParams) -> Result<BoxedMontyForm, O
     }
     let public = BoxedUint::from_be_slice(peer, bits).map_err(|_| failed())?;
     let one = BoxedUint::one_with_precision(bits);
+    if allow_identity && public == one {
+        return Ok(BoxedMontyForm::one(params));
+    }
     let p_minus_one = params.modulus().as_ref().wrapping_sub(&one);
     if public <= one || public >= p_minus_one {
         return Err(failed());

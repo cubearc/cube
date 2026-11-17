@@ -12960,6 +12960,122 @@ Example:
 cube cipher --help
 ```
 
+## cipher.cramer_shoup.decrypt
+
+Raw Cramer-Shoup in the RFC7919 ffdhe2048 subgroup with pinned second generator and domain-bound fixed-width SHA256 transcript and label.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CramerShoupParameters",
+  "type": "object",
+  "properties": {
+    "label_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 512,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/CramerShoupProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "CramerShoupProfile": {
+      "type": "string",
+      "enum": [
+        "cramer_shoup_ffdhe2048_sha256_raw_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher cramer-shoup decrypt --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## cipher.cramer_shoup.encrypt
+
+Raw Cramer-Shoup in the RFC7919 ffdhe2048 subgroup with pinned second generator and domain-bound fixed-width SHA256 transcript and label.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CramerShoupParameters",
+  "type": "object",
+  "properties": {
+    "label_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 512,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/CramerShoupProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "CramerShoupProfile": {
+      "type": "string",
+      "enum": [
+        "cramer_shoup_ffdhe2048_sha256_raw_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher cramer-shoup encrypt --parameters-file settings.json --key-file public.bin --file group.bin
+```
+
 ## cipher.digrafid.decode
 
 Explicit 3x9/9x3 A-Z-plus-extra geometry, period coordinate fractionation and visible padding.
@@ -13424,6 +13540,110 @@ Example:
 
 ```sh
 cube cipher --help
+```
+
+## cipher.elgamal.decrypt
+
+Raw ElGamal in the RFC7919 ffdhe2048 prime-order subgroup; exact integer group messages, fresh uniform coins, no authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ElGamalParameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/ElGamalProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "ElGamalProfile": {
+      "type": "string",
+      "enum": [
+        "elgamal_ffdhe2048_raw_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher elgamal decrypt --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## cipher.elgamal.encrypt
+
+Raw ElGamal in the RFC7919 ffdhe2048 prime-order subgroup; exact integer group messages, fresh uniform coins, no authentication.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ElGamalParameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/ElGamalProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "ElGamalProfile": {
+      "type": "string",
+      "enum": [
+        "elgamal_ffdhe2048_raw_v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher elgamal encrypt --parameters-file settings.json --key-file public.bin --file group.bin
 ```
 
 ## cipher.enigma

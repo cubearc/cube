@@ -1,0 +1,1010 @@
+[
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5fcee5ae725c401987981ff46d253e3afa27ac02c06930f8d5"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5f81909c67989167bdd1d4cc13eba4a6dbf511370d7b4ed4a1"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5fce6d373f189a1e9fd94e98326c12ed00a396bdafeddcf0b6f7c3b5e5f3d5f8704a2d367093988d00"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5f8f2afe0456996de37b17cd6ccd2282b0c0fdcae516668ad4e263ba267bb0f1124870c593bad8a8bd"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5fa227efc505b1c8283dabb3de04a929a9b4d6dc1c2aa0e8f6"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5ffbdfc99e0c7b86bb768445db6a15337dbbd5826fdfdc8898"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5fd4a6c197d69f3fa1a31059b8a64bc19845d48002d1593ef4657d82bb71d624127f970f58e1839925"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5fbddaa604a3f1528b728772dab348997dc3067980230c99b1392906e55270a8614b8caa4c3e8f83a2"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f127f850375bef2c95eca7b603e82cdbc09daa366d2e4fbba"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5fcab99118bb41719f0d91f4d6f69dd7ed4f78b5332ad5756b"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5f82e025f3bfc871f08e51ef671b26348101030ffd811e046cf5bfe9f85b8758aca5d99ced11611410"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5f4f8f67a5580d603928518140475c1f45523332ebd384e28f8488ddfad1ceb34ae68747ba0c372ba2"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f0307c9c9cb73b5df8177abdf9d20c4734d89e600fa846123e75c59ce5208ec70"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5fc98c9c0cd54a5775e3921e00cf5b463caead8a8f65e08d6e03b75b8f798e045c"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5ff534cbae9dc980ef80cc52d0bac64ffda113936b712562645eac7e29a1f2ba923221efc51fd535e3c1a5c2d2846d815e"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5ffc848de984d064e3dc5d04538e2238aee924369a8c4ccccaea19d1da67ba85224aa3cb149484374fdd45e4e050700cc3"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f80fee8f5edcbc523b1e758f68c1e55be1474b76f3b83c78f"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5fb6806d4b30ed12714adb6b002c219cf91e74e00f9fb4b044"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5f3f8a132979d1be878840ff5f333812342d25143f8d21d7df0cc5157bc7d9cf2a7a49ad1286ef9707"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5f8e3bd0d7b64d4cab2663581df477f54f8646fe0a7740ec7005b7e9e699e22d803c7a1b654bad5a9b"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f583d05d0ccef19bb16a04118220be85f97bfa918b3f8c419"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5f86b17874a7255368801cff281a56d3a768fc67cc846c8103"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5fea27f2670e2f1ba2fb255abc200b2b7e6fccc7250c4abc1814841554e680b29e8eb5e09da86af3dd"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5fedd252a15859a22dfc847c8304f57ad0ab3e69d868e1821e676e79bc7f1658ca2598f46c248ed8ec"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5fc0e7bed5c17f2b4d3d5cce5d5872b645aedc61e4026e2682"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5ff8cf9e90fa4dacd05375df41ae40e11af289032fee227bbe"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5f7eb15b1f634c5794ea1ea5699a988618914789f9414cda5a55ab0dc1ab156dd03cb308547e72880b"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "8"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt8",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5fb285e03a1af58ead30fd3a56c17329de6345665345bee2353aa332b0a602d674ace52cfdfb9c80c9"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f5bd680d29acf4bfcac459798d612c86c3a3a93bb033bcc19f038e9d5103e724f"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5f8974b9c4e23a8e9d4e35d830debce487e0350a1da4ecbf138c26508d6bfcd2a6"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5f887a699fb97b61cb9ee17bcc6f1761a51f05bb1875ff9d8b141f0cf0761908e3486a7028d5b342cfe109d27ecb786c38"
+  },
+  {
+    "source": "OpenSSL 3.6.3 9 Jun 2026 (Library: OpenSSL 3.6.3 9 Jun 2026)",
+    "command": [
+      "/usr/local/opt/openssl@3/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password",
+      "-pbkdf2",
+      "-iter",
+      "10000",
+      "-saltlen",
+      "16"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_pbkdf2_sha256_salt16",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "iterations": 10000
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5fc482d53ad2a3b7f79ca39cc18b060cffc62321ea896ebca87d80b3e9c217f96a1bcc358d0358d5ee891db62d643010ab"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5ff6255b8b0059095e5a27d28deb5642e9533d5b9723556f48"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5f826338bd92bb39da39aa3494f8c9c67f8768e8d6126bf653"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5fa90c4d92afc7be5b38384897a052a70f015c9a5ac9ea9e4ec0b42db4b51922541590adc0e99d6140"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5f995b6725c58a2cfe70e8079a6321c1e9b32f2b4bd9f17a4acd1cd4b967254c9a17faa94f38b1a8c0"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5ff2c8d530fd76676a2470fbe49116ac5aef7cc766333ab2d1"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5fb4e02865cbcab7456a88c883b54c6d389ad0b356326cd1da"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5fb7b2f7cb95855e08321f26474b470a7c6f88cf9d7c4f2ab21962a8251bd8665e9f555966bda651a5"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-128-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes128_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5f8bae97a88b232a5a2b3f14ed21719574f556b22569ced499919eda240a1f787dc6bf73b3aeab1603"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f63ed7e3b833020ffd223872b6954b75d7a29d6148143f1d9"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5fe156a446f73e1637a066a4e5831f9136014c8ab083ef8258"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5f89a6e00c44a9552aa138c3d06c752b617b19c0df8ff79188667006c2908a592ad56ca65245d95f20"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "md5",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_md5",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5f4b5b976c475b144154fe9555a427cb8b8bc990c01cfaed69f378efabef9bf5a86a69a3e244380ba8"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "",
+    "ciphertext_hex": "53616c7465645f5f059b32a1bf4a58031da9e811c8a7998f4cac750766016e05"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "00",
+    "ciphertext_hex": "53616c7465645f5fb3dcec18b4256a97dbc76533d28222c185f7d9ff1d7431ec"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+    "ciphertext_hex": "53616c7465645f5f9136d21ab67c76e1faec8e1fa5d73c2d7ecc40ea1007db89d4b114e14aa00fe0cf249fda05c990ae"
+  },
+  {
+    "source": "LibreSSL 3.3.6",
+    "command": [
+      "/usr/bin/openssl",
+      "enc",
+      "-aes-256-cbc",
+      "-salt",
+      "-md",
+      "sha256",
+      "-pass",
+      "file:private-password"
+    ],
+    "parameters": {
+      "profile": "aes256_cbc_pkcs7_evp_sha256",
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "53616c7465645f5ff0f72588fd4538fc15467ee7e7952f0dbb849872896cd213a011b664185ea7c8b82bbea26527c9cb"
+  }
+]

@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {readFile} from 'node:fs/promises';
+import {createCube} from '../dist/node.mjs';
+const root=new URL('../../../crates/cube-core/src/ciphers/openssl/',import.meta.url);
+const vectors=JSON.parse(await readFile(new URL('vectors.json',root),'utf8'));
+const witness=JSON.parse(await readFile(new URL('valid_pad_wrong_password.json',root),'utf8'));
+const cube=await createCube();const bytes=h=>new Uint8Array(Buffer.from(h,'hex'));
+const run=(data,parameters)=>cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:data},parameters}).output;
+test('OpenSSL/LibreSSL actual serialized files decrypt in Wasm',()=>{for(const v of vectors){const data=bytes(v.ciphertext_hex);assert.deepEqual(run(data,v.parameters),bytes(v.plaintext_hex));assert.throws(()=>run(data.subarray(0,-1),v.parameters),{code:'invalid_input'});}});
+test('legacy padding success is explicitly unauthenticated',()=>{assert.deepEqual(run(bytes(witness.ciphertext_hex),witness.parameters),bytes(witness.wrong_plaintext_hex));assert.notDeepEqual(bytes(witness.wrong_plaintext_hex),bytes(witness.original_plaintext_hex));});
+test('explicit KDF costs and private settings are enforced',()=>{assert.throws(()=>run(new Uint8Array(),{profile:'aes128_cbc_pkcs7_pbkdf2_sha256_salt8',password_hex:'',iterations:100001}));assert.throws(()=>run(new Uint8Array(),{password_hex:'SECRET'}),e=>!e.message.includes('SECRET'));});

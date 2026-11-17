@@ -19522,5 +19522,24 @@
       "radix": 10,
       "tweak_hex": ""
     }
+  },
+  {
+    "contract_sha256": "e7e4de0278972c242760b75243ebc93fec3a18583c29bb24c93b032cb2ec5a4b",
+    "inputs": {
+      "input": {
+        "base64": "U2FsdGVkX1/O5a5yXEAZh5gf9G0lPjr6J6wCwGkw+NU="
+      }
+    },
+    "operation": "cipher.openssl.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": ""
+      }
+    },
+    "parameters": {
+      "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
+      "profile": "aes128_cbc_pkcs7_evp_md5"
+    }
   }
 ]

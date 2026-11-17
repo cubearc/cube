@@ -1,8 +1,8 @@
 import { writeFile } from 'node:fs/promises';
 
 function schemaType(schema, output = false, root = schema, seen = new Set()) {
-  if (!schema || schema === true) return 'JsonValue';
   if (schema === false) return 'never';
+  if (!schema || schema === true) return 'JsonValue';
   if (schema.$ref) {
     if (seen.has(schema.$ref)) return 'JsonValue';
     const target = schema.$ref.split('/').slice(1).reduce((value, key) => value?.[key.replaceAll('~1', '/').replaceAll('~0', '~')], root);

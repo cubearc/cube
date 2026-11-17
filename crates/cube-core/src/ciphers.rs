@@ -324,3 +324,6 @@ pub mod stream;
 
 /// Exact format-preserving numeral-string profiles.
 pub mod fpe;
+
+/// Explicit decrypt-only OpenSSL legacy formats.
+pub mod openssl;

@@ -39,6 +39,7 @@ mod mono;
 mod multiset;
 mod numbered_key;
 mod numeric_puzzles;
+mod openssl;
 mod pipeline;
 mod poly;
 mod probability;
@@ -618,6 +619,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     mechanical::register(module)?;
     aes_blocks::register(module)?;
     key_wrap::register(module)?;
+    openssl::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

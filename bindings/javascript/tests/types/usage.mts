@@ -315,3 +315,12 @@ cube.execute({operation:'cipher.aes.key_wrap.wrap',version:1,inputs:{input:new U
 cube.execute({operation:'cipher.fpe.encrypt',version:1,inputs:{input:[0,1,2,3,4,5]},parameters:{profile:'ff1_sp800_38g_integer',radix:10,key_hex:'00'.repeat(16),tweak_hex:''}});
 // @ts-expect-error required exact FPE radix and tweak cannot be omitted
 cube.execute({operation:'cipher.fpe.encrypt',version:1,inputs:{input:[0,1,2,3,4,5]},parameters:{profile:'ff1_sp800_38g_integer',key_hex:'00'.repeat(16)}});
+
+cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'aes128_cbc_pkcs7_pbkdf2_sha256_salt8',password_hex:'',iterations:10000}});
+// @ts-expect-error an OpenSSL password is required
+cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'aes128_cbc_pkcs7_evp_md5'}});
+
+// @ts-expect-error PBKDF2 cost must be explicit
+cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'aes128_cbc_pkcs7_pbkdf2_sha256_salt8',password_hex:''}});
+// @ts-expect-error EVP_BytesToKey does not accept an iteration override
+cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'aes128_cbc_pkcs7_evp_md5',password_hex:'',iterations:1}});

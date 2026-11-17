@@ -497,6 +497,7 @@ const MODULES: &[Module] = &[
     crate::ciphers::aes_blocks::MODULE,
     crate::ciphers::aes_modes::MODULE,
     crate::ciphers::modern_aead::MODULE,
+    crate::ciphers::openssl::MODULE,
     crate::ciphers::fpe::MODULE,
     crate::ciphers::key_wrap::MODULE,
     crate::ciphers::block_profiles::MODULE,

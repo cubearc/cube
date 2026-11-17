@@ -271,3 +271,8 @@ for required nonce/counter sizes, privacy and backend qualification.
 
 `fpe_encrypt(digits, parameters_json)` and `fpe_decrypt` use required numeric
 radix, exact key/tweak and profile settings. See [FPE profiles](../reference/topics/format-preserving-encryption.md) for historical status, domain limits and the published example.
+
+### OpenSSL legacy files
+
+`openssl_decrypt(data, parameters_json)` requires an exact cipher/KDF/salt profile
+and password bytes; its result is unauthenticated. See [OpenSSL legacy files](../reference/topics/openssl-legacy.md) for the compatibility matrix and private settings example.

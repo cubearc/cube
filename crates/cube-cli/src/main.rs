@@ -38,6 +38,7 @@ mod mechanicalcmd;
 mod modularcmd;
 mod monocmd;
 mod numericcmd;
+mod opensslcmd;
 mod pipelinecmd;
 mod playcmd;
 mod polycmd;
@@ -553,6 +554,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Unauthenticated legacy Salted__ decryption with explicit profiles
+    Openssl {
+        #[command(subcommand)]
+        command: opensslcmd::Command,
     },
     /// Explicit FF1 and historical FF3/FF3-1 digit profiles
     Fpe {
@@ -1123,6 +1129,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),
                 Cipher::Fpe { command } => return fpecmd::run(command, &mut output),
                 Cipher::Aead { command } => return aeadcmd::run(command, &mut output),
                 Cipher::Aes { command } => return aescmd::run(command, &mut output),

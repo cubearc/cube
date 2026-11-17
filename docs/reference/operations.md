@@ -18041,6 +18041,121 @@ Example:
 cube cipher numbered-key --help
 ```
 
+## cipher.openssl.decrypt
+
+Decrypt-only explicit binary OpenSSL Salted__ AES-CBC/PKCS7 profiles; unauthenticated output.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "iterations": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 100000,
+      "minimum": 1
+    },
+    "password_hex": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "iterations": {
+              "type": "integer",
+              "maximum": 100000,
+              "minimum": 1
+            },
+            "profile": {
+              "enum": [
+                "aes128_cbc_pkcs7_pbkdf2_sha256_salt8",
+                "aes256_cbc_pkcs7_pbkdf2_sha256_salt8",
+                "aes128_cbc_pkcs7_pbkdf2_sha256_salt16",
+                "aes256_cbc_pkcs7_pbkdf2_sha256_salt16"
+              ]
+            }
+          },
+          "required": [
+            "profile",
+            "iterations"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "iterations": false,
+            "profile": {
+              "enum": [
+                "aes128_cbc_pkcs7_evp_md5",
+                "aes256_cbc_pkcs7_evp_md5",
+                "aes128_cbc_pkcs7_evp_sha256",
+                "aes256_cbc_pkcs7_evp_sha256"
+              ]
+            }
+          },
+          "required": [
+            "profile"
+          ]
+        }
+      ]
+    }
+  ],
+  "required": [
+    "profile",
+    "password_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aes128_cbc_pkcs7_evp_md5",
+        "aes256_cbc_pkcs7_evp_md5",
+        "aes128_cbc_pkcs7_evp_sha256",
+        "aes256_cbc_pkcs7_evp_sha256",
+        "aes128_cbc_pkcs7_pbkdf2_sha256_salt8",
+        "aes256_cbc_pkcs7_pbkdf2_sha256_salt8",
+        "aes128_cbc_pkcs7_pbkdf2_sha256_salt16",
+        "aes256_cbc_pkcs7_pbkdf2_sha256_salt16"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher openssl decrypt --parameters-file settings.json --file encrypted.bin
+```
+
 ## cipher.periodic_gromark.decode
 
 ACA keyed columnar alphabet, distinct-key ranking primer and periodic mixed-alphabet offsets; qualified widths 2..9.

@@ -10,7 +10,7 @@ Each family has `cipher.<family>.encrypt` and `cipher.<family>.decrypt`. Require
 | --- | --- | --- | --- | --- |
 | `rabin` | `rabin_blum_reference_v1` | `{"n":"77"}` | `{"p":"7","q":"11"}` | Plaintext/ciphertext integers in 0..n−1 |
 | `goldwasser_micali` | `goldwasser_micali_reference_v1` | `{"n":"272953","y":"2"}` | `{"p":"499","q":"547","y":"2"}` | Plaintext `"0"`/`"1"`; unit ciphertext residues |
-| `benaloh` | `benaloh_prime_r_reference_v1` | `{"n":"91","y":"2","r":3}` | `{"p":"7","q":"13","y":"2","r":3}` | Plaintext integers in 0..r−1; unit ciphertext residues |
+| `benaloh` | `benaloh_prime_r_reference_v1` | `{"n":"707","y":"2","r":3}` | `{"p":"7","q":"101","y":"2","r":3}` | Plaintext integers in 0..r−1; unit ciphertext residues |
 | `merkle_hellman` | `merkle_hellman_permuted_reference_v1` | `{"weights":["82","22"]}` | `{"weights":["2","3"],"modulus":"101","multiplier":"41","permutation":[0,1]}` | Plaintext binary strings of exactly the weight count; decimal subset-sum ciphertexts |
 
 The table contains tiny synthetic teaching keys, not generated security parameters. Unknown settings and key fields are rejected. All results use the named `tokens` port except Rabin decryption, which returns `candidates`: one numerically sorted, deduplicated array of all roots per ciphertext. Rabin never selects a plaintext on the caller's behalf.

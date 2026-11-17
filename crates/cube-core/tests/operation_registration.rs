@@ -33,6 +33,7 @@ impl Ids<'_> {
                     None
                 }
             }
+            Expr::Tuple(tuple) => tuple.elems.first().and_then(|expr| self.value(expr)),
             Expr::Path(path) => path
                 .path
                 .segments
@@ -220,6 +221,15 @@ fn static_spec_rows_cannot_evade_registration_auditing() {
     };
     visitor.visit_expr(owning_declaration(&item).unwrap());
     assert_eq!(visitor.ids, BTreeSet::from(["cipher.source_only".into()]));
+    let item: Item = syn::parse_quote! {
+        const PROFILED: [u8;1]=[row(("cipher.tuple_adapter", "cipher tuple-adapter"), "Reference")];
+    };
+    let mut visitor = Ids {
+        constants: &constants,
+        ids: BTreeSet::new(),
+    };
+    visitor.visit_expr(owning_declaration(&item).unwrap());
+    assert_eq!(visitor.ids, BTreeSet::from(["cipher.tuple_adapter".into()]));
     let item: Item = syn::parse_quote! {static UNRELATED:&str="cipher.not_an_operation";};
     assert!(owning_declaration(&item).is_none());
 }

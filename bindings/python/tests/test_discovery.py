@@ -96,6 +96,8 @@ SDK_BINDINGS = {
     "cipher.aead.decrypt": "aead_decrypt",
     "cipher.aes.siv.encrypt": "aes_siv_encrypt",
     "cipher.aes.siv.decrypt": "aes_siv_decrypt",
+    "cipher.aes.key_wrap.wrap": "aes_key_wrap",
+    "cipher.aes.key_wrap.unwrap": "aes_key_unwrap",
     "cipher.aes.mode.encrypt": "aes_mode_encrypt",
     "cipher.aes.mode.decrypt": "aes_mode_decrypt",
     "cipher.aes.encrypt_blocks": "aes_encrypt_blocks",

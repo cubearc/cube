@@ -134,6 +134,14 @@ Core limits apply in addition to Python transport checks. Read
 [complete and partial results](../concepts/results.md) before interpreting a
 resource stop; the operation reference defines its fields and failure policy.
 
+## AES key wrapping
+
+`cube.aes_key_wrap(data, parameters_json)` and
+`cube.aes_key_unwrap(data, parameters_json)` use explicit RFC3394/5649 profiles.
+Unwrap returns bytes only after complete integrity verification. See
+[AES key wrapping](../reference/topics/key-wrapping.md) for private settings,
+lengths, failure behavior and limits.
+
 ## Authenticated byte encryption
 
 `cube.aead_encrypt(data, associated_data, parameters_json)` returns a

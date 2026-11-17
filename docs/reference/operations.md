@@ -4098,6 +4098,120 @@ Example:
 cube cipher aes encrypt --key-file key.bin --file blocks.bin
 ```
 
+## cipher.aes.key_wrap.unwrap
+
+RFC3394 AES-KW or RFC5649 AES-KWP with fixed integrity checks and no unauthenticated key release.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aes_kw_rfc3394",
+        "aes_kwp_rfc5649"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aes key-wrap unwrap --parameters-file settings.json --file wrapped.bin
+```
+
+## cipher.aes.key_wrap.wrap
+
+RFC3394 AES-KW or RFC5649 AES-KWP with fixed integrity checks and no unauthenticated key release.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_hex"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "aes_kw_rfc3394",
+        "aes_kwp_rfc5649"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aes key-wrap wrap --parameters-file settings.json --file key.bin
+```
+
 ## cipher.aes.mode.decrypt
 
 Explicit unauthenticated AES byte modes, NIST CBC-CS1/2/3 and IEEE1619 XTS or full-block XEX data units.

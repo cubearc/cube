@@ -305,3 +305,9 @@ cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Ui
 
 // @ts-expect-error AES modes always require explicit private settings
 cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array()}});
+
+const wrappedKey:Uint8Array=cube.execute({operation:'cipher.aes.key_wrap.wrap',version:1,inputs:{input:new Uint8Array([1])},parameters:{profile:'aes_kwp_rfc5649',key_hex:'42'.repeat(16)}}).output;
+const unwrappedKey:Uint8Array=cube.execute({operation:'cipher.aes.key_wrap.unwrap',version:1,inputs:{input:wrappedKey},parameters:{profile:'aes_kwp_rfc5649',key_hex:'42'.repeat(16)}}).output;
+void unwrappedKey;
+// @ts-expect-error a wrapping profile and KEK are always required
+cube.execute({operation:'cipher.aes.key_wrap.wrap',version:1,inputs:{input:new Uint8Array([1])}});

@@ -1,7 +1,7 @@
 //! Exact cipher profiles forward byte ports and private settings to Core.
 use super::{bytes, field};
 use crate::{
-    ciphers::{aes_blocks, aes_modes, block_profiles, modern_aead, stream, xxtea},
+    ciphers::{aes_blocks, aes_modes, block_profiles, key_wrap, modern_aead, stream, xxtea},
     errors::{ErrorCode, OperationError},
 };
 use serde_json::{Value, json};
@@ -13,6 +13,8 @@ pub(super) fn supports(op: &str) -> bool {
             "cipher.vernam"
                 | "cipher.aes.encrypt_blocks"
                 | "cipher.aes.decrypt_blocks"
+                | key_wrap::WRAP
+                | key_wrap::UNWRAP
                 | modern_aead::ENCRYPT
                 | modern_aead::DECRYPT
                 | modern_aead::SIV_ENCRYPT
@@ -89,6 +91,14 @@ pub(super) fn execute(
             aes_modes::encrypt(&input, &settings)?
         } else {
             aes_modes::decrypt(&input, &settings)?
+        }
+    } else if matches!(op, key_wrap::WRAP | key_wrap::UNWRAP) {
+        let document = zeroize::Zeroizing::new(p.to_string());
+        let s = key_wrap::Settings::parse(&document)?;
+        if op == key_wrap::WRAP {
+            key_wrap::wrap(&input, &s)?
+        } else {
+            key_wrap::unwrap(&input, &s)?
         }
     } else if op == "cipher.vernam" {
         stream::vernam(&input, &bytes(&i["key"])?)?

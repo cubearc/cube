@@ -61,6 +61,7 @@
     - [Raw AES blocks](reference/topics/aes-blocks.md)
     - [AES byte modes](reference/topics/aes-modes.md)
     - [Authenticated byte encryption](reference/topics/authenticated-ciphers.md)
+    - [AES key wrapping](reference/topics/key-wrapping.md)
     - [Raw block reference profiles](reference/topics/block-profiles.md)
     - [XXTEA word sequences](reference/topics/xxtea.md)
     - [Raw stream ciphers](reference/topics/stream-ciphers.md)

@@ -10,6 +10,11 @@ use zeroize::Zeroizing;
 
 #[derive(Subcommand)]
 pub(crate) enum Command {
+    /// RFC3394/5649 wrapping; release key data only after integrity verification
+    KeyWrap {
+        #[command(subcommand)]
+        command: crate::keywrapcmd::Command,
+    },
     /// Encrypt independent raw blocks; no secure message-encryption scheme
     Encrypt(Parameters),
     /// Decrypt raw blocks; success does not authenticate or verify the key
@@ -77,6 +82,7 @@ pub(crate) fn run(command: Command, writer: &mut impl Write) -> Result<(), Box<d
         Command::Encrypt(args) => (args, aes::ENCRYPT, false),
         Command::Decrypt(args) => (args, aes::DECRYPT, true),
         Command::Mode { command } => return mode(command, writer),
+        Command::KeyWrap { command } => return crate::keywrapcmd::run(command, writer),
     };
     let mut key = Zeroizing::new(Vec::new());
     cube_core::forensics::open_regular(&args.key_file)

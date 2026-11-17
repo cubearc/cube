@@ -1,0 +1,722 @@
+[
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "7575da3a93607cc2bfd8cec7aadfd9a6"
+    },
+    "wrapped_hex": "031f6bd7e61e643df68594816f64caa3f56fabea2548f5fb",
+    "plaintext_hex": "42136d3c384a3eeac95a066fd28fed3f"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "e19be2051ff2627070adf920326ccbbc"
+    },
+    "wrapped_hex": "947ecf0d0b064da737bd7aa92293e2097a1c62c3656c6b8e",
+    "plaintext_hex": "e19a9d9368a9e43cf292fec8d959e066"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "e5d058e7f1c22c016c4e1cc9b26b9f8f"
+    },
+    "wrapped_hex": "60b9f8ac797c56e01e9b5f84d65816a980777869f67991a0e6dc19b8cd75c9b54db4a38456bbd6f3",
+    "plaintext_hex": "7f604e9b8d39d3c91e193fe6f196c1e3da6211a7c9a33b8873b64b138d1803e4"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "211af1b37d49732fe6160704d6d885c6"
+    },
+    "wrapped_hex": "3a2a26274e83b4013d8c9aef2a3232d0e0dd6224f6eb948af401def812295fc795841e0034241f45",
+    "plaintext_hex": "7e3d38a7b8286a9153a830bac4128d027eed559d66ec8072cb3614806e2c800f"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "67ae4270bcdd31e8326b7e7f94c80276"
+    },
+    "wrapped_hex": "96cec0e3272a21faa550a857957aa38ce3c1cf06f0dd9f5b5c5c422cef6c69a1",
+    "plaintext_hex": "57e748b62fbc37ba25e904ee973d01b136cf7c1d0c8c5c87"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "7977b70e73129937bc738e27bb2cfd46"
+    },
+    "wrapped_hex": "9ceb0d2f4649731668f206b02557ce46944e8a45bc6f2ca066d0e9f2ef797b40",
+    "plaintext_hex": "febd8d318a8cfa95e4136bd3b30bbb5317cbcb75239190a4"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "d7aa53aefad65cd95b57c8eee7b0a906"
+    },
+    "wrapped_hex": "84ebd38cf06c674dcf186977de4a40c6dde3e7f49361a43420a887d2931b29c23e2db72e95e4107001da925181bb7097",
+    "plaintext_hex": "4a8daee6774751fc4489e837b8f7fba6896c70bb3d5e53053c92eb58046ee4a7002e542311253b97"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "3866b8d74cf377e44e880ea5624e4d67"
+    },
+    "wrapped_hex": "6a0f93399a9690abe4180810432d278bba4a641a57221c14577e26f3c33f9ce7c492a5b964ea9549f9d5fcdb6f7c706d",
+    "plaintext_hex": "d03b23f115cad81560582cd73afca45067541c50ce3100cc2081f281ed7e2d7e074fb1f05ef673d0"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "98311985c4661d7e811ee56070e6fecf"
+    },
+    "wrapped_hex": "625aea9122b7b57b9f36446f9053acc42c6435a7f69d91b41547026f833291d488e477c7ccba698c143633a304f463d6af4a3e72c189234fcfc360013e65b07b7f7a36c529d3fdbbdbd6224bf100c14bc5354893b44790f54c739a2b1f5bda82d70fb600ed9b0606dbddea52e508b492b72d8779856274aaaaddc0a3edb6cfc788b603101bedfcc3f44baa62336bd950c2e349d5daf04f2e23ec2628893d214e277569c565e5e6aa8b72ffa14118a3b57f814b4deb179980b5eeefa4fd93f1751850466e929be537801babc2120f3ff1ffe5fea813ec7788eaf43f5ef657e5af48395c3ad11aaf741549090b58670695f7c95c68e00576ca18ef0313f2b4b757219fc8db3dc2db28721d6f912547ebfebcd96935c3100aa4e4df9955acae1b4e2c10df1166d46c4285ab631c6d2ce58ad3ae99c07c019dcd15958694055281ccd6f803af290431f188cc4c429e84a4c30fd9c63968dfd0951c417efb71921c207de172a9546bdd3e2bb35b45e140892c649f88c31a438f864e801a69f8010aa3d77a26601a7a89067c81b0f7e70d8e82f21f88c7d0bb0c8ca0db875d6c3f8c6f6d709bbb31c7da2e31f3571daa2c5ab13bfc16624cf35abd526e84269fb45bbd2fcd8c383d6fbb700bc4b5205b3ef8c4323dc0d9e0370e56a3d1e5e76aa4de082e4c2a0afd092845bd5dab52a45943181461b76e3984b95f48bea80a94944241d04b5634c86274e7",
+    "plaintext_hex": "18840c96813864ef3093b48cdde6ac5d78248b96d4a2cd1f15f0b56f98213dbf87e1ccad04e0d4f1954c233ea3e48fdad8f2b1156e54e19e3b5f4a66d2e9149032b876c51249165fe8c28e112a685b2d228a8ac308017574274af36a4ea3877bcc9850bafe8fc0e0a712faca0dea98396f9143bc5819fe4933a806e9b965133e3c695a45f0fbd6961798c400d7477287df64798b651e0d3009c13f7a2246c28f983509b9e5339919f2cdffcdfc550693cba9491c00334c4a62d878c4d0ca57b1104bc0174968ea8e3730b9e68db49678b23cd508ebe3e12e94b0ad3791023a8ef95473f0b32f906738f34e94e45a4480ad768072e1853adb63996b9ac27a1dade70804b82290a2274c6dcc3ccd40a8b38a56a5eb03f59075de015e8f9096f53549f6374e02da947fb849287a447f757cc340b6bded71d480988b6d2fcd984fba841470519830304667fef0a577b4cf84f76aef9deb84dde36abfbd76673c17113dbea7a3e24bf9b57a8fd17173a1ef91497b732b3fa8889bed58a503a0d3e20bc27ec4dbf5d13a93cbad05495e3df15e1fe34a3a6d6f648ea4aa60b2f114f30944ae593675dac2db188f90a3c483fb82cec0f0d295544d798b62cdcb51c6c036af1a341d78babf87b92609c1d866e311a46abccc8ba8c6a41420359bb061d7e752c0ed25990eef57c9f9e190572203f8c473edf8cfc8c26d34e37240f45ded97"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_128.txt",
+    "source_sha256": "ede25239dc6c6e6d045e35783bca1c46b93630272980ba3eea8eaaf3216203d3",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "83be65d2b4f042f7ff3be65210e435cd"
+    },
+    "wrapped_hex": "cc3dece1a36270404b1ca38a8573f87c74c14d357445c7160c5a618e3940b6439dd6e02db6aab3a211cfcbb0f924adbcb7ba426e9ed9ec31d501a579f082cd48e90147cb031d02db2bc51fd0ce79912e55f548b73778468d1b40e0c762f34c05d0eeb2295f507fbf5204d5f25ec3adc9e404d7553433defb392f2f560817b61c4f690920760edc1018832120e3c46036b4356658d39d49c8382142b7035ecf6ea8374ab71e538b80bda53104ceb103c6a6fe15b0c675aa1706e409e731d1250d04a623e2da9f5859142e8831398e1ec483629c0501cef16fd28caa25598237bd1bb367031e55a5a55a169ce19aaea0c0d44c6f2bc0485cf03ae452d221c37f3030831eeb79dd66c5b6dff38b66bb9b9565fe92d12f12737b66225f40f8de02cd47ce15437ba701eb8173c303dd55782acd97b8d212c412554e3c02a1162aad8e08c954ab45eb103064ce7bf5f70f1e035ec56ca8e9a2d0da1568f39e2b9a33d9460a5d6a218d6507287eda0aac2266e28da0f0e2cd915aa72e80370c0ce1b7848010ad8e5e21f424d56d52a307282fa50f94877e0a2ef4ee6ffc924afc66f828ec462c7ae6466d578198f82494148d6fbbe6ba75525a9da8fd9b79cd715c0d44a80f2498cc17db8a1a70a7ad5adf499ebc7ebf058a5b36cd2df1125f0967d65015056cf68a042bfb483ef7667d03c6d5430c3b02d3143daf64b793b13b647d400fac3b800419f8d7",
+    "plaintext_hex": "4246bee669e10e04d9d8e4c33fd9b610052b88b1f935a889580a5a65fb9337efac272834d10b59ebab4c1d8a7cf7855d65dfc5c54a9d5910e4b87a5f701d5e2c4b71786a832af86b29eeeb29e73e223adf8359b4e37433ab0fe91029ed3de4cb3f5f6de332103c65cd5c95c19df6988aaea25c8e2bfd2d1e573c0ebe6c2abb18594679336292a8006d072f76d8b8556f001ff4cc8faaed6de34d798a4958b3d9f1cea9d33c82134e2202abe6bc5a28e97f24e9a52410e9599142077b41477e720ccd582833e9ae7f8a1f6b00ff66fc7e42f6c7f30c809898ad610a9e418805db879b15694be775e87bf2882669fe6c0507e984120cb3292c1b318d4204201753dfe5b046d2b0b023cdf059836cf685617f733acfc59274c3d5282961a5f37589d056f079d97df2871d229239176484c83e1441ad2e05152b6905a9ee0e5e0a6156b63f4c3d52e07dddb9dcf24e552f0100b434af80ad2006ca07777575066f86cbc29505e624fac93a3f8a7d724e54df3809f2b59151a899c6fbaa46ce2ad3b847ab1823381ec434279dff07eee8b0c7086e2d7003f8806f224913847f43d9db2ae161532d35b74e37d712094c3287e7eafcf35d440b8c054dc13611a09c1b255078723d19fd290678e88d8be839b082ea3991d6ba38926a0304ae3120116b0fada76e853ade998623a9d917c30e857bbfeb1ff1ce1f704c0f2e10c9f3382198"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "a6a3f6d509811859238fc569b5664605f7a73c475a691a8f"
+    },
+    "wrapped_hex": "57d7a4b4e85ffdcb7788b9b666cb63303dd2c5d0f11b1bbb",
+    "plaintext_hex": "8484e414b091f8a9f72cfd13087ddec1"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "5c527b865c937d60eba89c5b1d1ea4d739bba4ae56bd5658"
+    },
+    "wrapped_hex": "cb0601f3cfa5fc8096a0f342c3011b779e14cef22abbb163",
+    "plaintext_hex": "e1b6755d191deeed4453ef8fb934ceeb"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "3686e50dd602f84024570f545bbf618362bef80d45472436"
+    },
+    "wrapped_hex": "c7d5a1a5dfeb7327acbb94767d74cc2afc622ffd01f854d7d3e2b6f75ca7e8f441a0c0bad3d26ee2",
+    "plaintext_hex": "d780d69b45483b682d311ccaaadcfa3a1cecf1f05dbe2ebc71e6d3fa979f3de8"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "88fbd0d52e4018f59834935b79399437ecc0235cc96142f8"
+    },
+    "wrapped_hex": "a32ccc32bb841b84831298c7a116d59de813430f70ccb70eba604f95e39be53d995a44235680977e",
+    "plaintext_hex": "02532cdcf36f1bcac6e0634c3a4df49bb70e89b83da47925329d1b89880f0a82"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "0a833412e7aa1384ff26866dc9c551bf60413c17e847d317"
+    },
+    "wrapped_hex": "3a7efd629305bf1d61360ed6ff8ec7d059e8af3e5104c29729adb55d1bb94f7e",
+    "plaintext_hex": "f734760cc0fa3bbfb271277d4f29a48ddecda733d610fa42"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "e19cda1fb31ae7e23e2b77ecf80c35761d882a5268de5813"
+    },
+    "wrapped_hex": "766550e5f692582065f74da4b8dabf0675f403d3e88e34990ecf3d4b24a4d412",
+    "plaintext_hex": "b0e61bab777c32dddda6e5d8bd1117926a3718cf7486b808"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "2d8526081d02fb5b85f69ac286ecd57d40df5df3494744d3"
+    },
+    "wrapped_hex": "443c6f15098371913e5c814ca1a042ec682f7b136d243a4d6c426fc6971563e8a14a558e09641619bf03fcaf90b1fc2d",
+    "plaintext_hex": "95c11bf5353afedb98fdd6c8ca6fdb6da54b74b4990fdc45c09d158f51ce629de2af26e3250e6b4c"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "d89ecf76c925bf83c9a7a1a2261e9412c26b2496f53fb16b"
+    },
+    "wrapped_hex": "64170e81b65db86b223ff3f9ba17f94c84db74350ffb983e35120e83235c9b74c406876c73b2d6638484607381b11e62",
+    "plaintext_hex": "d97092007536325a49f3b02122cffa321f294a3124412ecebcb3481b69db996821fe92ac85207700"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "932ed6ee1db1c4cf7fd81efce5609641cb5f3409563089dc"
+    },
+    "wrapped_hex": "76b6772984932bb6314d1eab8f625e044920f9494789e9a0ac2affd9a209cabb72ee83331a30472934e02ef28697d541a071eff9eb5c7dd49862f11384d46e8f4c2ddb084e76ef382117a285993e4a9f89e1e0ba6612f63b3c8a54784f940d7e6baf12cb67d27038e91d1ad4feceb5bc44daf7444f76fd140ec7a94869b4f99b9fcf6dd68e78c6a0a4794d55a1c91756ceb9d28b43d9c72b26fafc25c71e63dc175b29282d4a70813b833c35354983f29796909a9ba515cc5c37c58e95aa6f35b850500ea933b27a5922188c2da64680362602d71d169f853af0564b53bc613c15772ed82f89c2f8625670179a83536972332509e7ae4e0726271c5381501d3d88a3cc34a56d80e3e553b9b595e358615e92f361d695837734cdaddd7068c441b310aa511407b53806f1fed984a73862ea2ded1ee67d14feb5d8661ed94a62f5768829d6feea30db392bf24f0ea103fd2a60acf1fcd4bb2465641712113375bc2c8d73650795689f9061608b65e0e608f9948f5efcc0fba62c50b8cd97f67df2b0eec4f5a0cd354e982ae6a62070f4127b6556714bb2267d558112638f10c78be201ba165e57ac9cab6f3e35a762b7fe83b3c7c050b77174a4bf14eb2cac4d6d58a94f0c02727ad020a6a05d9ed145151d4f1ed41d5a6d06c50c0e1d5c24d09100d4f06c50d06a332a95845f4192ef577dc484e7acb91f0b2a57c1f8bef97c23294c59099eea13b3",
+    "plaintext_hex": "da8dd9c1dc8cbf95b0fa280747c1007ecb086b7c944b0db4dfa3bdf6ed0c9725901cb838c2e30131250188c22bd92b068aa0871ce58a0c22307671612fc4884a655329851d54afd48a9d3a7f97976850d6fd842034548aee67df1272b06f155eb21966858731c3c35d4bb94a1ea351ef5a8c4779c077d648ec1c4f27cfaa48f47541a8f36831e35a961b076307bea928e1856e448d7695a0f7fbcd8c82800d12f530c2086f3b67bc5081d384010b47d327120def5c92f815aaae31d32893cdd18a71ba4e208445ff3a2f68a0a46689458b0f2d6d9cd3726284e56b4c020b97a82d4463f74098cfd7bd7a5f12157a0bc812266b8f2c215933cb67518f900602f0825538e05765318b6d31150007e410b92d5d957e119c5d94aadba193cf6da230387b1c5e6448515f9789a8867571ea82ad34dc5b912d6cd243bd4fc2f19d132bd8f1f5cef00a141e30ec4d3f7a546a215d5b0c7e70c3b0ec4fc34b66c4170bf403ef910dd3897caef33405827a55f943904c4e1b1aee4cc3ffd0ad27e316c164e2b5bbcf73df60d8859201b6602be01ba638aff468f3136120c117ca848ae161ecafade668e2d04b227437d4b91c6fc40ebd9490f211bcd21fd7005d200ef584f37aa2c4c769174551cec0d7f2936ae78f6c389382212703d0e7c82aef1a736056ed9c45e71439731537a2edb8a63741825c678a11c42e5b2281b43e203b0523"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_192.txt",
+    "source_sha256": "ff73b738f9ad7ce7fd20a5e6dcf51aa1cbe28e635262172bc56cafda4f0e8a29",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "08745bb3f33ca44d4decb1059e5bd7ac91444d7cbaba99bf"
+    },
+    "wrapped_hex": "0a3e6ab4cd64ba08452cad5e28b453cd191a9631a47f50bb35bee5adabb3d5d2cee212807f322409fdbed9410ac938b0c5283aa8265ef4b03198c2fee69e6765ce4a0c5708b413fc60133c2c58f474888c0a63003e82c917f8b9d728bcb287b5191b5b608e56a22759b835c626717074f6c6496972a9807cf0c54411f5b08a9356347823d9a55b27c39dad757a35f665e671faaa43dbaa70c5ca91f1ad6117e4e40c0601f212cfa80368889f27ceee7c5dc5871e9d8c4e9ed59bd93dce452df8017843e6d5dba690e40d81e74e71fc9e4d054e5a7701fe19f6dc1e2258db64b8fb7c0cfe23e0fe2df014dd726b1ef39d695a0c1ee493234ef044a51f7fbc1680bf48df30dee2eb3d297d7bbc69a22721007288b6b265f212c797fef1dd65aea050c288e228d70f8c5178fe39047e7659506f31fc8d83263fac011a06c8f926fcb8fce79b0ddfd00b82908382e380a763336162855c1da2828106e4e0e521c078c25bd5f93ab0b8b158154a7e589f06995e658baba2ee92a1d53d334bc50e2e6fb090f2ff71e31878d097b4d2558583cfb14aeb91f168bb204c73ddffccd8d40a84e0f34b3625c341f339f0e8bcd9093a28faba865f10347f3de0bcb2ee81ac1c853217b45f5117d11ad863ef871ed365fc1fa82991ba48c97a9b91f1b532bfd7aa400b6772bb517151515643d3e2cff28b85aa93270909695b20b3763cb82a82e1f6716bb60508b5",
+    "plaintext_hex": "2c23bfadb835afa4564cde283158e2d4f0ce064831b9ff536e834e260fc159600c7821b2acb8c287888585950168db42f02272d821c6023a9d56332ea103171347e456c1496c65884080bb610222b6da2c20877166ed4b613473a86b4e4e2b51645ebaae6b6a14ce3b2191f3b4db68a65fa49935537c634942a5f637c84d4ca52d9268e62170b7deccfaa39a1d3203444d638dfd2619fa70706547c849618c8655fee5ade2f41bc375dea16fee5920e1c693e849f152590bda9bed682684d08d0633ac3aa110b61e804430a9e7eb6df783cdf8f707899fa0fe76a1241ea4a4bf751255b60d0309085d2613bc33d6a52c3706555c77da4ce9f447712ef99c9d3adae3066db7a3cccb5e89a613c054c028a8d2d493396ef396125a59101c69238c45f85fc5d6b3176c46cd17a6203ee73be32b5dc5a5164a4c330d7c70c3f57ccc9904fb796bab03530f3e2bc342ddcdf8f4318dde592ff95be2afd8f0b3e027b3bbf3c120a6f64581acccc4b6e1fa142a1b9747b2438f5d73efb89d9da02cfcabf297d7ac2c9b19e0938c24da34ca36cceb1fe5dda16dc8efa3a675eeacb26a0108c6763384e99a41f6749ec2277d1f9f4926b7810933224ab8d77f3486697b484349d3ac311855444e0a5d869f1bde2923c1aa1da69d47b156010ee25ba506a3f52da0088a04d7a254d54fa52f4b3b28799dfc4813d8dc69f2674b55ad4b4337"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "f59782f1dceb0544a8da06b34969b9212b55ce6dcbdd0975a33f4b3f88b538da"
+    },
+    "wrapped_hex": "2e63946ea3c090902fa1558375fdb2907742ac74e39403fc",
+    "plaintext_hex": "73d33060b5f9f2eb5785c0703ddfa704"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "5a51bef705d2e56efc2622a29f7b7c57cd2cb160820b1519fc5d16933cab7930"
+    },
+    "wrapped_hex": "1e86665cb9605dd4b34b8eaf900a4af4add0eb07e6e63e3e",
+    "plaintext_hex": "f6c00a3078ca85a4e3b95eac262f5ef1"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "8b54e6bc3d20e823d96343dc776c0db10c51708ceecc9a38a14beb4ca5b8b221"
+    },
+    "wrapped_hex": "b13eeb7619fab818f1519266516ceb82abc0e699a7153cf26edcb8aeb879f4c011da906841fc5956",
+    "plaintext_hex": "d6192635c620dee3054e0963396b260af5c6f02695a5205f159541b4bc584bac"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "5b2bbfb7707eee9264cbca8ddda9e337aa85546148f682139f568c4e6a8bff4a"
+    },
+    "wrapped_hex": "7839f033f16a99fe720e3445560b0acb2580b1322ee273f0392ba3285d8da84fda0068cf6f9ad065",
+    "plaintext_hex": "92772f5e21f29cbefcc86ba6c3099f26c11da9b8d2ee11bd23c30155a8fc3ba8"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "112ad41b4856c7254a9848d30fdd78335b039a48a8962c4d1cb78eabd5dad788"
+    },
+    "wrapped_hex": "ba8a259a471b787dd5d540ec25d43d87200fdadc6d1f05d916584fa9f6cbf512",
+    "plaintext_hex": "1b20bf1990b065d798e1b32264ad50a8747492ba09a04dd1"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "1d87456bce526e87b3a07e4bfa024f476bc3164216062441cfd4a198d852f3db"
+    },
+    "wrapped_hex": "8df903a404e067110bbc017ddb65bad82f4a361aca275e9bc23503f443ff5325",
+    "plaintext_hex": "f70f4a1e34793d750eeb4aaa204a757e6ea90a9aff335a28"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "c1bbf2650e131538f3cba91a67425a6ea1abeb16b5de41cf9ed598c46b3f6393"
+    },
+    "wrapped_hex": "96e34f339448dc21235c1432170b439baebba0095b13d8610d84e378da837120dd48502d7fc2d0274b311065c6181c29",
+    "plaintext_hex": "bd072d07eabfa27a17446156688faa97427f19d67d54d48daf28f2ca2455d395f826bc169068e640"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "5a7a5c46c365d95e4818ca7263ad7947a9211f069a6fa961649cb68557b6e27d"
+    },
+    "wrapped_hex": "461f95a6fa5ad786bae97f60f08ce3dcda01f68da1fdf0b50e975126527451d73ebb470777845cd8156dfc4a2f6676f3",
+    "plaintext_hex": "9067e74888934be87fec6e9decbddf1a5590d56be4f63da556624565288f7d05341cbd509a8cf4a0"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "931bf2c55eac657ae56fc0a9505a6ea7cc9af5162d844ccf01f19debfad09cbe"
+    },
+    "wrapped_hex": "6b75fa8070291ef7c89f5cc2060c56270f5077a6df65a8095cc76b717167e67af70dcce96de4aa32293c17d0812f666e1f42e7e662cef7a3148486d2be7f314631ed6606f326e9781c3ed6be1735bef8cd5d3ac7d2b45c4419ea61462baccc0ff87b83b9b6cc85278c0b20bc15e6baa0a15eedd9e99df82c8e61476529c98aebbc9d40d417f9af26e6da5d115acdd6007d83206c616a39fbe21c6331cc45af11c578532a7cac50aaba21f3cf317534564c2ee093ef127484aea62c7a90327fe9bbe8e45627974306d8cc7452e96033f0c8c30ba2d7fb644796a49c9b502d3db7d4995f920fe21962fd2b634c15be0d82e9cf0ae3fd2b6d45524e1003ab9788ee56cff3e2e62c5784061a5ff586b5907098b8ab54bb70fbc6cb066b071fedce10e013014d82162e3cc6f9be3b4067555907a4df55012a9b1001888c55dd94b4f8528bb29e7985ecb8a7958fc8559831db05002479b1f39e5de3659f3a6e8289d9b8ff4eaa3f864b1ea101d84b4c6138aa6ffb95dea4f825d23f5d368727ca0a8cacb74f7bfd70fccbc951db99f2f4a580425c31a8552fa27397cf8b7f420f13fdcddca553a5f31d8645615b98a88795fb4472bc7cd6e8e54707d7be1f3dd7d4871725f6bc0e65762f1e42e22c411fee6dfd8139068798c7ae9781c8e5bcf4732a83f9142edce36e1ee6e20142adf46c5abaea0ca78f61e16b6875927d4141f6b215da1f48748bd33c",
+    "plaintext_hex": "aa8074a195abd88930825b947cbf3cca9810eb829d2e7a09f9e9cb1f8271986d00c5be478150fbbe990de8c61af879495274a60d83f98cfecb2473a35d86fba6ce839d259ede318a362e7abc1f8a18168606d5e680f456f1ca19942e67e5aee382536df7c28204b7842b99023336b735a861cf28363e7773d7b0bcf32b5fab14cb524249863fd7ce49a7a7882b53728f7ecd020393852494df09d9a69189ea713e730e002252af18864b948a642d7c0fb17b0cd5671f14ae340fb0e83b4bda920445927b8de8a82ac93158edbbd57fddcc1d908688770a07c27d2bdb7151d986e85cdf1606b0c1c959542e75090d8fdce9c2a9c162e6fd988746c9bc916ff3f20f054690173d143212b74c5a8961cd46663958744ca1334f6c1dfc13fa83c0a9cc229a1030c6c84d01751ffef54d0f9edb2a4851a187d02f097a5c716f8fbae29eae76738239516ed08c14f24f9378451e9e696742a4bcdd9e0ecba49fd05eb93698afaa1b0d5558521c7b4e77b15ca2612619bbd78f670a1562a9a0a0215fe64211115e60476525444b351a4f8ff5551dd198655423f3fcfb5967c4f77e25d3911504de1d034176d3ccecaeb31bd29677c7569c858ea24d7017ce0b31f1911f4fa14b2afa429c06115bc285ea8b90bbedbcc63f5f0829dddcb17e8f9d21bd71501679e514147e1957ccf986e7e96a0e63ded70a9d017162658a901f55b1001d"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KW_AE_256.txt",
+    "source_sha256": "58db9474ba937a8235d15d07ddab38179e957ec1d5e5a017c13387ac68a8026e",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kw_rfc3394",
+      "key_hex": "c2b758c9dac8eaa9971195a3ea1823da0fd9ba03ede2a76e1cb5bc13d63a6d20"
+    },
+    "wrapped_hex": "8748681c2d61bd9a4622ce60b5d21765f32663f994d41540aef0b07c1ffd1ba7c283cb66a5ec2f24f923db5201d59ed86df51db33ed85eb6a29e45bf43383305078666ba8ff98546509522a697caf31a36fcec7f6f9b5a5e29c5e3f6e7a20818a33f18c711c3c3db4add453921b162a2cbb1dadaf87d7000f7c60cbaa2b7456afdb9b8eb1bd5fc385790ec054a24e8d89b98a375d8bb920d066782671629dc03c5180bb32d5b07dc7e63b76b1e82beadbc188c19335267f62f3d4a8316ca337e8e5066b956406038ae63dc260913c62d18e03a00c9d0d0d15d21ff4565736149580f7e1632c417eb31f9b50e4b8acce02de91e0e2f837ffb3a00622d1488076ea1804d6ed5a9c82dcbae698f2b58555536fd590fd9722d66d5d6b934eb8d542ecad2fa350bd4e864afdf95b15fd36593ffa78d8205c8274e618d0495f61a6d3983c427d9cd907063ed4b6a92853397614503df07acf91c0de7fc97ebe2b35e5feee5b7c3ad94a157306fc45a875e2a9c5063fa9d73ecea987f4feaa1927565892121881160b318cd71f7f41701ab421ea45aa0046ed07297c202fec093fb8c93e46349f742775a4cff693712a2843fdb9b7f1aba6d2cb207eaed4dd63a27a8555ac13daec975d9315ca9c79033b009be33fb402fc4dcf4bfd6d986daa96af5c42a6b2ed891bf0657e934d00393786f67a583568a2324eedbb3b1ddd06ca91a2677c4855e5702de0f",
+    "plaintext_hex": "e57dccf526516cce2c26833b36f9b3fa24d0c26e3308927547d838c3e3e938e1acd73cdcce7ecd61cea4b962bd9844900c65530236ad2b9a005f80e9ac36847444b6ec91b18a3c85d74196815b61d5677bf55af73df9b505870fc0a7e0cff54d8d380d1a19bc5ce68acf05078613ce86a6ad62faa9779ec93f7321758618943fb9a341e1cedca71a98cbf6f59d9689b52f76ea257ad35428dcadeaeb6a83ad1383049d52de108fd705474df9a34b8ad70f2f01fc185c8b1ebe964b12fa2cf08590bb06528b65b410a80fb0258b8ca00f564d7fb7f4820cb80232625428dd0244babf337adbb5f6016ed86fa33460d17dca36c207ad51b808dca95f88050ad9aef7d7f50fe02f0fb64fa5967948c73e7c5264167d51f37795736a1c512741dfd00ef99d62f51d23e76da49b66b65a5ace1a7a588d75327d9f3be026c64f2008b722b9fee6bd20bb94700c34db6e10736eb492db4f8940b34681606e4c82722773dc9053d39d85bda7928ce55f0041584e463ab96a4e1e122569a7b5f365cedeae0a4e9060b3b9ffe7e8d6363192e99cf7b8af691b0bf477559ff43e1ac3809a7740c08f8c8e5d46c328b8c39d4a78b969e924e44dfc5a80837fccaafc9dd07129ea436c9c6003f084ef4b0424035865affed518c2c8d0fca64a155e3c20516d6464148694bda5b54c1964cb6f6837723752740a2ce2eaec2a26212f114729a4aa"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "6decf10a1caf8e3b80c7a4be8c9c84e8"
+    },
+    "wrapped_hex": "01a7d657fc4a5b216f261cca4d052c2b",
+    "plaintext_hex": "49"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "7efb9b3964de316e7245c86186d98b5f"
+    },
+    "wrapped_hex": "116a4054c13b7feade9c22aa57b3caed",
+    "plaintext_hex": "3e"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "a8e06da625a65b25cf5030826830b661"
+    },
+    "wrapped_hex": "b6f967616dd8d772e9fea295a456dba7",
+    "plaintext_hex": "43acff293120dd5d"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "45c770fc267175072d70a38269c54685"
+    },
+    "wrapped_hex": "78ffa3f03b65c55b812f355730af71ac",
+    "plaintext_hex": "cc5fb15a17795c34"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "7865e20f3c21659ab4690b629cdf3cc4"
+    },
+    "wrapped_hex": "41eca956d4aa047eb5cf4efe659661e74db6f8c564e23500",
+    "plaintext_hex": "bd6843d420378dc896"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "853e2bac0f1e629867acea0d2b3c087e"
+    },
+    "wrapped_hex": "b43781062eb0317eb2dec6329f2d64de1c33d85570d57db6",
+    "plaintext_hex": "49575527bc59530fbe"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "be96dc195ec034d616486ed70e97fe83"
+    },
+    "wrapped_hex": "974769b3a7b4d5d32985f87fddf9990631e5610fbfb278387b58b1f48e05c77d2fb7575c5169eb0e",
+    "plaintext_hex": "85b5437b6335ebba7635903a4493d12a77d9357a9e0dbc013456d85f1d3201"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "c03db3cc1416dcd1c069a195a8d77e3d"
+    },
+    "wrapped_hex": "57e3b6699c6e817759a69492bb7e2cd00160d2ebef9bf4d4eb16fbf798f1340f6df6558a4fb84cd0",
+    "plaintext_hex": "46f87f58cdda4200f53d99ce2e49bdb76212511fe0cd4d0b5f37a27d45a288"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "0e54956a24c7d4a343f90269fb18a17f"
+    },
+    "wrapped_hex": "876f3e53ba9cf4f6a521ac198bc813d0ede0f862ab6082e3e0a06ad82b4f279582f7c43bb63574608446bc2a05f401a68f74086cf2776b4b3df6b3679c2edfb91c024db54c6831e0752ae6f86c7596462de905ee0be908c1b9d043ecafe2ad1cbddb904e18ebc9b7a107031be3a87059516a3d1257812d9c801b0b9f21539e70c47150c128d87c5e58fa6e4371aedde69c7b5cd16b73ac422676328131f3ac48c602bb6e0741805aad9d23b33b3523b86cf0588cdf9dc6c4d5f9fa43d88ca17976eaf48fb37a41a598266da04144373df5631cc5126341c200a0c8499b29ae96e6e6e6c2bdf8d8903da62bf8ddae970569b695240e77f8ac5b191da5034008b6ef21936858e69bac372bbafd8794f6b03711503c1875528a9348681844edb199a0664d740f0f0b1f866c4248c80fe8b5700a3c4134cdddb17676e0cd37d6d81831a0f4adfba071bb0935502480eccd48b28be5954ea6c7d873b51b8bd2b709c5b6132ed31296510915073c18f7012f0eff6a9aad5340a19fd5e372d35260b718d9e4807b1954c24e6a4fd48e4dbb8f395474e99ab577367d2ab5ccaa18c947331047dc3986e213a878b41089aa221019dad4191a4feefd095f8606c2700a46d71cbb13efb6957df925ec26071c04d04d5a94e138e5fc5d1f059236aad76208077dcc607b1dd2086f9c04e33f955822b457eecd68bd5f24836ecedbac675e6ed93d8a787cb57ad68e",
+    "plaintext_hex": "817ddabdc5d215eee233adff97e92193c6beec52a71340477f70243a794ce954af51e356c9940e4ab198f0e68c543355f65ad179cb2d60dd369eaeb9ed141fb18c9e4054ac7fdc83506896990a4d20833d2d6e9a34938796ee67c9d7d23058544a4a35f2954103ce443a95a7e785602075ca0a73da37899e4568106bb2dbf1f901377d4d3380c70fa5175ebc550481ac6f15986a4407fde5c23ff317e37544c0a25f87117506597db5bb79850c86247b73a5d0090417d63e4c257ea0220c2c04db07a34f0ab7954e1dfa2007a1466795c4d0c2aa09ca3986c028185b43a466526594afc9c891c263a7c608304bc1957c9873f544dc71e6f847c48d32026ed03b2333825452ee7e12a50e1cd7d678319264c65f78001996d37fae7f9861fbd21cb506c2f8a3b0ee53c7debe17111b6e3f78a5c5677857b082c2c4943dfd1edf6337fea98a44fc25928361156ef38d865948b979cf6f4b46bd2119f12f0891cef7fc9d0638fd105fc05f9968d16948d1cb820751e82e44cb68e99d4f072ffd1577da6c0631b5827bec7e1b9ec72d18b74cf5f233e85013c1668ceb5d7a1f5e0f016b0ff726a0a9d41e2cea8e14a2f56492b14606d3fafd8ac141335f39f90d56863735628e8f17be90e100ef0785f3cd57db8b9d89a6b2189dc2ea00c285d2657983f8bd7883c215477e67a55556401f1d8b27d4e0d541c7fb7ace370c2e428884"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_128.txt",
+    "source_sha256": "1ef311cb2071e8c24a715d38d3ebb81255c3bf0ef6535fc67a3709d140144695",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "6b8ba9cc9b31068ba175abfcc60c1338"
+    },
+    "wrapped_hex": "aea19443d7f8ad7d4501c1ecadc6b5e3f1c23c29eca608905f9cabdd46e34a55e1f7ac8308e75c903675982bda99173a2ba57d2ccf2e01a02589f89dfd4b3c7fd229ec91c9d0c46ea5dee3c048cd4611bfeadc9bf26daa1e02cb72e222cf3dab120dd1e8c2dd9bd58bbefa5d14526abd1e8d2170a6ba8283c243ec2fd5ef07030b1ef5f69f9620e4b17a3639341005887b9ffc793533594703e5dcae67bd0ce7a3c98ca65815a4d067f27e6e66d6636cebb789732566a52ac3970e14c37310dc2fcee0e739a16291029fd2b4d534e30445474b26711a8b3e1ee3cc88b09e8b1745b6cc0f067624ecb232db750b01fe5457fdea77b251b10fe95d3eeedb083bdf109c41dba26cc9654f787bf95735ff07070b175cea8b62302e6087b91a0415474605691099f1a9e2b626c4b3bb7aeb8ead9922bc3617cb427c669b88be5f98aea7edb8b0063bec80af4c081f89778d7c7242ddae88e8d3aff1f80e575e1aab4a5d115bc27636fd14d19bc59433f697635ecd870d17e7f5b004dee4001cddc34ab6e377eeb3fb08e9476970765105d93e4558fe3d4fc6fe053aab9c6cf032f1116e70c2d65f7c8cdeb6ad63ac4291f93d467ebbb29ead265c05ac684d20a6bef09b71830f717e08bcb4f9d3773bec928f66eeb64dc451e958e357ebbfef5a342df28707ac4b8e3e8c854e8d691cb92e87c0d57558e44cd754424865c229c9e1abb28e003b6819400b",
+    "plaintext_hex": "8af887c58dfbc38ee0423eefcc0e032dcc79dd116638ca65ad75dca2a2459f13934dbe61a62cb26d8bbddbabf9bf52bbe137ef1d3e30eacf0fe456ec808d6798dc29fe54fa1f784aa3c11cf39405009581d3f1d596843813a6685e503fac8535e0c06ecca8561b6a1f22c578eefb691912be2e1667946101ae8c3501e6c66eb17e14f2608c9ce6fbab4a1597ed49ccb3930b1060f98c97d8dc4ce81e35279c4d30d1bf86c9b919a3ce4f0109e77929e58c4c3aeb5de1ec5e0afa38ae896df9121c72c255141f2f5c9a51be5072547cf8a3b067404e62f9615a02479cf8c202e7feb2e258314e0ebe62878a5c4ecd4e9df7dab2e1fa9a7b532c2169acedb7998d5cd8a7118848ce7ee9fb2f68e28c2b279ddc064db70ad73c6dbe10c5e1c56a709c1407f93a727cce1075103a4009ae2f7731b7d71756eee119b828ef4ed61eff164935532a94fa8fe62dc2e22cf20f168ae65f4b6785286c253f365f29453a479dc2824b8bdabd962da3b76ae9c8a720155e158fe389c8cc7fa6ad522c951b5c236bf964b5b1bfb098a39835759b95404b72b17f7dbcda936177ae059269f41ecdac81a49f5bbfd2e801392a043ef06873550a67fcbc039f0b5d30ce490baa979dbbaf9e53d45d7e2dff26b2f7e6628ded694217a39f454b288e7906b79faf4a407a7d207646f93096a157f0d1dca05a7f92e318fc1ff62ce2de7f129b187053"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "9ca11078baebc1597a68ce2fe3fc79a201626575252b8860"
+    },
+    "wrapped_hex": "866bc0ae30e290bb20a0dab31a6e7165",
+    "plaintext_hex": "76"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "39542e1cdc57fc35a2cc0a702d710ba5dcd6e6b7ff6aeab6"
+    },
+    "wrapped_hex": "599ad0226bb37aa24222b5e76ff5c1f1",
+    "plaintext_hex": "87"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "c5029804d28341ca267c9e73afc5f963b14bb604708b43f2"
+    },
+    "wrapped_hex": "15b98046b2a3a49b9c0831c476fc34fb",
+    "plaintext_hex": "e6eb18a3e969ab5c"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "9a3fe78973398acf648e745987d5520726dae27e79202b69"
+    },
+    "wrapped_hex": "e017a7fa42aaf304d64fb4776734f791",
+    "plaintext_hex": "f154e14efa836250"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "9464f1af6aabad076661328bcfd15777da16a288a2660009"
+    },
+    "wrapped_hex": "d9b257b400d808a0b0386af3be9154fc7f2fb2d7edc06201",
+    "plaintext_hex": "431527c3a644c106bb"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "d2caeec2846c64c233d304f3f9191abcb763f44d7a21d510"
+    },
+    "wrapped_hex": "d790599e8752452f1160a1b7651ab26765b1a736000559ea",
+    "plaintext_hex": "34c73ade15edf2e82a"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "a354ccd6dd97cf40bed840f8137e0cf2e91c00e592104765"
+    },
+    "wrapped_hex": "f018e7c8d6dcdbd20606502b2667439d9049a9a2d5c960af8e9251466d6ff8923fb82432b299f1a4",
+    "plaintext_hex": "22ccc034c5345550f5bc0114f2951f0fe439ec3ecd8ac1fea8889dd12bfb8e"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "b3168d29a19eba9dd1cb28c52f538cf8c349d63e2097c30c"
+    },
+    "wrapped_hex": "42d0ffb60e37a6040f1e796cf7706bb8e84bd2b5d6852c64bc4d622d7f281edf6c1e66c259ce5dfe",
+    "plaintext_hex": "fcb63a3504a7a5e027cf02750e9a5095ec70bccca32f1ce098b91d40fab357"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "d92388950b0897b05a5e202beb152af1bb540bdd41a62874"
+    },
+    "wrapped_hex": "081ac30799def6457449300b5dc0f0920d8a0e4646ae4999fb27ca6fa9928ea422cd69d3010232b8c63ed9278ab74ba54260180dfd848dadde3eaad1e612f4057a633e3f6bc202adca87e9502ec15ec15bde9603848f7202aa66efacfd1eca538949b30ae453118864a9d3cd90fa458a7025d50ff8fb553150675bd35fea2f233e2ed1960236609174f6681ca0307d903998ddf20fda64451660b637c2f79d576000aa8980d61b61f1ca90c70b3c5011980cd541c50ffcb254c26f260d58995ac4bef96b71be9e6348630b26ac07612b94dac5d28a69a89923ef5b76d6629f71521e48a17818ffc43fbe01467b7f367251edc90b8d2021fde076266414925daa64992a099d6dfcc1272b91a9ecaa3207926a2203b51830a397ff8098a47bdb14e0fd762f7f87bd2477d680c3ce4cc3c3d46a3c43f95c55c8593a7040fa1bddfbd3439130be672f96e813bd499e0a09b7f574e0ae0b263a42d2378e355542cd780b21191e0b14bcb4f21cd0893bad60ecbd192260df069bb0bd64c1b824f9264a9ccecfe7f379595bb748922689f269ec4d107a0aa7fae76df81e10f74e9385fad11f8eccaab601a9d8d169203b7f4994f1226187b594fc737a3356ffb4234c974f381f464483e5a5a3ae6a35fa4758ba2e21cfcc9d51c9b0728b174a3373895b2920e903ea12eb35222742c2056c762afb38764e0f02545f389413e5969ebaf919e2bb6c72976db1",
+    "plaintext_hex": "4175c44328c0e518e58d6055757a2a0a727d224a39ca0fd04c50ba2500f82520ded19d3d9d7802c07e2991046e4e33eb5306c6e9f6c4e981c9505f5ce46f4431748f81b94862e35ce311e46fb6b17c4954b57e3d3ebfef45967c94ac6275e239d8cf7ec42dca87dc40d395e0b4c9895c81a5c1b3c56752d9eb28b843042ec20c9aedcc272953d4754097ffcef1eccc2e6dc65224518327bfc904435e57efc06836ae0cb824b4d516a9ecd4bf8d122bf6632f083e25aa6fe5c5005197b2cfaff409ce38fca64d19d771d60514262e72a82b12fbf1b91eef8fae23b503adcd13b1f74715994c8b88264b00a6b0800fbef5324ebd4939465fe3e9a7d1dc0ea05068c4ca4f87efa4fc679aa49666c115795184ad3393a54cc4ee67c9da90567ec468cdda03cfb3688e54441069d18ac7a9b2cc0b599bafde21737b772887f9795cb2c2b6005ad56e6133f51cd9b643a3ddfdb4426d518004e954c0f91a7ca07fc872c8e16230ea75cc4ffa3d6a9d6b22f0fad8254d62ca21c869de2c5726b066bc4d0c2dff4b23bcc0462bc70c52951ae293e65c8b8f01e5c45c845df93e2c648f7e422a6ba907b626e75a2e625d897f66c0a7ac5296e38e2718daab1eee40eb16b40de8c1a287f1ca8313bd7e51656366a3e8669d0cd3c31080abebc490d4071e0ef2577b33ce201de8bca5f17055a4e52ccb7f2cf45d407ab24937a503d3fa34e0"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_192.txt",
+    "source_sha256": "5ed966ca47760981d8d78119ddda3c532f26f4c68bd1f6324e953fb409815ddc",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "a85b4359ebd240012ec749459bc928eaa52c84e887ababb9"
+    },
+    "wrapped_hex": "72880f9f173f0ef4d99e3ae71f6f3b94f66a08aaa22be1d206faf431718c1a29bd0a574b1a28b69f0e64d56d3e43617dc73506a939b7de9005ef0ee3f02b9265e91a32aaec58b7ab990f39774f6769c9be9ced3339f6bf0159055abe237c4c755613a6c03271abea3bc89527f284a3e1557ae26b3910b779a77a128e773d11d7d641479d02f4888c989cbb8d928da0136b965531730a3c0c32404351f4c2390d996dff58985ed1d4f4021a5d6ccedf4555066a826a04055cdf8c9c44bdae26619390b3e22b064f86b28382094a3e299d55ab335ade601699e85f19d6f6f12407caf84ad47f03d75198691f1a9b2aa9ed95e508d8551b19601418922f3289fc1efc3abb1ebc2f4886dfe325cddfe25dd908e5aef8ad197ce2703e692b9c46a12201fa71ebc2e323ff8926ecc059ffeeacc0446d3f28496f17f1b4ad6504e4e24188862e25f3dfc36adc7f79920d88e6c53269cc4e5dbbebbba1a2347154683c840d178476ae11d6ce574c26b8b895957b8623807e8831b87b5639aeb415adf1bbef394046deb3bbe91a5c17f2f67131ae5f696352a488e3bed40df025e0a0846e0037847350fe8ae3cf73141d0ec550d82b89c05bbff7337bfe846411d3f0bd012e4de2fe5b83c7210214c0404b40e08abdd3f4bc441f9b6e1efdaa4ac13b85d139f670a6060a1ba8d2528bcd19f241d9ee5077d20c120f2b484c67c9c598b1b209824c3b8aec2b7b",
+    "plaintext_hex": "9db71e2a2d40f6fcc1b8311167ae13fb101bdf7b5c4e078373c0c3cb3f3a3ca39a91a6985d3fdd48d93f2b5a09b2a69350da2846ce6a37d018dda95ddac93a92fda7b7c3bb6518dd78f367f70e34e0bf19dbba46fd13d3f3e0a1776350f27138c64b177aa39c54dc06184b320016b6305c2dea19fa6da634cd613d5a4f71bc045f555a1ccee39b8f1ab90840b5bae555932e08719bf38f72bc1057875e8c077a70629f46be91281b977ed6f2a71171a7cbaf8e0566e55da6220a85a7655758de3b372144ef76d0337d3133004c0db096b2c41f524f95706247a331d08a6ff72b425395fee8e1ad308ccfe5b0525c40803e529db72063731fe1644891bdc0d5961397006e1f5d6521ad4e5aee3544da101fd3cf6bcf879220a612b7016e5eefe7369f136086e8f5109ae83e8687519f2008406d20992b64ba1d27b436ea5db1fd734340f3b2279e026a96e3f9c5c7b99553e35ada9e1d7d708a73774718f9b7073c0889a298f212d47ff5960e04743070338f99b11687396da2120b8f132535c0911b04505c0e6c32590c82bf59486fadfbdc0f16a224b2f52082eb66201f041d64b34809e5e91cda89d80d78fe1e15862bcf84f65a301ae68d097c9be09f3411c11cf83225733dbc9306ad2630eb7994a0d112ba83dc542966414137fd008fbb7995f649edf844fe5ee86b94acade1a04f42dae21928b9b0cdde8cc66095772d"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "95da2700ca6fd9a52554ee2a8df1386f5b94a1a60ed8a4aef60a8d61ab5f225a"
+    },
+    "wrapped_hex": "06ba7ae6f3248cfdcf267507fa001bc4",
+    "plaintext_hex": "d1"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "2800f18237cf8d2ba1dfe361784fd7519b0fdb0ec73e2ab1c0b966b9173fc5b5"
+    },
+    "wrapped_hex": "c1eccf2d077a385e67aaeb35552c893c",
+    "plaintext_hex": "ad"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "3517f0efa7f0c4d74f91af83ece5e7503bcc5ab82907a6e4b7ed34d87b69ab1d"
+    },
+    "wrapped_hex": "0b06a9b635d50cda9d4210cb3a71f990",
+    "plaintext_hex": "897e0456b289ad31"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "1c997c2bb5a15a4593e337b3249675d557467417917f6bc5165c9af6a3e29504"
+    },
+    "wrapped_hex": "163eb9e7dbc8ed0086dffbc6ab00e329",
+    "plaintext_hex": "3e3eafc50cd4e939"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "70da43aac823c6dd37d1109f5b18feb4503c973288989745e2cc1cc21d9570c6"
+    },
+    "wrapped_hex": "d67b5b2ad15c645450e23b5e7b6d682f8ae20e716d470db7",
+    "plaintext_hex": "edf17d966ed896aee3"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "8df1533f99be6fe60f951057fed1daccd14bd4e34118f24af677bbf46bf11fe7"
+    },
+    "wrapped_hex": "6974d7bae0221b4ed91336c26af77e32761f6024d8bbf292",
+    "plaintext_hex": "fb36b1f3907fb5edce"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "e9bb7f44c7baafbf392ab912589a2f8db53268106eafb74689bb1833136e6113"
+    },
+    "wrapped_hex": "15b9f06fbc765e5e3d55d6b824616f21921d2a6918ee7bf1406b524274e170b4a78333ca5ee92af5",
+    "plaintext_hex": "ffe952604834bff899e63658f34246815c91597eb40a21729e0a8a959b61f2"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "dea4667d911b5c9ec996cdb35da0e29bc996cbfb0e0a56bac12fccc334d732eb"
+    },
+    "wrapped_hex": "86d4e258391f15d7d4f0ab3e15d6f45e65dd2f8caf4c6720963bb8970fc2f3a4a58dc74674347ec9",
+    "plaintext_hex": "25d58d437a56a7332a18541333201f9929fccde11b06844c19ba1ca224cfd6"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 0,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "20f31cded60b8ed8d9d3fd1e1fa6244e76c7cb7628bfd28a5d63ce8aa2c9494d"
+    },
+    "wrapped_hex": "a5b63618fc0c4512960f00a1f226d9837a90480baea75265453b9553b12a58c72153080842d7f8710f317f88fbbbf97caf879ab4bf416ba767ee9aeb34357f4a2d0e8b9571054d98e28804a70bc4d74807f2bfd95ee955bfdbb6f4d6969a0c3c3b541a514647d5cd8c9740ac3496095c3f145c50c97ec98b935158fbdf89705d5330015e48ece89188b8c1bcb2ad6825d865b375a9b9056b743dac720feeac033c9f757f6fe73dd7c4a747661b64cf490a0dd43b547cd791a5d78dac97efcd355f7ebac248fa2a33e4fad640dc34e0d40b0d36588aa32f0864c9446739a6b44ff84666d723bd7d646c5172cda932fec34ddaaba342b02a9604087ef042a2be4774194b5d32cb3fb112438fbf2801050b5424635fa2d3d3fb10332965c73e6669e65195310a3a30602640e9809179cdfc50de585aa1c0072423c626815d281a06eac3b6ffa137716318e288e3f9970e415ef0451bdc557968febf9eb6772c1f77cb8e95701246d9c567048142bb25e340351b87d7391822d9ee7fe51378bc0d08135f9f39cf44b348b87937939dc61f430dfe308cada632722e23aed5a0699e039cf0563ab8025163744b136a13ce3c62c748c89f5e17540f105e7c6ec9ba13515b504342f9e6dc7d65b9a633d8c0b5c9fa858dbb9b3a594406d478a81bb9abfa289730408c1e303c663a61d5caca00f615065312580042862397b9aa8c80ca812887664c439c8c68",
+    "plaintext_hex": "f07225202842c8dede42215301e44b9bb7e625d3812f74f9b6ddbcd024ebd1f33e2cbf280b9004941f3cbf86c880a2357f88f92a6dcf8dad9da7dddcd00f3635efdff0af4382024e93c2af66b991e565eacca6b886f07178c9b4adad6f0d6ada5ff6aa7cd0712519a947a8089cea5e1e3e40ffe1806010b0149f9ffc7c4dd3c31b3d08d5ae1997c52369393d58611dff9bec501c1ab35e6ed3e7f9445a34e211010a8236686f154e0a5ae3433d6a844eb3884961aa6592216d93952b46bb58a4195aa80966ad0ccd4a7e23823912556a90d5ee9c3bb952ecbb9d895dabd3b11ab4f2e3a6c2582de50403289230ef4dc46e7c0d870a3f0cba9d643a0349503c1b162ddb6350e699589eb47bd563999f55a1adb6b78b52f006901b0427ea7d3394bb0adae4637b4f1ad5d5425e2c8ff3083506d7ad7ba4c7405a778b0a3a11760c96900a5256956cc9710091d073a19f46a985d004651fe2b6448ed761bf9bc81619cf273a6783d868d090753bf01318be21afd88d9f3a961a69f93e9d9fb822c80acc7b48cf14a08b5b7ef15c66975721b7cde9761a145b679155472a44dea8fedc0f86ae7ebf6283ecfde5f2444b51569e6723a7a19e28cdf8dec6791ccc14af95abad018f741575b343cb1a20a2a9adf4248f99728069a1e2e78ad8966c41c9918fb7019ef56c153a183a6247d22d9956564bb03075cbfd1b43d96818b28484"
+  },
+  {
+    "source": "NIST SP800-38F CAVP sample vectors",
+    "source_file": "kwtestvectors/KWP_AE_256.txt",
+    "source_sha256": "7a9566c73d10f866812d2ce2391b0b3c80b8bea0269b1103d6aab60dacf5f6e4",
+    "source_case": 1,
+    "parameters": {
+      "profile": "aes_kwp_rfc5649",
+      "key_hex": "85c8aa6d9c83cbcb11550c95cb9fa991d49dc89fbe2531e10694269f38e9a309"
+    },
+    "wrapped_hex": "d4112af26f37a7e2e9cdc0fd460cf4cf4f3985fc820348e63a095751ce30b2fa5d6e89a8d37b8ddd3dc2af8fa64e0db729f526bab89562ad7f2bbb9ba02668033ebf6eb742904f37fbf1d87b4d23b1dfc815529a6e3f24bb31ba1d4354820a47e0d7b0acb4e495a50912824715d24cdeab0be3597dc535326ee073eb39b925c7699115dfdffd4162b84afc61048c7802a76ddafec243b91791a26138f202bf365a0b0863555d48c953c50cce5e09fede4a97571d3ebf0582c57c39680714750fd2227a632274adece8a4bd13413825b51969b3e965ad417c96415f4041d8f0d0a3df04cbb24fcfbeb95b401be7ea840da43606cd5bd56bfde26034fe94aadc78bedfaa4eed77e64cdc3d059e3765ff6346e9344f0e0a183085d78711b13d4ddc356a669693d2ad090bb67e8013403c51c81951f8a6241269d3423a739b44215bfa403f8927fc1d100587d602a7efc505f28edfe51ae8df407361fa06c09d06c7e960cb7b7041f3603faa6b4767a8a3c3d1c8ab05f75143a3061396c7289503ec29237eea7a364eedb77f66da308fe8e194c9b1784364072dbcc8aa1145db1a03f3862c38cc1a08b569f8576623915a644700ab43f7eff7e59684eea5595c31b13778824704b4aaa9c1b5d2acc4a6cd2ae21c5b0b32bc1433d536e8bd7a4e6c5e6d1ceb70dcd2ac215bd4619aa1ea8c184033b3279cc9fd094336c5e6f5112bd9f36fbebf304ab04f",
+    "plaintext_hex": "58ffd9e73b5f64cb951b7df799a505d842ef0cca6d4b21027680793565a67d47db0bc872a7640691216c044fbfc0be1cd33ffe9fc73c5ad8cf38bcfe6d4b7b76639ef4200ced0eff2d361e9c948075f09398fbe5ef24d370a5a16b515c102d415813cbce56f6a8f7b5227db7aab33c4d8162ac3c178e2344f3c7e123f0e60142112b960137c0176c450248167e9714db8566e2d4af731a7ef3f88730a4be4cb99bf46eba39527ff279be67aee1f4af25b3396aef5883fe7086fed7285af5216c7945d9bd61d907a84095d6fad383a7a90ad4061f7241a84358cf9fbc7048c010c7652bf47f9ff58f1c0cfd62a5fef92b02074ecbf4762af71eeda9aeb8497d7b33beeb4fdbd80b72f2c6dc9a12409cf7ee3716fc07515970411ed7e113b7ad9865d822a502976bba1d2ef254dda4acdf6f55a04c4ac5f6a5e011375af4cfd405d1220a10465a4cd01d160d179fc7ce614ef4023d55dad363e3639f1eb8fec716f21d267ca21b0587186d162b4a3cd23f80e33ca330a8c3bd756e70c2d457306cd54be9e0433bd9416efd861ed42fcde10ccc98389652b5c14cff6c73341320c93ee457f9e3f320c5c5564fe50eeecf2d7a62a85639ddac4abdad7495e8926111b18f7866e6b3f95c788d9124ab9788210b1e25524427e86049726200052404d9b3585477bfc11f12c4fa761ed86b7449a5471ce18f964acee913946c0997980f"
+  }
+]

@@ -8,6 +8,7 @@ pub mod book;
 pub mod classical;
 pub mod enigma;
 pub(crate) mod execution;
+pub mod key_wrap;
 pub mod mechanical;
 pub mod modern_aead;
 pub mod mono;

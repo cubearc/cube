@@ -19406,5 +19406,43 @@
       "key_hex": "fffefdfcfbfaf9f8f7f6f5f4f3f2f1f0f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
       "profile": "aes128_siv_cmac_nonce_free"
     }
+  },
+  {
+    "contract_sha256": "c251b65c867c5eceb1337d24e9fdea156c2ed6e017ddd75545fcc5a839093bb8",
+    "inputs": {
+      "input": {
+        "base64": "H6aLCoEStEeu80vY+1p7gp0+hiNx0s/l"
+      }
+    },
+    "operation": "cipher.aes.key_wrap.unwrap",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "ABEiM0RVZneImaq7zN3u/w=="
+      }
+    },
+    "parameters": {
+      "key_hex": "000102030405060708090a0b0c0d0e0f",
+      "profile": "aes_kw_rfc3394"
+    }
+  },
+  {
+    "contract_sha256": "6141b4bd1d03286dd17aa1ea7b1c61a05873266fa21ccda6335a6f21a3d138cf",
+    "inputs": {
+      "input": {
+        "base64": "ABEiM0RVZneImaq7zN3u/w=="
+      }
+    },
+    "operation": "cipher.aes.key_wrap.wrap",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "H6aLCoEStEeu80vY+1p7gp0+hiNx0s/l"
+      }
+    },
+    "parameters": {
+      "key_hex": "000102030405060708090a0b0c0d0e0f",
+      "profile": "aes_kw_rfc3394"
+    }
   }
 ]

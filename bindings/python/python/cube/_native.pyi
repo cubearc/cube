@@ -2553,3 +2553,11 @@ def aes_siv_decrypt(
 ) -> bytes:
     """Authenticate SIV and ordered AAD components before returning plaintext."""
     ...
+
+def aes_key_wrap(data: bytes, parameters_json: str) -> bytes:
+    """Wrap exact key bytes with the explicit RFC3394 or RFC5649 profile."""
+    ...
+
+def aes_key_unwrap(data: bytes, parameters_json: str) -> bytes:
+    """Verify the complete wrapping before returning any key data."""
+    ...

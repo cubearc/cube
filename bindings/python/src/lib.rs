@@ -29,6 +29,7 @@ mod headlines;
 mod historical;
 mod image;
 mod investigation;
+mod key_wrap;
 mod lexical;
 mod mechanical;
 mod modern_aead;
@@ -615,6 +616,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     enigma::register(module)?;
     mechanical::register(module)?;
     aes_blocks::register(module)?;
+    key_wrap::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;
     xxtea::register(module)?;

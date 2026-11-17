@@ -32,6 +32,7 @@ mod cryptanalysiscmd;
 mod enigmacmd;
 mod fractioncmd;
 mod historicalcmd;
+mod keywrapcmd;
 mod mechanicalcmd;
 mod modularcmd;
 mod monocmd;

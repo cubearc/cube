@@ -27,11 +27,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .validate_outputs(&actual)
         .map_err(|_| "conformance output schema mismatch")?;
     std::panic::set_hook(Box::new(|_| {}));
-    std::panic::catch_unwind(|| randomized_fixture::assert_inverse(case, &actual))
-        .map_err(|_| "conformance inverse verification failed")?;
+    let comparison = std::panic::catch_unwind(|| randomized_fixture::verify(case, &actual))
+        .map_err(|_| "randomized conformance verification failed")?;
     println!(
         "{}",
-        serde_json::json!({"operation":operation,"comparison":"verified-inverse","verified":true})
+        serde_json::json!({"operation":operation,"comparison":comparison,"verified":true})
     );
     Ok(())
 }

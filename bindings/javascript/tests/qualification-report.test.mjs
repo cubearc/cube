@@ -23,7 +23,7 @@ test('qualification CLI emits real execution evidence for every advertised path'
       for (const path of ['direct', 'pipeline']) {
         if (!row[path]) continue;
         assert.equal(row.evidence[path].status, 'passed', `${row.operation}: ${path}`);
-        if (row.evidence[path].comparison==='verified-inverse') {
+        if (['verified-inverse', 'verified-kem'].includes(row.evidence[path].comparison)) {
           assert.equal(row.evidence[path].verification.actualOutputSha256,row.evidence[path].verification.expectedOutputSha256);
           assert.equal(catalog.operations.find(c=>c.operation===row.operation).deterministic,false);
         } else {

@@ -1,4 +1,4 @@
-// Qualification tooling only: verify randomized ciphertexts through a reviewed inverse.
+// Qualification tooling only: check randomized cryptographic results.
 // This module is never copied into the published runtime API.
 import assert from 'node:assert/strict';
 import {isDeepStrictEqual} from 'node:util';
@@ -10,6 +10,9 @@ export async function verifyFixtureResult({fixture,actual,contract,execute}) {
   }
   assert.equal(contract.deterministic,false,'Inverse assertions cannot replace deterministic known answers.');
   const v=fixture.verification;
+  if (v?.kind === 'kem_key_pair' || v?.kind === 'kem_encapsulation') {
+    return verifyKem(fixture, actual, execute);
+  }
   assert.equal(v?.kind,'inverse','Randomized fixtures require a reviewed inverse assertion.');
   assert.notEqual(v.operation,fixture.operation);
   assert.equal(Object.keys(actual).length,1,'Every randomized result port must be verified.');
@@ -22,6 +25,27 @@ export async function verifyFixtureResult({fixture,actual,contract,execute}) {
     if (!isDeepStrictEqual(verified,v.expected_outputs)) throw new Error(`Actual randomized-output verification mismatch: ${fixture.operation}.`);
   }
   return {comparison:'verified-inverse',operation:v.operation,actual:recovered,expected:v.expected_outputs};
+}
+
+async function verifyKem(fixture, actual, execute) {
+  const keyPair = fixture.verification.kind === 'kem_key_pair';
+  const suffix = keyPair ? '.keygen' : '.encapsulate';
+  assert.ok(fixture.operation.endsWith(suffix), 'KEM assertion must match its operation.');
+  const family = fixture.operation.slice(0, -suffix.length);
+  const operation = `${family}.decapsulate`;
+  const invoke = (operation, inputs) => execute({ operation, version: 1, inputs, parameters: fixture.parameters });
+  let result;
+  for (const output of [actual, fixture.outputs]) {
+    const ports = keyPair ? ['private_key', 'public_key'] : ['ciphertext', 'shared_secret'];
+    assert.deepEqual(Object.keys(output).sort(), ports, 'Every KEM output port must be verified.');
+    const envelope = keyPair ? await invoke(`${family}.encapsulate`, { public_key: output.public_key }) : output;
+    const private_key = keyPair ? output.private_key : fixture.verification.private_key;
+    const recovered = await invoke(operation, { private_key, ciphertext: envelope.ciphertext });
+    const expected = { shared_secret: envelope.shared_secret };
+    assert.ok(isDeepStrictEqual(recovered, expected), `KEM peers disagreed: ${fixture.operation}.`);
+    if (output === actual) result = { comparison: 'verified-kem', operation, actual: recovered, expected };
+  }
+  return result;
 }
 
 export function sdkWireExecutor(cube) {

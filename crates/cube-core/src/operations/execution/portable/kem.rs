@@ -1,0 +1,57 @@
+//! Typed direct KEM adapter. Cryptographic operations live in the backend module.
+use super::bytes;
+use crate::{
+    asymmetric::ml_kem,
+    errors::{ErrorCode, OperationError},
+    operations::execution::{Budget, Elapsed},
+};
+use serde_json::{Value, json};
+use zeroize::Zeroizing;
+
+pub(super) fn supports(operation: &str) -> bool {
+    matches!(
+        operation,
+        ml_kem::KEYGEN | ml_kem::ENCAPSULATE | ml_kem::DECAPSULATE
+    )
+}
+
+pub(super) fn execute(
+    operation: &str,
+    inputs: Value,
+    parameters: Value,
+    budget: Budget,
+    _clock: Option<Elapsed<'_>>,
+) -> Result<Value, OperationError> {
+    if budget.memory_bytes < ml_kem::MEMORY_RESERVATION || budget.instructions < 1 {
+        return Err(OperationError::new(
+            ErrorCode::ResourceLimit,
+            "ML-KEM invocation requires one work unit and its fixed memory reservation",
+        ));
+    }
+    let profile = ml_kem::Profile::parse(&parameters.to_string())?;
+    match operation {
+        ml_kem::KEYGEN => {
+            let keys = ml_kem::keygen(profile)?;
+            Ok(json!({"public_key":wire(&keys.public_key),"private_key":wire(&keys.private_key)}))
+        }
+        ml_kem::ENCAPSULATE => {
+            let result = ml_kem::encapsulate(&bytes(&inputs["public_key"])?, profile)?;
+            Ok(
+                json!({"ciphertext":wire(&result.ciphertext),"shared_secret":wire(&result.shared_secret[..])}),
+            )
+        }
+        ml_kem::DECAPSULATE => {
+            let key = Zeroizing::new(bytes(&inputs["private_key"])?);
+            let shared = ml_kem::decapsulate(&bytes(&inputs["ciphertext"])?, &key, profile)?;
+            Ok(json!({"shared_secret":wire(&shared[..])}))
+        }
+        _ => Err(OperationError::new(
+            ErrorCode::InvalidParameter,
+            "unknown KEM operation",
+        )),
+    }
+}
+
+fn wire(data: &[u8]) -> Value {
+    json!({"base64":crate::encoding::base64_encode(data)})
+}

@@ -5,6 +5,27 @@ native Python, JavaScript/TypeScript/WebAssembly and private Play calls adapt
 Core operations. Agreement is distinct from encryption; metadata does not grant
 permission to retain secrets.
 
+## ML-KEM qualification
+
+Reviewed on 2026-11-17. `libcrux-ml-kem` 0.0.11 (Apache-2.0, upstream
+`42d68bd49b244b09bd02626c6ffa95e54dc64f91`) provides the portable implementation
+and exact expanded-key format for the three parameter sets in
+[FIPS 203](https://csrc.nist.gov/pubs/fips/203/final). The published potential
+errata clarify the Appendix A table index and the comment in Algorithm 15. The
+portable implementation includes upstream formal source verification for parts
+of the algorithm. This qualification does not establish module certification
+or machine-code timing guarantees. The Core-owned copies of coins and returned
+private material are wiped on drop. Backend and interface copies may persist.
+
+Test-only entropy injection exercises deterministic key generation and
+encapsulation against independent ACVP data at
+[`975de31eb83d87039ec88934fdc47d8c312b892d`](https://github.com/usnistgov/ACVP-Server/tree/975de31eb83d87039ec88934fdc47d8c312b892d/gen-val/json-files).
+Tests compare valid and implicitly rejected decapsulation outputs to exact ACVP
+bytes. Fresh key pairs and encapsulations also qualify by agreement between two
+calls. This relation verifies every output without substituting a random result
+for a fixed known answer. Interoperability uses the named FIPS 203 profiles and
+their exact byte lengths. See [ML-KEM reference](../reference/topics/ml-kem.md).
+
 ## ECDH profiles
 
 Reviewed on 2026-11-17: `x25519-dalek` 2.0.1 (BSD-3-Clause) uses

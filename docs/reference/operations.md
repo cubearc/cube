@@ -30793,6 +30793,170 @@ Example:
 cube cipher ecdh agree --parameters-file settings.json --file peer.bin
 ```
 
+## crypto.ml_kem.decapsulate
+
+Decapsulate a FIPS 203 ciphertext with an expanded private key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "description": "Explicit FIPS 203 parameter set for raw wire encodings.",
+      "type": "string",
+      "enum": [
+        "ml_kem_512_fips203",
+        "ml_kem_768_fips203",
+        "ml_kem_1024_fips203"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher ml-kem decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## crypto.ml_kem.encapsulate
+
+Encapsulate a fresh shared secret with a canonical FIPS 203 public key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `public_key` | `bytes` |
+| Output | `ciphertext` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "description": "Explicit FIPS 203 parameter set for raw wire encodings.",
+      "type": "string",
+      "enum": [
+        "ml_kem_512_fips203",
+        "ml_kem_768_fips203",
+        "ml_kem_1024_fips203"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher ml-kem encapsulate --parameters-file settings.json --key-file public.bin
+```
+
+## crypto.ml_kem.keygen
+
+Generate a fresh FIPS 203 public key and expanded private key.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Output | `public_key` | `bytes` |
+| Output | `private_key` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "description": "Explicit FIPS 203 parameter set for raw wire encodings.",
+      "type": "string",
+      "enum": [
+        "ml_kem_512_fips203",
+        "ml_kem_768_fips203",
+        "ml_kem_1024_fips203"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher ml-kem keygen --parameters-file settings.json
+```
+
 ## encoding.base32.decode
 
 Decode base32 with strict documented alphabet rules.

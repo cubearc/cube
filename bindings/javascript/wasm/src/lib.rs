@@ -420,7 +420,7 @@ mod binding_tests {
                 Ok(value) => {
                     let actual: Value = serde_json::from_str(&value).unwrap();
                     if fixture.get("verification").is_some() {
-                        randomized_fixture::assert_inverse(&fixture, &actual);
+                        randomized_fixture::verify(&fixture, &actual);
                     } else if actual != fixture["outputs"] {
                         failures.push(format!("{op}: independent known-answer mismatch"));
                     }

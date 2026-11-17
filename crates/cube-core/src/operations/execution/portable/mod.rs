@@ -1,6 +1,7 @@
 //! Shared typed named-port adapters over the owning Core algorithms.
 mod brainfuck;
 mod crypto;
+mod kem;
 mod mono;
 mod native;
 mod puzzle_codes;
@@ -44,6 +45,7 @@ type Supports = fn(&str) -> bool;
 const MODULES: &[(Supports, Invoke)] = &[
     (mono::supports, mono::execute),
     (crypto::supports, crypto::execute),
+    (kem::supports, kem::execute),
     (brainfuck::supports, brainfuck::execute),
     (poly::supports, poly::execute),
     (transposition::supports, transposition::execute),

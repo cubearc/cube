@@ -39,6 +39,7 @@ mod investigation;
 mod key_wrap;
 mod lexical;
 mod mechanical;
+mod ml_kem;
 mod modern_aead;
 mod modular;
 mod mono;
@@ -636,6 +637,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     ies::register(module)?;
     group_encryption::register(module)?;
     historical_public_key::register(module)?;
+    ml_kem::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

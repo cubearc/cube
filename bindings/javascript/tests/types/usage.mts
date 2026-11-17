@@ -370,3 +370,11 @@ void rabinRoots;
 cube.execute({operation:'cipher.goldwasser_micali.encrypt',version:1,inputs:{tokens:['0','1'],key:new Uint8Array(20)},parameters:{profile:'goldwasser_micali_reference_v1',max_work:10000,max_memory_bytes:1048576}});
 // @ts-expect-error Exact reference integers use strings, never rounded numeric tokens.
 cube.execute({operation:'cipher.benaloh.encrypt',version:1,inputs:{tokens:[1],key:new Uint8Array(20)},parameters:{profile:'benaloh_prime_r_reference_v1'}});
+
+const kemParameters = {profile: 'ml_kem_768_fips203'} as const;
+const mlKemKeys = cube.execute({operation:'crypto.ml_kem.keygen',version:1,inputs:{},parameters:kemParameters});
+const mlKemEnvelope = cube.execute({operation:'crypto.ml_kem.encapsulate',version:1,inputs:{public_key:mlKemKeys.public_key},parameters:kemParameters});
+const mlKemShared: Uint8Array = cube.execute({operation:'crypto.ml_kem.decapsulate',version:1,inputs:{ciphertext:mlKemEnvelope.ciphertext,private_key:mlKemKeys.private_key},parameters:kemParameters}).shared_secret;
+void mlKemShared;
+// @ts-expect-error ML-KEM ciphertext transport requires bytes.
+cube.execute({operation:'crypto.ml_kem.decapsulate',version:1,inputs:{ciphertext:'deadbeef',private_key:mlKemKeys.private_key},parameters:kemParameters});

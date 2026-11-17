@@ -2640,3 +2640,14 @@ def merkle_hellman_decrypt(
     data: list[str], key: bytes, parameters_json: str
 ) -> list[str]:
     """Apply a bounded educational reference profile to exact tokens."""
+
+def ml_kem_keygen(parameters_json: str) -> tuple[bytes, bytes]:
+    """Return a fresh FIPS 203 (public_key, expanded_private_key) pair."""
+
+def ml_kem_encapsulate(public_key: bytes, parameters_json: str) -> tuple[bytes, bytes]:
+    """Return a fresh FIPS 203 (ciphertext, shared_secret) pair."""
+
+def ml_kem_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Return a 32-byte FIPS 203 shared secret with implicit rejection."""

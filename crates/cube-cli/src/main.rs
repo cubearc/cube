@@ -39,6 +39,7 @@ mod groupcmd;
 mod historicalcmd;
 mod historicalpublickeycmd;
 mod iescmd;
+mod kemcmd;
 mod keywrapcmd;
 mod mechanicalcmd;
 mod modularcmd;
@@ -618,6 +619,11 @@ enum Cipher {
     Ecdh {
         #[command(subcommand)]
         command: ecdhcmd::Command,
+    },
+    /// FIPS 203 key generation, encapsulation and decapsulation
+    MlKem {
+        #[command(subcommand)]
+        command: kemcmd::Command,
     },
     /// Authenticate a bounded binary agev1/X25519 file before output
     Age {
@@ -1237,6 +1243,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Rsa { command } => return rsacmd::run(command, &mut output),
                 Cipher::Dh { command } => return dhcmd::run(command, &mut output),
                 Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),
+                Cipher::MlKem { command } => return kemcmd::run(command, &mut output),
                 Cipher::Age { command } => return agecmd::run(command, &mut output),
                 Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),
                 Cipher::Fpe { command } => return fpecmd::run(command, &mut output),

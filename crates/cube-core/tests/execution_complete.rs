@@ -13,24 +13,24 @@ fn reviewed_randomized_assertions_reject_corruption_and_deterministic_bypasses()
         .iter()
         .find(|v| v["operation"] == "cipher.rsa.oaep.encrypt")
         .unwrap();
-    randomized_fixture::assert_inverse(case, &case["outputs"]);
+    randomized_fixture::verify(case, &case["outputs"]);
     let mut bad = case["outputs"].clone();
     let mut bytes =
         cube_core::encoding::base64_decode(bad["output"]["base64"].as_str().unwrap()).unwrap();
     let length = bytes.len();
     bytes[length - 1] ^= 1;
     bad["output"]["base64"] = serde_json::json!(cube_core::encoding::base64_encode(&bytes));
-    assert!(std::panic::catch_unwind(|| randomized_fixture::assert_inverse(case, &bad)).is_err());
+    assert!(std::panic::catch_unwind(|| randomized_fixture::verify(case, &bad)).is_err());
     let mut changed = case.clone();
     changed["verification"]["expected_outputs"]["output"]["base64"] = serde_json::json!("AA==");
     assert!(
-        std::panic::catch_unwind(|| randomized_fixture::assert_inverse(&changed, &case["outputs"]))
+        std::panic::catch_unwind(|| randomized_fixture::verify(&changed, &case["outputs"]))
             .is_err()
     );
     changed = case.clone();
     changed["operation"] = serde_json::json!("encoding.base64.encode");
     assert!(
-        std::panic::catch_unwind(|| randomized_fixture::assert_inverse(&changed, &case["outputs"]))
+        std::panic::catch_unwind(|| randomized_fixture::verify(&changed, &case["outputs"]))
             .is_err()
     );
 }
@@ -110,7 +110,7 @@ fn every_reviewed_known_answer_executes_through_the_same_core_boundary() {
                 "{operation}"
             );
         } else {
-            randomized_fixture::assert_inverse(&fixture, &contracts::canonical_value(output));
+            randomized_fixture::verify(&fixture, &contracts::canonical_value(output));
         }
     }
     assert_eq!(

@@ -66,7 +66,7 @@ function evidence(contract, version, request, actual, expected, fixture, path, c
   const retain = !contract.policy.private_output;
   return {
     status: 'passed', execution: 'actual-wasm', version, comparison:checked.comparison,
-    ...(checked.comparison==='verified-inverse'?{verification:{operation:checked.operation,actualOutputSha256:digest(checked.actual),expectedOutputSha256:digest(checked.expected)}}:{}),
+    ...(checked.comparison!=='exact'?{verification:{operation:checked.operation,actualOutputSha256:digest(checked.actual),expectedOutputSha256:digest(checked.expected)}}:{}),
     caseSha256: digest(request), reviewedFixtureSha256: digest(fixture),
     actualOutputSha256: digest(actual), expectedOutputSha256: digest(expected),
     outputPorts: path === 'direct' ? Object.keys(actual).sort() : ['output'],

@@ -104,7 +104,23 @@ fn every_catalog_id_executes_a_real_fixture_and_matches_its_complete_contract() 
                 parameters,
                 "{operation} owning parameters"
             );
-            contracts::canonical_value(fixture.outputs)
+            if v["verification"]["kind"]
+                .as_str()
+                .is_some_and(|kind| kind.starts_with("kem_"))
+            {
+                // The owning KEM fixtures hold independent ACVP reference bytes.
+                // Execute a fresh request and check its relation as well.
+                operations::execution::execute(
+                    operation,
+                    contract.operation_version,
+                    &inputs,
+                    &parameters,
+                    Default::default(),
+                )
+                .unwrap_or_else(|e| panic!("{operation}: {e}"))
+            } else {
+                contracts::canonical_value(fixture.outputs)
+            }
         } else if operation == "file.info.inspect" {
             file_info()
         } else {
@@ -132,7 +148,7 @@ fn every_catalog_id_executes_a_real_fixture_and_matches_its_complete_contract() 
                 v["outputs"]
             );
         } else {
-            randomized_fixture::assert_inverse(&v, &comparable);
+            randomized_fixture::verify(&v, &comparable);
         }
         // Every contract rejects an unknown input, parameter and output field.
         for (section, mut value) in [

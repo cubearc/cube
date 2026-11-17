@@ -2521,3 +2521,11 @@ def xxtea_encrypt_words(data: bytes, key: bytes) -> bytes:
 def xxtea_decrypt_words(data: bytes, key: bytes) -> bytes:
     """Decrypt one complete word sequence; success does not verify integrity."""
     ...
+
+def aes_mode_encrypt(data: bytes, parameters_json: str) -> bytes:
+    """Encrypt an explicit AES byte mode; no authentication or implicit IV/padding."""
+    ...
+
+def aes_mode_decrypt(data: bytes, parameters_json: str) -> bytes:
+    """Return bytes only after complete padding validation; padding is not integrity."""
+    ...

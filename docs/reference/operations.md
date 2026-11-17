@@ -3090,6 +3090,342 @@ Example:
 cube cipher aes encrypt --key-file key.bin --file blocks.bin
 ```
 
+## cipher.aes.mode.decrypt
+
+Explicit unauthenticated AES ECB/CBC with required padding, CFB128, OFB or full-width big-endian CTR.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "ecb"
+        },
+        "padding": {
+          "$ref": "#/$defs/Padding"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "padding"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc"
+        },
+        "padding": {
+          "$ref": "#/$defs/Padding"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex",
+        "padding"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cfb128"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "ofb"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "ctr128_be"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    }
+  ],
+  "$defs": {
+    "Padding": {
+      "type": "string",
+      "enum": [
+        "none",
+        "pkcs7"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aes mode decrypt --parameters-file settings.json --file input.bin
+```
+
+## cipher.aes.mode.encrypt
+
+Explicit unauthenticated AES ECB/CBC with required padding, CFB128, OFB or full-width big-endian CTR.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "properties": {
+    "key_hex": {
+      "type": "string",
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "ecb"
+        },
+        "padding": {
+          "$ref": "#/$defs/Padding"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "padding"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc"
+        },
+        "padding": {
+          "$ref": "#/$defs/Padding"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex",
+        "padding"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cfb128"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "ofb"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "ctr128_be"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    }
+  ],
+  "$defs": {
+    "Padding": {
+      "type": "string",
+      "enum": [
+        "none",
+        "pkcs7"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher aes mode encrypt --parameters-file settings.json --file input.bin
+```
+
 ## cipher.affine.decode
 
 Invert Affine with a's modular inverse; preserve case and other Unicode, <=1 MiB.

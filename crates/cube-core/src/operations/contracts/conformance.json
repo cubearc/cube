@@ -19212,5 +19212,47 @@
       "profile": "grain128a_skew2011_msb_v1",
       "tag_bits": 32
     }
+  },
+  {
+    "contract_sha256": "dd18a4942a833d8671476b5712130b5f9d7ee98d57e86813d094a2c769f9793e",
+    "inputs": {
+      "input": {
+        "base64": "dkmrrIEZskbO6Y6bEukZfQ=="
+      }
+    },
+    "operation": "cipher.aes.mode.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "a8G+4i5An5bpPX4Rc5MXKg=="
+      }
+    },
+    "parameters": {
+      "iv_hex": "000102030405060708090a0b0c0d0e0f",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "mode": "cbc",
+      "padding": "none"
+    }
+  },
+  {
+    "contract_sha256": "3c11207b1ea22921f422321dca6278d0d6f223609606051d1a81a29ef482c8e7",
+    "inputs": {
+      "input": {
+        "base64": "a8G+4i5An5bpPX4Rc5MXKg=="
+      }
+    },
+    "operation": "cipher.aes.mode.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "dkmrrIEZskbO6Y6bEukZfQ=="
+      }
+    },
+    "parameters": {
+      "iv_hex": "000102030405060708090a0b0c0d0e0f",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "mode": "cbc",
+      "padding": "none"
+    }
   }
 ]

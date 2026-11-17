@@ -26,6 +26,7 @@ remain in each operation's reference.
 - [KL7 rotor and re-entry cipher](topics/kl7.md)
 - [Swiss NEMA Model45](topics/nema.md)
 - [Raw AES blocks](topics/aes-blocks.md)
+- [AES byte modes](topics/aes-modes.md)
 - [Hashing and checksums](topics/hashing-and-checksums.md)
 - [Binary transformations](topics/binary-transformations.md)
 - [Text operations](topics/text-operations.md)

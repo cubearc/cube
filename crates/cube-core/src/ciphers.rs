@@ -1,6 +1,7 @@
 //! Classical challenge ciphers and explicitly hazardous raw modern primitives.
 
 pub mod aes_blocks;
+pub mod aes_modes;
 pub mod bacon;
 pub mod block_profiles;
 pub mod book;

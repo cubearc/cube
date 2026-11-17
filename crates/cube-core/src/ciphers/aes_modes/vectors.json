@@ -1,0 +1,173 @@
+[
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ecb",
+    "parameters": {
+      "mode": "ecb",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "padding": "none"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c3710",
+    "ciphertext_hex": "3ad77bb40d7a3660a89ecaf32466ef97f5d3d58503b9699de785895a96fdbaaf43b1cd7f598ece23881b00e3ed0306887b0c785e27e8ad3f8223207104725dd4"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 cbc",
+    "parameters": {
+      "mode": "cbc",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f",
+      "padding": "none"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c3710",
+    "ciphertext_hex": "7649abac8119b246cee98e9b12e9197d5086cb9b507219ee95db113a917678b273bed6b8e3c1743b7116e69e222295163ff1caa1681fac09120eca307586e1a7"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 cfb128",
+    "parameters": {
+      "mode": "cfb128",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c3710",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb4ac8a64537a0b3a93fcde3cdad9f1ce58b26751f67a3cbb140b1808cf187a4f4dfc04b05357c5d1c0eeac4c66f9ff7f2e6"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 cfb128 prefix",
+    "parameters": {
+      "mode": "cfb128",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6b",
+    "ciphertext_hex": "3b"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 cfb128 prefix prefix",
+    "parameters": {
+      "mode": "cfb128",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e11739317",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 cfb128 prefix prefix prefix",
+    "parameters": {
+      "mode": "cfb128",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb4ac8"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 cfb128 prefix prefix prefix prefix",
+    "parameters": {
+      "mode": "cfb128",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c37",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb4ac8a64537a0b3a93fcde3cdad9f1ce58b26751f67a3cbb140b1808cf187a4f4dfc04b05357c5d1c0eeac4c66f9ff7f2"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ofb",
+    "parameters": {
+      "mode": "ofb",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c3710",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb4a7789508d16918f03f53c52dac54ed8259740051e9c5fecf64344f7a82260edcc304c6528f659c77866a510d9c1d6ae5e"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ofb prefix",
+    "parameters": {
+      "mode": "ofb",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6b",
+    "ciphertext_hex": "3b"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ofb prefix prefix",
+    "parameters": {
+      "mode": "ofb",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e11739317",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ofb prefix prefix prefix",
+    "parameters": {
+      "mode": "ofb",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb4a77"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ofb prefix prefix prefix prefix",
+    "parameters": {
+      "mode": "ofb",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c37",
+    "ciphertext_hex": "3b3fd92eb72dad20333449f8e83cfb4a7789508d16918f03f53c52dac54ed8259740051e9c5fecf64344f7a82260edcc304c6528f659c77866a510d9c1d6ae"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ctr128_be",
+    "parameters": {
+      "mode": "ctr128_be",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c3710",
+    "ciphertext_hex": "874d6191b620e3261bef6864990db6ce9806f66b7970fdff8617187bb9fffdff5ae4df3edbd5d35e5b4f09020db03eab1e031dda2fbe03d1792170a0f3009cee"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ctr128_be prefix",
+    "parameters": {
+      "mode": "ctr128_be",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+    },
+    "plaintext_hex": "6b",
+    "ciphertext_hex": "87"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ctr128_be prefix prefix",
+    "parameters": {
+      "mode": "ctr128_be",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e11739317",
+    "ciphertext_hex": "874d6191b620e3261bef6864990db6"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ctr128_be prefix prefix prefix",
+    "parameters": {
+      "mode": "ctr128_be",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae",
+    "ciphertext_hex": "874d6191b620e3261bef6864990db6ce98"
+  },
+  {
+    "source": "NIST SP800-38A (2001), Appendix F, AES128 ctr128_be prefix prefix prefix prefix",
+    "parameters": {
+      "mode": "ctr128_be",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c37",
+    "ciphertext_hex": "874d6191b620e3261bef6864990db6ce9806f66b7970fdff8617187bb9fffdff5ae4df3edbd5d35e5b4f09020db03eab1e031dda2fbe03d1792170a0f3009c"
+  }
+]

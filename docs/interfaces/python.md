@@ -134,6 +134,13 @@ Core limits apply in addition to Python transport checks. Read
 [complete and partial results](../concepts/results.md) before interpreting a
 resource stop; the operation reference defines its fields and failure policy.
 
+## AES byte modes
+
+`cube.aes_mode_encrypt(data, parameters_json)` and
+`cube.aes_mode_decrypt(data, parameters_json)` execute explicit ECB/CBC/CFB128/OFB/CTR
+profiles through Core. See [AES byte modes](../reference/topics/aes-modes.md)
+for required private settings, padding, IV rules and limits.
+
 ## Raw AES blocks
 
 For raw AES interoperability, `cube.aes_encrypt_blocks(data, key)` and

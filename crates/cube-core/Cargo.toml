@@ -7,6 +7,11 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+cbc = { version = "=0.2.1", features = ["zeroize"] }
+ecb = { version = "=0.2.1", features = ["zeroize"] }
+cfb-mode = { version = "=0.9.1", features = ["zeroize"] }
+ofb = { version = "=0.7.1", features = ["zeroize"] }
+ctr = { version = "=0.10.1", features = ["zeroize"] }
 rc4 = { version = "=0.2.0", features = ["zeroize"] }
 hc-256 = { version = "=0.6.0", features = ["zeroize"] }
 rabbit = { version = "=0.5.0", features = ["zeroize"] }

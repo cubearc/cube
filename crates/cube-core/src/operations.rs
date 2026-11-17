@@ -495,6 +495,7 @@ const MODULES: &[Module] = &[
     crate::ciphers::mechanical::RED_MODULE,
     crate::ciphers::mechanical::PURPLE_MODULE,
     crate::ciphers::aes_blocks::MODULE,
+    crate::ciphers::aes_modes::MODULE,
     crate::ciphers::block_profiles::MODULE,
     crate::ciphers::xxtea::MODULE,
     crate::ciphers::stream::MODULE,

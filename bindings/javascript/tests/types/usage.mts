@@ -273,3 +273,8 @@ void authenticatedPlaintext;
 cube.execute({operation:'cipher.stream.auth.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:authenticatedSettings});
 // @ts-expect-error The tag is exact bytes, not hexadecimal text.
 cube.execute({operation:'cipher.stream.auth.decrypt',version:1,inputs:{input:new Uint8Array(),tag:'d6401a29'},parameters:authenticatedSettings});
+
+const aesModeOutput:Uint8Array=cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{mode:'cbc',padding:'pkcs7',key_hex:'00'.repeat(16),iv_hex:'24'.repeat(16)}}).output;
+void aesModeOutput;
+// @ts-expect-error ECB/CBC padding is mandatory
+cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array()},parameters:{mode:'cbc',key_hex:'00'.repeat(16),iv_hex:'24'.repeat(16)}});

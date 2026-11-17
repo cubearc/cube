@@ -92,6 +92,8 @@ SDK_BINDINGS = {
     "cipher.jefferson.decode": "jefferson_decode",
     "cipher.m138a.encode": "m138a_encode",
     "cipher.m138a.decode": "m138a_decode",
+    "cipher.aes.mode.encrypt": "aes_mode_encrypt",
+    "cipher.aes.mode.decrypt": "aes_mode_decrypt",
     "cipher.aes.encrypt_blocks": "aes_encrypt_blocks",
     "cipher.aes.decrypt_blocks": "aes_decrypt_blocks",
     "cipher.block.encrypt_blocks": "block_encrypt_blocks",

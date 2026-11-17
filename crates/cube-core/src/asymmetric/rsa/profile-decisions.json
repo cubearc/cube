@@ -1,0 +1,14 @@
+{
+  "source_revision": "65ca494727a52944c204441c860b039e6786b99b",
+  "profile": "rsa_oaep_sha256_mgf1_sha256_cfrg10",
+  "exceptions": [
+    {
+      "tcId": 23,
+      "source_result": "invalid",
+      "profile_result": "accept_expected_message",
+      "reason": "CFRG draft10 section7 requires ignoring the leading encoded-message octet; RustCrypto RSA0.10 implements this timing-hardening rule. All other OAEP vector outcomes retain their original meaning.",
+      "specification": "https://www.ietf.org/archive/id/draft-irtf-cfrg-rsa-guidance-10.html#section-7",
+      "backend_change": "https://github.com/RustCrypto/RSA/pull/770"
+    }
+  ]
+}

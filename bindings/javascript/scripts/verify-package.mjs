@@ -18,11 +18,12 @@ try {
   await writeFile(join(directory, 'fixtures.json'), await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url)));
   await writeFile(join(directory, 'alphabet-vectors.json'), await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/vectors.json', import.meta.url)));
   await writeFile(join(directory, 'alphabet-aliases.json'), await readFile(new URL('../../../crates/cube-core/src/symbols/alphabet/aliases.json', import.meta.url)));
+  await writeFile(join(directory,'fixture-verification.mjs'),await readFile(new URL('./fixture-verification.mjs',import.meta.url)));
   await writeFile(join(directory, 'consumer.mjs'), `
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { isDeepStrictEqual } from 'node:util';
 import { createCube, CubeError } from '@cubearc/cube';
+import {verifyFixtureResult,sdkWireExecutor} from './fixture-verification.mjs';
 const cube = await createCube();
 assert.equal(await createCube(), cube);
 const output = cube.execute({operation:'encoding.base64.decode',version:1,inputs:{input:'AP8='}}).output;
@@ -34,6 +35,8 @@ assert.deepEqual(run.intermediates['0'].data,Uint8Array.of(67,97,102,195,169));
 const fixtures=JSON.parse(await readFile('./fixtures.json','utf8'));
 assert.equal(JSON.parse(cube.catalogJson()).operations.length,fixtures.length);
 assert.equal(cube.executors.length,fixtures.length);
+const fixtureContracts=new Map(JSON.parse(cube.catalogJson()).operations.map(c=>[c.operation,c]));
+const executeWire=sdkWireExecutor(cube);
 for (const fixture of fixtures) {
   const binding=cube.executors.find(row=>row.operation===fixture.operation);
   assert.ok(binding,fixture.operation);
@@ -44,7 +47,7 @@ for (const fixture of fixtures) {
   const wire=Object.fromEntries(Object.entries(outputs).map(([name,value])=>[name,
     binding.outputs[name]==='bytes'?{base64:Buffer.from(value).toString('base64')}:
     binding.outputs[name]==='byte_array'?Array.from(value):value]));
-  assert.ok(isDeepStrictEqual(wire,fixture.outputs),fixture.operation+' packaged known answer');
+  await verifyFixtureResult({fixture,actual:wire,contract:fixtureContracts.get(fixture.operation),execute:executeWire});
 }
 const alphabetVectors=JSON.parse(await readFile('./alphabet-vectors.json','utf8'));
 for(const row of alphabetVectors) {

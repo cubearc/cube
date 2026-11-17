@@ -2,17 +2,20 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import init, * as wasm from '../dist/wasm/cube_wasm.js';
+import {verifyFixtureResult} from '../scripts/fixture-verification.mjs';
 
 await init({ module_or_path: await readFile(new URL('../dist/wasm/cube_wasm_bg.wasm', import.meta.url)) });
 const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
 
-test('all module-owned direct executors retain canonical named inputs, outputs and versions in Wasm', () => {
+test('all module-owned direct executors retain canonical named inputs, outputs and versions in Wasm', async () => {
   const executors = JSON.parse(wasm.executors_json());
   assert.ok(executors.some(row => row.operation === 'image.pixels.export'));
   assert.ok(executors.some(row => row.operation === 'text.concat'));
   assert.equal(executors.length, fixtures.length);
   assert.ok(executors.some(row => row.operation === 'file.info.inspect'));
   const failures = [];
+  const contracts=new Map(JSON.parse(JSON.parse(wasm.catalog_snapshot_json()).json).operations.map(c=>[c.operation,c]));
+  const execute=request=>JSON.parse(wasm.execute_json(JSON.stringify(request)));
   for (const executor of executors) {
     const fixture = fixtures.find(row => row.operation === executor.operation);
     assert.ok(fixture, executor.operation);
@@ -20,7 +23,7 @@ test('all module-owned direct executors retain canonical named inputs, outputs a
     let actual;
     try {
       actual = JSON.parse(wasm.execute_json(JSON.stringify(request)));
-      assert.deepEqual(actual, fixture.outputs);
+      await verifyFixtureResult({fixture,actual,contract:contracts.get(fixture.operation),execute});
       assert.deepEqual(Object.keys(executor.outputs).sort(), Object.keys(actual).sort());
     } catch (error) {
       failures.push(`${executor.operation}: ${String(error.message ?? error).slice(0, 1600)}`);

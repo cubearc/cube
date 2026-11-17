@@ -140,5 +140,16 @@ Synthetic fixture data contains only original redistributable test values, inclu
 publicly known test keys where required. Generated prose omits private values.
 Filesystem timestamps are validated against the complete schema but omitted from
 known-answer equality. Floating-point analyses use a relative tolerance of 1e-12;
-integer values/decimal strings and bytes compare exactly. No test invents execution
-attestation, host authorization or replay availability.
+deterministic integer values/decimal strings and bytes compare exactly.
+
+Randomized encryption fixtures additionally declare a reviewed `verification`
+inverse, its fixed private inputs and the expected plaintext. Test tooling verifies
+both fresh and stored reference ciphertexts against that inverse and requires
+recovery of the original input. It rejects corruption, missing assertions and
+attempts to replace deterministic known answers. Independent external ciphertext
+and backend interoperability tests remain required. No production seed or verifier
+endpoint is introduced. JavaScript qualification report version3 records the
+comparison mode, distinct ciphertext hashes and inverse-result hashes; private
+outputs remain redacted.
+
+No test invents execution attestation, host authorization or replay availability.

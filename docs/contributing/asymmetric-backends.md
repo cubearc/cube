@@ -28,12 +28,66 @@ scalars, malformed/hybrid/off-curve points, unknown settings, redacted errors an
 exact/one-over limits. Shared fixtures exercise the CLI, installed native
 extension, actual Wasm and consent-gated native Play graphs and byte outputs.
 
-## RSA source review
+## RSA and key serialization
 
-The [RustSec advisory](https://rustsec.org/advisories/RUSTSEC-2023-0071.html)
-was updated on 2026-11-08 to identify RSA 0.10.0 as patched. The
-[upstream tracker](https://github.com/RustCrypto/RSA/issues/711) records padding,
-fixed-width conversion and private arithmetic/blinding changes. Older releases
-and release candidates are not substituted. Exact-source parser, adversarial,
-entropy-failure and cross-interface qualification is still required; source
-status alone does not establish delivered RSA support.
+Reviewed on 2026-11-17: `rsa` 0.10.0 (Apache-2.0/MIT) with
+`crypto-bigint` 0.7.11 supplies the private arithmetic, OAEP and PKCS1v1.5
+implicit rejection. The [RustSec advisory](https://rustsec.org/advisories/RUSTSEC-2023-0071.html)
+was updated on 2026-11-08 to identify 0.10.0 as patched. The
+[upstream tracker](https://github.com/RustCrypto/RSA/issues/711) records
+fixed-width conversion, padding, base/exponent/CRT blinding and upstream
+`cargo checkct` checks. Cube does not claim to have run that upstream tool or an
+independent timing audit. Older releases and release candidates are not used.
+
+The backend's default RNG feature is disabled. Every encryption/private operation
+receives Cube's fallible OS/browser CSPRNG adapter, which caps requests at 65,536
+bytes. There is no production deterministic-coin API; entropy failure returns no
+result. Test-only injected failures exercise both encryption and private blinding.
+
+Maintained `pkcs8`/`spki`/`pkcs1`/DER/PEM parsers own serialization. Cube bounds
+transport and ASN1 components before bigint construction, accepts only the RSA
+Encryption OID with NULL parameters, requires canonical re-encoding and validates
+private arithmetic/CRT consistency. The selected subset is SPKI public and
+unencrypted two-prime PKCS8v1 private keys, in canonical DER or PEM. Raw SEC1 and
+RFC7748 keys remain curve-specific ECDH inputs. This is not PKI or a generic key
+resolver. Separate binary key ports keep private key material out of graph
+parameters without increasing native Play limits.
+
+## Depadding and independent vectors
+
+The profiles explicitly pin
+[CFRG guidance draft 10](https://www.ietf.org/archive/id/draft-irtf-cfrg-rsa-guidance-10.html#section-7).
+Its OAEP leading-octet rule deliberately accepts Wycheproof case 23, whose older
+strict-RFC8017 expectation is invalid. The original corpus is unchanged;
+`asymmetric/rsa/profile-decisions.json` records the exception and
+[upstream implementation change](https://github.com/RustCrypto/RSA/pull/770).
+All 37 OAEP cases are exercised with that explicit profile decision.
+
+The 67 legacy cases also have independently computed expected outcomes from
+Python's standard-library HMAC/SHA256 implementation of draft 10, including 19 exact
+synthetic rejection messages. This oracle is a fixture-generation tool, not a
+product algorithm. Publicly invalid ciphertext widths/representatives still fail;
+private padding validity is never returned.
+
+Additional ciphertexts come from cryptography 46.0.3/OpenSSL 3.5.4 and
+PyCryptodome 4.0.1, covering DER, PEM LF/CRLF and actual 2048/2049/8192-bit moduli.
+Exact 2049-bit generation was cross-checked by importing and decrypting with the
+independent OpenSSL implementation. Known decryption answers and encryption
+verified by native WebCrypto complement malformed-key, CRT, label, size,
+redaction, entropy-failure and private graph tests. Licenses and source revisions
+are retained with the checked corpora and dependency notices.
+
+## Randomized conformance
+
+Randomized encryption cannot compare fresh ciphertext bytes to one golden
+ciphertext. A reviewed test fixture declares an explicit deterministic inverse,
+fixed private inputs and the independently known plaintext. Test tooling validates
+both the actual and stored reference ciphertext, requiring that each recovers the
+original input. Corruption, wrong plaintext, missing assertions and attempts to
+replace deterministic known answers are rejected.
+
+Qualification reports retain actual/reference ciphertext hashes separately and
+record the inverse-result comparison and hashes. Private outputs remain redacted.
+These helpers are test tooling; no verifier endpoint, production RNG seed or
+fixture dispatcher is added to the runtime API. Existing exact comparisons and
+complete catalog coverage remain required.

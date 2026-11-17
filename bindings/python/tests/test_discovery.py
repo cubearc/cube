@@ -10,6 +10,9 @@ from cube import _native
 # Compatibility fixture for existing IDs and their actual SDK entry points.
 # This is test evidence, never a runtime catalog or execution registry.
 SDK_BINDINGS = {
+    "cipher.rsa.oaep.encrypt": "rsa_oaep_encrypt",
+    "cipher.rsa.oaep.decrypt": "rsa_oaep_decrypt",
+    "cipher.rsa.pkcs1_v1_5.decrypt": "rsa_pkcs1_v1_5_decrypt",
     "crypto.ecdh.agree": "ecdh_agree",
     "cipher.age.decrypt": "age_decrypt",
     "cipher.openssl.decrypt": "openssl_decrypt",

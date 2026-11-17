@@ -7,6 +7,10 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+rsa = { version = "=0.10.0", default-features = false, features = ["std", "encoding", "pkcs1v15"] }
+crypto-bigint = { version = "=0.7.11", default-features = false, features = ["alloc", "zeroize"] }
+rand_core = "=0.10.1"
+getrandom02 = { package = "getrandom", version = "=0.2.17", features = ["std"] }
 p256 = { version = "=0.14.0", default-features = false, features = ["arithmetic", "ecdh", "pkcs8"] }
 x25519-dalek = { version = "=2.0.1", default-features = false, features = ["static_secrets", "zeroize"] }
 age = { version = "=0.12.1", default-features = false }

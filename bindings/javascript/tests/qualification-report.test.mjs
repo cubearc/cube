@@ -12,7 +12,7 @@ test('qualification CLI emits real execution evidence for every advertised path'
     const child = spawnSync(process.execPath, ['scripts/qualification-report.mjs', destination], { cwd: new URL('..', import.meta.url), encoding: 'utf8' });
     assert.equal(child.status, 0, child.stderr);
     const report = JSON.parse(await readFile(destination, 'utf8'));
-    assert.equal(report.reportVersion, 2, 'Inventory alone must not claim real execution qualification.');
+    assert.equal(report.reportVersion, 3, 'Qualification must identify exact versus inverse-verified output comparisons.');
     assert.equal(report.runtime.kind, 'node-wasm');
     const catalog = JSON.parse(await readFile(new URL('../../../contracts/v1/catalog.json', import.meta.url), 'utf8'));
     assert.deepEqual(report.operations.map(row => row.operation), catalog.operations.map(row => row.operation));
@@ -23,7 +23,13 @@ test('qualification CLI emits real execution evidence for every advertised path'
       for (const path of ['direct', 'pipeline']) {
         if (!row[path]) continue;
         assert.equal(row.evidence[path].status, 'passed', `${row.operation}: ${path}`);
-        assert.equal(row.evidence[path].actualOutputSha256, row.evidence[path].expectedOutputSha256);
+        if (row.evidence[path].comparison==='verified-inverse') {
+          assert.equal(row.evidence[path].verification.actualOutputSha256,row.evidence[path].verification.expectedOutputSha256);
+          assert.equal(catalog.operations.find(c=>c.operation===row.operation).deterministic,false);
+        } else {
+          assert.equal(row.evidence[path].comparison,'exact');
+          assert.equal(row.evidence[path].actualOutputSha256,row.evidence[path].expectedOutputSha256);
+        }
         const contract = catalog.operations.find(contract => contract.operation === row.operation);
         assert.equal(row.evidence[path].outputRetained, !contract.policy.private_output);
         if (contract.policy.private_output) assert.equal(row.evidence[path].actualOutputs, undefined);

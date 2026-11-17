@@ -2,22 +2,19 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { createCube, CubeError } from '../dist/node.mjs';
+import {verifyFixtureResult,sdkWireExecutor} from '../scripts/fixture-verification.mjs';
 
 const cube = await createCube();
 
 test('the public API preserves every registered direct executor fixture and all output ports', async () => {
   const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
+  const contracts=new Map(JSON.parse(cube.catalogJson()).operations.map(c=>[c.operation,c]));
+  const execute=sdkWireExecutor(cube);
   for (const executor of cube.executors) {
     const fixture = fixtures.find(row => row.operation === executor.operation);
-    const inputs = Object.fromEntries(Object.entries(fixture.inputs).map(([name, value]) => [name,
-      executor.inputs[name] === 'bytes' ? Uint8Array.from(Buffer.from(value.base64, 'base64'))
-        : executor.inputs[name] === 'byte_array' ? Uint8Array.from(value) : value,
-    ]));
-    const expected = Object.fromEntries(Object.entries(fixture.outputs).map(([name, value]) => [name,
-      executor.outputs[name] === 'bytes' ? Uint8Array.from(Buffer.from(value.base64, 'base64'))
-        : executor.outputs[name] === 'byte_array' ? Uint8Array.from(value) : value,
-    ]));
-    assert.deepEqual(cube.execute({ operation: executor.operation, version: executor.version, inputs, parameters: fixture.parameters }), expected, executor.operation);
+    const actual=execute({operation:executor.operation,version:executor.version,inputs:fixture.inputs,parameters:fixture.parameters});
+    const contract=contracts.get(fixture.operation);
+    await verifyFixtureResult({fixture,actual,contract,execute});
   }
 });
 

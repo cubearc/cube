@@ -48,6 +48,7 @@ mod probability;
 mod puzzlecodes;
 mod puzzles;
 mod recipe;
+mod rsa;
 mod solresol;
 mod stream;
 mod structured_composition;
@@ -624,6 +625,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     openssl::register(module)?;
     age::register(module)?;
     ecdh::register(module)?;
+    rsa::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

@@ -336,3 +336,11 @@ cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Arr
 cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Array(32)},parameters:{profile:'p256_sec1_raw'}});
 // @ts-expect-error Unsupported curves are not inferred.
 cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Array(32)},parameters:{profile:'secp256k1',private_key_hex:'77'.repeat(32)}});
+
+const rsaCipher:Uint8Array=cube.execute({operation:'cipher.rsa.oaep.encrypt',version:1,inputs:{input:new Uint8Array(),key:new Uint8Array()},parameters:{profile:'rsa_oaep_sha256_mgf1_sha256_cfrg10',key_format:'spki_der'}}).output;void rsaCipher;
+// @ts-expect-error RSA encryption requires an explicit SPKI public key format.
+cube.execute({operation:'cipher.rsa.oaep.encrypt',version:1,inputs:{input:new Uint8Array(),key:new Uint8Array()},parameters:{profile:'rsa_oaep_sha256_mgf1_sha256_cfrg10',key_format:'pkcs8_der'}});
+// @ts-expect-error The legacy decrypt-only profile has no OAEP label parameter.
+cube.execute({operation:'cipher.rsa.pkcs1_v1_5.decrypt',version:1,inputs:{input:new Uint8Array(),key:new Uint8Array()},parameters:{profile:'rsaes_pkcs1_v1_5_implicit_rejection_cfrg10',key_format:'pkcs8_der',label_hex:''}});
+// @ts-expect-error A binary key input is required.
+cube.execute({operation:'cipher.rsa.oaep.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'rsa_oaep_sha256_mgf1_sha256_cfrg10',key_format:'pkcs8_der'}});

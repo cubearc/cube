@@ -10,7 +10,12 @@ use crate::{
 use serde_json::{Value, json};
 use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
-    op == crate::asymmetric::ecdh::AGREE
+    matches!(
+        op,
+        crate::asymmetric::rsa::ENCRYPT
+            | crate::asymmetric::rsa::DECRYPT
+            | crate::asymmetric::rsa::LEGACY_DECRYPT
+    ) || op == crate::asymmetric::ecdh::AGREE
         || stream::Profile::from_id(op).is_some()
         || matches!(
             op,
@@ -47,6 +52,27 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    if matches!(
+        op,
+        crate::asymmetric::rsa::ENCRYPT
+            | crate::asymmetric::rsa::DECRYPT
+            | crate::asymmetric::rsa::LEGACY_DECRYPT
+    ) {
+        use crate::asymmetric::rsa;
+        let document = zeroize::Zeroizing::new(p.to_string());
+        let input = zeroize::Zeroizing::new(bytes(&i["input"])?);
+        let key = zeroize::Zeroizing::new(bytes(&i["key"])?);
+        let output = zeroize::Zeroizing::new(match op {
+            rsa::ENCRYPT => {
+                rsa::encrypt(&input, &rsa::EncryptionSettings::parse(&document, &key)?)?
+            }
+            rsa::DECRYPT => {
+                rsa::decrypt(&input, &rsa::DecryptionSettings::parse(&document, &key)?)?
+            }
+            _ => rsa::legacy_decrypt(&input, &rsa::LegacySettings::parse(&document, &key)?)?,
+        });
+        return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
+    }
     if op == crate::asymmetric::ecdh::AGREE {
         let document = zeroize::Zeroizing::new(p.to_string());
         let settings = crate::asymmetric::ecdh::Settings::parse(&document)?;

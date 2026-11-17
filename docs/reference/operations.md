@@ -21265,6 +21265,207 @@ Example:
 cube cipher --help
 ```
 
+## cipher.rsa.oaep.decrypt
+
+RFC8017 RSA-OAEP SHA256/MGF1-SHA256 with CFRG draft10 depadding, or decrypt-only PKCS1v1.5 draft10 implicit rejection; bounded canonical keys and fresh system randomness.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PrivateParameters",
+  "type": "object",
+  "properties": {
+    "key_format": {
+      "$ref": "#/$defs/PrivateFormat"
+    },
+    "label_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 8192,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/OaepProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_format"
+  ],
+  "$defs": {
+    "OaepProfile": {
+      "type": "string",
+      "enum": [
+        "rsa_oaep_sha256_mgf1_sha256_cfrg10"
+      ]
+    },
+    "PrivateFormat": {
+      "type": "string",
+      "enum": [
+        "pkcs8_der",
+        "pkcs8_pem"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher rsa oaep decrypt --parameters-file settings.json --key-file key.bin --file ciphertext.bin
+```
+
+## cipher.rsa.oaep.encrypt
+
+RFC8017 RSA-OAEP SHA256/MGF1-SHA256 with CFRG draft10 depadding, or decrypt-only PKCS1v1.5 draft10 implicit rejection; bounded canonical keys and fresh system randomness.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PublicParameters",
+  "type": "object",
+  "properties": {
+    "key_format": {
+      "$ref": "#/$defs/PublicFormat"
+    },
+    "label_hex": {
+      "type": "string",
+      "default": "",
+      "maxLength": 8192,
+      "pattern": "^(?:[0-9A-Fa-f]{2})*$"
+    },
+    "profile": {
+      "$ref": "#/$defs/OaepProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_format"
+  ],
+  "$defs": {
+    "OaepProfile": {
+      "type": "string",
+      "enum": [
+        "rsa_oaep_sha256_mgf1_sha256_cfrg10"
+      ]
+    },
+    "PublicFormat": {
+      "type": "string",
+      "enum": [
+        "spki_der",
+        "spki_pem"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher rsa oaep encrypt --parameters-file settings.json --key-file key.bin --file message.bin
+```
+
+## cipher.rsa.pkcs1_v1_5.decrypt
+
+RFC8017 RSA-OAEP SHA256/MGF1-SHA256 with CFRG draft10 depadding, or decrypt-only PKCS1v1.5 draft10 implicit rejection; bounded canonical keys and fresh system randomness.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LegacyParameters",
+  "type": "object",
+  "properties": {
+    "key_format": {
+      "$ref": "#/$defs/PrivateFormat"
+    },
+    "profile": {
+      "$ref": "#/$defs/LegacyProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "key_format"
+  ],
+  "$defs": {
+    "LegacyProfile": {
+      "type": "string",
+      "enum": [
+        "rsaes_pkcs1_v1_5_implicit_rejection_cfrg10"
+      ]
+    },
+    "PrivateFormat": {
+      "type": "string",
+      "enum": [
+        "pkcs8_der",
+        "pkcs8_pem"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher rsa pkcs1-v1-5 decrypt --parameters-file settings.json --key-file key.bin --file ciphertext.bin
+```
+
 ## cipher.running_key.decode
 
 Nonrepeating caller-owned Vigenere material; reject insufficient key letters.

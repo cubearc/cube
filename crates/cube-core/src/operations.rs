@@ -370,6 +370,7 @@ impl Descriptor {
 /// This is metadata assembly, not a dispatcher. Consumers may sort by stable ID.
 const MODULES: &[Module] = &[
     crate::asymmetric::ecdh::MODULE,
+    crate::asymmetric::rsa::MODULE,
     crate::encoding::MODULE,
     crate::ciphers::MODULE,
     crate::hashing::MODULE,

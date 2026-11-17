@@ -1,6 +1,8 @@
 //! Exact catalog-to-real-result coverage, including legacy direct signatures.
 #[path = "support/conformance/mod.rs"]
 mod calls;
+#[path = "support/randomized_fixture.rs"]
+mod randomized_fixture;
 use cube_core::operations::{
     self,
     contracts::{self, Fixture},
@@ -123,11 +125,15 @@ fn every_catalog_id_executes_a_real_fixture_and_matches_its_complete_contract() 
             comparable["output"]["modified"] = Value::Null;
             comparable["output"]["created"] = Value::Null;
         }
-        assert!(
-            same(&comparable, &v["outputs"]),
-            "{operation}: actual {comparable} expected {}",
-            v["outputs"]
-        );
+        if v.get("verification").is_none() {
+            assert!(
+                same(&comparable, &v["outputs"]),
+                "{operation}: actual {comparable} expected {}",
+                v["outputs"]
+            );
+        } else {
+            randomized_fixture::assert_inverse(&v, &comparable);
+        }
         // Every contract rejects an unknown input, parameter and output field.
         for (section, mut value) in [
             ("input", v["inputs"].clone()),

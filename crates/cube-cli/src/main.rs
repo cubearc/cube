@@ -47,6 +47,7 @@ mod polycmd;
 mod puzzlecmd;
 mod puzzlecodescmd;
 mod recipecmd;
+mod rsacmd;
 mod streamcmd;
 mod streamrefcmd;
 mod textcmd;
@@ -556,6 +557,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Explicit RSA-OAEP and legacy implicit-rejection decryption
+    Rsa {
+        #[command(subcommand)]
+        command: rsacmd::Command,
     },
     /// Explicit X25519/P-256 key agreement, returning a raw shared secret
     Ecdh {
@@ -1141,6 +1147,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Rsa { command } => return rsacmd::run(command, &mut output),
                 Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),
                 Cipher::Age { command } => return agecmd::run(command, &mut output),
                 Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),

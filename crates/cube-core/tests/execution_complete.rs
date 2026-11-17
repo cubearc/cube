@@ -2,6 +2,38 @@
 use cube_core::operations::{self, contracts, execution};
 use serde_json::Value;
 use std::collections::BTreeSet;
+#[path = "support/randomized_fixture.rs"]
+mod randomized_fixture;
+
+#[test]
+fn reviewed_randomized_assertions_reject_corruption_and_deterministic_bypasses() {
+    let cases: Vec<Value> =
+        serde_json::from_str(include_str!("../src/operations/contracts/conformance.json")).unwrap();
+    let case = cases
+        .iter()
+        .find(|v| v["operation"] == "cipher.rsa.oaep.encrypt")
+        .unwrap();
+    randomized_fixture::assert_inverse(case, &case["outputs"]);
+    let mut bad = case["outputs"].clone();
+    let mut bytes =
+        cube_core::encoding::base64_decode(bad["output"]["base64"].as_str().unwrap()).unwrap();
+    let length = bytes.len();
+    bytes[length - 1] ^= 1;
+    bad["output"]["base64"] = serde_json::json!(cube_core::encoding::base64_encode(&bytes));
+    assert!(std::panic::catch_unwind(|| randomized_fixture::assert_inverse(case, &bad)).is_err());
+    let mut changed = case.clone();
+    changed["verification"]["expected_outputs"]["output"]["base64"] = serde_json::json!("AA==");
+    assert!(
+        std::panic::catch_unwind(|| randomized_fixture::assert_inverse(&changed, &case["outputs"]))
+            .is_err()
+    );
+    changed = case.clone();
+    changed["operation"] = serde_json::json!("encoding.base64.encode");
+    assert!(
+        std::panic::catch_unwind(|| randomized_fixture::assert_inverse(&changed, &case["outputs"]))
+            .is_err()
+    );
+}
 
 #[test]
 fn diagnostic_interpreters_cannot_raise_the_invocation_instruction_budget() {
@@ -71,11 +103,15 @@ fn every_reviewed_known_answer_executes_through_the_same_core_boundary() {
             execution::Budget::default(),
         )
         .unwrap_or_else(|failure| panic!("{operation}: {failure}"));
-        assert_eq!(
-            contracts::canonical_value(output),
-            contracts::canonical_value(fixture["outputs"].clone()),
-            "{operation}"
-        );
+        if fixture.get("verification").is_none() {
+            assert_eq!(
+                contracts::canonical_value(output),
+                contracts::canonical_value(fixture["outputs"].clone()),
+                "{operation}"
+            );
+        } else {
+            randomized_fixture::assert_inverse(&fixture, &contracts::canonical_value(output));
+        }
     }
     assert_eq!(
         covered,

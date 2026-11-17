@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { pipelineCases } from '../tests/support/pipeline-cases.mjs';
+import {verifyFixtureResult} from './fixture-verification.mjs';
 
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 function ordered(value) {
@@ -35,6 +36,13 @@ function verifyCatalog(snapshot, canonicalJson, fixtures, build) {
     assert.equal(identity.operation_version, contract.operation_version, `Runtime version drift: ${operation}`);
     assert.equal(identity.contract_sha256, fixture.contract_sha256, `Review the changed contract: ${operation}`);
     assert.equal(contract.operation_version, fixture.operation_version, `Fixture version drift: ${operation}`);
+    if (fixture.verification) {
+      assert.equal(contract.deterministic,false,'Inverse assertions cannot replace deterministic answers.');
+      const inverse=contracts.get(fixture.verification.operation);
+      assert.ok(inverse?.deterministic,'Randomized ciphertexts require a deterministic inverse contract.');
+      assert.equal(contract.outputs.length,1,'Every randomized output port must be verified.');
+      assert.equal(contract.outputs[0].name,fixture.verification.output_port);
+    }
   }
   return { catalog, contracts, answers, identities };
 }
@@ -53,25 +61,28 @@ function checkResult(actual, expected, operation, path) {
   if (!isDeepStrictEqual(actual, expected)) throw new Error(`Actual Wasm known-answer mismatch: ${operation} (${path}).`);
 }
 
-function evidence(contract, version, request, actual, expected, fixture, path) {
-  checkResult(actual, expected, contract.operation, path);
+function evidence(contract, version, request, actual, expected, fixture, path, checked={comparison:'exact'}) {
+  if (checked.comparison==='exact') checkResult(actual, expected, contract.operation, path);
   const retain = !contract.policy.private_output;
   return {
-    status: 'passed', execution: 'actual-wasm', version,
+    status: 'passed', execution: 'actual-wasm', version, comparison:checked.comparison,
+    ...(checked.comparison==='verified-inverse'?{verification:{operation:checked.operation,actualOutputSha256:digest(checked.actual),expectedOutputSha256:digest(checked.expected)}}:{}),
     caseSha256: digest(request), reviewedFixtureSha256: digest(fixture),
     actualOutputSha256: digest(actual), expectedOutputSha256: digest(expected),
     outputPorts: path === 'direct' ? Object.keys(actual).sort() : ['output'],
     outputRetained: retain,
-    ...(retain ? { actualOutputs: actual } : { redaction: 'Core private-output policy; exact output equality was checked before hashing.' }),
+    ...(retain ? { actualOutputs: actual } : { redaction: 'Core private-output policy; the declared conformance comparison was checked before hashing.' }),
   };
 }
 
-async function qualify(contract, fixture, binding, adapter, pipelineCase, driver) {
+async function qualify(contract, fixture, binding, adapter, pipelineCase, driver, direct) {
   const result = {};
   if (binding) {
     const request = { operation: contract.operation, version: binding.version, inputs: fixture.inputs, parameters: fixture.parameters };
     const actual = await driver.executeDirect(request, binding);
-    result.direct = evidence(contract, binding.version, request, actual, fixture.outputs, fixture, 'direct');
+    const execute=request=>{const inverse=direct.get(request.operation);assert.ok(inverse,'Missing executable inverse verifier.');return driver.executeDirect(request,inverse);};
+    const checked=await verifyFixtureResult({fixture,actual,contract,execute});
+    result.direct = evidence(contract, binding.version, request, actual, fixture.outputs, fixture, 'direct',checked);
   }
   if (adapter) {
     const execution = await driver.runRecipe(pipelineCase.definition);
@@ -90,7 +101,7 @@ export async function qualificationReport({ snapshot, canonicalJson, fixtures, b
   const operations = [];
   for (const contract of catalog.operations) {
     const binding = direct.get(contract.operation); const adapter = pipelines.get(contract.operation);
-    const covered = await qualify(contract, answers.get(contract.operation), binding, adapter, cases.get(contract.operation), driver);
+    const covered = await qualify(contract, answers.get(contract.operation), binding, adapter, cases.get(contract.operation), driver, direct);
     const supported = Boolean(binding || adapter);
     operations.push({
       operation: contract.operation, operationVersion: contract.operation_version,
@@ -102,7 +113,7 @@ export async function qualificationReport({ snapshot, canonicalJson, fixtures, b
     });
   }
   return {
-    reportVersion: 2, status: 'passed',
+    reportVersion: 3, status: 'passed',
     scope: 'Actual synthetic known-answer execution in the recorded runtime only; no other engine/host or production release is inferred.',
     runtime, build, limits, fixtureSetSha256: digest(fixtures),
     retention: 'No inputs or parameters retained. Results are retained only when the canonical Core output policy permits; otherwise equality and exact digests are recorded.',

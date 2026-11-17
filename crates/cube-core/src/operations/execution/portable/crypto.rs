@@ -10,7 +10,8 @@ use crate::{
 use serde_json::{Value, json};
 use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
-    stream::Profile::from_id(op).is_some()
+    op == crate::asymmetric::ecdh::AGREE
+        || stream::Profile::from_id(op).is_some()
         || matches!(
             op,
             "cipher.vernam"
@@ -46,6 +47,12 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    if op == crate::asymmetric::ecdh::AGREE {
+        let document = zeroize::Zeroizing::new(p.to_string());
+        let settings = crate::asymmetric::ecdh::Settings::parse(&document)?;
+        let output = crate::asymmetric::ecdh::agree(&bytes(&i["input"])?, &settings)?;
+        return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
+    }
     if op == "encoding.base58check.decode" {
         return Ok(
             json!({"output":crate::encoding::base58check::decode(&field::<String>(&i,"input")?)?}),

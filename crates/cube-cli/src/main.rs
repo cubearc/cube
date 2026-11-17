@@ -30,6 +30,7 @@ mod aescmd;
 mod agecmd;
 mod blockcmd;
 mod cryptanalysiscmd;
+mod ecdhcmd;
 mod enigmacmd;
 mod fpecmd;
 mod fractioncmd;
@@ -555,6 +556,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Explicit X25519/P-256 key agreement, returning a raw shared secret
+    Ecdh {
+        #[command(subcommand)]
+        command: ecdhcmd::Command,
     },
     /// Authenticate a bounded binary agev1/X25519 file before output
     Age {
@@ -1135,6 +1141,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),
                 Cipher::Age { command } => return agecmd::run(command, &mut output),
                 Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),
                 Cipher::Fpe { command } => return fpecmd::run(command, &mut output),

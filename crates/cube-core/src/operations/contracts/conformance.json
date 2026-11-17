@@ -19560,5 +19560,24 @@
       "identity": "AGE-SECRET-KEY-1EGTZVFFV20835NWYV6270LXYVK2VKNX2MMDKWYKLMGR48UAWX40Q2P2LM0",
       "profile": "age_v1_x25519_binary"
     }
+  },
+  {
+    "contract_sha256": "9bfd5071dc7cca27a0d4f9cf437c53d26d2d91620433f50e6b6021bbad9883d3",
+    "inputs": {
+      "input": {
+        "base64": "3p7bfXt9wbTTW2HC7OQ1Nz+DQ8hbeGdNrfx+FG+IK08="
+      }
+    },
+    "operation": "crypto.ecdh.agree",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "Sl2dW6TOLeFyjjv0gDUPJeB+IclH0Z4zdvCbPB4WF0I="
+      }
+    },
+    "parameters": {
+      "private_key_hex": "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a",
+      "profile": "x25519_rfc7748"
+    }
   }
 ]

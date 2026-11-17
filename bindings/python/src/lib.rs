@@ -22,6 +22,7 @@ mod constants;
 mod cryptanalysis;
 mod digital;
 mod discrete_transport;
+mod ecdh;
 mod enigma;
 mod esolang;
 mod fpe;
@@ -622,6 +623,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     key_wrap::register(module)?;
     openssl::register(module)?;
     age::register(module)?;
+    ecdh::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

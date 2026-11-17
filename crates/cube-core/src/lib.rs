@@ -5,6 +5,7 @@
 //! Classical ciphers and repeating-key XOR support challenges and education,
 //! but do not provide secure encryption.
 
+pub mod asymmetric;
 pub mod binary;
 pub mod blockchain;
 pub mod ciphers;

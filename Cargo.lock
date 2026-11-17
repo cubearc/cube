@@ -143,7 +143,7 @@ dependencies = [
  "chacha20poly1305 0.10.1",
  "cipher 0.4.4",
  "cookie-factory",
- "hkdf",
+ "hkdf 0.12.4",
  "hmac 0.12.1",
  "hpke",
  "i18n-embed",
@@ -151,7 +151,7 @@ dependencies = [
  "lazy_static",
  "ml-kem",
  "nom",
- "p256",
+ "p256 0.13.2",
  "pin-project",
  "rand",
  "rust-embed",
@@ -173,7 +173,7 @@ dependencies = [
  "bech32",
  "chacha20poly1305 0.10.1",
  "cookie-factory",
- "hkdf",
+ "hkdf 0.12.4",
  "hpke",
  "io_tee",
  "nom",
@@ -902,6 +902,7 @@ dependencies = [
  "num-bigint 0.5.1",
  "ocb3",
  "ofb",
+ "p256 0.14.0",
  "pbkdf2 0.13.0",
  "png",
  "quircs",
@@ -926,6 +927,7 @@ dependencies = [
  "twofish",
  "unicode-general-category",
  "unicode-normalization",
+ "x25519-dalek",
  "xtea",
  "xts-mode",
  "zeroize",
@@ -1105,6 +1107,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ecdsa"
+version = "0.17.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c0681a4fc24c767085329728d8dfba959af91228aa4610cca4f8ce317ba46ae0"
+dependencies = [
+ "der 0.8.2",
+ "digest 0.11.3",
+ "elliptic-curve 0.14.3",
+ "signature",
+ "zeroize",
+]
+
+[[package]]
 name = "elliptic-curve"
 version = "0.13.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1116,7 +1131,7 @@ dependencies = [
  "ff 0.13.1",
  "generic-array",
  "group 0.13.0",
- "hkdf",
+ "hkdf 0.12.4",
  "rand_core 0.6.4",
  "sec1 0.7.3",
  "subtle",
@@ -1132,9 +1147,12 @@ dependencies = [
  "base16ct 1.0.0",
  "crypto-bigint 0.7.8",
  "crypto-common 0.2.2",
+ "digest 0.11.3",
  "ff 0.14.0",
  "group 0.14.0",
+ "hkdf 0.13.0",
  "hybrid-array 0.4.15",
+ "pkcs8",
  "rand_core 0.10.1",
  "sec1 0.8.1",
  "subtle",
@@ -1539,6 +1557,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "hkdf"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4aaa26c720c68b866f2c96ef5c1264b3e6f473fe5d4ce61cd44bbe913e553018"
+dependencies = [
+ "hmac 0.13.0",
+]
+
+[[package]]
 name = "hmac"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1567,9 +1594,9 @@ dependencies = [
  "chacha20poly1305 0.10.1",
  "digest 0.10.7",
  "generic-array",
- "hkdf",
+ "hkdf 0.12.4",
  "hmac 0.12.1",
- "p256",
+ "p256 0.13.2",
  "rand_core 0.6.4",
  "sha2 0.10.9",
  "subtle",
@@ -2212,6 +2239,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "p256"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2c9239b2dbc807adbbe147e8cf72ea7450c3a0aabe62cb8e75ff4ec22e1f72a"
+dependencies = [
+ "ecdsa",
+ "elliptic-curve 0.14.3",
+ "primefield",
+ "primeorder 0.14.0",
+]
+
+[[package]]
 name = "parking_lot"
 version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2291,6 +2330,16 @@ name = "pin-project-lite"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+
+[[package]]
+name = "pkcs8"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "451913da69c775a56034ea8d9003d27ee8948e12443eae7c038ba100a4f21cb7"
+dependencies = [
+ "der 0.8.2",
+ "spki",
+]
 
 [[package]]
 name = "png"
@@ -3022,6 +3071,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
 
 [[package]]
+name = "signature"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28d567dcbaf0049cb8ac2608a76cd95ff9e4412e1899d389ee400918ca7537f5"
+dependencies = [
+ "digest 0.11.3",
+ "rand_core 0.10.1",
+]
+
+[[package]]
 name = "simd-adler32"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3061,6 +3120,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eda7efdab3e820a9170ee4b8ef02e7121913d0815b52357b695241f515d0c9d1"
 dependencies = [
  "cipher 0.5.2",
+]
+
+[[package]]
+name = "spki"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ef958a98b9d5da290cfc78946e9f3e61e1e62a18db0d92cac0b83cc161491a9"
+dependencies = [
+ "der 0.8.2",
 ]
 
 [[package]]

@@ -7,6 +7,8 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+p256 = { version = "=0.14.0", default-features = false, features = ["arithmetic", "ecdh", "pkcs8"] }
+x25519-dalek = { version = "=2.0.1", default-features = false, features = ["static_secrets", "zeroize"] }
 age = { version = "=0.12.1", default-features = false }
 pbkdf2 = { version = "=0.13.0", default-features = false, features = ["hmac"] }
 aes-kw = { version = "=0.3.1", default-features = false, features = ["zeroize"] }

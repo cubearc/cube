@@ -328,3 +328,11 @@ cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uin
 cube.execute({operation:'cipher.age.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'age_v1_x25519_binary',identity:'private caller identity'}});
 // @ts-expect-error a private identity is required
 cube.execute({operation:'cipher.age.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'age_v1_x25519_binary'}});
+
+const sharedEcdh:Uint8Array=cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Array(32)},parameters:{profile:'x25519_rfc7748',private_key_hex:'77'.repeat(32)}}).output;void sharedEcdh;
+// @ts-expect-error Curve selection is required.
+cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Array(32)},parameters:{private_key_hex:'77'.repeat(32)}});
+// @ts-expect-error Private key material is required.
+cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Array(32)},parameters:{profile:'p256_sec1_raw'}});
+// @ts-expect-error Unsupported curves are not inferred.
+cube.execute({operation:'crypto.ecdh.agree',version:1,inputs:{input:new Uint8Array(32)},parameters:{profile:'secp256k1',private_key_hex:'77'.repeat(32)}});

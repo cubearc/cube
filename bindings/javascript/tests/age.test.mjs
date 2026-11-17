@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {createCube} from '../dist/node.mjs';
+const vectors=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/ciphers/age/vectors.json',import.meta.url),'utf8'));
+const cube=await createCube();const bytes=s=>new Uint8Array(Buffer.from(s,'base64'));
+const run=(data,parameters)=>cube.execute({operation:'cipher.age.decrypt',version:1,inputs:{input:data},parameters}).output;
+test('CCTV/Go age cases authenticate completely in actual Wasm',()=>{for(const v of vectors){if(v.expect==='success'){const plain=run(bytes(v.ciphertext_base64),v.parameters);assert.deepEqual(plain,bytes(v.plaintext_base64));assert.equal(createHash('sha256').update(plain).digest('hex'),v.plaintext_sha256);}else assert.throws(()=>run(bytes(v.ciphertext_base64),v.parameters));}});
+test('age ciphertext bounds and private identity errors remain exact',()=>{assert.throws(()=>run(new Uint8Array(16*1024*1024+1),vectors[0].parameters),{code:'resource_limit'});assert.throws(()=>run(new Uint8Array(),{profile:'age_v1_x25519_binary',identity:'SECRET'}),e=>!e.message.includes('SECRET'));});

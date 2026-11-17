@@ -28,6 +28,7 @@ remain in each operation's reference.
 - [Raw AES blocks](topics/aes-blocks.md)
 - [AES byte modes](topics/aes-modes.md)
 - [Authenticated byte encryption](topics/authenticated-ciphers.md)
+- [Authenticated age files](topics/age-files.md)
 - [OpenSSL legacy files](topics/openssl-legacy.md)
 - [Format-preserving encryption](topics/format-preserving-encryption.md)
 - [AES key wrapping](topics/key-wrapping.md)

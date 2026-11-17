@@ -5226,6 +5226,64 @@ Example:
 cube cipher affine --a 5 --b 8 --text AFFINECIPHER
 ```
 
+## cipher.age.decrypt
+
+Bounded binary agev1/X25519 decryption with complete header and STREAM authentication before output.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "identity": {
+      "type": "string",
+      "maxLength": 74,
+      "minLength": 74,
+      "pattern": "^AGE-SECRET-KEY-1[0-9A-Z]+$"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "identity"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "age_v1_x25519_binary"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher age decrypt --parameters-file settings.json --file encrypted.bin
+```
+
 ## cipher.alberti.decode
 
 Alberti digit-feedback profile from Di Palma 2009 museum reconstruction, exact 24-cell rings and explicit starting index.

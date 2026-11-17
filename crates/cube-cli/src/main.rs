@@ -27,6 +27,7 @@ mod probabilitycmd;
 use input::Input;
 mod aeadcmd;
 mod aescmd;
+mod agecmd;
 mod blockcmd;
 mod cryptanalysiscmd;
 mod enigmacmd;
@@ -554,6 +555,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Authenticate a bounded binary agev1/X25519 file before output
+    Age {
+        #[command(subcommand)]
+        command: agecmd::Command,
     },
     /// Unauthenticated legacy Salted__ decryption with explicit profiles
     Openssl {
@@ -1129,6 +1135,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Age { command } => return agecmd::run(command, &mut output),
                 Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),
                 Cipher::Fpe { command } => return fpecmd::run(command, &mut output),
                 Cipher::Aead { command } => return aeadcmd::run(command, &mut output),

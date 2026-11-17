@@ -276,3 +276,9 @@ radix, exact key/tweak and profile settings. See [FPE profiles](../reference/top
 
 `openssl_decrypt(data, parameters_json)` requires an exact cipher/KDF/salt profile
 and password bytes; its result is unauthenticated. See [OpenSSL legacy files](../reference/topics/openssl-legacy.md) for the compatibility matrix and private settings example.
+
+### Authenticated age files
+
+`age_decrypt(data, parameters_json)` accepts the exact binaryv1/X25519 profile and
+one private caller identity. It returns bytes after complete authentication only.
+See [age files](../reference/topics/age-files.md) for boundaries and the published test identity example.

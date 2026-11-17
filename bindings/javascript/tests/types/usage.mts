@@ -324,3 +324,7 @@ cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uin
 cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'aes128_cbc_pkcs7_pbkdf2_sha256_salt8',password_hex:''}});
 // @ts-expect-error EVP_BytesToKey does not accept an iteration override
 cube.execute({operation:'cipher.openssl.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'aes128_cbc_pkcs7_evp_md5',password_hex:'',iterations:1}});
+
+cube.execute({operation:'cipher.age.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'age_v1_x25519_binary',identity:'private caller identity'}});
+// @ts-expect-error a private identity is required
+cube.execute({operation:'cipher.age.decrypt',version:1,inputs:{input:new Uint8Array()},parameters:{profile:'age_v1_x25519_binary'}});

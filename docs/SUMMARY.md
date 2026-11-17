@@ -61,7 +61,8 @@
     - [Raw AES blocks](reference/topics/aes-blocks.md)
     - [AES byte modes](reference/topics/aes-modes.md)
     - [Authenticated byte encryption](reference/topics/authenticated-ciphers.md)
-    - [OpenSSL legacy files](reference/topics/openssl-legacy.md)
+    - [Authenticated age files](reference/topics/age-files.md)
+  - [OpenSSL legacy files](reference/topics/openssl-legacy.md)
   - [Format-preserving encryption](reference/topics/format-preserving-encryption.md)
   - [AES key wrapping](reference/topics/key-wrapping.md)
     - [Raw block reference profiles](reference/topics/block-profiles.md)
@@ -110,3 +111,5 @@
     - [Authenticated backend qualification](contributing/authenticated-backends.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
     - [Classical analysis research](research/classical-analysis-evaluation.md)
+
+- [Authenticated envelope qualification](contributing/authenticated-envelopes.md)

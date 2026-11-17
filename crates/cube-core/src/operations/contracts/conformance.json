@@ -19541,5 +19541,24 @@
       "password_hex": "4375626520696e7465726f7065726162696c69747920746573742070617373776f7264",
       "profile": "aes128_cbc_pkcs7_evp_md5"
     }
+  },
+  {
+    "contract_sha256": "f5ca05feca314ce6ee825ff561b7785bacaf3eef9ec4cfc5f1163b3da07a40d3",
+    "inputs": {
+      "input": {
+        "base64": "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBURWlGMHlwcXIrYnB2Y3FYTnlDVkpwTDdPdXdQZFZ3UEw3S1FFYkZET0NjCmhqYWJHWHdTTFE5YzNTNkx3MmkrUzJUdTJmaXdRSEhzbGJCTjZCNDFGTEUKLS0tIFd5SnA5Ri85Rk9aaDdnSmRoZXEyV0lKY3dIZ1ljOE5JVmgzZGR3aHJjTmcK7s9ix86RtDMnTmjU8vkTTLdMW/73vqpSyPC8DpksHoMx+2Y="
+      }
+    },
+    "operation": "cipher.age.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "YWdl"
+      }
+    },
+    "parameters": {
+      "identity": "AGE-SECRET-KEY-1EGTZVFFV20835NWYV6270LXYVK2VKNX2MMDKWYKLMGR48UAWX40Q2P2LM0",
+      "profile": "age_v1_x25519_binary"
+    }
   }
 ]

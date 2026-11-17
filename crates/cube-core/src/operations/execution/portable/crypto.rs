@@ -2,7 +2,8 @@
 use super::{bytes, field};
 use crate::{
     ciphers::{
-        aes_blocks, aes_modes, block_profiles, fpe, key_wrap, modern_aead, openssl, stream, xxtea,
+        aes_blocks, aes_modes, age, block_profiles, fpe, key_wrap, modern_aead, openssl, stream,
+        xxtea,
     },
     errors::{ErrorCode, OperationError},
 };
@@ -15,6 +16,7 @@ pub(super) fn supports(op: &str) -> bool {
             "cipher.vernam"
                 | "cipher.aes.encrypt_blocks"
                 | "cipher.aes.decrypt_blocks"
+                | age::DECRYPT
                 | openssl::DECRYPT
                 | fpe::ENCRYPT
                 | fpe::DECRYPT
@@ -116,6 +118,10 @@ pub(super) fn execute(
         } else {
             key_wrap::unwrap(&input, &s)?
         }
+    } else if op == age::DECRYPT {
+        let document = zeroize::Zeroizing::new(p.to_string());
+        let settings = age::Settings::parse(&document)?;
+        age::decrypt(&input, &settings)?
     } else if op == openssl::DECRYPT {
         let document = zeroize::Zeroizing::new(p.to_string());
         let settings = openssl::Settings::parse(&document)?;

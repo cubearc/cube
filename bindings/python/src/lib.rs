@@ -6,6 +6,7 @@ use pyo3::prelude::*;
 use pyo3::types::PyBytes;
 
 mod aes_blocks;
+mod age;
 mod alphabet;
 mod audio;
 mod base58check;
@@ -620,6 +621,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     aes_blocks::register(module)?;
     key_wrap::register(module)?;
     openssl::register(module)?;
+    age::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

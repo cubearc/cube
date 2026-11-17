@@ -378,3 +378,8 @@ const mlKemShared: Uint8Array = cube.execute({operation:'crypto.ml_kem.decapsula
 void mlKemShared;
 // @ts-expect-error ML-KEM ciphertext transport requires bytes.
 cube.execute({operation:'crypto.ml_kem.decapsulate',version:1,inputs:{ciphertext:'deadbeef',private_key:mlKemKeys.private_key},parameters:kemParameters});
+
+const kyberShared: Uint8Array = cube.execute({operation:'crypto.kyber.decapsulate',version:1,inputs:{ciphertext:new Uint8Array(768),private_key:new Uint8Array(1632)},parameters:{profile:'kyber512_round3_shake'}}).shared_secret;
+void kyberShared;
+// @ts-expect-error Final ML-KEM parameters cannot select a historical Kyber profile.
+cube.execute({operation:'crypto.kyber.decapsulate',version:1,inputs:{ciphertext:new Uint8Array(768),private_key:new Uint8Array(1632)},parameters:{profile:'ml_kem_512_fips203'}});

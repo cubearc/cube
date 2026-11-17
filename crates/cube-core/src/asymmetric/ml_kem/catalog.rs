@@ -1,4 +1,5 @@
 use super::*;
+use crate::asymmetric::kem_wire::{byte_port as port, byte_schema};
 use crate::operations::{self as o, contracts as c, metadata as m};
 use serde_json::{Value, json};
 
@@ -99,25 +100,6 @@ const PROFILED: [m::Entry; 3] = [
     ),
 ];
 pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
-
-fn byte_schema<const MIN: usize, const MAX: usize>() -> schemars::Schema {
-    let mut schema = c::schema::<c::values::Bytes>().to_value();
-    let property = &mut schema["properties"]["base64"];
-    property["minLength"] = json!(MIN.div_ceil(3) * 4);
-    property["maxLength"] = json!(MAX.div_ceil(3) * 4);
-    property["x-cube-min-decoded-bytes"] = json!(MIN);
-    property["x-cube-max-decoded-bytes"] = json!(MAX);
-    schemars::Schema::try_from(schema).expect("bounded KEM byte port")
-}
-
-const fn port(name: &'static str, schema: fn() -> schemars::Schema) -> c::Port {
-    c::Port {
-        name,
-        semantic_type: "bytes",
-        schema,
-        required: true,
-    }
-}
 
 const PUBLIC_KEY: c::Port = port("public_key", byte_schema::<800, MAX_PUBLIC_KEY>);
 const PRIVATE_KEY: c::Port = port("private_key", byte_schema::<1632, MAX_PRIVATE_KEY>);

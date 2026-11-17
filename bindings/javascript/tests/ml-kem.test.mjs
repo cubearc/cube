@@ -45,3 +45,27 @@ test('qualification rejects unrelated KEM keys and corrupted shared secrets', as
     await assert.rejects(verifyFixtureResult({ fixture, actual, contract: { deterministic: false }, execute }), /KEM peers disagreed/);
   }
 });
+
+test('Kyber Round 3 uses the exact historical shared secret and implicit rejection', async () => {
+  const vectors = JSON.parse(await readFile(new URL(`${path}asymmetric/kyber/vectors.json`, import.meta.url), 'utf8'));
+  for (const vector of vectors.profiles) {
+    const parameters = { profile: vector.profile };
+    const private_key = fromHex(vector.dk);
+    for (const [input, expected] of [['ciphertext', 'shared_secret'], ['modified_ciphertext', 'rejection_secret']]) {
+      const result = cube.execute({operation:'crypto.kyber.decapsulate',version:1,inputs:{ciphertext:fromHex(vector[input]),private_key},parameters});
+      assert.ok(Buffer.from(result.shared_secret).equals(fromHex(vector[expected])));
+    }
+  }
+});
+
+test('alternate KEM profiles match external key and ciphertext vectors in Wasm', async () => {
+  const fixtures = JSON.parse(await readFile(new URL(`${path}operations/contracts/conformance.json`, import.meta.url), 'utf8'));
+  const execute = sdkWireExecutor(cube);
+  for (const family of ['frodo_kem', 'hqc', 'classic_mceliece']) {
+    const operation = `crypto.${family}.decapsulate`;
+    const fixture = fixtures.find(row => row.operation === operation);
+    const request = { operation, version: 1, inputs: fixture.inputs, parameters: fixture.parameters };
+    assert.deepEqual(execute(request), fixture.outputs);
+    assert.throws(() => execute({ ...request, parameters: { profile: 'not_the_profile' } }));
+  }
+});

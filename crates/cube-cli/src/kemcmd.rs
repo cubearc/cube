@@ -1,6 +1,9 @@
 //! Bounded binary KEM input files and a named Base64 JSON result.
 use clap::{Args, Subcommand};
-use cube_core::{asymmetric::ml_kem, encoding::base64_encode};
+use cube_core::{
+    asymmetric::{alternate_kem, kyber, ml_kem},
+    encoding::base64_encode,
+};
 use serde::Serialize;
 use std::{
     error::Error,
@@ -19,21 +22,31 @@ pub(crate) enum Command {
         #[arg(long)]
         key_file: PathBuf,
     },
-    Decapsulate {
-        #[command(flatten)]
-        settings: Settings,
-        /// Raw FIPS 203 expanded decapsulation key
-        #[arg(long)]
-        key_file: PathBuf,
-        /// Raw ciphertext. Reads stdin when omitted.
-        #[arg(short = 'f', long)]
-        file: Option<PathBuf>,
-    },
+    Decapsulate(Decapsulation),
+}
+
+#[derive(Subcommand)]
+pub(crate) enum KyberCommand {
+    Decapsulate(Decapsulation),
+}
+
+pub(crate) use KyberCommand as RawKemCommand;
+
+#[derive(Args)]
+pub(crate) struct Decapsulation {
+    #[command(flatten)]
+    settings: Settings,
+    /// Raw expanded decapsulation key
+    #[arg(long)]
+    key_file: PathBuf,
+    /// Raw ciphertext. Reads stdin when omitted.
+    #[arg(short = 'f', long)]
+    file: Option<PathBuf>,
 }
 
 #[derive(Args)]
 pub(crate) struct Settings {
-    /// JSON containing the explicit FIPS 203 profile
+    /// JSON containing the explicit key encapsulation profile
     #[arg(long)]
     parameters_file: PathBuf,
 }
@@ -102,24 +115,55 @@ pub(crate) fn run(command: Command, writer: &mut impl Write) -> Result<(), Box<d
                 },
             )?;
         }
-        Command::Decapsulate {
-            settings,
-            key_file,
-            file,
-        } => {
-            let key = Zeroizing::new(read(key_file, ml_kem::MAX_PRIVATE_KEY)?);
-            let ct = crate::Input::file_or_stdin(file)
+        Command::Decapsulate(args) => {
+            let profile = args.settings.profile()?;
+            let key = Zeroizing::new(read(args.key_file, ml_kem::MAX_PRIVATE_KEY)?);
+            let ct = crate::Input::file_or_stdin(args.file)
                 .read_bounded(ml_kem::MAX_CIPHERTEXT, ml_kem::DECAPSULATE)?;
-            let shared = ml_kem::decapsulate(&ct, &key, settings.profile()?)?;
-            let encoded = Zeroizing::new(base64_encode(&shared[..]));
-            serde_json::to_writer(
-                &mut *writer,
-                &SharedSecret {
-                    shared_secret: Bytes { base64: &encoded },
-                },
-            )?;
+            return write_shared(writer, &ml_kem::decapsulate(&ct, &key, profile)?[..]);
         }
     }
     writer.write_all(b"\n")?;
     Ok(())
+}
+
+pub(crate) fn run_kyber(
+    command: KyberCommand,
+    writer: &mut impl Write,
+) -> Result<(), Box<dyn Error>> {
+    let KyberCommand::Decapsulate(args) = command;
+    let document = read(args.settings.parameters_file, kyber::MAX_PARAMETERS)?;
+    let profile = kyber::Profile::parse(std::str::from_utf8(&document)?)?;
+    let key = Zeroizing::new(read(args.key_file, kyber::MAX_PRIVATE_KEY)?);
+    let ct = crate::Input::file_or_stdin(args.file)
+        .read_bounded(kyber::MAX_CIPHERTEXT, kyber::DECAPSULATE)?;
+    write_shared(writer, &kyber::decapsulate(&ct, &key, profile)?[..])
+}
+
+fn write_shared(writer: &mut impl Write, shared: &[u8]) -> Result<(), Box<dyn Error>> {
+    let encoded = Zeroizing::new(base64_encode(shared));
+    serde_json::to_writer(
+        &mut *writer,
+        &SharedSecret {
+            shared_secret: Bytes { base64: &encoded },
+        },
+    )?;
+    writer.write_all(b"\n")?;
+    Ok(())
+}
+
+pub(crate) fn run_alternate(
+    command: RawKemCommand,
+    profile: alternate_kem::Profile,
+    writer: &mut impl Write,
+) -> Result<(), Box<dyn Error>> {
+    let RawKemCommand::Decapsulate(args) = command;
+    let document = read(args.settings.parameters_file, alternate_kem::MAX_PARAMETERS)?;
+    profile.validate_parameters(std::str::from_utf8(&document)?)?;
+    let (key_bytes, ciphertext_bytes, _) = profile.widths();
+    let key = Zeroizing::new(read(args.key_file, key_bytes)?);
+    let ciphertext = crate::Input::file_or_stdin(args.file)
+        .read_bounded(ciphertext_bytes, profile.operation())?;
+    let shared = alternate_kem::decapsulate(&ciphertext, &key, profile)?;
+    write_shared(writer, &shared)
 }

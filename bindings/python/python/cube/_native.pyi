@@ -2651,3 +2651,23 @@ def ml_kem_decapsulate(
     ciphertext: bytes, private_key: bytes, parameters_json: str
 ) -> bytes:
     """Return a 32-byte FIPS 203 shared secret with implicit rejection."""
+
+def kyber_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Return the 32-byte shared secret from a Kyber 3.0 SHAKE exchange."""
+
+def frodo_kem_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Decapsulate one raw ciphertext with the explicit frodo kem profile."""
+
+def hqc_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Decapsulate one raw ciphertext with the explicit hqc profile."""
+
+def classic_mceliece_decapsulate(
+    ciphertext: bytes, private_key: bytes, parameters_json: str
+) -> bytes:
+    """Decapsulate one raw ciphertext with the explicit classic mceliece profile."""

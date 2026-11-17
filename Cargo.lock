@@ -968,11 +968,13 @@ dependencies = [
  "des",
  "eax",
  "ecb",
+ "frodo-kem",
  "getrandom 0.2.17",
  "gift-cipher",
  "hc-256",
  "hex",
  "hmac 0.13.0",
+ "hqc-kem",
  "html5gum",
  "idea",
  "image",
@@ -991,6 +993,7 @@ dependencies = [
  "p256 0.14.0",
  "pbkdf2 0.13.0",
  "png",
+ "pq-mceliece",
  "quircs",
  "rabbit",
  "rand_core 0.10.1",
@@ -1433,6 +1436,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "frodo-kem"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8b0e5e1969f9d7cbfb3a2ce3c7e76a42f1b145a14f686160bc6210a494450591"
+dependencies = [
+ "rand_core 0.10.1",
+ "serdect",
+ "sha3 0.11.0",
+ "subtle",
+ "thiserror 2.0.21",
+ "zeroize",
+]
+
+[[package]]
 name = "futures"
 version = "0.3.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1799,6 +1816,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "hqc-kem"
+version = "0.1.0-rc.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a17f8c7ca9e20957a346a39a110c8f05a4c9fdb9ce2bb15d08a1a72ecec44710"
+dependencies = [
+ "ctutils",
+ "rand 0.10.4",
+ "sha3 0.12.0",
+ "shake",
+ "subtle",
+ "thiserror 2.0.21",
+ "zeroize",
+]
+
+[[package]]
 name = "html5gum"
 version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2141,8 +2173,6 @@ dependencies = [
 [[package]]
 name = "libcrux-ml-kem"
 version = "0.0.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ceed00367748ec0b545bc4a7b0521f8c9fd476d02484340f0a95b0f45f828cd"
 dependencies = [
  "hax-lib 0.4.2",
  "libcrux-intrinsics",
@@ -2738,6 +2768,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
 dependencies = [
  "zerocopy",
+]
+
+[[package]]
+name = "pq-mceliece"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1eedaa25b6a7dedcddf5417a1f41b405d84cc6d80aec4b6b9aae26facb0a33ed"
+dependencies = [
+ "ctutils",
+ "shake",
+ "thiserror 2.0.21",
+ "zeroize",
 ]
 
 [[package]]
@@ -3463,9 +3505,30 @@ dependencies = [
 
 [[package]]
 name = "sha3"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be176f1a57ce4e3d31c1a166222d9768de5954f811601fb7ca06fc8203905ce1"
+dependencies = [
+ "digest 0.11.3",
+ "keccak 0.2.2",
+]
+
+[[package]]
+name = "sha3"
 version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc9bad02c26382724b2d2692c6f179285e4b54eeecd7968f52a50059c3c11759"
+dependencies = [
+ "digest 0.11.3",
+ "keccak 0.2.2",
+ "sponge-cursor",
+]
+
+[[package]]
+name = "shake"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09057cb2149ad4cbd2da1e26b351f9a4c354219421229c69c3063e6f61947c4a"
 dependencies = [
  "digest 0.11.3",
  "keccak 0.2.2",
@@ -3575,6 +3638,9 @@ name = "sponge-cursor"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3a0219bd7d979d58245a4f41f695e1ac9f8befdffadd7f61f1bae9e39abc6620"
+dependencies = [
+ "zeroize",
+]
 
 [[package]]
 name = "strength_reduce"

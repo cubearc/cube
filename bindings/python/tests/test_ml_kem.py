@@ -35,3 +35,49 @@ def test_acvp_and_fresh_key_exchange(vector):
         cube.ml_kem_decapsulate(ciphertext, private[:-1], parameters)
     with pytest.raises(ValueError):
         cube.ml_kem_encapsulate(public, '{"profile":"kyber768"}')
+
+
+@pytest.mark.parametrize("index", range(3))
+def test_historical_kyber_vectors(index):
+    path = (
+        Path(__file__).parents[3] / "crates/cube-core/src/asymmetric/kyber/vectors.json"
+    )
+    vector = json.loads(path.read_text())["profiles"][index]
+    profile = json.dumps({"profile": vector["profile"]})
+    key = bytes.fromhex(vector["dk"])
+    ciphertext = bytes.fromhex(vector["ciphertext"])
+    assert cube.kyber_decapsulate(ciphertext, key, profile) == bytes.fromhex(
+        vector["shared_secret"]
+    )
+    assert cube.kyber_decapsulate(
+        bytes.fromhex(vector["modified_ciphertext"]), key, profile
+    ) == bytes.fromhex(vector["rejection_secret"])
+    with pytest.raises(ValueError):
+        cube.kyber_decapsulate(ciphertext[:-1], key, profile)
+
+
+@pytest.mark.parametrize(
+    ("operation", "name", "profile"),
+    [
+        (cube.frodo_kem_decapsulate, "frodo640", "frodokem640_shake_salted"),
+        (cube.hqc_decapsulate, "hqc128", "hqc128_20260210_submission"),
+        (
+            cube.classic_mceliece_decapsulate,
+            "mceliece460896f",
+            "mceliece460896f_round4",
+        ),
+    ],
+)
+def test_alternate_kems_match_external_answers(operation, name, profile):
+    directory = (
+        Path(__file__).parents[3] / "crates/cube-core/src/asymmetric/alternate_kem"
+    )
+    vector = json.loads((directory / f"{name}.json").read_text())
+    ciphertext = bytes.fromhex(vector["ct"])
+    private_key = bytes.fromhex(vector["sk"])
+    parameters = json.dumps({"profile": profile})
+    assert operation(ciphertext, private_key, parameters) == bytes.fromhex(vector["ss"])
+    with pytest.raises(ValueError):
+        operation(ciphertext[:-1], private_key, parameters)
+    with pytest.raises(ValueError):
+        operation(ciphertext, private_key, '{"profile":"other"}')

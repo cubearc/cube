@@ -26,6 +26,45 @@ calls. This relation verifies every output without substituting a random result
 for a fixed known answer. Interoperability uses the named FIPS 203 profiles and
 their exact byte lengths. See [ML-KEM reference](../reference/topics/ml-kem.md).
 
+Kyber compatibility calls the distinct Libcrux Round 3 SHAKE decapsulation API
+for all three historical parameter sets. Key-generation domain separation,
+encapsulation preprocessing and the rejection-output KDF differ between
+historical Kyber and the standardized ML-KEM algorithms. The independent
+[original v3.0 reference](https://github.com/pq-crystals/kyber/tree/8e9308bd0f25fa698e4f37aba216249261f8b352/ref)
+produced one valid and one modified ciphertext per parameter set. Core tests
+check the exact historical outputs and the different result through the final
+ML-KEM profile for the same bytes. The backend's historical Kyber code is
+outside the upstream ML-KEM formal-verification claim.
+
+Libcrux 0.0.11 matched the original valid Kyber outputs. The modified-ciphertext
+vectors exposed a different rejection derivation. The pinned local source patch
+uses the historical pre-key `z` for Kyber rejection and retains the FIPS 203
+derivation and shared constant-time selection. The pinned ACVP tests also
+exercise the FIPS 203 behavior after the patch.
+
+## Alternate KEM qualification
+
+The fixed decapsulation profiles use portable Rust backends. The exact
+encoding and recognized reference bytes are part of each profile.
+
+| Profile | Backend | Independent reference |
+| --- | --- | --- |
+| Salted FrodoKEM-640-SHAKE | `frodo-kem` 0.1.0 (`c1dfcd2ddf55b48218bfda359f3138b32d5ff5cd`) | Microsoft `PQCrypto-LWEKE` `a2f9dec8917ccc3464b3378d46b140fa7353320d`, salted SHAKE KAT count 0 |
+| HQC-128, February 2026 submission | `hqc-kem` 0.1.0-rc.0 (`1a50023ab1dcebaaf500646589c76a3f0efade1f`) | HQC reference `161cd4f`, level 1 KAT count 0 |
+| Classic McEliece 460896f, Round 4 | `pq-mceliece` 0.3.0 (`e34039fc546a70db3991b98ef1f7ec6ccf734f3c`) | liboqs 0.15.0 portable reference, deterministic NIST KAT seed stream |
+
+The two RustCrypto backends and `pq-mceliece` provide Apache-2.0 or MIT
+licensing. Notices accompany the source and SDK packages. Only the selected
+parameter-set features are enabled. The crate review and interoperability
+tests do not establish a security audit or certify a protocol. The HQC profile
+names the submission date to prevent confusion with later encodings.
+
+The recognized valid cases are compared byte for byte. Core also tests
+modified ciphertexts, short and oversized inputs, and wrong profiles. Core
+wipes its owned shared-secret buffers and discards and wipes FrodoKEM's
+internal decoded message. Backend and caller copies may persist. See
+[alternate KEM profiles](../reference/topics/alternate-kem.md) for API bounds.
+
 ## ECDH profiles
 
 Reviewed on 2026-11-17: `x25519-dalek` 2.0.1 (BSD-3-Clause) uses

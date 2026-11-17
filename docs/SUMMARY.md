@@ -67,6 +67,7 @@
     - [AES key wrapping](reference/topics/key-wrapping.md)
     - [Raw key agreement](reference/topics/key-agreement.md)
     - [ML-KEM key encapsulation](reference/topics/ml-kem.md)
+    - [Alternate KEM profiles](reference/topics/alternate-kem.md)
     - [Historical public-key references](reference/topics/historical-public-key.md)
     - [Raw ElGamal and Cramer–Shoup](reference/topics/group-encryption.md)
     - [ECIES and DHIES](reference/topics/ies.md)

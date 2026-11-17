@@ -625,6 +625,26 @@ enum Cipher {
         #[command(subcommand)]
         command: kemcmd::Command,
     },
+    /// Recover a shared secret from a historical Kyber 3.0 SHAKE exchange
+    Kyber {
+        #[command(subcommand)]
+        command: kemcmd::KyberCommand,
+    },
+    /// Salted FrodoKEM-640-SHAKE raw decapsulation
+    FrodoKem {
+        #[command(subcommand)]
+        command: kemcmd::RawKemCommand,
+    },
+    /// HQC-128 decapsulation for the February 2026 submission
+    Hqc {
+        #[command(subcommand)]
+        command: kemcmd::RawKemCommand,
+    },
+    /// Classic McEliece 460896f Round 4 raw decapsulation
+    ClassicMceliece {
+        #[command(subcommand)]
+        command: kemcmd::RawKemCommand,
+    },
     /// Authenticate a bounded binary agev1/X25519 file before output
     Age {
         #[command(subcommand)]
@@ -1244,6 +1264,28 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::Dh { command } => return dhcmd::run(command, &mut output),
                 Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),
                 Cipher::MlKem { command } => return kemcmd::run(command, &mut output),
+                Cipher::Kyber { command } => return kemcmd::run_kyber(command, &mut output),
+                Cipher::FrodoKem { command } => {
+                    return kemcmd::run_alternate(
+                        command,
+                        cube_core::asymmetric::alternate_kem::Profile::Frodo640Shake,
+                        &mut output,
+                    );
+                }
+                Cipher::Hqc { command } => {
+                    return kemcmd::run_alternate(
+                        command,
+                        cube_core::asymmetric::alternate_kem::Profile::Hqc128February2026,
+                        &mut output,
+                    );
+                }
+                Cipher::ClassicMceliece { command } => {
+                    return kemcmd::run_alternate(
+                        command,
+                        cube_core::asymmetric::alternate_kem::Profile::McEliece460896f,
+                        &mut output,
+                    );
+                }
                 Cipher::Age { command } => return agecmd::run(command, &mut output),
                 Cipher::Openssl { command } => return opensslcmd::run(command, &mut output),
                 Cipher::Fpe { command } => return fpecmd::run(command, &mut output),

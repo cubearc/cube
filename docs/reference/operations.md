@@ -30680,6 +30680,53 @@ Example:
 cube cipher xxtea encrypt --key-file key.bin --file words.bin
 ```
 
+## crypto.classic_mceliece.decapsulate
+
+Decapsulate Classic McEliece 460896f
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required exact raw KEM profile.",
+      "type": "string",
+      "enum": [
+        "mceliece460896f_round4"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher classic-mceliece decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
 ## crypto.dh.agree
 
 RFC7919 named finite-field raw agreement with subgroup validation; no authentication or KDF.
@@ -30791,6 +30838,155 @@ Example:
 
 ```sh
 cube cipher ecdh agree --parameters-file settings.json --file peer.bin
+```
+
+## crypto.frodo_kem.decapsulate
+
+Decapsulate FrodoKEM-640-SHAKE
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required exact raw KEM profile.",
+      "type": "string",
+      "enum": [
+        "frodokem640_shake_salted"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher frodo-kem decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## crypto.hqc.decapsulate
+
+Decapsulate HQC-128 February 2026
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "description": "Required exact raw KEM profile.",
+      "type": "string",
+      "enum": [
+        "hqc128_20260210_submission"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher hqc decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
+```
+
+## crypto.kyber.decapsulate
+
+Decapsulate historical CRYSTALS-Kyber 3.0 Round 3 SHAKE ciphertexts using an explicit raw key profile.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ciphertext` | `bytes` |
+| Input | `private_key` | `bytes` |
+| Output | `shared_secret` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "description": "Explicit SHAKE parameter set of CRYSTALS-Kyber 3.0 Round 3.",
+      "type": "string",
+      "enum": [
+        "kyber512_round3_shake",
+        "kyber768_round3_shake",
+        "kyber1024_round3_shake"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher kyber decapsulate --parameters-file settings.json --key-file legacy.bin --file ciphertext.bin
 ```
 
 ## crypto.ml_kem.decapsulate

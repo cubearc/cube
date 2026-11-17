@@ -517,6 +517,8 @@ const MODULES: &[Module] = &[
     crate::asymmetric::group_encryption::MODULE,
     crate::asymmetric::historical_public_key::MODULE,
     crate::asymmetric::ml_kem::MODULE,
+    crate::asymmetric::kyber::MODULE,
+    crate::asymmetric::alternate_kem::MODULE,
 ];
 pub fn catalog() -> Vec<&'static Descriptor> {
     MODULES

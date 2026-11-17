@@ -1,7 +1,7 @@
 [workspace]
 members = ["crates/cube-core", "crates/cube-cli", "bindings/python", "bindings/javascript/wasm"]
 resolver = "3"
-exclude = ["vendor/salsa20"]
+exclude = ["vendor/salsa20", "vendor/libcrux-ml-kem"]
 
 [workspace.package]
 version = "0.18.0"

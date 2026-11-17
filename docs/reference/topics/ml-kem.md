@@ -58,3 +58,24 @@ with `Uint8Array` values.
 
 See [FIPS 203](https://csrc.nist.gov/pubs/fips/203/final) and the
 [backend qualification](../../contributing/asymmetric-backends.md#ml-kem-qualification).
+
+## Recover a Kyber Round 3 shared secret
+
+`crypto.kyber.decapsulate` reads raw SHAKE ciphertext and expanded private-key
+bytes from a CRYSTALS-Kyber 3.0 exchange. Match the profile recorded by the
+sender. The byte widths match the corresponding ML-KEM sizes in the table, so
+the encoding cannot identify which algorithm produced the ciphertext.
+
+| Profile | Private key | Ciphertext |
+| --- | ---: | ---: |
+| `kyber512_round3_shake` | 1,632 | 768 |
+| `kyber768_round3_shake` | 2,400 | 1,088 |
+| `kyber1024_round3_shake` | 3,168 | 1,568 |
+
+Use `cube cipher kyber decapsulate --parameters-file settings.json --key-file
+legacy.bin --file ciphertext.bin` or `kyber_decapsulate(ciphertext, private_key,
+parameters_json)` in Python. JavaScript uses the `ciphertext` and `private_key`
+byte ports and returns `shared_secret`. The 32-byte output uses historical
+implicit rejection for a correct-width ciphertext. Wrong lengths, an invalid
+expanded-key hash or an unknown profile return an error. Play retention and
+resource bounds match the raw ML-KEM decapsulation interface.

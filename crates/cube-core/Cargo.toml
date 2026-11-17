@@ -7,7 +7,10 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-libcrux-ml-kem = { version = "=0.0.11", default-features = false, features = ["mlkem512", "mlkem768", "mlkem1024"] }
+frodo-kem = { version = "=0.1.0", default-features = false, features = ["frodo640shake"] }
+hqc-kem = { version = "=0.1.0-rc.0", default-features = false, features = ["dcap"] }
+pq-mceliece = { version = "=0.3.0", default-features = false, features = ["mceliece460896f", "decapsulate"] }
+libcrux-ml-kem = { path = "../../vendor/libcrux-ml-kem", version = "=0.0.11", default-features = false, features = ["mlkem512", "mlkem768", "mlkem1024", "kyber"] }
 rsa = { version = "=0.10.0", default-features = false, features = ["std", "encoding", "pkcs1v15"] }
 sm2 = { version = "=0.14.0", default-features = false, features = ["std", "pke", "pkcs8"] }
 sm3 = { version = "=0.5.0", default-features = false, features = ["zeroize"] }

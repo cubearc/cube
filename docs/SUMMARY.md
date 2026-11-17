@@ -109,7 +109,8 @@
     - [Block backend qualification](contributing/block-backends.md)
     - [Stream backend qualification](contributing/stream-backends.md)
     - [Authenticated backend qualification](contributing/authenticated-backends.md)
+    - [Authenticated envelope qualification](contributing/authenticated-envelopes.md)
+    - [Checked cryptographic vectors](contributing/crypto-vectors.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
     - [Classical analysis research](research/classical-analysis-evaluation.md)
 
-- [Authenticated envelope qualification](contributing/authenticated-envelopes.md)

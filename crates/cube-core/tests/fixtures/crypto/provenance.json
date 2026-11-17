@@ -1,0 +1,90 @@
+{
+  "format_version": 1,
+  "total_cases": 585,
+  "corpora": [
+    {
+      "corpus": "aes_modes",
+      "formats": [
+        "nist_spec",
+        "nist_cavp",
+        "independent_capture"
+      ],
+      "sha256": "6d9c4f36bcf031d2322af098c4dfa45ad6a33044a289563cdc571b68f51dcb81",
+      "cases": 71
+    },
+    {
+      "corpus": "key_wrap",
+      "formats": [
+        "nist_cavp"
+      ],
+      "sha256": "410f7d516cd79842005bf7cb9d706f521ce95e3ea1b6b464ce8499cfc6ae4fb0",
+      "cases": 60
+    },
+    {
+      "corpus": "key_wrap_invalid",
+      "formats": [
+        "nist_cavp"
+      ],
+      "sha256": "aa2764eb05d2e9894190c3a7d9587e5b49012bb32131bb0e90fe0a176db61527",
+      "cases": 54
+    },
+    {
+      "corpus": "aead",
+      "formats": [
+        "backend_kat",
+        "independent_capture"
+      ],
+      "sha256": "761088b4aedd2fdc4c42b976fc2dc3b1fc2cba6570588daac85772cb31a02743",
+      "cases": 152
+    },
+    {
+      "corpus": "siv",
+      "formats": [
+        "backend_kat"
+      ],
+      "sha256": "fadffcfc9db2ccca3f6432f1c10b8c8ed17b139802c387a98f6c4a1c402546d6",
+      "cases": 16
+    },
+    {
+      "corpus": "fpe",
+      "formats": [
+        "nist_spec",
+        "backend_kat"
+      ],
+      "sha256": "1fe356cfd84b31501eb49274ed6c2f3f751e639458128daba60bed94c04083ce",
+      "cases": 27
+    },
+    {
+      "corpus": "openssl",
+      "formats": [
+        "independent_capture"
+      ],
+      "sha256": "2c097f576dd228640ec0fff49704f0e352018ea2412d3cc5c887564fabfbd6fd",
+      "cases": 48
+    },
+    {
+      "corpus": "openssl_wrong_pad",
+      "formats": [
+        "independent_capture"
+      ],
+      "sha256": "185e8982fa0d8228535ffaec0249f6377ce7856299f465ad7cf5bd1d7ddf7d26",
+      "cases": 1
+    },
+    {
+      "corpus": "age",
+      "formats": [
+        "cctv"
+      ],
+      "sha256": "2e4fcb15ed9bbc8764da6fe5937f3445dbecc622c4cdf76c7750b6e41909d15f",
+      "cases": 23
+    },
+    {
+      "corpus": "wycheproof",
+      "formats": [
+        "wycheproof"
+      ],
+      "sha256": "bc1cdd3db049f9cfb4d77bd746698550cd0880f9436b7e946652944265dc2ed6",
+      "cases": 133
+    }
+  ]
+}

@@ -169,5 +169,668 @@
     },
     "plaintext_hex": "6bc1bee22e409f96e93d7e117393172aae2d8a571e03ac9c9eb76fac45af8e5130c81c46a35ce411e5fbc1191a0a52eff69f2445df4f9b17ad2b417be66c37",
     "ciphertext_hex": "874d6191b620e3261bef6864990db6ce9806f66b7970fdff8617187bb9fffdff5ae4df3edbd5d35e5b4f09020db03eab1e031dda2fbe03d1792170a0f3009c"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 0,
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b652074686520",
+    "ciphertext_hex": "97c6353568f2bf8cb4d8a580362da7ff7f"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 0,
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b652074686520",
+    "ciphertext_hex": "c6353568f2bf8cb4d8a580362da7ff7f97"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 0,
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b652074686520",
+    "ciphertext_hex": "c6353568f2bf8cb4d8a580362da7ff7f97"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 1,
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe5fc00783e0efdb2c1d445d4c8eff7ed22"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 1,
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320",
+    "ciphertext_hex": "fc00783e0efdb2c1d445d4c8eff7ed2297687268d6ecccc0c07b25e25ecfe5"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 1,
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320",
+    "ciphertext_hex": "fc00783e0efdb2c1d445d4c8eff7ed2297687268d6ecccc0c07b25e25ecfe5"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 2,
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c2047617527732043",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a8"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 2,
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c2047617527732043",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a8"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 2,
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c2047617527732043",
+    "ciphertext_hex": "39312523a78662d5be7fcbcc98ebf5a897687268d6ecccc0c07b25e25ecfe584"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 3,
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5b3fffd940c16a18c1b5549d2f838029e"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 3,
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe584b3fffd940c16a18c1b5549d2f838029e39312523a78662d5be7fcbcc98ebf5"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 3,
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe584b3fffd940c16a18c1b5549d2f838029e39312523a78662d5be7fcbcc98ebf5"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 4,
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c20",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a89dad8bbb96c4cdc03bc103e1a194bbd8"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 4,
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c20",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a89dad8bbb96c4cdc03bc103e1a194bbd8"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 4,
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c20",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe5849dad8bbb96c4cdc03bc103e1a194bbd839312523a78662d5be7fcbcc98ebf5a8"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 5,
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c20616e6420776f6e746f6e20736f75702e",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a89dad8bbb96c4cdc03bc103e1a194bbd84807efe836ee89a526730dbc2f7bc840"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 5,
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c20616e6420776f6e746f6e20736f75702e",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a89dad8bbb96c4cdc03bc103e1a194bbd84807efe836ee89a526730dbc2f7bc840"
+  },
+  {
+    "source": "RFC3962 Appendix B; NIST38A addendum segment ordering",
+    "source_sha256": "f4859c67a7781cf1a16de0961f25ac02da7b2ad961df36b0c04f9a301d879486",
+    "source_case": 5,
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "636869636b656e207465726979616b69",
+      "iv_hex": "00000000000000000000000000000000"
+    },
+    "plaintext_hex": "4920776f756c64206c696b65207468652047656e6572616c20476175277320436869636b656e2c20706c656173652c20616e6420776f6e746f6e20736f75702e",
+    "ciphertext_hex": "97687268d6ecccc0c07b25e25ecfe58439312523a78662d5be7fcbcc98ebf5a84807efe836ee89a526730dbc2f7bc8409dad8bbb96c4cdc03bc103e1a194bbd8"
+  },
+  {
+    "source": "NIST38A Appendix F single-block CBC; CTS minimum from addendum",
+    "parameters": {
+      "mode": "cbc_cs1",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172a",
+    "ciphertext_hex": "7649abac8119b246cee98e9b12e9197d"
+  },
+  {
+    "source": "NIST38A Appendix F single-block CBC; CTS minimum from addendum",
+    "parameters": {
+      "mode": "cbc_cs2",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172a",
+    "ciphertext_hex": "7649abac8119b246cee98e9b12e9197d"
+  },
+  {
+    "source": "NIST38A Appendix F single-block CBC; CTS minimum from addendum",
+    "parameters": {
+      "mode": "cbc_cs3",
+      "key_hex": "2b7e151628aed2a6abf7158809cf4f3c",
+      "iv_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "6bc1bee22e409f96e93d7e117393172a",
+    "ciphertext_hex": "7649abac8119b246cee98e9b12e9197d"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "1",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "a1b90cba3f06ac353b2c343876081762090923026e91771815f29dab01932f2f",
+      "tweak_hex": "4faef7117cda59c66e4b92013e768ad5"
+    },
+    "plaintext_hex": "ebabce95b14d3c8d6fb350390790311c",
+    "ciphertext_hex": "778ae8b43cb98d5a825081d5be471c63"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "1",
+    "parameters": {
+      "mode": "xex_aes128_ieee1619_full_blocks",
+      "key_hex": "a1b90cba3f06ac353b2c343876081762090923026e91771815f29dab01932f2f",
+      "tweak_hex": "4faef7117cda59c66e4b92013e768ad5"
+    },
+    "plaintext_hex": "ebabce95b14d3c8d6fb350390790311c",
+    "ciphertext_hex": "778ae8b43cb98d5a825081d5be471c63"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "2",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "8f59462c1327fd6411cb6b02c04bf0a129f145c276a38693c745de3118c90a2f",
+      "tweak_hex": "f2b86793b29e730e4a627b6ee161706c"
+    },
+    "plaintext_hex": "f7049f8aa312aeb1ab99ad11a1d7a720",
+    "ciphertext_hex": "e59fca86c3c906f3df67418636a28767"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "2",
+    "parameters": {
+      "mode": "xex_aes128_ieee1619_full_blocks",
+      "key_hex": "8f59462c1327fd6411cb6b02c04bf0a129f145c276a38693c745de3118c90a2f",
+      "tweak_hex": "f2b86793b29e730e4a627b6ee161706c"
+    },
+    "plaintext_hex": "f7049f8aa312aeb1ab99ad11a1d7a720",
+    "ciphertext_hex": "e59fca86c3c906f3df67418636a28767"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "3",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "e4eb402fae4395ff08e1280b0cd4d356e7a1e8c28aad13b9a6fef8b88ccd2e84",
+      "tweak_hex": "b611ff70e6653cb68b14354f2b3cba74"
+    },
+    "plaintext_hex": "132097c5236eddea183235ba1e7b50f9",
+    "ciphertext_hex": "268160fa57392906007199d45e988e56"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "3",
+    "parameters": {
+      "mode": "xex_aes128_ieee1619_full_blocks",
+      "key_hex": "e4eb402fae4395ff08e1280b0cd4d356e7a1e8c28aad13b9a6fef8b88ccd2e84",
+      "tweak_hex": "b611ff70e6653cb68b14354f2b3cba74"
+    },
+    "plaintext_hex": "132097c5236eddea183235ba1e7b50f9",
+    "ciphertext_hex": "268160fa57392906007199d45e988e56"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "101",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "b7b93f516aef295eff3a29d837cf1f135347e8a21dae616ff5062b2e8d78ce5e",
+      "tweak_hex": "873edea653b643bd8bcf51403197ed14"
+    },
+    "plaintext_hex": "236f8a5b58dd55f6194ed70c4ac1a17f1fe60ec9a6c454d087ccb77d6b638c47",
+    "ciphertext_hex": "22e6a3c6379dcf7599b052b5a749c7f78ad8a11b9f1aa9430cf3aef445682e19"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "101",
+    "parameters": {
+      "mode": "xex_aes128_ieee1619_full_blocks",
+      "key_hex": "b7b93f516aef295eff3a29d837cf1f135347e8a21dae616ff5062b2e8d78ce5e",
+      "tweak_hex": "873edea653b643bd8bcf51403197ed14"
+    },
+    "plaintext_hex": "236f8a5b58dd55f6194ed70c4ac1a17f1fe60ec9a6c454d087ccb77d6b638c47",
+    "ciphertext_hex": "22e6a3c6379dcf7599b052b5a749c7f78ad8a11b9f1aa9430cf3aef445682e19"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "102",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "750372c3d82f63382867be6662acfa4a259be3fa9bc662a1154ffaaed8b448a5",
+      "tweak_hex": "93a29254c47e4260669621307d4f5cd3"
+    },
+    "plaintext_hex": "d8e3a56559a436ce0d8b212c80a88b23af62b0e598f208e03c1f2e9fa563a54b",
+    "ciphertext_hex": "495f7855535efd133464dc9a9abf8a0f28facbce21bd3c22178ec489b799e491"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "102",
+    "parameters": {
+      "mode": "xex_aes128_ieee1619_full_blocks",
+      "key_hex": "750372c3d82f63382867be6662acfa4a259be3fa9bc662a1154ffaaed8b448a5",
+      "tweak_hex": "93a29254c47e4260669621307d4f5cd3"
+    },
+    "plaintext_hex": "d8e3a56559a436ce0d8b212c80a88b23af62b0e598f208e03c1f2e9fa563a54b",
+    "ciphertext_hex": "495f7855535efd133464dc9a9abf8a0f28facbce21bd3c22178ec489b799e491"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "103",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "46187e8ad7b6326f31e71685fa92ba95f53a39c6f64c09e8d3d649e194f7ae6c",
+      "tweak_hex": "033c759ba1dbf346eb125c8eb84e3646"
+    },
+    "plaintext_hex": "e211b2b7511a43a88df116cf6ff06a296a63089d74831569090a2fb8e31f4130",
+    "ciphertext_hex": "1166257c5973d23e14dde02bf345e53b0da2e5ca765598c7e84ae3698afdf6b3"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "103",
+    "parameters": {
+      "mode": "xex_aes128_ieee1619_full_blocks",
+      "key_hex": "46187e8ad7b6326f31e71685fa92ba95f53a39c6f64c09e8d3d649e194f7ae6c",
+      "tweak_hex": "033c759ba1dbf346eb125c8eb84e3646"
+    },
+    "plaintext_hex": "e211b2b7511a43a88df116cf6ff06a296a63089d74831569090a2fb8e31f4130",
+    "ciphertext_hex": "1166257c5973d23e14dde02bf345e53b0da2e5ca765598c7e84ae3698afdf6b3"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "301",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "394c97881abd989d29c703e48a72b397a7acf51b59649eeea9b33274d8541df4",
+      "tweak_hex": "4b15c684a152d485fe9937d39b168c29"
+    },
+    "plaintext_hex": "2f3b9dcfbae729583b1d1ffdd16bb6fe2757329435662a78f0",
+    "ciphertext_hex": "f3473802e38a3ffef4d4fb8e6aa266ebde553a64528a06463e"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "302",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "8afb90c2ec924c4b0b0bd840fb1efc842c9385a14d1ca95bd4d12cbf9ab588ed",
+      "tweak_hex": "b2f8c6374eb275c1744e85aa21f8ea6b"
+    },
+    "plaintext_hex": "d9d8f00683bcd489154882290f24624726e093390783d4959a",
+    "ciphertext_hex": "f4bbaa8ebd480d2a2a371beab3d8b387c02282678c6000227b"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES128.rsp",
+    "source_sha256": "deb876f9b3c861286733962bc20561504b4dd1022f656d03ac2fe6b3ef26ea62",
+    "source_case": "303",
+    "parameters": {
+      "mode": "xts_aes128",
+      "key_hex": "6052a415b42d1df06d4283186ef363c9e59aa0eafa92ffe0aa1ce617fa1ed39a",
+      "tweak_hex": "b29b1a4388673fec4c1dbd786a491c62"
+    },
+    "plaintext_hex": "eb61da2b2159b9ca0099cbb82af6cf26a645ad954811aa703c",
+    "ciphertext_hex": "2c404c9b9c71dde43012a5abe879fa66d4c94fbebbdbfc01fa"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "1",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "1ea661c58d943a0e4801e42f4b0947149e7f9f8e3e68d0c7505210bd311a0e7cd6e13ffdf2418d8d1911c004cda58da3d619b7e2b9141e58318eea392cf41b08",
+      "tweak_hex": "adf8d92627464ad2f0428e84a9f87564"
+    },
+    "plaintext_hex": "2eedea52cd8215e1acc647e810bbc3642e87287f8d2e57e36c0a24fbc12a202e",
+    "ciphertext_hex": "cbaad0e2f6cea3f50b37f934d46a9b130b9d54f07e34f36af793e86f73c6d7db"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "1",
+    "parameters": {
+      "mode": "xex_aes256_ieee1619_full_blocks",
+      "key_hex": "1ea661c58d943a0e4801e42f4b0947149e7f9f8e3e68d0c7505210bd311a0e7cd6e13ffdf2418d8d1911c004cda58da3d619b7e2b9141e58318eea392cf41b08",
+      "tweak_hex": "adf8d92627464ad2f0428e84a9f87564"
+    },
+    "plaintext_hex": "2eedea52cd8215e1acc647e810bbc3642e87287f8d2e57e36c0a24fbc12a202e",
+    "ciphertext_hex": "cbaad0e2f6cea3f50b37f934d46a9b130b9d54f07e34f36af793e86f73c6d7db"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "2",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "e149be00177d76b7c1d85bcbb6b5054ee10b9f51cd73f59e0840628b9e7d854e2e1c0ab0537186a2a7c314bbc5eb23b6876a26bcdbf9e6b758d1cae053c2f278",
+      "tweak_hex": "0ea18818fab95289b1caab4e61349501"
+    },
+    "plaintext_hex": "f5f101d8e3a7681b1ddb21bd2826b24e32990bca49b39291b5369a9bca277d75",
+    "ciphertext_hex": "5bf2479393cc673306fbb15e72600598e33d4d8a470727ce098730fd80afa959"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "2",
+    "parameters": {
+      "mode": "xex_aes256_ieee1619_full_blocks",
+      "key_hex": "e149be00177d76b7c1d85bcbb6b5054ee10b9f51cd73f59e0840628b9e7d854e2e1c0ab0537186a2a7c314bbc5eb23b6876a26bcdbf9e6b758d1cae053c2f278",
+      "tweak_hex": "0ea18818fab95289b1caab4e61349501"
+    },
+    "plaintext_hex": "f5f101d8e3a7681b1ddb21bd2826b24e32990bca49b39291b5369a9bca277d75",
+    "ciphertext_hex": "5bf2479393cc673306fbb15e72600598e33d4d8a470727ce098730fd80afa959"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "3",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "522499839449864b0f59ac861b0b8923a1e4e204f8a255febb9ef0a8078942e8ab26a30a3bd6d14fd291efaeacd088169a6bb1218f3ffe9a482a439d2ef78628",
+      "tweak_hex": "04782cd3c9161fd2eaa9e911c23af4c8"
+    },
+    "plaintext_hex": "1614c98391c1dece1a3d165af0101c872a31730c407b07a2bc97f8c8741e7fcb",
+    "ciphertext_hex": "4d8ee472b5c9367b364cf284738ef5b490f4c131a4badc316a175f3d55d28711"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "3",
+    "parameters": {
+      "mode": "xex_aes256_ieee1619_full_blocks",
+      "key_hex": "522499839449864b0f59ac861b0b8923a1e4e204f8a255febb9ef0a8078942e8ab26a30a3bd6d14fd291efaeacd088169a6bb1218f3ffe9a482a439d2ef78628",
+      "tweak_hex": "04782cd3c9161fd2eaa9e911c23af4c8"
+    },
+    "plaintext_hex": "1614c98391c1dece1a3d165af0101c872a31730c407b07a2bc97f8c8741e7fcb",
+    "ciphertext_hex": "4d8ee472b5c9367b364cf284738ef5b490f4c131a4badc316a175f3d55d28711"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "101",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "266c336b3b01489f3267f52835fd92f674374b88b4e1ebd2d36a5f457581d9d042c3eef7b0b7e5137b086496b4d9e6ac658d7196a23f23f036172fdb8faee527",
+      "tweak_hex": "06b209a7a22f486ecbfadb0f3137ba42"
+    },
+    "plaintext_hex": "ca7d65ef8d3dfad345b61ccddca1ad81de830b9e86c7b426d76cb7db766852d981c6b21409399d78f42cc0b33a7bbb06",
+    "ciphertext_hex": "c73256870cc2f4dd57acc74b5456dbd776912a128bc1f77d72cdebbf270044b7a43ceed29025e1e8be211fa3c3ed002d"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "101",
+    "parameters": {
+      "mode": "xex_aes256_ieee1619_full_blocks",
+      "key_hex": "266c336b3b01489f3267f52835fd92f674374b88b4e1ebd2d36a5f457581d9d042c3eef7b0b7e5137b086496b4d9e6ac658d7196a23f23f036172fdb8faee527",
+      "tweak_hex": "06b209a7a22f486ecbfadb0f3137ba42"
+    },
+    "plaintext_hex": "ca7d65ef8d3dfad345b61ccddca1ad81de830b9e86c7b426d76cb7db766852d981c6b21409399d78f42cc0b33a7bbb06",
+    "ciphertext_hex": "c73256870cc2f4dd57acc74b5456dbd776912a128bc1f77d72cdebbf270044b7a43ceed29025e1e8be211fa3c3ed002d"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "102",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "7d12d5eaf687a3edf4ef0a284a6c7e9cfa075185e2608c2003b5f2719f81dec92d107279d6f1985b4b950e168b8af70b6e6e0b4419ddb50f425d673fa3714a38",
+      "tweak_hex": "d63bba65b05d175a90de1003624e1d9f"
+    },
+    "plaintext_hex": "752e9b0b241e91fad431e0b900b5b697f875c0898d3d58b93b74723c032fd103bcc555a7b8be44a9d1e7726e7f31d2c7",
+    "ciphertext_hex": "ad6f2c59c6130f0814bfebcb3f5e7833d6dbccb24c3311642806f965ff4435602d9d3e39851a495cfada67f8b3017ae7"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "102",
+    "parameters": {
+      "mode": "xex_aes256_ieee1619_full_blocks",
+      "key_hex": "7d12d5eaf687a3edf4ef0a284a6c7e9cfa075185e2608c2003b5f2719f81dec92d107279d6f1985b4b950e168b8af70b6e6e0b4419ddb50f425d673fa3714a38",
+      "tweak_hex": "d63bba65b05d175a90de1003624e1d9f"
+    },
+    "plaintext_hex": "752e9b0b241e91fad431e0b900b5b697f875c0898d3d58b93b74723c032fd103bcc555a7b8be44a9d1e7726e7f31d2c7",
+    "ciphertext_hex": "ad6f2c59c6130f0814bfebcb3f5e7833d6dbccb24c3311642806f965ff4435602d9d3e39851a495cfada67f8b3017ae7"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "103",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "c87fb73eb82d324be109e8fea07e14a7e76d39dcf4b2a3f745a230c2df66413686a48db657c220ddd1a35764379ae4d3c83c5645090c262f776778adea5bfa28",
+      "tweak_hex": "029c8685779e9d3be89aaf5b16cd28bd"
+    },
+    "plaintext_hex": "f7354b97fdb01e0b64dde22c841dfda5c946b93e206e75d4a87b67784bd3b4d054174b980144b4c2419af2f084e08809",
+    "ciphertext_hex": "7be844854b4aace2178e94f5f0ea6f9452df701137710be4913389cb64595cbaacca500b3e004ac49d1aa9ee926139ea"
+  },
+  {
+    "source": "NIST CAVS11 XTS byte-aligned data units",
+    "source_file": "format tweak value input - 128 hex str/XTSGenAES256.rsp",
+    "source_sha256": "3476dffb2707016e3c0c995061fe71c2ba2b2e579eda9d3bbf5f55cff8575795",
+    "source_case": "103",
+    "parameters": {
+      "mode": "xex_aes256_ieee1619_full_blocks",
+      "key_hex": "c87fb73eb82d324be109e8fea07e14a7e76d39dcf4b2a3f745a230c2df66413686a48db657c220ddd1a35764379ae4d3c83c5645090c262f776778adea5bfa28",
+      "tweak_hex": "029c8685779e9d3be89aaf5b16cd28bd"
+    },
+    "plaintext_hex": "f7354b97fdb01e0b64dde22c841dfda5c946b93e206e75d4a87b67784bd3b4d054174b980144b4c2419af2f084e08809",
+    "ciphertext_hex": "7be844854b4aace2178e94f5f0ea6f9452df701137710be4913389cb64595cbaacca500b3e004ac49d1aa9ee926139ea"
+  },
+  {
+    "source": "Independent OpenSSL XTS interoperability",
+    "source_version": "cryptography-46.0.3; OpenSSL 3.5.4 30 Sep 2025",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "tweak_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f10",
+    "ciphertext_hex": "02044b67146e6a91bf0cc1fee7cd8812b8"
+  },
+  {
+    "source": "Independent OpenSSL XTS interoperability",
+    "source_version": "cryptography-46.0.3; OpenSSL 3.5.4 30 Sep 2025",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "tweak_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+    "ciphertext_hex": "e0974e818d442f9dff82aedfbdd2a4f7b82298441f93d2a0ad34668c7df66e"
+  },
+  {
+    "source": "Independent OpenSSL XTS interoperability",
+    "source_version": "cryptography-46.0.3; OpenSSL 3.5.4 30 Sep 2025",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "tweak_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
+    "ciphertext_hex": "b82298441f93d2a0ad34668c7df66e4cdbc55f8354176968d313635a185fd8269c"
+  },
+  {
+    "source": "Independent OpenSSL XTS interoperability",
+    "source_version": "cryptography-46.0.3; OpenSSL 3.5.4 30 Sep 2025",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "tweak_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e",
+    "ciphertext_hex": "b82298441f93d2a0ad34668c7df66e4ce15e4259a87fff59192e0700484221449ce4d6a936a41f0f8983a38c00a32e"
+  },
+  {
+    "source": "Independent OpenSSL XTS interoperability",
+    "source_version": "cryptography-46.0.3; OpenSSL 3.5.4 30 Sep 2025",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "tweak_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e",
+    "ciphertext_hex": "b82298441f93d2a0ad34668c7df66e4c9ce4d6a936a41f0f8983a38c00a32efd2dc0aaefeab74406a582dc698022400809c020224e930a4c89a1864c5e97fd"
+  },
+  {
+    "source": "Independent OpenSSL XTS interoperability",
+    "source_version": "cryptography-46.0.3; OpenSSL 3.5.4 30 Sep 2025",
+    "parameters": {
+      "mode": "xts_aes256",
+      "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "tweak_hex": "000102030405060708090a0b0c0d0e0f"
+    },
+    "plaintext_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f40",
+    "ciphertext_hex": "b82298441f93d2a0ad34668c7df66e4c9ce4d6a936a41f0f8983a38c00a32efd09c020224e930a4c89a1864c5e97fdae83c3341ed4dd73a6b397e2419aea9e04f8"
   }
 ]

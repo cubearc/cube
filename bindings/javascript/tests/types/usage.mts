@@ -295,3 +295,13 @@ const sivTag:Uint8Array=sivOutput.tag;
 void sivTag;
 // @ts-expect-error SIV nonce-free parameters forbid nonce fields
 cube.execute({operation:'cipher.aes.siv.encrypt',version:1,inputs:{input:new Uint8Array(),aad_components:[]},parameters:{profile:'aes128_siv_cmac_nonce_free',key_hex:'00'.repeat(32),nonce_hex:'00'.repeat(16)}});
+
+const xtsBytes:Uint8Array=cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array(17)},parameters:{mode:'xts_aes256',key_hex:'42'.repeat(32)+'24'.repeat(32),tweak_hex:'00'.repeat(16)}}).output;
+void xtsBytes;
+// @ts-expect-error storage requires an explicit tweak, not a CBC IV
+cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array(16)},parameters:{mode:'xts_aes128',key_hex:'42'.repeat(16)+'24'.repeat(16),iv_hex:'00'.repeat(16)}});
+// @ts-expect-error CTS forbids a padding choice
+cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array(16)},parameters:{mode:'cbc_cs3',key_hex:'42'.repeat(16),iv_hex:'24'.repeat(16),padding:'pkcs7'}});
+
+// @ts-expect-error AES modes always require explicit private settings
+cube.execute({operation:'cipher.aes.mode.encrypt',version:1,inputs:{input:new Uint8Array()}});

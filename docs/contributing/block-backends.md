@@ -212,3 +212,23 @@ kernel, with no string wrapper or appended length. Fourteen frozen answers
 cover seven word counts and two key patterns; all interfaces reuse that corpus.
 There is no C runtime dependency. Exactly sixteen key bytes, empty identity,
 minimum two words, 64 KiB work ceiling and 4096-byte parameter ceiling are explicit.
+
+
+## AES ciphertext stealing and storage
+
+The `aes_modes` module pins RustCrypto CTS0.7.0 and `xts-mode`0.6.0 over
+AES0.9.3. Qualification includes NIST CAVP byte-oriented XTS vectors and RFC3962
+CBC-CS3 answers reordered according to the NIST addendum for CS1/CS2.
+Independent OpenSSL3.5.4/cryptography46.0.3 answers cover AES256-XTS partial units.
+
+The exact16-byte CTS minimum has its own regression. CTS0.7's CS3 path applies an
+extra encryption there; the Core adapter uses ordinary single-block CBC for all
+three variants, as defined by the minimum case. Other lengths reuse the maintained
+CTS implementation. Do not reject the minimum, weaken the expected answer or
+replace it with a round-trip-only check.
+
+XEX profiles name the full-block, two-key IEEE1619 component precisely and reuse
+XTS's full-block transform; partial input is rejected. Both storage families
+reject equal key halves before execution and cap one data unit at2^20 AES blocks.
+Tweak input/field byte order, no implicit sector partition and lack of authentication
+are documented in [AES modes](../reference/topics/aes-modes.md#ciphertext-stealing-and-storage-units).

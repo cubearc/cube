@@ -1,34 +1,54 @@
 use super::*;
 use crate::operations::{self as o, contracts as c, metadata as m};
-const DESCRIPTION: &str = "Explicit unauthenticated AES ECB/CBC with required padding, CFB128, OFB or full-width big-endian CTR.";
+const DESCRIPTION: &str = "Explicit unauthenticated AES byte modes, NIST CBC-CS1/2/3 and IEEE1619 XTS or full-block XEX data units.";
 
 const PARAMETERS: &[o::Parameter] = &[
     o::Parameter {
         name: "mode",
-        description: "Required exact SP800-38A mode; CFB128 and full-width big-endian CTR only.",
+        description: "Required exact byte, ciphertext-stealing or storage construction; no inferred mode.",
         required: true,
         default: None,
         constraints: o::ParameterType::Text {
-            choices: &["ecb", "cbc", "cfb128", "ofb", "ctr128_be"],
+            choices: &[
+                "ecb",
+                "cbc",
+                "cfb128",
+                "ofb",
+                "ctr128_be",
+                "cbc_cs1",
+                "cbc_cs2",
+                "cbc_cs3",
+                "xts_aes128",
+                "xts_aes256",
+                "xex_aes128_ieee1619_full_blocks",
+                "xex_aes256_ieee1619_full_blocks",
+            ],
         },
     },
     o::Parameter {
         name: "key_hex",
-        description: "Required private 16/24/32-byte key as exact hexadecimal.",
+        description: "Required private AES key, or32/64-byte combined storage key with distinct halves, as hexadecimal.",
         required: true,
         default: None,
         constraints: o::ParameterType::Text { choices: &[] },
     },
     o::Parameter {
         name: "iv_hex",
-        description: "Required 16-byte IV/counter for every mode except ECB; forbidden for ECB.",
+        description: "Required16-byte IV/counter for CBC/feedback/CTR/CTS; forbidden for ECB/storage.",
+        required: false,
+        default: None,
+        constraints: o::ParameterType::Text { choices: &[] },
+    },
+    o::Parameter {
+        name: "tweak_hex",
+        description: "Required16-byte initial tweak input for XTS/XEX; forbidden for other modes.",
         required: false,
         default: None,
         constraints: o::ParameterType::Text { choices: &[] },
     },
     o::Parameter {
         name: "padding",
-        description: "Required none or pkcs7 for ECB/CBC; forbidden for feedback/counter modes.",
+        description: "Required none or pkcs7 for ECB/CBC; forbidden for all other modes.",
         required: false,
         default: None,
         constraints: o::ParameterType::Text {
@@ -63,7 +83,7 @@ const fn row(
             aliases: &[],
             security: m::Security {
                 classification: m::Classification::BinaryTransform,
-                limitations: "Unauthenticated low-level interoperability only. ECB reveals repetition; CBC padding is not authentication. Decryption never verifies a key or integrity. No secure message-encryption claim.",
+                limitations: "Unauthenticated low-level interoperability only. ECB reveals repetition; CBC padding is not authentication. Decryption never verifies a key or integrity. CTS and XTS/XEX preserve length but remain malleable. No secure message-encryption claim.",
                 private_input: true,
                 private_output: true,
                 sensitive_parameters: &["key_hex"],
@@ -71,18 +91,20 @@ const fn row(
             profile: m::Profile {
                 variant: DESCRIPTION,
                 alphabet: "Exact bytes; no text conversion.",
-                key: "16/24/32 caller-supplied key bytes as exact hexadecimal in private settings.",
-                key_advancement: "CBC/CFB128/OFB require a 16-byte IV; CTR increments the full 128-bit big-endian IV. Explicit none/PKCS#7 for ECB/CBC. No RNG.",
+                key: "16/24/32 AES key bytes; XTS/XEX require32/64 combined bytes with unequal halves. Exact private hexadecimal.",
+                key_advancement: "CBC/CFB128/OFB/CTS use an explicit16-byte IV; CTR increments the full128-bit big-endian state. XTS/XEX encrypt an explicit16-byte initial tweak under the second key, then advance in little-endian GF(2^128). No RNG.",
                 block_bits: Some(128),
                 output_bits: None,
             },
             resources: &[],
-            resource_notes: "Core body <=16 MiB plus at most one padding block. Parameter JSON <=2048 bytes. Output allocation is bounded by input plus 16 bytes and fixed backend state. Expanded keys and owned decoded key buffers wiped on drop; caller, parser, OS and interpreter copies are not guaranteed erased. No pipeline or automatic capture. Play transport limits may be lower.",
+            resource_notes: "Core body <=16 MiB plus at most one padding block. CTS/storage need at least16 bytes; full-block XEX rejects partial blocks. A data unit contains at most2^20 AES blocks. Parameter JSON <=2048 bytes. Output allocation is bounded by input plus 16 bytes and fixed backend state. Expanded keys and owned decoded key buffers wiped on drop; caller, parser, OS and interpreter copies are not guaranteed erased. No pipeline or automatic capture. Play transport limits may be lower.",
             rust_api: api,
             python_api,
             references: &[
                 "https://csrc.nist.gov/pubs/fips/197/final",
                 "https://docs.rs/aes/0.9.3/aes/",
+                "https://csrc.nist.gov/pubs/sp/800/38/a/sup/final",
+                "https://csrc.nist.gov/pubs/sp/800/38/e/final",
             ],
         }),
     }
@@ -109,7 +131,8 @@ pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
 fn parameters_schema() -> schemars::Schema {
     let mut schema = c::schema::<Parameters>().to_value();
     schema["properties"] =
-        serde_json::json!({"key_hex":key_schema(&mut schemars::SchemaGenerator::default())});
+        serde_json::json!({"mode":{"type":"string"},"key_hex":common_key_schema()});
+    schema["required"] = serde_json::json!(["mode", "key_hex"]);
     schemars::Schema::try_from(schema).expect("typed mode union with common private key")
 }
 fn bytes_schema() -> schemars::Schema {

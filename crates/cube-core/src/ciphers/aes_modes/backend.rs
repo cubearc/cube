@@ -13,6 +13,9 @@ pub(super) fn transform(
     s: &Settings,
     inverse: bool,
 ) -> Result<Vec<u8>, OperationError> {
+    if matches!(s.mode, Mode::Storage(_)) {
+        return storage::transform(data, s, inverse);
+    }
     match s.key.len() {
         16 => apply::<Aes128>(data, s, inverse),
         24 => apply::<Aes192>(data, s, inverse),
@@ -52,40 +55,47 @@ where
         Mode::Cbc(padding) => {
             if inverse {
                 unpad(
-                    cbc::Decryptor::<C>::new_from_slices(&s.key, &s.iv).map_err(|_| invalid())?,
+                    cbc::Decryptor::<C>::new_from_slices(&s.key, &s.initial_block)
+                        .map_err(|_| invalid())?,
                     &mut buffer,
                     padding,
                 )?
             } else {
                 pad(
-                    cbc::Encryptor::<C>::new_from_slices(&s.key, &s.iv).map_err(|_| invalid())?,
+                    cbc::Encryptor::<C>::new_from_slices(&s.key, &s.initial_block)
+                        .map_err(|_| invalid())?,
                     &mut buffer,
                     data.len(),
                     padding,
                 )?
             }
         }
+        Mode::Stealing(kind) => {
+            stealing::transform::<C>(&mut buffer, s, inverse, kind)?;
+            data.len()
+        }
+        Mode::Storage(_) => unreachable!("storage dispatched before block modes"),
         Mode::Cfb128 => {
             if inverse {
-                cfb_mode::Decryptor::<C>::new_from_slices(&s.key, &s.iv)
+                cfb_mode::Decryptor::<C>::new_from_slices(&s.key, &s.initial_block)
                     .map_err(|_| invalid())?
                     .decrypt(&mut buffer);
             } else {
-                cfb_mode::Encryptor::<C>::new_from_slices(&s.key, &s.iv)
+                cfb_mode::Encryptor::<C>::new_from_slices(&s.key, &s.initial_block)
                     .map_err(|_| invalid())?
                     .encrypt(&mut buffer);
             }
             data.len()
         }
         Mode::Ofb => {
-            ofb::Ofb::<C>::new_from_slices(&s.key, &s.iv)
+            ofb::Ofb::<C>::new_from_slices(&s.key, &s.initial_block)
                 .map_err(|_| invalid())?
                 .try_apply_keystream(&mut buffer)
                 .map_err(|_| failed())?;
             data.len()
         }
         Mode::Ctr128Be => {
-            ctr::Ctr128BE::<C>::new_from_slices(&s.key, &s.iv)
+            ctr::Ctr128BE::<C>::new_from_slices(&s.key, &s.initial_block)
                 .map_err(|_| invalid())?
                 .try_apply_keystream(&mut buffer)
                 .map_err(|_| failed())?;

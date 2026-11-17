@@ -14,7 +14,7 @@ pub(crate) enum Command {
     Encrypt(Parameters),
     /// Decrypt raw blocks; success does not authenticate or verify the key
     Decrypt(Parameters),
-    /// Explicit ECB/CBC/CFB128/OFB/CTR profiles; no authentication
+    /// Explicit AES byte, CBC-CTS and storage profiles; no authentication
     Mode {
         #[command(subcommand)]
         command: ModeCommand,

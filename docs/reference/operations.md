@@ -4100,7 +4100,7 @@ cube cipher aes encrypt --key-file key.bin --file blocks.bin
 
 ## cipher.aes.mode.decrypt
 
-Explicit unauthenticated AES ECB/CBC with required padding, CFB128, OFB or full-width big-endian CTR.
+Explicit unauthenticated AES byte modes, NIST CBC-CS1/2/3 and IEEE1619 XTS or full-block XEX data units.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
@@ -4125,7 +4125,10 @@ Parameters:
   "properties": {
     "key_hex": {
       "type": "string",
-      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64}|[0-9A-Fa-f]{128})$"
+    },
+    "mode": {
+      "type": "string"
     }
   },
   "oneOf": [
@@ -4246,7 +4249,172 @@ Parameters:
         "key_hex",
         "iv_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc_cs1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc_cs2"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc_cs3"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xts_aes128"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{128}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xts_aes256"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xex_aes128_ieee1619_full_blocks"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{128}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xex_aes256_ieee1619_full_blocks"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
     }
+  ],
+  "required": [
+    "mode",
+    "key_hex"
   ],
   "$defs": {
     "Padding": {
@@ -4268,7 +4436,7 @@ cube cipher aes mode decrypt --parameters-file settings.json --file input.bin
 
 ## cipher.aes.mode.encrypt
 
-Explicit unauthenticated AES ECB/CBC with required padding, CFB128, OFB or full-width big-endian CTR.
+Explicit unauthenticated AES byte modes, NIST CBC-CS1/2/3 and IEEE1619 XTS or full-block XEX data units.
 
 Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
 
@@ -4293,7 +4461,10 @@ Parameters:
   "properties": {
     "key_hex": {
       "type": "string",
-      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+      "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64}|[0-9A-Fa-f]{128})$"
+    },
+    "mode": {
+      "type": "string"
     }
   },
   "oneOf": [
@@ -4414,7 +4585,172 @@ Parameters:
         "key_hex",
         "iv_hex"
       ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc_cs1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc_cs2"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "iv_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        },
+        "key_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{32}|[0-9A-Fa-f]{48}|[0-9A-Fa-f]{64})$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "cbc_cs3"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "iv_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xts_aes128"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{128}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xts_aes256"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{64}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xex_aes128_ieee1619_full_blocks"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "key_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{128}$"
+        },
+        "mode": {
+          "type": "string",
+          "const": "xex_aes256_ieee1619_full_blocks"
+        },
+        "tweak_hex": {
+          "type": "string",
+          "pattern": "^[0-9A-Fa-f]{32}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "key_hex",
+        "tweak_hex"
+      ]
     }
+  ],
+  "required": [
+    "mode",
+    "key_hex"
   ],
   "$defs": {
     "Padding": {

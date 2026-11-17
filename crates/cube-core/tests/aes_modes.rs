@@ -179,3 +179,99 @@ fn exact_body_limit_and_padded_ciphertext_overhead_match_contracts() {
     assert!(aes::encrypt(&vec![0; aes::MAX_INPUT + 1], &settings).is_err());
     assert!(aes::decrypt(&vec![0; aes::MAX_INPUT + 17], &settings).is_err());
 }
+
+#[test]
+fn cbc_ciphertext_stealing_profiles_accept_the_exact_single_block_minimum() {
+    use cube_core::ciphers::aes_modes as aes;
+    let plain = hex::decode("6bc1bee22e409f96e93d7e117393172a").unwrap();
+    let expected = hex::decode("7649abac8119b246cee98e9b12e9197d").unwrap();
+    for mode in ["cbc_cs1", "cbc_cs2", "cbc_cs3"] {
+        let p = json!({"mode":mode,"key_hex":"2b7e151628aed2a6abf7158809cf4f3c","iv_hex":"000102030405060708090a0b0c0d0e0f"});
+        let settings = aes::Settings::parse(&p.to_string()).unwrap();
+        assert_eq!(aes::encrypt(&plain, &settings).unwrap(), expected);
+        assert_eq!(aes::decrypt(&expected, &settings).unwrap(), plain);
+    }
+}
+
+#[test]
+fn storage_key_halves_sizes_tweaks_and_full_block_xex_are_explicit() {
+    use cube_core::ciphers::aes_modes as aes;
+    for bits in [128, 256] {
+        let half = bits / 8;
+        let key = hex::encode([vec![0x42; half], vec![0x24; half]].concat());
+        for mode in [
+            format!("xts_aes{bits}"),
+            format!("xex_aes{bits}_ieee1619_full_blocks"),
+        ] {
+            let mut p =
+                json!({"mode":mode,"key_hex":key,"tweak_hex":"000102030405060708090a0b0c0d0e0f"});
+            let s = aes::Settings::parse(&p.to_string()).unwrap();
+            let contract = cube_core::operations::require(aes::ENCRYPT)
+                .unwrap()
+                .contract()
+                .unwrap();
+            contract.validate_parameters(&p).unwrap();
+            for n in [0, 1, 15] {
+                assert!(aes::encrypt(&vec![0; n], &s).is_err());
+                assert!(aes::decrypt(&vec![0; n], &s).is_err());
+            }
+            for n in [16, 17, 31, 32, 33, 48, 63, 64] {
+                let data = vec![0xff; n];
+                if mode.starts_with("xex") && !n.is_multiple_of(16) {
+                    assert!(aes::encrypt(&data, &s).is_err());
+                    continue;
+                }
+                let ciphertext = aes::encrypt(&data, &s).unwrap();
+                assert_eq!(ciphertext.len(), n);
+                assert_eq!(aes::decrypt(&ciphertext, &s).unwrap(), data);
+            }
+            for change in [
+                json!({"iv_hex":"00".repeat(16)}),
+                json!({"padding":"none"}),
+                json!({"tweak_hex":"00"}),
+                json!({"key_hex":"42".repeat(half*2)}),
+            ] {
+                let mut changed = p.clone();
+                changed
+                    .as_object_mut()
+                    .unwrap()
+                    .extend(change.as_object().unwrap().clone());
+                assert!(aes::Settings::parse(&changed.to_string()).is_err());
+            }
+            p["key_hex"] = json!("00".repeat(half));
+            assert!(aes::Settings::parse(&p.to_string()).is_err());
+            assert!(contract.validate_parameters(&p).is_err());
+        }
+    }
+    for mode in ["cbc_cs1", "cbc_cs2", "cbc_cs3"] {
+        for size in [16, 24, 32] {
+            let p = json!({"mode":mode,"key_hex":"42".repeat(size),"iv_hex":"24".repeat(16)});
+            let s = aes::Settings::parse(&p.to_string()).unwrap();
+            for n in [16, 17, 31, 32, 33, 48, 63, 64] {
+                let data = vec![0x42; n];
+                let encrypted = aes::encrypt(&data, &s).unwrap();
+                assert_eq!(encrypted.len(), n);
+                assert_eq!(aes::decrypt(&encrypted, &s).unwrap(), data);
+            }
+        }
+    }
+}
+
+#[test]
+fn storage_data_unit_accepts_exact_standard_ceiling_and_rejects_one_over() {
+    use cube_core::{ciphers::aes_modes as aes, errors::ErrorCode};
+    let data = vec![0x42; aes::MAX_INPUT];
+    for (mode, half) in [("xts_aes128", 16), ("xex_aes256_ieee1619_full_blocks", 32)] {
+        let p = json!({"mode":mode,"key_hex":"42".repeat(half)+&"24".repeat(half),"tweak_hex":"ff".repeat(16)});
+        let s = aes::Settings::parse(&p.to_string()).unwrap();
+        let encrypted = aes::encrypt(&data, &s).unwrap();
+        assert_eq!(encrypted.len(), aes::MAX_INPUT);
+        assert_eq!(aes::decrypt(&encrypted, &s).unwrap(), data);
+        assert_eq!(
+            aes::encrypt(&vec![0; aes::MAX_INPUT + 1], &s)
+                .unwrap_err()
+                .code,
+            ErrorCode::ResourceLimit
+        );
+    }
+}

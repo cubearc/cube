@@ -13,7 +13,8 @@ native Python exposes `aes_mode_encrypt(data, parameters_json)` and
 ## Choose a mode
 
 Every call requires a private JSON document containing `mode` and `key_hex`.
-The key must contain exactly 16, 24 or 32 bytes, expressed as hexadecimal without
+For ordinary and CTS modes, the key contains 16, 24 or 32 bytes; storage modes use
+two combined keys as described below. Keys are hexadecimal without
 separators or a prefix. Unknown fields and unsupported variants fail.
 
 | Mode | Additional required fields | Byte behavior |
@@ -24,8 +25,8 @@ separators or a prefix. Unknown fields and unsupported variants fail.
 | `ofb` | `iv_hex` | Full-block output feedback, preserving input length |
 | `ctr128_be` | `iv_hex` | Increment the entire 128-bit big-endian counter |
 
-`iv_hex` contains exactly 16 bytes. ECB forbids an IV; feedback/counter profiles
-forbid padding. CFB1/CFB8, partial-width counters and inferred padding are not
+`iv_hex` contains exactly16 bytes. ECB forbids an IV; storage modes require
+`tweak_hex` instead. Only ordinary ECB/CBC accept a padding field. CFB1/CFB8, partial-width counters and inferred padding are not
 accepted. CBC and CFB need unpredictable fresh IVs; OFB/CTR need unique initial
 states for each key. The caller supplies and manages these values.
 
@@ -68,3 +69,43 @@ under their owners' control.
 The implementation uses RustCrypto AES and its maintained CBC, ECB, CFB, OFB and
 CTR adapters. The independent vectors are from
 [NIST SP800-38A](https://csrc.nist.gov/pubs/sp/800/38/a/final), Appendix F.
+
+## Ciphertext stealing and storage units
+
+The same operations accept these exact modes, preserving input length:
+
+| Mode | Key bytes | Initial state | Length |
+| --- | ---: | --- | --- |
+| `cbc_cs1`, `cbc_cs2`, `cbc_cs3` | 16, 24, 32 | `iv_hex`:16 bytes | 16 bytes to16 MiB |
+| `xts_aes128` | 32 total | `tweak_hex`:16 bytes | 16 bytes to16 MiB |
+| `xts_aes256` | 64 total | `tweak_hex`:16 bytes | 16 bytes to16 MiB |
+| `xex_aes128_ieee1619_full_blocks` | 32 total | `tweak_hex`:16 bytes | Whole blocks,16 bytes to16 MiB |
+| `xex_aes256_ieee1619_full_blocks` | 64 total | `tweak_hex`:16 bytes | Whole blocks,16 bytes to16 MiB |
+
+CTS modes forbid a `padding` field. CS1 places the truncated penultimate segment
+before the final full ciphertext block; CS2/CS3 put it after that block. For aligned
+messages CS1/CS2 are CBC; CS3 swaps the final two blocks when at least two blocks
+are present. At the exact 16-byte minimum all variants equal single-block CBC.
+
+Storage keys concatenate two independent AES keys of the indicated size; equal
+halves are rejected. `tweak_hex` is the exact 16-byte **input** to the second AES
+key, before tweak encryption. To represent an integer data-unit number, encode it
+as a 128-bit little-endian byte sequence. Tweak advancement uses the IEEE1619
+little-endian field convention. No implicit sector split, unit-number increment
+or disk access occurs; each call transforms one complete caller-supplied unit.
+
+XTS uses the IEEE1619-2007/SP800-38E byte-oriented construction, including
+ciphertext stealing for a partial final block. Its ceiling is 2^20 AES blocks per
+data unit. The explicitly named XEX modes use that construction's full-block
+component: `AES_K1(P xor T) xor T`, with initial `T=AES_K2(tweak)` and field
+advancement between blocks. They reject partial blocks rather than selecting a
+stealing convention. These are precise two-key IEEE profiles, not an unspecified
+single-key XEX interface. Tweak reuse and malleability remain caller concerns;
+none of these profiles authenticates data.
+
+Reference sources are the [NIST CBC addendum](https://csrc.nist.gov/pubs/sp/800/38/a/sup/final),
+[SP800-38E](https://csrc.nist.gov/pubs/sp/800/38/e/final) and the
+[NIST CAVP vectors](https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/cavp-testing-block-cipher-modes).
+The profile pins the 2010 final recommendation; the 2026 revision draft is not
+represented as a final publication. RustCrypto CTS0.7.0 and `xts-mode`0.6.0
+provide the maintained mode implementations over the shared AES backend.

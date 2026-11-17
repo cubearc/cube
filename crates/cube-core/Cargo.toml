@@ -8,6 +8,8 @@ repository.workspace = true
 
 [dependencies]
 rsa = { version = "=0.10.0", default-features = false, features = ["std", "encoding", "pkcs1v15"] }
+sm2 = { version = "=0.14.0", default-features = false, features = ["std", "pke", "pkcs8"] }
+sm3 = { version = "=0.5.0", default-features = false, features = ["zeroize"] }
 crypto-bigint = { version = "=0.7.11", default-features = false, features = ["alloc", "zeroize"] }
 rand_core = "=0.10.1"
 getrandom02 = { package = "getrandom", version = "=0.2.17", features = ["std"] }

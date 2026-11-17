@@ -49,6 +49,7 @@ mod puzzlecmd;
 mod puzzlecodescmd;
 mod recipecmd;
 mod rsacmd;
+mod sm2cmd;
 mod streamcmd;
 mod streamrefcmd;
 mod textcmd;
@@ -558,6 +559,11 @@ enum Cipher {
     Xxtea {
         #[command(subcommand)]
         command: xxteacmd::Command,
+    },
+    /// Explicit SM2/SM3 encryption and authenticated decryption
+    Sm2 {
+        #[command(subcommand)]
+        command: sm2cmd::Command,
     },
     /// Explicit RSA-OAEP and legacy implicit-rejection decryption
     Rsa {
@@ -1153,6 +1159,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
                 Cipher::T52ab { command } => mechanicalcmd::t52ab(command)?,
                 Cipher::Hagelin { command } => mechanicalcmd::hagelin(command)?,
                 Cipher::Lorenz { command } => mechanicalcmd::lorenz(command)?,
+                Cipher::Sm2 { command } => return sm2cmd::run(command, &mut output),
                 Cipher::Rsa { command } => return rsacmd::run(command, &mut output),
                 Cipher::Dh { command } => return dhcmd::run(command, &mut output),
                 Cipher::Ecdh { command } => return ecdhcmd::run(command, &mut output),

@@ -12,7 +12,9 @@ use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
     matches!(
         op,
-        crate::asymmetric::rsa::ENCRYPT
+        crate::asymmetric::sm2::ENCRYPT
+            | crate::asymmetric::sm2::DECRYPT
+            | crate::asymmetric::rsa::ENCRYPT
             | crate::asymmetric::rsa::DECRYPT
             | crate::asymmetric::rsa::LEGACY_DECRYPT
     ) || op == crate::asymmetric::dh::AGREE
@@ -53,6 +55,26 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    if matches!(
+        op,
+        crate::asymmetric::sm2::ENCRYPT | crate::asymmetric::sm2::DECRYPT
+    ) {
+        use crate::asymmetric::sm2;
+        let key = zeroize::Zeroizing::new(bytes(&i["key"])?);
+        let input = zeroize::Zeroizing::new(bytes(&i["input"])?);
+        let output = zeroize::Zeroizing::new(if op == sm2::ENCRYPT {
+            sm2::encrypt(
+                &input,
+                &sm2::EncryptionSettings::parse(&p.to_string(), &key)?,
+            )?
+        } else {
+            sm2::decrypt(
+                &input,
+                &sm2::DecryptionSettings::parse(&p.to_string(), &key)?,
+            )?
+        });
+        return Ok(json!({"output":{"base64":crate::encoding::base64_encode(&output)}}));
+    }
     if matches!(
         op,
         crate::asymmetric::rsa::ENCRYPT

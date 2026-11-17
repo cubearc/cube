@@ -16,6 +16,11 @@ impl Default for SystemRng {
         Self { remaining: 65536 }
     }
 }
+impl SystemRng {
+    pub(super) fn bounded(bytes: usize) -> Self {
+        Self { remaining: bytes }
+    }
+}
 impl TryRng for SystemRng {
     type Error = EntropyError;
     fn try_fill_bytes(&mut self, dst: &mut [u8]) -> Result<(), Self::Error> {

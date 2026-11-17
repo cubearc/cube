@@ -50,6 +50,7 @@ mod puzzlecodes;
 mod puzzles;
 mod recipe;
 mod rsa;
+mod sm2;
 mod solresol;
 mod stream;
 mod structured_composition;
@@ -628,6 +629,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     dh::register(module)?;
     ecdh::register(module)?;
     rsa::register(module)?;
+    sm2::register(module)?;
     fpe::register(module)?;
     modern_aead::register(module)?;
     block_profiles::register(module)?;

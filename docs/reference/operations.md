@@ -22672,6 +22672,114 @@ Example:
 cube cipher --help
 ```
 
+## cipher.sm2.decrypt
+
+SM2/SM3 encryption with explicit uncompressed C1C3C2, C1C2C3 or canonical DER ciphertext representation.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "sm2_sm3_c1c3c2",
+        "sm2_sm3_c1c2c3",
+        "sm2_sm3_der"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher sm2 decrypt --parameters-file settings.json --key-file secret.bin --file ciphertext.bin
+```
+
+## cipher.sm2.encrypt
+
+SM2/SM3 encryption with explicit uncompressed C1C3C2, C1C2C3 or canonical DER ciphertext representation.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Parameters",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "sm2_sm3_c1c3c2",
+        "sm2_sm3_c1c2c3",
+        "sm2_sm3_der"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher sm2 encrypt --parameters-file settings.json --key-file public.bin --file message.bin
+```
+
 ## cipher.solitaire.decode
 
 Original Schneier Solitaire/Pontifex with explicit private deck, optional passphrase and bounded rejected outputs; no implicit padding.

@@ -66,6 +66,7 @@
     - [Format-preserving encryption](reference/topics/format-preserving-encryption.md)
     - [AES key wrapping](reference/topics/key-wrapping.md)
     - [Raw key agreement](reference/topics/key-agreement.md)
+    - [SM2 encryption](reference/topics/sm2.md)
     - [RSA encryption profiles](reference/topics/rsa.md)
     - [Raw block reference profiles](reference/topics/block-profiles.md)
     - [XXTEA word sequences](reference/topics/xxtea.md)

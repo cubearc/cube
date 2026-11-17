@@ -2584,3 +2584,9 @@ def rsa_pkcs1_v1_5_decrypt(data: bytes, key: bytes, parameters_json: str) -> byt
 
 def dh_agree(data: bytes, key: bytes, parameters_json: str) -> bytes:
     """Compute a raw RFC7919 secret with exact named-group encodings and no KDF."""
+
+def sm2_encrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Encrypt nonempty bytes with an explicit SM2/SM3 ciphertext representation."""
+
+def sm2_decrypt(data: bytes, key: bytes, parameters_json: str) -> bytes:
+    """Validate SM2/SM3 ciphertext before returning any recovered bytes."""

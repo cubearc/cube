@@ -19690,5 +19690,67 @@
     "parameters": {
       "profile": "ffdhe2048_rfc7919_raw"
     }
+  },
+  {
+    "contract_sha256": "2bdb54932094ad5100385518060b67ea3e41ca9b44cbfaea63d6a6d6717343ac",
+    "inputs": {
+      "input": {
+        "base64": "cGxhaW50ZXh0"
+      },
+      "key": {
+        "base64": "BBLUlQ8uaE5HRyKdM0q0oCmpTKp1BrIuK7RyzEtl6tEWySNT3aYEVEsqoKipAgJJPurWbtDcweAlOA3+zjtkA9E="
+      }
+    },
+    "operation": "cipher.sm2.encrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "BIljGCZZyYGUNm3dO0NH5ea8psnG6XF6ZKTJqQEnigJqcBxJH8HH7FnVDGrXlltOsshbDFC7AwNauE0ZQvBouzp03c2BG+YK7hbdn2e3GdfRKKhocoiyB1IlgIpAWKTTQNDJ2zvEf7cfiA=="
+      }
+    },
+    "parameters": {
+      "profile": "sm2_sm3_c1c3c2"
+    },
+    "verification": {
+      "kind": "inverse",
+      "operation": "cipher.sm2.decrypt",
+      "operation_version": 1,
+      "parameters": {
+        "profile": "sm2_sm3_c1c3c2"
+      },
+      "inputs": {
+        "key": {
+          "base64": "Pd0qNnm/bx38O0nT6ZEUcY5I7BcOtOTTqCBS2rGei1A="
+        }
+      },
+      "input_port": "input",
+      "output_port": "output",
+      "expected_outputs": {
+        "output": {
+          "base64": "cGxhaW50ZXh0"
+        }
+      }
+    }
+  },
+  {
+    "contract_sha256": "a7cf3a988c0cb233746f16ead5ef7960a5c4a6e30e29b1d62a76ba7483301b83",
+    "inputs": {
+      "input": {
+        "base64": "BPnKFMRFI/5Z6sH3AkFHDnLivuLWUq+m6LOnjjJgHExZHku0MUX+K+vufXywZEwFoydmRDbZcLjbVUFiGq06q+6vWbaAlFy8SF19uyXH8OWLM3zBmf7cDg6O71yAv19UMPlznFpw2F+fyA=="
+      },
+      "key": {
+        "base64": "Pd0qNnm/bx38O0nT6ZEUcY5I7BcOtOTTqCBS2rGei1A="
+      }
+    },
+    "operation": "cipher.sm2.decrypt",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "cGxhaW50ZXh0"
+      }
+    },
+    "parameters": {
+      "profile": "sm2_sm3_c1c3c2"
+    }
   }
 ]

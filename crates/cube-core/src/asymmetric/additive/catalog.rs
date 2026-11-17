@@ -67,7 +67,7 @@ const fn parameters(choices: &'static [&'static str]) -> [o::Parameter; 1] {
 const PAILLIER: [o::Parameter; 1] = parameters(&[Profile::Paillier.name()]);
 const DAMGARD_JURIK: [o::Parameter; 1] = parameters(&[Profile::DamgardJurik.name()]);
 
-const ENTRIES: [m::Entry; 2] = [
+const PROFILED: [m::Entry; 2] = [
     row(
         PAILLIER_ADD,
         "Add Paillier ciphertexts",
@@ -92,7 +92,7 @@ const ENTRIES: [m::Entry; 2] = [
     ),
 ];
 
-pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&ENTRIES);
+pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
 
 macro_rules! contract {
     ($index:expr, $profile:expr, $prefix:literal) => {{
@@ -136,7 +136,7 @@ const CONTRACTS: &[c::Entry] = &[
 ];
 
 pub(crate) const MODULE: o::Module =
-    o::Module::profiled(OPERATIONS, &ENTRIES).with_contracts(CONTRACTS);
+    o::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);
 
 fn fixture(
     profile: Profile,

@@ -80,7 +80,7 @@ const fn row(
 
 const NTRU_SOURCE: &[&str] = &["https://www.ntru.org/f/hps98.pdf"];
 const REGEV_SOURCE: &[&str] = &["https://cims.nyu.edu/~regev/papers/qcrypto.pdf"];
-const ENTRIES: [m::Entry; 4] = [
+const PROFILED: [m::Entry; 4] = [
     row(
         NTRU_ENCRYPT,
         "Encrypt a polynomial with educational NTRUEncrypt",
@@ -131,7 +131,7 @@ const ENTRIES: [m::Entry; 4] = [
     ),
 ];
 
-pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&ENTRIES);
+pub const OPERATIONS: &[o::Descriptor] = &m::descriptors(&PROFILED);
 
 macro_rules! contract {
     ($index:expr, $profile:expr, $encrypt:expr, $file:literal) => {{
@@ -177,7 +177,7 @@ const CONTRACTS: &[c::Entry] = &[
 ];
 
 pub(crate) const MODULE: o::Module =
-    o::Module::profiled(OPERATIONS, &ENTRIES).with_contracts(CONTRACTS);
+    o::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);
 
 #[derive(Deserialize)]
 struct Vector {

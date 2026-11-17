@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { pipelineCases } from '../tests/support/pipeline-cases.mjs';
-import {verifyFixtureResult} from './fixture-verification.mjs';
+import { kemVerification, verifyFixtureResult } from './fixture-verification.mjs';
 
 const sha256 = value => createHash('sha256').update(value).digest('hex');
 function ordered(value) {
@@ -36,15 +36,37 @@ function verifyCatalog(snapshot, canonicalJson, fixtures, build) {
     assert.equal(identity.operation_version, contract.operation_version, `Runtime version drift: ${operation}`);
     assert.equal(identity.contract_sha256, fixture.contract_sha256, `Review the changed contract: ${operation}`);
     assert.equal(contract.operation_version, fixture.operation_version, `Fixture version drift: ${operation}`);
-    if (fixture.verification) {
-      assert.equal(contract.deterministic,false,'Inverse assertions cannot replace deterministic answers.');
-      const inverse=contracts.get(fixture.verification.operation);
-      assert.ok(inverse?.deterministic,'Randomized ciphertexts require a deterministic inverse contract.');
-      assert.equal(contract.outputs.length,1,'Every randomized output port must be verified.');
-      assert.equal(contract.outputs[0].name,fixture.verification.output_port);
-    }
+    if (fixture.verification) verifyRelationalContract(contract, fixture, contracts);
   }
   return { catalog, contracts, answers, identities };
+}
+
+function verifyRelationalContract(contract, fixture, contracts) {
+  assert.equal(contract.deterministic, false, 'Relational assertions apply only to randomized outputs.');
+  const kem = kemVerification(fixture);
+  if (kem) {
+    const ports = (operation, direction) => operation[direction].map(port => port.name).sort();
+    assert.equal(contract.operation_version, 1, 'KEM assertions use version 1.');
+    assert.deepEqual(ports(contract, 'outputs'), kem.outputs, 'Every KEM output port must be verified.');
+    const decapsulation = contracts.get(kem.decapsulate);
+    assert.equal(decapsulation?.operation_version, 1, 'KEM assertion requires a version 1 decapsulation peer.');
+    assert.equal(decapsulation.deterministic, true, 'KEM decapsulation must be deterministic.');
+    assert.deepEqual(ports(decapsulation, 'inputs'), ['ciphertext', 'private_key']);
+    assert.deepEqual(ports(decapsulation, 'outputs'), ['shared_secret']);
+    if (kem.keyPair) {
+      const encapsulation = contracts.get(kem.encapsulate);
+      assert.equal(encapsulation?.operation_version, 1, 'KEM key pair assertion requires a version 1 encapsulation peer.');
+      assert.equal(encapsulation.deterministic, false, 'KEM encapsulation must be randomized.');
+      assert.deepEqual(ports(encapsulation, 'inputs'), ['public_key']);
+      assert.deepEqual(ports(encapsulation, 'outputs'), ['ciphertext', 'shared_secret']);
+    }
+    return;
+  }
+  assert.equal(fixture.verification.kind, 'inverse', 'Expected a reviewed relational assertion.');
+  const inverse = contracts.get(fixture.verification.operation);
+  assert.ok(inverse?.deterministic, 'Randomized ciphertexts require a deterministic inverse contract.');
+  assert.equal(contract.outputs.length, 1, 'Every randomized output port must be verified.');
+  assert.equal(contract.outputs[0].name, fixture.verification.output_port);
 }
 
 function verifyCapabilities(entries, contracts, path) {

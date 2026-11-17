@@ -24,6 +24,8 @@ test('qualification CLI emits real execution evidence for every advertised path'
         if (!row[path]) continue;
         assert.equal(row.evidence[path].status, 'passed', `${row.operation}: ${path}`);
         if (['verified-inverse', 'verified-kem'].includes(row.evidence[path].comparison)) {
+          const kind = fixture.verification?.kind;
+          assert.equal(row.evidence[path].comparison, kind === 'inverse' ? 'verified-inverse' : 'verified-kem');
           assert.equal(row.evidence[path].verification.actualOutputSha256,row.evidence[path].verification.expectedOutputSha256);
           assert.equal(catalog.operations.find(c=>c.operation===row.operation).deterministic,false);
         } else {
@@ -76,4 +78,9 @@ test('report rejects reviewed-contract, fixture and capability drift before qual
   state = await inputs();
   state.executors = [...state.executors, { ...state.executors[0], operation: 'not.a.canonical.operation' }];
   await assert.rejects(qualificationReport(state), /Unknown direct capability/);
+  state = await inputs();
+  const keyPair = state.fixtures.find(fixture => fixture.operation === 'crypto.ml_kem.keygen');
+  assert.ok(keyPair);
+  keyPair.verification.kind = 'kem_encapsulation';
+  await assert.rejects(qualificationReport(state), /KEM assertion must match its operation/);
 });

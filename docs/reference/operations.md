@@ -38150,7 +38150,7 @@ cube image invert sample.png --output inverted.png
 
 Inspect baseline JPEG quantized AC magnitude parity in row-major block and zigzag AC order.
 
-Category: `images`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
 
 Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 

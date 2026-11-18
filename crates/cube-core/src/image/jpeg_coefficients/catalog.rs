@@ -43,7 +43,7 @@ const PARAMETERS: &[o::Parameter] = &[
 ];
 const DESCRIPTOR: o::Descriptor = o::Descriptor {
     id: EXTRACT,
-    category: "images",
+    category: "image",
     description: "Inspect baseline JPEG quantized AC magnitude parity in row-major block and zigzag AC order.",
     input_type: "bytes",
     output_type: "image.jpeg.coefficients",

@@ -11,6 +11,7 @@ pub(crate) mod execution;
 pub use bitwise::BitwiseOperation;
 pub mod colors;
 pub mod csv;
+pub mod jpeg_coefficients;
 pub mod layers;
 pub mod pairs;
 pub use colors::{ColorLayer, ColorOutput};

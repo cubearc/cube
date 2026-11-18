@@ -1,5 +1,24 @@
 //! Binary-safe native adapters for bounded byte transformations.
-use cube_core::binary::transform as t;
+use cube_core::binary::{compression as c, transform as t};
+#[pyfunction(signature = (data, *, profile, level=None))]
+fn compress_bytes<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    profile: &str,
+    level: Option<u8>,
+) -> PyResult<Bound<'py, PyBytes>> {
+    let profile = c::Profile::parse(profile, c::ENCODE).map_err(super::file_error)?;
+    result(py, c::compress(data, c::EncodeSettings { profile, level }))
+}
+#[pyfunction(signature = (data, *, profile))]
+fn decompress_bytes<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    profile: &str,
+) -> PyResult<Bound<'py, PyBytes>> {
+    let profile = c::Profile::parse(profile, c::DECODE).map_err(super::file_error)?;
+    result(py, c::decompress(data, c::DecodeSettings { profile }))
+}
 use pyo3::{prelude::*, types::PyBytes};
 fn result<'py>(
     py: Python<'py>,
@@ -69,6 +88,15 @@ fn unit(value: Option<&Bound<'_, PyAny>>, op: &'static str) -> PyResult<usize> {
     }
     Ok(value as usize)
 }
+#[pyfunction(signature = (data, *, unit_bytes))]
+fn reverse_bits<'py>(
+    py: Python<'py>,
+    data: &[u8],
+    unit_bytes: usize,
+) -> PyResult<Bound<'py, PyBytes>> {
+    result(py, t::reverse_bits(data, unit_bytes))
+}
+
 #[pyfunction]
 #[pyo3(signature=(data,count,*,unit_bytes=None))]
 fn rotate_left<'py>(
@@ -143,6 +171,9 @@ pub fn register(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(shift_left, module)?)?;
     module.add_function(wrap_pyfunction!(shift_right, module)?)?;
     module.add_function(wrap_pyfunction!(swap_endian, module)?)?;
+    module.add_function(wrap_pyfunction!(reverse_bits, module)?)?;
+    module.add_function(wrap_pyfunction!(compress_bytes, module)?)?;
+    module.add_function(wrap_pyfunction!(decompress_bytes, module)?)?;
     module.add_function(wrap_pyfunction!(rotate_left, module)?)?;
     module.add_function(wrap_pyfunction!(rotate_right, module)?)?;
     module.add_function(wrap_pyfunction!(xor_exact, module)?)?;

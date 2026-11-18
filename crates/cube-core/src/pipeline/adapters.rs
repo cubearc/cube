@@ -4,6 +4,8 @@ use crate::{errors::ErrorCode, operations};
 #[derive(Clone, Copy, Debug)]
 pub(super) enum Action {
     MaskedText,
+    Digest(crate::hashing::extended::Profile),
+    ByteText(crate::encoding::byte_text::Profile, bool),
     Keccak256,
     Ripemd160,
     Base58CheckEncode,
@@ -20,6 +22,9 @@ pub(super) enum Action {
     Or,
     Not,
     ReverseBytes,
+    ReverseBits,
+    Compress,
+    Decompress,
     ShiftLeft,
     ShiftRight,
     SwapEndian,
@@ -51,6 +56,14 @@ pub(super) enum Action {
     Crc32c,
     Crc16Ibm3740,
     Xor,
+    AsciiEncode,
+    AsciiDecode,
+    Utf16Encode,
+    Utf16Decode,
+    JsonEscapeEncode,
+    JsonEscapeDecode,
+    HtmlEntityEncode,
+    HtmlEntityDecode,
     Utf8Encode,
     Utf8Decode,
     Signatures,
@@ -64,6 +77,276 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: crate::binary::compression::ENCODE,
+        version: 1,
+        action: Action::Compress,
+    },
+    Adapter {
+        id: crate::binary::compression::DECODE,
+        version: 1,
+        action: Action::Decompress,
+    },
+    Adapter {
+        id: "text.ascii.encode",
+        version: 1,
+        action: Action::AsciiEncode,
+    },
+    Adapter {
+        id: "text.ascii.decode",
+        version: 1,
+        action: Action::AsciiDecode,
+    },
+    Adapter {
+        id: "text.utf16.encode",
+        version: 1,
+        action: Action::Utf16Encode,
+    },
+    Adapter {
+        id: "text.utf16.decode",
+        version: 1,
+        action: Action::Utf16Decode,
+    },
+    Adapter {
+        id: "text.json_escape.encode",
+        version: 1,
+        action: Action::JsonEscapeEncode,
+    },
+    Adapter {
+        id: "text.json_escape.decode",
+        version: 1,
+        action: Action::JsonEscapeDecode,
+    },
+    Adapter {
+        id: "text.html_entity.encode",
+        version: 1,
+        action: Action::HtmlEntityEncode,
+    },
+    Adapter {
+        id: "text.html_entity.decode",
+        version: 1,
+        action: Action::HtmlEntityDecode,
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Binary.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Binary, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Binary.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Binary, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Octal.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Octal, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Octal.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Octal, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base36.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base36, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base36.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base36, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base62.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base62, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base62.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base62, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Ascii85.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Ascii85, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Ascii85.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Ascii85, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Ascii85Bare.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Ascii85Bare, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Ascii85Bare.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Ascii85Bare, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base91.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base91, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base91.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base91, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base92.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base92, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::Base92.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::Base92, false),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::UrlComponent.id(true),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::UrlComponent, true),
+    },
+    Adapter {
+        id: crate::encoding::byte_text::Profile::UrlComponent.id(false),
+        version: 1,
+        action: Action::ByteText(crate::encoding::byte_text::Profile::UrlComponent, false),
+    },
+    Adapter {
+        id: "binary.reverse_bits",
+        version: 1,
+        action: Action::ReverseBits,
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha224.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha224),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha384.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha384),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha512224.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha512224),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha512256.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha512256),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha3224.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha3224),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha3256.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha3256),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha3384.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha3384),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Sha3512.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Sha3512),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Keccak224.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Keccak224),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Keccak384.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Keccak384),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Keccak512.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Keccak512),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Ripemd128.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Ripemd128),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Ripemd256.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Ripemd256),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Ripemd320.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Ripemd320),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Blake2B512.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Blake2B512),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Blake2S256.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Blake2S256),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Blake3.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Blake3),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Md4.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Md4),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Whirlpool.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Whirlpool),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Crc8Smbus.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Crc8Smbus),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Crc16Arc.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Crc16Arc),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Crc64Ecma182.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Crc64Ecma182),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Adler32.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Adler32),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Fletcher16.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Fletcher16),
+    },
+    Adapter {
+        id: crate::hashing::extended::Profile::Fletcher32.id(),
+        version: 1,
+        action: Action::Digest(crate::hashing::extended::Profile::Fletcher32),
+    },
     Adapter {
         id: "binary.sub_wrapping",
         version: 1,
@@ -333,6 +616,9 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
     Masked(crate::text::transform::Config),
+    Utf16(crate::text::representation::Utf16Settings),
+    AsciiOnly(bool),
+    Compression(crate::binary::compression::Profile, Option<u8>),
     Version(u8),
     WebAsset {
         index: usize,
@@ -427,6 +713,41 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::Compress | Action::Decompress => {
+            use crate::binary::compression as c;
+            let Some(Parameter::Text(profile)) = step.parameters.get("profile") else {
+                return Err(invalid("select an exact compression profile").parameter("profile"));
+            };
+            let profile = c::Profile::parse(profile, adapter.id).map_err(Error::from_operation)?;
+            let level = step
+                .parameters
+                .get("level")
+                .map(|_| integer("level"))
+                .transpose()?
+                .map(|value| value as u8);
+            Arguments::Compression(profile, level)
+        }
+        Action::JsonEscapeEncode => {
+            let ascii_only = match step.parameters.get("ascii_only") {
+                Some(Parameter::Boolean(value)) => *value,
+                None => true,
+                _ => return Err(invalid("expected a boolean").parameter("ascii_only")),
+            };
+            Arguments::AsciiOnly(ascii_only)
+        }
+        Action::Utf16Encode | Action::Utf16Decode => {
+            let required_text = |name| match step.parameters.get(name) {
+                Some(Parameter::Text(value)) => Ok(value.as_str()),
+                _ => Err(invalid("required text parameter").parameter(name)),
+            };
+            Arguments::Utf16(
+                crate::text::representation::Utf16Settings::parse(
+                    required_text("byte_order")?,
+                    required_text("bom")?,
+                )
+                .map_err(Error::from_operation)?,
+            )
+        }
         Action::MaskedText => Arguments::Masked(super::masked::prepare(step)?),
         Action::Base58CheckEncode => Arguments::Version(integer("version")? as u8),
         Action::HtmlAsset | Action::HarAsset => {
@@ -480,14 +801,14 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
                 }
             }
         }
-        Action::ShiftLeft | Action::ShiftRight | Action::SwapEndian => {
+        Action::ShiftLeft | Action::ShiftRight | Action::SwapEndian | Action::ReverseBits => {
             let unit_bytes = match step.parameters.get("unit_bytes") {
                 Some(Parameter::Integer(n)) => usize::try_from(*n)
                     .map_err(|_| invalid("invalid unit width").parameter("unit_bytes"))?,
                 None => 1,
                 _ => return Err(invalid("expected integer unit width").parameter("unit_bytes")),
             };
-            let bits = if matches!(adapter.action, Action::SwapEndian) {
+            let bits = if matches!(adapter.action, Action::SwapEndian | Action::ReverseBits) {
                 0
             } else {
                 integer("bits")? as u8

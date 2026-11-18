@@ -62,3 +62,50 @@ returns a structured result and has no pipeline adapter.
 
 Payloads and captures contain the caller's data. A valid checksum does not make
 private-key material safe to capture; see [Offline key formats](offline-key-formats.md).
+
+## More byte encodings
+
+| CLI format | Canonical wire representation | Byte / text limit |
+| --- | --- | --- |
+| `binary` | Eight binary digits per byte with one ASCII space between tokens | 1 MiB / 9,437,183 bytes |
+| `octal` | Three octal digits per byte, `000` through `377`, with one ASCII space between tokens | 1 MiB / 4,194,303 bytes |
+| `base36` | `0–9a–z`, unsigned big-endian magnitude | 4,096 / 8,192 bytes |
+| `base62` | `0–9A–Za–z`, unsigned big-endian magnitude | 4,096 / 8,192 bytes |
+| `ascii85` | Adobe digit order, `<~` and `~>` framing, `z` for four zero bytes | 1 MiB / 1,310,724 bytes |
+| `ascii85-bare` | Same Adobe digit order and packing, with no framing | 1 MiB / 1,310,720 bytes |
+| `base91` | Original basE91 alphabet and 13/14-bit little-endian packing | 1 MiB / 2 MiB |
+| `base92` | Original Base92 alphabet and 13-bit big-endian packing | 1 MiB / 2 MiB |
+| `url-component` | RFC 3986 unreserved bytes and uppercase percent triplets | 1 MiB / 3 MiB |
+
+Each initial zero byte in Base36 and Base62 becomes one literal `0`. These
+profiles use GNU MP digit order and Cube's exact leading-zero convention. The
+4,096-byte cap also limits magnitude conversion work. The
+[integer base converter](numeric-conversions.md) handles signed numbers.
+
+Ascii85 uses `!` through `u` for digit values 0 through 84. The last partial
+group has two to four digits. Groups with overflow, noncanonical tails or
+misplaced `z` fail. Empty framed input is `<~~>`. Empty input in Base92 is
+`~`. Empty input in the other profiles is empty text.
+
+Base91 uses the following alphabet in order.
+
+~~~text
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~"
+~~~
+
+Base92 uses `!`, ASCII `#` through `_`, then ASCII `a` through `}` in order.
+Both decoders reject characters outside the profile and require canonical
+tail bits. Compare the [basE91 implementation documentation](https://docs.rs/base91/0.1.0/base91/)
+and [the original Base92 specification](https://github.com/thenoviceoof/base92).
+
+The URL component decoder accepts lowercase hex in percent triplets. Encode a
+literal plus as `%2B`. The decoder returns bytes, including NUL or invalid UTF-8,
+so text conversion remains an explicit operation. Percent escapes apply to one
+component. The operation interprets no URL structure or form fields.
+
+```sh
+cube encode octal --text A
+# 101
+cube decode url-component --text '%00%ff'
+# 00ff
+```

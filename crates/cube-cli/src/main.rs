@@ -40,6 +40,7 @@ mod historicalcmd;
 mod historicalpublickeycmd;
 mod homomorphiccmd;
 mod iescmd;
+mod kdfcmd;
 mod kemcmd;
 mod keywrapcmd;
 mod latticecmd;
@@ -304,6 +305,33 @@ enum Ops {
 
 #[derive(Subcommand)]
 enum Encode {
+    /// Encode bytes as Binary byte tokens
+    #[command(name = "binary")]
+    Binary(Input),
+    /// Encode bytes as Octal byte tokens
+    #[command(name = "octal")]
+    Octal(Input),
+    /// Encode bytes as Base36 bytes
+    #[command(name = "base36")]
+    Base36(Input),
+    /// Encode bytes as Base62 bytes
+    #[command(name = "base62")]
+    Base62(Input),
+    /// Encode bytes as Framed Adobe Ascii85
+    #[command(name = "ascii85")]
+    Ascii85(Input),
+    /// Encode bytes as Bare Adobe Ascii85
+    #[command(name = "ascii85-bare")]
+    Ascii85Bare(Input),
+    /// Encode bytes as Original basE91
+    #[command(name = "base91")]
+    Base91(Input),
+    /// Encode bytes as Original Base92
+    #[command(name = "base92")]
+    Base92(Input),
+    /// Encode bytes as RFC 3986 component
+    #[command(name = "url-component")]
+    UrlComponent(Input),
     /// Source-qualified symbolic alphabet over exact presegmented JSON units
     Alphabet(puzzlecodescmd::Parameters),
     /// Exact French gloss tokens to the qualified Gajewski monosyllable lexicon
@@ -340,6 +368,33 @@ enum Encode {
 
 #[derive(Subcommand)]
 enum Decode {
+    /// Decode Binary byte tokens
+    #[command(name = "binary")]
+    Binary(DecodeArgs),
+    /// Decode Octal byte tokens
+    #[command(name = "octal")]
+    Octal(DecodeArgs),
+    /// Decode Base36 bytes
+    #[command(name = "base36")]
+    Base36(DecodeArgs),
+    /// Decode Base62 bytes
+    #[command(name = "base62")]
+    Base62(DecodeArgs),
+    /// Decode Framed Adobe Ascii85
+    #[command(name = "ascii85")]
+    Ascii85(DecodeArgs),
+    /// Decode Bare Adobe Ascii85
+    #[command(name = "ascii85-bare")]
+    Ascii85Bare(DecodeArgs),
+    /// Decode Original basE91
+    #[command(name = "base91")]
+    Base91(DecodeArgs),
+    /// Decode Original Base92
+    #[command(name = "base92")]
+    Base92(DecodeArgs),
+    /// Decode RFC 3986 component
+    #[command(name = "url-component")]
+    UrlComponent(DecodeArgs),
     /// Read exact symbolic tokens, retaining alternatives and positions
     Alphabet(puzzlecodescmd::Parameters),
     /// Retain all Gajewski monosyllable glosses and original word positions
@@ -375,6 +430,11 @@ enum Decode {
 
 #[derive(Subcommand)]
 enum Cipher {
+    /// Derive raw private key material with explicit costs and input files
+    Kdf {
+        #[command(subcommand)]
+        command: kdfcmd::Command,
+    },
     /// Explicit raw stream profiles with bounded private JSON settings
     Stream {
         #[command(subcommand)]
@@ -849,6 +909,81 @@ enum Cipher {
 
 #[derive(Subcommand)]
 enum Hash {
+    /// Compute SHA-224 over exact bytes, up to 16 MiB
+    #[command(name = "sha224")]
+    Sha224(Input),
+    /// Compute SHA-384 over exact bytes, up to 16 MiB
+    #[command(name = "sha384")]
+    Sha384(Input),
+    /// Compute SHA-512/224 over exact bytes, up to 16 MiB
+    #[command(name = "sha512-224")]
+    Sha512224(Input),
+    /// Compute SHA-512/256 over exact bytes, up to 16 MiB
+    #[command(name = "sha512-256")]
+    Sha512256(Input),
+    /// Compute SHA3-224 over exact bytes, up to 16 MiB
+    #[command(name = "sha3-224")]
+    Sha3224(Input),
+    /// Compute SHA3-256 over exact bytes, up to 16 MiB
+    #[command(name = "sha3-256")]
+    Sha3256(Input),
+    /// Compute SHA3-384 over exact bytes, up to 16 MiB
+    #[command(name = "sha3-384")]
+    Sha3384(Input),
+    /// Compute SHA3-512 over exact bytes, up to 16 MiB
+    #[command(name = "sha3-512")]
+    Sha3512(Input),
+    /// Compute Keccak-224 over exact bytes, up to 16 MiB
+    #[command(name = "keccak224")]
+    Keccak224(Input),
+    /// Compute Keccak-384 over exact bytes, up to 16 MiB
+    #[command(name = "keccak384")]
+    Keccak384(Input),
+    /// Compute Keccak-512 over exact bytes, up to 16 MiB
+    #[command(name = "keccak512")]
+    Keccak512(Input),
+    /// Compute RIPEMD-128 over exact bytes, up to 16 MiB
+    #[command(name = "ripemd128")]
+    Ripemd128(Input),
+    /// Compute RIPEMD-256 over exact bytes, up to 16 MiB
+    #[command(name = "ripemd256")]
+    Ripemd256(Input),
+    /// Compute RIPEMD-320 over exact bytes, up to 16 MiB
+    #[command(name = "ripemd320")]
+    Ripemd320(Input),
+    /// Compute BLAKE2b-512 over exact bytes, up to 16 MiB
+    #[command(name = "blake2b512")]
+    Blake2B512(Input),
+    /// Compute BLAKE2s-256 over exact bytes, up to 16 MiB
+    #[command(name = "blake2s256")]
+    Blake2S256(Input),
+    /// Compute BLAKE3 over exact bytes, up to 16 MiB
+    #[command(name = "blake3")]
+    Blake3(Input),
+    /// Compute MD4 over exact bytes, up to 16 MiB
+    #[command(name = "md4")]
+    Md4(Input),
+    /// Compute Whirlpool over exact bytes, up to 16 MiB
+    #[command(name = "whirlpool")]
+    Whirlpool(Input),
+    /// Compute CRC-8/SMBUS over exact bytes, up to 16 MiB
+    #[command(name = "crc8-smbus")]
+    Crc8Smbus(Input),
+    /// Compute CRC-16/ARC over exact bytes, up to 16 MiB
+    #[command(name = "crc16-arc")]
+    Crc16Arc(Input),
+    /// Compute CRC-64/ECMA-182 over exact bytes, up to 16 MiB
+    #[command(name = "crc64-ecma182")]
+    Crc64Ecma182(Input),
+    /// Compute Adler-32 over exact bytes, up to 16 MiB
+    #[command(name = "adler32")]
+    Adler32(Input),
+    /// Compute Fletcher-16 over exact bytes, up to 16 MiB
+    #[command(name = "fletcher16")]
+    Fletcher16(Input),
+    /// Compute Fletcher-32 over exact bytes, up to 16 MiB
+    #[command(name = "fletcher32")]
+    Fletcher32(Input),
     /// RIPEMD-160 for protocol compatibility; exact bytes, <=16 MiB
     Ripemd160(Input),
     /// Ethereum Keccak-256, distinct from SHA3-256; exact bytes, <=16 MiB
@@ -867,6 +1002,32 @@ enum Hash {
     Crc32(Input),
     /// Compute SHA-256 as lowercase hexadecimal
     Sha256(Input),
+}
+
+fn hash_profile(
+    profile: hashing::extended::Profile,
+    input: Input,
+) -> Result<String, Box<dyn std::error::Error>> {
+    let data = input.read_bounded(hashing::extended::MAX_INPUT, profile.id())?;
+    Ok(profile.digest(&data)?)
+}
+
+fn encode_byte_text(
+    profile: encoding::byte_text::Profile,
+    input: Input,
+) -> Result<String, Box<dyn std::error::Error>> {
+    let data = input.read_bounded(profile.byte_limit(), profile.id(true))?;
+    Ok(profile.encode(&data)?)
+}
+fn decode_byte_text(
+    profile: encoding::byte_text::Profile,
+    args: DecodeArgs,
+    output: &mut impl Write,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let text = args
+        .input
+        .read_text_limit(profile.text_limit(), profile.id(false))?;
+    write_bytes(output, &profile.decode(&text)?, args.output)
 }
 
 #[derive(Args)]
@@ -1136,6 +1297,33 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Encode { command } => {
             let text = match command {
+                Encode::Binary(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Binary, input)?
+                }
+                Encode::Octal(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Octal, input)?
+                }
+                Encode::Base36(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Base36, input)?
+                }
+                Encode::Base62(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Base62, input)?
+                }
+                Encode::Ascii85(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Ascii85, input)?
+                }
+                Encode::Ascii85Bare(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Ascii85Bare, input)?
+                }
+                Encode::Base91(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Base91, input)?
+                }
+                Encode::Base92(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::Base92, input)?
+                }
+                Encode::UrlComponent(input) => {
+                    encode_byte_text(encoding::byte_text::Profile::UrlComponent, input)?
+                }
                 Encode::Base58check {
                     input,
                     version_byte,
@@ -1170,6 +1358,35 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
             write_text(&mut output, &text)?;
         }
         Command::Decode { command } => match command {
+            Decode::Binary(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Binary, args, &mut output)?
+            }
+            Decode::Octal(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Octal, args, &mut output)?
+            }
+            Decode::Base36(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Base36, args, &mut output)?
+            }
+            Decode::Base62(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Base62, args, &mut output)?
+            }
+            Decode::Ascii85(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Ascii85, args, &mut output)?
+            }
+            Decode::Ascii85Bare(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Ascii85Bare, args, &mut output)?
+            }
+            Decode::Base91(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Base91, args, &mut output)?
+            }
+            Decode::Base92(args) => {
+                decode_byte_text(encoding::byte_text::Profile::Base92, args, &mut output)?
+            }
+            Decode::UrlComponent(args) => decode_byte_text(
+                encoding::byte_text::Profile::UrlComponent,
+                args,
+                &mut output,
+            )?,
             Decode::Base58check { input, json } => {
                 let decoded = encoding::base58check::decode(&input.read_text_limit(
                     encoding::base58check::MAX_ENCODED,
@@ -1255,6 +1472,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         },
         Command::Cipher { command } => {
             let text = match command {
+                Cipher::Kdf { command } => return kdfcmd::run(command, &mut output),
                 Cipher::Gronsfeld(args) => polycmd::gronsfeld(args)?,
                 Cipher::InterruptedKey(args) => polycmd::interrupted_key(args)?,
                 Cipher::ProgressiveKey(args) => polycmd::progressive_key(args)?,
@@ -1615,6 +1833,61 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         }
         Command::Hash { command } => {
             let digest = match command {
+                Hash::Sha224(input) => hash_profile(hashing::extended::Profile::Sha224, input)?,
+                Hash::Sha384(input) => hash_profile(hashing::extended::Profile::Sha384, input)?,
+                Hash::Sha512224(input) => {
+                    hash_profile(hashing::extended::Profile::Sha512224, input)?
+                }
+                Hash::Sha512256(input) => {
+                    hash_profile(hashing::extended::Profile::Sha512256, input)?
+                }
+                Hash::Sha3224(input) => hash_profile(hashing::extended::Profile::Sha3224, input)?,
+                Hash::Sha3256(input) => hash_profile(hashing::extended::Profile::Sha3256, input)?,
+                Hash::Sha3384(input) => hash_profile(hashing::extended::Profile::Sha3384, input)?,
+                Hash::Sha3512(input) => hash_profile(hashing::extended::Profile::Sha3512, input)?,
+                Hash::Keccak224(input) => {
+                    hash_profile(hashing::extended::Profile::Keccak224, input)?
+                }
+                Hash::Keccak384(input) => {
+                    hash_profile(hashing::extended::Profile::Keccak384, input)?
+                }
+                Hash::Keccak512(input) => {
+                    hash_profile(hashing::extended::Profile::Keccak512, input)?
+                }
+                Hash::Ripemd128(input) => {
+                    hash_profile(hashing::extended::Profile::Ripemd128, input)?
+                }
+                Hash::Ripemd256(input) => {
+                    hash_profile(hashing::extended::Profile::Ripemd256, input)?
+                }
+                Hash::Ripemd320(input) => {
+                    hash_profile(hashing::extended::Profile::Ripemd320, input)?
+                }
+                Hash::Blake2B512(input) => {
+                    hash_profile(hashing::extended::Profile::Blake2B512, input)?
+                }
+                Hash::Blake2S256(input) => {
+                    hash_profile(hashing::extended::Profile::Blake2S256, input)?
+                }
+                Hash::Blake3(input) => hash_profile(hashing::extended::Profile::Blake3, input)?,
+                Hash::Md4(input) => hash_profile(hashing::extended::Profile::Md4, input)?,
+                Hash::Whirlpool(input) => {
+                    hash_profile(hashing::extended::Profile::Whirlpool, input)?
+                }
+                Hash::Crc8Smbus(input) => {
+                    hash_profile(hashing::extended::Profile::Crc8Smbus, input)?
+                }
+                Hash::Crc16Arc(input) => hash_profile(hashing::extended::Profile::Crc16Arc, input)?,
+                Hash::Crc64Ecma182(input) => {
+                    hash_profile(hashing::extended::Profile::Crc64Ecma182, input)?
+                }
+                Hash::Adler32(input) => hash_profile(hashing::extended::Profile::Adler32, input)?,
+                Hash::Fletcher16(input) => {
+                    hash_profile(hashing::extended::Profile::Fletcher16, input)?
+                }
+                Hash::Fletcher32(input) => {
+                    hash_profile(hashing::extended::Profile::Fletcher32, input)?
+                }
                 Hash::Keccak256(input) => hashing::keccak256(
                     &input.read_bounded(hashing::protocol::MAX_INPUT, "hash.keccak256")?,
                 )?,

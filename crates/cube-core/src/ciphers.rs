@@ -326,6 +326,7 @@ pub mod stream;
 pub mod fpe;
 
 /// Explicit decrypt-only OpenSSL legacy formats.
+pub mod kdf;
 pub mod openssl;
 
 /// Bounded authenticated agev1/X25519 file decryption.

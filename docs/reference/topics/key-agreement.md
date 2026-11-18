@@ -67,3 +67,6 @@ cube cipher dh agree --parameters-file settings.json --key-file secret.bin --fil
 Native Python exposes `dh_agree(peer_bytes, private_key_bytes, parameters_json)`. JavaScript/TypeScript uses `cube.execute` with separate byte ports `input` and `key` and the required `profile`. Rust also provides `Settings::public_key()` for the matching generator exponentiation. The executable operation returns only the raw shared secret.
 
 JSON settings are at most 256 bytes; peer and private key transport are at most 1,024 and 64 bytes respectively. A call performs one public subgroup check and one secret exponentiation. Wrong lengths, range or subgroup yield no shared secret. Unknown groups or private exponents 0/1 fail with redacted settings errors. Play requires explicit private retention consent and retains its existing transport and worker limits.
+
+Use [key derivation](key-derivation.md) to bind raw shared material to an
+explicit context.

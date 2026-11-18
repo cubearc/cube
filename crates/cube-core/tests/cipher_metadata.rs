@@ -91,7 +91,16 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
                 | "number.maximum"
                 | "number.add"
                 | "image.dimensions"
-        ) || d.id.starts_with("text.utf8.")
+                | "image.jpeg.coefficients.extract"
+        ) || [
+            "text.ascii.",
+            "text.utf16.",
+            "text.html_entity.",
+            "text.json_escape.",
+        ]
+        .iter()
+        .any(|prefix| d.id.starts_with(prefix))
+            || d.id.starts_with("text.utf8.")
             || d.id.starts_with("text.keyboard.coordinates.")
             || d.id.starts_with("text.keyboard.shift.");
         assert_eq!(d.metadata().is_some(), expected, "{}", d.id);
@@ -140,9 +149,9 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 349);
-    assert_eq!(ids.len(), 465);
-    assert_eq!(cube_core::pipeline::supported_adapters().len(), 53);
+    assert_eq!(annotated, 409);
+    assert_eq!(ids.len(), 525);
+    assert_eq!(cube_core::pipeline::supported_adapters().len(), 107);
 }
 #[test]
 fn aliases_security_variants_and_surface_limits_are_precise() {

@@ -48,6 +48,52 @@ The SDK exposes the data version as `cube.UNICODE_VERSION`.
 | Normalize | 1 MiB UTF-8 | At most 8 MiB |
 | `text.utf8.encode` / `text.utf8.decode` | Pipeline or direct-operation limits | Convert types without normalization or replacement; invalid UTF-8 fails |
 
+### ASCII and UTF-16
+
+`cube text ascii encode` and `cube text ascii decode` use Unicode scalars and
+byte values 0 through 127. UTF-8 retains strict validation through
+`cube text to-bytes` and `cube text from-bytes`. All three formats report
+invalid input at its original byte offset.
+
+Use `cube text utf16 encode` and `cube text utf16 decode` with
+`--byte-order le` or `--byte-order be` and an explicit `--bom` policy.
+
+| Policy | Encode | Decode |
+| --- | --- | --- |
+| `require` | Prepend a matching marker | Require and remove the matching initial marker |
+| `forbid` | Reject leading U+FEFF or U+FFFE | Reject either marker at the start |
+| `strip` | Encode the given scalars | Remove a matching initial marker; reject an opposite marker |
+| `preserve` | Encode the given scalars | Interpret every code unit as data |
+
+UTF-16 decode rejects odd lengths and unpaired surrogates. Encoders accept
+at most 1 MiB of UTF-8. UTF-16 binary input and output and decoded UTF-8
+are capped at 4 MiB. ASCII and UTF-8 cap direct input at 1 MiB.
+
+### JSON and HTML character escapes
+
+`cube text json-escape encode` writes RFC 8259 string content without outer
+quotes. Its default escapes non-ASCII scalars. Use `--allow-unicode` to keep
+those scalars literal. The decoder accepts valid JSON string escapes and
+pairs of surrogate escapes. It rejects raw controls, unescaped quotes,
+malformed escapes and unpaired surrogates.
+
+`cube text html-entity encode` emits hexadecimal character references for
+ampersand, angle brackets, double quote and apostrophe. The decoder follows
+WHATWG text-context matching, including the longest named match and numeric
+replacements for zero, surrogates, out-of-range values and applicable C1
+controls. Unknown references remain literal. The operation preserves markup
+and line endings as text and decodes references once.
+
+Both encoders accept at most 1 MiB of UTF-8 and produce at most 12 MiB.
+Decoders accept up to 12 MiB and return up to 1 MiB of UTF-8.
+
+```sh
+cube text json-escape encode --text '🧊'
+# \uD83E\uDDCA
+cube text html-entity decode --text '&lt;&amp;&gt;'
+# <&>
+```
+
 ## Text statistics
 
 Statistics count scalars and overlapping n-grams, with `n` from 1 to 16.

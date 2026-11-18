@@ -133,6 +133,32 @@ impl Prepared {
             Action::Keccak256 => 64,
             Action::Ripemd160 => 40,
             Action::Sha512 => 128,
+            Action::Compress => binary::compression::encoded_bound(size),
+            Action::Decompress => binary::compression::decoded_bound(size),
+            Action::JsonEscapeEncode | Action::HtmlEntityEncode => size * 6,
+            Action::HtmlEntityDecode => size * 2,
+            Action::Utf16Encode => size * 2 + 2,
+            Action::Utf16Decode => size.div_ceil(2) * 3,
+            Action::Digest(profile) => profile.hex_length(),
+            Action::ByteText(profile, encode) => {
+                let limit = if encode {
+                    profile.byte_limit()
+                } else {
+                    profile.text_limit()
+                };
+                if size > limit {
+                    return Err(Error::new(
+                        ErrorCode::ResourceLimit,
+                        "byte encoding exceeds its input bound",
+                    ));
+                }
+                if encode {
+                    profile.max_encoded(size)
+                } else {
+                    size.min(profile.byte_limit())
+                }
+            }
+
             Action::Sha1 => 40,
             Action::Md5 => 32,
             Action::Crc32c => 8,
@@ -208,6 +234,9 @@ impl Prepared {
             }
             (Action::ShiftRight, Value::Bytes { data }, Arguments::Units { bits, unit_bytes }) => {
                 bytes(binary::transform::shift_right(&data, *bits, *unit_bytes)?)
+            }
+            (Action::ReverseBits, Value::Bytes { data }, Arguments::Units { unit_bytes, .. }) => {
+                bytes(binary::transform::reverse_bits(&data, *unit_bytes)?)
             }
             (Action::SwapEndian, Value::Bytes { data }, Arguments::Units { unit_bytes, .. }) => {
                 bytes(binary::transform::swap_endian(&data, *unit_bytes)?)
@@ -343,6 +372,55 @@ impl Prepared {
             (Action::Ripemd160, Value::Bytes { data }, _) => text(hashing::ripemd160(&data)?),
             (Action::Crc32, Value::Bytes { data }, _) => text(hashing::crc32(&data)),
             (Action::Sha512, Value::Bytes { data }, _) => text(hashing::sha512(&data)),
+            (Action::Compress, Value::Bytes { data }, Arguments::Compression(profile, level)) => {
+                bytes(binary::compression::compress(
+                    &data,
+                    binary::compression::EncodeSettings {
+                        profile: *profile,
+                        level: *level,
+                    },
+                )?)
+            }
+            (Action::Decompress, Value::Bytes { data }, Arguments::Compression(profile, _)) => {
+                bytes(binary::compression::decompress(
+                    &data,
+                    binary::compression::DecodeSettings { profile: *profile },
+                )?)
+            }
+            (Action::AsciiEncode, Value::Text { data }, _) => {
+                bytes(text::representation::ascii_encode(&data)?)
+            }
+            (Action::AsciiDecode, Value::Bytes { data }, _) => {
+                text(text::representation::ascii_decode(&data)?)
+            }
+            (Action::Utf16Encode, Value::Text { data }, Arguments::Utf16(settings)) => {
+                bytes(text::representation::utf16_encode(&data, *settings)?)
+            }
+            (Action::Utf16Decode, Value::Bytes { data }, Arguments::Utf16(settings)) => {
+                text(text::representation::utf16_decode(&data, *settings)?)
+            }
+            (Action::JsonEscapeEncode, Value::Text { data }, Arguments::AsciiOnly(ascii_only)) => {
+                text(text::representation::json_escape_encode(
+                    &data,
+                    *ascii_only,
+                )?)
+            }
+            (Action::JsonEscapeDecode, Value::Text { data }, _) => {
+                text(text::representation::json_escape_decode(&data)?)
+            }
+            (Action::HtmlEntityEncode, Value::Text { data }, _) => {
+                text(text::representation::html_entity_encode(&data)?)
+            }
+            (Action::HtmlEntityDecode, Value::Text { data }, _) => {
+                text(text::representation::html_entity_decode(&data)?)
+            }
+            (Action::ByteText(profile, true), Value::Bytes { data }, _) => {
+                text(profile.encode(&data)?)
+            }
+            (Action::ByteText(profile, false), Value::Text { data }, _) => {
+                bytes(profile.decode(&data)?)
+            }
+            (Action::Digest(profile), Value::Bytes { data }, _) => text(profile.digest(&data)?),
             (Action::Sha1, Value::Bytes { data }, _) => text(hashing::sha1(&data)),
             (Action::Md5, Value::Bytes { data }, _) => text(hashing::md5(&data)),
             (Action::Crc32c, Value::Bytes { data }, _) => text(hashing::crc32c(&data)),

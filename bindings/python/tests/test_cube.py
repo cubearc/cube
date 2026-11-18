@@ -295,9 +295,12 @@ def test_operation_discovery_uses_core_metadata():
     binary_ids = [
         "binary.add_wrapping",
         "binary.and",
+        "binary.compress.decode",
+        "binary.compress.encode",
         "binary.not",
         "binary.or",
         "binary.reverse",
+        "binary.reverse_bits",
         "binary.rotate_left",
         "binary.rotate_right",
         "binary.shift_left",

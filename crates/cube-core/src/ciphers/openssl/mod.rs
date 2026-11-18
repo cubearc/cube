@@ -8,7 +8,6 @@ pub(crate) use catalog::MODULE;
 pub use catalog::OPERATIONS;
 use schemars::JsonSchema;
 use serde::Deserialize;
-use sha2::Digest;
 use zeroize::{Zeroize, Zeroizing};
 pub const DECRYPT: &str = "cipher.openssl.decrypt";
 pub const MAX_INPUT: usize = 16 * 1024 * 1024;
@@ -133,23 +132,13 @@ pub fn decrypt(input: &[u8], settings: &Settings) -> Result<Vec<u8>, OperationEr
     if let Some(iterations) = settings.iterations {
         pbkdf2::pbkdf2_hmac::<sha2::Sha256>(&settings.password, salt, iterations, &mut derived);
     } else {
-        let mut previous = Zeroizing::new(Vec::new());
-        let mut position = 0;
-        while position < derived.len() {
-            let mut material = Zeroizing::new(previous.to_vec());
-            material.extend_from_slice(&settings.password);
-            material.extend_from_slice(salt);
-            previous = Zeroizing::new(
-                if matches!(settings.profile, Profile::Aes128Md5 | Profile::Aes256Md5) {
-                    md5::Md5::digest(&material).to_vec()
-                } else {
-                    sha2::Sha256::digest(&material).to_vec()
-                },
-            );
-            let length = (derived.len() - position).min(previous.len());
-            derived[position..position + length].copy_from_slice(&previous[..length]);
-            position += length;
-        }
+        use crate::ciphers::kdf::{LegacyDigest, evp_chain};
+        let digest = if matches!(settings.profile, Profile::Aes128Md5 | Profile::Aes256Md5) {
+            LegacyDigest::Md5
+        } else {
+            LegacyDigest::Sha256
+        };
+        evp_chain(digest, &settings.password, salt, 1, &mut derived);
     }
     let doc=Zeroizing::new(serde_json::json!({"mode":"cbc","padding":"pkcs7","key_hex":hex::encode(&derived[..key_bytes]),"iv_hex":hex::encode(&derived[key_bytes..])}).to_string());
     let s = aes_modes::Settings::parse(&doc).map_err(|_| failed())?;

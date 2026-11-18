@@ -106,17 +106,15 @@ pub fn discovery_document(
                         DiscoveryFormat::CliJson { metadata: true } => {
                             let views: Vec<_> =
                                 rows.iter().map(|d| d.profiled_discovery()).collect();
-                            // Keep every profile fact inside the existing hard
-                            // budget. Only opt-in lists use one-space indentation;
-                            // default legacy JSON keeps its exact formatter.
-                            let formatter = serde_json::ser::PrettyFormatter::with_indent(b" ");
-                            let mut serializer =
-                                serde_json::Serializer::with_formatter(&mut out, formatter);
-                            List {
-                                schema_version: 1,
-                                operations: views,
-                            }
-                            .serialize(&mut serializer)
+                            // Complete opt-in metadata lists use compact JSON to
+                            // fit the same discovery byte ceiling.
+                            serde_json::to_writer(
+                                &mut out,
+                                &List {
+                                    schema_version: 1,
+                                    operations: views,
+                                },
+                            )
                             .map_err(|_| failed())?;
                         }
                         DiscoveryFormat::CliJson { metadata: false } => {

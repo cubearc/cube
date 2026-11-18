@@ -14,6 +14,7 @@ mod binaryops;
 mod block_profiles;
 mod blockchain;
 mod boolean;
+mod byte_text;
 mod candidates;
 mod combinations;
 mod combinatorics;
@@ -37,6 +38,7 @@ mod homomorphic;
 mod ies;
 mod image;
 mod investigation;
+mod kdf;
 mod key_wrap;
 mod lattice_reference;
 mod lexical;
@@ -55,6 +57,7 @@ mod probability;
 mod puzzlecodes;
 mod puzzles;
 mod recipe;
+mod representation;
 mod rsa;
 mod sm2;
 mod solresol;
@@ -544,6 +547,106 @@ fn crc32(data: &[u8]) -> String {
 
 /// Compute RIPEMD-160 as 40 lowercase hexadecimal digits; input <=16 MiB.
 #[pyfunction]
+fn sha224(data: &[u8]) -> PyResult<String> {
+    hashing::sha224(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha384(data: &[u8]) -> PyResult<String> {
+    hashing::sha384(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha512_224(data: &[u8]) -> PyResult<String> {
+    hashing::sha512_224(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha512_256(data: &[u8]) -> PyResult<String> {
+    hashing::sha512_256(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha3_224(data: &[u8]) -> PyResult<String> {
+    hashing::sha3_224(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha3_256(data: &[u8]) -> PyResult<String> {
+    hashing::sha3_256(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha3_384(data: &[u8]) -> PyResult<String> {
+    hashing::sha3_384(data).map_err(file_error)
+}
+#[pyfunction]
+fn sha3_512(data: &[u8]) -> PyResult<String> {
+    hashing::sha3_512(data).map_err(file_error)
+}
+#[pyfunction]
+fn keccak224(data: &[u8]) -> PyResult<String> {
+    hashing::keccak224(data).map_err(file_error)
+}
+#[pyfunction]
+fn keccak384(data: &[u8]) -> PyResult<String> {
+    hashing::keccak384(data).map_err(file_error)
+}
+#[pyfunction]
+fn keccak512(data: &[u8]) -> PyResult<String> {
+    hashing::keccak512(data).map_err(file_error)
+}
+#[pyfunction]
+fn ripemd128(data: &[u8]) -> PyResult<String> {
+    hashing::ripemd128(data).map_err(file_error)
+}
+#[pyfunction]
+fn ripemd256(data: &[u8]) -> PyResult<String> {
+    hashing::ripemd256(data).map_err(file_error)
+}
+#[pyfunction]
+fn ripemd320(data: &[u8]) -> PyResult<String> {
+    hashing::ripemd320(data).map_err(file_error)
+}
+#[pyfunction]
+fn blake2b512(data: &[u8]) -> PyResult<String> {
+    hashing::blake2b512(data).map_err(file_error)
+}
+#[pyfunction]
+fn blake2s256(data: &[u8]) -> PyResult<String> {
+    hashing::blake2s256(data).map_err(file_error)
+}
+#[pyfunction]
+fn blake3(data: &[u8]) -> PyResult<String> {
+    hashing::blake3(data).map_err(file_error)
+}
+#[pyfunction]
+fn md4(data: &[u8]) -> PyResult<String> {
+    hashing::md4(data).map_err(file_error)
+}
+#[pyfunction]
+fn whirlpool(data: &[u8]) -> PyResult<String> {
+    hashing::whirlpool(data).map_err(file_error)
+}
+#[pyfunction]
+fn crc8_smbus(data: &[u8]) -> PyResult<String> {
+    hashing::crc8_smbus(data).map_err(file_error)
+}
+#[pyfunction]
+fn crc16_arc(data: &[u8]) -> PyResult<String> {
+    hashing::crc16_arc(data).map_err(file_error)
+}
+#[pyfunction]
+fn crc64_ecma182(data: &[u8]) -> PyResult<String> {
+    hashing::crc64_ecma182(data).map_err(file_error)
+}
+#[pyfunction]
+fn adler32(data: &[u8]) -> PyResult<String> {
+    hashing::adler32(data).map_err(file_error)
+}
+#[pyfunction]
+fn fletcher16(data: &[u8]) -> PyResult<String> {
+    hashing::fletcher16(data).map_err(file_error)
+}
+#[pyfunction]
+fn fletcher32(data: &[u8]) -> PyResult<String> {
+    hashing::fletcher32(data).map_err(file_error)
+}
+#[pyfunction]
 fn keccak256(data: &[u8]) -> PyResult<String> {
     hashing::keccak256(data).map_err(file_error)
 }
@@ -600,6 +703,9 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     video::register(module)?;
     web::register(module)?;
     binaryops::register(module)?;
+    byte_text::register(module)?;
+    representation::register(module)?;
+    kdf::register(module)?;
     combinatorics::register(module)?;
     multiset::register(module)?;
     lexical::register(module)?;
@@ -693,6 +799,31 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     module.add_function(wrap_pyfunction!(sha256, module)?)?;
     module.add_function(wrap_pyfunction!(ripemd160, module)?)?;
     module.add_function(wrap_pyfunction!(keccak256, module)?)?;
+    module.add_function(wrap_pyfunction!(sha224, module)?)?;
+    module.add_function(wrap_pyfunction!(sha384, module)?)?;
+    module.add_function(wrap_pyfunction!(sha512_224, module)?)?;
+    module.add_function(wrap_pyfunction!(sha512_256, module)?)?;
+    module.add_function(wrap_pyfunction!(sha3_224, module)?)?;
+    module.add_function(wrap_pyfunction!(sha3_256, module)?)?;
+    module.add_function(wrap_pyfunction!(sha3_384, module)?)?;
+    module.add_function(wrap_pyfunction!(sha3_512, module)?)?;
+    module.add_function(wrap_pyfunction!(keccak224, module)?)?;
+    module.add_function(wrap_pyfunction!(keccak384, module)?)?;
+    module.add_function(wrap_pyfunction!(keccak512, module)?)?;
+    module.add_function(wrap_pyfunction!(ripemd128, module)?)?;
+    module.add_function(wrap_pyfunction!(ripemd256, module)?)?;
+    module.add_function(wrap_pyfunction!(ripemd320, module)?)?;
+    module.add_function(wrap_pyfunction!(blake2b512, module)?)?;
+    module.add_function(wrap_pyfunction!(blake2s256, module)?)?;
+    module.add_function(wrap_pyfunction!(blake3, module)?)?;
+    module.add_function(wrap_pyfunction!(md4, module)?)?;
+    module.add_function(wrap_pyfunction!(whirlpool, module)?)?;
+    module.add_function(wrap_pyfunction!(crc8_smbus, module)?)?;
+    module.add_function(wrap_pyfunction!(crc16_arc, module)?)?;
+    module.add_function(wrap_pyfunction!(crc64_ecma182, module)?)?;
+    module.add_function(wrap_pyfunction!(adler32, module)?)?;
+    module.add_function(wrap_pyfunction!(fletcher16, module)?)?;
+    module.add_function(wrap_pyfunction!(fletcher32, module)?)?;
     module.add_function(wrap_pyfunction!(sha512, module)?)?;
     module.add_function(wrap_pyfunction!(sha1, module)?)?;
     module.add_function(wrap_pyfunction!(md5, module)?)?;

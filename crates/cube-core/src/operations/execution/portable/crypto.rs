@@ -10,7 +10,7 @@ use crate::{
 use serde_json::{Value, json};
 use stream::reference::authentication;
 pub(super) fn supports(op: &str) -> bool {
-    if crate::asymmetric::historical_public_key::supports(op) {
+    if crate::ciphers::kdf::supports(op) || crate::asymmetric::historical_public_key::supports(op) {
         return true;
     }
     matches!(
@@ -194,6 +194,9 @@ pub(super) fn execute(
         };
         return Ok(json!({"output":output}));
     }
+    if crate::ciphers::kdf::supports(op) {
+        return derive_key(op, &i, p);
+    }
     let input = bytes(&i["input"])?;
     if matches!(
         op,
@@ -317,4 +320,54 @@ fn authenticated(op: &str, input: &[u8], i: &Value, p: &Value) -> Result<Value, 
 }
 fn detached(result: modern_aead::Detached) -> Value {
     json!({"output":{"base64":crate::encoding::base64_encode(&result.ciphertext)},"tag":{"base64":crate::encoding::base64_encode(&result.tag)}})
+}
+
+fn derive_key(operation: &str, inputs: &Value, parameters: Value) -> Result<Value, OperationError> {
+    use crate::ciphers::kdf;
+    let invalid = || OperationError::new(ErrorCode::InvalidParameter, "invalid KDF settings");
+    let salt = zeroize::Zeroizing::new(bytes(&inputs["salt"])?);
+    let secret = zeroize::Zeroizing::new(bytes(
+        &inputs[if operation == kdf::HKDF {
+            "ikm"
+        } else {
+            "password"
+        }],
+    )?);
+    let byte_value = |value: &[u8]| json!({"base64": crate::encoding::base64_encode(value)});
+    let output = match operation {
+        kdf::PBKDF2 => kdf::pbkdf2(
+            &secret,
+            &salt,
+            serde_json::from_value(parameters).map_err(|_| invalid())?,
+        )?,
+        kdf::HKDF => {
+            let info = zeroize::Zeroizing::new(bytes(&inputs["info"])?);
+            kdf::hkdf(
+                &secret,
+                &salt,
+                &info,
+                serde_json::from_value(parameters).map_err(|_| invalid())?,
+            )?
+        }
+        kdf::SCRYPT => kdf::scrypt(
+            &secret,
+            &salt,
+            serde_json::from_value(parameters).map_err(|_| invalid())?,
+        )?,
+        kdf::ARGON2ID => kdf::argon2id(
+            &secret,
+            &salt,
+            serde_json::from_value(parameters).map_err(|_| invalid())?,
+        )?,
+        kdf::EVP_BYTES_TO_KEY => {
+            let result = kdf::evp_bytes_to_key(
+                &secret,
+                &salt,
+                serde_json::from_value(parameters).map_err(|_| invalid())?,
+            )?;
+            return Ok(json!({"key": byte_value(result.key()), "iv": byte_value(result.iv())}));
+        }
+        _ => return Err(invalid()),
+    };
+    Ok(json!({"output": byte_value(output.as_slice())}))
 }

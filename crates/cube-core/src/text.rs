@@ -9,6 +9,7 @@ pub mod lexical;
 pub(crate) mod mapping;
 pub mod multiset;
 pub mod positions;
+pub mod representation;
 pub mod selection;
 pub mod statistics;
 pub mod transform;

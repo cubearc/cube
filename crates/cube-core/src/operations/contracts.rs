@@ -21,6 +21,19 @@ pub const MAX_INSTANCE_BYTES: usize = 64 * 1024 * 1024;
 pub fn schema<T: JsonSchema>() -> Schema {
     wire::schema(schemars::schema_for!(T))
 }
+/// Exact Base64 byte transport with the declared decoded bound.
+pub(crate) fn bytes_schema<const MAX: usize>() -> Schema {
+    let mut shape = schema::<values::Bytes>().to_value();
+    shape["properties"]["base64"]["maxLength"] = json!(MAX.div_ceil(3) * 4);
+    shape["properties"]["base64"]["x-cube-max-decoded-bytes"] = json!(MAX);
+    Schema::try_from(shape).expect("bounded byte transport")
+}
+/// UTF-8 text transport. The owning operation also enforces the exact byte ceiling.
+pub(crate) fn text_schema<const MAX: usize>() -> Schema {
+    let mut shape = schema::<String>().to_value();
+    shape["maxLength"] = json!(MAX);
+    Schema::try_from(shape).expect("bounded text transport")
+}
 /// Project a named report field from its actual Rust DTO, retaining local
 /// definitions. Owning modules use this for complete independently named ports.
 pub(crate) fn field<T: JsonSchema>(name: &str) -> Schema {

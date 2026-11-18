@@ -15,6 +15,7 @@ use data_encoding::BASE32;
 
 use crate::Error;
 pub mod base58check;
+pub mod byte_text;
 mod execution;
 
 pub(crate) fn serialize_hex<S: serde::Serializer>(

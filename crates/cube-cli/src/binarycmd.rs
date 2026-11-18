@@ -1,6 +1,7 @@
 //! Byte-only CLI adaptation; algorithms and unit validation live in cube-core.
 use crate::{DecodeArgs, Input, Output};
 use clap::{Args, Subcommand};
+use cube_core::binary::compression as c;
 use cube_core::{
     binary::{self, transform as t},
     encoding,
@@ -41,6 +42,14 @@ pub(crate) struct UnitArgs {
     unit_bytes: usize,
 }
 #[derive(Args)]
+pub(crate) struct ReverseBitsArgs {
+    #[command(flatten)]
+    data: DecodeArgs,
+    /// Exact independent big-endian unit width, in bytes
+    #[arg(long)]
+    unit_bytes: usize,
+}
+#[derive(Args)]
 pub(crate) struct ShiftArgs {
     #[command(flatten)]
     unit: UnitArgs,
@@ -66,6 +75,23 @@ pub(crate) struct ArithmeticArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum BinaryCommand {
+    /// Compress exact bytes to one explicitly selected stream
+    Compress {
+        #[command(flatten)]
+        args: DecodeArgs,
+        #[arg(long, value_parser = clap::builder::PossibleValuesParser::new(c::Profile::NAMES.iter().copied()))]
+        profile: String,
+        /// Optional level 0 through 9 for deflate, zlib and gzip
+        #[arg(long)]
+        level: Option<u8>,
+    },
+    /// Decompress exactly one bounded stream in the named format
+    Decompress {
+        #[command(flatten)]
+        args: DecodeArgs,
+        #[arg(long, value_parser = clap::builder::PossibleValuesParser::new(c::Profile::NAMES.iter().copied()))]
+        profile: String,
+    },
     /// XOR bytes with a repeating key (not secure encryption)
     Xor(XorArgs),
     /// Rotate left within independent big-endian units
@@ -92,6 +118,8 @@ pub(crate) enum BinaryCommand {
     ShiftRight(ShiftArgs),
     /// Reverse byte order within complete units, preserving unit order
     SwapEndian(UnitArgs),
+    /// Reverse bits within complete big-endian units, preserving unit order
+    ReverseBits(ReverseBitsArgs),
 }
 fn data(args: DecodeArgs, op: &'static str) -> Result<(Vec<u8>, Output), Box<dyn Error>> {
     Ok((args.input.read_bounded(t::MAX_INPUT, op)?, args.output))
@@ -104,6 +132,26 @@ fn key(hex: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 }
 pub(crate) fn run(command: BinaryCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let (bytes, format) = match command {
+        BinaryCommand::Compress {
+            args,
+            profile,
+            level,
+        } => {
+            let profile = c::Profile::parse(&profile, c::ENCODE)?;
+            let (bytes, format) = data(args, c::ENCODE)?;
+            (
+                c::compress(&bytes, c::EncodeSettings { profile, level })?,
+                format,
+            )
+        }
+        BinaryCommand::Decompress { args, profile } => {
+            let profile = c::Profile::parse(&profile, c::DECODE)?;
+            let (bytes, format) = data(args, c::DECODE)?;
+            (
+                c::decompress(&bytes, c::DecodeSettings { profile })?,
+                format,
+            )
+        }
         BinaryCommand::Xor(args) => {
             let key = match (args.key, args.key_hex) {
                 (Some(key), None) => key.into_bytes(),
@@ -184,6 +232,10 @@ pub(crate) fn run(command: BinaryCommand, output: &mut impl Write) -> Result<(),
                 t::shift_right(&bytes, args.bits, args.unit.unit_bytes)?,
                 format,
             )
+        }
+        BinaryCommand::ReverseBits(args) => {
+            let (bytes, format) = data(args.data, "binary.reverse_bits")?;
+            (t::reverse_bits(&bytes, args.unit_bytes)?, format)
         }
         BinaryCommand::SwapEndian(args) => {
             let (bytes, format) = data(args.data, "binary.swap_endian")?;

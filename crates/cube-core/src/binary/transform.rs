@@ -54,6 +54,22 @@ pub fn reverse(data: &[u8]) -> Result<Vec<u8>, OperationError> {
     check(data, "binary.reverse")?;
     Ok(data.iter().rev().copied().collect())
 }
+const REVERSE_BITS: &str = "binary.reverse_bits";
+/// Reverse the bits within each complete big-endian 1/2/4/8-byte unit.
+/// Unit order is preserved. At most 16 MiB. Applying twice restores the bytes.
+///
+/// ```
+/// use cube_core::binary::transform::reverse_bits;
+/// assert_eq!(reverse_bits(&[0x01, 0x02, 0x80, 0x00], 2)?, [0x40, 0x80, 0, 1]);
+/// # Ok::<(), cube_core::errors::OperationError>(())
+/// ```
+pub fn reverse_bits(data: &[u8], unit_bytes: usize) -> Result<Vec<u8>, OperationError> {
+    complete(data, unit_bytes, REVERSE_BITS)?;
+    Ok(data
+        .chunks_exact(unit_bytes)
+        .flat_map(|unit| unit.iter().rev().map(|byte| byte.reverse_bits()))
+        .collect())
+}
 pub(crate) fn validate_unit(unit_bytes: usize, op: &'static str) -> Result<(), OperationError> {
     if ![1, 2, 4, 8].contains(&unit_bytes) {
         Err(invalid(op, "unit_bytes", "unit_bytes must be 1, 2, 4 or 8"))
@@ -292,7 +308,65 @@ const COUNT: Parameter = Parameter {
         max: u64::MAX,
     },
 };
-const PROFILED: [crate::operations::metadata::Entry; 12] = [
+const REVERSE_BITS_UNIT: Parameter = Parameter {
+    required: true,
+    default: None,
+    ..UNIT
+};
+const REVERSE_BITS_SPEC: Descriptor = Descriptor {
+    id: REVERSE_BITS,
+    category: "binary",
+    description: "Reverse bits within complete unsigned big-endian units, preserving unit order.",
+    input_type: "bytes",
+    output_type: "bytes",
+    parameters: &[REVERSE_BITS_UNIT],
+    deterministic: true,
+    reversible: Some(true),
+    command: "binary reverse-bits",
+    example: "cube binary reverse-bits --unit-bytes 2 --text AB",
+};
+const fn reverse_bits_metadata(id: &'static str) -> crate::operations::metadata::Entry {
+    use crate::operations::metadata as m;
+    m::Entry {
+        descriptor: Descriptor {
+            id,
+            ..REVERSE_BITS_SPEC
+        },
+        metadata: Some(m::Metadata {
+            schema_version: 1,
+            canonical_name: "Bit reversal within units",
+            family: "binary_transforms",
+            aliases: &[],
+            security: m::Security {
+                classification: m::Classification::BinaryTransform,
+                limitations: "Reversible byte transformation without confidentiality or authentication.",
+                private_input: false,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: m::Profile {
+                variant: REVERSE_BITS_SPEC.description,
+                alphabet: "Exact bytes and 1/2/4/8-byte units.",
+                key: "No key.",
+                key_advancement: "Independent units.",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[m::ResourceBound {
+                name: "input_bytes",
+                maximum: MAX_INPUT as u64,
+                unit: "bytes",
+                scope: m::Scope::Core,
+            }],
+            resource_notes: "At most 16 MiB input and output. Linear work.",
+            rust_api: "cube_core::binary::transform::reverse_bits",
+            python_api: "reverse_bits",
+            references: &["https://doc.rust-lang.org/std/primitive.u8.html#method.reverse_bits"],
+        }),
+    }
+}
+const PROFILED: [crate::operations::metadata::Entry; 13] = [
+    reverse_bits_metadata(REVERSE_BITS),
     {
         const DECLARATION: crate::operations::Descriptor = Descriptor {
             id: "binary.and",
@@ -1010,5 +1084,78 @@ const PROFILED: [crate::operations::metadata::Entry; 12] = [
 ];
 pub const OPERATIONS: &[crate::operations::Descriptor] =
     &crate::operations::metadata::descriptors(&PROFILED);
+use crate::operations::contracts as c;
+use serde_json::json;
+fn reverse_bits_parameters() -> schemars::Schema {
+    c::descriptor_parameters(&REVERSE_BITS_SPEC)
+}
+const INPUT_PORT: c::Port = c::Port {
+    name: "input",
+    semantic_type: "bytes",
+    schema: c::bytes_schema::<MAX_INPUT>,
+    required: true,
+};
+const CONTRACTS: &[c::Entry] = &[c::Entry {
+    operation_version: 1,
+    descriptor: REVERSE_BITS_SPEC,
+    inputs: &[INPUT_PORT],
+    parameters: reverse_bits_parameters,
+    outputs: &[c::Port {
+        name: "output",
+        ..INPUT_PORT
+    }],
+    limits: c::Limits {
+        max_input_bytes: Some(MAX_INPUT as u64),
+        max_output_bytes: Some(MAX_INPUT as u64),
+        max_work: Some(MAX_INPUT as u64),
+        max_items: None,
+        max_memory_bytes: None,
+    },
+    fixture: || {
+        let result = reverse_bits(&[0x01, 0x02, 0x80, 0], 2)?;
+        Ok(c::Fixture {
+            inputs: json!({"input":{"base64":"AQKAAA=="}}),
+            parameters: json!({"unit_bytes":2}),
+            outputs: json!({"output":{"base64":crate::encoding::base64_encode(&result)}}),
+        })
+    },
+}];
 pub(crate) const MODULE: crate::operations::Module =
-    crate::operations::Module::profiled(OPERATIONS, &PROFILED);
+    crate::operations::Module::profiled(OPERATIONS, &PROFILED).with_contracts(CONTRACTS);
+
+#[cfg(test)]
+mod reverse_bits_tests {
+    use super::*;
+
+    #[test]
+    fn exact_bit_order_and_boundaries() {
+        assert_eq!(reverse_bits(&[1, 2, 128, 0], 2).unwrap(), [64, 128, 0, 1]);
+        assert_eq!(
+            reverse_bits(&[0, 255, 1, 128, 0b10101010], 1).unwrap(),
+            [0, 255, 128, 1, 0b01010101]
+        );
+        for unit in [1, 2, 4, 8] {
+            let bytes = [0, 1, 128, 255, 2, 0, 42, 14];
+            assert_eq!(
+                reverse_bits(&reverse_bits(&bytes, unit).unwrap(), unit).unwrap(),
+                bytes
+            );
+            assert!(reverse_bits(&[], unit).unwrap().is_empty());
+        }
+        assert_eq!(
+            reverse_bits(&[0, 0, 0], 2).unwrap_err().code,
+            ErrorCode::InvalidParameter
+        );
+        assert_eq!(
+            reverse_bits(&[], 3).unwrap_err().code,
+            ErrorCode::InvalidParameter
+        );
+        let mut bytes = vec![0; MAX_INPUT];
+        assert_eq!(reverse_bits(&bytes, 8).unwrap(), bytes);
+        bytes.push(0);
+        assert_eq!(
+            reverse_bits(&bytes, 1).unwrap_err().code,
+            ErrorCode::ResourceLimit
+        );
+    }
+}

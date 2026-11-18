@@ -87,3 +87,6 @@ A separate independently discovered wrong-password/valid-padding witness is
 verified with real OpenSSL and tests the absence of authentication. Core, CLI,
 installed native Python, actual Wasm and private native Play exercise the corpus.
 No OpenSSL library is linked into Cube, and no FIPS/CAVP certification is claimed.
+
+For artifacts that provide the salt and lengths separately, see the
+[explicit EVP_BytesToKey profile](key-derivation.md#profiles-and-limits).

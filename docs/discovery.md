@@ -105,6 +105,7 @@ query ceiling. Lower the document limit with `--max-output-bytes` or the native
 Python keyword `max_output_bytes`; a larger ceiling is rejected. The limit counts
 the entire UTF-8 document, including CLI envelopes, indentation and the final
 newline (also counted in Python's compact internal JSON before parsing).
+The complete opt-in CLI list with `--metadata` uses compact JSON.
 
 Serialization checks before every append. An exact-sized budget succeeds; one
 byte less returns `resource_limit` without a partial result/stdout prefix.

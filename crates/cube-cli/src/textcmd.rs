@@ -102,6 +102,27 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Strict ASCII text and bytes
+    Ascii {
+        #[command(subcommand)]
+        command: Ascii,
+    },
+    /// UTF-16 with explicit code-unit order and BOM policy
+    Utf16 {
+        #[command(subcommand)]
+        command: Utf16,
+    },
+    /// RFC 8259 string-content escapes
+    JsonEscape {
+        #[command(subcommand)]
+        command: JsonEscape,
+    },
+    /// WHATWG text-context character references
+    HtmlEntity {
+        #[command(subcommand)]
+        command: HtmlEntity,
+    },
+
     /// Exact caller-dictionary multiword anagrams (JSON)
     Anagram {
         #[command(subcommand)]
@@ -232,6 +253,11 @@ pub(crate) fn run(
     capture: Option<&crate::capture::Target>,
 ) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Ascii { command } => return ascii(command, output),
+        TextCommand::Utf16 { command } => return utf16(command, output),
+        TextCommand::JsonEscape { command } => return json_escape(command, output),
+        TextCommand::HtmlEntity { command } => return html_entity(command, output),
+
         TextCommand::Anagram { command } => return crate::lexicalcmd::anagram(command, output),
         TextCommand::WordLadder { command } => return crate::lexicalcmd::ladder(command, output),
         TextCommand::Multiset { command } => return crate::multisetcmd::run(command, output),
@@ -476,4 +502,127 @@ pub(crate) fn run(
     };
     crate::write_text(output, &result)?;
     Ok(())
+}
+
+use cube_core::text::representation as r;
+#[derive(Subcommand)]
+pub(crate) enum Ascii {
+    /// Encode ASCII scalars as bytes
+    Encode(crate::DecodeArgs),
+    /// Decode ASCII bytes as text
+    Decode(Input),
+}
+#[derive(Args)]
+pub(crate) struct Utf16Options {
+    #[arg(long, value_parser = ["le", "be"])]
+    byte_order: String,
+    #[arg(long, value_parser = ["require", "forbid", "strip", "preserve"])]
+    bom: String,
+}
+impl Utf16Options {
+    fn settings(
+        &self,
+        operation: &'static str,
+    ) -> Result<r::Utf16Settings, cube_core::errors::OperationError> {
+        r::Utf16Settings::parse(&self.byte_order, &self.bom)
+            .map_err(|error| error.operation(operation))
+    }
+}
+#[derive(Subcommand)]
+pub(crate) enum Utf16 {
+    /// Encode Unicode scalars as UTF-16 code units
+    Encode {
+        #[command(flatten)]
+        data: crate::DecodeArgs,
+        #[command(flatten)]
+        options: Utf16Options,
+    },
+    /// Decode complete UTF-16 code units
+    Decode {
+        #[command(flatten)]
+        input: Input,
+        #[command(flatten)]
+        options: Utf16Options,
+    },
+}
+#[derive(Subcommand)]
+pub(crate) enum JsonEscape {
+    /// Encode string content without surrounding quotes
+    Encode {
+        #[command(flatten)]
+        input: Input,
+        /// Keep unescaped non-ASCII scalars
+        #[arg(long)]
+        allow_unicode: bool,
+    },
+    /// Decode string content without surrounding quotes
+    Decode(Input),
+}
+#[derive(Subcommand)]
+pub(crate) enum HtmlEntity {
+    /// Encode five markup-sensitive scalars as hex references
+    Encode(Input),
+    /// Decode named and numeric references in a text context
+    Decode(Input),
+}
+
+fn ascii(command: Ascii, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+    match command {
+        Ascii::Encode(args) => {
+            let text = args
+                .input
+                .read_text_limit(r::MAX_TEXT, "text.ascii.encode")?;
+            crate::write_bytes(output, &r::ascii_encode(&text)?, args.output)?;
+        }
+        Ascii::Decode(input) => {
+            let data = input.read_bounded(r::MAX_TEXT, "text.ascii.decode")?;
+            crate::write_text(output, &r::ascii_decode(&data)?)?;
+        }
+    }
+    Ok(())
+}
+fn utf16(command: Utf16, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+    match command {
+        Utf16::Encode { data, options } => {
+            let id = "text.utf16.encode";
+            let text = data.input.read_text_limit(r::MAX_TEXT, id)?;
+            crate::write_bytes(
+                output,
+                &r::utf16_encode(&text, options.settings(id)?)?,
+                data.output,
+            )?;
+        }
+        Utf16::Decode { input, options } => {
+            let id = "text.utf16.decode";
+            let bytes = input.read_bounded(r::MAX_UTF16, id)?;
+            crate::write_text(output, &r::utf16_decode(&bytes, options.settings(id)?)?)?;
+        }
+    }
+    Ok(())
+}
+fn json_escape(command: JsonEscape, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+    let text = match command {
+        JsonEscape::Encode {
+            input,
+            allow_unicode,
+        } => r::json_escape_encode(
+            &input.read_text_limit(r::MAX_TEXT, "text.json_escape.encode")?,
+            !allow_unicode,
+        )?,
+        JsonEscape::Decode(input) => r::json_escape_decode(
+            &input.read_text_limit(r::MAX_ESCAPED, "text.json_escape.decode")?,
+        )?,
+    };
+    Ok(crate::write_text(output, &text)?)
+}
+fn html_entity(command: HtmlEntity, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
+    let text = match command {
+        HtmlEntity::Encode(input) => {
+            r::html_entity_encode(&input.read_text_limit(r::MAX_TEXT, "text.html_entity.encode")?)?
+        }
+        HtmlEntity::Decode(input) => r::html_entity_decode(
+            &input.read_text_limit(r::MAX_ESCAPED, "text.html_entity.decode")?,
+        )?,
+    };
+    Ok(crate::write_text(output, &text)?)
 }

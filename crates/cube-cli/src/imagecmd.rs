@@ -176,6 +176,19 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Read quantized baseline JPEG DCT coefficient parity and exact bit counts (JSON)
+    JpegCoefficients {
+        #[command(flatten)]
+        input: crate::Input,
+        #[arg(long, value_parser = ["baseline_ac_parity"])]
+        profile: String,
+        #[arg(long)]
+        component_id: u8,
+        #[arg(long)]
+        start_bit: u32,
+        #[arg(long)]
+        max_bits: u32,
+    },
     /// Read exact width/height facts for numeric composition
     Dimensions { path: PathBuf },
     /// Exact overlap moments at explicit spatial lags (JSON)
@@ -453,6 +466,29 @@ pub(crate) fn run(
     capture: Option<&crate::capture::Target>,
 ) -> Result<(), Box<dyn Error>> {
     match command {
+        ImageCommand::JpegCoefficients {
+            input,
+            profile,
+            component_id,
+            start_bit,
+            max_bits,
+        } => {
+            use image::jpeg_coefficients as jpeg;
+            let settings: jpeg::Settings = serde_json::from_value(serde_json::json!({
+                "profile":profile,"component_id":component_id,"start_bit":start_bit,"max_bits":max_bits,
+            }))?;
+            let result = jpeg::extract(
+                &input.read_bounded(jpeg::MAX_INPUT, jpeg::EXTRACT)?,
+                settings,
+            )?;
+            writeln!(
+                output,
+                "{}",
+                serde_json::json!({
+                    "bits":{"base64":cube_core::encoding::base64_encode(&result.bits)},"report":result.report,
+                })
+            )?;
+        }
         ImageCommand::Dimensions { path } => writeln!(
             output,
             "{}",

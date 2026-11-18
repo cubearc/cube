@@ -29,6 +29,7 @@ The two reorder operations differ in scope:
 | Operation | CLI command | Result for `41 42 43 44` |
 | --- | --- | --- |
 | Reverse the buffer | `binary reverse` | `44 43 42 41` |
+| Reverse bits within each two-byte unit | `binary reverse-bits --unit-bytes 2` | `42 82 22 c2` |
 | Swap two-byte units | `binary swap-endian --unit-bytes 2` | `42 41 44 43` |
 
 Both operations restore the input when applied twice. Swapping byte order keeps
@@ -57,6 +58,38 @@ The operations handle overflow as follows:
 A shift of zero leaves the input unchanged. A shift equal to the unit's bit width
 produces zeros; a larger shift fails. Partial units fail without padding.
 Unit widths and operand lengths are validated even for empty input.
+
+Bit reversal requires an explicit unit width of 1, 2, 4 or 8 bytes. It
+reverses bits independently within each complete big-endian unit. Applying
+the same command twice restores the bytes.
+
+## Compression formats
+
+Use `binary compress` and `binary decompress` with an explicit `--profile`.
+Selected profiles read one complete stream. Trailing data, concatenated
+streams and external dictionaries fail.
+
+| Profile | Wire format | Encoder |
+| --- | --- | --- |
+| `deflate` | Raw RFC 1951 stream | Levels 0–9, default 6 |
+| `zlib` | RFC 1950 stream with Adler-32 | Levels 0–9, default 6 |
+| `gzip` | RFC 1952 single member with CRC-32 and length | Levels 0–9, default 6, mtime 0, no filename |
+| `brotli` | RFC 7932 standard window | Quality 4, window 1 MiB, block setting 64 KiB |
+| `zstd` | RFC 8878 standard frame | Fixed fastest setting with a content checksum |
+| `lzma_alone` | LZMA1 in a .lzma header, with end marker when size is unknown | Fixed fast preset with 1 MiB dictionary |
+
+Input and output are capped at 16 MiB. Decoder windows and dictionaries
+are bounded at 16 MiB. Decoding stops at the smaller of 16 MiB and 256 times
+the encoded byte count. Encoding also checks this ratio so its returned
+stream can be read under the same rules. Declared lengths are checked when
+the format carries them. Any included checksum detects corruption. It
+provides no authentication.
+
+```sh
+cube binary compress --profile zlib --text abc --output raw > abc.zlib
+cube binary decompress --profile zlib --file abc.zlib
+# 616263
+```
 
 ## Limits
 

@@ -26,6 +26,43 @@ pub(super) fn execute(
     _budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    // Direct invocations have the operation's own declared limits.
+    if let Some(profile) = crate::hashing::extended::Profile::find(operation) {
+        return Ok(json!({"output": profile.digest(&super::bytes(&inputs["input"])?)?}));
+    }
+    use crate::binary::compression as c;
+    if matches!(operation, c::ENCODE | c::DECODE) {
+        let data = super::bytes(&inputs["input"])?;
+        let output = if operation == c::ENCODE {
+            c::compress(
+                &data,
+                serde_json::from_value(parameters).map_err(|_| invalid())?,
+            )?
+        } else {
+            c::decompress(
+                &data,
+                serde_json::from_value(parameters).map_err(|_| invalid())?,
+            )?
+        };
+        return Ok(json!({"output": {"base64": crate::encoding::base64_encode(&output)}}));
+    }
+    if operation == "binary.reverse_bits" {
+        let output = crate::binary::transform::reverse_bits(
+            &super::bytes(&inputs["input"])?,
+            super::field(&parameters, "unit_bytes")?,
+        )?;
+        return Ok(json!({"output": {"base64": crate::encoding::base64_encode(&output)}}));
+    }
+    if let Some((profile, encode)) = crate::encoding::byte_text::Profile::find(operation) {
+        if encode {
+            return Ok(json!({"output": profile.encode(&super::bytes(&inputs["input"])?)?}));
+        }
+        let output = profile.decode(inputs["input"].as_str().ok_or_else(invalid)?)?;
+        return Ok(json!({"output": {"base64": crate::encoding::base64_encode(&output)}}));
+    }
+    if let Some(output) = representation(operation, &inputs["input"], &parameters)? {
+        return Ok(json!({"output": output}));
+    }
     // The direct Core contract accepts full-width u64 counts; pipeline integers
     // have a smaller signed range. Preserve the declared direct contract here.
     if matches!(operation, "binary.rotate_left" | "binary.rotate_right") {
@@ -96,4 +133,30 @@ pub(super) fn execute(
         pipeline::Value::Text { data } => Ok(json!({"output":data})),
         _ => Err(invalid()),
     }
+}
+
+fn representation(
+    operation: &str,
+    input: &Value,
+    parameters: &Value,
+) -> Result<Option<Value>, OperationError> {
+    use crate::text::representation as r;
+    let text = || input.as_str().ok_or_else(invalid);
+    let settings =
+        || serde_json::from_value::<r::Utf16Settings>(parameters.clone()).map_err(|_| invalid());
+    let base64 = |value: &[u8]| json!({"base64": crate::encoding::base64_encode(value)});
+    Ok(Some(match operation {
+        "text.ascii.encode" => base64(&r::ascii_encode(text()?)?),
+        "text.ascii.decode" => json!(r::ascii_decode(&super::bytes(input)?)?),
+        "text.utf16.encode" => base64(&r::utf16_encode(text()?, settings()?)?),
+        "text.utf16.decode" => json!(r::utf16_decode(&super::bytes(input)?, settings()?)?),
+        "text.json_escape.encode" => json!(r::json_escape_encode(
+            text()?,
+            super::field(parameters, "ascii_only")?
+        )?),
+        "text.json_escape.decode" => json!(r::json_escape_decode(text()?)?),
+        "text.html_entity.encode" => json!(r::html_entity_encode(text()?)?),
+        "text.html_entity.decode" => json!(r::html_entity_decode(text()?)?),
+        _ => return Ok(None),
+    }))
 }

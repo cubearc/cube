@@ -1340,6 +1340,150 @@ Example:
 cube binary and --key-hex ff0f --text AB
 ```
 
+## binary.compress.decode
+
+Read one complete frame in the named wire format and reject trailing data.
+
+Category: `binary`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "eJxLTEoGAAJNASc="
+    }
+  },
+  "parameters": {
+    "profile": "zlib"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DecodeSettings",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "deflate",
+        "zlib",
+        "gzip",
+        "brotli",
+        "zstd",
+        "lzma_alone"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary decompress --profile zlib --file data.zlib
+```
+
+## binary.compress.encode
+
+Compress exact bytes with one named wire format and bounded output.
+
+Category: `binary`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJj"
+    }
+  },
+  "parameters": {
+    "profile": "zlib"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EncodeSettings",
+  "type": "object",
+  "properties": {
+    "level": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 9,
+      "minimum": 0
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "deflate",
+        "zlib",
+        "gzip",
+        "brotli",
+        "zstd",
+        "lzma_alone"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary compress --profile zlib --text abc
+```
+
 ## binary.not
 
 Invert all eight bits per byte; preserve byte length, <=16 MiB.
@@ -1482,6 +1626,68 @@ Example:
 
 ```sh
 cube binary reverse --text AB
+```
+
+## binary.reverse_bits
+
+Reverse bits within complete unsigned big-endian units, preserving unit order.
+
+Category: `binary`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "AQKAAA=="
+    }
+  },
+  "parameters": {
+    "unit_bytes": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "unit_bytes": {
+      "description": "Independent unsigned big-endian units: 1/2/4/8 bytes; partial units fail.",
+      "type": "integer",
+      "enum": [
+        1,
+        2,
+        4,
+        8
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "unit_bytes"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube binary reverse-bits --unit-bytes 2 --text AB
 ```
 
 ## binary.rotate_left
@@ -16728,6 +16934,345 @@ Example:
 cube cipher --help
 ```
 
+## cipher.kdf.argon2id
+
+Version 0x13 Argon2id with explicit memory, iterations, lanes and output length.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `password` | `bytes` |
+| Input | `salt` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Argon2id",
+  "type": "object",
+  "properties": {
+    "iterations": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 255,
+      "minimum": 1
+    },
+    "lanes": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 32,
+      "minimum": 1
+    },
+    "memory_kib": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 64512,
+      "minimum": 8
+    },
+    "output_bytes": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 1024,
+      "minimum": 16
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "memory_kib",
+    "iterations",
+    "lanes",
+    "output_bytes"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher kdf argon2id --secret-file secret.bin --salt-file salt.bin --memory-kib 32 --iterations 2 --lanes 1 --output-bytes 32 > derived.bin
+```
+
+## cipher.kdf.evp_bytes_to_key
+
+Legacy OpenSSL digest chaining with an explicit digest, count, eight-byte salt and key and IV sizes.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `password` | `bytes` |
+| Input | `salt` | `bytes` |
+| Output | `key` | `bytes` |
+| Output | `iv` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EvpBytesToKey",
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1000000,
+      "minimum": 1
+    },
+    "digest": {
+      "$ref": "#/$defs/LegacyDigest"
+    },
+    "iv_bytes": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 1023,
+      "minimum": 0
+    },
+    "key_bytes": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 1024,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "digest",
+    "count",
+    "key_bytes",
+    "iv_bytes"
+  ],
+  "$defs": {
+    "LegacyDigest": {
+      "type": "string",
+      "enum": [
+        "md5",
+        "sha256"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher kdf evp-bytes-to-key --secret-file secret.bin --salt-file salt.bin --digest md5 --count 1 --key-bytes 32 --iv-bytes 16 > derived.bin
+```
+
+## cipher.kdf.hkdf
+
+RFC 5869 extract and expand with SHA256 or SHA512 and explicit salt and info.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `ikm` | `bytes` |
+| Input | `salt` | `bytes` |
+| Input | `info` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hkdf",
+  "type": "object",
+  "properties": {
+    "output_bytes": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 1024,
+      "minimum": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Sha2"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "output_bytes"
+  ],
+  "$defs": {
+    "Sha2": {
+      "type": "string",
+      "enum": [
+        "sha256",
+        "sha512"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher kdf hkdf --secret-file secret.bin --salt-file salt.bin --profile sha256 --info-file info.bin --output-bytes 32 > derived.bin
+```
+
+## cipher.kdf.pbkdf2
+
+PBKDF2-HMAC-SHA256 or SHA512 with explicit iterations and output length.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `password` | `bytes` |
+| Input | `salt` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pbkdf2",
+  "type": "object",
+  "properties": {
+    "iterations": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 10000000,
+      "minimum": 1
+    },
+    "output_bytes": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 1024,
+      "minimum": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Sha2"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "iterations",
+    "output_bytes"
+  ],
+  "$defs": {
+    "Sha2": {
+      "type": "string",
+      "enum": [
+        "sha256",
+        "sha512"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube cipher kdf pbkdf2 --secret-file secret.bin --salt-file salt.bin --profile sha256 --iterations 2 --output-bytes 32 > derived.bin
+```
+
+## cipher.kdf.scrypt
+
+RFC 7914 scrypt with explicit N, r, p and output length.
+
+Category: `ciphers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `password` | `bytes` |
+| Input | `salt` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scrypt",
+  "type": "object",
+  "properties": {
+    "n": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 524288,
+      "minimum": 2
+    },
+    "output_bytes": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 1024,
+      "minimum": 16
+    },
+    "p": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1024,
+      "minimum": 1
+    },
+    "r": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1024,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "n",
+    "r",
+    "p",
+    "output_bytes"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube cipher kdf scrypt --secret-file secret.bin --salt-file salt.bin --n 16 --r 1 --p 1 --output-bytes 32 > derived.bin
+```
+
 ## cipher.key_phrase.decode
 
 Decode the ACA Key Phrase alphabet into all per-letter readings without guessing plaintext.
@@ -31727,6 +32272,186 @@ Example:
 cube cipher ntru-kem decapsulate --parameters-file settings.json --key-file private.bin --file ciphertext.bin
 ```
 
+## encoding.ascii85.decode
+
+Explicit Adobe framing with canonical zero shorthand and final group.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "<~AoDS~>"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode ascii85 --text '<~AoDS~>'
+```
+
+## encoding.ascii85.encode
+
+Explicit Adobe framing with canonical zero shorthand and final group.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode ascii85 --text 'foo'
+```
+
+## encoding.ascii85_bare.decode
+
+Adobe packing with canonical zero shorthand and final group, without framing.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AoDS"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode ascii85-bare --text 'AoDS'
+```
+
+## encoding.ascii85_bare.encode
+
+Adobe packing with canonical zero shorthand and final group, without framing.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode ascii85-bare --text 'foo'
+```
+
 ## encoding.base32.decode
 
 Decode base32 with strict documented alphabet rules.
@@ -31817,6 +32542,96 @@ Example:
 
 ```sh
 cube encode base32 --text foo
+```
+
+## encoding.base36.decode
+
+Lowercase GMP magnitude alphabet with one leading zero digit per leading zero byte.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "3zvxr"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode base36 --text '3zvxr'
+```
+
+## encoding.base36.encode
+
+Lowercase GMP magnitude alphabet with one leading zero digit per leading zero byte.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode base36 --text 'foo'
 ```
 
 ## encoding.base58.decode
@@ -32014,6 +32829,96 @@ Example:
 cube encode base58check --version-byte 0 --text abc
 ```
 
+## encoding.base62.decode
+
+GMP digits, uppercase letters, then lowercase letters, with one leading zero digit per leading zero byte.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "SAPP"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode base62 --text 'SAPP'
+```
+
+## encoding.base62.encode
+
+GMP digits, uppercase letters, then lowercase letters, with one leading zero digit per leading zero byte.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode base62 --text 'foo'
+```
+
 ## encoding.base64.decode
 
 Decode base64 with strict documented alphabet rules.
@@ -32106,6 +33011,276 @@ Example:
 cube encode base64 --text foo
 ```
 
+## encoding.base91.decode
+
+Original basE91 alphabet and 13/14-bit packing with a strict canonical tail.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "nX,<:WRT%yxtYQ:mbr4JB*H[LR/@Qj{o0aU=Z"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode base91 --text 'nX,<:WRT%yxtYQ:mbr4JB*H[LR/@Qj{o0aU=Z'
+```
+
+## encoding.base91.encode
+
+Original basE91 alphabet and 13/14-bit packing with a strict canonical tail.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "VGhpcyBpcyBhIHJhbmRvbSBiaW5hcnkgc3RyaW5n"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode base91 --text 'This is a random binary string'
+```
+
+## encoding.base92.decode
+
+Original Base92 alphabet and 13-bit packing, canonical tail and tilde empty marker.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "Fc_$aOTdKnsM*k"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode base92 --text 'Fc_$aOTdKnsM*k'
+```
+
+## encoding.base92.encode
+
+Original Base92 alphabet and 13-bit packing, canonical tail and tilde empty marker.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "aGVsbG8gd29ybGQ="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode base92 --text 'hello world'
+```
+
+## encoding.binary.decode
+
+Eight binary digits per byte with one ASCII space between tokens.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "01100110 01101111 01101111"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode binary --text '01100110 01101111 01101111'
+```
+
+## encoding.binary.encode
+
+Eight binary digits per byte with one ASCII space between tokens.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode binary --text 'foo'
+```
+
 ## encoding.hex.decode
 
 Decode hex with strict documented alphabet rules.
@@ -32196,6 +33371,186 @@ Example:
 
 ```sh
 cube encode hex --text foo
+```
+
+## encoding.octal.decode
+
+Three octal digits per byte with one ASCII space between tokens. Values above 377 fail.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "146 157 157"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode octal --text '146 157 157'
+```
+
+## encoding.octal.encode
+
+Three octal digits per byte with one ASCII space between tokens. Values above 377 fail.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode octal --text 'foo'
+```
+
+## encoding.url_component.decode
+
+Unreserved ASCII or percent triplets. Encoding emits uppercase triplets. Decoding accepts either hex case.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "foo"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube decode url-component --text 'foo'
+```
+
+## encoding.url_component.encode
+
+Unreserved ASCII or percent triplets. Encoding emits uppercase triplets. Decoding accepts either hex case.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube encode url-component --text 'foo'
 ```
 
 ## esolang.brainfuck.compare
@@ -33963,6 +35318,236 @@ Example:
 cube graph shortest-path --source a --target a --text '{"vertices":["a"],"directed":false,"edges":[]}'
 ```
 
+## hash.adler32
+
+RFC 1950 Adler-32 with sums initialized to 1 and 0, modulo 65521.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash adler32 --text abcd
+```
+
+## hash.blake2b512
+
+Unkeyed BLAKE2b with a 64-byte digest and sequential default parameters.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash blake2b512 --text abcd
+```
+
+## hash.blake2s256
+
+Unkeyed BLAKE2s with a 32-byte digest and sequential default parameters.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash blake2s256 --text abcd
+```
+
+## hash.blake3
+
+Unkeyed BLAKE3 with the fixed 32-byte digest.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash blake3 --text abcd
+```
+
+## hash.crc16_arc
+
+Polynomial 0x8005, init 0x0000, reflected input and output, xorout 0x0000.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash crc16-arc --text abcd
+```
+
 ## hash.crc16_ibm3740
 
 CRC-16/IBM-3740 checksum, poly 0x1021, init 0xFFFF, xor 0, unreflected; not cryptographic.
@@ -34104,6 +35689,236 @@ Example:
 cube hash crc32c --text abc
 ```
 
+## hash.crc64_ecma182
+
+Polynomial 0x42f0e1eba9ea3693, init 0, no reflection, xorout 0.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash crc64-ecma182 --text abcd
+```
+
+## hash.crc8_smbus
+
+Polynomial 0x07, init 0x00, no reflection, xorout 0x00.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash crc8-smbus --text abcd
+```
+
+## hash.fletcher16
+
+Eight-bit words and zero-initialized sums modulo 255, second sum in the high byte.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash fletcher16 --text abcd
+```
+
+## hash.fletcher32
+
+Big-endian 16-bit words and zero-initialized sums modulo 65535, second sum in the high half. Odd byte counts fail.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash fletcher32 --text abcd
+```
+
+## hash.keccak224
+
+Original Keccak-224 with delimited suffix 0x01.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash keccak224 --text abcd
+```
+
 ## hash.keccak256
 
 Ethereum Keccak-256 (not standardized SHA3-256), exact bytes as 64 lowercase hex digits; <=16 MiB. No protocol-specific prefixes or normalization.
@@ -34149,6 +35964,144 @@ Example:
 
 ```sh
 cube hash keccak256 --text abc
+```
+
+## hash.keccak384
+
+Original Keccak-384 with delimited suffix 0x01.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash keccak384 --text abcd
+```
+
+## hash.keccak512
+
+Original Keccak-512 with delimited suffix 0x01.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash keccak512 --text abcd
+```
+
+## hash.md4
+
+RFC 1320 legacy MD4 compatibility digest.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash md4 --text abcd
 ```
 
 ## hash.md5
@@ -34198,6 +36151,52 @@ Example:
 cube hash md5 --text abc
 ```
 
+## hash.ripemd128
+
+RIPEMD-128 compatibility digest.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash ripemd128 --text abcd
+```
+
 ## hash.ripemd160
 
 RIPEMD-160 exact-byte digest as 40 lowercase hex digits for protocol compatibility; <=16 MiB input, not password hashing/authentication.
@@ -34243,6 +36242,98 @@ Example:
 
 ```sh
 cube hash ripemd160 --text abc
+```
+
+## hash.ripemd256
+
+RIPEMD-256 compatibility digest.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash ripemd256 --text abcd
+```
+
+## hash.ripemd320
+
+RIPEMD-320 compatibility digest.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash ripemd320 --text abcd
 ```
 
 ## hash.sha1
@@ -34292,6 +36383,52 @@ Example:
 cube hash sha1 --text abc
 ```
 
+## hash.sha224
+
+SHA-224 with the initial values specified in FIPS 180-4.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha224 --text abcd
+```
+
 ## hash.sha256
 
 SHA-256 digest of exact bytes, not password hashing.
@@ -34339,6 +36476,236 @@ Example:
 cube hash sha256 --text Hello
 ```
 
+## hash.sha384
+
+SHA-384 with the initial values specified in FIPS 180-4.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha384 --text abcd
+```
+
+## hash.sha3_224
+
+FIPS 202 SHA3-224 with delimited suffix 0x06.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha3-224 --text abcd
+```
+
+## hash.sha3_256
+
+FIPS 202 SHA3-256 with delimited suffix 0x06.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha3-256 --text abcd
+```
+
+## hash.sha3_384
+
+FIPS 202 SHA3-384 with delimited suffix 0x06.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha3-384 --text abcd
+```
+
+## hash.sha3_512
+
+FIPS 202 SHA3-512 with delimited suffix 0x06.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha3-512 --text abcd
+```
+
 ## hash.sha512
 
 SHA-512 exact-byte digest (128 lowercase hex digits), not password hashing.
@@ -34384,6 +36751,144 @@ Example:
 
 ```sh
 cube hash sha512 --text abc
+```
+
+## hash.sha512_224
+
+SHA-512/224 with the initial values specified in FIPS 180-4.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha512-224 --text abcd
+```
+
+## hash.sha512_256
+
+SHA-512/256 with the initial values specified in FIPS 180-4.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash sha512-256 --text abcd
+```
+
+## hash.whirlpool
+
+Final 2003 Whirlpool compatibility digest.
+
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "YWJjZA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube hash whirlpool --text abcd
 ```
 
 ## image.bit_plane.extract
@@ -35639,6 +38144,98 @@ Example:
 
 ```sh
 cube image invert sample.png --output inverted.png
+```
+
+## image.jpeg.coefficients.extract
+
+Inspect baseline JPEG quantized AC magnitude parity in row-major block and zigzag AC order.
+
+Category: `images`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `bits` | `bytes` |
+| Output | `report` | `image.jpeg.coefficients` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/wAALCAAJABMBAREA/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/9oACAEBAAA/AING8JXNpDLouhxRzNFDIjWu23SW3jdt0ZeSYMGeY25wERkA8oiQLvdzS47u/t4L3RNLN5fG8hhhne3UCJFjiniZUA2rIvm43qBypZQhkfdna4thpeqz2enX95pltGRttobG4liBIBZ42jV0MbsS67WwFZQAuNo9J+F//IPsf+v+H/0itK4mH/kTfGv/AF5eF/8A0cK+hPh3/wAiuv8A1+33/pXLX//Z"
+    }
+  },
+  "parameters": {
+    "component_id": 1,
+    "max_bits": 19,
+    "profile": "baseline_ac_parity",
+    "start_bit": 3
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Settings",
+  "type": "object",
+  "properties": {
+    "component_id": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 255,
+      "minimum": 0
+    },
+    "max_bits": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1048576,
+      "minimum": 1
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "start_bit": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 1048576,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "component_id",
+    "start_bit",
+    "max_bits"
+  ],
+  "$defs": {
+    "Profile": {
+      "oneOf": [
+        {
+          "description": "Magnitude parity of nonzero AC coefficients in baseline JPEG.",
+          "type": "string",
+          "const": "baseline_ac_parity"
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image jpeg-coefficients --profile baseline_ac_parity --component-id 1 --start-bit 0 --max-bits 16 --file source.jpg
 ```
 
 ## image.lsb.extract
@@ -40375,6 +42972,96 @@ Example:
 cube text anagram search ab --dictionary '["ab","a","b"]
 ```
 
+## text.ascii.decode
+
+Strict ASCII bytes to their corresponding Unicode scalars.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "QUIA"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text ascii decode --text ABC
+```
+
+## text.ascii.encode
+
+Strict U+0000 through U+007F to exact bytes.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "AB\u0000"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text ascii encode --text ABC
+```
+
 ## text.class.map
 
 Map disjoint scalar sets with source positions and explicit preserved/filtered records; <=65536 positions/8 MiB report.
@@ -40961,6 +43648,94 @@ Example:
 cube text grid --text ABCDEF --width 3
 ```
 
+## text.html_entity.decode
+
+Decode WHATWG text-context named and numeric references in exact text.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "&lt;&amp;&gt;"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text html-entity decode --text '&lt;&amp;&gt;'
+```
+
+## text.html_entity.encode
+
+Encode markup-sensitive scalars as canonical hexadecimal character references.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "<&>"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text html-entity encode --text '<&>'
+```
+
 ## text.integer
 
 Parse exact signed decimal integer text; reject spaces, plus signs, leading zeros, fractions, exponents and out-of-range values.
@@ -41184,6 +43959,103 @@ Example:
 
 ```sh
 cube text josephus --steps 2 --text ABCDE
+```
+
+## text.json_escape.decode
+
+Decode exact JSON string content, rejecting raw controls and malformed escapes.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "A\\uD83E\\uDDCA"
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmptyParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text json-escape decode --text '\uD83E\uDDCA'
+```
+
+## text.json_escape.encode
+
+JSON string content escapes without surrounding quotes, ASCII-only by default.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "A🧊"
+  },
+  "parameters": {
+    "ascii_only": true
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "ascii_only": {
+      "description": "Escape all non-ASCII scalars.",
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "additionalProperties": false,
+  "required": []
+}
+```
+
+Example:
+
+```sh
+cube text json-escape encode --text '🧊'
 ```
 
 ## text.keyboard.coordinates.decode
@@ -43169,6 +46041,214 @@ Example:
 
 ```sh
 cube text unicode-inspect --text 'Aaé'
+```
+
+## text.utf16.decode
+
+Strict complete UTF-16 code units with the selected byte order and marker policy.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "/v8AQdg+3co="
+    }
+  },
+  "parameters": {
+    "bom": "require",
+    "byte_order": "be"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Utf16Settings",
+  "type": "object",
+  "properties": {
+    "bom": {
+      "description": "Required initial marker policy.",
+      "$ref": "#/$defs/Bom"
+    },
+    "byte_order": {
+      "description": "Required code-unit byte order.",
+      "$ref": "#/$defs/ByteOrder"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "byte_order",
+    "bom"
+  ],
+  "$defs": {
+    "Bom": {
+      "description": "Handling of an initial UTF-16 byte-order mark, with the byte order fixed separately.",
+      "oneOf": [
+        {
+          "description": "Emit a mark and require and remove a matching initial mark when decoding.",
+          "type": "string",
+          "const": "require"
+        },
+        {
+          "description": "Refuse either marker at the start.",
+          "type": "string",
+          "const": "forbid"
+        },
+        {
+          "description": "Encode the given scalars and remove one matching initial mark when decoding.",
+          "type": "string",
+          "const": "strip"
+        },
+        {
+          "description": "Treat every code unit as data, including a leading U+FEFF or U+FFFE.",
+          "type": "string",
+          "const": "preserve"
+        }
+      ]
+    },
+    "ByteOrder": {
+      "description": "Explicit byte ordering for UTF-16 code units.",
+      "oneOf": [
+        {
+          "description": "Little-endian.",
+          "type": "string",
+          "const": "le"
+        },
+        {
+          "description": "Big-endian.",
+          "type": "string",
+          "const": "be"
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube text utf16 decode --byte-order be --bom require --file text.utf16
+```
+
+## text.utf16.encode
+
+Encode Unicode scalars in the selected byte order and initial marker policy.
+
+Category: `text`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "A🧊"
+  },
+  "parameters": {
+    "bom": "require",
+    "byte_order": "be"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Utf16Settings",
+  "type": "object",
+  "properties": {
+    "bom": {
+      "description": "Required initial marker policy.",
+      "$ref": "#/$defs/Bom"
+    },
+    "byte_order": {
+      "description": "Required code-unit byte order.",
+      "$ref": "#/$defs/ByteOrder"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "byte_order",
+    "bom"
+  ],
+  "$defs": {
+    "Bom": {
+      "description": "Handling of an initial UTF-16 byte-order mark, with the byte order fixed separately.",
+      "oneOf": [
+        {
+          "description": "Emit a mark and require and remove a matching initial mark when decoding.",
+          "type": "string",
+          "const": "require"
+        },
+        {
+          "description": "Refuse either marker at the start.",
+          "type": "string",
+          "const": "forbid"
+        },
+        {
+          "description": "Encode the given scalars and remove one matching initial mark when decoding.",
+          "type": "string",
+          "const": "strip"
+        },
+        {
+          "description": "Treat every code unit as data, including a leading U+FEFF or U+FFFE.",
+          "type": "string",
+          "const": "preserve"
+        }
+      ]
+    },
+    "ByteOrder": {
+      "description": "Explicit byte ordering for UTF-16 code units.",
+      "oneOf": [
+        {
+          "description": "Little-endian.",
+          "type": "string",
+          "const": "le"
+        },
+        {
+          "description": "Big-endian.",
+          "type": "string",
+          "const": "be"
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube text utf16 encode --byte-order be --bom require --text A
 ```
 
 ## text.utf8.decode

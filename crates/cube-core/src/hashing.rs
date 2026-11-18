@@ -2,7 +2,13 @@
 
 pub(crate) mod execution;
 use sha2::{Digest, Sha256, Sha512};
+pub mod extended;
 pub mod protocol;
+pub use extended::{
+    adler32, blake2b512, blake2s256, blake3, crc8_smbus, crc16_arc, crc64_ecma182, fletcher16,
+    fletcher32, keccak224, keccak384, keccak512, md4, ripemd128, ripemd256, ripemd320, sha3_224,
+    sha3_256, sha3_384, sha3_512, sha224, sha384, sha512_224, sha512_256, whirlpool,
+};
 pub use protocol::{keccak256, ripemd160};
 
 /// Compute CRC-32/ISO-HDLC (IEEE CRC32) as eight lowercase hexadecimal digits.

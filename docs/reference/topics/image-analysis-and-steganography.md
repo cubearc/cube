@@ -219,6 +219,27 @@ PNG channel visualization requires default row order. Other orders use bytes or
 records. Exported bytes can enter ordinary byte transformations and pipelines;
 encoded-image decoding and image results have no pipeline adapters.
 
+## JPEG coefficient parity
+
+`cube image jpeg-coefficients` reads the original encoded bytes of an
+eight-bit baseline JPEG with one complete scan and one or three components.
+Choose `--profile baseline_ac_parity` and the `--component-id` stored in its
+frame header. The operation visits the selected plane's real blocks in
+row-major order and reads the magnitude parity of nonzero AC coefficients
+in JPEG zigzag order. Whole padded MCU blocks and DC coefficients are
+outside the selected sequence.
+
+Set `--start-bit` to an offset in that sequence and `--max-bits` to the
+maximum desired count. The JSON result gives packed bits and an evidence
+report with dimensions, block counts, the number of candidate positions
+and the number of bits returned. Bits are packed most significant first.
+Only the declared `bit_count` bits are valid in the last byte.
+
+The input cap is 16 MiB and the traversal cap is 1,048,576 coefficients.
+Each result contains at most 1,048,576 bits. The operation has no linear
+pipeline adapter. Recompression or editing the JPEG can change the stored
+coefficients.
+
 ## QR analysis
 
 QR analysis accepts opaque supported images. It expands palettes in a temporary

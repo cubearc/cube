@@ -66,6 +66,7 @@
     - [Format-preserving encryption](reference/topics/format-preserving-encryption.md)
     - [AES key wrapping](reference/topics/key-wrapping.md)
     - [Raw key agreement](reference/topics/key-agreement.md)
+    - [Key derivation](reference/topics/key-derivation.md)
     - [ML-KEM key encapsulation](reference/topics/ml-kem.md)
     - [Alternate KEM profiles](reference/topics/alternate-kem.md)
     - [Homomorphic ciphertext evaluation](reference/topics/homomorphic-evaluation.md)

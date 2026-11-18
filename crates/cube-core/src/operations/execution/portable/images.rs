@@ -9,7 +9,8 @@ use serde_json::{Value, json};
 pub(super) fn supports(operation: &str) -> bool {
     matches!(
         operation,
-        "image.decode"
+        crate::image::jpeg_coefficients::EXTRACT
+            | "image.decode"
             | "image.encode"
             | "image.palette.expand"
             | "image.pixels.read"
@@ -77,6 +78,12 @@ pub(super) fn execute(
     budget: crate::operations::execution::Budget,
     _clock: Option<crate::operations::execution::Elapsed<'_>>,
 ) -> Result<Value, OperationError> {
+    use crate::image::jpeg_coefficients as jpeg;
+    if op == jpeg::EXTRACT {
+        let settings = serde_json::from_value(p).map_err(|_| invalid())?;
+        let result = jpeg::extract(&super::bytes(&inputs["input"])?, settings)?;
+        return Ok(json!({"bits":values::Bytes{data:result.bits},"report":result.report}));
+    }
     if op == "image.decode" {
         return Ok(
             json!({"output":image(&Image::decode_with_sample_limit(&super::bytes(&inputs["input"] )?, budget.image_sample_bytes.min(budget.output_bytes))?)}),

@@ -98,6 +98,26 @@ schemars = "=1.2.3"
 jsonschema = { version = "=0.60.2", default-features = false }
 chacha20 = { version = "=0.10.2", features = ["xchacha", "zeroize"] }
 salsa20 = { path = "../../vendor/salsa20", version = "=0.11.0", features = ["zeroize"] }
+adler2 = { version = "=2.0.1", default-features = false }
+blake2 = { version = "=0.11.0", default-features = false }
+blake3 = { version = "=1.8.7", default-features = false, features = ["pure"] }
+md4 = { version = "=0.11.0", default-features = false }
+whirlpool = { version = "=0.11.0", default-features = false }
+
+base91 = { version = "=0.1.0", default-features = false, features = ["canonical", "std"] }
+
+web_atoms = { version = "=0.3.0", default-features = false }
+
+argon2 = { version = "=0.6.0", default-features = false, features = ["zeroize"] }
+scrypt = { version = "=0.11.0", default-features = false }
+hkdf = { version = "=0.13.0", default-features = false }
+
+flate2 = { version = "=1.1.10", default-features = false, features = ["rust_backend"] }
+brotli = { version = "=9.1.3", default-features = false, features = ["std", "disallow_large_window_size"] }
+ruzstd = { version = "=0.9.1", default-features = false, features = ["std", "hash"] }
+lzma-rust2 = { version = "=0.25.0", default-features = false, features = ["std", "encoder"] }
+
+jpxl-jpeg = "=0.3.0"
 
 [lints]
 workspace = true

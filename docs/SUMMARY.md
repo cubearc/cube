@@ -82,6 +82,7 @@
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)
     - [Binary transformations](reference/topics/binary-transformations.md)
     - [Text operations](reference/topics/text-operations.md)
+    - [Sequence analysis](reference/topics/sequence-analysis.md)
     - [Ordered composition](reference/composition.md)
     - [Fields and integer composition](reference/structured-composition.md)
     - [Shared text preparation](reference/text-preparation.md)

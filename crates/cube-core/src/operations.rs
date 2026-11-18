@@ -422,6 +422,7 @@ const MODULES: &[Module] = &[
     crate::text::keyboard::coordinates::MODULE,
     Module::plain(crate::text::classes::OPERATIONS),
     crate::text::MODULE,
+    crate::sequence::MODULE,
     Module::plain(crate::text::selection::OPERATIONS),
     Module::plain(crate::text::word::OPERATIONS),
     Module::plain(crate::text::values::OPERATIONS),

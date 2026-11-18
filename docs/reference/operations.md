@@ -41493,6 +41493,886 @@ Example:
 cube recipe validate recipe.json
 ```
 
+## sequence.align
+
+Align two exact sequences with global or local integer gap scoring.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.align.request` |
+| Output | `report` | `sequence.align.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "mode": "global",
+      "operands": {
+        "left": "A",
+        "right": "A",
+        "unit": "scalars"
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence align --text '{"operands":{"unit":"scalars","left":"A","right":"A"},"mode":"global"}'
+```
+
+## sequence.bitap
+
+Report exact Shift-And or approximate Levenshtein byte endings.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.bitap.request` |
+| Output | `report` | `sequence.bitap.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "haystack": "YWFhYQ==",
+      "pattern": "YWE="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence bitap --text '{"haystack":"YWFhYQ==","pattern":"YWE="}'
+```
+
+## sequence.common_spans
+
+Locate exact longest common prefix, suffix and contiguous substring.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.common_spans.request` |
+| Output | `report` | `sequence.common_spans.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": "ab",
+      "right": "a",
+      "unit": "scalars"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence common-spans --text '{"unit":"scalars","left":"ab","right":"a"}'
+```
+
+## sequence.diff
+
+Generate exact edit runs or line-based Patience and Histogram diffs.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.diff.request` |
+| Output | `report` | `sequence.diff.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "input": {
+        "left": "old\n",
+        "right": "new\n",
+        "unit": "lines"
+      },
+      "unified": {}
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence diff --text '{"input":{"unit":"lines","left":"old\n","right":"new\n"},"unified":{}}'
+```
+
+## sequence.dtw
+
+Compute a closed-endpoint dynamic time warping cost and path.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.dtw.request` |
+| Output | `report` | `sequence.dtw.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": [
+        0,
+        2
+      ],
+      "right": [
+        0,
+        1
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence dtw --text '{"left":[0,2],"right":[0,1]}'
+```
+
+## sequence.edit_distance
+
+Compare exact sequences with an explicit edit or transposition profile.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.edit_distance.request` |
+| Output | `report` | `sequence.edit_distance.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "method": "dl",
+      "operands": {
+        "left": "CA",
+        "right": "ABC",
+        "unit": "scalars"
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence edit-distance --text '{"operands":{"unit":"scalars","left":"CA","right":"ABC"},"method":"dl"}'
+```
+
+## sequence.exact_search
+
+Find overlapping exact byte positions with a named classic algorithm.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.exact_search.request` |
+| Output | `report` | `sequence.exact_search.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "algorithm": "kmp",
+      "haystack": "YmFuYW5h",
+      "pattern": "YW5h"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence exact-search --text '{"haystack":"YmFuYW5h","pattern":"YW5h","algorithm":"kmp"}'
+```
+
+## sequence.hamming
+
+Count differing byte, scalar or packed-bit positions.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.hamming.request` |
+| Output | `report` | `sequence.hamming.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": "/wA=",
+      "right": "AIA=",
+      "unit": "bits"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence hamming --text '{"unit":"bits","left":"/wA=","right":"AIA="}'
+```
+
+## sequence.jaro
+
+Score exact scalar sequences with Jaro or Jaro–Winkler.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.jaro.request` |
+| Output | `report` | `sequence.jaro.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": "a",
+      "right": "a"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence jaro --text '{"left":"a","right":"a"}'
+```
+
+## sequence.lcs
+
+Recover a longest common subsequence with paired source positions.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.lcs.request` |
+| Output | `report` | `sequence.lcs.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": "xé",
+      "right": "é",
+      "unit": "scalars"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence lcs --text '{"unit":"scalars","left":"xé","right":"é"}'
+```
+
+## sequence.monge_elkan
+
+Match ordered token arrays by directional best similarity.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.monge_elkan.request` |
+| Output | `report` | `sequence.monge_elkan.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "base": "jaro",
+      "left": [
+        "a",
+        "a"
+      ],
+      "right": [
+        "b",
+        "a"
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence monge-elkan --text '{"left":["a","a"],"right":["b","a"],"base":"jaro"}'
+```
+
+## sequence.multi_search
+
+Search ordered byte patterns with a bounded Aho–Corasick automaton.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.multi_search.request` |
+| Output | `report` | `sequence.multi_search.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "haystack": "YWJh",
+      "patterns": [
+        "YQ==",
+        "YmE=",
+        "YQ=="
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence multi-search --text '{"haystack":"YWJh","patterns":["YQ==","YmE=","YQ=="]}'
+```
+
+## sequence.ratcliff_obershelp
+
+Score common contiguous blocks with deterministic tie-breaking.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.ratcliff_obershelp.request` |
+| Output | `report` | `sequence.ratcliff_obershelp.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": "Xa",
+      "right": "aY",
+      "unit": "scalars"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence ratcliff-obershelp --text '{"unit":"scalars","left":"Xa","right":"aY"}'
+```
+
+## sequence.set_similarity
+
+Compare exact token sets or overlapping scalar q-gram counts.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.set_similarity.request` |
+| Output | `report` | `sequence.set_similarity.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "input": {
+        "kind": "tokens",
+        "left": [
+          "a",
+          "a",
+          "b"
+        ],
+        "right": [
+          "a"
+        ]
+      },
+      "method": "jaccard"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence set-similarity --text '{"input":{"kind":"tokens","left":["a","a","b"],"right":["a"]},"method":"jaccard"}'
+```
+
+## sequence.tfidf_compare
+
+Compare two documents under a verified TF-IDF model.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.tfidf_compare.request` |
+| Output | `report` | `sequence.tfidf_compare.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "left": [
+        "a"
+      ],
+      "model": {
+        "documents": 2,
+        "frequencies": [
+          {
+            "df": 1,
+            "token": "a"
+          },
+          {
+            "df": 1,
+            "token": "b"
+          }
+        ],
+        "profile": "raw_tf_smooth_idf_l2_v1",
+        "sha256": "a18846f1267e910f42e78e19aad51896fb028c1e7b0637e7efe7e2f186e3160b"
+      },
+      "right": [
+        "a",
+        "a"
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence tfidf-compare --text '{"model":{"profile":"raw_tf_smooth_idf_l2_v1","documents":2,"frequencies":[{"token":"a","df":1},{"token":"b","df":1}],"sha256":"a18846f1267e910f42e78e19aad51896fb028c1e7b0637e7efe7e2f186e3160b"},"left":["a"],"right":["a","a"]}'
+```
+
+## sequence.tfidf_model
+
+Build an exact document-frequency model from supplied tokens.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.tfidf_model.request` |
+| Output | `report` | `sequence.tfidf_model.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "documents": [
+        [
+          "a",
+          "a"
+        ],
+        [
+          "b"
+        ]
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence tfidf-model --text '{"documents":[["a","a"],["b"]]}'
+```
+
+## sequence.vector_similarity
+
+Compute cosine, Kullback–Leibler or Jensen–Shannon scores.
+
+Category: `sequence`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `sequence.vector_similarity.request` |
+| Output | `report` | `sequence.vector_similarity.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "input": {
+        "kind": "dense",
+        "left": [
+          1,
+          0
+        ],
+        "right": [
+          0,
+          1
+        ]
+      },
+      "method": "kl"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube sequence vector-similarity --text '{"input":{"kind":"dense","left":[1,0],"right":[0,1]},"method":"kl"}'
+```
+
 ## symbol.a1z26.decode
 
 Strict canonical 1..26 hyphen tokens to uppercase ASCII; preserve ASCII whitespace, reject malformed tokens; <=3 MiB.

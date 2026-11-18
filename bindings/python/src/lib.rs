@@ -59,6 +59,7 @@ mod puzzles;
 mod recipe;
 mod representation;
 mod rsa;
+mod sequence;
 mod sm2;
 mod solresol;
 mod stream;
@@ -708,6 +709,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     kdf::register(module)?;
     combinatorics::register(module)?;
     multiset::register(module)?;
+    sequence::register(module)?;
     lexical::register(module)?;
     probability::register(module)?;
     boolean::register(module)?;

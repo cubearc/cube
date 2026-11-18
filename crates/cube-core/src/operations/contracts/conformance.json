@@ -21520,5 +21520,639 @@
       "bom": "require",
       "byte_order": "be"
     }
+  },
+  {
+    "contract_sha256": "effb30320dd3acbfea39c02266135dc7b7de44bd01001eb337da5e8d78631346",
+    "inputs": {
+      "request": {
+        "mode": "global",
+        "operands": {
+          "left": "A",
+          "right": "A",
+          "unit": "scalars"
+        }
+      }
+    },
+    "operation": "sequence.align",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "left": {
+          "byte_end": 1,
+          "byte_start": 0,
+          "end": 1,
+          "start": 0
+        },
+        "right": {
+          "byte_end": 1,
+          "byte_start": 0,
+          "end": 1,
+          "start": 0
+        },
+        "runs": [
+          {
+            "kind": "equal",
+            "left": {
+              "byte_end": 1,
+              "byte_start": 0,
+              "end": 1,
+              "start": 0
+            },
+            "right": {
+              "byte_end": 1,
+              "byte_start": 0,
+              "end": 1,
+              "start": 0
+            }
+          }
+        ],
+        "score": 2
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "2dbc01fcf60feda30e7d0d6ed089ae4c7ed68f34c83897b4f0485a222bf8e21a",
+    "inputs": {
+      "request": {
+        "haystack": "YWFhYQ==",
+        "pattern": "YWE="
+      }
+    },
+    "operation": "sequence.bitap",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "matches": [
+          {
+            "distance": 0,
+            "end": 2,
+            "start": 0
+          },
+          {
+            "distance": 0,
+            "end": 3,
+            "start": 1
+          },
+          {
+            "distance": 0,
+            "end": 4,
+            "start": 2
+          }
+        ],
+        "mode": "exact"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "662c53bcfb536be12e2e00da9969e3ff6e40808b12f366fdf5012ea30dd93068",
+    "inputs": {
+      "request": {
+        "left": "ab",
+        "right": "a",
+        "unit": "scalars"
+      }
+    },
+    "operation": "sequence.common_spans",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "prefix": {
+          "left": {
+            "byte_end": 1,
+            "byte_start": 0,
+            "end": 1,
+            "start": 0
+          },
+          "length": 1,
+          "right": {
+            "byte_end": 1,
+            "byte_start": 0,
+            "end": 1,
+            "start": 0
+          }
+        },
+        "substring": {
+          "left": {
+            "byte_end": 1,
+            "byte_start": 0,
+            "end": 1,
+            "start": 0
+          },
+          "length": 1,
+          "right": {
+            "byte_end": 1,
+            "byte_start": 0,
+            "end": 1,
+            "start": 0
+          }
+        },
+        "suffix": {
+          "left": {
+            "byte_end": 0,
+            "byte_start": 0,
+            "end": 0,
+            "start": 0
+          },
+          "length": 0,
+          "right": {
+            "byte_end": 0,
+            "byte_start": 0,
+            "end": 0,
+            "start": 0
+          }
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "1b4781f42ce340e4ffc04edc291b5c277ac0f50756536e1737dc6550cb5e72a1",
+    "inputs": {
+      "request": {
+        "input": {
+          "left": "old\n",
+          "right": "new\n",
+          "unit": "lines"
+        },
+        "unified": {}
+      }
+    },
+    "operation": "sequence.diff",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "method": "myers",
+        "minimal": true,
+        "profile": "myers_1986_delete_ties",
+        "runs": [
+          {
+            "kind": "delete",
+            "left": {
+              "byte_end": 4,
+              "byte_start": 0,
+              "end": 1,
+              "start": 0
+            },
+            "right": {
+              "byte_end": 0,
+              "byte_start": 0,
+              "end": 0,
+              "start": 0
+            }
+          },
+          {
+            "kind": "insert",
+            "left": {
+              "byte_end": 4,
+              "byte_start": 4,
+              "end": 1,
+              "start": 1
+            },
+            "right": {
+              "byte_end": 4,
+              "byte_start": 0,
+              "end": 1,
+              "start": 0
+            }
+          }
+        ],
+        "unified": "--- a/input\n+++ b/input\n@@ -1 +1 @@\n-old\n+new\n"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "45148486d5c9eefad6eed3c1175d56897087c99817e54c0184a7fcc9428fde07",
+    "inputs": {
+      "request": {
+        "left": [
+          0,
+          2
+        ],
+        "right": [
+          0,
+          1
+        ]
+      }
+    },
+    "operation": "sequence.dtw",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "cost": 1.0,
+        "path": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "079021ccc41f5142572953992aae5204b8ad6a01314724ffdd23918090f20430",
+    "inputs": {
+      "request": {
+        "method": "dl",
+        "operands": {
+          "left": "CA",
+          "right": "ABC",
+          "unit": "scalars"
+        }
+      }
+    },
+    "operation": "sequence.edit_distance",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "above_threshold": false,
+        "distance": 2,
+        "method": "dl"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "e2f4480f7447c4002486da217ff98084f9bbb5fe73f3dacbf7a7a21f3b3546af",
+    "inputs": {
+      "request": {
+        "algorithm": "kmp",
+        "haystack": "YmFuYW5h",
+        "pattern": "YW5h"
+      }
+    },
+    "operation": "sequence.exact_search",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "algorithm": "kmp",
+        "complete": true,
+        "count": 2,
+        "matches": [
+          {
+            "end": 4,
+            "start": 1
+          },
+          {
+            "end": 6,
+            "start": 3
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "f6dfce7fe61670527c9f7db2d7e42ad97f923e1a05451cf550760088029e34f0",
+    "inputs": {
+      "request": {
+        "left": "/wA=",
+        "right": "AIA=",
+        "unit": "bits"
+      }
+    },
+    "operation": "sequence.hamming",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "differing_units": 9,
+        "normalized": 0.5625,
+        "total_units": 16
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "7e0128bda7691314ebb3bed9027a795ec12ec99a07d47744b730ba286db1d741",
+    "inputs": {
+      "request": {
+        "left": "a",
+        "right": "a"
+      }
+    },
+    "operation": "sequence.jaro",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "distance": 0.0,
+        "method": "jaro",
+        "scale": 0.1,
+        "similarity": 1.0,
+        "threshold": 0.7
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "2d702a01fa74e74cdd734e3f668b1df1d662536a8c04607e58977ebe974217ed",
+    "inputs": {
+      "request": {
+        "left": "xé",
+        "right": "é",
+        "unit": "scalars"
+      }
+    },
+    "operation": "sequence.lcs",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "length": 1,
+        "positions": [
+          {
+            "left": {
+              "byte_end": 3,
+              "byte_start": 1,
+              "end": 2,
+              "start": 1
+            },
+            "length": 1,
+            "right": {
+              "byte_end": 2,
+              "byte_start": 0,
+              "end": 1,
+              "start": 0
+            }
+          }
+        ],
+        "subsequence": {
+          "text": "é",
+          "unit": "scalars"
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "9698443e239ad24806ce12df4d4af07934405817301b3615750ad07cceb0ec37",
+    "inputs": {
+      "request": {
+        "base": "jaro",
+        "left": [
+          "a",
+          "a"
+        ],
+        "right": [
+          "b",
+          "a"
+        ]
+      }
+    },
+    "operation": "sequence.monge_elkan",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "base": "jaro",
+        "direction": "left_to_right",
+        "matches": [
+          {
+            "index": 1,
+            "similarity": 1.0
+          },
+          {
+            "index": 1,
+            "similarity": 1.0
+          }
+        ],
+        "reverse_matches": null,
+        "similarity": 1.0
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "6c5d407f0f399c7c979acea1a664add33cfb1d2e1c57f6d47e5b5dee75779351",
+    "inputs": {
+      "request": {
+        "haystack": "YWJh",
+        "patterns": [
+          "YQ==",
+          "YmE=",
+          "YQ=="
+        ]
+      }
+    },
+    "operation": "sequence.multi_search",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "complete": true,
+        "count": 5,
+        "matches": [
+          {
+            "end": 1,
+            "pattern_id": 0,
+            "start": 0
+          },
+          {
+            "end": 1,
+            "pattern_id": 2,
+            "start": 0
+          },
+          {
+            "end": 3,
+            "pattern_id": 1,
+            "start": 1
+          },
+          {
+            "end": 3,
+            "pattern_id": 0,
+            "start": 2
+          },
+          {
+            "end": 3,
+            "pattern_id": 2,
+            "start": 2
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "aa3d8f320e0671cc6cf870bed5f8061891a5c7c457291cea9df29182b7cdb5f5",
+    "inputs": {
+      "request": {
+        "left": "Xa",
+        "right": "aY",
+        "unit": "scalars"
+      }
+    },
+    "operation": "sequence.ratcliff_obershelp",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "blocks": [
+          {
+            "left": {
+              "byte_end": 2,
+              "byte_start": 1,
+              "end": 2,
+              "start": 1
+            },
+            "length": 1,
+            "right": {
+              "byte_end": 1,
+              "byte_start": 0,
+              "end": 1,
+              "start": 0
+            }
+          }
+        ],
+        "distance": 0.5,
+        "similarity": 0.5
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "66431bc6a941a92aab5ff370e880fe5e9bd8d8226b9371168ff1def7086c4209",
+    "inputs": {
+      "request": {
+        "input": {
+          "kind": "tokens",
+          "left": [
+            "a",
+            "a",
+            "b"
+          ],
+          "right": [
+            "a"
+          ]
+        },
+        "method": "jaccard"
+      }
+    },
+    "operation": "sequence.set_similarity",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "fraction": {
+          "denominator": "2",
+          "numerator": "1"
+        },
+        "intersection": 1,
+        "jaccard_distance": 0.5,
+        "l1": null,
+        "left_only": 1,
+        "method": "jaccard",
+        "right_only": 0,
+        "similarity": 0.5,
+        "union": 2
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "6ee7c60eea06d41efa207c65448c629dbe31f5894f160864dcc9d020ffc95cfd",
+    "inputs": {
+      "request": {
+        "left": [
+          "a"
+        ],
+        "model": {
+          "documents": 2,
+          "frequencies": [
+            {
+              "df": 1,
+              "token": "a"
+            },
+            {
+              "df": 1,
+              "token": "b"
+            }
+          ],
+          "profile": "raw_tf_smooth_idf_l2_v1",
+          "sha256": "a18846f1267e910f42e78e19aad51896fb028c1e7b0637e7efe7e2f186e3160b"
+        },
+        "right": [
+          "a",
+          "a"
+        ]
+      }
+    },
+    "operation": "sequence.tfidf_compare",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "model_sha256": "a18846f1267e910f42e78e19aad51896fb028c1e7b0637e7efe7e2f186e3160b",
+        "profile": "raw_tf_smooth_idf_l2_v1",
+        "reason": null,
+        "similarity": 1.0
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "1a933d2b0f7404ddea9955049b4f38ad824715582c3f4bb90a09ec02c85813f8",
+    "inputs": {
+      "request": {
+        "documents": [
+          [
+            "a",
+            "a"
+          ],
+          [
+            "b"
+          ]
+        ]
+      }
+    },
+    "operation": "sequence.tfidf_model",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "documents": 2,
+        "frequencies": [
+          {
+            "df": 1,
+            "token": "a"
+          },
+          {
+            "df": 1,
+            "token": "b"
+          }
+        ],
+        "profile": "raw_tf_smooth_idf_l2_v1",
+        "sha256": "a18846f1267e910f42e78e19aad51896fb028c1e7b0637e7efe7e2f186e3160b"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "b8cabf24683e9cc4f9a2111b37627d6c3a3cb01b5de986e594dfd57f8610caee",
+    "inputs": {
+      "request": {
+        "input": {
+          "kind": "dense",
+          "left": [
+            1,
+            0
+          ],
+          "right": [
+            0,
+            1
+          ]
+        },
+        "method": "kl"
+      }
+    },
+    "operation": "sequence.vector_similarity",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "method": "kl",
+        "reason": "positive_mass_over_zero",
+        "status": "positive_infinity",
+        "value": null
+      }
+    },
+    "parameters": {}
   }
 ]

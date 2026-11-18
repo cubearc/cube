@@ -150,7 +150,9 @@ if(text!=="LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP")throw new Error('Packaged KL7 so
   await writeFile(join(directory, 'example.mts'), await readFile(join(assets, 'examples/node.mts')));
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled', 'example.mts']);
   run(process.execPath, [join(directory, 'compiled/example.mjs')]);
-  await writeFile(join(directory, 'utilities.mts'), await readFile(join(assets, 'examples/utilities.mts')));
-  run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled', 'utilities.mts']);
-  run(process.execPath, [join(directory, 'compiled/utilities.mjs')]);
+  for (const example of ['utilities', 'sequence']) {
+    await writeFile(join(directory, `${example}.mts`), await readFile(join(assets, `examples/${example}.mts`)));
+    run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled', `${example}.mts`]);
+    run(process.execPath, [join(directory, `compiled/${example}.mjs`)]);
+  }
 } finally { await rm(directory, { recursive: true, force: true }); }

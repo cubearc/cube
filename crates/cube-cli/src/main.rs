@@ -56,6 +56,7 @@ mod puzzlecmd;
 mod puzzlecodescmd;
 mod recipecmd;
 mod rsacmd;
+mod sequencecmd;
 mod sm2cmd;
 mod streamcmd;
 mod streamrefcmd;
@@ -102,6 +103,8 @@ enum Command {
         #[command(subcommand)]
         command: probabilitycmd::Command,
     },
+    /// Analyze exact caller-owned sequences and patterns
+    Sequence(sequencecmd::Command),
     /// Exact bounded caller-supplied multigraph queries
     Graph {
         #[command(subcommand)]
@@ -1140,6 +1143,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Compose { command } => composecmd::run(command, &mut output)?,
         Command::Cryptanalysis { command } => cryptanalysiscmd::run(command, &mut output)?,
         Command::Probability { command } => probabilitycmd::run(command, &mut output)?,
+        Command::Sequence(command) => sequencecmd::run(command, &mut output)?,
         Command::Graph { command } => graphcmd::run(command, &mut output)?,
         Command::Logic { command } => logiccmd::run(command, &mut output)?,
         Command::Number {

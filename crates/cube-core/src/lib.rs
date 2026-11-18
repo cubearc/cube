@@ -25,6 +25,7 @@ pub mod numbers;
 pub mod operations;
 pub mod pipeline;
 pub mod probability;
+pub mod sequence;
 pub mod symbols;
 pub mod text;
 pub mod web;

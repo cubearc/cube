@@ -2,7 +2,7 @@
 use cube_core::errors::{ErrorCode, OperationError};
 use pyo3::{
     prelude::*,
-    types::{PyBool, PyDict, PyInt, PyList, PyString},
+    types::{PyBool, PyDict, PyFloat, PyInt, PyList, PyString},
 };
 pub(super) fn invalid(op: &'static str, name: &'static str, msg: &str) -> PyErr {
     super::file_error(
@@ -105,6 +105,7 @@ struct JsonBudget {
     max_nodes: usize,
     max_depth: usize,
     op: &'static str,
+    finite_floats: bool,
 }
 impl JsonBudget {
     fn walk(&mut self, v: &Bound<'_, PyAny>, depth: usize) -> PyResult<()> {
@@ -147,6 +148,11 @@ impl JsonBudget {
                 ));
             }
             add = 21;
+        } else if self.finite_floats && v.is_exact_instance_of::<PyFloat>() {
+            if !v.extract::<f64>()?.is_finite() {
+                return Err(input(self.op, "document", "JSON numbers must be finite"));
+            }
+            add = 32;
         } else if v.is_exact_instance_of::<PyList>() {
             let a = v.cast::<PyList>()?;
             if a.len() > self.max_nodes - self.nodes {
@@ -204,7 +210,7 @@ impl JsonBudget {
             return Err(input(
                 self.op,
                 "document",
-                "expected builtin JSON dict/list/string/Boolean/integer/null",
+                "expected a builtin value from this operation’s JSON profile",
             ));
         }
         self.bytes = self
@@ -224,6 +230,18 @@ pub(super) fn document(
     max_nodes: usize,
     max_depth: usize,
     op: &'static str,
+) -> PyResult<String> {
+    typed_document(py, v, max_bytes, max_nodes, max_depth, op, false)
+}
+
+pub(super) fn typed_document(
+    py: Python<'_>,
+    v: &Bound<'_, PyAny>,
+    max_bytes: usize,
+    max_nodes: usize,
+    max_depth: usize,
+    op: &'static str,
+    finite_floats: bool,
 ) -> PyResult<String> {
     if let Ok(s) = v.cast::<PyString>() {
         if s.as_any().len()? > max_bytes {
@@ -249,6 +267,7 @@ pub(super) fn document(
         max_nodes,
         max_depth,
         op,
+        finite_floats,
     }
     .walk(v, 0)?;
     let options = PyDict::new(py);

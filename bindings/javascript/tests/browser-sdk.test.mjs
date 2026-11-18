@@ -5,6 +5,8 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const require = createRequire(import.meta.url);
+const catalog = JSON.parse(await readFile(new URL('../../../contracts/v1/catalog.json', import.meta.url), 'utf8'));
+const expectedAdapters = catalog.operations.filter(row => row.pipeline_adapter !== null).map(row => row.operation).sort();
 const browserType = require(process.env.PLAYWRIGHT_MODULE ?? 'playwright')[process.env.BROWSER_ENGINE ?? 'chromium'];
 const modules = ['browser.mjs', 'errors.mjs', 'transport.mjs', 'canonical-input.mjs', 'loading.mjs', 'build-info.mjs','runtime-metadata.mjs', 'worker.mjs', 'worker-client.mjs', 'wasm/cube_wasm.js', 'wasm/cube_wasm_bg.wasm'];
 
@@ -65,7 +67,7 @@ test('browser SDK verifies static assets and dedicated workers terminate and res
     worker.terminate();
     return { missing, direct: Array.from(direct.output), encoded, stopped, busy,
       decoded: Array.from(decoded.value.output), firstGeneration: encoded.generation, nextGeneration: decoded.generation,
-      original: Array.from(original), adapterCount: worker.pipelineAdapters.length, sourceDirty: worker.build.sourceDirty };
+      original: Array.from(original), adapterIds: worker.pipelineAdapters.map(row => row.operation).sort(), sourceDirty: worker.build.sourceDirty };
   });
   assert.equal(result.missing, 'initialization_failed');
   assert.deepEqual(result.direct, [0, 255]);
@@ -76,7 +78,7 @@ test('browser SDK verifies static assets and dedicated workers terminate and res
   assert.ok(result.nextGeneration > result.firstGeneration);
   assert.deepEqual(result.decoded, [0, 255, 128, 1]);
   assert.deepEqual(result.original, [1, 1, 1, 1]);
-  assert.equal(result.adapterCount, 53);
+  assert.deepEqual(result.adapterIds, expectedAdapters);
   await page.goto(`${origin}/docs/sdk-example/examples/static/`);
   await page.waitForFunction(() => document.querySelector('#status').textContent.includes('Run again to retry.'));
   await page.locator('#run').click();

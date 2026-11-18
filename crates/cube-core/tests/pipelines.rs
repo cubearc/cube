@@ -30,7 +30,7 @@ fn run(input: Value, steps: Vec<Step>) -> Value {
 }
 #[test]
 fn typed_values_round_trip_without_implicit_text_and_all_adapters_match_descriptors() {
-    assert_eq!(pipeline::supported_adapters().len(), 53);
+    assert_eq!(pipeline::supported_adapters().len(), 107);
     for (encode, decode, known) in [
         (
             "encoding.base32.encode",
@@ -40,6 +40,12 @@ fn typed_values_round_trip_without_implicit_text_and_all_adapters_match_descript
         ("encoding.base58.encode", "encoding.base58.decode", "15Q"),
         ("encoding.base64.encode", "encoding.base64.decode", "AP8="),
         ("encoding.hex.encode", "encoding.hex.decode", "00ff"),
+        ("encoding.octal.encode", "encoding.octal.decode", "000 377"),
+        (
+            "encoding.url_component.encode",
+            "encoding.url_component.decode",
+            "%00%FF",
+        ),
     ] {
         assert_eq!(run(bytes(&[0, 255]), vec![Step::new(encode)]), text(known));
         assert_eq!(

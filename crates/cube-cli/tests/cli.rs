@@ -621,7 +621,7 @@ fn structured_discovery_and_descriptions() {
     success(
         &["ops", "list", "--category", "binary"],
         b"",
-        b"binary xor\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\ncompose bytes\n",
+        b"binary xor\nbinary reverse-bits\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\nbinary compress\nbinary decompress\ncompose bytes\n",
     );
     for args in [
         vec!["ops", "list", "--category", "missing"],

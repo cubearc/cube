@@ -102,6 +102,8 @@ fn position_list(
 }
 #[derive(Subcommand)]
 pub(crate) enum TextCommand {
+    /// Run an explicit structured text or phonetic profile from an exact JSON request
+    Profile(ProfileArgs),
     /// Strict ASCII text and bytes
     Ascii {
         #[command(subcommand)]
@@ -253,6 +255,7 @@ pub(crate) fn run(
     capture: Option<&crate::capture::Target>,
 ) -> Result<(), Box<dyn Error>> {
     let result = match command {
+        TextCommand::Profile(args) => return profile(args, output),
         TextCommand::Ascii { command } => return ascii(command, output),
         TextCommand::Utf16 { command } => return utf16(command, output),
         TextCommand::JsonEscape { command } => return json_escape(command, output),
@@ -625,4 +628,34 @@ fn html_entity(command: HtmlEntity, output: &mut impl Write) -> Result<(), Box<d
         )?,
     };
     Ok(crate::write_text(output, &text)?)
+}
+
+#[derive(Args)]
+pub(crate) struct ProfileArgs {
+    /// Exact profile command from the operation catalog
+    operation: String,
+    #[command(flatten)]
+    input: Input,
+}
+
+fn profile(args: ProfileArgs, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
+    use cube_core::{
+        errors::{ErrorCode, OperationError},
+        text::profiles,
+    };
+    let operation = profiles::command(&args.operation).ok_or_else(|| {
+        OperationError::new(
+            ErrorCode::InvalidParameter,
+            "unknown text profile; see cube ops list",
+        )
+        .operation("text.profile")
+        .parameter("operation")
+    })?;
+    let source = args
+        .input
+        .read_text_limit(profiles::MAX_DOCUMENT, operation)?;
+    let result = profiles::invoke(operation, profiles::parse(&source)?)?;
+    serde_json::to_writer(&mut *out, &result)?;
+    writeln!(out)?;
+    Ok(())
 }

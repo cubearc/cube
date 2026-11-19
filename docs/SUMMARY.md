@@ -82,6 +82,8 @@
     - [Hashing and checksums](reference/topics/hashing-and-checksums.md)
     - [Binary transformations](reference/topics/binary-transformations.md)
     - [Text operations](reference/topics/text-operations.md)
+    - [Unicode text profiles](reference/topics/unicode-text-profiles.md)
+    - [Phonetic text profiles](reference/topics/phonetic-text-profiles.md)
     - [Sequence analysis](reference/topics/sequence-analysis.md)
     - [Ordered composition](reference/composition.md)
     - [Fields and integer composition](reference/structured-composition.md)
@@ -124,6 +126,7 @@
     - [Asymmetric backend qualification](contributing/asymmetric-backends.md)
     - [Authenticated envelope qualification](contributing/authenticated-envelopes.md)
     - [Checked cryptographic vectors](contributing/crypto-vectors.md)
+    - [Phonetic profile provenance](contributing/phonetic-provenance.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
     - [Classical analysis research](research/classical-analysis-evaluation.md)
 

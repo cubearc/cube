@@ -43942,6 +43942,60 @@ Example:
 cube text ascii encode --text ABC
 ```
 
+## text.beider_morse
+
+Compute bounded Beider–Morse alternatives with explicit language selection.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.beider_morse.request` |
+| Output | `report` | `text.beider_morse.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "language": {
+        "languages": [
+          "portuguese"
+        ],
+        "mode": "explicit"
+      },
+      "name": "Santos",
+      "name_type": "sephardic",
+      "rule_type": "exact"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile beider-morse --text '{"name":"Santos","name_type":"sephardic","rule_type":"exact","language":{"mode":"explicit","languages":["portuguese"]}}'
+```
+
 ## text.class.map
 
 Map disjoint scalar sets with source positions and explicit preserved/filtered records; <=65536 positions/8 MiB report.
@@ -44197,6 +44251,52 @@ Example:
 cube compose text --left The --right key --separator ' '
 ```
 
+## text.daitch_mokotoff
+
+Return all bounded Daitch–Mokotoff phonetic alternatives.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.daitch_mokotoff.request` |
+| Output | `report` | `text.daitch_mokotoff.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "name": "Auerbach"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile daitch-mokotoff --text '{"name":"Auerbach"}'
+```
+
 ## text.extract
 
 Select Unicode scalar positions (not UTF-8 bytes); preserve list order/duplicates, no normalization; <=1 MiB.
@@ -44385,6 +44485,53 @@ Example:
 
 ```sh
 cube text extract --start 1 --stride 2 --text abcdef
+```
+
+## text.graphemes
+
+Segment or reverse default extended Unicode grapheme clusters.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.graphemes.request` |
+| Output | `report` | `text.graphemes.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "reverse",
+      "text": "á🧑‍💻b"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile graphemes --text '{"action":"reverse","text":"á🧑‍💻b"}'
 ```
 
 ## text.grid.factors
@@ -45877,6 +46024,54 @@ Example:
 cube --help
 ```
 
+## text.match_rating
+
+Derive Match Rating Approach keys or compare exact ASCII names.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.match_rating.request` |
+| Output | `report` | `text.match_rating.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "compare",
+      "left": "Miller",
+      "right": "Miller"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile match-rating --text '{"action":"compare","left":"Miller","right":"Miller"}'
+```
+
 ## text.multiset.compare
 
 Exact sorted scalar inventories with equality, containment, residuals and deficits; <=1 MiB per raw input, shared statistics preparation/counting.
@@ -46159,6 +46354,105 @@ Example:
 cube text normalize --form NFC --text café
 ```
 
+## text.phonetic
+
+Encode explicit one-name or batch phonetic keys.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.phonetic.request` |
+| Output | `report` | `text.phonetic.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "method": "soundex_nara",
+      "names": [
+        "Washington",
+        "Lee",
+        "Ashcraft"
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile phonetic --text '{"method":"soundex_nara","names":["Washington","Lee","Ashcraft"]}'
+```
+
+## text.regex
+
+Match, capture or split UTF-8 with a bounded Rust regex engine.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.regex.request` |
+| Output | `report` | `text.regex.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "exists",
+      "pattern": "é",
+      "text": "é"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile regex --text '{"action":"exists","text":"é","pattern":"é"}'
+```
+
 ## text.reverse
 
 Reverse Unicode scalar values, including combining marks/CRLF; not grapheme or byte reversal; <=1 MiB.
@@ -46202,6 +46496,59 @@ Example:
 
 ```sh
 cube text reverse --text 'Cube 🧊'
+```
+
+## text.scalar_weave
+
+Pad exact scalars or interleave and recover explicit lanes.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.scalar_weave.request` |
+| Output | `report` | `text.scalar_weave.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "interleave",
+      "lanes": [
+        "Aé",
+        "B",
+        "",
+        "🧊C"
+      ],
+      "mode": "ragged"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile scalar-weave --text '{"action":"interleave","mode":"ragged","lanes":["Aé","B","","🧊C"]}'
 ```
 
 ## text.select
@@ -46262,6 +46609,59 @@ Example:
 
 ```sh
 cube text select --selector word_first --text 'Cube Uses Binary Evidence'
+```
+
+## text.select_words
+
+Select signed whole-word indexes with exact source spans.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.select_words.request` |
+| Output | `report` | `text.select_words.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "indices": [
+        -1,
+        1,
+        1,
+        0
+      ],
+      "out_of_range": "skip",
+      "text": "é! B"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile select-words --text '{"text":"é! B","indices":[-1,1,1,0],"out_of_range":"skip"}'
 ```
 
 ## text.skip.keyed
@@ -46445,6 +46845,59 @@ Example:
 cube text keyed-skip --steps 2 --count 5 --text ABCDE
 ```
 
+## text.sort
+
+Sort exact scalars or tokens and preserve stable source indexes.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.sort.request` |
+| Output | `report` | `text.sort.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "tokens": [
+        "b",
+        "a",
+        "A",
+        "A",
+        "ä"
+      ],
+      "unit": "tokens"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile sort --text '{"unit":"tokens","tokens":["b","a","A","A","ä"]}'
+```
+
 ## text.statistics
 
 Bounded Unicode-scalar frequencies, overlapping n-grams, IC and entropy under explicit normalization/case/filter policies; numeric observations, never cipher identification.
@@ -46539,6 +46992,53 @@ Example:
 
 ```sh
 cube text statistics --text ABAB --ngram-size 2 --json
+```
+
+## text.tokenize
+
+Return existing Unicode-whitespace tokens with exact source spans.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.tokenize.request` |
+| Output | `report` | `text.tokenize.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "profile": "unicode_whitespace",
+      "text": "ä! B"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile tokenize --text '{"profile":"unicode_whitespace","text":"ä! B"}'
 ```
 
 ## text.transform.masked
@@ -46921,6 +47421,53 @@ Example:
 
 ```sh
 cube text unicode-inspect --text 'Aaé'
+```
+
+## text.unicode_transform
+
+Apply explicit ASCII casing, Unicode case folding or category filtering.
+
+Category: `text`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `text.unicode_transform.request` |
+| Output | `report` | `text.unicode_transform.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "text": "Fuß İΣ",
+      "transform": "casefold"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube text profile unicode-transform --text '{"transform":"casefold","text":"Fuß İΣ"}'
 ```
 
 ## text.utf16.decode

@@ -90,7 +90,7 @@ fn invalid(message: &str) -> OperationError {
 }
 /// Resolve positive origin-0/1 positions and negative indexes from a word's end.
 /// Negative -1 always means the final scalar; i64::MIN is handled without negation.
-fn resolve(position: i64, base: u8, length: usize) -> Option<usize> {
+pub(super) fn resolve(position: i64, base: u8, length: usize) -> Option<usize> {
     let index = if position < 0 {
         length.checked_sub(usize::try_from(position.unsigned_abs()).ok()?)?
     } else {

@@ -22154,5 +22154,360 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "ac1f562256f824782a23e0f6094574d98e668cee98d2cb588e6dc163026c09b8",
+    "inputs": {
+      "request": {
+        "language": {
+          "languages": [
+            "portuguese"
+          ],
+          "mode": "explicit"
+        },
+        "name": "Santos",
+        "name_type": "sephardic",
+        "rule_type": "exact"
+      }
+    },
+    "operation": "text.beider_morse",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "concatenate": true,
+        "encoding": "santoS|santuS",
+        "groups": [
+          {
+            "alternatives": [
+              "santoS",
+              "santuS"
+            ],
+            "languages": [
+              "portuguese"
+            ],
+            "path": [],
+            "table_language": "portuguese"
+          }
+        ],
+        "name_type": "sephardic",
+        "peak_alternatives": 2,
+        "profile": "apache-commons-codec-1.15-bm/cube-v1",
+        "profile_sha256": "834d0ae444e2aea76b808c242d7541ff1585c1fc29ae2ba47cd758974ca9a4a3",
+        "rule_type": "exact",
+        "work_units": 351
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "68a827395c1a6fc494fbfac1b29b36fa4ee5547ac1418a06cd29c224d5845b37",
+    "inputs": {
+      "request": {
+        "name": "Auerbach"
+      }
+    },
+    "operation": "text.daitch_mokotoff",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "codes": [
+          "097400",
+          "097500"
+        ],
+        "folding": false,
+        "profile": "apache-commons-codec-1.15-dm"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "0c97bbb82baae4aff578c31c9f3f2a3ebd91c4334c85c5745c48c31066ff9f21",
+    "inputs": {
+      "request": {
+        "action": "reverse",
+        "text": "á🧑‍💻b"
+      }
+    },
+    "operation": "text.graphemes",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "reverse",
+        "text": "b🧑‍💻á",
+        "uax29_revision": 47,
+        "unicode_version": [
+          17,
+          0,
+          0
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "1e52e82325ffcad8f66eedbfde226b70c59e5ac8a0231a2db6f2693451602b8c",
+    "inputs": {
+      "request": {
+        "action": "compare",
+        "left": "Miller",
+        "right": "Miller"
+      }
+    },
+    "operation": "text.match_rating",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "compare",
+        "left_key": "MLR",
+        "matches": true,
+        "minimum": 4,
+        "profile": "apache-commons-codec-1.15/cube-ascii-v1",
+        "rating": 6,
+        "right_key": "MLR",
+        "unmatched_count": 0
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "422acc8ea93edc6692e8c73f33fd271b3818a6bd425ee773fe4982df146ee207",
+    "inputs": {
+      "request": {
+        "method": "soundex_nara",
+        "names": [
+          "Washington",
+          "Lee",
+          "Ashcraft"
+        ]
+      }
+    },
+    "operation": "text.phonetic",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "keys": [
+          {
+            "key": "W252"
+          },
+          {
+            "key": "L000"
+          },
+          {
+            "key": "A261"
+          }
+        ],
+        "max_code_length": null,
+        "method": "soundex_nara",
+        "profile": "nara-census-four-character-v1",
+        "strict": null
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "62e1ebfe7c9a7d9a437a654663d38d7e3e189362679d780e2683b91e9186097f",
+    "inputs": {
+      "request": {
+        "action": "exists",
+        "pattern": "é",
+        "text": "é"
+      }
+    },
+    "operation": "text.regex",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "exists",
+        "exists": true,
+        "profile": "regex-syntax-0.8.11/pikevm-0.4.18",
+        "work_bound": 168
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "5f49d82c67f7c471be40fcad3f1b8f82f3b92be79fcaff689130479180005d30",
+    "inputs": {
+      "request": {
+        "action": "interleave",
+        "lanes": [
+          "Aé",
+          "B",
+          "",
+          "🧊C"
+        ],
+        "mode": "ragged"
+      }
+    },
+    "operation": "text.scalar_weave",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "interleave",
+        "lengths": [
+          2,
+          1,
+          0,
+          2
+        ],
+        "text": "AB🧊éC"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "dd8f2b7d4b6d77292d92bf2dafa8a7bf29936ae4e2bd002fee61bada289f7a96",
+    "inputs": {
+      "request": {
+        "indices": [
+          -1,
+          1,
+          1,
+          0
+        ],
+        "out_of_range": "skip",
+        "text": "é! B"
+      }
+    },
+    "operation": "text.select_words",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "omitted": [
+          {
+            "index": 0,
+            "position": 3
+          }
+        ],
+        "selected": [
+          {
+            "byte_end": 7,
+            "byte_start": 6,
+            "index": -1,
+            "scalar_end": 4,
+            "scalar_start": 3,
+            "text": "B",
+            "word_index": 1
+          },
+          {
+            "byte_end": 3,
+            "byte_start": 0,
+            "index": 1,
+            "scalar_end": 2,
+            "scalar_start": 0,
+            "text": "é!",
+            "word_index": 0
+          },
+          {
+            "byte_end": 3,
+            "byte_start": 0,
+            "index": 1,
+            "scalar_end": 2,
+            "scalar_start": 0,
+            "text": "é!",
+            "word_index": 0
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "ad2d5c4f1805a1c3e41fc4563a5291d7d561fbf71aa049de5eb15f2cea550b9c",
+    "inputs": {
+      "request": {
+        "tokens": [
+          "b",
+          "a",
+          "A",
+          "A",
+          "ä"
+        ],
+        "unit": "tokens"
+      }
+    },
+    "operation": "text.sort",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "original_indices": [
+          2,
+          3,
+          1,
+          0,
+          4
+        ],
+        "tokens": [
+          "A",
+          "A",
+          "a",
+          "b",
+          "ä"
+        ],
+        "unit": "tokens"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "d2b2190ee64914982ec81a7be75a3839ced53b2a87544ed09e8aff9b698fe924",
+    "inputs": {
+      "request": {
+        "profile": "unicode_whitespace",
+        "text": "ä! B"
+      }
+    },
+    "operation": "text.tokenize",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "profile": "unicode_whitespace",
+        "tokens": [
+          {
+            "byte_end": 3,
+            "byte_start": 0,
+            "scalar_end": 2,
+            "scalar_start": 0,
+            "text": "ä!"
+          },
+          {
+            "byte_end": 7,
+            "byte_start": 6,
+            "scalar_end": 4,
+            "scalar_start": 3,
+            "text": "B"
+          }
+        ],
+        "unicode_version": [
+          17,
+          0,
+          0
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3f0e59b175709d75fd8f17f48487388c80a31fef845c5b9b62acb1db65f1a8c8",
+    "inputs": {
+      "request": {
+        "text": "Fuß İΣ",
+        "transform": "casefold"
+      }
+    },
+    "operation": "text.unicode_transform",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "profile": "casefold_full",
+        "text": "fuss i̇σ",
+        "unicode_version": [
+          17,
+          0,
+          0
+        ]
+      }
+    },
+    "parameters": {}
   }
 ]

@@ -3,6 +3,10 @@
 Normalize, reverse, select, count or arrange Unicode text. Positions count
 [Unicode scalars](../../concepts/text.md#bytes-scalars-and-visible-characters).
 
+For whole-word selection, grapheme boundaries, case folding and regex, see
+[Unicode text profiles](unicode-text-profiles.md). For spelling keys and
+alternatives, see [phonetic text profiles](phonetic-text-profiles.md).
+
 ## Reversal and positional extraction
 
 | Operation | Behavior |

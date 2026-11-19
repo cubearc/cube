@@ -22,6 +22,23 @@ Use `bytes` for binary data and `str` for text. Binary results are returned as b
 without the CLI's hexadecimal display or an added newline.
 See [bytes and text](../concepts/data.md) for the data model.
 
+## Text profiles
+
+Pass an explicit request dictionary to a native text operation.
+
+```python
+import cube
+
+report = cube.text_select_words({"text": "café azul", "indices": [-1, 1]})
+print([item["text"] for item in report["selected"]])
+# ['azul', 'café']
+```
+
+Each result includes its original UTF-8 byte and scalar spans.
+See [Unicode text profiles](../reference/topics/unicode-text-profiles.md)
+for request fields and [phonetic profiles](../reference/topics/phonetic-text-profiles.md)
+for name-key operations.
+
 ## Work with images in memory
 
 You can create an image from a byte buffer and inspect it without a temporary file:

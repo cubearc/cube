@@ -26,6 +26,7 @@ mod sequence;
 mod symbols;
 mod text;
 mod text_analysis;
+mod text_profiles;
 mod video;
 mod workflows;
 use crate::{
@@ -68,6 +69,7 @@ const MODULES: &[(Supports, Invoke)] = &[
     (numbers::supports, numbers::execute),
     (reasoning::supports, reasoning::execute),
     (sequence::supports, sequence::execute),
+    (text_profiles::supports, text_profiles::execute),
     (symbols::supports, symbols::execute),
     (text::supports, text::execute),
     (text_analysis::supports, text_analysis::execute),

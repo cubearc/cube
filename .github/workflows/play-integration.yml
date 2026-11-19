@@ -12,6 +12,7 @@ on:
       - "bindings/python/Cargo.toml"
       - "bindings/javascript/wasm/**"
       - ".github/workflows/play-integration.yml"
+      - ".github/scripts/adopt_core_lock.py"
   pull_request:
     branches: [main]
     paths:
@@ -23,6 +24,7 @@ on:
       - "bindings/python/Cargo.toml"
       - "bindings/javascript/wasm/**"
       - ".github/workflows/play-integration.yml"
+      - ".github/scripts/adopt_core_lock.py"
   workflow_dispatch:
 
 permissions:
@@ -65,6 +67,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: Build the real Core CLI used by the native workbench
         run: cargo build --locked --manifest-path ../cube/Cargo.toml -p cube-cli
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Verify the reviewed Play lock with the current Core dependency identities
+        run: |
+          cargo fetch --locked --manifest-path ../cube/Cargo.toml
+          python ../cube/.github/scripts/adopt_core_lock.py . ../cube
       - name: Test native execution, admission and evidence with the current Core
         run: cargo test --workspace --all-features --locked
       - name: Verify the complete Core contracts and real conformance fixtures

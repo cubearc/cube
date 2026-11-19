@@ -423,6 +423,7 @@ const MODULES: &[Module] = &[
     Module::plain(crate::text::classes::OPERATIONS),
     crate::text::MODULE,
     crate::sequence::MODULE,
+    crate::text::profiles::MODULE,
     Module::plain(crate::text::selection::OPERATIONS),
     Module::plain(crate::text::word::OPERATIONS),
     Module::plain(crate::text::values::OPERATIONS),

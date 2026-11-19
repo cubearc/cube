@@ -62,6 +62,10 @@ for explicit row selection.
 
 ## Use the local ESM API
 
+The packaged `examples/text-profiles.mts` runs extended-grapheme reversal
+through the installed SDK. It uses the typed `request` and `report` of
+[Unicode text profiles](../reference/topics/unicode-text-profiles.md).
+
 ```javascript
 import { createCube } from './dist/node.mjs';
 

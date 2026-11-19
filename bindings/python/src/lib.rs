@@ -65,6 +65,7 @@ mod solresol;
 mod stream;
 mod structured_composition;
 mod symbolic_alphabet;
+mod text_profiles;
 mod textops;
 mod traversal;
 mod unicode;
@@ -710,6 +711,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     combinatorics::register(module)?;
     multiset::register(module)?;
     sequence::register(module)?;
+    text_profiles::register(module)?;
     lexical::register(module)?;
     probability::register(module)?;
     boolean::register(module)?;

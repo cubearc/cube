@@ -408,3 +408,24 @@ test('PURPLE executes independent source answers and stateful boundaries in actu
  assert.equal(execute('encode','A'.repeat(262144),settings).text.length,262144);assert.throws(()=>execute('encode','A'.repeat(1048577),settings),{code:'resource_limit'});assert.throws(()=>execute('encode','A'.repeat(65537),{...settings,trace:true}),{code:'resource_limit'});
  assert.throws(()=>execute('encode','PRIVATE_TEXT',settings),{code:'invalid_input'});
 });
+
+test('text profiles execute independently reviewed contracts and exact word indices in Wasm', async () => {
+  const operations = new Set([
+    'text.beider_morse', 'text.daitch_mokotoff', 'text.graphemes', 'text.match_rating',
+    'text.phonetic', 'text.regex', 'text.scalar_weave', 'text.select_words', 'text.sort',
+    'text.tokenize', 'text.unicode_transform',
+  ]);
+  const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
+  const cases = fixtures.filter(row => operations.has(row.operation));
+  assert.deepEqual(new Set(cases.map(row => row.operation)), operations);
+  for (const row of cases) {
+    assert.deepEqual(cube.execute({ operation: row.operation, version: 1, inputs: row.inputs, parameters: row.parameters }), row.outputs, row.operation);
+  }
+  const run = (operation, request) => cube.execute({ operation, version: 1, inputs: { request } }).report;
+  const minimum = -(2n ** 63n);
+  assert.deepEqual(run('text.select_words', { text: 'word', indices: [minimum], out_of_range: 'skip' }).omitted, [
+    { index: minimum.toString(), position: 0 },
+  ]);
+  assert.throws(() => run('text.regex', { action: 'matches', text: 'aa', pattern: 'a', max_results: 1 }), { code: 'resource_limit' });
+  assert.throws(() => run('text.phonetic', { method: 'nysiis', name: 'é' }), { code: 'invalid_input' });
+});

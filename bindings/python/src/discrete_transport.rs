@@ -140,14 +140,17 @@ impl JsonBudget {
         } else if v.is_exact_instance_of::<PyBool>() {
             add = 5;
         } else if v.is_exact_instance_of::<PyInt>() {
-            if v.extract::<i64>().is_err() && v.extract::<u64>().is_err() {
+            add = if let Ok(n) = v.extract::<i64>() {
+                1 + usize::from(n < 0) + n.unsigned_abs().checked_ilog10().unwrap_or(0) as usize
+            } else if let Ok(n) = v.extract::<u64>() {
+                1 + n.checked_ilog10().unwrap_or(0) as usize
+            } else {
                 return Err(input(
                     self.op,
                     "document",
                     "JSON integer exceeds fixed-width transport",
                 ));
-            }
-            add = 21;
+            };
         } else if self.finite_floats && v.is_exact_instance_of::<PyFloat>() {
             if !v.extract::<f64>()?.is_finite() {
                 return Err(input(self.op, "document", "JSON numbers must be finite"));

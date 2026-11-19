@@ -429,3 +429,23 @@ test('text profiles execute independently reviewed contracts and exact word indi
   assert.throws(() => run('text.regex', { action: 'matches', text: 'aa', pattern: 'a', max_results: 1 }), { code: 'resource_limit' });
   assert.throws(() => run('text.phonetic', { method: 'nysiis', name: 'é' }), { code: 'invalid_input' });
 });
+
+test('exact numerics and statistical analysis execute canonical fixtures in Wasm', async () => {
+  const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
+  const rows = fixtures.filter(row => row.operation.startsWith('number.') && 'report' in row.outputs && 'request' in row.inputs);
+  assert.equal(rows.length, 23);
+  for (const row of rows) {
+    assert.deepEqual(cube.execute({
+      operation: row.operation, version: row.operation_version, inputs: row.inputs, parameters: row.parameters,
+    }), row.outputs, row.operation);
+  }
+  const execute = (operation, request) => cube.execute({ operation, version: 1, inputs: { request } }).report;
+  const wide = (1n << 128n) - 1n;
+  const encoded = execute('number.factoradic', { direction: 'encode', value: wide.toString() });
+  assert.equal(BigInt(execute('number.factoradic', { direction: 'decode', digits: encoded.digits }).value), wide);
+  const modulus = '18446744073709551615';
+  assert.deepEqual(execute('number.crt', { pairs: [{ modulus, residue: '18446744073709551614' }] }),
+    { status: 'solution', modulus, residue: '18446744073709551614' });
+  assert.throws(() => execute('number.roman', { direction: 'decode', text: 'IIV' }), { code: 'invalid_input' });
+  assert.throws(() => execute('number.correlation', { method: 'lag', x: [1], lags: [1] }), { code: 'invalid_input' });
+});

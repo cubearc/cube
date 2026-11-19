@@ -40191,6 +40191,53 @@ Example:
 cube number alphabet --source-alphabet 01 --target-alphabet abcdefghij --from-base 2 --to-base 10 --text 1010
 ```
 
+## number.balanced_ternary
+
+Convert signed magnitudes to or from exact balanced ternary trits.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.balanced_ternary.request` |
+| Output | `report` | `number.balanced_ternary.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "direction": "encode",
+      "value": "-2"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis balanced-ternary --text '{"direction":"encode","value":"-2"}'
+```
+
 ## number.base.convert
 
 Convert signed ASCII integers between bases 2..36; <=4096 input digits, <=128-bit magnitude; no floats or prefixes.
@@ -40253,6 +40300,57 @@ Example:
 
 ```sh
 cube number base --from-base 16 --to-base 2 --text FF
+```
+
+## number.benford
+
+Measure exact first significant decimal digits and return Benford weights.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.benford.request` |
+| Output | `report` | `number.benford.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "values": [
+        "-010",
+        "+0200",
+        "027",
+        "0"
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis benford --text '{"values":["-010","+0200","027","0"]}'
 ```
 
 ## number.binomial
@@ -40413,6 +40511,212 @@ Example:
 cube number digits pi --start 256 --count 16 --max-digits 512 --json
 ```
 
+## number.correlation
+
+Compute ordered lag overlaps or explicit Pearson and Spearman correlations.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.correlation.request` |
+| Output | `report` | `number.correlation.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "lags": [
+        -1,
+        0,
+        1
+      ],
+      "method": "lag",
+      "x": [
+        1,
+        2,
+        4
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis correlation --text '{"method":"lag","x":[1,2,4],"lags":[-1,0,1]}'
+```
+
+## number.crt
+
+Merge generalized Chinese remainder constraints, including noncoprime moduli.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.crt.request` |
+| Output | `report` | `number.crt.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "pairs": [
+        {
+          "modulus": 6,
+          "residue": 2
+        },
+        {
+          "modulus": 9,
+          "residue": 8
+        }
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis crt --text '{"pairs":[{"residue":2,"modulus":6},{"residue":8,"modulus":9}]}'
+```
+
+## number.de_bruijn
+
+Generate a canonical FKM de Bruijn cycle over an explicit scalar alphabet.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.de_bruijn.request` |
+| Output | `report` | `number.de_bruijn.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "alphabet": "01",
+      "linearized": true,
+      "order": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis de-bruijn --text '{"alphabet":"01","order":2,"linearized":true}'
+```
+
+## number.decimal_check
+
+Summarize decimal digits or test an explicit equation modulo nine.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.decimal_check.request` |
+| Output | `report` | `number.decimal_check.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "summarize",
+      "value": "-38"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis decimal-check --text '{"action":"summarize","value":"-38"}'
+```
+
 ## number.digital_root
 
 Decimal digital root of a signed 128-bit magnitude; <=4096 ASCII input digits, no float conversion; zero maps to zero.
@@ -40469,6 +40773,57 @@ Example:
 cube number digital-root --text=-38
 ```
 
+## number.entropy
+
+Estimate entropy from counts with Shannon, Rényi or Miller–Madow.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.entropy.request` |
+| Output | `report` | `number.entropy.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "counts": [
+        2,
+        0,
+        2
+      ],
+      "method": "shannon"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis entropy --text '{"method":"shannon","counts":[2,0,2]}'
+```
+
 ## number.extended_gcd
 
 Exact GCD and signed i128 Bezout coefficients; deterministic Euclid; JSON decimal strings.
@@ -40516,6 +40871,100 @@ Example:
 cube number extended-gcd --a 240 --b 46 --json
 ```
 
+## number.factor
+
+Factor u32 by trial division or search for one bounded Pollard rho divisor.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.factor.request` |
+| Output | `report` | `number.factor.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "method": "trial_division",
+      "value": 360
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis factor --text '{"method":"trial_division","value":360}'
+```
+
+## number.factoradic
+
+Convert exact unsigned integers and canonical factoradic digits.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.factoradic.request` |
+| Output | `report` | `number.factoradic.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "direction": "encode",
+      "value": "463"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis factoradic --text '{"direction":"encode","value":"463"}'
+```
+
 ## number.gcd
 
 Exact u64 GCD, including gcd(0,0)=0; fixed storage, <=256 Euclidean rounds.
@@ -40561,6 +41010,384 @@ Example:
 
 ```sh
 cube number gcd --a 48 --b 18
+```
+
+## number.gray
+
+Encode or decode a width-specific reflected Gray code.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.gray.request` |
+| Output | `report` | `number.gray.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "binary": true,
+      "direction": "encode",
+      "value": "14",
+      "width": 4
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis gray --text '{"direction":"encode","width":4,"value":"14","binary":true}'
+```
+
+## number.interpolation
+
+Return exact forward differences or evaluate a Lagrange or Newton interpolant.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.interpolation.request` |
+| Output | `report` | `number.interpolation.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "interpolate",
+      "coefficients": true,
+      "method": "newton",
+      "points": [
+        3
+      ],
+      "samples": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 5
+        }
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis interpolation --text '{"action":"interpolate","method":"newton","samples":[{"x":0,"y":1},{"x":2,"y":5}],"points":[3],"coefficients":true}'
+```
+
+## number.lehmer
+
+Rank and unrank distinct permutations with exact Lehmer digits.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.lehmer.request` |
+| Output | `report` | `number.lehmer.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "rank",
+      "permutation": [
+        2,
+        0,
+        1
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis lehmer --text '{"action":"rank","permutation":[2,0,1]}'
+```
+
+## number.letter_values
+
+Apply explicit scalar value tables with checked aggregate and position evidence.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.letter_values.request` |
+| Output | `report` | `number.letter_values.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "evaluate",
+      "aggregate": "positional_weighted_sum",
+      "mapping": {
+        "preset": "chaldean_cheiro"
+      },
+      "reduce": true,
+      "text": "A!Z",
+      "unmapped": "skip"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis letter-values --text '{"action":"evaluate","mapping":{"preset":"chaldean_cheiro"},"text":"A!Z","unmapped":"skip","aggregate":"positional_weighted_sum","reduce":true}'
+```
+
+## number.lexicographic_rank
+
+Rank or unrank a multiset of scalars in an explicit alphabet order.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.lexicographic_rank.request` |
+| Output | `report` | `number.lexicographic_rank.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "rank",
+      "alphabet": "BA",
+      "multiset": "ABA",
+      "text": "ABA"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis lexicographic-rank --text '{"action":"rank","alphabet":"BA","multiset":"ABA","text":"ABA"}'
+```
+
+## number.markov
+
+Build ordered empirical transition counts and exact row probabilities.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.markov.request` |
+| Output | `report` | `number.markov.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "sequences": [
+        [
+          "a",
+          "b"
+        ],
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "states": [
+        "a",
+        "b"
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis markov --text '{"states":["a","b"],"sequences":[["a","b"],["a","a"]]}'
+```
+
+## number.matrix
+
+Compute exact rational matrix operations and deterministic elimination.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.matrix.request` |
+| Output | `report` | `number.matrix.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "determinant",
+      "matrix": {
+        "cells": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "cols": 2,
+        "rows": 2
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis matrix --text '{"action":"determinant","matrix":{"rows":2,"cols":2,"cells":[1,2,3,4]}}'
 ```
 
 ## number.maximum
@@ -40774,6 +41601,54 @@ Example:
 cube number multinomial --groups 2,1,1 --json
 ```
 
+## number.partitions
+
+Count and enumerate bounded integer partitions in reverse lexicographic order.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.partitions.request` |
+| Output | `report` | `number.partitions.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "enumerate",
+      "n": 4,
+      "part_count": 2
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis partitions --text '{"action":"enumerate","n":4,"part_count":2}'
+```
+
 ## number.pascal
 
 Exact Pascal rows 0..rows-1; <=129 rows including row 128; decimal strings, <=1 MiB report.
@@ -40835,6 +41710,57 @@ Example:
 
 ```sh
 cube number pascal --rows 4
+```
+
+## number.permutation_list
+
+Enumerate distinct multiset or adjacent-swap permutations with bounded prefixes.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.permutation_list.request` |
+| Output | `report` | `number.permutation_list.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "mode": "multiset",
+      "tokens": [
+        2,
+        1,
+        2
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis permutation-list --text '{"mode":"multiset","tokens":[2,1,2]}'
 ```
 
 ## number.permutations
@@ -40900,6 +41826,245 @@ Example:
 
 ```sh
 cube number permutations --n 5 --k 2 --json
+```
+
+## number.primality
+
+Test an exact u32 by trial division or fixed-base Miller–Rabin.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.primality.request` |
+| Output | `report` | `number.primality.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "method": "miller_rabin",
+      "value": 4294967291
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis primality --text '{"value":4294967291,"method":"miller_rabin"}'
+```
+
+## number.recurrence
+
+Generate checked progressions, Fibonacci, Lucas or bounded Collatz prefixes.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.recurrence.request` |
+| Output | `report` | `number.recurrence.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "count": 7,
+      "sequence": "fibonacci"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis recurrence --text '{"sequence":"fibonacci","count":7}'
+```
+
+## number.roman
+
+Read or write canonical Roman numerals from 1 through 3999.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.roman.request` |
+| Output | `report` | `number.roman.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "direction": "decode",
+      "text": "MCMXCIV"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis roman --text '{"direction":"decode","text":"MCMXCIV"}'
+```
+
+## number.runs
+
+Count Wald–Wolfowitz runs and return explicitly defined evidence.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.runs.request` |
+| Output | `report` | `number.runs.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "input": "binary",
+      "values": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis runs --text '{"input":"binary","values":[0,0,0]}'
+```
+
+## number.sieve
+
+List bounded primes using Eratosthenes or Atkin.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.sieve.request` |
+| Output | `report` | `number.sieve.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "limit": 20,
+      "method": "atkin"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis sieve --text '{"limit":20,"method":"atkin"}'
 ```
 
 ## pipeline.execute

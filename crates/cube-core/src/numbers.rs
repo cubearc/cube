@@ -1,5 +1,6 @@
 //! Checked integer representations, distinct from byte encodings and floating point.
 pub mod alphabet;
+pub mod analysis;
 pub mod combinatorics;
 pub mod constants;
 pub mod digital;

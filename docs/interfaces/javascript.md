@@ -66,6 +66,10 @@ The packaged `examples/text-profiles.mts` runs extended-grapheme reversal
 through the installed SDK. It uses the typed `request` and `report` of
 [Unicode text profiles](../reference/topics/unicode-text-profiles.md).
 
+The packaged `examples/numeric-analysis.mts` encodes a 128-bit Gray code.
+It uses decimal strings for the wide request and report and converts the
+result to `BigInt`. See [exact numeric reports](../reference/topics/numeric-analysis.md).
+
 ```javascript
 import { createCube } from './dist/node.mjs';
 

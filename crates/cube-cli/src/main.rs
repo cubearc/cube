@@ -47,6 +47,7 @@ mod latticecmd;
 mod mechanicalcmd;
 mod modularcmd;
 mod monocmd;
+mod numberanalysiscmd;
 mod numericcmd;
 mod opensslcmd;
 mod pipelinecmd;
@@ -217,6 +218,8 @@ enum Command {
 
 #[derive(Subcommand)]
 enum Number {
+    /// Run a typed numeric analysis on a JSON request
+    Analysis(numberanalysiscmd::Args),
     /// Exact ordered k-selections, n<=128, u128 result
     Permutations(combinatoricscmd::Pair),
     /// Exact C(n,k), cancellation avoids factorial overflow
@@ -1146,6 +1149,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn Error>> {
         Command::Sequence(command) => sequencecmd::run(command, &mut output)?,
         Command::Graph { command } => graphcmd::run(command, &mut output)?,
         Command::Logic { command } => logiccmd::run(command, &mut output)?,
+        Command::Number {
+            command: Number::Analysis(args),
+        } => numberanalysiscmd::run(args, &mut output)?,
         Command::Number {
             command: Number::Permutations(args),
         } => combinatoricscmd::pair(args, true, &mut output)?,

@@ -36,30 +36,8 @@ pub(crate) fn indexed(
     {
         return Err(invalid(op));
     }
-    let len = usize::try_from(limit)
-        .ok()
-        .and_then(|n| n.checked_add(1))
-        .ok_or_else(|| invalid(op))?;
     let mut work = 0;
-    charge(&mut work, len as u32, op)?;
-    let mut marked = Vec::new();
-    marked.try_reserve_exact(len).map_err(|_| {
-        OperationError::new(ErrorCode::ResourceLimit, "bounded sieve allocation refused")
-            .operation(op)
-    })?;
-    marked.resize(len, 0u8);
-    let n = limit as usize;
-    let mut p = 2usize;
-    while p <= n / p {
-        charge(&mut work, 1, op)?;
-        if marked[p] == 0 {
-            for multiple in (p * p..=n).step_by(p) {
-                charge(&mut work, 1, op)?;
-                marked[multiple] = 1;
-            }
-        }
-        p += 1;
-    }
+    let marked = eratosthenes(limit, &mut work, op)?;
     let mut result = Vec::with_capacity(count);
     let mut seen = 0;
     for (value, &flag) in marked.iter().enumerate().skip(2) {
@@ -80,4 +58,36 @@ pub(crate) fn indexed(
     )
     .operation(op)
     .parameter("max_prime"))
+}
+
+/// Shared inclusive Eratosthenes flags; zero means unmarked.
+pub(crate) fn eratosthenes(
+    limit: u32,
+    work: &mut u32,
+    op: &'static str,
+) -> Result<Vec<u8>, OperationError> {
+    let len = usize::try_from(limit)
+        .ok()
+        .and_then(|n| n.checked_add(1))
+        .ok_or_else(|| invalid(op))?;
+    charge(work, len as u32, op)?;
+    let mut marked = Vec::new();
+    marked.try_reserve_exact(len).map_err(|_| {
+        OperationError::new(ErrorCode::ResourceLimit, "bounded sieve allocation refused")
+            .operation(op)
+    })?;
+    marked.resize(len, 0u8);
+    let n = limit as usize;
+    let mut p = 2usize;
+    while p <= n / p {
+        charge(work, 1, op)?;
+        if marked[p] == 0 {
+            for multiple in (p * p..=n).step_by(p) {
+                charge(work, 1, op)?;
+                marked[multiple] = 1;
+            }
+        }
+        p += 1;
+    }
+    Ok(marked)
 }

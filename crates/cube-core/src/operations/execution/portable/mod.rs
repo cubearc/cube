@@ -21,6 +21,7 @@ mod image_analysis;
 mod images;
 mod linear;
 mod numbers;
+mod numeric_analysis;
 mod reasoning;
 mod sequence;
 mod symbols;
@@ -70,6 +71,7 @@ const MODULES: &[(Supports, Invoke)] = &[
     (reasoning::supports, reasoning::execute),
     (sequence::supports, sequence::execute),
     (text_profiles::supports, text_profiles::execute),
+    (numeric_analysis::supports, numeric_analysis::execute),
     (symbols::supports, symbols::execute),
     (text::supports, text::execute),
     (text_analysis::supports, text_analysis::execute),

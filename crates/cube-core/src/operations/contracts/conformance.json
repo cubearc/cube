@@ -22509,5 +22509,727 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "bd959d77493dd83d9b43193b8ecd4616d9ae0e3f90b1ffe4d3916d8f4ccf7e3e",
+    "inputs": {
+      "request": {
+        "direction": "encode",
+        "value": "-2"
+      }
+    },
+    "operation": "number.balanced_ternary",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "text": "T1",
+        "trits": [
+          -1,
+          1
+        ],
+        "value": "-2"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "9a0958843e23b6df83576ece39ad3d6a8804f2b5eeb948c573160c1303198fa5",
+    "inputs": {
+      "request": {
+        "values": [
+          "-010",
+          "+0200",
+          "027",
+          "0"
+        ]
+      }
+    },
+    "operation": "number.benford",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "counts": [
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "included": 3,
+        "probabilities": [
+          0.3010299956639812,
+          0.17609125905568124,
+          0.12493873660829995,
+          0.09691001300805642,
+          0.07918124604762483,
+          0.0669467896306132,
+          0.057991946977686754,
+          0.05115252244738129,
+          0.04575749056067512
+        ],
+        "zeros": 1
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "267d71aa7b1baa95694e9eacb5827492fdc837ee6ed52d1565ba6edeb390911e",
+    "inputs": {
+      "request": {
+        "lags": [
+          -1,
+          0,
+          1
+        ],
+        "method": "lag",
+        "x": [
+          1,
+          2,
+          4
+        ]
+      }
+    },
+    "operation": "number.correlation",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "kind": "lags",
+        "lags": [
+          {
+            "lag": -1,
+            "overlap": 2,
+            "value": 10.0
+          },
+          {
+            "lag": 0,
+            "overlap": 3,
+            "value": 21.0
+          },
+          {
+            "lag": 1,
+            "overlap": 2,
+            "value": 10.0
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "e1250bb872a19b93aab6202cbca4fc080dcb22eed09c611a140ef768f16eeb21",
+    "inputs": {
+      "request": {
+        "pairs": [
+          {
+            "modulus": 6,
+            "residue": 2
+          },
+          {
+            "modulus": 9,
+            "residue": 8
+          }
+        ]
+      }
+    },
+    "operation": "number.crt",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "modulus": 18,
+        "residue": 8,
+        "status": "solution"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "8df7d117e5cbd6cfb89f5bd78624917e5efe6400241363a9565bd617aecbb97a",
+    "inputs": {
+      "request": {
+        "alphabet": "01",
+        "linearized": true,
+        "order": 2
+      }
+    },
+    "operation": "number.de_bruijn",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "cyclic_symbols": 4,
+        "linearized": true,
+        "sequence": "00110"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "cf60dd8d28942263620929a645e3ea6c2be4b03c69d362e24cf35171e3261d15",
+    "inputs": {
+      "request": {
+        "action": "summarize",
+        "value": "-38"
+      }
+    },
+    "operation": "number.decimal_check",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "summarize",
+        "digit_sum": 11,
+        "digital_root": 2,
+        "residue9": 7
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "64bb82249746ba787289664cdbc7cee507ce822b7243e37415ea2c24bcd8f936",
+    "inputs": {
+      "request": {
+        "counts": [
+          2,
+          0,
+          2
+        ],
+        "method": "shannon"
+      }
+    },
+    "operation": "number.entropy",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "alpha": null,
+        "bits": 1.0,
+        "method": "shannon",
+        "nonzero_bins": 2,
+        "samples": "4"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "2591a9dba77eed285a9794dfe850364a584a9c765bea7ff4882bdd1cc2779205",
+    "inputs": {
+      "request": {
+        "method": "trial_division",
+        "value": 360
+      }
+    },
+    "operation": "number.factor",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "factors": [
+          {
+            "multiplicity": 3,
+            "prime": 2
+          },
+          {
+            "multiplicity": 2,
+            "prime": 3
+          },
+          {
+            "multiplicity": 1,
+            "prime": 5
+          }
+        ],
+        "method": "trial_division"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "c70532aa4b5fc4eaa9a4a7db3d116329ce265e10789720840f504f199220a513",
+    "inputs": {
+      "request": {
+        "direction": "encode",
+        "value": "463"
+      }
+    },
+    "operation": "number.factoradic",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "digits": [
+          3,
+          4,
+          1,
+          0,
+          1,
+          0
+        ],
+        "value": "463"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "e452d2be744d99dfcb90f5b20e0db89d5e04b0b32dd9feac39c1b17ec0e313a8",
+    "inputs": {
+      "request": {
+        "binary": true,
+        "direction": "encode",
+        "value": "14",
+        "width": 4
+      }
+    },
+    "operation": "number.gray",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "binary": "1001",
+        "value": "9"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "5e1fa44e151eaf04a3a32254b136d16c19f345a3fb76731b86968dee0db7ce83",
+    "inputs": {
+      "request": {
+        "action": "interpolate",
+        "coefficients": true,
+        "method": "newton",
+        "points": [
+          3
+        ],
+        "samples": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 2,
+            "y": 5
+          }
+        ]
+      }
+    },
+    "operation": "number.interpolation",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "interpolate",
+        "coefficients": [
+          {
+            "denominator": "1",
+            "numerator": "1"
+          },
+          {
+            "denominator": "1",
+            "numerator": "2"
+          }
+        ],
+        "method": "newton",
+        "values": [
+          {
+            "denominator": "1",
+            "numerator": "7"
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "a6982d98e42e5b581e32d4a89a64545b37672fed6e1997ee8f1e61ba8d377c01",
+    "inputs": {
+      "request": {
+        "action": "rank",
+        "permutation": [
+          2,
+          0,
+          1
+        ]
+      }
+    },
+    "operation": "number.lehmer",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "digits": [
+          2,
+          0,
+          0
+        ],
+        "permutation": [
+          2,
+          0,
+          1
+        ],
+        "rank": "4"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "7f83091382272de531223f8bd03d6842b1f1f8ecba5b3abd6084f83920ed5e8a",
+    "inputs": {
+      "request": {
+        "action": "evaluate",
+        "aggregate": "positional_weighted_sum",
+        "mapping": {
+          "preset": "chaldean_cheiro"
+        },
+        "reduce": true,
+        "text": "A!Z",
+        "unmapped": "skip"
+      }
+    },
+    "operation": "number.letter_values",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "evaluate",
+        "aggregate": "positional_weighted_sum",
+        "digital_root": 4,
+        "omitted_count": 1,
+        "profile": "chaldean_cheiro",
+        "sum": 8,
+        "table_sha256": "442b7d9d79d5de77f3adb4b149bb60b1f487ff97e66c360311622c98223d0e2c",
+        "value": "22",
+        "values": [
+          {
+            "byte_offset": 0,
+            "scalar": "A",
+            "scalar_index": 0,
+            "value": 1
+          },
+          {
+            "byte_offset": 1,
+            "scalar": "!",
+            "scalar_index": 1,
+            "value": null
+          },
+          {
+            "byte_offset": 2,
+            "scalar": "Z",
+            "scalar_index": 2,
+            "value": 7
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "32623a6505082892c98a14c3353d5d94cd98e2be77b6fe280488ae86e616e6a1",
+    "inputs": {
+      "request": {
+        "action": "rank",
+        "alphabet": "BA",
+        "multiset": "ABA",
+        "text": "ABA"
+      }
+    },
+    "operation": "number.lexicographic_rank",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "rank": "1",
+        "text": "ABA",
+        "total": "3"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "a4565d61604a5665db610ba819851e3f67dffb5a244786d9e40fb9679b5265c4",
+    "inputs": {
+      "request": {
+        "sequences": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "a",
+            "a"
+          ]
+        ],
+        "states": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    "operation": "number.markov",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "rows": [
+          {
+            "counts": [
+              1,
+              1
+            ],
+            "probabilities": [
+              {
+                "denominator": 2,
+                "numerator": 1
+              },
+              {
+                "denominator": 2,
+                "numerator": 1
+              }
+            ],
+            "total": 2
+          },
+          {
+            "counts": [
+              0,
+              0
+            ],
+            "probabilities": null,
+            "total": 0
+          }
+        ],
+        "sequence_count": 2,
+        "sequence_length": 4,
+        "states": [
+          "a",
+          "b"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "50d731b1e270b4eddb5a366d718691de979e740e63620ff5144cc7940e07aa97",
+    "inputs": {
+      "request": {
+        "action": "determinant",
+        "matrix": {
+          "cells": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "cols": 2,
+          "rows": 2
+        }
+      }
+    },
+    "operation": "number.matrix",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "action": "determinant",
+        "value": {
+          "denominator": "1",
+          "numerator": "-2"
+        }
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "cf98ccf160e652fa6f5eb8b7e54c4ab9b0b8ef58f9e31797580ab489a6b98269",
+    "inputs": {
+      "request": {
+        "action": "enumerate",
+        "n": 4,
+        "part_count": 2
+      }
+    },
+    "operation": "number.partitions",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "complete": true,
+        "count": "2",
+        "partitions": [
+          [
+            3,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        "stop_reason": "complete"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "9f60d12c38e25411c2ad09777409d99a06c830086f246dfb034b37c45dba1191",
+    "inputs": {
+      "request": {
+        "mode": "multiset",
+        "tokens": [
+          2,
+          1,
+          2
+        ]
+      }
+    },
+    "operation": "number.permutation_list",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "complete": true,
+        "count": "3",
+        "mode": "multiset",
+        "permutations": [
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            2,
+            1,
+            2
+          ],
+          [
+            2,
+            2,
+            1
+          ]
+        ],
+        "sources": [
+          {
+            "source_indices": [
+              1
+            ],
+            "token": 1
+          },
+          {
+            "source_indices": [
+              0,
+              2
+            ],
+            "token": 2
+          }
+        ],
+        "stop_reason": "complete"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "a4b18ebb0ea8d460d72c0982837e903a0ff23b41750d6fc7f4703bf69f0981b6",
+    "inputs": {
+      "request": {
+        "method": "miller_rabin",
+        "value": 4294967291
+      }
+    },
+    "operation": "number.primality",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "method": "miller_rabin",
+        "prime": true
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "b1ce1e181beff92ac3ba8d5a4716e7180964db371f094ae447860a74a0daec13",
+    "inputs": {
+      "request": {
+        "count": 7,
+        "sequence": "fibonacci"
+      }
+    },
+    "operation": "number.recurrence",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "kind": "unsigned",
+        "values": [
+          0,
+          1,
+          1,
+          2,
+          3,
+          5,
+          8
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "7ea3478e59375cf45775127cb4567ae7cf4b11fa572d762e6d2d74eaa514a1c1",
+    "inputs": {
+      "request": {
+        "direction": "decode",
+        "text": "MCMXCIV"
+      }
+    },
+    "operation": "number.roman",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "text": "MCMXCIV",
+        "value": 1994
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "56e5565f6a8ab0e05bab2fb58ebc4e64aaa0d78d72ed5e8950d074beed5a652b",
+    "inputs": {
+      "request": {
+        "input": "binary",
+        "values": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "operation": "number.runs",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "dropped": 0,
+        "expected": 1.0,
+        "large_sample": false,
+        "n0": 3,
+        "n1": 0,
+        "runs": 1,
+        "undefined_reason": "single_category",
+        "variance": 0.0,
+        "z": null
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "4eb97c3a5eec03a735009a485b7f2a8ad3123fb6ba17536c2653a1074d35ddec",
+    "inputs": {
+      "request": {
+        "limit": 20,
+        "method": "atkin"
+      }
+    },
+    "operation": "number.sieve",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "method": "atkin",
+        "primes": [
+          2,
+          3,
+          5,
+          7,
+          11,
+          13,
+          17,
+          19
+        ]
+      }
+    },
+    "parameters": {}
   }
 ]

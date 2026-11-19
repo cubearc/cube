@@ -84,6 +84,7 @@
     - [Text operations](reference/topics/text-operations.md)
     - [Unicode text profiles](reference/topics/unicode-text-profiles.md)
     - [Phonetic text profiles](reference/topics/phonetic-text-profiles.md)
+    - [Exact numerics and statistical analysis](reference/topics/numeric-analysis.md)
     - [Sequence analysis](reference/topics/sequence-analysis.md)
     - [Ordered composition](reference/composition.md)
     - [Fields and integer composition](reference/structured-composition.md)

@@ -49,6 +49,7 @@ mod modular;
 mod mono;
 mod multiset;
 mod numbered_key;
+mod numeric_analysis;
 mod numeric_puzzles;
 mod openssl;
 mod pipeline;
@@ -712,6 +713,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     multiset::register(module)?;
     sequence::register(module)?;
     text_profiles::register(module)?;
+    numeric_analysis::register(module)?;
     lexical::register(module)?;
     probability::register(module)?;
     boolean::register(module)?;

@@ -138,6 +138,35 @@ pub fn parse_table(json: &str) -> Result<Vec<(char, u64)>, OperationError> {
     }
     Ok(result)
 }
+pub(crate) fn table_index(
+    table: &[(char, u64)],
+    op: &'static str,
+) -> Result<BTreeMap<char, u64>, OperationError> {
+    if table.len() > 4096 {
+        return Err(error(
+            op,
+            ErrorCode::ResourceLimit,
+            "value table exceeds 4096 entries",
+        )
+        .parameter("table"));
+    }
+    let mut budget = ByteBudget::new(65536);
+    serde_json::to_writer(&mut budget, table).map_err(|_| {
+        error(op, ErrorCode::ResourceLimit, "value table exceeds 64 KiB").parameter("table")
+    })?;
+    let mut map = BTreeMap::new();
+    for &(scalar, value) in table {
+        if map.insert(scalar, value).is_some() {
+            return Err(error(
+                op,
+                ErrorCode::InvalidParameter,
+                "duplicate exact scalar in value table",
+            )
+            .parameter("table"));
+        }
+    }
+    Ok(map)
+}
 /// Per-word character values default to exact Unicode scalar code points.
 /// An optional <=4096-entry/64 KiB table matches exact scalars; unmapped error
 /// (default at interfaces) or skip retains a null value and omission count.
@@ -164,34 +193,7 @@ pub fn word_values(
             error(OP, ErrorCode::InvalidParameter, "max_sum requires sums").parameter("max_sum"),
         );
     }
-    let map = if let Some(table) = table {
-        if table.len() > 4096 {
-            return Err(error(
-                OP,
-                ErrorCode::ResourceLimit,
-                "value table exceeds 4096 entries",
-            )
-            .parameter("table"));
-        }
-        let mut budget = ByteBudget::new(65536);
-        serde_json::to_writer(&mut budget, table).map_err(|_| {
-            error(OP, ErrorCode::ResourceLimit, "value table exceeds 64 KiB").parameter("table")
-        })?;
-        let mut map = BTreeMap::new();
-        for &(scalar, value) in table {
-            if map.insert(scalar, value).is_some() {
-                return Err(error(
-                    OP,
-                    ErrorCode::InvalidParameter,
-                    "duplicate exact scalar in value table",
-                )
-                .parameter("table"));
-            }
-        }
-        Some(map)
-    } else {
-        None
-    };
+    let map = table.map(|table| table_index(table, OP)).transpose()?;
     let source = Index::new(input, OP)?;
     if source.words.iter().map(|w| w.scalar_length).sum::<usize>() > MAX_INDICES {
         return Err(error(

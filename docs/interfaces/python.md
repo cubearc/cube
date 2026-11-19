@@ -39,6 +39,23 @@ See [Unicode text profiles](../reference/topics/unicode-text-profiles.md)
 for request fields and [phonetic profiles](../reference/topics/phonetic-text-profiles.md)
 for name-key operations.
 
+## Exact numeric reports
+
+Pass a request dictionary to `cube.number_<name>`. Exact large numeric
+results use Python's builtin `int`, including rational numerators and
+denominators.
+
+```python
+import cube
+
+maximum = (1 << 128) - 1
+code = cube.number_gray({"direction": "encode", "width": 128, "value": maximum})
+assert code["value"] == 1 << 127
+```
+
+See [exact numerics and statistical analysis](../reference/topics/numeric-analysis.md)
+for request fields and bounds.
+
 ## Work with images in memory
 
 You can create an image from a byte buffer and inspect it without a temporary file:

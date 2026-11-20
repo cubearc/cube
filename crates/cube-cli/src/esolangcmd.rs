@@ -15,6 +15,8 @@ use std::{
 
 #[derive(Subcommand)]
 pub(crate) enum Command {
+    /// Run a typed analysis from an explicit JSON request
+    Analysis(crate::numberanalysiscmd::Args),
     /// Strict bounded Brainfuck with byte input/output and wrapping cells
     Brainfuck {
         #[command(subcommand)]
@@ -180,8 +182,13 @@ impl Common {
     }
 }
 pub(crate) fn run(command: Command, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
-    let Command::Brainfuck { command } = command;
-    match command {
+    let nested = match command {
+        Command::Analysis(args) => {
+            return crate::numberanalysiscmd::family("esolang", args, output);
+        }
+        Command::Brainfuck { command } => command,
+    };
+    match nested {
         Brainfuck::Run(args) => {
             let Loaded {
                 source,

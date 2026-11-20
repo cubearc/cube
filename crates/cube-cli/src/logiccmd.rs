@@ -4,6 +4,8 @@ use cube_core::logic::boolean as b;
 use std::{error::Error, io::Write};
 #[derive(Subcommand)]
 pub(crate) enum Command {
+    /// Run a typed analysis from an explicit JSON request
+    Analysis(crate::numberanalysiscmd::Args),
     Boolean {
         #[command(subcommand)]
         command: Boolean,
@@ -52,8 +54,11 @@ impl Model {
     }
 }
 pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
-    let Command::Boolean { command } = command;
-    match command {
+    let nested = match command {
+        Command::Analysis(args) => return crate::numberanalysiscmd::family("logic", args, out),
+        Command::Boolean { command } => command,
+    };
+    match nested {
         Boolean::Analyze(args) => {
             let (model, limits) = args.load()?;
             serde_json::to_writer(&mut *out, &b::analyze(&model, limits)?)?;

@@ -6,6 +6,7 @@ pub mod constants;
 pub mod digital;
 pub mod modular;
 pub(crate) mod primes;
+pub mod streams;
 use crate::errors::{ErrorCode, OperationError};
 /// Maximum ASCII digits, excluding one optional sign; leading zeros still count.
 pub const MAX_DIGITS: usize = 4096;

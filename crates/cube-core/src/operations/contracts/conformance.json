@@ -23231,5 +23231,499 @@
       }
     },
     "parameters": {}
+  },
+  {
+    "contract_sha256": "20d5e69315d1921d70a063e691135e422a85eb756de2a96de75e8112612663a1",
+    "inputs": {
+      "request": {
+        "generations": 1,
+        "initial": {
+          "cells": "00100",
+          "kind": "elementary",
+          "rule": 90
+        },
+        "snapshots": [
+          0
+        ]
+      }
+    },
+    "operation": "esolang.cellular_automaton",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "boundary": "finite_dead",
+        "cols": 5,
+        "final_grid": {
+          "cells": "01010",
+          "generation": 1
+        },
+        "rows": 1,
+        "rule": {
+          "kind": "elementary",
+          "rule": 90
+        },
+        "snapshots": [
+          {
+            "cells": "00100",
+            "generation": 0
+          }
+        ],
+        "work": 5
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "4c29ddfe323dd1f3d34ab53d1ade5b8e9742972930243af7f840a5f5c21f479b",
+    "inputs": {
+      "request": {
+        "term": "(\\x.x) y",
+        "trace": 1
+      }
+    },
+    "operation": "esolang.lambda",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "normal_form": true,
+        "omitted_steps": 0,
+        "steps": 1,
+        "stop_reason": "normal_form",
+        "term": "y",
+        "trace": [
+          {
+            "redex_preorder": 0,
+            "rule": "beta",
+            "step": 1
+          }
+        ],
+        "work": 5
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "8cfdaa29d6608ada8ec2a739a0be1ba9d8f381d41c9519a1b39131fb74fd822b",
+    "inputs": {
+      "request": {
+        "term": "I K"
+      }
+    },
+    "operation": "esolang.ski",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "normal_form": true,
+        "omitted_steps": 1,
+        "steps": 1,
+        "stop_reason": "normal_form",
+        "term": "K",
+        "trace": [],
+        "work": 4
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "7c10dff380e23f43b6f6a29085a09fe7442f473f584b4a12970cb79d0790bb53",
+    "inputs": {
+      "request": {
+        "graph": {
+          "directed": true,
+          "edges": [
+            {
+              "from": "A",
+              "id": "ab",
+              "to": "B",
+              "weight": -3
+            }
+          ],
+          "vertices": [
+            "A",
+            "B"
+          ]
+        },
+        "paths": [
+          {
+            "goal": "B",
+            "start": "A"
+          }
+        ]
+      }
+    },
+    "operation": "graph.all_pairs_paths",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "distances": [
+          [
+            "0",
+            "-3"
+          ],
+          [
+            null,
+            "0"
+          ]
+        ],
+        "paths": [
+          {
+            "cost": "-3",
+            "path": {
+              "edges": [
+                "ab"
+              ],
+              "vertices": [
+                "A",
+                "B"
+              ]
+            },
+            "status": "finite"
+          }
+        ],
+        "unbounded": [
+          [
+            false,
+            false
+          ],
+          [
+            false,
+            false
+          ]
+        ],
+        "vertices": [
+          "A",
+          "B"
+        ],
+        "work": 6
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "a3e6c7e99f5f5b7c98a4c0e37e24065b25b533fe14954dbf7f5277996a3d7535",
+    "inputs": {
+      "request": {
+        "edges": [
+          {
+            "from": "A",
+            "id": "ab",
+            "to": "B"
+          }
+        ],
+        "left": [
+          "A"
+        ],
+        "minimum_cover": true,
+        "right": [
+          "B"
+        ]
+      }
+    },
+    "operation": "graph.bipartite_matching",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "duplicates": [],
+        "matches": [
+          {
+            "edge": "ab",
+            "left": "A",
+            "right": "B"
+          }
+        ],
+        "minimum_cover": {
+          "left": [
+            "A"
+          ],
+          "right": []
+        },
+        "unmatched_left": [],
+        "unmatched_right": [],
+        "work": 14
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "129947feaf3fe52105bd8856ad41cc69f4ebeaf949b73360b41fd95cbc5b9224",
+    "inputs": {
+      "request": {
+        "actions": [
+          {
+            "action": "union",
+            "left": 10,
+            "right": 20
+          },
+          {
+            "action": "find",
+            "id": 10
+          }
+        ],
+        "ids": [
+          20,
+          10
+        ]
+      }
+    },
+    "operation": "graph.disjoint_sets",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "answers": [
+          {
+            "action": "find",
+            "action_index": 1,
+            "representative": 20
+          }
+        ],
+        "components": [
+          [
+            20,
+            10
+          ]
+        ],
+        "work": 11
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "12839c2b25814a908cd4715cf4c425977ff738660bc8cad8ffbdf2c332e4094d",
+    "inputs": {
+      "request": {
+        "graph": {
+          "directed": true,
+          "edges": [
+            {
+              "from": "A",
+              "id": "ab",
+              "to": "B"
+            }
+          ],
+          "vertices": [
+            "A",
+            "B"
+          ]
+        },
+        "mode": "depth_first"
+      }
+    },
+    "operation": "graph.traversal",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "result": {
+          "discovery": [
+            {
+              "parent_edge": null,
+              "vertex": "A"
+            },
+            {
+              "parent_edge": "ab",
+              "vertex": "B"
+            }
+          ],
+          "finish": [
+            "B",
+            "A"
+          ],
+          "mode": "depth_first"
+        },
+        "work": 11
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "ef54c1e8af485c5f50cab63f77fa09ec1bb3dede3f640955fa061d4494dc2186",
+    "inputs": {
+      "request": {
+        "algorithm": {
+          "method": "dijkstra"
+        },
+        "goal": "B",
+        "graph": {
+          "directed": true,
+          "edges": [
+            {
+              "from": "A",
+              "id": "ab",
+              "to": "B",
+              "weight": 7
+            }
+          ],
+          "vertices": [
+            "A",
+            "B"
+          ]
+        },
+        "start": "A"
+      }
+    },
+    "operation": "graph.weighted_path",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "negative_cycle": null,
+        "result": {
+          "cost": "7",
+          "path": {
+            "edges": [
+              "ab"
+            ],
+            "vertices": [
+              "A",
+              "B"
+            ]
+          },
+          "status": "finite"
+        },
+        "work": 9
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "39dd9ead883122235f58d074707d79d6d9961cf8a4fc713dc637dd9b1c583673",
+    "inputs": {
+      "request": {
+        "action": "solve",
+        "formula": {
+          "clauses": [
+            []
+          ],
+          "variables": []
+        },
+        "proof": true
+      }
+    },
+    "operation": "logic.cdcl",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "conflicts": 1,
+        "learned_literals": 0,
+        "profile": "cube_first_uip_rup_v1",
+        "result": {
+          "proof": [
+            []
+          ],
+          "status": "unsat"
+        },
+        "work": 4
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "8a4e97b6ac544c7ca3aa2016b75d45d816100eecdf35af5d5bd8af71d4940577",
+    "inputs": {
+      "request": {
+        "formula": {
+          "clauses": [
+            [
+              7
+            ]
+          ],
+          "variables": [
+            7
+          ]
+        }
+      }
+    },
+    "operation": "logic.dpll",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "result": {
+          "assignment": [
+            {
+              "value": true,
+              "variable": 7
+            }
+          ],
+          "status": "sat"
+        },
+        "work": 9
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "d76554ed6b0455fcea46f6eed4d76d8e052dd85b9883bbda0e3926f3862835c1",
+    "inputs": {
+      "request": {
+        "columns": [],
+        "max_solutions": 1,
+        "rows": []
+      }
+    },
+    "operation": "logic.exact_cover",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "complete": true,
+        "solutions": [
+          []
+        ],
+        "stop_reason": "complete",
+        "work": 1
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3026b74b8dd7d663554a7e1b52fbefa872fde3c6f6ee91471522cd06e4034994",
+    "inputs": {
+      "request": {
+        "count": 8,
+        "packing": "msb_first",
+        "state": 1,
+        "tail": "reject",
+        "tap_mask": 3,
+        "width": 3
+      }
+    },
+    "operation": "number.lfsr",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "final_state": 4,
+        "hex": "97",
+        "packing": "msb_first",
+        "valid_bits": 8,
+        "work": 8
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "36e13f1807518853a2e8821a71c6ce5889365439bc1b057fd76ac2ac7970cd3c",
+    "inputs": {
+      "request": {
+        "count": 3,
+        "source": {
+          "profile": "xorshift32",
+          "seed": 1
+        }
+      }
+    },
+    "operation": "number.prng",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "final_state": {
+          "profile": "xorshift32",
+          "state": 2647435461
+        },
+        "values": [
+          270369,
+          67634689,
+          2647435461
+        ],
+        "work": 4
+      }
+    },
+    "parameters": {}
   }
 ]

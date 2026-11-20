@@ -33892,6 +33892,153 @@ Example:
 cube esolang brainfuck report --code '-.' --cell-bits 16 --tape-len 1
 ```
 
+## esolang.cellular_automaton
+
+Evolve a finite Life grid or an elementary rule with explicit boundaries.
+
+Category: `esolang`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `esolang.cellular_automaton.request` |
+| Output | `report` | `esolang.cellular_automaton.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "generations": 1,
+      "initial": {
+        "cells": "00100",
+        "kind": "elementary",
+        "rule": 90
+      },
+      "snapshots": [
+        0
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube esolang analysis cellular-automaton --text '{"initial":{"kind":"elementary","rule":90,"cells":"00100"},"generations":1,"snapshots":[0]}'
+```
+
+## esolang.lambda
+
+Perform bounded full beta and optional eta reduction on explicit lambda terms.
+
+Category: `esolang`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `esolang.lambda.request` |
+| Output | `report` | `esolang.lambda.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "term": "(\\x.x) y",
+      "trace": 1
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube esolang analysis lambda --text '{"term":"(\\x.x) y","trace":1}'
+```
+
+## esolang.ski
+
+Reduce explicit SKI combinator terms with bounded leftmost-outermost rewrites.
+
+Category: `esolang`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `esolang.ski.request` |
+| Output | `report` | `esolang.ski.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "term": "I K"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube esolang analysis ski --text '{"term":"I K"}'
+```
+
 ## file.appended.detect
 
 Find trailing bytes after supported PNG, baseline JPEG, GIF or classic ZIP framing; no pixel/entropy decoding.
@@ -34940,6 +35087,131 @@ Example:
 cube file zip sample.bin --offset 128 --json
 ```
 
+## graph.all_pairs_paths
+
+Compute exact Floyd–Warshall distances and identify unbounded pairs.
+
+Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `graph.all_pairs_paths.request` |
+| Output | `report` | `graph.all_pairs_paths.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "graph": {
+        "directed": true,
+        "edges": [
+          {
+            "from": "A",
+            "id": "ab",
+            "to": "B",
+            "weight": -3
+          }
+        ],
+        "vertices": [
+          "A",
+          "B"
+        ]
+      },
+      "paths": [
+        {
+          "goal": "B",
+          "start": "A"
+        }
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube graph analysis all-pairs-paths --text '{"graph":{"vertices":["A","B"],"directed":true,"edges":[{"id":"ab","from":"A","to":"B","weight":-3}]},"paths":[{"start":"A","goal":"B"}]}'
+```
+
+## graph.bipartite_matching
+
+Return a Hopcroft–Karp maximum matching and an optional minimum cover.
+
+Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `graph.bipartite_matching.request` |
+| Output | `report` | `graph.bipartite_matching.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "edges": [
+        {
+          "from": "A",
+          "id": "ab",
+          "to": "B"
+        }
+      ],
+      "left": [
+        "A"
+      ],
+      "minimum_cover": true,
+      "right": [
+        "B"
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube graph analysis bipartite-matching --text '{"left":["A"],"right":["B"],"edges":[{"id":"ab","from":"A","to":"B"}],"minimum_cover":true}'
+```
+
 ## graph.components
 
 Weak components of explicit ordered directed/undirected multigraph; includes isolates, <=4096 vertices/32768 edges/2 MiB input.
@@ -35118,6 +35390,66 @@ Example:
 
 ```sh
 cube graph cycle --text '{"vertices":[],"directed":true,"edges":[]}'
+```
+
+## graph.disjoint_sets
+
+Apply an ordered union and query batch with canonical representatives.
+
+Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `graph.disjoint_sets.request` |
+| Output | `report` | `graph.disjoint_sets.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "actions": [
+        {
+          "action": "union",
+          "left": 10,
+          "right": 20
+        },
+        {
+          "action": "find",
+          "id": 10
+        }
+      ],
+      "ids": [
+        20,
+        10
+      ]
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube graph analysis disjoint-sets --text '{"ids":[20,10],"actions":[{"action":"union","left":10,"right":20},{"action":"find","id":10}]}'
 ```
 
 ## graph.euler_trail
@@ -35316,6 +35648,131 @@ Example:
 
 ```sh
 cube graph shortest-path --source a --target a --text '{"vertices":["a"],"directed":false,"edges":[]}'
+```
+
+## graph.traversal
+
+Return ordered depth-first visits, topological order or Tarjan components.
+
+Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `graph.traversal.request` |
+| Output | `report` | `graph.traversal.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "graph": {
+        "directed": true,
+        "edges": [
+          {
+            "from": "A",
+            "id": "ab",
+            "to": "B"
+          }
+        ],
+        "vertices": [
+          "A",
+          "B"
+        ]
+      },
+      "mode": "depth_first"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube graph analysis traversal --text '{"graph":{"vertices":["A","B"],"directed":true,"edges":[{"id":"ab","from":"A","to":"B"}]},"mode":"depth_first"}'
+```
+
+## graph.weighted_path
+
+Find one exact weighted path with Dijkstra, Bellman–Ford or A*.
+
+Category: `graph`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `graph.weighted_path.request` |
+| Output | `report` | `graph.weighted_path.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "algorithm": {
+        "method": "dijkstra"
+      },
+      "goal": "B",
+      "graph": {
+        "directed": true,
+        "edges": [
+          {
+            "from": "A",
+            "id": "ab",
+            "to": "B",
+            "weight": 7
+          }
+        ],
+        "vertices": [
+          "A",
+          "B"
+        ]
+      },
+      "start": "A"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube graph analysis weighted-path --text '{"graph":{"vertices":["A","B"],"directed":true,"edges":[{"id":"ab","from":"A","to":"B","weight":7}]},"start":"A","goal":"B","algorithm":{"method":"dijkstra"}}'
 ```
 
 ## hash.adler32
@@ -40068,6 +40525,162 @@ Example:
 cube logic boolean evaluate --text '{"variables":[],"formula":{"op":"const","value":true}}' --assignment '[]'
 ```
 
+## logic.cdcl
+
+Solve bounded CNF using first-UIP learning or verify an explicit RUP certificate.
+
+Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `logic.cdcl.request` |
+| Output | `report` | `logic.cdcl.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "action": "solve",
+      "formula": {
+        "clauses": [
+          []
+        ],
+        "variables": []
+      },
+      "proof": true
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube logic analysis cdcl --text '{"action":"solve","formula":{"variables":[],"clauses":[[]]},"proof":true}'
+```
+
+## logic.dpll
+
+Solve explicit CNF with deterministic false-first DPLL and bounded unit propagation.
+
+Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `logic.dpll.request` |
+| Output | `report` | `logic.dpll.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "formula": {
+        "clauses": [
+          [
+            7
+          ]
+        ],
+        "variables": [
+          7
+        ]
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube logic analysis dpll --text '{"formula":{"variables":[7],"clauses":[[7]]}}'
+```
+
+## logic.exact_cover
+
+Enumerate a bounded exact cover prefix with Algorithm X and dancing links.
+
+Category: `logic`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `logic.exact_cover.request` |
+| Output | `report` | `logic.exact_cover.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "columns": [],
+      "max_solutions": 1,
+      "rows": []
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube logic analysis exact-cover --text '{"columns":[],"rows":[],"max_solutions":1}'
+```
+
 ## number.add
 
 Add two exact signed JSON integers; reject invalid operands and sums outside the exact range without coercion or wrapping.
@@ -41275,6 +41888,57 @@ Example:
 cube number analysis lexicographic-rank --text '{"action":"rank","alphabet":"BA","multiset":"ABA","text":"ABA"}'
 ```
 
+## number.lfsr
+
+Emit a bounded Fibonacci right-shift LFSR bit stream with explicit packing.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.lfsr.request` |
+| Output | `report` | `number.lfsr.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "count": 8,
+      "packing": "msb_first",
+      "state": 1,
+      "tail": "reject",
+      "tap_mask": 3,
+      "width": 3
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis lfsr --text '{"width":3,"state":1,"tap_mask":3,"count":8,"packing":"msb_first","tail":"reject"}'
+```
+
 ## number.markov
 
 Build ordered empirical transition counts and exact row probabilities.
@@ -41873,6 +42537,56 @@ Example:
 
 ```sh
 cube number analysis primality --text '{"value":4294967291,"method":"miller_rabin"}'
+```
+
+## number.prng
+
+Generate reproducible MT19937ar-2002 or xorshift32 words and continuation state.
+
+Category: `numbers`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `request` | `number.prng.request` |
+| Output | `report` | `number.prng.report` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "request": {
+      "count": 3,
+      "source": {
+        "profile": "xorshift32",
+        "seed": 1
+      }
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube number analysis prng --text '{"source":{"profile":"xorshift32","seed":1},"count":3}'
 ```
 
 ## number.recurrence

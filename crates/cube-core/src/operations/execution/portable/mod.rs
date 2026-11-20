@@ -17,6 +17,7 @@ mod transposition;
 mod audio;
 mod blockchain;
 mod files;
+mod formal;
 mod image_analysis;
 mod images;
 mod linear;
@@ -72,6 +73,7 @@ const MODULES: &[(Supports, Invoke)] = &[
     (sequence::supports, sequence::execute),
     (text_profiles::supports, text_profiles::execute),
     (numeric_analysis::supports, numeric_analysis::execute),
+    (formal::supports, formal::execute),
     (symbols::supports, symbols::execute),
     (text::supports, text::execute),
     (text_analysis::supports, text_analysis::execute),
@@ -299,7 +301,31 @@ pub(super) fn execute(
             "operation has no installed executor",
         )
     })?;
-    let output = contracts::canonical_value(executor(operation, inputs, effective, budget, clock)?);
+    finish_output(
+        &contract,
+        executor(operation, inputs, effective, budget, clock)?,
+        budget,
+    )
+}
+
+pub(in crate::operations) fn execute_formal(
+    operation: &str,
+    inputs: &Value,
+    budget: super::Budget,
+    cancelled: &mut dyn FnMut() -> bool,
+) -> Result<Value, OperationError> {
+    let (contract, mut inputs, _) = prepare(operation, 1, inputs, &json!({}), budget)?;
+    let report =
+        operations::formal::invoke_with_cancel(operation, inputs["request"].take(), cancelled)?;
+    finish_output(&contract, json!({"report":report}), budget)
+}
+
+fn finish_output(
+    contract: &contracts::Contract,
+    output: Value,
+    budget: super::Budget,
+) -> Result<Value, OperationError> {
+    let output = contracts::canonical_value(output);
     contract.validate_outputs(&output)?;
     port_bytes(
         &contract.outputs,

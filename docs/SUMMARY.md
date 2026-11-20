@@ -85,6 +85,7 @@
     - [Unicode text profiles](reference/topics/unicode-text-profiles.md)
     - [Phonetic text profiles](reference/topics/phonetic-text-profiles.md)
     - [Exact numerics and statistical analysis](reference/topics/numeric-analysis.md)
+    - [Graphs, constraints and formal computation](reference/topics/formal-analysis.md)
     - [Sequence analysis](reference/topics/sequence-analysis.md)
     - [Ordered composition](reference/composition.md)
     - [Fields and integer composition](reference/structured-composition.md)
@@ -129,5 +130,6 @@
     - [Checked cryptographic vectors](contributing/crypto-vectors.md)
     - [Phonetic profile provenance](contributing/phonetic-provenance.md)
     - [Finite-domain research](research/finite-domain-evaluation.md)
+    - [CDCL backend qualification](research/cdcl-backend.md)
     - [Classical analysis research](research/classical-analysis-evaluation.md)
 

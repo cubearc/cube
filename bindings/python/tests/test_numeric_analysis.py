@@ -14,6 +14,7 @@ CASES = [
     row
     for row in json.loads(FIXTURES.read_text(encoding="utf-8"))
     if row["operation"].startswith("number.")
+    and row["operation"] not in {"number.lfsr", "number.prng"}
     and "request" in row["inputs"]
     and "report" in row["outputs"]
 ]

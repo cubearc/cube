@@ -1,8 +1,12 @@
 //! Explicit bounded multigraphs. Ordered vertex/edge IDs resolve traversal ties;
 //! undirected loops have degree two and retain one edge identity. No weights or
 //! implicit vertices. BFS and Hierholzer are shared concrete algorithms.
+pub mod disjoint;
+pub mod matching;
 mod metadata;
 mod queries;
+pub mod traversal;
+pub mod weighted;
 use crate::{
     errors::{ErrorCode, OperationError},
     pipeline::json,

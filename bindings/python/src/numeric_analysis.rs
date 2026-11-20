@@ -115,6 +115,9 @@ fn request<'py>(value: &Bound<'py, PyAny>, operation: &'static str) -> PyResult<
 fn numeric_field(operation: &str, field: &str) -> bool {
     match operation {
         "number.gray" | "number.factoradic" | "number.balanced_ternary" => field == "value",
+        "number.lfsr" => field == "final_state",
+        "graph.weighted_path" => field == "cost",
+        "graph.all_pairs_paths" => matches!(field, "cost" | "distances"),
         "number.lehmer" => field == "rank",
         "number.lexicographic_rank" => matches!(field, "rank" | "total"),
         "number.partitions" | "number.permutation_list" => field == "count",
@@ -128,7 +131,7 @@ fn numeric_field(operation: &str, field: &str) -> bool {
     }
 }
 
-fn restore(
+pub(super) fn restore(
     value: &Bound<'_, PyAny>,
     wire: &Value,
     field: &str,

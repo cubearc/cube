@@ -7,6 +7,7 @@
 pub mod contracts;
 mod discovery;
 pub mod execution;
+pub mod formal;
 pub mod metadata;
 pub use discovery::{
     DiscoveryFormat, DiscoveryRequest, MAX_DISCOVERY_BYTES, MAX_DISCOVERY_QUERY_BYTES,
@@ -425,6 +426,7 @@ const MODULES: &[Module] = &[
     crate::sequence::MODULE,
     crate::text::profiles::MODULE,
     crate::numbers::analysis::MODULE,
+    formal::MODULE,
     Module::plain(crate::text::selection::OPERATIONS),
     Module::plain(crate::text::word::OPERATIONS),
     Module::plain(crate::text::values::OPERATIONS),

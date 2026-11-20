@@ -15,6 +15,7 @@ pub mod encoding;
 pub mod errors;
 pub mod esolang;
 pub mod forensics;
+mod formal_work;
 pub mod graph;
 pub mod hashing;
 pub mod image;

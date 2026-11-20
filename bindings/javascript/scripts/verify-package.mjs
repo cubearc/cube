@@ -150,7 +150,7 @@ if(text!=="LPZOCRFYBRJMWHZRTSIYGTXHUODGYYIUOGP")throw new Error('Packaged KL7 so
   await writeFile(join(directory, 'example.mts'), await readFile(join(assets, 'examples/node.mts')));
   run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled', 'example.mts']);
   run(process.execPath, [join(directory, 'compiled/example.mjs')]);
-  for (const example of ['utilities', 'sequence', 'text-profiles', 'numeric-analysis']) {
+  for (const example of ['utilities', 'sequence', 'text-profiles', 'numeric-analysis', 'formal-analysis']) {
     await writeFile(join(directory, `${example}.mts`), await readFile(join(assets, `examples/${example}.mts`)));
     run(process.execPath, [compiler, '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--outDir', 'compiled', `${example}.mts`]);
     run(process.execPath, [join(directory, `compiled/${example}.mjs`)]);

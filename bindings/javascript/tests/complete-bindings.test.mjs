@@ -432,7 +432,7 @@ test('text profiles execute independently reviewed contracts and exact word indi
 
 test('exact numerics and statistical analysis execute canonical fixtures in Wasm', async () => {
   const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
-  const rows = fixtures.filter(row => row.operation.startsWith('number.') && 'report' in row.outputs && 'request' in row.inputs);
+  const rows = fixtures.filter(row => row.operation.startsWith('number.') && !['number.lfsr', 'number.prng'].includes(row.operation) && 'report' in row.outputs && 'request' in row.inputs);
   assert.equal(rows.length, 23);
   for (const row of rows) {
     assert.deepEqual(cube.execute({
@@ -448,4 +448,29 @@ test('exact numerics and statistical analysis execute canonical fixtures in Wasm
     { status: 'solution', modulus, residue: '18446744073709551614' });
   assert.throws(() => execute('number.roman', { direction: 'decode', text: 'IIV' }), { code: 'invalid_input' });
   assert.throws(() => execute('number.correlation', { method: 'lag', x: [1], lags: [1] }), { code: 'invalid_input' });
+});
+
+test('the formal analysis operations execute through the packaged Wasm API', async () => {
+  const ids = new Set([
+    'graph.traversal', 'graph.weighted_path', 'graph.all_pairs_paths', 'graph.disjoint_sets',
+    'graph.bipartite_matching', 'logic.exact_cover', 'logic.dpll', 'logic.cdcl', 'esolang.lambda',
+    'esolang.ski', 'esolang.cellular_automaton', 'number.lfsr', 'number.prng',
+  ]);
+  const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
+  const rows = fixtures.filter(row => ids.has(row.operation));
+  assert.deepEqual(new Set(rows.map(row => row.operation)), ids);
+  for (const row of rows) {
+    assert.deepEqual(cube.execute({
+      operation: row.operation, version: row.operation_version, inputs: row.inputs, parameters: row.parameters,
+    }), row.outputs, row.operation);
+  }
+  const run = (operation, request) => cube.execute({ operation, version: 1, inputs: { request } }).report;
+  const state = ((1n << 64n) - 1n).toString();
+  const stream = { width: 64, state, tap_mask: 1, count: 8, packing: 'lsb_first', tail: 'reject' };
+  assert.equal(run('number.lfsr', stream).final_state, state);
+  assert.throws(() => run('number.lfsr', { ...stream, count: 1048577 }), { code: 'invalid_input' });
+  const formula = { variables: [1, 2], clauses: [[1, 2], [-1, 2], [1, -2], [-1, -2]] };
+  const unsat = run('logic.cdcl', { action: 'solve', formula, proof: true });
+  assert.equal(unsat.result.status, 'unsat');
+  assert.deepEqual(run('logic.cdcl', { action: 'verify_proof', formula, clauses: unsat.result.proof }).result, { status: 'verified' });
 });

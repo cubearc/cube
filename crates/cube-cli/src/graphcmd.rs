@@ -31,6 +31,8 @@ pub(crate) struct Euler {
 }
 #[derive(Subcommand)]
 pub(crate) enum Command {
+    /// Run a typed analysis from an explicit JSON request
+    Analysis(crate::numberanalysiscmd::Args),
     Components(Common),
     ShortestPath(Route),
     Cycle(Common),
@@ -51,6 +53,7 @@ impl Common {
 }
 pub(crate) fn run(command: Command, out: &mut impl Write) -> Result<(), Box<dyn Error>> {
     match command {
+        Command::Analysis(args) => return crate::numberanalysiscmd::family("graph", args, out),
         Command::Components(a) => {
             let (g, l) = a.load()?;
             serde_json::to_writer(&mut *out, &g.components(l)?)?;

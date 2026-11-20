@@ -3,7 +3,7 @@
 //! Catalog metadata alone never grants execution. Hosts negotiate representations,
 //! enforce retention policy and OS resource isolation, then pass lower budgets.
 //! Files, credentials, network and process authority are never accepted here.
-mod portable;
+pub(super) mod portable;
 mod values;
 use super::contracts::Contract;
 use serde::Serialize;

@@ -117,6 +117,11 @@ impl Graph {
     /// traversal API. Parent *edge* identity preserves parallel-edge cycles.
     pub fn cycle(&self, limits: Limits) -> Result<QueryReport<Option<Path>>, OperationError> {
         let mut b = self.budget(limits, "graph.cycle")?;
+        let result = self.cycle_path(&mut b)?;
+        Ok(self.finish(result, b))
+    }
+
+    pub(super) fn cycle_path(&self, b: &mut Budget) -> Result<Option<Path>, OperationError> {
         let n = self.out.len();
         let mut color = vec![0u8; n];
         let mut parent = vec![None; n];
@@ -159,11 +164,11 @@ impl Graph {
                     edges.reverse();
                     vertices.push(arc.vertex);
                     edges.push(arc.edge);
-                    return Ok(self.finish(Some(self.path(vertices, edges)), b));
+                    return Ok(Some(self.path(vertices, edges)));
                 }
             }
         }
-        Ok(self.finish(None, b))
+        Ok(None)
     }
     /// Hierholzer over exact edge identities. Weak connectivity of non-isolates
     /// and degree balance determine existence; isolated vertices are ignored when

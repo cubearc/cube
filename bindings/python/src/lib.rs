@@ -27,6 +27,7 @@ mod discrete_transport;
 mod ecdh;
 mod enigma;
 mod esolang;
+mod formal;
 mod fpe;
 mod fraction;
 mod graph;
@@ -714,6 +715,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     sequence::register(module)?;
     text_profiles::register(module)?;
     numeric_analysis::register(module)?;
+    formal::register(module)?;
     lexical::register(module)?;
     probability::register(module)?;
     boolean::register(module)?;

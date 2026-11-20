@@ -56,6 +56,23 @@ assert code["value"] == 1 << 127
 See [exact numerics and statistical analysis](../reference/topics/numeric-analysis.md)
 for request fields and bounds.
 
+## Run a bounded formal search
+
+Pass explicit request dictionaries to the graph, CNF, exact cover and term
+analysis functions. The optional `cancel` keyword on cooperative searches
+takes a `cube.CancellationToken`. Use result status and completion fields to
+distinguish a finished proof from an interrupted search.
+
+```python
+import cube
+
+formula = {"variables": [1], "clauses": [[1], [-1]]}
+report = cube.logic_cdcl({"action": "solve", "formula": formula, "proof": True})
+assert report["result"] == {"status": "unsat", "proof": [[]]}
+```
+
+See [formal computation operations](../reference/topics/formal-analysis.md).
+
 ## Work with images in memory
 
 You can create an image from a byte buffer and inspect it without a temporary file:

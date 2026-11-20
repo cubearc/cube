@@ -113,6 +113,10 @@ copied before asynchronous work, including Node Buffer inputs. A failed load can
 be retried. Unexpected runtime traps require a fresh worker; they are not empty
 successes.
 
+The packaged `examples/formal-analysis.mts` solves a CNF formula and verifies
+the returned RUP certificate through the same Wasm package. See
+[formal computation operations](../reference/topics/formal-analysis.md).
+
 ## Discover contracts and pipeline support separately
 
 `cube.catalogJson()` returns the complete canonical contract wire after checking

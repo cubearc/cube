@@ -38106,7 +38106,7 @@ cube hash md5 --text abc
 
 Compute seeded XXH32, XXH64 or a named MurmurHash3 digest in reference byte order.
 
-Category: `hash`. Contract: 1. Pipeline adapter: 1.
+Category: `hashing`. Contract: 1. Pipeline adapter: 1.
 
 Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 
@@ -38902,7 +38902,7 @@ cube hash sha512-256 --text abcd
 
 Compute an exact little-endian SipHash-2-4 digest with a caller-provided private key.
 
-Category: `hash`. Contract: 1. Pipeline adapter: none (direct API).
+Category: `hashing`. Contract: 1. Pipeline adapter: none (direct API).
 
 Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
 

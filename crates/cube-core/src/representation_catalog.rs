@@ -111,6 +111,8 @@ const BIT_LIMITS: c::Limits = c::Limits {
 };
 const INTEGERS: c::Limits = limits(MIB, MIB, Some(65_536));
 
+const SIP_DESCRIPTION: &str =
+    "Compute an exact little-endian SipHash-2-4 digest with a caller-provided private key.";
 const SIPHASH: m::Metadata = m::Metadata {
     schema_version: 1,
     canonical_name: "SipHash-2-4",
@@ -124,7 +126,7 @@ const SIPHASH: m::Metadata = m::Metadata {
         limitations: "64-bit keyed digest for the documented SipHash profile. Treat the caller's key and result as private.",
     },
     profile: m::Profile {
-        variant: "SipHash-2-4, little-endian 64-bit digest bytes",
+        variant: "",
         alphabet: "raw bytes",
         key: "required private 16-byte raw input",
         key_advancement: "two compression rounds and four finalization rounds",
@@ -177,27 +179,52 @@ const fn parameterized(mut row: Row, parameters: &'static [o::Parameter]) -> Row
 
 struct Row {
     contract: c::Entry,
-    metadata: Option<m::Metadata>,
+    metadata: m::Metadata,
 }
 const fn declare(id: &'static str, mut row: Row) -> Row {
     row.contract.descriptor.id = id;
+    row.metadata.profile.variant = row.contract.descriptor.description;
     row
 }
 
-macro_rules! optional_metadata {
-    () => {
-        None
-    };
-    ($metadata:expr) => {
-        Some($metadata)
+macro_rules! public_profile {
+    ($name:literal, $family:literal, $class:ident, $alphabet:literal, $limitations:literal,
+     $notes:literal, $rust:literal, $py:literal, [$($reference:literal),+]) => {
+        m::Metadata {
+            schema_version: 1,
+            canonical_name: $name,
+            family: $family,
+            aliases: &[],
+            security: m::Security {
+                classification: m::Classification::$class,
+                limitations: $limitations,
+                private_input: false,
+                private_output: false,
+                sensitive_parameters: &[],
+            },
+            profile: m::Profile {
+                variant: "",
+                alphabet: $alphabet,
+                key: "none",
+                key_advancement: "none",
+                block_bits: None,
+                output_bits: None,
+            },
+            resources: &[],
+            resource_notes: $notes,
+            rust_api: concat!("cube_core::", $rust),
+            python_api: $py,
+            references: &[$($reference),+],
+        }
     };
 }
+
 macro_rules! row {
-    ($cat:literal, $slug:literal, $kind:literal => $output:literal, $desc:literal,
+    ($cat:literal, $slug:literal, $kind:literal => $output:literal, $desc:expr,
      $params:ty, $inputs:expr => $outputs:expr, $limits:expr, $reversible:expr,
-     $sample:literal => $answer:literal $(, $metadata:expr)?) => {
+     $sample:literal => $answer:literal, $metadata:expr) => {
         Row {
-            metadata: optional_metadata!($($metadata)?),
+            metadata: $metadata,
             contract: c::Entry {
                 operation_version: 1,
                 descriptor: o::Descriptor {
@@ -217,11 +244,13 @@ macro_rules! row {
                 outputs: $outputs,
                 limits: $limits,
                 fixture: || {
-                    let mut sample: Value = serde_json::from_str($sample).expect("representation fixture");
+                    let mut sample: Value =
+                        serde_json::from_str($sample).expect("representation fixture");
                     Ok(c::Fixture {
                         inputs: sample["inputs"].take(),
                         parameters: sample["parameters"].take(),
-                        outputs: serde_json::from_str($answer).expect("representation fixture answer"),
+                        outputs: serde_json::from_str($answer)
+                            .expect("representation fixture answer"),
                     })
                 },
             },
@@ -237,7 +266,8 @@ const ROWS: [Row; 19] = [
         bit_units::Pack, &[bytes::<1048576>("data")] => &[bytes::<131072>("output"), typed::<usize>("valid_bits")],
         BIT_LIMITS, Some(true),
         r#"{"inputs":{"data":{"base64":"AQAAAAAAAAEB"}},"parameters":{"bit_order":"msb","tail":"pad_zero"}}"#
-        => r#"{"output":{"base64":"gYA="},"valid_bits":9}"#),
+        => r#"{"output":{"base64":"gYA="},"valid_bits":9}"#,
+        public_profile!("Pack bits", "bit representations", BinaryTransform, "byte-valued bits 0 and 1", "Uses the explicit bit order and can represent a partial final byte.", "Up to 1 MiB input and 128 KiB packed data plus the valid-bit count.", "binary::bit_units::pack", "pack_bits", ["https://github.com/cubearc/cube/issues/385"])),
     ),
     declare(
         "binary.unpack_bits",
@@ -246,7 +276,8 @@ const ROWS: [Row; 19] = [
         bit_units::Unpack, &[bytes::<1048576>("data")] => &[bytes::<8388608>("output"), typed::<usize>("valid_bits")],
         BIT_LIMITS, Some(true),
         r#"{"inputs":{"data":{"base64":"gYA="}},"parameters":{"bit_order":"msb","valid_bits":9}}"#
-        => r#"{"output":{"base64":"AQAAAAAAAAEB"},"valid_bits":9}"#),
+        => r#"{"output":{"base64":"AQAAAAAAAAEB"},"valid_bits":9}"#,
+        public_profile!("Unpack bits", "bit representations", BinaryTransform, "exact bytes", "Uses the explicit bit order and can represent a partial final byte.", "Up to 1 MiB packed input and 8 MiB expanded bytes plus the valid-bit count.", "binary::bit_units::unpack", "unpack_bits", ["https://github.com/cubearc/cube/issues/385"])),
     ),
     declare(
         "binary.mask",
@@ -255,7 +286,8 @@ const ROWS: [Row; 19] = [
         bit_units::Mask, &[bytes::<16777216>("data")] => &[bytes::<16777216>("output")],
         limits(16 * MIB, 16 * MIB, None), Some(false),
         r#"{"inputs":{"data":{"base64":"//8SNA=="}},"parameters":{"unit_bytes":2,"mask":255}}"#
-        => r#"{"output":{"base64":"AP8ANA=="}}"#),
+        => r#"{"output":{"base64":"AP8ANA=="}}"#,
+        public_profile!("Fixed-unit bit mask", "bit operations", BinaryTransform, "exact bytes", "Uses independent unsigned big-endian units of 1, 2, 4 or 8 bytes.", "Up to 16 MiB of input and output bytes.", "binary::bit_units::mask", "mask_bytes", ["https://github.com/cubearc/cube/issues/386"])),
     ),
     declare(
         "binary.count_bits",
@@ -264,7 +296,8 @@ const ROWS: [Row; 19] = [
         bit_units::Count, &[bytes::<16777216>("data")] => &[items::<u32, 65536>("counts")],
         limits(16 * MIB, MIB, Some(65_536)), Some(false),
         r#"{"inputs":{"data":{"base64":"//8SNA=="}},"parameters":{"unit_bytes":2,"kind":"population"}}"#
-        => r#"{"counts":[16,5]}"#),
+        => r#"{"counts":[16,5]}"#,
+        public_profile!("Fixed-unit bit counts", "bit operations", BinaryTransform, "exact bytes", "Uses independent unsigned big-endian units of 1, 2, 4 or 8 bytes.", "Up to 16 MiB of input and 65,536 ordered counts.", "binary::bit_units::count", "count_bits", ["https://github.com/cubearc/cube/issues/386"])),
     ),
     declare(
         "binary.fixed_integer.encode",
@@ -273,7 +306,8 @@ const ROWS: [Row; 19] = [
         representation::IntegerFormat, &[items::<representation::Integer, 65536>("values")] => &[bytes::<1048576>("output")],
         INTEGERS, Some(true),
         r#"{"inputs":{"values":[1,"18446744073709551615"]},"parameters":{"bits":64,"byte_order":"little","signedness":"unsigned"}}"#
-        => r#"{"output":{"base64":"AQAAAAAAAAD//////////w=="}}"#),
+        => r#"{"output":{"base64":"AQAAAAAAAAD//////////w=="}}"#,
+        public_profile!("Encode fixed-width integers", "integer representations", BinaryTransform, "exact 64-bit integer values", "Checked narrowing and explicit byte order at all four widths.", "Up to 65,536 values and 1 MiB of transport.", "binary::representation::encode", "fixed_integer_encode", ["https://github.com/cubearc/cube/issues/387"])),
     ),
     declare(
         "binary.fixed_integer.decode",
@@ -282,7 +316,8 @@ const ROWS: [Row; 19] = [
         representation::IntegerFormat, &[bytes::<1048576>("data")] => &[typed::<representation::Integers>("result")],
         INTEGERS, Some(true),
         r#"{"inputs":{"data":{"base64":"AQAAAAAAAAD//////////w=="}},"parameters":{"bits":64,"byte_order":"little","signedness":"unsigned"}}"#
-        => r#"{"result":{"signedness":"unsigned","values":[1,"18446744073709551615"]}}"#),
+        => r#"{"result":{"signedness":"unsigned","values":[1,"18446744073709551615"]}}"#,
+        public_profile!("Decode fixed-width integers", "integer representations", BinaryTransform, "exact bytes", "Checked narrowing and explicit byte order at all four widths.", "Up to 65,536 integers and 1 MiB of report bytes.", "binary::representation::decode", "fixed_integer_decode", ["https://github.com/cubearc/cube/issues/387"])),
     ),
     declare(
         "binary.bcd.encode",
@@ -291,7 +326,8 @@ const ROWS: [Row; 19] = [
         bcd::Layout, &[text::<4096>("digits"), typed::<bool>("negative")] => &[bytes::<16384>("output")],
         limits(4096, 16384, Some(4096)), None,
         r#"{"inputs":{"digits":"123","negative":true},"parameters":{"profile":"signed_packed","digits":3}}"#
-        => r#"{"output":{"base64":"Ej0="}}"#),
+        => r#"{"output":{"base64":"Ej0="}}"#,
+        public_profile!("Encode binary-coded decimal", "binary-coded decimal", BinaryTransform, "ASCII digits and declared decimal sign", "Uses exact digit widths and the selected sign and padding profile.", "Up to 4,096 digits and 16 KiB output.", "binary::bcd::encode", "bcd_encode", ["https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=arithmetic-formats-numeric-data"])),
     ),
     declare(
         "binary.bcd.decode",
@@ -300,7 +336,8 @@ const ROWS: [Row; 19] = [
         bcd::Decode, &[bytes::<16384>("data")] => &[typed::<bcd::Decimal>("result")],
         limits(16384, 16384, Some(4096)), None,
         r#"{"inputs":{"data":{"base64":"Ej0="}},"parameters":{"profile":"signed_packed","digits":3}}"#
-        => r#"{"result":{"digits":"123","negative":true}}"#),
+        => r#"{"result":{"digits":"123","negative":true}}"#,
+        public_profile!("Decode binary-coded decimal", "binary-coded decimal", BinaryTransform, "exact bytes", "Uses exact digit widths and the selected sign and padding profile.", "Up to 16 KiB input and 4,096 output digits.", "binary::bcd::decode", "bcd_decode", ["https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=arithmetic-formats-numeric-data"])),
     ),
     declare(
         "binary.varint.encode",
@@ -309,7 +346,8 @@ const ROWS: [Row; 19] = [
         varint::Encode, &[items::<representation::Integer, 65536>("values")] => &[bytes::<1048576>("output")],
         INTEGERS, Some(true),
         r#"{"inputs":{"values":[624485]},"parameters":{"profile":"uleb128"}}"#
-        => r#"{"output":{"base64":"5Y4m"}}"#),
+        => r#"{"output":{"base64":"5Y4m"}}"#,
+        public_profile!("Encode variable-length integers", "variable-length integers", BinaryTransform, "exact 64-bit integer values", "Uses at most ten bytes per unsigned or signed 64-bit value.", "Up to 65,536 values and 1 MiB bytes or transport.", "binary::varint::encode", "varint_encode", ["https://dwarfstd.org/doc/DWARF5.pdf", "https://protobuf.dev/programming-guides/encoding/"])),
     ),
     declare(
         "binary.varint.decode",
@@ -318,7 +356,8 @@ const ROWS: [Row; 19] = [
         varint::Decode, &[bytes::<1048576>("data")] => &[items::<varint::Record, 65536>("records")],
         INTEGERS, None,
         r#"{"inputs":{"data":{"base64":"5Y4m"}},"parameters":{"profile":"uleb128","mode":"batch"}}"#
-        => r#"{"records":[{"value":624485,"consumed":3}]}"#),
+        => r#"{"records":[{"value":624485,"consumed":3}]}"#,
+        public_profile!("Decode variable-length integers", "variable-length integers", BinaryTransform, "exact bytes", "Uses at most ten bytes per unsigned or signed 64-bit value.", "Up to 65,536 records and 1 MiB of input bytes or reports.", "binary::varint::decode", "varint_decode", ["https://dwarfstd.org/doc/DWARF5.pdf", "https://protobuf.dev/programming-guides/encoding/"])),
     ),
     declare(
         "binary.ieee754.inspect",
@@ -327,7 +366,8 @@ const ROWS: [Row; 19] = [
         representation::FloatLayout, &[bytes::<524288>("data")] => &[items::<representation::FloatRecord, 65536>("records")],
         limits(524288, 4 * MIB, Some(65_536)), Some(false),
         r#"{"inputs":{"data":{"base64":"gAAAAH+AAAE="}},"parameters":{"format":"binary32","byte_order":"big"}}"#
-        => r#"{"records":[{"bits":2147483648,"sign":true,"biased_exponent":0,"fraction":0,"classification":"zero"},{"bits":2139095041,"sign":false,"biased_exponent":255,"fraction":1,"classification":"signaling_nan"}]}"#),
+        => r#"{"records":[{"bits":2147483648,"sign":true,"biased_exponent":0,"fraction":0,"classification":"zero"},{"bits":2139095041,"sign":false,"biased_exponent":255,"fraction":1,"classification":"signaling_nan"}]}"#,
+        public_profile!("Inspect IEEE 754 fields", "floating-point representations", BinaryTransform, "exact bytes", "Interprets raw binary32 and binary64 fields without floating-point arithmetic.", "Up to 65,536 complete records and 4 MiB of reports.", "binary::representation::inspect_floats", "ieee754_inspect", ["https://doc.rust-lang.org/std/primitive.f64.html#method.from_bits"])),
     ),
     declare(
         "binary.reed_solomon.encode",
@@ -336,7 +376,8 @@ const ROWS: [Row; 19] = [
         reed_solomon::Options, &[items::<BlockBytes, BLOCK_LIMIT>("blocks")] => &[items::<Encoded, BLOCK_LIMIT>("blocks")],
         RS_LIMITS, Some(true),
         r#"{"inputs":{"blocks":[{"base64":"QFSEVMTE8OwR7BHsEewR7A=="}]},"parameters":{"field":{"profile":"qr-rs-gf256"},"parity_bytes":10}}"#
-        => r#"{"blocks":[{"parity":{"base64":"I3MjmewIyfc33w=="},"codeword":{"base64":"QFSEVMTE8OwR7BHsEewR7CNzI5nsCMn3N98="}}]}"#),
+        => r#"{"blocks":[{"parity":{"base64":"I3MjmewIyfc33w=="},"codeword":{"base64":"QFSEVMTE8OwR7BHsEewR7CNzI5nsCMn3N98="}}]}"#,
+        public_profile!("Encode Reed–Solomon blocks", "error-correcting codes", BinaryTransform, "exact bytes", "Error correction establishes codeword consistency; alternate valid codewords can exist.", "Up to 4,096 shortened blocks, 16 Mi field operations and 4 MiB of reports.", "binary::reed_solomon::encode", "reed_solomon_encode", ["https://www.nayuki.io/page/qr-code-generator-library"])),
     ),
     declare(
         "binary.reed_solomon.decode",
@@ -345,24 +386,26 @@ const ROWS: [Row; 19] = [
         reed_solomon::Options, &[items::<Erased, BLOCK_LIMIT>("blocks")] => &[items::<Corrected, BLOCK_LIMIT>("blocks")],
         RS_LIMITS, None,
         r#"{"inputs":{"blocks":[{"codeword":{"base64":"QFSEf8TE8OwR7BHsEewR7CNzI5nsCMn3N/U="},"erasures":[25]}]},"parameters":{"field":{"profile":"qr-rs-gf256"},"parity_bytes":10}}"#
-        => r#"{"blocks":[{"message":{"base64":"QFSEVMTE8OwR7BHsEewR7A=="},"codeword":{"base64":"QFSEVMTE8OwR7BHsEewR7CNzI5nsCMn3N98="},"positions":[3,25],"initial_syndromes":[1,6,170,26,32,224,200,199,104,251],"verified_syndromes":[0,0,0,0,0,0,0,0,0,0]}]}"#),
+        => r#"{"blocks":[{"message":{"base64":"QFSEVMTE8OwR7BHsEewR7A=="},"codeword":{"base64":"QFSEVMTE8OwR7BHsEewR7CNzI5nsCMn3N98="},"positions":[3,25],"initial_syndromes":[1,6,170,26,32,224,200,199,104,251],"verified_syndromes":[0,0,0,0,0,0,0,0,0,0]}]}"#,
+        public_profile!("Correct Reed–Solomon blocks", "error-correcting codes", BinaryTransform, "exact bytes", "Error correction establishes codeword consistency; alternate valid codewords can exist.", "Up to 4,096 shortened blocks, 16 Mi field operations and 4 MiB of reports.", "binary::reed_solomon::decode", "reed_solomon_decode", ["https://www.nayuki.io/page/qr-code-generator-library"])),
     ),
     declare(
         "hash.noncrypto",
         parameterized(
-            row!("hash", "noncrypto-hash", "bytes" => "text",
+            row!("hashing", "noncrypto-hash", "bytes" => "text",
         "Compute seeded XXH32, XXH64 or a named MurmurHash3 digest in reference byte order.",
         fingerprints::Options, &[bytes::<16777216>("input")] => &[port("output", "text", fingerprint_hex)],
         limits(16 * MIB, 32, None), None,
         r#"{"inputs":{"input":{"base64":""}},"parameters":{"profile":"xxh64"}}"#
-        => r#"{"output":"ef46db3751d8e999"}"#),
+        => r#"{"output":"ef46db3751d8e999"}"#,
+        public_profile!("Noncryptographic hash", "byte fingerprints", UnkeyedDigest, "exact bytes", "Noncryptographic indexing digest with explicitly selected seed width and byte order.", "Up to 16 MiB of input and 32 lowercase hexadecimal characters.", "hashing::fingerprints::noncrypto", "noncrypto_hash", ["https://github.com/Cyan4973/xxHash", "https://github.com/aappleby/smhasher"])),
             HASH_PARAMETERS,
         ),
     ),
     declare(
         "hash.siphash24",
-        row!("hash", "siphash24", "bytes" => "json",
-        "Compute an exact little-endian SipHash-2-4 digest with a caller-provided private key.",
+        row!("hashing", "siphash24", "bytes" => "json",
+        SIP_DESCRIPTION,
         NoParameters, &[bytes::<16777216>("data"), port("key", "bytes", sip_key)] => &[port("digest", "json", sip_digest)],
         limits(16 * MIB + 16, 48, None), None,
         r#"{"inputs":{"data":{"base64":""},"key":{"base64":"AAECAwQFBgcICQoLDA0ODw=="}},"parameters":{}}"#
@@ -374,7 +417,8 @@ const ROWS: [Row; 19] = [
         "Encode canonical uppercase RFC 4648 Base32hex with padding.",
         NoParameters, &[bytes::<1048576>("input")] => &[text::<2097152>("output")],
         limits(MIB, 2 * MIB, None), Some(true),
-        r#"{"inputs":{"input":{"base64":"Zm9v"}},"parameters":{}}"# => r#"{"output":"CPNMU==="}"#),
+        r#"{"inputs":{"input":{"base64":"Zm9v"}},"parameters":{}}"# => r#"{"output":"CPNMU==="}"#,
+        public_profile!("Encode Base32hex", "RFC 4648", Encoding, "uppercase 0–9 and A–V with canonical padding", "Reversible encoding without confidentiality.", "Up to 1 MiB of bytes and 2 MiB of text.", "encoding::rfc4648::encode_base32hex", "base32hex_encode", ["https://www.rfc-editor.org/rfc/rfc4648.html"])),
     ),
     declare(
         "encoding.base32hex.decode",
@@ -382,7 +426,8 @@ const ROWS: [Row; 19] = [
         "Decode strict padded RFC 4648 Base32hex with zero unused bits.",
         NoParameters, &[text::<2097152>("input")] => &[bytes::<1048576>("output")],
         limits(2 * MIB, MIB, None), Some(true),
-        r#"{"inputs":{"input":"CPNMU==="},"parameters":{}}"# => r#"{"output":{"base64":"Zm9v"}}"#),
+        r#"{"inputs":{"input":"CPNMU==="},"parameters":{}}"# => r#"{"output":{"base64":"Zm9v"}}"#,
+        public_profile!("Decode Base32hex", "RFC 4648", Encoding, "uppercase 0–9 and A–V with canonical padding", "Reversible encoding without confidentiality.", "Up to 2 MiB of text and 1 MiB of bytes.", "encoding::rfc4648::decode_base32hex", "base32hex_decode", ["https://www.rfc-editor.org/rfc/rfc4648.html"])),
     ),
     declare(
         "encoding.base64url.encode",
@@ -391,7 +436,8 @@ const ROWS: [Row; 19] = [
         "Encode URL-safe RFC 4648 Base64 using the selected padding policy.",
         rfc4648::Base64Url, &[bytes::<1048576>("input")] => &[text::<2097152>("output")],
         limits(MIB, 2 * MIB, None), Some(true),
-        r#"{"inputs":{"input":{"base64":"+/8="}},"parameters":{"padding":"forbidden"}}"# => r#"{"output":"-_8"}"#),
+        r#"{"inputs":{"input":{"base64":"+/8="}},"parameters":{"padding":"forbidden"}}"# => r#"{"output":"-_8"}"#,
+        public_profile!("Encode Base64url", "RFC 4648", Encoding, "URL-safe Base64 alphabet with required or forbidden padding", "Reversible encoding without confidentiality.", "Up to 1 MiB of bytes and 2 MiB of text.", "encoding::rfc4648::encode_base64url", "base64url_encode", ["https://www.rfc-editor.org/rfc/rfc4648.html"])),
             URL_PARAMETERS,
         ),
     ),
@@ -402,7 +448,8 @@ const ROWS: [Row; 19] = [
         "Decode strict URL-safe RFC 4648 Base64 with the exact selected padding policy.",
         rfc4648::Base64Url, &[text::<2097152>("input")] => &[bytes::<1048576>("output")],
         limits(2 * MIB, MIB, None), Some(true),
-        r#"{"inputs":{"input":"-_8="},"parameters":{}}"# => r#"{"output":{"base64":"+/8="}}"#),
+        r#"{"inputs":{"input":"-_8="},"parameters":{}}"# => r#"{"output":{"base64":"+/8="}}"#,
+        public_profile!("Decode Base64url", "RFC 4648", Encoding, "URL-safe Base64 alphabet with required or forbidden padding", "Reversible encoding without confidentiality.", "Up to 2 MiB of text and 1 MiB of bytes.", "encoding::rfc4648::decode_base64url", "base64url_decode", ["https://www.rfc-editor.org/rfc/rfc4648.html"])),
             URL_PARAMETERS,
         ),
     ),
@@ -426,7 +473,7 @@ const fn profiles() -> [m::Entry; ROWS.len()] {
     while i < ROWS.len() {
         entries[i] = m::Entry {
             descriptor: ROWS[i].contract.descriptor,
-            metadata: ROWS[i].metadata,
+            metadata: Some(ROWS[i].metadata),
         };
         i += 1;
     }

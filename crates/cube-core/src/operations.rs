@@ -7,6 +7,7 @@
 pub mod contracts;
 mod discovery;
 pub mod execution;
+#[path = "formal_catalog.rs"]
 pub mod formal;
 pub mod metadata;
 pub use discovery::{

@@ -24,6 +24,7 @@ mod lexicalcmd;
 mod logiccmd;
 mod multisetcmd;
 mod probabilitycmd;
+mod representationcmd;
 use input::Input;
 mod aeadcmd;
 mod aescmd;

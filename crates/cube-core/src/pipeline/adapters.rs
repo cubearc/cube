@@ -31,6 +31,9 @@ pub(super) enum Action {
     TextSelect,
     A1z26Encode,
     A1z26Decode,
+    Base32Hex(bool),
+    Base64Url(bool),
+    NoncryptoHash,
     Base32Encode,
     Base32Decode,
     Base58Encode,
@@ -77,6 +80,31 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: "encoding.base32hex.encode",
+        version: 1,
+        action: Action::Base32Hex(true),
+    },
+    Adapter {
+        id: "encoding.base32hex.decode",
+        version: 1,
+        action: Action::Base32Hex(false),
+    },
+    Adapter {
+        id: "encoding.base64url.encode",
+        version: 1,
+        action: Action::Base64Url(true),
+    },
+    Adapter {
+        id: "encoding.base64url.decode",
+        version: 1,
+        action: Action::Base64Url(false),
+    },
+    Adapter {
+        id: "hash.noncrypto",
+        version: 1,
+        action: Action::NoncryptoHash,
+    },
     Adapter {
         id: crate::binary::compression::ENCODE,
         version: 1,
@@ -615,6 +643,8 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    NoncryptoHash(crate::hashing::fingerprints::Options),
+    Base64Url(crate::encoding::rfc4648::Base64Url),
     Masked(crate::text::transform::Config),
     Utf16(crate::text::representation::Utf16Settings),
     AsciiOnly(bool),
@@ -713,6 +743,39 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
         _ => Err(invalid("required integer parameter is missing or invalid").parameter(name)),
     };
     let arguments = match adapter.action {
+        Action::Base64Url(_) => {
+            use crate::encoding::rfc4648::{Base64Url, Padding};
+            let padding = match step.parameters.get("padding") {
+                Some(Parameter::Text(value)) if value == "forbidden" => Padding::Forbidden,
+                _ => Padding::Required,
+            };
+            Arguments::Base64Url(Base64Url { padding })
+        }
+        Action::NoncryptoHash => {
+            use crate::hashing::fingerprints::Options;
+            let Some(Parameter::Text(profile)) = step.parameters.get("profile") else {
+                return Err(invalid("explicit fingerprint profile required").parameter("profile"));
+            };
+            let seed = match step.parameters.get("seed") {
+                None => 0,
+                Some(Parameter::Text(seed)) => seed
+                    .parse::<u64>()
+                    .ok()
+                    .filter(|n| n.to_string() == *seed)
+                    .ok_or_else(|| {
+                        invalid("seed must be canonical unsigned decimal text").parameter("seed")
+                    })?,
+                _ => {
+                    return Err(
+                        invalid("seed must be canonical unsigned decimal text").parameter("seed")
+                    );
+                }
+            };
+            let options: Options =
+                serde_json::from_value(serde_json::json!({ "profile": profile, "seed": seed }))
+                    .map_err(|_| invalid("unknown fingerprint profile").parameter("profile"))?;
+            Arguments::NoncryptoHash(options.validate().map_err(Error::from_operation)?)
+        }
         Action::Compress | Action::Decompress => {
             use crate::binary::compression as c;
             let Some(Parameter::Text(profile)) = step.parameters.get("profile") else {

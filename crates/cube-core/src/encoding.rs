@@ -17,6 +17,7 @@ use crate::Error;
 pub mod base58check;
 pub mod byte_text;
 mod execution;
+pub mod rfc4648;
 
 pub(crate) fn serialize_hex<S: serde::Serializer>(
     data: &[u8],
@@ -51,18 +52,23 @@ pub fn base32_encode(input: &[u8]) -> String {
 /// # }
 /// ```
 pub fn base32_decode(input: &str) -> Result<Vec<u8>, Error> {
+    strict_base32(input, &BASE32).map_err(Error::InvalidBase32)
+}
+
+fn strict_base32(
+    input: &str,
+    encoding: &data_encoding::Encoding,
+) -> Result<Vec<u8>, data_encoding::DecodeError> {
     // The codec accepts concatenated padded blocks; canonical input pads only the final block.
     if let Some(position) = input.find('=')
         && position < input.len().saturating_sub(8)
     {
-        return Err(Error::InvalidBase32(data_encoding::DecodeError {
+        return Err(data_encoding::DecodeError {
             position,
             kind: data_encoding::DecodeKind::Padding,
-        }));
+        });
     }
-    BASE32
-        .decode(input.as_bytes())
-        .map_err(Error::InvalidBase32)
+    encoding.decode(input.as_bytes())
 }
 
 /// Encode bytes using the case-sensitive Bitcoin Base58 alphabet:

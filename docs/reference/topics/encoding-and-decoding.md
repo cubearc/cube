@@ -109,3 +109,30 @@ cube encode octal --text A
 cube decode url-component --text '%00%ff'
 # 00ff
 ```
+
+## Extended-hex Base32 and URL-safe Base64
+
+`encoding.base32hex.encode` and `encoding.base32hex.decode` use the
+RFC 4648 §7 alphabet `0–9 A–V` with canonical padding. The decoder requires
+uppercase letters, zero unused bits and padding in the final group only.
+
+`encoding.base64url.encode` and `encoding.base64url.decode` use the
+RFC 4648 §5 alphabet with `-` and `_`. The default `required` policy
+uses canonical padding. Set `padding` to `forbidden` for profiles that omit
+it. A decoder enforces the selected policy and rejects whitespace, unused
+bits set to one, and standard Base64 alphabet characters `+` and `/`.
+
+Both profiles limit bytes to 1 MiB and encoded text to 2 MiB. The native
+Python entry points are `base32hex_encode`, `base32hex_decode`,
+`base64url_encode`, and `base64url_decode`. All four also have version-1
+bytes/text pipeline adapters.
+
+```sh
+cube binary format base64url-encode --text '{"inputs":{"input":{"base64":"+/8="}},"parameters":{"padding":"forbidden"}}'
+# {"output":"-_8"}
+```
+
+The standard Base32 and Base64 operations retain their alphabets and padding
+rules. The wire profiles are defined in [RFC 4648 §§5, 7, and 10][rfc4648].
+
+[rfc4648]: https://www.rfc-editor.org/rfc/rfc4648.html

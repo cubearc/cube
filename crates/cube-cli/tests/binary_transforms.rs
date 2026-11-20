@@ -194,3 +194,39 @@ fn arithmetic_widths_transports_and_invalid_counts() {
         assert!(r.stdout.is_empty());
     }
 }
+
+#[test]
+fn reed_solomon_file_output_is_exclusive_and_only_written_after_validation() {
+    let directory = std::env::temp_dir().join(format!("cube-codeword-test-{}", std::process::id()));
+    std::fs::create_dir(&directory).unwrap();
+    let path = directory.join("verified-codeword.bin");
+    let command = [
+        "binary",
+        "format",
+        "reed-solomon-encode",
+        "--codeword-file",
+        path.to_str().unwrap(),
+    ];
+    let invalid = br#"{"inputs":{"blocks":[{"base64":""}]},"parameters":{"field":{"profile":"qr-rs-gf256"},"parity_bytes":10}}"#;
+    let result = run(&command, invalid);
+    assert!(!result.status.success());
+    assert!(result.stdout.is_empty());
+    assert!(!path.exists());
+    let valid = br#"{"inputs":{"blocks":[{"base64":"QFSEVMTE8OwR7BHsEewR7A=="}]},"parameters":{"field":{"profile":"qr-rs-gf256"},"parity_bytes":10}}"#;
+    let result = run(&command, valid);
+    assert!(
+        result.status.success(),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    let expected =
+        cube_core::encoding::hex_decode("40548454c4c4f0ec11ec11ec11ec11ec23732399ec08c9f737df")
+            .unwrap();
+    assert_eq!(std::fs::read(&path).unwrap(), expected);
+    let result = run(&command, valid);
+    assert!(!result.status.success());
+    assert!(result.stdout.is_empty());
+    assert_eq!(std::fs::read(&path).unwrap(), expected);
+    std::fs::remove_file(path).unwrap();
+    std::fs::remove_dir(directory).unwrap();
+}

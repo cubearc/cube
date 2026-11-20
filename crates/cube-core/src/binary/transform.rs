@@ -19,6 +19,9 @@ fn invalid(op: &'static str, name: &'static str, message: &str) -> OperationErro
         .operation(op)
         .parameter(name)
 }
+pub(crate) fn and_byte(a: u8, b: u8) -> u8 {
+    a & b
+}
 fn combine(data: &[u8], key: &[u8], is_and: bool) -> Result<Vec<u8>, OperationError> {
     let op = if is_and { "binary.and" } else { "binary.or" };
     check(data, op)?;
@@ -33,7 +36,7 @@ fn combine(data: &[u8], key: &[u8], is_and: bool) -> Result<Vec<u8>, OperationEr
     Ok(data
         .iter()
         .zip(key)
-        .map(|(a, b)| if is_and { a & b } else { a | b })
+        .map(|(a, b)| if is_and { and_byte(*a, *b) } else { a | b })
         .collect())
 }
 /// Per-byte AND with an equally long operand. Empty/empty is valid; no key cycling.
@@ -164,7 +167,11 @@ pub fn xor_exact(data: &[u8], key: &[u8]) -> Result<Vec<u8>, OperationError> {
     paired(data, key, 1, op)?;
     Ok(data.iter().zip(key).map(|(a, b)| a ^ b).collect())
 }
-fn complete(data: &[u8], unit_bytes: usize, op: &'static str) -> Result<(), OperationError> {
+pub(crate) fn complete(
+    data: &[u8],
+    unit_bytes: usize,
+    op: &'static str,
+) -> Result<(), OperationError> {
     check(data, op)?;
     validate_unit(unit_bytes, op)?;
     if !data.len().is_multiple_of(unit_bytes) {

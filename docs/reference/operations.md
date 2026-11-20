@@ -1340,6 +1340,212 @@ Example:
 cube binary and --key-hex ff0f --text AB
 ```
 
+## binary.bcd.decode
+
+Read and validate packed or unpacked BCD while preserving all declared digits.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `result` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "Ej0="
+    }
+  },
+  "parameters": {
+    "digits": 3,
+    "profile": "signed_packed"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decode",
+  "type": "object",
+  "properties": {
+    "allow_unsigned_sign": {
+      "type": "boolean",
+      "default": false
+    },
+    "digits": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "digits"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "unsigned_packed",
+        "unsigned_unpacked",
+        "signed_packed"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format bcd-decode --text '{"inputs":{"data":{"base64":"Ej0="}},"parameters":{"profile":"signed_packed","digits":3}}'
+```
+
+## binary.bcd.encode
+
+Encode exact width-preserving decimal digits using an explicit BCD profile.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `digits` | `text` |
+| Input | `negative` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "digits": "123",
+    "negative": true
+  },
+  "parameters": {
+    "digits": 3,
+    "profile": "signed_packed"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Layout",
+  "type": "object",
+  "properties": {
+    "digits": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 4096,
+          "minimum": 1,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 4096,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 4096,
+        "minimum": 1,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "digits"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "unsigned_packed",
+        "unsigned_unpacked",
+        "signed_packed"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format bcd-encode --text '{"inputs":{"digits":"123","negative":true},"parameters":{"profile":"signed_packed","digits":3}}'
+```
+
 ## binary.compress.decode
 
 Read one complete frame in the named wire format and reject trailing data.
@@ -1484,6 +1690,432 @@ Example:
 cube binary compress --profile zlib --text abc
 ```
 
+## binary.count_bits
+
+Report population, leading-zero or trailing-zero counts per complete big-endian unit.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `counts` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "//8SNA=="
+    }
+  },
+  "parameters": {
+    "kind": "population",
+    "unit_bytes": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Count",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "$ref": "#/$defs/CountKind"
+    },
+    "unit_bytes": {
+      "type": "integer",
+      "default": 1,
+      "enum": [
+        1,
+        2,
+        4,
+        8
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "kind"
+  ],
+  "$defs": {
+    "CountKind": {
+      "type": "string",
+      "enum": [
+        "population",
+        "leading_zeros",
+        "trailing_zeros"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format count-bits --text '{"inputs":{"data":{"base64":"//8SNA=="}},"parameters":{"unit_bytes":2,"kind":"population"}}'
+```
+
+## binary.fixed_integer.decode
+
+Decode complete fixed-width integer units with exact width, signedness and byte order.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `result` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "AQAAAAAAAAD//////////w=="
+    }
+  },
+  "parameters": {
+    "bits": 64,
+    "byte_order": "little",
+    "signedness": "unsigned"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IntegerFormat",
+  "type": "object",
+  "properties": {
+    "bits": {
+      "type": "integer",
+      "enum": [
+        8,
+        16,
+        32,
+        64
+      ]
+    },
+    "byte_order": {
+      "$ref": "#/$defs/ByteOrder"
+    },
+    "signedness": {
+      "$ref": "#/$defs/Signedness"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "bits",
+    "byte_order",
+    "signedness"
+  ],
+  "$defs": {
+    "ByteOrder": {
+      "type": "string",
+      "enum": [
+        "big",
+        "little"
+      ]
+    },
+    "Signedness": {
+      "type": "string",
+      "enum": [
+        "signed",
+        "unsigned"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format fixed-integer-decode --text '{"inputs":{"data":{"base64":"AQAAAAAAAAD//////////w=="}},"parameters":{"bits":64,"byte_order":"little","signedness":"unsigned"}}'
+```
+
+## binary.fixed_integer.encode
+
+Serialize exact signed or unsigned integers with checked narrowing and explicit byte order.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `values` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "values": [
+      1,
+      "18446744073709551615"
+    ]
+  },
+  "parameters": {
+    "bits": 64,
+    "byte_order": "little",
+    "signedness": "unsigned"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IntegerFormat",
+  "type": "object",
+  "properties": {
+    "bits": {
+      "type": "integer",
+      "enum": [
+        8,
+        16,
+        32,
+        64
+      ]
+    },
+    "byte_order": {
+      "$ref": "#/$defs/ByteOrder"
+    },
+    "signedness": {
+      "$ref": "#/$defs/Signedness"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "bits",
+    "byte_order",
+    "signedness"
+  ],
+  "$defs": {
+    "ByteOrder": {
+      "type": "string",
+      "enum": [
+        "big",
+        "little"
+      ]
+    },
+    "Signedness": {
+      "type": "string",
+      "enum": [
+        "signed",
+        "unsigned"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format fixed-integer-encode --text '{"inputs":{"values":[1,"18446744073709551615"]},"parameters":{"bits":64,"byte_order":"little","signedness":"unsigned"}}'
+```
+
+## binary.ieee754.inspect
+
+Inspect exact binary32 or binary64 fields, including signed zero and NaN payloads.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `records` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "gAAAAH+AAAE="
+    }
+  },
+  "parameters": {
+    "byte_order": "big",
+    "format": "binary32"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FloatLayout",
+  "type": "object",
+  "properties": {
+    "byte_order": {
+      "$ref": "#/$defs/ByteOrder"
+    },
+    "format": {
+      "$ref": "#/$defs/FloatFormat"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "byte_order"
+  ],
+  "$defs": {
+    "ByteOrder": {
+      "type": "string",
+      "enum": [
+        "big",
+        "little"
+      ]
+    },
+    "FloatFormat": {
+      "type": "string",
+      "enum": [
+        "binary32",
+        "binary64"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format ieee754-inspect --text '{"inputs":{"data":{"base64":"gAAAAH+AAAE="}},"parameters":{"format":"binary32","byte_order":"big"}}'
+```
+
+## binary.mask
+
+Repeat one unsigned AND mask across complete big-endian units.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "//8SNA=="
+    }
+  },
+  "parameters": {
+    "mask": 255,
+    "unit_bytes": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Mask",
+  "type": "object",
+  "properties": {
+    "mask": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint64",
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "unit_bytes": {
+      "type": "integer",
+      "default": 1,
+      "enum": [
+        1,
+        2,
+        4,
+        8
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "mask"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube binary format mask --text '{"inputs":{"data":{"base64":"//8SNA=="}},"parameters":{"unit_bytes":2,"mask":255}}'
+```
+
 ## binary.not
 
 Invert all eight bits per byte; preserve byte length, <=16 MiB.
@@ -1579,6 +2211,405 @@ Example:
 
 ```sh
 cube binary or --key-hex 0080 --text AB
+```
+
+## binary.pack_bits
+
+Pack exact byte-valued bits in the specified order and report their count.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+| Output | `valid_bits` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "AQAAAAAAAAEB"
+    }
+  },
+  "parameters": {
+    "bit_order": "msb",
+    "tail": "pad_zero"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pack",
+  "type": "object",
+  "properties": {
+    "bit_order": {
+      "$ref": "#/$defs/BitOrder"
+    },
+    "tail": {
+      "$ref": "#/$defs/Tail"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "bit_order"
+  ],
+  "$defs": {
+    "BitOrder": {
+      "description": "First extracted bit occupies bit 7 (MSB) or bit 0 (LSB) of an output byte.",
+      "type": "string",
+      "enum": [
+        "msb",
+        "lsb"
+      ]
+    },
+    "Tail": {
+      "type": "string",
+      "enum": [
+        "reject",
+        "pad_zero"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format pack-bits --text '{"inputs":{"data":{"base64":"AQAAAAAAAAEB"}},"parameters":{"bit_order":"msb","tail":"pad_zero"}}'
+```
+
+## binary.reed_solomon.decode
+
+Correct shortened Reed–Solomon errors and erasures, then verify every output syndrome.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `blocks` | `json` |
+| Output | `blocks` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "blocks": [
+      {
+        "codeword": {
+          "base64": "QFSEf8TE8OwR7BHsEewR7CNzI5nsCMn3N/U="
+        },
+        "erasures": [
+          25
+        ]
+      }
+    ]
+  },
+  "parameters": {
+    "field": {
+      "profile": "qr-rs-gf256"
+    },
+    "parity_bytes": 10
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "field": {
+      "$ref": "#/$defs/FieldProfile"
+    },
+    "parity_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 64,
+          "minimum": 2,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 64,
+            "minimum": 2,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 64,
+        "minimum": 2,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "work_limit": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 16777216,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "field",
+    "parity_bytes"
+  ],
+  "$defs": {
+    "FieldProfile": {
+      "description": "Field definitions use consecutive generator powers for the roots.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "profile": {
+              "type": "string",
+              "const": "qr-rs-gf256"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "profile"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "first_root": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 254,
+              "minimum": 0
+            },
+            "generator": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 1
+            },
+            "polynomial": {
+              "type": "integer",
+              "format": "uint16",
+              "maximum": 511,
+              "minimum": 257
+            },
+            "profile": {
+              "type": "string",
+              "const": "custom"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "profile",
+            "polynomial",
+            "generator",
+            "first_root"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format reed-solomon-decode --text '{"inputs":{"blocks":[{"codeword":{"base64":"QFSEf8TE8OwR7BHsEewR7CNzI5nsCMn3N/U="},"erasures":[25]}]},"parameters":{"field":{"profile":"qr-rs-gf256"},"parity_bytes":10}}'
+```
+
+## binary.reed_solomon.encode
+
+Encode shortened systematic Reed–Solomon blocks over a qualified explicit GF(256) field.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `blocks` | `json` |
+| Output | `blocks` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "blocks": [
+      {
+        "base64": "QFSEVMTE8OwR7BHsEewR7A=="
+      }
+    ]
+  },
+  "parameters": {
+    "field": {
+      "profile": "qr-rs-gf256"
+    },
+    "parity_bytes": 10
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "field": {
+      "$ref": "#/$defs/FieldProfile"
+    },
+    "parity_bytes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 64,
+          "minimum": 2,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 64,
+            "minimum": 2,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 64,
+        "minimum": 2,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "work_limit": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 16777216,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "field",
+    "parity_bytes"
+  ],
+  "$defs": {
+    "FieldProfile": {
+      "description": "Field definitions use consecutive generator powers for the roots.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "profile": {
+              "type": "string",
+              "const": "qr-rs-gf256"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "profile"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "first_root": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 254,
+              "minimum": 0
+            },
+            "generator": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 1
+            },
+            "polynomial": {
+              "type": "integer",
+              "format": "uint16",
+              "maximum": 511,
+              "minimum": 257
+            },
+            "profile": {
+              "type": "string",
+              "const": "custom"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "profile",
+            "polynomial",
+            "generator",
+            "first_root"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format reed-solomon-encode --text '{"inputs":{"blocks":[{"base64":"QFSEVMTE8OwR7BHsEewR7A=="}]},"parameters":{"field":{"profile":"qr-rs-gf256"},"parity_bytes":10}}'
 ```
 
 ## binary.reverse
@@ -2146,6 +3177,259 @@ Example:
 
 ```sh
 cube binary swap-endian --unit-bytes 2 --text ABCD
+```
+
+## binary.unpack_bits
+
+Expand a declared count of packed bits to exact bytes valued zero or one.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+| Output | `valid_bits` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "gYA="
+    }
+  },
+  "parameters": {
+    "bit_order": "msb",
+    "valid_bits": 9
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unpack",
+  "type": "object",
+  "properties": {
+    "bit_order": {
+      "$ref": "#/$defs/BitOrder"
+    },
+    "valid_bits": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 8388608,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 8388608,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 8388608,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "bit_order",
+    "valid_bits"
+  ],
+  "$defs": {
+    "BitOrder": {
+      "description": "First extracted bit occupies bit 7 (MSB) or bit 0 (LSB) of an output byte.",
+      "type": "string",
+      "enum": [
+        "msb",
+        "lsb"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format unpack-bits --text '{"inputs":{"data":{"base64":"gYA="}},"parameters":{"bit_order":"msb","valid_bits":9}}'
+```
+
+## binary.varint.decode
+
+Decode a varint prefix, one complete value or a batch and report consumed byte counts.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `records` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "5Y4m"
+    }
+  },
+  "parameters": {
+    "mode": "batch",
+    "profile": "uleb128"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decode",
+  "type": "object",
+  "properties": {
+    "allow_noncanonical": {
+      "type": "boolean",
+      "default": false
+    },
+    "mode": {
+      "$ref": "#/$defs/Mode"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "mode"
+  ],
+  "$defs": {
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "prefix",
+        "full",
+        "batch"
+      ]
+    },
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "uleb128",
+        "sleb128",
+        "protobuf_uint64",
+        "zigzag64"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format varint-decode --text '{"inputs":{"data":{"base64":"5Y4m"}},"parameters":{"profile":"uleb128","mode":"batch"}}'
+```
+
+## binary.varint.encode
+
+Encode canonical ULEB128, SLEB128, Protobuf uint64 or ZigZag64 varints.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `values` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "values": [
+      624485
+    ]
+  },
+  "parameters": {
+    "profile": "uleb128"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Encode",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "uleb128",
+        "sleb128",
+        "protobuf_uint64",
+        "zigzag64"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format varint-encode --text '{"inputs":{"values":[624485]},"parameters":{"profile":"uleb128"}}'
 ```
 
 ## binary.xor
@@ -32544,6 +33828,96 @@ Example:
 cube encode base32 --text foo
 ```
 
+## encoding.base32hex.decode
+
+Decode strict padded RFC 4648 Base32hex with zero unused bits.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "CPNMU==="
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format base32hex-decode --text '{"inputs":{"input":"CPNMU==="},"parameters":{}}'
+```
+
+## encoding.base32hex.encode
+
+Encode canonical uppercase RFC 4648 Base32hex with padding.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "Zm9v"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format base32hex-encode --text '{"inputs":{"input":{"base64":"Zm9v"}},"parameters":{}}'
+```
+
 ## encoding.base36.decode
 
 Lowercase GMP magnitude alphabet with one leading zero digit per leading zero byte.
@@ -33009,6 +34383,126 @@ Example:
 
 ```sh
 cube encode base64 --text foo
+```
+
+## encoding.base64url.decode
+
+Decode strict URL-safe RFC 4648 Base64 with the exact selected padding policy.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `text` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": "-_8="
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Base64Url",
+  "type": "object",
+  "properties": {
+    "padding": {
+      "$ref": "#/$defs/Padding"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "Padding": {
+      "type": "string",
+      "enum": [
+        "required",
+        "forbidden"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format base64url-decode --text '{"inputs":{"input":"-_8="},"parameters":{}}'
+```
+
+## encoding.base64url.encode
+
+Encode URL-safe RFC 4648 Base64 using the selected padding policy.
+
+Category: `encoding`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "+/8="
+    }
+  },
+  "parameters": {
+    "padding": "forbidden"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Base64Url",
+  "type": "object",
+  "properties": {
+    "padding": {
+      "$ref": "#/$defs/Padding"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "Padding": {
+      "type": "string",
+      "enum": [
+        "required",
+        "forbidden"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format base64url-encode --text '{"inputs":{"input":{"base64":"+/8="}},"parameters":{"padding":"forbidden"}}'
 ```
 
 ## encoding.base91.decode
@@ -36608,6 +38102,108 @@ Example:
 cube hash md5 --text abc
 ```
 
+## hash.noncrypto
+
+Compute seeded XXH32, XXH64 or a named MurmurHash3 digest in reference byte order.
+
+Category: `hash`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `text` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": ""
+    }
+  },
+  "parameters": {
+    "profile": "xxh64"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint64",
+          "default": 0,
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "default": 0,
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "default": 0,
+      "x-cube-integer": {
+        "default": 0,
+        "format": "uint64",
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "xxh32",
+        "xxh64",
+        "murmur3_x86_32",
+        "murmur3_x64_128"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format noncrypto-hash --text '{"inputs":{"input":{"base64":""}},"parameters":{"profile":"xxh64"}}'
+```
+
 ## hash.ripemd128
 
 RIPEMD-128 compatibility digest.
@@ -37300,6 +38896,42 @@ Example:
 
 ```sh
 cube hash sha512-256 --text abcd
+```
+
+## hash.siphash24
+
+Compute an exact little-endian SipHash-2-4 digest with a caller-provided private key.
+
+Category: `hash`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Input | `key` | `bytes` |
+| Output | `digest` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Private fixture values are omitted here; capture and retention require explicit interface policy.
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoParameters",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format siphash24 --text '{"inputs":{"data":{"base64":""},"key":{"base64":"AAECAwQFBgcICQoLDA0ODw=="}},"parameters":{}}'
 ```
 
 ## hash.whirlpool

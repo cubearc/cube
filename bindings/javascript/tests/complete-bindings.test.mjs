@@ -474,3 +474,39 @@ test('the formal analysis operations execute through the packaged Wasm API', asy
   assert.equal(unsat.result.status, 'unsat');
   assert.deepEqual(run('logic.cdcl', { action: 'verify_proof', formula, clauses: unsat.result.proof }).result, { status: 'verified' });
 });
+
+test('binary representations and fingerprints execute all reviewed rows through the published API', async () => {
+  const ids = new Set([
+    'binary.pack_bits', 'binary.unpack_bits', 'binary.mask', 'binary.count_bits',
+    'binary.fixed_integer.encode', 'binary.fixed_integer.decode', 'binary.bcd.encode', 'binary.bcd.decode',
+    'binary.varint.encode', 'binary.varint.decode', 'binary.ieee754.inspect',
+    'binary.reed_solomon.encode', 'binary.reed_solomon.decode', 'hash.noncrypto', 'hash.siphash24',
+    'encoding.base32hex.encode', 'encoding.base32hex.decode', 'encoding.base64url.encode', 'encoding.base64url.decode',
+  ]);
+  const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
+  const rows = fixtures.filter(row => ids.has(row.operation));
+  assert.deepEqual(new Set(rows.map(row => row.operation)), ids);
+  for (const row of rows) {
+    const inputs = Object.fromEntries(Object.entries(row.inputs).map(([port, value]) =>
+      [port, typeof value?.base64 === 'string' ? Uint8Array.from(Buffer.from(value.base64, 'base64')) : value]));
+    const outputs = cube.execute({operation: row.operation, version: 1, inputs, parameters: row.parameters});
+    const wire = Object.fromEntries(Object.entries(outputs).map(([port, value]) =>
+      [port, value instanceof Uint8Array ? {base64: Buffer.from(value).toString('base64')} : value]));
+    assert.deepEqual(wire, row.outputs, row.operation);
+  }
+  const invoke = (operation, inputs, parameters = {}) => cube.execute({operation, version: 1, inputs, parameters});
+  const max = '18446744073709551615';
+  const format = {bits: 64, byte_order: 'little', signedness: 'unsigned'};
+  const {output} = invoke('binary.fixed_integer.encode', {values: [max]}, format);
+  assert.deepEqual(output, new Uint8Array(8).fill(255));
+  assert.deepEqual(invoke('binary.fixed_integer.decode', {data: output}, format).result.values, [max]);
+  for (const value of [true, 1.5, 2 ** 53, '01', '18446744073709551616']) {
+    assert.throws(() => invoke('binary.fixed_integer.encode', {values: [value]}, format));
+  }
+  assert.throws(() => invoke('binary.varint.decode', {data: Uint8Array.of(128, 0)}, {profile: 'uleb128', mode: 'batch'}),
+    {code: 'invalid_input'});
+  assert.throws(() => invoke('binary.reed_solomon.encode', {blocks: [{base64: 'AQ=='}]},
+    {field: {profile: 'qr-rs-gf256'}, parity_bytes: 2, work_limit: 1}), {code: 'resource_limit'});
+  assert.throws(() => invoke('hash.siphash24', {data: new Uint8Array(), key: Uint8Array.of(0x8f)}),
+    error => !String(error).includes('8f') && /invalid/.test(error.code));
+});

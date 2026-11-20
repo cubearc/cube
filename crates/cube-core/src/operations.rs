@@ -10,6 +10,8 @@ pub mod execution;
 #[path = "formal_catalog.rs"]
 pub mod formal;
 pub mod metadata;
+#[path = "representation_catalog.rs"]
+pub mod representation;
 pub use discovery::{
     DiscoveryFormat, DiscoveryRequest, MAX_DISCOVERY_BYTES, MAX_DISCOVERY_QUERY_BYTES,
     discovery_document,
@@ -428,6 +430,7 @@ const MODULES: &[Module] = &[
     crate::text::profiles::MODULE,
     crate::numbers::analysis::MODULE,
     formal::MODULE,
+    representation::MODULE,
     Module::plain(crate::text::selection::OPERATIONS),
     Module::plain(crate::text::word::OPERATIONS),
     Module::plain(crate::text::values::OPERATIONS),

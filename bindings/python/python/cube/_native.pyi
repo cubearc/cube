@@ -2932,3 +2932,120 @@ def esolang_ski(
 def esolang_cellular_automaton(request: dict[str, Any] | str) -> dict[str, Any]: ...
 def number_lfsr(request: dict[str, Any] | str) -> dict[str, Any]: ...
 def number_prng(request: dict[str, Any] | str) -> dict[str, Any]: ...
+
+# Native binary representations. Python ints and bytes preserve all 64-bit values.
+class BitPackOptions(TypedDict):
+    bit_order: Literal["msb", "lsb"]
+    tail: NotRequired[Literal["reject", "pad_zero"]]
+
+class BitUnpackOptions(TypedDict):
+    bit_order: Literal["msb", "lsb"]
+    valid_bits: int
+
+class BitMaskOptions(TypedDict):
+    unit_bytes: NotRequired[Literal[1, 2, 4, 8]]
+    mask: int
+
+class BitCountOptions(TypedDict):
+    unit_bytes: NotRequired[Literal[1, 2, 4, 8]]
+    kind: Literal["population", "leading_zeros", "trailing_zeros"]
+
+class FixedIntegerOptions(TypedDict):
+    bits: Literal[8, 16, 32, 64]
+    byte_order: Literal["big", "little"]
+    signedness: Literal["signed", "unsigned"]
+
+class IntegerBatch(TypedDict):
+    signedness: Literal["signed", "unsigned"]
+    values: list[int]
+
+class BcdOptions(TypedDict):
+    profile: Literal["unsigned_packed", "unsigned_unpacked", "signed_packed"]
+    digits: int
+
+class BcdDecodeOptions(BcdOptions):
+    allow_unsigned_sign: NotRequired[bool]
+
+class BcdResult(TypedDict):
+    digits: str
+    negative: bool
+
+class VarintOptions(TypedDict):
+    profile: Literal["uleb128", "sleb128", "protobuf_uint64", "zigzag64"]
+
+class VarintDecodeOptions(VarintOptions):
+    mode: Literal["prefix", "full", "batch"]
+    allow_noncanonical: NotRequired[bool]
+
+class VarintRecord(TypedDict):
+    value: int
+    consumed: int
+
+class Ieee754Options(TypedDict):
+    format: Literal["binary32", "binary64"]
+    byte_order: Literal["big", "little"]
+
+class Ieee754Record(TypedDict):
+    bits: int
+    sign: bool
+    biased_exponent: int
+    fraction: int
+    classification: Literal[
+        "zero", "subnormal", "normal", "infinity", "quiet_nan", "signaling_nan"
+    ]
+
+class QrReedSolomonField(TypedDict):
+    profile: Literal["qr-rs-gf256"]
+
+class CustomReedSolomonField(TypedDict):
+    profile: Literal["custom"]
+    polynomial: int
+    generator: int
+    first_root: int
+
+class ReedSolomonOptions(TypedDict):
+    field: QrReedSolomonField | CustomReedSolomonField
+    parity_bytes: int
+    work_limit: NotRequired[int | None]
+
+class ReedSolomonEncoded(TypedDict):
+    parity: bytes
+    codeword: bytes
+
+class ReedSolomonCorrected(TypedDict):
+    message: bytes
+    codeword: bytes
+    positions: list[int]
+    initial_syndromes: list[int]
+    verified_syndromes: list[int]
+
+class NoncryptoHashOptions(TypedDict):
+    profile: Literal["xxh32", "xxh64", "murmur3_x86_32", "murmur3_x64_128"]
+    seed: NotRequired[int]
+
+class Base64UrlOptions(TypedDict):
+    padding: NotRequired[Literal["required", "forbidden"]]
+
+def pack_bits(data: bytes, options: BitPackOptions) -> tuple[bytes, int]: ...
+def unpack_bits(data: bytes, options: BitUnpackOptions) -> tuple[bytes, int]: ...
+def mask_bytes(data: bytes, options: BitMaskOptions) -> bytes: ...
+def count_bits(data: bytes, options: BitCountOptions) -> list[int]: ...
+def fixed_integer_encode(values: list[int], options: FixedIntegerOptions) -> bytes: ...
+def fixed_integer_decode(data: bytes, options: FixedIntegerOptions) -> IntegerBatch: ...
+def bcd_encode(digits: str, negative: bool, options: BcdOptions) -> bytes: ...
+def bcd_decode(data: bytes, options: BcdDecodeOptions) -> BcdResult: ...
+def varint_encode(values: list[int], options: VarintOptions) -> bytes: ...
+def varint_decode(data: bytes, options: VarintDecodeOptions) -> list[VarintRecord]: ...
+def ieee754_inspect(data: bytes, options: Ieee754Options) -> list[Ieee754Record]: ...
+def reed_solomon_encode(
+    blocks: list[bytes], options: ReedSolomonOptions
+) -> list[ReedSolomonEncoded]: ...
+def reed_solomon_decode(
+    blocks: list[tuple[bytes, list[int]]], options: ReedSolomonOptions
+) -> list[ReedSolomonCorrected]: ...
+def noncrypto_hash(data: bytes, options: NoncryptoHashOptions) -> str: ...
+def siphash24(data: bytes, key: bytes) -> str: ...
+def base32hex_encode(data: bytes) -> str: ...
+def base32hex_decode(text: str) -> bytes: ...
+def base64url_encode(data: bytes, options: Base64UrlOptions | None = None) -> str: ...
+def base64url_decode(text: str, options: Base64UrlOptions | None = None) -> bytes: ...

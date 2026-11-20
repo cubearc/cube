@@ -411,3 +411,23 @@ const regevBit: Uint8Array = cube.execute({
     parameters: {profile: 'regev_educational_n4_m16_q97'},
 }).output;
 void [paillierCiphertext, regevBit];
+
+const packedRepresentation = cube.execute({
+  operation: 'binary.pack_bits', version: 1, inputs: {data: Uint8Array.of(1)},
+  parameters: {bit_order: 'lsb', tail: 'pad_zero'},
+});
+cube.execute({
+  operation: 'binary.unpack_bits', version: 1, inputs: {data: packedRepresentation.output},
+  parameters: {bit_order: 'lsb', valid_bits: packedRepresentation.valid_bits},
+});
+cube.execute({
+  operation: 'hash.noncrypto', version: 1,
+  inputs: {input: Uint8Array.of(0, 255)}, parameters: {profile: 'xxh64', seed: '18446744073709551615'},
+});
+cube.execute({
+  operation: 'binary.reed_solomon.decode', version: 1,
+  inputs: {blocks: [{codeword: {base64: 'AQID'}, erasures: [1]}]},
+  parameters: {field: {profile: 'qr-rs-gf256'}, parity_bytes: 2},
+});
+// @ts-expect-error fixed integer signedness is required
+cube.execute({operation: 'binary.fixed_integer.encode', version: 1, inputs: {values: [42]}, parameters: {bits: 64, byte_order: 'little'}});

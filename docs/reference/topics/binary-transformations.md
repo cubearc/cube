@@ -120,3 +120,102 @@ useful for reversible masks, but it does not provide secure encryption.
 
 Use `--output raw` when passing binary output to another operation.
 For the complete schemas, see the [operation reference](../operations.md).
+
+## Bit packing and counts
+
+Use `binary.pack_bits` to pack bytes whose values are exactly 0 or 1. Set
+`bit_order` to `msb` or `lsb` to choose the first position within each byte.
+The default `reject` tail policy requires complete groups of eight. Set
+`tail` to `pad_zero` to fill an incomplete final byte with zeros.
+`binary.unpack_bits` uses the supplied `valid_bits` and returns that many bytes
+valued 0 or 1. Both operations return the valid bit count. Each accepts up to
+1 MiB of input and unpacking can produce up to 8 MiB.
+
+`binary.mask` repeats a single unsigned AND mask over complete big-endian
+units. `binary.count_bits` reports `population`, `leading_zeros`, or
+`trailing_zeros` in input order. The default unit is one byte. Other choices
+are 2, 4 and 8 bytes. A zero unit has as many leading and trailing zeros as bits
+in the unit. The count report holds up to 65,536 units and the byte input for
+either operation is limited to 16 MiB.
+
+## Exact numbers and decimal digits
+
+| Family | Required format | Limits and canonical behavior |
+| --- | --- | --- |
+| `binary.fixed_integer.*` | 8, 16, 32 or 64 bits, `big` or `little` byte order, `signed` or `unsigned` | Signed values use two's complement. Narrowing and partial units fail. Up to 65,536 values and 1 MiB each for input and output. |
+| `binary.bcd.*` | `unsigned_packed`, `unsigned_unpacked`, or `signed_packed`, with exact digit width | Up to 4,096 ASCII digits. Packed values take a leading zero nibble when needed. Unpacked values use a zero high nibble. Signed values use C for positive and D for negative. Decode accepts sign F only with `allow_unsigned_sign`. Zero has a positive sign and all declared digits. |
+| `binary.varint.*` | `uleb128`, `sleb128`, `protobuf_uint64`, or `zigzag64` | Each uses at most ten bytes. Decode requires `prefix`, `full` or `batch` and reports consumption per integer. Full mode requires one complete value and rejects trailing bytes. The default requires shortest form. `allow_noncanonical` admits redundant groups within the 64-bit domain. Up to 65,536 values and 1 MiB of bytes or reports. |
+| `binary.ieee754.inspect` | `binary32` or `binary64`, and byte order | Returns raw bits, sign, biased exponent, fraction and classification. The report preserves signed zero and quiet and signaling NaN payloads. Up to 65,536 complete records and 4 MiB of reports. |
+
+Wide integers use decimal strings in JSON when their magnitude exceeds
+9,007,199,254,740,991. The Python SDK accepts and returns builtin integers.
+The Rust SDK owns the exact functions in `binary::representation`,
+`binary::bcd`, and `binary::varint`. The JavaScript SDK generates named
+types from the same contracts and accepts `Uint8Array` for direct byte ports.
+
+```sh
+cube binary format varint-decode --text '{"inputs":{"data":{"base64":"5Y4m"}},"parameters":{"profile":"uleb128","mode":"batch"}}'
+# {"records":[{"consumed":3,"value":624485}]}
+```
+
+```python
+import cube
+
+options = {"bits": 64, "byte_order": "little", "signedness": "unsigned"}
+data = cube.fixed_integer_encode([42, (1 << 64) - 1], options)
+assert cube.fixed_integer_decode(data, options)["values"] == [42, (1 << 64) - 1]
+```
+
+BCD uses width-preserving digit text. A decimal scale belongs to the enclosing
+format. Floating-point inspection uses these [IEEE field definitions][ieee].
+The varint profiles follow [DWARF 5 §7.6][dwarf] and the
+[Protocol Buffers encoding guide][protobuf]. BCD sign choices follow the
+[signed packed-decimal layout][bcd].
+
+[ieee]: https://doc.rust-lang.org/std/primitive.f64.html#method.from_bits
+[dwarf]: https://dwarfstd.org/doc/DWARF5.pdf
+[protobuf]: https://protobuf.dev/programming-guides/encoding/
+[bcd]: https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=arithmetic-formats-numeric-data
+
+## Reed–Solomon block correction
+
+`binary.reed_solomon.encode` appends parity to shortened messages.
+`binary.reed_solomon.decode` receives complete codewords with explicit
+zero-based erasure positions. It returns the corrected message and codeword,
+changed positions, and initial and verified syndromes in root order. Corrections
+must satisfy `2 × errors + erasures ≤ parity_bytes`. A valid alternate codeword
+can also have zero syndromes. The result establishes code validity.
+
+Select `field.profile` explicitly. The `qr-rs-gf256` profile uses
+polynomial `0x11d`, generator 2, first root 0, consecutive roots, and
+systematic message followed by parity. The `custom` profile requires a monic
+degree-eight `polynomial` with constant term 1, a primitive `generator` and a
+`first_root` exponent from 0 through 254. Use leading-zero shortening without
+interleaving. The message must contain at least one byte. The total codeword
+may have up to 255 bytes, including 2 to 64 parity bytes.
+
+A batch can contain up to 4,096 blocks and 1 MiB of input bytes. The hard
+ceilings are 16 Mi field operations, 16 MiB of scratch space and 4 MiB of
+reports. Callers may lower `work_limit`. An uncorrectable block fails the
+whole batch. The CLI can write one verified codeword as exact bytes using
+`--codeword-file` with a new destination.
+
+```python
+import cube
+
+settings = {"field": {"profile": "qr-rs-gf256"}, "parity_bytes": 10}
+message = bytes.fromhex("40548454c4c4f0ec11ec11ec11ec11ec")
+[encoded] = cube.reed_solomon_encode([message], settings)
+assert encoded["parity"].hex() == "23732399ec08c9f737df"
+damaged = bytearray(encoded["codeword"])
+damaged[3] ^= 43
+[corrected] = cube.reed_solomon_decode([(bytes(damaged), [3])], settings)
+assert corrected["message"] == message and corrected["positions"] == [3]
+```
+
+The QR parity fixture is checked against the
+[Nayuki reference implementation][nayuki]. Core builds and validates its
+tables for each selected field. The field layout, shortening and correction
+contracts are exposed through the direct typed APIs.
+
+[nayuki]: https://github.com/nayuki/QR-Code-generator/blob/9a217d443937f60cc56c1458c39a211d7f2d3af5/python/qrcodegen.py

@@ -10,6 +10,7 @@ mod age;
 mod alphabet;
 mod audio;
 mod base58check;
+mod binary_formats;
 mod binaryops;
 mod block_profiles;
 mod blockchain;
@@ -716,6 +717,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     text_profiles::register(module)?;
     numeric_analysis::register(module)?;
     formal::register(module)?;
+    binary_formats::register(module)?;
     lexical::register(module)?;
     probability::register(module)?;
     boolean::register(module)?;

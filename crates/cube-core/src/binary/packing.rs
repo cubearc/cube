@@ -5,7 +5,7 @@ fn invalid(message: &str) -> OperationError {
     OperationError::new(ErrorCode::InvalidParameter, message)
 }
 /// First extracted bit occupies bit 7 (MSB) or bit 0 (LSB) of an output byte.
-#[derive(Clone, Copy, Debug, Default, Serialize, schemars::JsonSchema)]
+#[derive(Clone, Copy, Debug, Default, Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum BitOrder {
     #[default]
@@ -41,10 +41,13 @@ impl Incomplete {
     }
 }
 
-pub(crate) fn store(bytes: &mut [u8], position: usize, bit: u8, order: BitOrder) {
-    let shift = match order {
+pub(crate) fn bit_shift(position: usize, order: BitOrder) -> usize {
+    match order {
         BitOrder::Msb => 7 - position % 8,
         BitOrder::Lsb => position % 8,
-    };
-    bytes[position / 8] |= bit << shift;
+    }
+}
+
+pub(crate) fn store(bytes: &mut [u8], position: usize, bit: u8, order: BitOrder) {
+    bytes[position / 8] |= bit << bit_shift(position, order);
 }

@@ -117,10 +117,34 @@ impl Prepared {
                 "Base58 pipeline adapters accept at most 4096 input bytes per step",
             ));
         }
+        use encoding::rfc4648::{BYTE_LIMIT, TEXT_LIMIT};
+        if matches!(
+            self.adapter.action,
+            Action::Base32Hex(true) | Action::Base64Url(true)
+        ) && size > BYTE_LIMIT
+            || matches!(
+                self.adapter.action,
+                Action::Base32Hex(false) | Action::Base64Url(false)
+            ) && size > TEXT_LIMIT
+            || matches!(self.adapter.action, Action::NoncryptoHash)
+                && size > binary::transform::MAX_INPUT
+        {
+            return Err(Error::new(
+                ErrorCode::ResourceLimit,
+                "binary representation input exceeds its pipeline bound",
+            ));
+        }
+        if let Arguments::NoncryptoHash(options) = self.arguments {
+            return Ok(options.hex_length());
+        }
         Ok(match self.adapter.action {
             Action::SemaphoreEncode => size * 6,
             Action::HtmlAsset | Action::HarAsset => size.min(crate::web::assets::MAX_ASSET_BYTES),
             Action::A1z26Encode => size * 3,
+            Action::Base32Hex(true) => size.div_ceil(5) * 8,
+            Action::Base32Hex(false) => (size / 8 * 5).min(BYTE_LIMIT),
+            Action::Base64Url(true) => size.div_ceil(3) * 4,
+            Action::Base64Url(false) => (size * 6 / 8).min(BYTE_LIMIT),
             Action::Base32Encode => size.div_ceil(5) * 8,
             Action::Base32Decode => size / 8 * 5,
             Action::Base64Encode => size.div_ceil(3) * 4,
@@ -322,6 +346,21 @@ impl Prepared {
             }
             (Action::Base58CheckEncode, Value::Bytes { data }, Arguments::Version(version)) => {
                 text(encoding::base58check::encode(*version, &data)?)
+            }
+            (Action::NoncryptoHash, Value::Bytes { data }, Arguments::NoncryptoHash(options)) => {
+                text(hashing::fingerprints::noncrypto(&data, *options)?.hex)
+            }
+            (Action::Base32Hex(true), Value::Bytes { data }, _) => {
+                text(encoding::rfc4648::encode_base32hex(&data)?)
+            }
+            (Action::Base32Hex(false), Value::Text { data }, _) => {
+                bytes(encoding::rfc4648::decode_base32hex(&data)?)
+            }
+            (Action::Base64Url(true), Value::Bytes { data }, Arguments::Base64Url(options)) => {
+                text(encoding::rfc4648::encode_base64url(&data, *options)?)
+            }
+            (Action::Base64Url(false), Value::Text { data }, Arguments::Base64Url(options)) => {
+                bytes(encoding::rfc4648::decode_base64url(&data, *options)?)
             }
             (Action::Base32Encode, Value::Bytes { data }, _) => {
                 text(encoding::base32_encode(&data))

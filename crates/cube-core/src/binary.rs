@@ -124,4 +124,9 @@ mod tests {
     }
 }
 
+pub mod bcd;
+pub mod bit_units;
 pub mod packing;
+pub mod reed_solomon;
+pub mod representation;
+pub mod varint;

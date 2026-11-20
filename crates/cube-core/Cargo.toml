@@ -79,6 +79,9 @@ html5gum = { version = "0.8.4", default-features = false }
 kamadak-exif = "0.6"
 lofty = "0.25.4"
 md-5 = "0.11"
+hashcrew = { version = "=0.3.0", default-features = false, features = ["murmur"] }
+siphasher = { version = "=1.0.4", default-features = false }
+twox-hash = { version = "=2.1.5", default-features = false, features = ["xxhash32", "xxhash64"] }
 png = "0.18"
 quircs = "0.10.3"
 rustfft = { version = "6.4.1", default-features = false }

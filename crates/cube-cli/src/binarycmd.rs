@@ -75,6 +75,8 @@ pub(crate) struct ArithmeticArgs {
 }
 #[derive(Subcommand)]
 pub(crate) enum BinaryCommand {
+    /// Invoke a bounded exact binary format or fingerprint with named JSON ports
+    Format(crate::representationcmd::FormatArgs),
     /// Compress exact bytes to one explicitly selected stream
     Compress {
         #[command(flatten)]
@@ -132,6 +134,7 @@ fn key(hex: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 }
 pub(crate) fn run(command: BinaryCommand, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
     let (bytes, format) = match command {
+        BinaryCommand::Format(args) => return crate::representationcmd::run(args, output),
         BinaryCommand::Compress {
             args,
             profile,

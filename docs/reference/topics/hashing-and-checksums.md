@@ -91,3 +91,47 @@ cube hash sha3-256 --text abc
 Adler and Fletcher place the second sum above the first in the hexadecimal
 result. Fletcher-32 refuses an incomplete final word. These checksums detect
 corruption within the 16 MiB input limit. They provide no authentication.
+
+## Reproducible fingerprints
+
+`hash.noncrypto` hashes up to 16 MiB of exact bytes using an explicit
+profile and an unsigned seed that defaults to zero. Digests are lowercase
+hexadecimal of the reference bytes, including any leading zeros.
+
+| Profile | Seed bits | Digest representation |
+| --- | --- | --- |
+| `xxh32` | 32 | 8 hex characters, big-endian word |
+| `xxh64` | 64 | 16 hex characters, big-endian word |
+| `murmur3_x86_32` | 32 | 8 hex characters, little-endian word |
+| `murmur3_x64_128` | 32 | 32 hex characters, first little-endian word then second |
+
+The direct API keeps wide seeds exact with JSON decimal strings for values
+above 9,007,199,254,740,991. Native Python takes exact builtin integers.
+The version-1 bytes-to-text pipeline uses canonical unsigned decimal text
+for an explicit `seed` across the entire range.
+
+`hash.siphash24` takes a private, exact 16-byte key and up to 16 MiB of
+message bytes. It returns the 64-bit SipHash-2-4 digest as 16 lowercase
+hexadecimal characters in little-endian byte order. In the terminal, pass
+key-bearing JSON over standard input or through an explicitly selected file.
+SipHash is available through direct execution with private-input and
+private-output policy. Session capture and pipeline execution are disabled.
+
+```python
+import cube
+
+assert cube.noncrypto_hash(b"", {"profile": "xxh64"}) == "ef46db3751d8e999"
+assert cube.siphash24(b"", bytes(range(16))) == "310e0edd47db6f72"
+```
+
+The Rust backends are [twox-hash 2.1.5][twox] (MIT), [hashcrew 0.3.0][hashcrew]
+(Apache-2.0), and [siphasher 1.0.4][siphasher] (MIT or Apache-2.0).
+Reference testing uses [xxHash v0.8.3][xxhash], the original
+[MurmurHash3 implementation][murmur], and the published [SipHash vectors][sip].
+
+[twox]: https://docs.rs/crate/twox-hash/2.1.5
+[hashcrew]: https://docs.rs/crate/hashcrew/0.3.0
+[siphasher]: https://docs.rs/crate/siphasher/1.0.4
+[xxhash]: https://github.com/Cyan4973/xxHash/blob/v0.8.3/doc/xxhash_spec.md
+[murmur]: https://github.com/aappleby/smhasher/blob/32d067603b93b47828700880649198e0bfbbcffa/src/MurmurHash3.cpp
+[sip]: https://github.com/veorq/SipHash/blob/07bb4de10a63e8cc2e1724865454eba635742383/vectors.h

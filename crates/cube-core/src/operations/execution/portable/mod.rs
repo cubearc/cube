@@ -16,6 +16,8 @@ mod transposition;
 
 mod audio;
 mod blockchain;
+mod bounded_formats;
+
 mod files;
 mod formal;
 mod image_analysis;
@@ -65,6 +67,7 @@ const MODULES: &[(Supports, Invoke)] = &[
     (puzzle_codes::supports, puzzle_codes::execute),
     (audio::supports, audio::execute),
     (blockchain::supports, blockchain::execute),
+    (bounded_formats::supports, bounded_formats::execute),
     (files::supports, files::execute),
     (image_analysis::supports, image_analysis::execute),
     (images::supports, images::execute),

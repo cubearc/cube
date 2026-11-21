@@ -68,7 +68,7 @@ field names. For other formats, `validated_chunks` counts framing records.
 
 ## Validate a ZIP candidate
 
-`file zip` / `validate_zip` validates a classic ZIP at a caller-selected origin.
+`file zip` / `validate_zip` validates a classic ZIP or ZIP64 archive at a caller-selected origin.
 Local headers, central directory, EOCD counts and offsets, names, CRC/size fields
 and entry extents must agree. Records must be contiguous and nonoverlapping;
 archive offsets are relative to the selected origin.
@@ -77,18 +77,20 @@ archive offsets are relative to the selected origin.
 
 | Supported | Rejected |
 | --- | --- |
-| Stored and deflate methods | Encryption and ZIP64 |
+| Stored and deflate methods | Encryption |
 | UTF-8 names and comments | Multi-disk archives |
-| Signed 32-bit data descriptors | Unsigned descriptors |
-| Origin-relative offsets | Alternate self-extracting offset variants |
+| Signed 32-bit and ZIP64 data descriptors | Unsigned descriptors |
+| Origin-relative offsets and single-disk ZIP64 locators | Alternate self-extracting offset variants |
 
-Names remain inert `name_hex` data. Nothing is unpacked.
+ZIP64 sentinel values require their exact ordered 0x0001 values. Local and
+central values must agree. Names remain inert `name_hex` data.
 
 ### ZIP limits and result meaning
 
 | Resource | Maximum |
 | --- | --- |
-| Suffix searched after the origin | 16 MiB |
+| Prefix searched after the origin | 16 MiB |
+| Extra ZIP64 end-record search near EOF | 65,577 bytes |
 | EOCD candidates | 64 |
 | Entries | 1,000 |
 | Cumulative local/central header visits | 10,000 |
@@ -96,13 +98,36 @@ Names remain inert `name_hex` data. Nothing is unpacked.
 | Total declared uncompressed data | 64 MiB |
 
 - `scanned_bytes` and `candidate_scan_complete` describe the searched suffix.
-  Interpretations outside that prefix are not ruled out.
+  Large ZIP64 records can be inspected through explicit seeks. A prefix scan
+  does not enumerate every potential ZIP64 boundary outside the prefix.
 - `payload_verified` is always false. Compressed content, actual CRC integrity
   and authenticity are not verified.
 - Boundary detection and carving require a complete search, rather than choosing
   a potentially ambiguous extent.
 - `file appended` uses this validator for ZIP at offset zero. ZIP validation is
   available through direct APIs, without a pipeline adapter.
+
+## Inspect bounded file framing
+
+These direct operations accept up to 32 MiB of exact source bytes. They return
+inert metadata and checked source extents. The file is never loaded, rendered
+or executed by an inspector.
+
+| Operation | Report contents | Profile bounds |
+| --- | --- | --- |
+| `file.bmp.inspect` | 40-byte Windows DIB, dimensions, direction, color table and raster extent | BI_RGB and BI_BITFIELDS |
+| `file.webp.inspect` | RIFF chunks and VP8, VP8L or VP8X dimensions | 10,000 chunks and 1 MiB report |
+| `file.tiff.inspect` | Classic TIFF directory links, SubIFDs and known field extents in either byte order | 1,024 directories, 10,000 entries, depth 8 and 1 MiB retained values |
+| `file.executable.inspect` | ELF32/64 or PE32/32+ headers, architecture, entry point and checked ranges | 4,096 headers and 1 MiB metadata reads |
+| `file.mpeg_audio.inspect` | ID3v2.3/v2.4 text and frame boundaries, MPEG Layer III frame rates and extents | 256 tag frames, 10,000 audio frames and 1 MiB tag metadata |
+| `file.ogg.inspect` | Ogg version 0 pages, streams and continuation fragments with verified page CRCs | 10,000 pages, 128 streams, 1 MiB metadata and 16 Mi CRC work units |
+
+BMP height may be top-down. TIFF rejects cycles and retains unknown types as
+inert entry bytes. Executable entry addresses are exact hexadecimal strings.
+MPEG Layer III inspection rejects free-format bitrate and reports metadata
+without audio decoding or gapless-duration analysis. Ogg stores the granule as
+an exact decimal string and checks the RFC 3533 unreflected CRC. This validates
+page framing and CRC, with packet content available only as source ranges.
 
 ## Recover selected embedded bytes
 

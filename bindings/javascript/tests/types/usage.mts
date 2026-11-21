@@ -431,3 +431,20 @@ cube.execute({
 });
 // @ts-expect-error fixed integer signedness is required
 cube.execute({operation: 'binary.fixed_integer.encode', version: 1, inputs: {values: [42]}, parameters: {bits: 64, byte_order: 'little'}});
+
+const tokens = cube.execute({
+  operation: 'binary.lz77.encode', version: 1, inputs: {data: Uint8Array.of(65, 65, 65, 65)}, parameters: {window: 1024},
+}).tokens;
+const expanded: Uint8Array = cube.execute({
+  operation: 'binary.lz77.decode', version: 1, inputs: {tokens}, parameters: {window: 1024},
+}).output;
+const riffWidth: number = cube.execute({
+  operation: 'file.webp.inspect', version: 1, inputs: {data: expanded},
+}).report.width;
+const entropyWire: Uint8Array = cube.execute({
+  operation: 'binary.entropy.encode', version: 1,
+  inputs: {data: expanded, frequencies: [{symbol: 65, count: '1'}]}, parameters: {profile: 'range32'},
+}).output;
+void [riffWidth, entropyWire];
+// @ts-expect-error Raw LZ4 blocks need their exact decoded length.
+cube.execute({operation: 'binary.lz4.decode', version: 1, inputs: {data: expanded}, parameters: {mode: 'block'}});

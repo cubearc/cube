@@ -510,3 +510,29 @@ test('binary representations and fingerprints execute all reviewed rows through 
   assert.throws(() => invoke('hash.siphash24', {data: new Uint8Array(), key: Uint8Array.of(0x8f)}),
     error => !String(error).includes('8f') && /invalid/.test(error.code));
 });
+
+test('bounded coding and file profiles execute as named Wasm operations', async () => {
+  const fixtures = JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json', import.meta.url), 'utf8'));
+  const selected = fixtures.filter(row =>
+    /^(binary\.(packbits|lz77|lz78|lz4|bzip2|bwt|mtf|huffman|lzw|entropy)\.|file\.(bmp|webp|tiff|executable|mpeg_audio|ogg)\.inspect$|file\.zip\.validate$)/.test(row.operation));
+  assert.equal(selected.length, 28);
+  const typed = values => Object.fromEntries(Object.entries(values).map(([name, value]) => [
+    name, typeof value?.base64 === 'string' ? Uint8Array.from(Buffer.from(value.base64, 'base64')) : value,
+  ]));
+  for (const row of selected) {
+    assert.deepEqual(cube.execute({
+      operation: row.operation, version: 1, inputs: typed(row.inputs), parameters: row.parameters,
+    }), typed(row.outputs), row.operation);
+  }
+  const execute = (operation, data, parameters = {}) => cube.execute({
+    operation, version: 1, inputs: operation.startsWith('binary.packbits.') ? {input: data} : {data}, parameters,
+  });
+  assert.throws(() => execute('binary.packbits.decode', Uint8Array.of(5, 2)), {code: 'invalid_input'});
+  assert.throws(() => execute('binary.packbits.encode', new Uint8Array((1 << 20) + 1)), {code: 'resource_limit'});
+  assert.throws(() => execute('binary.lz4.decode', Uint8Array.of(0x30, 1, 2, 3), {
+    mode: 'block', expected_length: 3, limits: {max_output: 2},
+  }), {code: 'resource_limit'});
+  for (const operation of ['binary.packbits.encode', 'binary.packbits.decode']) {
+    assert.ok(cube.pipelineAdapters.some(adapter => adapter.operation === operation));
+  }
+});

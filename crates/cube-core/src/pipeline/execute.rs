@@ -134,6 +134,20 @@ impl Prepared {
                 "binary representation input exceeds its pipeline bound",
             ));
         }
+        if let Arguments::PackBitsExpected(expected) = self.arguments {
+            if size > 1 << 20 {
+                return Err(Error::new(
+                    ErrorCode::ResourceLimit,
+                    "PackBits pipeline input exceeds 1 MiB",
+                ));
+            }
+            return Ok(if matches!(self.adapter.action, Action::PackBits(true)) {
+                size + size.div_ceil(128)
+            } else {
+                let upper = (size / 2 * 128).min(16 << 20);
+                expected.map_or(upper, |length| length.min(upper))
+            });
+        }
         if let Arguments::NoncryptoHash(options) = self.arguments {
             return Ok(options.hex_length());
         }
@@ -411,6 +425,15 @@ impl Prepared {
             (Action::Ripemd160, Value::Bytes { data }, _) => text(hashing::ripemd160(&data)?),
             (Action::Crc32, Value::Bytes { data }, _) => text(hashing::crc32(&data)),
             (Action::Sha512, Value::Bytes { data }, _) => text(hashing::sha512(&data)),
+            (
+                Action::PackBits(encode),
+                Value::Bytes { data },
+                Arguments::PackBitsExpected(expected),
+            ) => bytes(if encode {
+                binary::compression::packbits::encode(&data)?
+            } else {
+                binary::compression::packbits::decode(&data, *expected)?
+            }),
             (Action::Compress, Value::Bytes { data }, Arguments::Compression(profile, level)) => {
                 bytes(binary::compression::compress(
                     &data,

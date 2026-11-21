@@ -4563,29 +4563,40 @@
   {
     "inputs": {
       "input": {
-        "base64": "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA=="
+        "base64": "UEsDBC0AAAAAAAAAIQCGphA2//////////8JABQAaGVsbG8udHh0AQAQAAUAAAAAAAAABQAAAAAAAABoZWxsb1BLAQItAy0AAAAAAAAAIQCGphA2BQAAAAUAAAAJAAAAAAAAAAAAAACAAQAAAABoZWxsby50eHRQSwUGAAAAAAEAAQA3AAAAQAAAAAAA"
       }
     },
     "operation": "file.zip.validate",
     "operation_version": 1,
     "outputs": {
       "output": {
-        "candidate_scan_complete": true,
-        "entries": [],
-        "evidence": "Classic single-disk ZIP central/local/end relationships and bounded extents; compressed payloads, CRC integrity and authenticity are not verified",
         "format": "zip",
-        "length": 22,
-        "logical_end": 22,
         "offset": 0,
+        "length": 141,
+        "logical_end": 141,
+        "trailing_bytes": 0,
+        "entries": [
+          {
+            "local_offset": 0,
+            "data_offset": 59,
+            "compressed_size": 5,
+            "uncompressed_size": 5,
+            "crc32": 907060870,
+            "method": 0,
+            "flags": 0,
+            "name_hex": "68656c6c6f2e747874"
+          }
+        ],
         "payload_verified": false,
-        "scanned_bytes": 22,
-        "trailing_bytes": 0
+        "scanned_bytes": 141,
+        "candidate_scan_complete": true,
+        "evidence": "Single-disk ZIP64 central/local/end relationships and bounded extents; compressed payloads, CRC integrity and authenticity are not verified"
       }
     },
     "parameters": {
       "offset": 0
     },
-    "contract_sha256": "c6d5509caa3d942948af0b89652e39602b874fb00f5dbbc3d53da39619b73561"
+    "contract_sha256": "817a232aba60f6fb375bc142b22d11a01a8ae34880a7926b838339b3e77f0e3e"
   },
   {
     "inputs": {
@@ -24142,6 +24153,764 @@
     "outputs": {
       "output": {
         "base64": "+/8="
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "671b44516c6dbb46e7900c9560e3ca51c3fd70d776d6608d11aadd074cc9ecf8",
+    "inputs": {
+      "input": {
+        "base64": "UVFRWFhZWlpaWg=="
+      }
+    },
+    "operation": "binary.packbits.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "/lECWFhZ/Vo="
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "46b9bb5e72c615b05f1798648a2926a1bf48e2114609e6cf04f7822ee4f55a24",
+    "inputs": {
+      "input": {
+        "base64": "/lECWFhZ/Vo="
+      }
+    },
+    "operation": "binary.packbits.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "UVFRWFhZWlpaWg=="
+      }
+    },
+    "parameters": {
+      "expected_length": 10
+    }
+  },
+  {
+    "contract_sha256": "e30b670e40851ec43bb02a6b1b8b8f72714ccea0a7f9d35bd1d81c748fc31cbb",
+    "inputs": {
+      "data": {
+        "base64": "YmFuYW5h"
+      }
+    },
+    "operation": "binary.mtf.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "YmJuAQEB"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "d464f0710a0952728525f60d4b8b4ccfa9fdd68a2266ef2f77e2f72baf93929d",
+    "inputs": {
+      "data": {
+        "base64": "YmJuAQEB"
+      }
+    },
+    "operation": "binary.mtf.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "YmFuYW5h"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "f008b1575d41d108847b61a776e9719c98dc1dc05414a0cfb5bb6a344f940eb4",
+    "inputs": {
+      "data": {
+        "base64": "YWJj"
+      }
+    },
+    "operation": "binary.lz4.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "MGFiYw=="
+      }
+    },
+    "parameters": {
+      "mode": "block"
+    }
+  },
+  {
+    "contract_sha256": "9602fc542cdeb594185ce5b394c891cf35ee07e3973e1363775c5f35e0530811",
+    "inputs": {
+      "data": {
+        "base64": "MGFiYw=="
+      }
+    },
+    "operation": "binary.lz4.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "YWJj"
+      }
+    },
+    "parameters": {
+      "expected_length": 3,
+      "mode": "block"
+    }
+  },
+  {
+    "contract_sha256": "5a5b8c7de1770a5e3ccd9bc868d0e5738701d7a8a8b11bc46d821b6f90002acf",
+    "inputs": {
+      "data": {
+        "base64": "YWJj"
+      }
+    },
+    "operation": "binary.bzip2.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "QlpoMTFBWSZTWWSMu3MAAAABADgAIAAhmBmEYXckU4UJBkjLtzA="
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "4a024ec2f7022def839a4b06770ed1dc5155921b7b2fef9fd9fda4a04650750e",
+    "inputs": {
+      "data": {
+        "base64": "QlpoMTFBWSZTWWSMu3MAAAABADgAIAAhmBmEYXckU4UJBkjLtzA="
+      }
+    },
+    "operation": "binary.bzip2.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "YWJj"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "93d429c5fc6b8bcd30187c27289c4d649ac0d4e3788d2a28455a69d8ba34d693",
+    "inputs": {
+      "data": {
+        "base64": "AAEAAQ=="
+      }
+    },
+    "operation": "binary.lzw.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "RFw="
+      }
+    },
+    "parameters": {
+      "min_code_size": 2,
+      "profile": "gif"
+    }
+  },
+  {
+    "contract_sha256": "96ea4e52659619087c28e8397f237871b706f621d38884be8485fea19bf1e5db",
+    "inputs": {
+      "data": {
+        "base64": "RFw="
+      }
+    },
+    "operation": "binary.lzw.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "AAEAAQ=="
+      }
+    },
+    "parameters": {
+      "min_code_size": 2,
+      "profile": "gif"
+    }
+  },
+  {
+    "contract_sha256": "eb9703c9bf9c5cdcf0cee4439b4574fefa57a0fd1c872a4f8af12082cfbfc623",
+    "inputs": {
+      "data": {
+        "base64": "QkFOQU5B"
+      }
+    },
+    "operation": "binary.bwt.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "Tk5CQUFB"
+      },
+      "primary_index": 3
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "9be6108bfc8a0d3026196bd0cbe1e8a9a6d5e11f3905ae8257aeb707151fe811",
+    "inputs": {
+      "data": {
+        "base64": "Tk5CQUFB"
+      }
+    },
+    "operation": "binary.bwt.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "QkFOQU5B"
+      }
+    },
+    "parameters": {
+      "primary_index": 3
+    }
+  },
+  {
+    "contract_sha256": "6802f6ec7f2c75aa7de2155d77b09df56b5bb54de0065622c5b6db4077f30ddf",
+    "inputs": {
+      "data": {
+        "base64": "QUFBQUFB"
+      }
+    },
+    "operation": "binary.lz77.encode",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        {
+          "byte": 65,
+          "kind": "literal"
+        },
+        {
+          "distance": 1,
+          "kind": "match",
+          "length": 5
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "219143d6ec3fdabb16eada41058647fba449373efdc01e201a2cffa0502daddf",
+    "inputs": {
+      "tokens": [
+        {
+          "byte": 65,
+          "kind": "literal"
+        },
+        {
+          "distance": 1,
+          "kind": "match",
+          "length": 5
+        }
+      ]
+    },
+    "operation": "binary.lz77.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "QUFBQUFB"
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "067527a2dc5f589ca4e330e1aa9775209fd483202479326c45032f5efd392d92",
+    "inputs": {
+      "data": {
+        "base64": "QUFBQUFBQQ=="
+      }
+    },
+    "operation": "binary.lz78.encode",
+    "operation_version": 1,
+    "outputs": {
+      "tokens": [
+        {
+          "byte": 65,
+          "index": 0
+        },
+        {
+          "byte": 65,
+          "index": 1
+        },
+        {
+          "byte": 65,
+          "index": 2
+        },
+        {
+          "byte": null,
+          "index": 1
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "029351ac660fd406f533168efccc9fc76c34de8e312797a128aa1e9d15f7e2bf",
+    "inputs": {
+      "tokens": [
+        {
+          "byte": 65,
+          "index": 0
+        },
+        {
+          "byte": 65,
+          "index": 1
+        },
+        {
+          "byte": 65,
+          "index": 2
+        },
+        {
+          "byte": null,
+          "index": 1
+        }
+      ]
+    },
+    "operation": "binary.lz78.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "QUFBQUFBQQ=="
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "1507fc47e01e9595125a9429e2177a161a4d532cadb3f0a57f8c75944a668fcd",
+    "inputs": {
+      "frequencies": [
+        {
+          "count": "7",
+          "symbol": 0
+        },
+        {
+          "count": "7",
+          "symbol": 1
+        },
+        {
+          "count": "7",
+          "symbol": 2
+        },
+        {
+          "count": "7",
+          "symbol": 3
+        }
+      ]
+    },
+    "operation": "binary.huffman.construct",
+    "operation_version": 1,
+    "outputs": {
+      "codes": [
+        {
+          "code": 0,
+          "length": 2,
+          "symbol": 0
+        },
+        {
+          "code": 1,
+          "length": 2,
+          "symbol": 1
+        },
+        {
+          "code": 2,
+          "length": 2,
+          "symbol": 2
+        },
+        {
+          "code": 3,
+          "length": 2,
+          "symbol": 3
+        }
+      ]
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "5f3a010e1f298f4d3c2ed6ef0ebdab0213e1d3e76cda1be82f87d138f3b73eb5",
+    "inputs": {
+      "data": {
+        "base64": "AAECAwE="
+      },
+      "frequencies": [
+        {
+          "count": "7",
+          "symbol": 0
+        },
+        {
+          "count": "7",
+          "symbol": 1
+        },
+        {
+          "count": "7",
+          "symbol": 2
+        },
+        {
+          "count": "7",
+          "symbol": 3
+        }
+      ]
+    },
+    "operation": "binary.huffman.encode",
+    "operation_version": 1,
+    "outputs": {
+      "bit_count": 10,
+      "codes": [
+        {
+          "code": 0,
+          "length": 2,
+          "symbol": 0
+        },
+        {
+          "code": 1,
+          "length": 2,
+          "symbol": 1
+        },
+        {
+          "code": 2,
+          "length": 2,
+          "symbol": 2
+        },
+        {
+          "code": 3,
+          "length": 2,
+          "symbol": 3
+        }
+      ],
+      "output": {
+        "base64": "G0A="
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "e3ea018a82af38fdd93bbdd9306c421614dc0a6bf830b7bc908f9332ea3c87d3",
+    "inputs": {
+      "data": {
+        "base64": "G0A="
+      },
+      "lengths": [
+        {
+          "length": 2,
+          "symbol": 0
+        },
+        {
+          "length": 2,
+          "symbol": 1
+        },
+        {
+          "length": 2,
+          "symbol": 2
+        },
+        {
+          "length": 2,
+          "symbol": 3
+        }
+      ]
+    },
+    "operation": "binary.huffman.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "AAECAwE="
+      }
+    },
+    "parameters": {
+      "bit_count": 10,
+      "symbol_count": 5
+    }
+  },
+  {
+    "contract_sha256": "13cd0d31ea3407e327fbd8a86112e9437a45057ecf42fe33da013e9a348e5d23",
+    "inputs": {
+      "data": {
+        "base64": "QUJCQQ=="
+      },
+      "frequencies": [
+        {
+          "count": "1",
+          "symbol": 65
+        },
+        {
+          "count": "1",
+          "symbol": 66
+        }
+      ]
+    },
+    "operation": "binary.entropy.encode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "ZA=="
+      }
+    },
+    "parameters": {
+      "profile": "arithmetic16"
+    }
+  },
+  {
+    "contract_sha256": "39ce91ab4a91238a030dd8e070ee76570490971c0704703b90791e4344a6b771",
+    "inputs": {
+      "data": {
+        "base64": "AF////4="
+      },
+      "frequencies": [
+        {
+          "count": "1",
+          "symbol": 65
+        },
+        {
+          "count": "1",
+          "symbol": 66
+        }
+      ]
+    },
+    "operation": "binary.entropy.decode",
+    "operation_version": 1,
+    "outputs": {
+      "output": {
+        "base64": "QUJCQQ=="
+      }
+    },
+    "parameters": {
+      "profile": "range32",
+      "symbol_count": 4
+    }
+  },
+  {
+    "contract_sha256": "b6c5ee27f3bda955c1623bb1363e6a11badda7f93cf0e2d8a10dd57a286f6109",
+    "inputs": {
+      "data": {
+        "base64": "Qk06AAAAAAAAADYAAAAoAAAAAQAAAP////8BABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+      }
+    },
+    "operation": "file.bmp.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "bits_per_pixel": 24,
+        "channel_masks": null,
+        "color_table": null,
+        "compression": "bi_rgb",
+        "declared_size": 58,
+        "height": 1,
+        "logical_end": 58,
+        "payload_verified": false,
+        "raster": {
+          "length": 4,
+          "offset": 54
+        },
+        "row_stride_bytes": 4,
+        "top_down": true,
+        "trailing_bytes": 0,
+        "unsupported_features": [],
+        "width": 1
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "c93528b7098d9519760d9bb980700d87426b19ffca0c7c3ea9f05cc3160a1c22",
+    "inputs": {
+      "data": {
+        "base64": "UklGRhIAAABXRUJQVlA4TAUAAAAvAAAAAAA="
+      }
+    },
+    "operation": "file.webp.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "chunks": [
+          {
+            "fourcc": "VP8L",
+            "padded_length": 6,
+            "payload": {
+              "length": 5,
+              "offset": 20
+            }
+          }
+        ],
+        "declared_size": 18,
+        "height": 1,
+        "logical_end": 26,
+        "payload_verified": false,
+        "trailing_bytes": 0,
+        "unsupported_features": [],
+        "width": 1
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "2ad04abc440af0ae12ff1117b15baf265c883ae3eb4f8bb7558c3f7cdeca8eba",
+    "inputs": {
+      "data": {
+        "base64": "SUkqAAgAAAABAAABAwABAAAAEAAAAAAAAAA="
+      }
+    },
+    "operation": "file.tiff.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "byte_order": "little",
+        "directories": [
+          {
+            "entries": [
+              {
+                "entry_range": {
+                  "length": 12,
+                  "offset": 10
+                },
+                "field_type": 3,
+                "inline_hex": "1000",
+                "offset_value_hex": null,
+                "tag": 256,
+                "unsupported_type": false,
+                "value_count": 1,
+                "value_range": {
+                  "length": 2,
+                  "offset": 18
+                }
+              }
+            ],
+            "next": null,
+            "range": {
+              "length": 18,
+              "offset": 8
+            },
+            "sub_ifds": []
+          }
+        ],
+        "first": 8,
+        "payload_verified": false
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "4a95c47eb59c6934f1a81d1ac37696ee3e5c9570a83cf9178b9fb781fb42f445",
+    "inputs": {
+      "data": {
+        "base64": "f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAAiHdmVUQzIhEAAAAAAAAAAAAAAAAAAAAAAAAAAEAAOAAAAEAAAAAAAA=="
+      }
+    },
+    "operation": "file.executable.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "architecture": "x86_64",
+        "byte_order": "little",
+        "data_directories": [],
+        "entry_point": "0x1122334455667788",
+        "format": "elf64",
+        "image_base": null,
+        "machine": 62,
+        "main_header": {
+          "length": 64,
+          "offset": 0
+        },
+        "program_headers": [],
+        "program_table": null,
+        "section_table": null,
+        "sections": [],
+        "stub": null,
+        "unsupported_features": [
+          "interpreter_and_dynamic_metadata",
+          "section_payloads"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "3dab26993116cedc2d3d0534765823bd7fab44a70d4fb56627ad114457ea6811",
+    "inputs": {
+      "data": {
+        "base64": "SUQzAwAAAAAAEFRJVDIAAAAGAAAAVGl0bGU="
+      }
+    },
+    "operation": "file.mpeg_audio.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "frames": [],
+        "payload_verified": false,
+        "tag": {
+          "extended_header": null,
+          "footer": null,
+          "frames": [
+            {
+              "flags": 0,
+              "id": "TIT2",
+              "payload": {
+                "length": 6,
+                "offset": 20
+              },
+              "range": {
+                "length": 16,
+                "offset": 10
+              },
+              "text": "Title",
+              "unsupported_payload": false
+            }
+          ],
+          "range": {
+            "length": 26,
+            "offset": 0
+          },
+          "unsynchronized": false,
+          "version": "2.3"
+        },
+        "trailing_id3v1": null
+      }
+    },
+    "parameters": {}
+  },
+  {
+    "contract_sha256": "27dc34f2ca5fe07f47453ec9cac3dd0c0b785a5d353bc1b05e164abb93e6b63b",
+    "inputs": {
+      "data": {
+        "base64": "T2dnUwAGAAAAAAAAAAAHAAAAAAAAAJaPlD8BAWE="
+      }
+    },
+    "operation": "file.ogg.inspect",
+    "operation_version": 1,
+    "outputs": {
+      "report": {
+        "checksum_verified": true,
+        "pages": [
+          {
+            "checksum": 1066700694,
+            "flags": 6,
+            "fragments": [
+              {
+                "complete": true,
+                "packet": 0,
+                "range": {
+                  "length": 1,
+                  "offset": 28
+                }
+              }
+            ],
+            "granule_position": "0",
+            "lacing": [
+              1
+            ],
+            "range": {
+              "length": 29,
+              "offset": 0
+            },
+            "sequence": 0,
+            "serial": 7
+          }
+        ],
+        "streams": [
+          {
+            "ended": true,
+            "packets": 1,
+            "pages": 1,
+            "serial": 7
+          }
+        ]
       }
     },
     "parameters": {}

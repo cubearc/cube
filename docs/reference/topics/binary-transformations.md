@@ -219,3 +219,82 @@ tables for each selected field. The field layout, shortening and correction
 contracts are exposed through the direct typed APIs.
 
 [nayuki]: https://github.com/nayuki/QR-Code-generator/blob/9a217d443937f60cc56c1458c39a211d7f2d3af5/python/qrcodegen.py
+
+## PackBits, dictionary tokens and block transforms
+
+[TIFF 6.0 PackBits](https://pdfa.org/wp-content/uploads/2020/07/TIFF6.pdf)
+uses signed controls for literals, repeated bytes and no-ops. The encoder
+prefers repeats of 3 to 128 bytes and leaves pairs in literals. Decoding checks
+complete packets and an optional exact decoded length. Both forms accept up to
+1 MiB of input. Decoded output is capped at 16 MiB. PackBits has version-1
+pipeline adapters for exact byte input and output.
+
+| Transform | What the result carries | Main Core bounds |
+| --- | --- | --- |
+| LZ77 | Literal or distance/length tokens with a 4,096-byte default window | 64 KiB source, 65,536 tokens, 1 MiB expansion |
+| LZ78 | Prior dictionary index and a byte, with an optional final suffix | 64 KiB source, 65,536 tokens, 1 MiB expansion |
+| Burrows–Wheeler | Last column and the exact primary index for inverse use | 65,536 bytes |
+| Move-to-front | Byte indexes in a moving permutation | 65,536 bytes |
+
+LZ77 chooses the longest match, then the smallest distance. Matches span 3
+through 258 bytes and can overlap. LZ78 index zero names the empty phrase.
+BWT uses the starting offset to break equal-rotation ties. MTF defaults to the
+byte order 00 through FF. Pass the identical initial alphabet to invert a
+custom permutation. LZ token sequences and BWT results use direct named ports.
+
+## LZ4, bzip2 and LZW
+
+| Profile | Required selection | Main Core bounds |
+| --- | --- | --- |
+| LZ4 | Raw block with exact decoded length, or standard frame | 16 MiB input/output, 64 MiB scratch, 10,000 frame blocks |
+| bzip2 | Standard BZh stream, level 1 for encoding by default | 16 MiB input/output, 64 MiB scratch, 10,000 cumulative blocks |
+| GIF89a LZW | Minimum code size 2 through 8, least-significant-bit first | 1 MiB input, 16 MiB output, 4,096 dictionary entries |
+| TIFF 6.0 LZW | 256-byte alphabet, most-significant-bit first and early width changes | 1 MiB input, 16 MiB output, 4,096 dictionary entries |
+
+LZ4 framing verifies the declared size and each selected checksum. The encoder
+uses independent 64 KiB blocks, an explicit content size and both checksums.
+Callers can lower input, output, scratch and block bounds. Frame decoding
+rejects trailing frames, dictionaries and legacy magic. A raw block has no
+size or integrity fields.
+
+bzip2 checks each member's standard CRCs. Enable explicit concatenation to
+use a single output and block budget across members. The encoder uses standard
+levels 1 through 9 and work factor 30.
+
+The LZW profiles operate on compressed code bytes. GIF data subblocks and TIFF
+strip framing belong to the enclosing formats. Both profiles emit initial
+clear and end codes. GIF keeps a full dictionary frozen until a clear. TIFF
+clears before reaching the last two dictionary slots. Decoding accepts at most
+seven zero padding bits after the end code.
+
+## Canonical Huffman and fixed probability streams
+
+Canonical Huffman builds binary code lengths from a byte frequency table. The
+tree breaks ties by frequency, lowest symbol and node creation order. Codes
+follow increasing length and then symbol. A singleton uses one zero bit per
+symbol. The encoder returns the table, packed bytes and exact bit count.
+Decoding takes code lengths, bit count and symbol count. It checks that the
+codes fill a complete tree, with exceptions for singleton and empty streams.
+
+Frequency records have a byte `symbol` and a canonical unsigned decimal
+`count`. An omitted symbol has count zero. Decimal strings preserve every
+64-bit count across interfaces.
+
+`arithmetic16` uses [Witten–Neal–Cleary](https://doi.org/10.1145/214762.214771)
+16-bit inclusive intervals, E1/E2/E3 renormalization and an MSB-first final
+interval prefix. `range32` uses a byte-renormalized half-open range with
+[delayed carry](https://github.com/ip7z/7zip/blob/25.01/C/LzmaEnc.c) and a
+five-byte flush. Both models use ascending byte symbols and fixed frequencies
+with total 1 through 16,383. There is no rescaling. Pass the identical model
+and the exact original symbol count to decode. Canonical re-encoding checks
+termination and trailing data. The raw streams carry no independent checksum
+or embedded model.
+
+To decode a PackBits buffer in Python, pass the bytes and expected size.
+
+```python
+import cube
+
+plain = cube.packbits_decode(bytes.fromhex("fe5102585859fd5a"), expected_length=10)
+assert plain == b"QQQXXYZZZZ"
+```

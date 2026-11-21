@@ -3,8 +3,9 @@ use clap::Args;
 use cube_core::{
     errors::{ErrorCode, OperationError},
     operations::{
+        bounded_formats,
         execution::{self, Budget},
-        representation::MAX_DOCUMENT,
+        representation,
     },
 };
 use std::{error::Error, io::Write, path::PathBuf};
@@ -14,7 +15,7 @@ use zeroize::Zeroizing;
 pub(crate) struct FormatArgs {
     /// Binary format or fingerprint profile command
     #[arg(value_parser = clap::builder::PossibleValuesParser::new(
-        cube_core::operations::representation::OPERATIONS.iter()
+        representation::OPERATIONS.iter().chain(bounded_formats::OPERATIONS)
             .filter_map(|op| op.command.strip_prefix("binary format "))
     ))]
     format: String,
@@ -26,11 +27,17 @@ pub(crate) struct FormatArgs {
 }
 
 pub(crate) fn run(args: FormatArgs, output: &mut impl Write) -> Result<(), Box<dyn Error>> {
-    let id = cube_core::operations::representation::command(&args.format)
-        .ok_or("unknown binary format")?;
-    let data = Zeroizing::new(args.input.read_bounded(MAX_DOCUMENT, id)?);
+    let (id, max_document) = if let Some(id) = representation::command(&args.format) {
+        (id, representation::MAX_DOCUMENT)
+    } else {
+        (
+            bounded_formats::command(&args.format).ok_or("unknown binary format")?,
+            bounded_formats::MAX_DOCUMENT,
+        )
+    };
+    let data = Zeroizing::new(args.input.read_bounded(max_document, id)?);
     let document = std::str::from_utf8(&data)?;
-    let request = cube_core::pipeline::json::parse_with_limits(document, MAX_DOCUMENT, 16, 400_000)
+    let request = cube_core::pipeline::json::parse_with_limits(document, max_document, 16, 400_000)
         .map_err(|failure| (*failure.error).operation(id))?;
     let invalid = || {
         OperationError::new(
@@ -49,8 +56,8 @@ pub(crate) fn run(args: FormatArgs, output: &mut impl Write) -> Result<(), Box<d
         &request["inputs"],
         &request["parameters"],
         Budget {
-            input_bytes: MAX_DOCUMENT,
-            output_bytes: MAX_DOCUMENT,
+            input_bytes: max_document,
+            output_bytes: max_document,
             ..Budget::default()
         },
     )?;

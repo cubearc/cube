@@ -32,6 +32,7 @@ pub(super) enum Action {
     A1z26Encode,
     A1z26Decode,
     Base32Hex(bool),
+    PackBits(bool),
     Base64Url(bool),
     NoncryptoHash,
     Base32Encode,
@@ -80,6 +81,16 @@ pub(super) struct Adapter {
     pub action: Action,
 }
 pub(super) const ADAPTERS: &[Adapter] = &[
+    Adapter {
+        id: crate::operations::bounded_formats::PACKBITS_ENCODE,
+        version: 1,
+        action: Action::PackBits(true),
+    },
+    Adapter {
+        id: crate::operations::bounded_formats::PACKBITS_DECODE,
+        version: 1,
+        action: Action::PackBits(false),
+    },
     Adapter {
         id: "encoding.base32hex.encode",
         version: 1,
@@ -643,6 +654,7 @@ pub(super) const ADAPTERS: &[Adapter] = &[
 ];
 #[derive(Clone, Debug)]
 pub(super) enum Arguments {
+    PackBitsExpected(Option<usize>),
     NoncryptoHash(crate::hashing::fingerprints::Options),
     Base64Url(crate::encoding::rfc4648::Base64Url),
     Masked(crate::text::transform::Config),
@@ -775,6 +787,15 @@ pub(super) fn prepare(step: &Step) -> Result<Prepared, Error> {
                 serde_json::from_value(serde_json::json!({ "profile": profile, "seed": seed }))
                     .map_err(|_| invalid("unknown fingerprint profile").parameter("profile"))?;
             Arguments::NoncryptoHash(options.validate().map_err(Error::from_operation)?)
+        }
+        Action::PackBits(_) => {
+            let expected = step
+                .parameters
+                .get("expected_length")
+                .map(|_| integer("expected_length"))
+                .transpose()?
+                .map(|n| n as usize);
+            Arguments::PackBitsExpected(expected)
         }
         Action::Compress | Action::Decompress => {
             use crate::binary::compression as c;

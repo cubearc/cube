@@ -46,7 +46,7 @@ pub(crate) enum FileCommand {
         #[arg(long)]
         json: bool,
     },
-    /// Validate one bounded classic ZIP candidate; no decompression or payload CRC check
+    /// Validate one bounded classic ZIP or ZIP64 candidate; no decompression or payload CRC check
     Zip {
         path: PathBuf,
         #[arg(long, default_value_t = 0)]

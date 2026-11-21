@@ -1546,6 +1546,246 @@ Example:
 cube binary format bcd-encode --text '{"inputs":{"digits":"123","negative":true},"parameters":{"profile":"signed_packed","digits":3}}'
 ```
 
+## binary.bwt.decode
+
+Invert the last column using its explicit primary index.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "Tk5CQUFB"
+    }
+  },
+  "parameters": {
+    "primary_index": 3
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Primary",
+  "type": "object",
+  "properties": {
+    "primary_index": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65535,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65535,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65535,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "primary_index"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube binary format bwt-decode --text '{"inputs":{"data":{"base64":"Tk5CQUFB"}},"parameters":{"primary_index":3}}'
+```
+
+## binary.bwt.encode
+
+Order cyclic rotations and return the last column and primary index.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+| Output | `primary_index` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "QkFOQU5B"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format bwt-encode --text '{"inputs":{"data":{"base64":"QkFOQU5B"}},"parameters":{}}'
+```
+
+## binary.bzip2.decode
+
+Decode bounded standard BZh streams with verified framing.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "QlpoMTFBWSZTWWSMu3MAAAABADgAIAAhmBmEYXckU4UJBkjLtzA="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bzip2Members",
+  "type": "object",
+  "properties": {
+    "concatenate": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format bzip2-decode --text '{"inputs":{"data":{"base64":"QlpoMTFBWSZTWWSMu3MAAAABADgAIAAhmBmEYXckU4UJBkjLtzA="}},"parameters":{}}'
+```
+
+## binary.bzip2.encode
+
+Encode bounded standard BZh streams with verified framing.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "YWJj"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bzip2Level",
+  "type": "object",
+  "properties": {
+    "level": {
+      "type": "integer",
+      "format": "uint8",
+      "default": 1,
+      "maximum": 9,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format bzip2-encode --text '{"inputs":{"data":{"base64":"YWJj"}},"parameters":{}}'
+```
+
 ## binary.compress.decode
 
 Read one complete frame in the named wire format and reject trailing data.
@@ -1767,6 +2007,207 @@ Example:
 cube binary format count-bits --text '{"inputs":{"data":{"base64":"//8SNA=="}},"parameters":{"unit_bytes":2,"kind":"population"}}'
 ```
 
+## binary.entropy.decode
+
+Decode the declared count and verify canonical arithmetic or range termination.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Input | `frequencies` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "AF////4="
+    },
+    "frequencies": [
+      {
+        "count": "1",
+        "symbol": 65
+      },
+      {
+        "count": "1",
+        "symbol": 66
+      }
+    ]
+  },
+  "parameters": {
+    "profile": "range32",
+    "symbol_count": 4
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EntropyDecode",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "symbol_count": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 65536,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 65536,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 65536,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "symbol_count"
+  ],
+  "$defs": {
+    "Profile": {
+      "oneOf": [
+        {
+          "description": "16-bit inclusive intervals and E1/E2/E3 renormalization.",
+          "type": "string",
+          "const": "arithmetic16"
+        },
+        {
+          "description": "32-bit half-open byte range and a delayed carry.",
+          "type": "string",
+          "const": "range32"
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format entropy-decode --text '{"inputs":{"frequencies":[{"symbol":65,"count":"1"},{"symbol":66,"count":"1"}],"data":{"base64":"AF////4="}},"parameters":{"profile":"range32","symbol_count":4}}'
+```
+
+## binary.entropy.encode
+
+Encode a fixed model with explicitly selected integer arithmetic or carry-buffered range coding.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Input | `frequencies` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "QUJCQQ=="
+    },
+    "frequencies": [
+      {
+        "count": "1",
+        "symbol": 65
+      },
+      {
+        "count": "1",
+        "symbol": 66
+      }
+    ]
+  },
+  "parameters": {
+    "profile": "arithmetic16"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EntropyMode",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "oneOf": [
+        {
+          "description": "16-bit inclusive intervals and E1/E2/E3 renormalization.",
+          "type": "string",
+          "const": "arithmetic16"
+        },
+        {
+          "description": "32-bit half-open byte range and a delayed carry.",
+          "type": "string",
+          "const": "range32"
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format entropy-encode --text '{"inputs":{"frequencies":[{"symbol":65,"count":"1"},{"symbol":66,"count":"1"}],"data":{"base64":"QUJCQQ=="}},"parameters":{"profile":"arithmetic16"}}'
+```
+
 ## binary.fixed_integer.decode
 
 Decode complete fixed-width integer units with exact width, signedness and byte order.
@@ -1944,6 +2385,274 @@ Example:
 cube binary format fixed-integer-encode --text '{"inputs":{"values":[1,"18446744073709551615"]},"parameters":{"bits":64,"byte_order":"little","signedness":"unsigned"}}'
 ```
 
+## binary.huffman.construct
+
+Construct deterministic canonical byte codes from an exact frequency table.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `frequencies` | `json` |
+| Output | `codes` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "frequencies": [
+      {
+        "count": "7",
+        "symbol": 0
+      },
+      {
+        "count": "7",
+        "symbol": 1
+      },
+      {
+        "count": "7",
+        "symbol": 2
+      },
+      {
+        "count": "7",
+        "symbol": 3
+      }
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format huffman-construct --text '{"inputs":{"frequencies":[{"symbol":0,"count":"7"},{"symbol":1,"count":"7"},{"symbol":2,"count":"7"},{"symbol":3,"count":"7"}]},"parameters":{}}'
+```
+
+## binary.huffman.decode
+
+Decode an exact symbol and bit count with a checked canonical Huffman length table.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Input | `lengths` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "G0A="
+    },
+    "lengths": [
+      {
+        "length": 2,
+        "symbol": 0
+      },
+      {
+        "length": 2,
+        "symbol": 1
+      },
+      {
+        "length": 2,
+        "symbol": 2
+      },
+      {
+        "length": 2,
+        "symbol": 3
+      }
+    ]
+  },
+  "parameters": {
+    "bit_count": 10,
+    "symbol_count": 5
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HuffmanCounts",
+  "type": "object",
+  "properties": {
+    "bit_count": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 16777216,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 16777216,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "symbol_count": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 8388608,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 8388608,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 8388608,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "bit_count",
+    "symbol_count"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube binary format huffman-decode --text '{"inputs":{"lengths":[{"symbol":0,"length":2},{"symbol":1,"length":2},{"symbol":2,"length":2},{"symbol":3,"length":2}],"data":{"base64":"G0A="}},"parameters":{"symbol_count":5,"bit_count":10}}'
+```
+
+## binary.huffman.encode
+
+Encode MSB-first canonical Huffman codes and return the exact bit count and code table.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Input | `frequencies` | `json` |
+| Output | `output` | `bytes` |
+| Output | `codes` | `json` |
+| Output | `bit_count` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "AAECAwE="
+    },
+    "frequencies": [
+      {
+        "count": "7",
+        "symbol": 0
+      },
+      {
+        "count": "7",
+        "symbol": 1
+      },
+      {
+        "count": "7",
+        "symbol": 2
+      },
+      {
+        "count": "7",
+        "symbol": 3
+      }
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format huffman-encode --text '{"inputs":{"frequencies":[{"symbol":0,"count":"7"},{"symbol":1,"count":"7"},{"symbol":2,"count":"7"},{"symbol":3,"count":"7"}],"data":{"base64":"AAECAwE="}},"parameters":{}}'
+```
+
 ## binary.ieee754.inspect
 
 Inspect exact binary32 or binary64 fields, including signed zero and NaN payloads.
@@ -2019,6 +2728,975 @@ Example:
 
 ```sh
 cube binary format ieee754-inspect --text '{"inputs":{"data":{"base64":"gAAAAH+AAAE="}},"parameters":{"format":"binary32","byte_order":"big"}}'
+```
+
+## binary.lz4.decode
+
+Decode a standard LZ4 frame or an explicitly selected raw block.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "MGFiYw=="
+    }
+  },
+  "parameters": {
+    "expected_length": 3,
+    "mode": "block"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lz4Decode",
+  "type": "object",
+  "properties": {
+    "expected_length": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "maximum": 16777216,
+          "minimum": 0,
+          "x-cube-maximum-decimal": "18446744073709551615",
+          "x-cube-minimum-decimal": "0"
+        },
+        {
+          "type": "string",
+          "maxLength": 40,
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "x-cube-native-integer": {
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      ],
+      "x-cube-integer": {
+        "format": "uint",
+        "maximum": 16777216,
+        "minimum": 0,
+        "type": "integer",
+        "x-cube-maximum-decimal": "18446744073709551615",
+        "x-cube-minimum-decimal": "0"
+      }
+    },
+    "limits": {
+      "$ref": "#/$defs/Limits"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "block",
+        "frame"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "expected_length": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "maximum": 16777216,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "format": "uint",
+                "maximum": 16777216,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "x-cube-integer": {
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "limits": {
+          "$ref": "#/$defs/Limits"
+        },
+        "mode": {
+          "type": "string",
+          "const": "block"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "expected_length"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "limits": {
+          "$ref": "#/$defs/Limits"
+        },
+        "mode": {
+          "type": "string",
+          "const": "frame"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ]
+    }
+  ],
+  "required": [
+    "mode"
+  ],
+  "$defs": {
+    "Limits": {
+      "type": "object",
+      "properties": {
+        "max_blocks": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 10000,
+              "maximum": 10000,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 10000,
+                "format": "uint",
+                "maximum": 10000,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 10000,
+          "x-cube-integer": {
+            "default": 10000,
+            "format": "uint",
+            "maximum": 10000,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "max_input": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 16777216,
+              "maximum": 16777216,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 16777216,
+                "format": "uint",
+                "maximum": 16777216,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 16777216,
+          "x-cube-integer": {
+            "default": 16777216,
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "max_output": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 16777216,
+              "maximum": 16777216,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 16777216,
+                "format": "uint",
+                "maximum": 16777216,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 16777216,
+          "x-cube-integer": {
+            "default": 16777216,
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "max_scratch": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 67108864,
+              "maximum": 67108864,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 67108864,
+                "format": "uint",
+                "maximum": 67108864,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 67108864,
+          "x-cube-integer": {
+            "default": 67108864,
+            "format": "uint",
+            "maximum": 67108864,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format lz4-decode --text '{"inputs":{"data":{"base64":"MGFiYw=="}},"parameters":{"mode":"block","expected_length":3}}'
+```
+
+## binary.lz4.encode
+
+Encode a standard LZ4 frame or an explicitly selected raw block.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "YWJj"
+    }
+  },
+  "parameters": {
+    "mode": "block"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lz4Encode",
+  "type": "object",
+  "properties": {
+    "limits": {
+      "$ref": "#/$defs/Limits"
+    },
+    "mode": {
+      "$ref": "#/$defs/Mode"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "mode"
+  ],
+  "$defs": {
+    "Limits": {
+      "type": "object",
+      "properties": {
+        "max_blocks": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 10000,
+              "maximum": 10000,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 10000,
+                "format": "uint",
+                "maximum": 10000,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 10000,
+          "x-cube-integer": {
+            "default": 10000,
+            "format": "uint",
+            "maximum": 10000,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "max_input": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 16777216,
+              "maximum": 16777216,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 16777216,
+                "format": "uint",
+                "maximum": 16777216,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 16777216,
+          "x-cube-integer": {
+            "default": 16777216,
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "max_output": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 16777216,
+              "maximum": 16777216,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 16777216,
+                "format": "uint",
+                "maximum": 16777216,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 16777216,
+          "x-cube-integer": {
+            "default": 16777216,
+            "format": "uint",
+            "maximum": 16777216,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "max_scratch": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 67108864,
+              "maximum": 67108864,
+              "minimum": 0,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 67108864,
+                "format": "uint",
+                "maximum": 67108864,
+                "minimum": 0,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 67108864,
+          "x-cube-integer": {
+            "default": 67108864,
+            "format": "uint",
+            "maximum": 67108864,
+            "minimum": 0,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "block",
+        "frame"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube binary format lz4-encode --text '{"inputs":{"data":{"base64":"YWJj"}},"parameters":{"mode":"block"}}'
+```
+
+## binary.lz77.decode
+
+Expand and check explicit LZ77 dictionary tokens.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      {
+        "byte": 65,
+        "kind": "literal"
+      },
+      {
+        "distance": 1,
+        "kind": "match",
+        "length": 5
+      }
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Window",
+  "type": "object",
+  "properties": {
+    "window": {
+      "type": "integer",
+      "format": "uint16",
+      "default": 4096,
+      "maximum": 4096,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format lz77-decode --text '{"inputs":{"tokens":[{"kind":"literal","byte":65},{"kind":"match","distance":1,"length":5}]},"parameters":{}}'
+```
+
+## binary.lz77.encode
+
+Construct deterministic explicit LZ77 dictionary tokens.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "QUFBQUFB"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Window",
+  "type": "object",
+  "properties": {
+    "window": {
+      "type": "integer",
+      "format": "uint16",
+      "default": 4096,
+      "maximum": 4096,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format lz77-encode --text '{"inputs":{"data":{"base64":"QUFBQUFB"}},"parameters":{}}'
+```
+
+## binary.lz78.decode
+
+Expand and check explicit LZ78 dictionary tokens.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `tokens` | `json` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "tokens": [
+      {
+        "byte": 65,
+        "index": 0
+      },
+      {
+        "byte": 65,
+        "index": 1
+      },
+      {
+        "byte": 65,
+        "index": 2
+      },
+      {
+        "byte": null,
+        "index": 1
+      }
+    ]
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format lz78-decode --text '{"inputs":{"tokens":[{"index":0,"byte":65},{"index":1,"byte":65},{"index":2,"byte":65},{"index":1,"byte":null}]},"parameters":{}}'
+```
+
+## binary.lz78.encode
+
+Construct deterministic explicit LZ78 dictionary tokens.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `tokens` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "QUFBQUFBQQ=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format lz78-encode --text '{"inputs":{"data":{"base64":"QUFBQUFBQQ=="}},"parameters":{}}'
+```
+
+## binary.lzw.decode
+
+Decode an explicit GIF89a or TIFF 6.0 LZW bitstream.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "RFw="
+    }
+  },
+  "parameters": {
+    "min_code_size": 2,
+    "profile": "gif"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Profile",
+  "type": "object",
+  "properties": {
+    "min_code_size": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 8,
+      "minimum": 2
+    },
+    "profile": {
+      "type": "string",
+      "enum": [
+        "gif",
+        "tiff"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "min_code_size": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 8,
+          "minimum": 2
+        },
+        "profile": {
+          "type": "string",
+          "const": "gif"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "min_code_size"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "const": "tiff"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ]
+    }
+  ],
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube binary format lzw-decode --text '{"inputs":{"data":{"base64":"RFw="}},"parameters":{"profile":"gif","min_code_size":2}}'
+```
+
+## binary.lzw.encode
+
+Encode an explicit GIF89a or TIFF 6.0 LZW bitstream.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "AAEAAQ=="
+    }
+  },
+  "parameters": {
+    "min_code_size": 2,
+    "profile": "gif"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Profile",
+  "type": "object",
+  "properties": {
+    "min_code_size": {
+      "type": "integer",
+      "format": "uint8",
+      "maximum": 8,
+      "minimum": 2
+    },
+    "profile": {
+      "type": "string",
+      "enum": [
+        "gif",
+        "tiff"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "min_code_size": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 8,
+          "minimum": 2
+        },
+        "profile": {
+          "type": "string",
+          "const": "gif"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "min_code_size"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "profile": {
+          "type": "string",
+          "const": "tiff"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ]
+    }
+  ],
+  "required": [
+    "profile"
+  ]
+}
+```
+
+Example:
+
+```sh
+cube binary format lzw-encode --text '{"inputs":{"data":{"base64":"AAEAAQ=="}},"parameters":{"profile":"gif","min_code_size":2}}'
 ```
 
 ## binary.mask
@@ -2114,6 +3792,130 @@ Example:
 
 ```sh
 cube binary format mask --text '{"inputs":{"data":{"base64":"//8SNA=="}},"parameters":{"unit_bytes":2,"mask":255}}'
+```
+
+## binary.mtf.decode
+
+Invert byte indexes using the same initial move-to-front alphabet.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "YmJuAQEB"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Permutation",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 256,
+      "minItems": 256
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format mtf-decode --text '{"inputs":{"data":{"base64":"YmJuAQEB"}},"parameters":{}}'
+```
+
+## binary.mtf.encode
+
+Apply the move-to-front byte transform with an optional exact alphabet.
+
+Category: `binary`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "YmFuYW5h"
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Permutation",
+  "type": "object",
+  "properties": {
+    "alphabet": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "integer",
+        "format": "uint8",
+        "maximum": 255,
+        "minimum": 0
+      },
+      "maxItems": 256,
+      "minItems": 256
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format mtf-encode --text '{"inputs":{"data":{"base64":"YmFuYW5h"}},"parameters":{}}'
 ```
 
 ## binary.not
@@ -2289,6 +4091,111 @@ Example:
 
 ```sh
 cube binary format pack-bits --text '{"inputs":{"data":{"base64":"AQAAAAAAAAEB"}},"parameters":{"bit_order":"msb","tail":"pad_zero"}}'
+```
+
+## binary.packbits.decode
+
+Decode checked TIFF 6.0 PackBits runs and optionally verify the expected byte count.
+
+Category: `binary`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "/lECWFhZ/Vo="
+    }
+  },
+  "parameters": {
+    "expected_length": 10
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Expected",
+  "type": "object",
+  "properties": {
+    "expected_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "maximum": 16777216,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format packbits-decode --text '{"inputs":{"input":{"base64":"/lECWFhZ/Vo="}},"parameters":{"expected_length":10}}'
+```
+
+## binary.packbits.encode
+
+Compress bytes using TIFF 6.0 PackBits run and literal controls.
+
+Category: `binary`. Contract: 1. Pipeline adapter: 1.
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `bytes` |
+| Output | `output` | `bytes` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "base64": "UVFRWFhZWlpaWg=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format packbits-encode --text '{"inputs":{"input":{"base64":"UVFRWFhZWlpaWg=="}},"parameters":{}}'
 ```
 
 ## binary.reed_solomon.decode
@@ -35714,6 +37621,52 @@ Example:
 cube file compare first.bin second.bin
 ```
 
+## file.bmp.inspect
+
+Inspect a 40-byte Windows BMP header, dimensions and bounded raster extents.
+
+Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "Qk06AAAAAAAAADYAAAAoAAAAAQAAAP////8BABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format bmp-inspect --text '{"inputs":{"data":{"base64":"Qk06AAAAAAAAADYAAAAoAAAAAQAAAP////8BABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="}},"parameters":{}}'
+```
+
 ## file.carve
 
 Recover an explicit range or freshly validated framing candidate to a new file with exact range provenance; no decompression.
@@ -35842,6 +37795,52 @@ Example:
 
 ```sh
 cube file carve sample.bin --offset 128 --output recovered.zip --json
+```
+
+## file.executable.inspect
+
+Inspect bounded ELF32/64 or PE32/32+ headers and declared extents.
+
+Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAAiHdmVUQzIhEAAAAAAAAAAAAAAAAAAAAAAAAAAEAAOAAAAEAAAAAAAA=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format executable-inspect --text '{"inputs":{"data":{"base64":"f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAAiHdmVUQzIhEAAAAAAAAAAAAAAAAAAAAAAAAAAEAAOAAAAEAAAAAAAA=="}},"parameters":{}}'
 ```
 
 ## file.exif.inspect
@@ -36067,6 +38066,98 @@ Example:
 
 ```sh
 cube inspect sample.bin
+```
+
+## file.mpeg_audio.inspect
+
+Inspect bounded ID3v2.3/v2.4 tags and MPEG Layer III frame ranges.
+
+Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "SUQzAwAAAAAAEFRJVDIAAAAGAAAAVGl0bGU="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format mpeg-audio-inspect --text '{"inputs":{"data":{"base64":"SUQzAwAAAAAAEFRJVDIAAAAGAAAAVGl0bGU="}},"parameters":{}}'
+```
+
+## file.ogg.inspect
+
+Verify RFC 3533 page CRCs and report Ogg streams and packet-fragment ranges.
+
+Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "T2dnUwAGAAAAAAAAAAAHAAAAAAAAAJaPlD8BAWE="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format ogg-inspect --text '{"inputs":{"data":{"base64":"T2dnUwAGAAAAAAAAAAAHAAAAAAAAAJaPlD8BAWE="}},"parameters":{}}'
 ```
 
 ## file.range.extract
@@ -36493,9 +38584,101 @@ Example:
 cube file strings sample.bin
 ```
 
+## file.tiff.inspect
+
+Inspect a bounded classic TIFF directory graph and exact field ranges.
+
+Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "SUkqAAgAAAABAAABAwABAAAAEAAAAAAAAAA="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format tiff-inspect --text '{"inputs":{"data":{"base64":"SUkqAAgAAAABAAABAwABAAAAEAAAAAAAAAA="}},"parameters":{}}'
+```
+
+## file.webp.inspect
+
+Inspect checked RIFF/WebP chunks, canvas dimensions and padding.
+
+Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "UklGRhIAAABXRUJQVlA4TAUAAAAvAAAAAAA="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NoOptions",
+  "type": "object",
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube binary format webp-inspect --text '{"inputs":{"data":{"base64":"UklGRhIAAABXRUJQVlA4TAUAAAAvAAAAAAA="}},"parameters":{}}'
+```
+
 ## file.zip.validate
 
-Validate bounded classic ZIP structure at an explicit candidate origin; no decompression or payload integrity claim.
+Validate bounded classic ZIP or ZIP64 structure at an explicit candidate origin; no decompression or payload integrity claim.
 
 Category: `file`. Contract: 1. Pipeline adapter: none (direct API).
 
@@ -36514,7 +38697,7 @@ Typed example (validated by the complete conformance matrix):
 {
   "inputs": {
     "input": {
-      "base64": "UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA=="
+      "base64": "UEsDBC0AAAAAAAAAIQCGphA2//////////8JABQAaGVsbG8udHh0AQAQAAUAAAAAAAAABQAAAAAAAABoZWxsb1BLAQItAy0AAAAAAAAAIQCGphA2BQAAAAUAAAAJAAAAAAAAAAAAAACAAQAAAABoZWxsby50eHRQSwUGAAAAAAEAAQA3AAAAQAAAAAAA"
     }
   },
   "parameters": {

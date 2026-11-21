@@ -15,6 +15,7 @@ mod binaryops;
 mod block_profiles;
 mod blockchain;
 mod boolean;
+mod bounded_formats;
 mod byte_text;
 mod candidates;
 mod combinations;
@@ -718,6 +719,7 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     numeric_analysis::register(module)?;
     formal::register(module)?;
     binary_formats::register(module)?;
+    bounded_formats::register(module)?;
     lexical::register(module)?;
     probability::register(module)?;
     boolean::register(module)?;

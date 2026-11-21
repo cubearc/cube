@@ -155,7 +155,7 @@ fn central_local_descriptor_and_extent_relationships_must_agree() {
     );
 }
 #[test]
-fn unsupported_encryption_zip64_multidisk_and_features_are_explicit() {
+fn unsupported_encryption_multidisk_and_malformed_zip64_are_explicit() {
     let base = fixture(&[b"a"], false, &[]);
     let c = cd(&base);
     let end = base.len() - 22;
@@ -172,15 +172,12 @@ fn unsupported_encryption_zip64_multidisk_and_features_are_explicit() {
     }
     let mut sentinel = base.clone();
     put32(&mut sentinel, c + 20, u32::MAX);
-    assert_eq!(
-        check(&sentinel).unwrap_err().code,
-        ErrorCode::UnsupportedFormat
-    );
+    assert_eq!(check(&sentinel).unwrap_err().code, ErrorCode::InvalidInput);
     assert_eq!(
         check(&fixture(&[b"a"], false, &[1, 0, 0, 0]))
             .unwrap_err()
             .code,
-        ErrorCode::UnsupportedFormat
+        ErrorCode::InvalidInput
     );
     assert!(check(&fixture(&[b"a"], false, &[0x99, 0x99, 4, 0])).is_err());
     let mut utf8 = fixture(&[&[255]], false, &[]);

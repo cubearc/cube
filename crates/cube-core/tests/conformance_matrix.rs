@@ -107,9 +107,11 @@ fn every_catalog_id_executes_a_real_fixture_and_matches_its_complete_contract() 
             if v["verification"]["kind"]
                 .as_str()
                 .is_some_and(|kind| kind.starts_with("kem_"))
+                || operations::bounded_formats::OPERATIONS
+                    .iter()
+                    .any(|row| row.id == operation)
             {
-                // The owning KEM fixtures hold independent ACVP reference bytes.
-                // Execute a fresh request and check its relation as well.
+                // Execute the named entry point against the independent fixture.
                 operations::execution::execute(
                     operation,
                     contract.operation_version,

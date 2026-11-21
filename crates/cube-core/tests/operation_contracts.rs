@@ -162,3 +162,56 @@ fn hand_authored_composite_schemas_preserve_canonical_full_width_integers() {
     input["input"]["input"]["value"]["offset"] = json!("18446744073709551616");
     assert!(contract.validate_inputs(&input).is_err());
 }
+
+#[test]
+fn tagged_compression_parameters_expose_fields_and_enforce_the_selected_variant() {
+    let contract = operations::require("binary.lz4.decode")
+        .unwrap()
+        .contract()
+        .unwrap();
+    let schema = contract.parameters.as_value();
+    assert_eq!(
+        schema["properties"]["mode"]["enum"],
+        json!(["block", "frame"])
+    );
+    assert!(
+        contract
+            .validate_parameters(&json!({"mode":"block","expected_length":0}))
+            .is_ok()
+    );
+    assert!(
+        contract
+            .validate_parameters(&json!({"mode":"block"}))
+            .is_err()
+    );
+    assert!(
+        contract
+            .validate_parameters(&json!({"mode":"frame","expected_length":0}))
+            .is_err()
+    );
+
+    let contract = operations::require("binary.lzw.decode")
+        .unwrap()
+        .contract()
+        .unwrap();
+    let schema = contract.parameters.as_value();
+    assert_eq!(
+        schema["properties"]["profile"]["enum"],
+        json!(["gif", "tiff"])
+    );
+    assert!(
+        contract
+            .validate_parameters(&json!({"profile":"gif","min_code_size":2}))
+            .is_ok()
+    );
+    assert!(
+        contract
+            .validate_parameters(&json!({"profile":"gif"}))
+            .is_err()
+    );
+    assert!(
+        contract
+            .validate_parameters(&json!({"profile":"tiff","min_code_size":2}))
+            .is_err()
+    );
+}

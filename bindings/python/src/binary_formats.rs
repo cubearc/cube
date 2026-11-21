@@ -11,13 +11,16 @@ use pyo3::{
 };
 use serde::{Serialize, de::DeserializeOwned};
 
-fn error(code: ErrorCode, op: &'static str, message: &str) -> PyErr {
+pub(super) fn error(code: ErrorCode, op: &'static str, message: &str) -> PyErr {
     super::file_error(OperationError::new(code, message).operation(op))
 }
-fn result<T>(value: Result<T, OperationError>, op: &'static str) -> PyResult<T> {
+pub(super) fn result<T>(value: Result<T, OperationError>, op: &'static str) -> PyResult<T> {
     value.map_err(|err| super::file_error(err.operation(op)))
 }
-fn settings<T: DeserializeOwned>(options: &Bound<'_, PyDict>, op: &'static str) -> PyResult<T> {
+pub(super) fn settings<T: DeserializeOwned>(
+    options: &Bound<'_, PyDict>,
+    op: &'static str,
+) -> PyResult<T> {
     let json =
         super::discrete_transport::document(options.py(), options.as_any(), 4096, 64, 6, op)?;
     serde_json::from_str(&json).map_err(|_| {
@@ -28,7 +31,11 @@ fn settings<T: DeserializeOwned>(options: &Bound<'_, PyDict>, op: &'static str) 
         )
     })
 }
-fn report(py: Python<'_>, value: impl Serialize, op: &'static str) -> PyResult<Py<PyAny>> {
+pub(super) fn report(
+    py: Python<'_>,
+    value: impl Serialize,
+    op: &'static str,
+) -> PyResult<Py<PyAny>> {
     let value = serde_json::to_value(value).map_err(|_| {
         error(
             ErrorCode::InvalidInput,
@@ -38,7 +45,7 @@ fn report(py: Python<'_>, value: impl Serialize, op: &'static str) -> PyResult<P
     })?;
     super::structured(py, &value)
 }
-fn count(value: usize, maximum: usize, op: &'static str) -> PyResult<()> {
+pub(super) fn count(value: usize, maximum: usize, op: &'static str) -> PyResult<()> {
     if value > maximum {
         return Err(error(
             ErrorCode::ResourceLimit,

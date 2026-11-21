@@ -4,6 +4,8 @@
 //! not reuse an ID for different semantics. Categories are strings, so extending
 //! the catalog does not require changing a central category enum.
 
+#[path = "bounded_formats_catalog.rs"]
+pub mod bounded_formats;
 pub mod contracts;
 mod discovery;
 pub mod execution;
@@ -431,6 +433,7 @@ const MODULES: &[Module] = &[
     crate::numbers::analysis::MODULE,
     formal::MODULE,
     representation::MODULE,
+    bounded_formats::MODULE,
     Module::plain(crate::text::selection::OPERATIONS),
     Module::plain(crate::text::word::OPERATIONS),
     Module::plain(crate::text::values::OPERATIONS),

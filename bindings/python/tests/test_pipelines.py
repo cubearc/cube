@@ -15,7 +15,7 @@ def test_binary_pipeline_capture_and_explicit_utf8():
     assert result["intermediates"] == {0: "00ff"}
     assert cube.execute_pipeline(steps, b"\x00\xff")["intermediates"] == {}
     assert cube.validate_pipeline(steps, "bytes")["output_type"] == "bytes"
-    assert len(cube.pipeline_adapters()["adapters"]) == 112
+    assert len(cube.pipeline_adapters()["adapters"]) == 114
     text = "é 世界🧊\x00\r\n"
     assert cube.utf8_decode(cube.utf8_encode(text)) == text
     assert (
@@ -112,3 +112,20 @@ def test_forensic_reports_compose_and_keep_native_bytes():
     assert error.value.code == "resource_limit"
     with pytest.raises(TypeError):
         cube.execute_pipeline([], {"type": "text", "data": b"text"})
+
+
+def test_packbits_version_one_adapters_execute_and_validate_lengths():
+    data = b"QQQXXYZZZZ"
+    wire = bytes.fromhex("fe5102585859fd5a")
+    steps = [
+        step("binary.packbits.encode"),
+        step("binary.packbits.decode", {"expected_length": 10}),
+    ]
+    result = cube.execute_pipeline(steps, data, capture=[0, 1])
+    assert result["output"] == data
+    assert result["intermediates"] == {0: wire, 1: data}
+    with pytest.raises(ValueError) as error:
+        cube.execute_pipeline(
+            [step("binary.packbits.decode", {"expected_length": 9})], wire
+        )
+    assert error.value.code == "invalid_input"

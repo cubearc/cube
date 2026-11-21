@@ -187,3 +187,38 @@ pub fn decompress(data: &[u8], settings: DecodeSettings) -> Result<Vec<u8>, Oper
     codecs::decode(data, settings.profile, &mut output)?;
     Ok(output.data)
 }
+
+pub mod dictionary;
+pub mod packbits;
+pub mod transforms;
+
+const MIB: usize = 1 << 20;
+const WORK_LIMIT: usize = 16 * MIB;
+
+fn malformed(message: &str) -> OperationError {
+    OperationError::new(ErrorCode::InvalidInput, message)
+}
+
+fn parameter(message: &str) -> OperationError {
+    OperationError::new(ErrorCode::InvalidParameter, message)
+}
+
+fn exhausted(message: &str) -> OperationError {
+    OperationError::new(ErrorCode::ResourceLimit, message)
+}
+
+fn check_limit(value: usize, maximum: usize, message: &str) -> Result<(), OperationError> {
+    if value > maximum {
+        return Err(exhausted(message));
+    }
+    Ok(())
+}
+
+mod bitstream;
+pub mod huffman;
+pub mod lzw;
+
+pub mod bzip2;
+pub mod lz4;
+
+pub mod probability;

@@ -73,6 +73,9 @@ base64 = "0.23"
 bs58 = "0.5"
 crc32fast = "1.5"
 crc = "3.4"
+lz4_flex = "=0.14.2"
+object = { version = "=0.41.0", default-features = false, features = ["read_core", "elf", "pe", "unaligned"] }
+cube-bzip2-backend = { path = "../../vendor/cube-bzip2-backend", version = "=0.2.7", default-features = false, features = ["std"] }
 data-encoding = "2.11"
 hex = "0.4"
 html5gum = { version = "0.8.4", default-features = false }

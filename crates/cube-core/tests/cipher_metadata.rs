@@ -92,6 +92,12 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
                 | "number.add"
                 | "image.dimensions"
                 | "image.jpeg.coefficients.extract"
+                | "file.bmp.inspect"
+                | "file.webp.inspect"
+                | "file.tiff.inspect"
+                | "file.executable.inspect"
+                | "file.mpeg_audio.inspect"
+                | "file.ogg.inspect"
         ) || [
             "text.ascii.",
             "text.utf16.",
@@ -149,7 +155,7 @@ fn owning_declarations_cover_the_measured_crypto_and_puzzle_scope() {
             }
         }
     }
-    assert_eq!(annotated, 428);
+    assert_eq!(annotated, 455);
     assert_eq!(ids.len(), 635);
     assert_eq!(cube_core::pipeline::supported_adapters().len(), 114);
 }

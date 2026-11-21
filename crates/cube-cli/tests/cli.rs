@@ -621,7 +621,7 @@ fn structured_discovery_and_descriptions() {
     success(
         &["ops", "list", "--category", "binary"],
         b"",
-        b"binary xor\nbinary reverse-bits\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\nbinary format pack-bits\nbinary format unpack-bits\nbinary format mask\nbinary format count-bits\nbinary format fixed-integer-encode\nbinary format fixed-integer-decode\nbinary format bcd-encode\nbinary format bcd-decode\nbinary format varint-encode\nbinary format varint-decode\nbinary format ieee754-inspect\nbinary format reed-solomon-encode\nbinary format reed-solomon-decode\nbinary compress\nbinary decompress\ncompose bytes\n",
+        b"binary xor\nbinary reverse-bits\nbinary and\nbinary or\nbinary not\nbinary reverse\nbinary shift-left\nbinary shift-right\nbinary swap-endian\nbinary rotate-left\nbinary rotate-right\nbinary xor-exact\nbinary add-wrapping\nbinary sub-wrapping\nbinary format pack-bits\nbinary format unpack-bits\nbinary format mask\nbinary format count-bits\nbinary format fixed-integer-encode\nbinary format fixed-integer-decode\nbinary format bcd-encode\nbinary format bcd-decode\nbinary format varint-encode\nbinary format varint-decode\nbinary format ieee754-inspect\nbinary format reed-solomon-encode\nbinary format reed-solomon-decode\nbinary format packbits-encode\nbinary format lz77-encode\nbinary format lz78-encode\nbinary format lz4-encode\nbinary format bzip2-encode\nbinary format lzw-encode\nbinary format bwt-encode\nbinary format mtf-encode\nbinary format huffman-encode\nbinary format entropy-encode\nbinary format packbits-decode\nbinary format lz77-decode\nbinary format lz78-decode\nbinary format lz4-decode\nbinary format bzip2-decode\nbinary format lzw-decode\nbinary format bwt-decode\nbinary format mtf-decode\nbinary format huffman-decode\nbinary format entropy-decode\nbinary format huffman-construct\nbinary compress\nbinary decompress\ncompose bytes\n",
     );
     for args in [
         vec!["ops", "list", "--category", "missing"],
@@ -664,7 +664,7 @@ fn optional_profile_discovery_preserves_json_and_enforces_complete_output_limits
             .iter()
             .filter(|d| d.get("metadata").is_some())
             .count(),
-        428
+        455
     );
     let args = [
         "ops",

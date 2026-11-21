@@ -37,7 +37,7 @@ def test_optional_profiles_preserve_legacy_descriptors_and_real_availability():
         for alias in profile["aliases"]:
             with pytest.raises(ValueError, match="unknown operation ID"):
                 cube.describe_operation(alias["name"], include_metadata=True)
-    assert annotated == 428
+    assert annotated == 455
     assert "metadata" not in cube.describe_operation(
         "file.info.inspect", include_metadata=True
     )

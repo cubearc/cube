@@ -1,0 +1,1018 @@
+{
+  "image.resize": {
+    "inputs": {
+      "input": {
+        "width": 2,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "AgY="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "width": 1,
+      "height": 1,
+      "kernel": "bilinear"
+    },
+    "outputs": {
+      "output": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "BA=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    }
+  },
+  "image.warp": {
+    "inputs": {
+      "input": {
+        "width": 2,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "AgY="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "width": 2,
+      "height": 1,
+      "transform": {
+        "kind": "affine",
+        "matrix": [
+          [
+            1.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "outputs": {
+      "output": {
+        "width": 2,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "BgA="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "report": {
+        "transform": {
+          "kind": "affine",
+          "matrix": [
+            [
+              1.0,
+              0.0,
+              1.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "source": {
+          "format": "png",
+          "representation": "constructed_8bit_samples",
+          "width": 2,
+          "height": 1,
+          "model": "gray"
+        }
+      }
+    }
+  },
+  "image.color.convert": {
+    "inputs": {
+      "input": {
+        "width": 1,
+        "height": 1,
+        "color_model": "rgb",
+        "samples": {
+          "base64": "/wAA"
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "target": "hsv"
+    },
+    "outputs": {
+      "report": {
+        "target": "hsv",
+        "width": 1,
+        "height": 1,
+        "values": [
+          [
+            0.0,
+            1.0,
+            1.0
+          ]
+        ],
+        "alpha": null
+      }
+    }
+  },
+  "image.quality.measure": {
+    "inputs": {
+      "left": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "right": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      },
+      "channel": "gray",
+      "metric": "psnr"
+    },
+    "outputs": {
+      "report": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        "channel": "gray",
+        "metric": "psnr",
+        "sum_squared_difference": 0,
+        "count": 1,
+        "mse": 0.0,
+        "value": null,
+        "perfect": true,
+        "windows": null
+      }
+    }
+  },
+  "image.filter": {
+    "inputs": {
+      "input": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "filter": {
+        "kind": "median",
+        "width": 3
+      }
+    },
+    "outputs": {
+      "output": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    }
+  },
+  "image.edge.response": {
+    "inputs": {
+      "input": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      },
+      "channel": "gray",
+      "kernel": "laplacian"
+    },
+    "outputs": {
+      "report": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        "channel": "gray",
+        "kernel": "laplacian",
+        "border": "replicate",
+        "gx": null,
+        "gy": null,
+        "laplacian": [
+          0
+        ],
+        "magnitude": null
+      }
+    }
+  },
+  "image.edge.canny": {
+    "inputs": {
+      "input": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      },
+      "channel": "gray",
+      "settings": {
+        "low": 1.0,
+        "high": 2.0
+      }
+    },
+    "outputs": {
+      "mask": {
+        "base64": "AA=="
+      },
+      "report": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1,
+          "height": 1
+        },
+        "channel": "gray",
+        "settings": {
+          "radius": 2,
+          "sigma": 1.0,
+          "low": 1.0,
+          "high": 2.0
+        }
+      }
+    }
+  },
+  "image.mask.otsu": {
+    "inputs": {
+      "input": {
+        "width": 2,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "AgY="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 2,
+        "height": 1
+      },
+      "channel": "gray"
+    },
+    "outputs": {
+      "mask": {
+        "base64": "AP8="
+      },
+      "report": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 2,
+          "height": 1
+        },
+        "channel": "gray",
+        "threshold": 2,
+        "degenerate": false
+      }
+    }
+  },
+  "image.mask.morphology": {
+    "inputs": {
+      "mask": {
+        "base64": "/wA="
+      }
+    },
+    "parameters": {
+      "width": 2,
+      "height": 1,
+      "operation": "dilate"
+    },
+    "outputs": {
+      "mask": {
+        "base64": "//8="
+      },
+      "report": {
+        "width": 2,
+        "height": 1,
+        "operation": "dilate",
+        "element": {
+          "width": 3,
+          "height": 3,
+          "shape": "rectangle"
+        },
+        "iterations": 1
+      }
+    }
+  },
+  "image.mask.components": {
+    "inputs": {
+      "mask": {
+        "base64": "/wA="
+      }
+    },
+    "parameters": {
+      "width": 2,
+      "height": 1,
+      "connectivity": "four"
+    },
+    "outputs": {
+      "report": {
+        "width": 2,
+        "height": 1,
+        "connectivity": "four",
+        "labels": [
+          1,
+          0
+        ],
+        "components": [
+          {
+            "label": 1,
+            "area": 1,
+            "bounds": {
+              "x": 0,
+              "y": 0,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
+      }
+    }
+  },
+  "image.mask.flood": {
+    "inputs": {
+      "mask": {
+        "base64": "/wA="
+      },
+      "seeds": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    "parameters": {
+      "width": 2,
+      "height": 1,
+      "connectivity": "four"
+    },
+    "outputs": {
+      "mask": {
+        "base64": "/wA="
+      },
+      "report": {
+        "width": 2,
+        "height": 1,
+        "connectivity": "four",
+        "seed_labels": [
+          1,
+          0
+        ]
+      }
+    }
+  },
+  "image.hough.lines": {
+    "inputs": {
+      "mask": {
+        "base64": "/w=="
+      }
+    },
+    "parameters": {
+      "width": 1,
+      "height": 1,
+      "options": {
+        "theta_bins": 1
+      }
+    },
+    "outputs": {
+      "report": {
+        "options": {
+          "theta_bins": 1,
+          "rho_step": 1.0,
+          "minimum_votes": 1,
+          "max_peaks": 32
+        },
+        "rho_origin": -2.0,
+        "rho_bins": 5,
+        "foreground": 1,
+        "accumulator": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "peaks": [
+          {
+            "theta_index": 0,
+            "rho_index": 2,
+            "theta": 0.0,
+            "rho": 0.0,
+            "votes": 1
+          }
+        ]
+      }
+    }
+  },
+  "image.template.match": {
+    "inputs": {
+      "input": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "template": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "channel": "gray",
+      "template_channel": "gray",
+      "options": {
+        "metric": "ncc"
+      }
+    },
+    "outputs": {
+      "report": {
+        "options": {
+          "metric": "ncc",
+          "best": 16,
+          "dense": false
+        },
+        "width": 1,
+        "height": 1,
+        "evaluated": 1,
+        "matches": [
+          {
+            "x": 0,
+            "y": 0,
+            "score": null,
+            "reason": "zero_variance",
+            "moments": {
+              "count": 1,
+              "sum_x": 3,
+              "sum_y": 3,
+              "sum_x_squared": 9,
+              "sum_y_squared": 9,
+              "sum_xy": 9,
+              "squared_difference": 0
+            }
+          }
+        ],
+        "dense": null
+      }
+    }
+  },
+  "image.traversal.order": {
+    "inputs": {},
+    "parameters": {
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 2,
+        "height": 2
+      },
+      "traversal": "hilbert"
+    },
+    "outputs": {
+      "coordinates": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    }
+  },
+  "image.traversal.permute": {
+    "inputs": {
+      "indices": [
+        1,
+        0
+      ]
+    },
+    "parameters": {
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 2,
+        "height": 1
+      }
+    },
+    "outputs": {
+      "coordinates": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "image.png.scanlines": {
+    "inputs": {
+      "source": {
+        "base64": "iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAAAAAClGgl+AAAAAklEQVR4nGKkkSsAAAAaSURBVGNg+s/IyMzCyMTw7yczM/MfFtafTAAsvgUOLMbMDgAAAABJRU5ErkJggg=="
+      }
+    },
+    "parameters": {
+      "profile": "reconstructed"
+    },
+    "outputs": {
+      "data": {
+        "base64": "Av8BAwcIAwUBBAcACQIC"
+      },
+      "report": {
+        "profile": "reconstructed",
+        "width": 3,
+        "height": 5,
+        "model": "gray",
+        "row_stride": 3,
+        "filter_offsets": [
+          0,
+          4,
+          8,
+          12,
+          16
+        ],
+        "source_sha256": "1c34c3e1104f8ea61f905c5f47225da036100d3a7d63fc09f25e28b2f089f7ae"
+      }
+    }
+  },
+  "image.gif.indices": {
+    "inputs": {
+      "source": {
+        "base64": "R0lGODlhBAADAIAAAAoUHgoUHiH5BAEAAAEALAEAAQACAAEAAAICDAoAOw=="
+      }
+    },
+    "parameters": {},
+    "outputs": {
+      "indices": {
+        "base64": "AQA="
+      },
+      "report": {
+        "canvas_width": 4,
+        "canvas_height": 3,
+        "background_index": 0,
+        "frame_index": 0,
+        "frame": {
+          "x": 1,
+          "y": 1,
+          "width": 2,
+          "height": 1
+        },
+        "interlaced": false,
+        "local_palette": false,
+        "palette": [
+          [
+            10,
+            20,
+            30
+          ],
+          [
+            10,
+            20,
+            30
+          ]
+        ],
+        "transparent_index": 1,
+        "source_sha256": "2a6bd7855456c2e970d6aa535f0cbcc9abaf30054955fcb5a5bd698ef4cc1c0b"
+      }
+    }
+  },
+  "image.stereo.separate": {
+    "inputs": {
+      "input": {
+        "width": 2,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "AgY="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "mode": "side_by_side"
+    },
+    "outputs": {
+      "left": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Ag=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "right": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Bg=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "report": {
+        "mode": "side_by_side",
+        "eye_order": "left_right",
+        "source": {
+          "format": "png",
+          "representation": "constructed_8bit_samples",
+          "width": 2,
+          "height": 1,
+          "model": "gray"
+        }
+      }
+    }
+  },
+  "image.stereo.anaglyph": {
+    "inputs": {
+      "left": {
+        "width": 1,
+        "height": 1,
+        "color_model": "rgb",
+        "samples": {
+          "base64": "/wAA"
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "right": {
+        "width": 1,
+        "height": 1,
+        "color_model": "rgb",
+        "samples": {
+          "base64": "AAAA"
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "profile": "dubois-redcyan-2009"
+    },
+    "outputs": {
+      "output": {
+        "width": 1,
+        "height": 1,
+        "color_model": "rgb",
+        "samples": {
+          "base64": "sQAA"
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      },
+      "report": {
+        "profile": "dubois-redcyan-2009",
+        "sources": [
+          {
+            "format": "png",
+            "representation": "constructed_8bit_samples",
+            "width": 1,
+            "height": 1,
+            "model": "rgb"
+          },
+          {
+            "format": "png",
+            "representation": "constructed_8bit_samples",
+            "width": 1,
+            "height": 1,
+            "model": "rgb"
+          }
+        ],
+        "matrices": [
+          [
+            [
+              0.437,
+              0.449,
+              0.164
+            ],
+            [
+              -0.062,
+              -0.062,
+              -0.024
+            ],
+            [
+              -0.048,
+              -0.05,
+              -0.017
+            ]
+          ],
+          [
+            [
+              -0.011,
+              -0.032,
+              -0.007
+            ],
+            [
+              0.377,
+              0.761,
+              0.009
+            ],
+            [
+              -0.026,
+              -0.093,
+              1.234
+            ]
+          ]
+        ]
+      }
+    }
+  },
+  "image.hash.perceptual": {
+    "inputs": {
+      "input": {
+        "width": 1,
+        "height": 1,
+        "color_model": "gray",
+        "samples": {
+          "base64": "Aw=="
+        },
+        "palette": [],
+        "transparency": {
+          "base64": ""
+        }
+      }
+    },
+    "parameters": {
+      "profile": "ahash8"
+    },
+    "outputs": {
+      "output": {
+        "base64": "//////////8="
+      },
+      "report": {
+        "profile": "ahash8"
+      }
+    }
+  },
+  "image.qr.encode": {
+    "inputs": {
+      "data": {
+        "base64": "AP8="
+      }
+    },
+    "parameters": {
+      "ecc": "L",
+      "version": 1,
+      "mask": 0
+    },
+    "outputs": {
+      "modules": {
+        "base64": "AQEBAQEBAQAAAAEAAQABAQEBAQEBAQAAAAAAAQAAAAAAAQABAAAAAAABAQABAQEAAQABAAEAAAABAAEBAQABAQABAQEAAQAAAAAAAQABAAEBAQABAQABAQEAAQAAAQABAQABAAEBAQABAQAAAAAAAQAAAQEBAAABAAAAAAABAQEBAQEBAQABAAEAAQABAQEBAQEBAAAAAAAAAAABAAEAAAAAAAAAAAAAAQEBAAEBAQEBAAEAAQEBAAAAAQAAAQABAQAAAAEAAQABAAEAAQAAAQABAAABAAABAQABAAABAAEBAQABAAEAAAEBAAEAAAABAAABAQEAAQEBAAEAAQEAAAABAQEAAQABAAEBAQAAAQABAAAAAAAAAAABAAAAAAABAAAAAQEAAQEBAQEBAQABAQEAAQAAAAEAAAABAQAAAAAAAQABAQAAAAABAAAAAQEBAQABAQEAAQABAAEAAQABAAEAAQABAQABAQEAAQAAAQABAAEAAQABAAEAAQABAQEAAQABAQEBAAEBAQABAQABAQAAAAAAAQABAAABAQEAAQEBAAEAAQEBAQEBAQABAQEBAAEBAQABAQEB"
+      },
+      "report": {
+        "ecc": "L",
+        "version": 1,
+        "mask": 0,
+        "size": 21,
+        "segments": [
+          {
+            "mode": "byte",
+            "length": 2
+          }
+        ],
+        "penalties": [
+          {
+            "mask": 0,
+            "runs": 155,
+            "blocks": 75,
+            "finder_like": 840,
+            "balance": 0,
+            "total": 1070
+          }
+        ]
+      }
+    }
+  },
+  "image.barcode.scan": {
+    "inputs": {
+      "scanlines": [
+        [
+          255,
+          255,
+          255,
+          255,
+          255
+        ]
+      ]
+    },
+    "parameters": {
+      "symbology": {
+        "kind": "ean13"
+      },
+      "orientation": "forward"
+    },
+    "outputs": {
+      "report": {
+        "options": {
+          "symbology": {
+            "kind": "ean13"
+          },
+          "orientation": "forward",
+          "threshold": 128
+        },
+        "charged_steps": 80,
+        "rows": [
+          {
+            "row": 0,
+            "status": "no_detection",
+            "payload": null,
+            "codewords": null,
+            "checksum": null,
+            "start": null,
+            "stop": null
+          }
+        ]
+      }
+    }
+  },
+  "image.barcode.decode": {
+    "inputs": {
+      "crops": [
+        {
+          "width": 40,
+          "height": 40,
+          "color_model": "gray",
+          "samples": {
+            "base64": "/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w=="
+          },
+          "palette": [],
+          "transparency": {
+            "base64": ""
+          }
+        }
+      ]
+    },
+    "parameters": {
+      "format": "data_matrix",
+      "orientation": "0"
+    },
+    "outputs": {
+      "report": {
+        "options": {
+          "format": "data_matrix",
+          "orientation": "0"
+        },
+        "charged_steps": 2538400,
+        "crops": [
+          {
+            "status": "no_detection",
+            "text": null,
+            "raw_bytes": null,
+            "raw_bits": null,
+            "byte_segments": [],
+            "codewords": null,
+            "corrected_errors": null,
+            "correction_level": null,
+            "symbology_identifier": null,
+            "points": []
+          }
+        ]
+      }
+    }
+  }
+}

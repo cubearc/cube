@@ -4,6 +4,54 @@ import { readFile } from 'node:fs/promises';
 import { createCube } from '../dist/node.mjs';
 const cube = await createCube();
 const documentNodeCount=value=>1+(value&&typeof value==='object'?Object.values(value).reduce((sum,v)=>sum+documentNodeCount(v),0):0);
+
+test('image profiles execute exact native samples, reports and binary QR ports through Wasm', async () => {
+  const cases = JSON.parse(await readFile(new URL(
+    '../../../crates/cube-core/src/image/advanced-fixtures.json', import.meta.url,
+  ), 'utf8'));
+  assert.equal(Object.keys(cases).length, 23);
+  for (const [operation, { inputs, parameters, outputs }] of Object.entries(cases)) {
+    const executor = cube.executors.find(row => row.operation === operation);
+    const native = (fields, representations) => Object.fromEntries(
+      Object.entries(fields).map(([name, value]) => [name, representations[name] === 'bytes'
+        ? Uint8Array.from(Buffer.from(value.base64, 'base64')) : value]),
+    );
+    const result = cube.execute({
+      operation, version: 1, inputs: native(inputs, executor.inputs), parameters,
+    });
+    assert.deepEqual(result, native(outputs, executor.outputs), operation);
+  }
+  const qr = cube.execute({
+    operation: 'image.qr.encode', version: 1,
+    inputs: { data: Uint8Array.of(0, 255) },
+    parameters: { ecc: 'L', version: 1, mask: 0, raster: { scale: 4 } },
+  });
+  assert.ok(qr.modules instanceof Uint8Array);
+  assert.deepEqual(qr.modules, Uint8Array.from(Buffer.from(cases['image.qr.encode'].outputs.modules.base64, 'base64')));
+  assert.equal(qr.raster.width, 116);
+
+  for (const [format, file, text] of [
+    ['data_matrix', 'datamatrix', '0123456789'],
+    ['aztec', 'aztec-full', 'Cube\0ÿ'],
+    ['pdf417', 'pdf417', 'This is PDF417'],
+  ]) {
+    const png = await readFile(new URL(`../../../crates/cube-core/tests/fixtures/visual-codes/${file}.png`, import.meta.url));
+    const image = cube.execute({
+      operation: 'image.decode', version: 1, inputs: { input: Uint8Array.from(png) },
+    }).output;
+    const result = cube.execute({
+      operation: 'image.barcode.decode', version: 1, inputs: { crops: [image] },
+      parameters: { format, orientation: '0' },
+    }).report.crops[0];
+    assert.equal(result.status, 'decoded');
+    assert.equal(result.text, text);
+  }
+  assert.throws(() => cube.execute({
+    operation: 'image.qr.encode', version: 1, inputs: { data: Uint8Array.of(), segments: [] },
+    parameters: { ecc: 'L' },
+  }), { code: 'invalid_input' });
+});
+
 test('historical wheel and strip profiles execute through actual Wasm with explicit rows', async()=>{
   const fixtures=JSON.parse(await readFile(new URL('../../../crates/cube-core/src/operations/contracts/conformance.json',import.meta.url),'utf8'));
   const rows=fixtures.filter(r=>/^cipher\.(m94|jefferson|m138a)\./.test(r.operation));

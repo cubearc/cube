@@ -123,6 +123,9 @@ scrypt = { version = "=0.11.0", default-features = false }
 hkdf = { version = "=0.13.0", default-features = false }
 
 flate2 = { version = "=1.1.10", default-features = false, features = ["rust_backend"] }
+gif = { version = "=0.14.2", default-features = false, features = ["std"] }
+qrcodegen = "=1.8.0"
+rxing = { version = "=0.9.3", default-features = false, features = ["aztec", "datamatrix", "decoders", "encoding_rs", "oned", "pdf417", "wasm_support"] }
 brotli = { version = "=9.1.3", default-features = false, features = ["std", "disallow_large_window_size"] }
 ruzstd = { version = "=0.9.1", default-features = false, features = ["std", "hash"] }
 lzma-rust2 = { version = "=0.25.0", default-features = false, features = ["std", "encoder"] }

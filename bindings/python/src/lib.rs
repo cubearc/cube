@@ -40,6 +40,7 @@ mod historical_public_key;
 mod homomorphic;
 mod ies;
 mod image;
+mod image_profiles;
 mod investigation;
 mod kdf;
 mod key_wrap;
@@ -777,6 +778,10 @@ fn _native(module: &Bound<'_, PyModule>) -> PyResult<()> {
     candidates::register(module)?;
     module.add_class::<image::PyImage>()?;
     module.add_function(wrap_pyfunction!(image::image_pairs, module)?)?;
+    module.add_function(wrap_pyfunction!(
+        image_profiles::execute_image_profile,
+        module
+    )?)?;
     module.add_function(wrap_pyfunction!(image::png_chunks, module)?)?;
     module.add_function(wrap_pyfunction!(inspect_exif, module)?)?;
     module.add_function(wrap_pyfunction!(file_exif, module)?)?;

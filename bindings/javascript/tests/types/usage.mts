@@ -72,6 +72,12 @@ cube.execute({ operation: 'encoding.base64.encode', version: 1, inputs: { input:
 // @ts-expect-error Unknown ports are not silently dropped.
 cube.execute({ operation: 'encoding.base64.decode', version: 1, inputs: { input: '', extra: '' } });
 const image = cube.execute({ operation: 'image.decode', version: 1, inputs: { input: bytes } });
+const qr = cube.execute({
+  operation: 'image.qr.encode', version: 1, inputs: { data: bytes },
+  parameters: { ecc: 'L', mask: 0, raster: { scale: 4 } },
+});
+const modules: Uint8Array = qr.modules;
+void modules;
 void image;
 const artifact = cube.execute({ operation: 'file.info.inspect', version: 2, inputs: { input: bytes } });
 void artifact;

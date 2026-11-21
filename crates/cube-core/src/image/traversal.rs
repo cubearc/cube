@@ -1,7 +1,9 @@
 //! Bounded coordinate ordering, independent of samples, channels and bits.
 use super::{MAX_DIMENSION, MAX_PIXELS, Region, invalid, limit};
 use crate::errors::OperationError;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+
+const MAX_EXTENDED_COORDINATES: usize = 1 << 20;
 
 pub const NAMES: &[&str] = &[
     "row",
@@ -10,9 +12,14 @@ pub const NAMES: &[&str] = &[
     "zigzag",
     "spiral_cw",
     "spiral_ccw",
+    "serpentine",
+    "hilbert",
+    "morton",
 ];
 pub const CORNER_NAMES: &[&str] = &["top_left", "top_right", "bottom_right", "bottom_left"];
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, schemars::JsonSchema)]
+#[derive(
+    Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize, Serialize, schemars::JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Traversal {
     #[default]
@@ -22,8 +29,13 @@ pub enum Traversal {
     Zigzag,
     SpiralCw,
     SpiralCcw,
+    Serpentine,
+    Hilbert,
+    Morton,
 }
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, schemars::JsonSchema)]
+#[derive(
+    Clone, Copy, Debug, Default, PartialEq, Eq, Deserialize, Serialize, schemars::JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Corner {
     #[default]
@@ -55,10 +67,10 @@ impl Traversal {
             "zigzag" => Ok(Self::Zigzag),
             "spiral_cw" => Ok(Self::SpiralCw),
             "spiral_ccw" => Ok(Self::SpiralCcw),
-            _ => Err(invalid(
-                "traversal must be row, column, diagonal, zigzag, spiral_cw or spiral_ccw",
-            )
-            .parameter("traversal")),
+            "serpentine" => Ok(Self::Serpentine),
+            "hilbert" => Ok(Self::Hilbert),
+            "morton" => Ok(Self::Morton),
+            _ => Err(invalid("unknown explicit image traversal").parameter("traversal")),
         }
     }
     /// Visit every selected pixel once. Corners mirror row/column/diagonal axes;
@@ -84,6 +96,20 @@ impl Traversal {
         if region.width > MAX_DIMENSION || region.height > MAX_DIMENSION || count > MAX_PIXELS {
             return Err(limit("coordinate traversal exceeds image limits"));
         }
+        if matches!(self, Self::Hilbert | Self::Morton)
+            && (region.width != region.height
+                || !region.width.is_power_of_two()
+                || region.width > 2048)
+        {
+            return Err(invalid(
+                "Hilbert and Morton require a power-of-two square up to side 2048",
+            ));
+        }
+        if matches!(self, Self::Serpentine | Self::Hilbert | Self::Morton)
+            && count > MAX_EXTENDED_COORDINATES as u64
+        {
+            return Err(limit("extended traversal exceeds 1 Mi coordinates"));
+        }
         Ok(Coordinates {
             traversal: self,
             region,
@@ -93,6 +119,72 @@ impl Traversal {
             count: count as usize,
         })
     }
+}
+
+fn hilbert(mut order: usize, side: usize) -> (usize, usize) {
+    let (mut x, mut y, mut block) = (0, 0, 1);
+    while block < side {
+        let rx = (order >> 1) & 1;
+        let ry = (order ^ rx) & 1;
+        if ry == 0 {
+            if rx != 0 {
+                (x, y) = (block - 1 - x, block - 1 - y);
+            }
+            (x, y) = (y, x);
+        }
+        x += block * rx;
+        y += block * ry;
+        block <<= 1;
+        order >>= 2;
+    }
+    (x, side - 1 - y)
+}
+
+fn morton(mut order: usize, side: usize) -> (usize, usize) {
+    let (mut x, mut y) = (0, 0);
+    for bit in 0..side.trailing_zeros() {
+        x |= (order & 1) << bit;
+        y |= ((order >> 1) & 1) << bit;
+        order >>= 2;
+    }
+    (x, y)
+}
+
+/// Validate destination-to-source row-major indices and return their absolute
+/// source coordinates. A packed bitset enforces an exact rectangular bijection.
+pub fn permutation(region: Region, indices: &[u32]) -> Result<Vec<[u32; 2]>, OperationError> {
+    let size = Traversal::Row
+        .coordinates(region, Corner::TopLeft, false)?
+        .len();
+    if size > MAX_EXTENDED_COORDINATES {
+        return Err(limit("grid permutation exceeds 1 Mi coordinates"));
+    }
+    if indices.len() != size {
+        return Err(invalid(
+            "permutation needs exactly one source index per destination",
+        ));
+    }
+    let mut seen = vec![0u64; size.div_ceil(64)];
+    for &index in indices {
+        if index as usize >= size {
+            return Err(invalid("permutation source index exceeds region"));
+        }
+        let word = &mut seen[index as usize / 64];
+        let bit = 1 << (index % 64);
+        if *word & bit != 0 {
+            return Err(invalid("permutation repeats a source index"));
+        }
+        *word |= bit;
+    }
+    Ok(indices
+        .iter()
+        .map(|&index| {
+            [
+                region.x + index % region.width,
+                region.y + index / region.width,
+            ]
+        })
+        .collect())
 }
 pub struct Coordinates {
     traversal: Traversal,
@@ -197,15 +289,25 @@ impl Iterator for Coordinates {
                     Traversal::Column => (i / h, i % h),
                     Traversal::Diagonal => diagonal(i, w, h, false),
                     Traversal::Zigzag => diagonal(i, w, h, true),
+                    Traversal::Serpentine => {
+                        let (x, y) = (i % w, i / w);
+                        (if y % 2 == 0 { x } else { w - 1 - x }, y)
+                    }
+                    Traversal::Hilbert => hilbert(i, w),
+                    Traversal::Morton => morton(i, w),
                     _ => unreachable!(),
                 };
+                // Hilbert's canonical x/y coordinates start at mathematical
+                // bottom-left. After converting to image y-down coordinates,
+                // reflect that starting position into the caller's corner.
+                let bottom = matches!(self.corner, Corner::BottomLeft | Corner::BottomRight);
                 (
                     if matches!(self.corner, Corner::TopRight | Corner::BottomRight) {
                         w - 1 - x
                     } else {
                         x
                     },
-                    if matches!(self.corner, Corner::BottomLeft | Corner::BottomRight) {
+                    if bottom != (pattern == Traversal::Hilbert) {
                         h - 1 - y
                     } else {
                         y
@@ -232,7 +334,7 @@ pub(super) const REVERSE_PARAMETER: Parameter = Parameter {
 };
 pub(super) const TRAVERSAL_PARAMETER: Parameter = Parameter {
     name: "traversal",
-    description: "Row/column, anti-diagonals, alternating zigzag or clockwise/counterclockwise inward spiral.",
+    description: "Select row, column, diagonal, zigzag, directed spiral, serpentine, Hilbert or Morton order.",
     required: false,
     default: Some(ParameterValue::Text("row")),
     constraints: ParameterType::Text { choices: NAMES },

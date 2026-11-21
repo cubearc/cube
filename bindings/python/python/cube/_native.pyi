@@ -605,6 +605,42 @@ def clock_directions(
 ) -> dict[str, Any]: ...
 def semaphore_encode(text: str) -> str: ...
 def semaphore_decode(text: str) -> str: ...
+ImageTraversal = Literal[
+    "row", "column", "diagonal", "zigzag", "spiral_cw", "spiral_ccw",
+    "serpentine", "hilbert", "morton",
+]
+
+ImageProfileId = Literal[
+    "image.resize",
+    "image.warp",
+    "image.color.convert",
+    "image.quality.measure",
+    "image.filter",
+    "image.edge.response",
+    "image.edge.canny",
+    "image.mask.otsu",
+    "image.mask.morphology",
+    "image.mask.components",
+    "image.mask.flood",
+    "image.hough.lines",
+    "image.template.match",
+    "image.traversal.order",
+    "image.traversal.permute",
+    "image.png.scanlines",
+    "image.gif.indices",
+    "image.stereo.separate",
+    "image.stereo.anaglyph",
+    "image.hash.perceptual",
+    "image.qr.encode",
+    "image.barcode.scan",
+    "image.barcode.decode",
+]
+
+def execute_image_profile(
+    operation: ImageProfileId,
+    inputs: dict[str, Any],
+    parameters: dict[str, Any],
+) -> dict[str, Image | bytes | dict[str, Any] | list[list[int]]]: ...
 def image_pairs(
     images: list[Image],
     operation: str,
@@ -621,7 +657,7 @@ def text_grid(
     width: int,
     *,
     drop_whitespace: bool = False,
-    traversal: str = "row",
+    traversal: ImageTraversal = "row",
     colors: dict[str, list[int]] | None = None,
 ) -> dict[str, Any]: ...
 
@@ -878,7 +914,7 @@ class Image:
         region: tuple[int, int, int, int] | None = None,
         channels: list[str] | None = None,
         expand_palette: bool = False,
-        traversal: str = "row",
+        traversal: ImageTraversal = "row",
         start_corner: str = "top_left",
         reverse: bool = False,
     ) -> dict[str, Any]: ...
@@ -932,7 +968,7 @@ class Image:
         region: tuple[int, int, int, int] | None = None,
         channels: list[str] | None = None,
         bits: list[int] = ...,
-        traversal: str = "row",
+        traversal: ImageTraversal = "row",
         start_corner: str = "top_left",
         reverse: bool = False,
         bit_order: str = "msb",

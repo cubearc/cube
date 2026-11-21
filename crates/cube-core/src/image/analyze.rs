@@ -3,11 +3,11 @@ mod contracts;
 use super::{ColorModel, Image, invalid, limit};
 use crate::errors::OperationError;
 pub(crate) use contracts::CONTRACTS;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 /// Named physical sample channel. Palette expansion must be an explicit operation.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Channel {
     Red,

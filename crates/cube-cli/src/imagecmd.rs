@@ -8,6 +8,7 @@ use std::{error::Error, io::Write, path::PathBuf};
 mod csv;
 mod output;
 mod pairs;
+mod profiles;
 mod spatial;
 
 #[derive(Args)]
@@ -176,6 +177,8 @@ impl PixelOutput {
 
 #[derive(Subcommand)]
 pub(crate) enum ImageCommand {
+    /// Execute a bounded image profile with named JSON inputs and parameters
+    Profile(profiles::Args),
     /// Read quantized baseline JPEG DCT coefficient parity and exact bit counts (JSON)
     JpegCoefficients {
         #[command(flatten)]
@@ -494,6 +497,7 @@ pub(crate) fn run(
             "{}",
             serde_json::to_string(&image::dimensions::inspect(&Image::open(&path)?))?
         )?,
+        ImageCommand::Profile(args) => profiles::run(args, output)?,
         ImageCommand::Autocorrelation(args) => spatial::run(args, output)?,
         ImageCommand::Csv { command } => csv::run(command, output)?,
         ImageCommand::Pairs(args) => pairs::run(args, output)?,

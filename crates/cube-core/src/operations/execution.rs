@@ -11,6 +11,13 @@ use serde_json::{Value, json};
 use std::collections::BTreeMap;
 pub(crate) use values::{bytes, image, text};
 
+/// Convert a logical image samples port back into a validated native raster.
+pub fn decode_image_samples(
+    value: &Value,
+) -> std::result::Result<crate::image::Image, crate::errors::OperationError> {
+    portable::images::raster(value)
+}
+
 /// Transport capabilities, independent of an operation's semantic port types.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "snake_case")]

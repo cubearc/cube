@@ -114,6 +114,13 @@ fn every_coordinate_is_visited_once_for_all_small_shapes_corners_and_reversal() 
                     };
                     let order = Traversal::parse(name).unwrap();
                     let corner = Corner::parse(corner).unwrap();
+                    if matches!(order, Traversal::Hilbert | Traversal::Morton)
+                        && (w != h || !w.is_power_of_two())
+                    {
+                        assert!(order.coordinates(region, corner, false).is_err());
+                        assert!(order.coordinates(region, corner, true).is_err());
+                        continue;
+                    }
                     let mut iter = order.coordinates(region, corner, false).unwrap();
                     assert_eq!(iter.len(), (w * h) as usize);
                     let forward: Vec<_> = iter.by_ref().collect();

@@ -8,6 +8,45 @@ pub const MAX_WORK: usize = 16 * 1024 * 1024;
 pub const MAX_MEMORY: usize = 16 * 1024 * 1024;
 pub const MAX_REPORT: usize = 1024 * 1024;
 const OP: &str = "image.spatial.autocorrelation";
+
+/// Exact moments of at most 1 Mi pairs of 8-bit samples. Individual sums fit
+/// in u64; centered products use wider arithmetic.
+#[derive(Debug, Default, Serialize, schemars::JsonSchema)]
+pub struct PairMoments {
+    pub count: u64,
+    pub sum_x: u64,
+    pub sum_y: u64,
+    pub sum_x_squared: u64,
+    pub sum_y_squared: u64,
+    pub sum_xy: u64,
+    pub squared_difference: u64,
+}
+
+impl PairMoments {
+    pub(super) fn observe(&mut self, x: u8, y: u8) {
+        let (x, y) = (u64::from(x), u64::from(y));
+        self.count += 1;
+        self.sum_x += x;
+        self.sum_y += y;
+        self.sum_x_squared += x * x;
+        self.sum_y_squared += y * y;
+        self.sum_xy += x * y;
+        self.squared_difference += x.abs_diff(y).pow(2);
+    }
+
+    fn centered_xy(&self) -> i128 {
+        i128::from(self.count) * i128::from(self.sum_xy)
+            - i128::from(self.sum_x) * i128::from(self.sum_y)
+    }
+
+    pub(super) fn correlation(&self) -> Option<f64> {
+        let n = u128::from(self.count);
+        let vx = n * u128::from(self.sum_x_squared) - u128::from(self.sum_x).pow(2);
+        let vy = n * u128::from(self.sum_y_squared) - u128::from(self.sum_y).pow(2);
+        (vx != 0 && vy != 0)
+            .then(|| ((self.centered_xy() as f64) / ((vx * vy) as f64).sqrt()).clamp(-1., 1.))
+    }
+}
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Lag {
@@ -144,56 +183,32 @@ impl Image {
         let channels = self.model.channels();
         for &lag in lags {
             let (a, b) = overlap(region, lag)?;
-            let (mut sx, mut sy, mut xx, mut yy, mut xy, mut diff) =
-                (0u64, 0u64, 0u64, 0u64, 0u64, 0u64);
-            // At most 1 Mi pairs of 8-bit samples per lag. Each sum <=1 Mi*65025,
-            // proven to fit u64 by the validated model and region bounds.
+            let mut moments = PairMoments::default();
             for y in 0..a.height {
                 for x in 0..a.width {
-                    let u = u64::from(
-                        self.samples[((a.y + y) as usize * self.width as usize
-                            + (a.x + x) as usize)
+                    let value = |region: Region| {
+                        self.samples[((region.y + y) as usize * self.width as usize
+                            + (region.x + x) as usize)
                             * channels
-                            + index],
-                    );
-                    let v = u64::from(
-                        self.samples[((b.y + y) as usize * self.width as usize
-                            + (b.x + x) as usize)
-                            * channels
-                            + index],
-                    );
-                    sx += u;
-                    sy += v;
-                    xx += u * u;
-                    yy += v * v;
-                    xy += u * v;
-                    diff += u.abs_diff(v).pow(2);
+                            + index]
+                    };
+                    moments.observe(value(a), value(b));
                 }
             }
-            let count = u64::from(a.width) * u64::from(a.height);
-            let n = u128::from(count);
-            let vx = n * u128::from(xx) - u128::from(sx).pow(2);
-            let vy = n * u128::from(yy) - u128::from(sy).pow(2);
-            let centered = (n * u128::from(xy)) as i128 - (u128::from(sx) * u128::from(sy)) as i128;
-            let covariance = centered as f64 / (count as f64).powi(2);
-            let correlation = if vx == 0 || vy == 0 {
-                None
-            } else {
-                Some((centered as f64 / ((vx * vy) as f64).sqrt()).clamp(-1.0, 1.0))
-            };
             measurements.push(Measurement {
                 lag,
                 source_overlap: a,
                 target_overlap: b,
-                count,
-                sum_x: sx,
-                sum_y: sy,
-                sum_x_squared: xx,
-                sum_y_squared: yy,
-                sum_xy: xy,
-                squared_difference: diff,
-                population_covariance: covariance,
-                correlation,
+                count: moments.count,
+                sum_x: moments.sum_x,
+                sum_y: moments.sum_y,
+                sum_x_squared: moments.sum_x_squared,
+                sum_y_squared: moments.sum_y_squared,
+                sum_xy: moments.sum_xy,
+                squared_difference: moments.squared_difference,
+                population_covariance: moments.centered_xy() as f64
+                    / (moments.count as f64).powi(2),
+                correlation: moments.correlation(),
             });
         }
         Ok(Report {

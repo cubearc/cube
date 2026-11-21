@@ -175,6 +175,101 @@ a file. Optional export creates a new PNG from the exact candidate layout.
 Saved PNGs preserve samples, palette and transparency while dropping other
 metadata. Preserved samples do not imply byte-identical source files.
 
+## Raster profiles
+
+Image profiles take named ports. The [sample transformation guide](../../guides/images.md#run-an-image-profile)
+shows the shared request shape in the CLI, Python and JavaScript. Each operation's
+[reference](../operations.md#imageresize) lists its parameters and limits.
+
+| Operation | Profile |
+| --- | --- |
+| `image.resize` | Nearest, bilinear or Catmull–Rom bicubic with half-pixel centers and clamped edges. |
+| `image.warp` | An inverse affine or projective matrix maps destination pixel centers to source centers. Choose nearest or bilinear, with constant or clamped borders. |
+| `image.color.convert` | Encoded sRGB to HSV or HSL, or linearized sRGB through Bradford adaptation to CIELAB D50. Alpha is reported separately. |
+| `image.quality.measure` | MSE, PSNR or Gaussian 11 × 11 single-scale SSIM over the same region and selected physical channel. Exact matches have a null PSNR and a perfect-match flag. |
+| `image.filter` | Select physical channels for Gaussian or median filtering. Indexed input needs explicit palette expansion. |
+| `image.edge.response` / `image.edge.canny` | Signed Sobel, Prewitt or Laplacian samples, or a Canny mask with caller-provided low/high thresholds. |
+| `image.mask.*` | Otsu threshold, rectangle or cross morphology, ordered components and selection from explicit flood seeds. Masks use 0 and 255. |
+| `image.hough.lines` | Theta-major accumulator and peaks ordered by vote count, then bin position. |
+| `image.template.match` | SSD or zero-mean NCC over every valid position. A zero-variance NCC window has a null score. |
+| `image.stereo.separate` | Red/cyan channel separation or equal-width side-by-side views with explicit eye order. |
+| `image.stereo.anaglyph` | March 2009 Dubois red–cyan projection of two equal opaque sRGB views. Clip the two linear projections before combining and converting back to sRGB. |
+| `image.hash.perceptual` | `ahash8`, `dhash8` or `phash32-8-v1` return eight MSB-first bytes for comparing perceptual similarity. |
+
+Resize and warp sample alpha independently of other channels. Warp defaults to
+nearest and zero borders. Resize rounds clamped samples half up. Compare
+normalized floating-point reports with absolute or relative tolerance of
+`1e-9` and use `1e-6` absolute tolerance for Lab against external references.
+Dubois output may differ by one sample level at a floating-point rounding
+boundary. Integer counts, coordinates, bits and masks compare exactly.
+[CSS Color 4, 26 October 2026](https://www.w3.org/TR/2026/CRD-css-color-4-20261026/),
+[Wang et al. on SSIM](https://www.cns.nyu.edu/~lcv/ssim/index.html),
+[Dubois, March 2009](https://www.site.uottawa.ca/~edubois/anaglyph/LeastSquaresHowToPhotoshop.pdf)
+
+## Traversal and native samples
+
+`image.traversal.order` lists coordinates using an explicit corner, order and
+reversal. Serpentine alternates rows. Hilbert and Morton require square regions
+with power-of-two sides. Hilbert reflects the mathematical bottom-left path
+to the selected image corner. These three traversal names can also be used in
+pixel export, LSB extraction and scalar-grid rendering.
+`image.traversal.permute` checks a bijection over a rectangular region. Each
+entry gives the row-major source index for that destination position.
+
+`image.png.scanlines` requires a complete noninterlaced 8-bit PNG. The
+`filtered` profile keeps each row's filter byte with the filtered bytes.
+`reconstructed` returns the physical bytes after reversing the row filters.
+Both report the filtered offsets and SHA-256 of the original source.
+`image.gif.indices` reads frame zero of a complete single-frame GIF, returning
+the deinterlaced indices, active palette, transparency index and frame offset.
+Duplicate palette colors retain their original indices.
+[PNG specification](https://www.w3.org/TR/png-3/),
+[GIF89a specification](https://www.w3.org/Graphics/GIF/spec-gif89a.txt)
+
+## Visual codes
+
+`image.qr.encode` encodes QR Model 2 versions 1–40. Choose L, M, Q or H
+correction and provide exact bytes or explicit numeric, alphanumeric and byte
+segments. Supply mask 0–7 or omit it to evaluate all eight. The report includes
+the four penalty terms for each evaluated mask. The lowest mask number breaks
+ties. The `modules` port is one byte per module in row-major order, with 1 for
+dark. An optional gray raster defaults to a four-module quiet zone and a scale
+of one. [Nayuki QR Code generator 1.8.0](https://github.com/nayuki/QR-Code-generator/tree/v1.8.0)
+
+`image.barcode.scan` scans only the supplied gray/RGB image rows or explicit
+unsigned scanlines. Select `ean13`, `upca`, `code39` or `code128` plus
+`forward` or `reverse`. EAN-13, UPC-A and Code 128 require a valid checksum.
+Code 39 requires `none` or `mod43`. The report keeps positions in the caller's
+sample coordinates and includes Code 128 codewords. The batch is bounded to
+1,024 lines, 4,096 samples per line, 1 Mi total samples, 16 Mi work units and
+64 decoded symbols.
+
+`image.barcode.decode` takes opaque gray crops and a format of `data_matrix`,
+`aztec` or `pdf417`. Supply a clockwise normalization angle as `"0"`,
+`"90"`, `"180"` or `"270"`. Results give crop-relative points, decoded text,
+and original binary material when the decoder exposes it. Data Matrix and
+Aztec expose corrected bytes or bits and byte segments as available. PDF417
+exposes corrected integer codewords, correction level and the number of
+corrected errors. Read the crop status before using any payload.
+
+### Optical profile qualification
+
+The 21 November 2026 review selected [RXing 0.9.3](https://crates.io/crates/rxing/0.9.3)
+(Apache-2.0, Rust 1.85 minimum) for all three formats. Each call accepts up to
+eight candidates, up to 262,144 pixels and a 1,024-pixel side per crop, with
+32 Mi work units and 64 KiB of decoded material across the batch.
+
+| Format | Selected scope and work limit |
+| --- | --- |
+| Data Matrix ECC200 | One rectified symbol with a quiet zone. Use the pure-symbol reader and the pinned backend's ECC200 Reed–Solomon decoder. Structured-append control words are rejected. |
+| Aztec | One compact or full symbol. Use the pinned detector and its mode and data error correction. Budget the crop passes and bounded layer/codeword work before detection. |
+| Standard PDF417 | One rectified symbol with fixed horizontal module width and consistent row indicators. Use RXing's codeword table, prime-field error correction and compaction parser. Charge one correction attempt using the measured codeword count and parity before entering the backend. Macro and compact framing fall outside this profile. |
+
+The qualification fixtures include original ZXing Java encodings and the
+upstream compact Aztec and PDF417 samples. The tests exercise orientation,
+binary payloads, correction evidence, blank and adversarial crops.
+[ZXing 3.5.4](https://github.com/zxing/zxing/tree/zxing-3.5.4)
+
 ## Bit planes and LSB extraction
 
 A bit plane returns one 0/1 byte per selected pixel. Optional packing is MSB-first;

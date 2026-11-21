@@ -20,8 +20,9 @@ mod bounded_formats;
 
 mod files;
 mod formal;
+mod image_advanced;
 mod image_analysis;
-mod images;
+pub(super) mod images;
 mod linear;
 mod numbers;
 mod numeric_analysis;
@@ -69,6 +70,7 @@ const MODULES: &[(Supports, Invoke)] = &[
     (blockchain::supports, blockchain::execute),
     (bounded_formats::supports, bounded_formats::execute),
     (files::supports, files::execute),
+    (image_advanced::supports, image_advanced::execute),
     (image_analysis::supports, image_analysis::execute),
     (images::supports, images::execute),
     (representation::supports, representation::execute),

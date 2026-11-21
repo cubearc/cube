@@ -448,6 +448,8 @@ const MODULES: &[Module] = &[
     Module::plain(crate::text::word_ladder::OPERATIONS),
     Module::plain(crate::probability::OPERATIONS),
     Module::plain(crate::image::spatial::OPERATIONS),
+    Module::plain(crate::image::advanced_catalog::OPERATIONS)
+        .with_contracts(crate::image::advanced_catalog::CONTRACTS),
     crate::symbols::MODULE,
     crate::symbols::tokens::MODULE,
     crate::symbols::a1z26::MODULE,

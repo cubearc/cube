@@ -2,6 +2,11 @@
 use super::{Channel, ColorModel, Image, Region, invalid};
 use crate::errors::OperationError;
 
+pub(super) fn rgb_luma(pixel: &[u8]) -> u8 {
+    ((77 * u32::from(pixel[0]) + 150 * u32::from(pixel[1]) + 29 * u32::from(pixel[2]) + 128) >> 8)
+        as u8
+}
+
 impl Image {
     /// Rotate clockwise by canonical quarter-turn angles 0, 90, 180 or 270.
     /// Samples, indices, palette and tRNS are exact; other metadata is dropped.
@@ -196,11 +201,7 @@ impl Image {
                 let gray = if matches!(self.model, ColorModel::Gray | ColorModel::GrayAlpha) {
                     pixel[0]
                 } else {
-                    ((77 * u32::from(pixel[0])
-                        + 150 * u32::from(pixel[1])
-                        + 29 * u32::from(pixel[2])
-                        + 128)
-                        >> 8) as u8
+                    rgb_luma(pixel)
                 };
                 samples.push(gray);
                 if alpha {

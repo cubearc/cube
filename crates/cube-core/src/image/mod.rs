@@ -4,22 +4,37 @@
 //! unpremultiplied values. No gamma/profile conversion, compositing or normalization
 //! occurs. Indexed images retain indices, palette and tRNS independently.
 
+pub mod advanced_catalog;
 pub mod analyze;
+pub mod barcode;
+pub mod binary_grid;
 pub mod bitwise;
 pub mod dimensions;
 pub(crate) mod execution;
 pub use bitwise::BitwiseOperation;
+pub mod colorimetry;
 pub mod colors;
 pub mod csv;
 pub mod jpeg_coefficients;
 pub mod layers;
+pub mod matching;
+pub mod native_samples;
+pub mod optical;
 pub mod pairs;
+pub mod perceptual;
 pub use colors::{ColorLayer, ColorOutput};
 pub mod bits;
 pub mod decode;
+pub mod edges;
+pub mod filters;
+mod plane;
 pub mod qr;
+pub mod qr_encode;
+pub mod quality;
 pub mod raw;
+pub mod resample;
 pub mod spatial;
+pub mod stereo;
 pub mod stream;
 pub mod traversal;
 pub use bits::{BitOrder, BitPlane, Incomplete, LsbOptions, LsbResult, Traversal};
@@ -27,6 +42,7 @@ pub use raw::{RawInfo, RawLayout, SampleLayout};
 pub use stream::PixelStream;
 pub use traversal::Corner;
 pub mod transform;
+pub mod voting;
 pub use analyze::{Channel, Comparison, Histogram, PixelData, Region};
 
 use crate::{

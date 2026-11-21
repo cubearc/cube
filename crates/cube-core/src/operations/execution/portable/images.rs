@@ -32,7 +32,7 @@ fn invalid() -> OperationError {
         "use the exact logical raster fields and parameters",
     )
 }
-pub(super) fn raster(value: &Value) -> Result<Image, OperationError> {
+pub(in crate::operations::execution) fn raster(value: &Value) -> Result<Image, OperationError> {
     let model: String = super::field(value, "color_model")?;
     Image::from_samples(
         super::field(value, "width")?,

@@ -119,7 +119,7 @@ pub fn inspect(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationErr
         if n >= 2 && header[..2] == [255, 216] {
             jpeg(&mut f)
         } else if n >= 6 && [&b"GIF87a"[..], &b"GIF89a"[..]].contains(&&header[..6]) {
-            gif(&mut f)
+            gif(&mut f, false)
         } else {
             Err(unsupported(
                 "boundary inspection supports PNG, baseline JPEG, GIF and classic ZIP framing",
@@ -129,7 +129,20 @@ pub fn inspect(reader: &mut (impl Read + Seek)) -> Result<Boundary, OperationErr
     result.map_err(|e: OperationError| e.operation("file.appended.detect"))
 }
 
-fn gif(f: &mut Framing<impl Read + Seek>) -> Result<Boundary, OperationError> {
+pub(crate) fn single_gif(data: &[u8]) -> Result<Boundary, OperationError> {
+    if !data.starts_with(b"GIF87a") && !data.starts_with(b"GIF89a") {
+        return Err(unsupported("expected GIF87a or GIF89a framing"));
+    }
+    let mut reader = Framing {
+        reader: BufReader::new(std::io::Cursor::new(data)),
+        pos: 0,
+        total: data.len() as u64,
+        records: 0,
+    };
+    gif(&mut reader, true)
+}
+
+fn gif(f: &mut Framing<impl Read + Seek>, single: bool) -> Result<Boundary, OperationError> {
     let header = f.bytes(13)?;
     let word = |s: &[u8]| u16::from_le_bytes([s[0], s[1]]) as u32;
     let (width, height) = (word(&header[6..]), word(&header[8..]));
@@ -159,6 +172,9 @@ fn gif(f: &mut Framing<impl Read + Seek>) -> Result<Boundary, OperationError> {
                 return Ok(f.finish("gif","GIF header, palettes, raster/extension block lengths and trailer; LZW pixels are not decoded"));
             }
             0x2c => {
+                if single && images != 0 {
+                    return Err(unsupported("GIF indices require exactly one frame"));
+                }
                 let image = f.bytes(9)?;
                 let (x, y, w, h) = (
                     word(&image),

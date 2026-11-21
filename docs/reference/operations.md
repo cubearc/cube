@@ -41151,6 +41151,224 @@ Example:
 cube hash whirlpool --text abcd
 ```
 
+## image.barcode.decode
+
+Read Data Matrix ECC200, Aztec or PDF417 from explicitly selected opaque gray crops.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `crops` | `json` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "format": {
+      "$ref": "#/$defs/Format"
+    },
+    "orientation": {
+      "$ref": "#/$defs/Orientation"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "orientation"
+  ],
+  "$defs": {
+    "Format": {
+      "type": "string",
+      "enum": [
+        "data_matrix",
+        "aztec",
+        "pdf417"
+      ]
+    },
+    "Orientation": {
+      "type": "string",
+      "enum": [
+        "0",
+        "90",
+        "180",
+        "270"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile barcode-decode --input request.json
+```
+
+## image.barcode.scan
+
+Read one explicitly selected linear symbology on bounded rows and report checksum evidence.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Input | `rows` | `json` |
+| Input | `scanlines` | `json` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "scanlines": [
+      [
+        255,
+        255,
+        255,
+        255,
+        255
+      ]
+    ]
+  },
+  "parameters": {
+    "orientation": "forward",
+    "symbology": {
+      "kind": "ean13"
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScanOptions",
+  "type": "object",
+  "properties": {
+    "orientation": {
+      "$ref": "#/$defs/Orientation"
+    },
+    "symbology": {
+      "$ref": "#/$defs/Symbology"
+    },
+    "threshold": {
+      "type": "integer",
+      "format": "uint8",
+      "default": 128,
+      "maximum": 255,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "symbology",
+    "orientation"
+  ],
+  "$defs": {
+    "Code39Checksum": {
+      "type": "string",
+      "enum": [
+        "none",
+        "mod43"
+      ]
+    },
+    "Orientation": {
+      "type": "string",
+      "enum": [
+        "forward",
+        "reverse"
+      ]
+    },
+    "Symbology": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "ean13"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "upca"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "checksum": {
+              "$ref": "#/$defs/Code39Checksum"
+            },
+            "kind": {
+              "type": "string",
+              "const": "code39"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "checksum"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "code128"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile barcode-scan --input request.json
+```
+
 ## image.bit_plane.extract
 
 Extract one row-major sample bit as 0/1 values and MSB-first zero-padded bytes.
@@ -41424,6 +41642,81 @@ Example:
 
 ```sh
 cube image channel sample.png --channel red --output red.bin
+```
+
+## image.color.convert
+
+Measure explicit sRGB samples as HSV, HSL or Bradford-adapted CIELAB D50.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "/wAA"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "target": "hsv"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Color",
+  "type": "object",
+  "properties": {
+    "target": {
+      "$ref": "#/$defs/Target"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "target"
+  ],
+  "$defs": {
+    "Target": {
+      "type": "string",
+      "enum": [
+        "hsv",
+        "hsl",
+        "lab_d50"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile color --input request.json
 ```
 
 ## image.colors.export
@@ -42009,6 +42302,323 @@ Example:
 cube image dimensions sample.png
 ```
 
+## image.edge.canny
+
+Detect edges in an explicit grayscale channel with bounded Gaussian, Sobel and hysteresis stages.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `mask` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "channel": "gray",
+    "region": {
+      "height": 1,
+      "width": 1,
+      "x": 0,
+      "y": 0
+    },
+    "settings": {
+      "high": 2.0,
+      "low": 1.0
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canny",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "$ref": "#/$defs/Channel"
+    },
+    "region": {
+      "$ref": "#/$defs/Rect"
+    },
+    "settings": {
+      "$ref": "#/$defs/Canny"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "region",
+    "channel",
+    "settings"
+  ],
+  "$defs": {
+    "Canny": {
+      "type": "object",
+      "properties": {
+        "high": {
+          "type": "number",
+          "format": "double"
+        },
+        "low": {
+          "type": "number",
+          "format": "double"
+        },
+        "radius": {
+          "type": "integer",
+          "format": "uint8",
+          "default": 2,
+          "maximum": 15,
+          "minimum": 1
+        },
+        "sigma": {
+          "type": "number",
+          "format": "double",
+          "default": 1.0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "low",
+        "high"
+      ]
+    },
+    "Channel": {
+      "description": "Named physical sample channel. Palette expansion must be an explicit operation.",
+      "type": "string",
+      "enum": [
+        "red",
+        "green",
+        "blue",
+        "alpha",
+        "gray",
+        "index"
+      ]
+    },
+    "Rect": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile canny --input request.json
+```
+
+## image.edge.response
+
+Report signed Sobel, Prewitt or discrete Laplacian responses for one physical channel.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "channel": "gray",
+    "kernel": "laplacian",
+    "region": {
+      "height": 1,
+      "width": 1,
+      "x": 0,
+      "y": 0
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Edge",
+  "type": "object",
+  "properties": {
+    "border": {
+      "$ref": "#/$defs/EdgeBorder",
+      "default": "replicate"
+    },
+    "channel": {
+      "$ref": "#/$defs/Channel"
+    },
+    "kernel": {
+      "$ref": "#/$defs/EdgeKernel"
+    },
+    "magnitude": {
+      "type": "boolean",
+      "default": false
+    },
+    "region": {
+      "$ref": "#/$defs/Rect"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "region",
+    "channel",
+    "kernel"
+  ],
+  "$defs": {
+    "Channel": {
+      "description": "Named physical sample channel. Palette expansion must be an explicit operation.",
+      "type": "string",
+      "enum": [
+        "red",
+        "green",
+        "blue",
+        "alpha",
+        "gray",
+        "index"
+      ]
+    },
+    "EdgeBorder": {
+      "type": "string",
+      "enum": [
+        "replicate",
+        "constant_zero"
+      ]
+    },
+    "EdgeKernel": {
+      "type": "string",
+      "enum": [
+        "sobel",
+        "prewitt",
+        "laplacian"
+      ]
+    },
+    "Rect": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile edge --input request.json
+```
+
 ## image.encode
 
 Encode exact PNG8 samples, preserving palette/tRNS and dropping other metadata.
@@ -42063,6 +42673,190 @@ Example:
 
 ```sh
 cube image convert sample.png --output copy.png
+```
+
+## image.filter
+
+Smooth selected channels with a bounded Gaussian or median filter and an explicit border.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "filter": {
+      "kind": "median",
+      "width": 3
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Filter",
+  "type": "object",
+  "properties": {
+    "border": {
+      "$ref": "#/$defs/FilterBorder",
+      "default": {
+        "kind": "replicate"
+      }
+    },
+    "channels": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/Channel"
+      },
+      "maxItems": 4
+    },
+    "filter": {
+      "$ref": "#/$defs/Filter"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "filter"
+  ],
+  "$defs": {
+    "Channel": {
+      "description": "Named physical sample channel. Palette expansion must be an explicit operation.",
+      "type": "string",
+      "enum": [
+        "red",
+        "green",
+        "blue",
+        "alpha",
+        "gray",
+        "index"
+      ]
+    },
+    "Filter": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "gaussian"
+            },
+            "radius": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 15,
+              "minimum": 1
+            },
+            "sigma": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "radius",
+            "sigma"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "median"
+            },
+            "width": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 15,
+              "minimum": 3
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "width"
+          ]
+        }
+      ]
+    },
+    "FilterBorder": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "replicate"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "constant"
+            },
+            "sample": {
+              "type": "integer",
+              "format": "uint8",
+              "maximum": 255,
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "sample"
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile filter --input request.json
 ```
 
 ## image.geometry.inspect
@@ -42158,6 +42952,62 @@ Example:
 cube image raw pixels.bin --width 2 --height 1 --layout rgba --compare-header
 ```
 
+## image.gif.indices
+
+Read exact deinterlaced GIF indices, active palette and frame offset for one indexed frame.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `source` | `bytes` |
+| Output | `indices` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "source": {
+      "base64": "R0lGODlhBAADAIAAAAoUHgoUHiH5BAEAAAEALAEAAQACAAEAAAICDAoAOw=="
+    }
+  },
+  "parameters": {}
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gif",
+  "type": "object",
+  "properties": {
+    "frame_index": {
+      "type": "integer",
+      "format": "uint32",
+      "default": 0,
+      "maximum": 0,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}
+```
+
+Example:
+
+```sh
+cube image profile gif-indices --input request.json
+```
+
 ## image.grayscale
 
 Lossy color reduction using (77R+150G+29B+128)>>8 without gamma conversion; preserve alpha.
@@ -42220,6 +43070,82 @@ Example:
 
 ```sh
 cube image grayscale sample.png --output gray.png
+```
+
+## image.hash.perceptual
+
+Compute a versioned opaque-image average, difference or DCT similarity digest.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `output` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "profile": "ahash8"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Perceptual",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "Profile": {
+      "type": "string",
+      "enum": [
+        "ahash8",
+        "dhash8",
+        "phash32-8-v1"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile perceptual-hash --input request.json
 ```
 
 ## image.histogram
@@ -42322,6 +43248,173 @@ Example:
 
 ```sh
 cube image histogram sample.png --json
+```
+
+## image.hough.lines
+
+Vote for polar lines in an explicit binary edge mask and return bounded ordered peaks.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `mask` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "mask": {
+      "base64": "/w=="
+    }
+  },
+  "parameters": {
+    "height": 1,
+    "options": {
+      "theta_bins": 1
+    },
+    "width": 1
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hough",
+  "type": "object",
+  "properties": {
+    "height": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "options": {
+      "$ref": "#/$defs/HoughOptions"
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "options"
+  ],
+  "$defs": {
+    "HoughOptions": {
+      "type": "object",
+      "properties": {
+        "max_peaks": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 32,
+              "maximum": 256,
+              "minimum": 1,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 32,
+                "format": "uint",
+                "maximum": 256,
+                "minimum": 1,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 32,
+          "x-cube-integer": {
+            "default": 32,
+            "format": "uint",
+            "maximum": 256,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "minimum_votes": {
+          "type": "integer",
+          "format": "uint32",
+          "default": 1,
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "rho_step": {
+          "type": "number",
+          "format": "double",
+          "default": 1.0
+        },
+        "theta_bins": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "maximum": 720,
+              "minimum": 1,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "format": "uint",
+                "maximum": 720,
+                "minimum": 1,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "x-cube-integer": {
+            "format": "uint",
+            "maximum": 720,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "theta_bins"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile hough --input request.json
 ```
 
 ## image.invert
@@ -42640,7 +43733,7 @@ Parameters:
       ]
     },
     "traversal": {
-      "description": "Row/column, anti-diagonals, alternating zigzag or clockwise/counterclockwise inward spiral.",
+      "description": "Select row, column, diagonal, zigzag, directed spiral, serpentine, Hilbert or Morton order.",
       "type": "string",
       "default": "row",
       "enum": [
@@ -42649,7 +43742,10 @@ Parameters:
         "diagonal",
         "zigzag",
         "spiral_cw",
-        "spiral_ccw"
+        "spiral_ccw",
+        "serpentine",
+        "hilbert",
+        "morton"
       ]
     }
   },
@@ -42662,6 +43758,436 @@ Example:
 
 ```sh
 cube image lsb sample.png --channels red --bits 0 --bit-order msb --stdout
+```
+
+## image.mask.components
+
+Label binary components in first-pixel row-major order and report their area and bounds.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `mask` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "mask": {
+      "base64": "/wA="
+    }
+  },
+  "parameters": {
+    "connectivity": "four",
+    "height": 1,
+    "width": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Components",
+  "type": "object",
+  "properties": {
+    "connectivity": {
+      "$ref": "#/$defs/Connectivity"
+    },
+    "height": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "connectivity"
+  ],
+  "$defs": {
+    "Connectivity": {
+      "type": "string",
+      "enum": [
+        "four",
+        "eight"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile components --input request.json
+```
+
+## image.mask.flood
+
+Select the union of the foreground components containing the supplied seeds.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `mask` | `bytes` |
+| Input | `seeds` | `json` |
+| Output | `mask` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "mask": {
+      "base64": "/wA="
+    },
+    "seeds": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ]
+    ]
+  },
+  "parameters": {
+    "connectivity": "four",
+    "height": 1,
+    "width": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Components",
+  "type": "object",
+  "properties": {
+    "connectivity": {
+      "$ref": "#/$defs/Connectivity"
+    },
+    "height": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "connectivity"
+  ],
+  "$defs": {
+    "Connectivity": {
+      "type": "string",
+      "enum": [
+        "four",
+        "eight"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile flood --input request.json
+```
+
+## image.mask.morphology
+
+Erode or dilate an exact binary mask with a bounded rectangular or cross-shaped element.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `mask` | `bytes` |
+| Output | `mask` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "mask": {
+      "base64": "/wA="
+    }
+  },
+  "parameters": {
+    "height": 1,
+    "operation": "dilate",
+    "width": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Morphology",
+  "type": "object",
+  "properties": {
+    "element": {
+      "$ref": "#/$defs/Element",
+      "default": {
+        "height": 3,
+        "shape": "rectangle",
+        "width": 3
+      }
+    },
+    "height": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "iterations": {
+      "type": "integer",
+      "format": "uint8",
+      "default": 1,
+      "maximum": 16,
+      "minimum": 1
+    },
+    "operation": {
+      "$ref": "#/$defs/Morphology"
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "operation"
+  ],
+  "$defs": {
+    "Element": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 31,
+          "minimum": 1
+        },
+        "shape": {
+          "$ref": "#/$defs/ElementShape"
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 31,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height",
+        "shape"
+      ]
+    },
+    "ElementShape": {
+      "type": "string",
+      "enum": [
+        "rectangle",
+        "cross"
+      ]
+    },
+    "Morphology": {
+      "type": "string",
+      "enum": [
+        "erode",
+        "dilate"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile morphology --input request.json
+```
+
+## image.mask.otsu
+
+Threshold one physical channel using exact Otsu histogram comparisons and a stable tie rule.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `mask` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AgY="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "channel": "gray",
+    "region": {
+      "height": 1,
+      "width": 2,
+      "x": 0,
+      "y": 0
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Selected",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "$ref": "#/$defs/Channel"
+    },
+    "region": {
+      "$ref": "#/$defs/Rect"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "region",
+    "channel"
+  ],
+  "$defs": {
+    "Channel": {
+      "description": "Named physical sample channel. Palette expansion must be an explicit operation.",
+      "type": "string",
+      "enum": [
+        "red",
+        "green",
+        "blue",
+        "alpha",
+        "gray",
+        "index"
+      ]
+    },
+    "Rect": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile otsu --input request.json
 ```
 
 ## image.mirror
@@ -43006,7 +44532,7 @@ Parameters:
       ]
     },
     "traversal": {
-      "description": "Row/column, anti-diagonals, alternating zigzag or clockwise/counterclockwise inward spiral.",
+      "description": "Select row, column, diagonal, zigzag, directed spiral, serpentine, Hilbert or Morton order.",
       "type": "string",
       "default": "row",
       "enum": [
@@ -43015,7 +44541,10 @@ Parameters:
         "diagonal",
         "zigzag",
         "spiral_cw",
-        "spiral_ccw"
+        "spiral_ccw",
+        "serpentine",
+        "hilbert",
+        "morton"
       ]
     }
   },
@@ -43174,6 +44703,72 @@ Example:
 cube image chunks sample.png --json
 ```
 
+## image.png.scanlines
+
+Read strict noninterlaced PNG8 filtered or reconstructed native scanlines.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `source` | `bytes` |
+| Output | `data` | `bytes` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "source": {
+      "base64": "iVBORw0KGgoAAAANSUhEUgAAAAMAAAAFCAAAAAClGgl+AAAAAklEQVR4nGKkkSsAAAAaSURBVGNg+s/IyMzCyMTw7yczM/MfFtafTAAsvgUOLMbMDgAAAABJRU5ErkJggg=="
+    }
+  },
+  "parameters": {
+    "profile": "reconstructed"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scanlines",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/PngProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "PngProfile": {
+      "type": "string",
+      "enum": [
+        "filtered",
+        "reconstructed"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile png-scanlines --input request.json
+```
+
 ## image.qr.decode
 
 Decode bounded QR symbols as raw bytes, separating no detection, undecodable candidates and decoded payloads.
@@ -43215,6 +44810,277 @@ Example:
 
 ```sh
 cube image qr code.png --json
+```
+
+## image.qr.encode
+
+Generate QR Model 2 modules from explicit segments with a forced or scored mask and an optional gray raster.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `data` | `bytes` |
+| Input | `segments` | `json` |
+| Output | `modules` | `bytes` |
+| Output | `report` | `json` |
+| Output | `raster` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "data": {
+      "base64": "AP8="
+    }
+  },
+  "parameters": {
+    "ecc": "L",
+    "mask": 0,
+    "version": 1
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Options",
+  "type": "object",
+  "properties": {
+    "ecc": {
+      "$ref": "#/$defs/Ecc"
+    },
+    "mask": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint8",
+      "maximum": 7,
+      "minimum": 0
+    },
+    "raster": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Raster"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint8",
+      "maximum": 40,
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "ecc"
+  ],
+  "$defs": {
+    "Ecc": {
+      "type": "string",
+      "enum": [
+        "L",
+        "M",
+        "Q",
+        "H"
+      ]
+    },
+    "Raster": {
+      "type": "object",
+      "properties": {
+        "quiet_zone": {
+          "type": "integer",
+          "format": "uint16",
+          "default": 4,
+          "maximum": 65535,
+          "minimum": 0
+        },
+        "scale": {
+          "type": "integer",
+          "format": "uint8",
+          "default": 1,
+          "maximum": 16,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile qr-encode --input request.json
+```
+
+## image.quality.measure
+
+Measure exact squared error, PSNR or single-scale SSIM on a selected physical channel.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `image.samples` |
+| Input | `right` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    },
+    "right": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "channel": "gray",
+    "metric": "psnr",
+    "region": {
+      "height": 1,
+      "width": 1,
+      "x": 0,
+      "y": 0
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Quality",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "$ref": "#/$defs/Channel"
+    },
+    "metric": {
+      "$ref": "#/$defs/Metric"
+    },
+    "region": {
+      "$ref": "#/$defs/Rect"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "region",
+    "channel",
+    "metric"
+  ],
+  "$defs": {
+    "Channel": {
+      "description": "Named physical sample channel. Palette expansion must be an explicit operation.",
+      "type": "string",
+      "enum": [
+        "red",
+        "green",
+        "blue",
+        "alpha",
+        "gray",
+        "index"
+      ]
+    },
+    "Metric": {
+      "type": "string",
+      "enum": [
+        "mse",
+        "psnr",
+        "ssim"
+      ]
+    },
+    "Rect": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile quality --input request.json
 ```
 
 ## image.raw.interpret
@@ -43399,6 +45265,97 @@ Example:
 cube image reorder sample.png --channels blue,green,red,alpha --output reordered.png
 ```
 
+## image.resize
+
+Resize physical channels using half-pixel centers and the selected nearest, bilinear or bicubic kernel.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `output` | `image.samples` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AgY="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "height": 1,
+    "kernel": "bilinear",
+    "width": 1
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Resize",
+  "type": "object",
+  "properties": {
+    "height": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "kernel": {
+      "$ref": "#/$defs/Kernel"
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "kernel"
+  ],
+  "$defs": {
+    "Kernel": {
+      "type": "string",
+      "enum": [
+        "nearest",
+        "bilinear",
+        "bicubic"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile resize --input request.json
+```
+
 ## image.rotate
 
 Rotate exact samples clockwise by 0/90/180/270; no interpolation.
@@ -43573,6 +45530,793 @@ Example:
 
 ```sh
 cube image autocorrelation --input stripes.png --region 0,0,4,1 --channel gray --lags '[{"dx":1,"dy":0}]'
+```
+
+## image.stereo.anaglyph
+
+Project a pair of opaque sRGB views using the pinned March 2009 Dubois red-cyan matrices.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `left` | `image.samples` |
+| Input | `right` | `image.samples` |
+| Output | `output` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "left": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "/wAA"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    },
+    "right": {
+      "color_model": "rgb",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AAAA"
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "profile": "dubois-redcyan-2009"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Anaglyph",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "$ref": "#/$defs/AnaglyphProfile"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "profile"
+  ],
+  "$defs": {
+    "AnaglyphProfile": {
+      "type": "string",
+      "enum": [
+        "dubois-redcyan-2009"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile anaglyph --input request.json
+```
+
+## image.stereo.separate
+
+Separate explicit red-cyan channels or equal-width side-by-side stereo eyes.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `left` | `image.samples` |
+| Output | `right` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AgY="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "mode": "side_by_side"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stereo",
+  "type": "object",
+  "properties": {
+    "eye_order": {
+      "$ref": "#/$defs/EyeOrder",
+      "default": "left_right"
+    },
+    "mode": {
+      "$ref": "#/$defs/Mode"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "mode"
+  ],
+  "$defs": {
+    "EyeOrder": {
+      "type": "string",
+      "enum": [
+        "left_right",
+        "right_left"
+      ]
+    },
+    "Mode": {
+      "type": "string",
+      "enum": [
+        "red_cyan",
+        "side_by_side"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile stereo --input request.json
+```
+
+## image.template.match
+
+Compare valid template locations using SSD or zero-mean NCC and exact sample moments.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Input | `template` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    },
+    "template": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "Aw=="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 1
+    }
+  },
+  "parameters": {
+    "channel": "gray",
+    "options": {
+      "metric": "ncc"
+    },
+    "template_channel": "gray"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Template",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "$ref": "#/$defs/Channel"
+    },
+    "options": {
+      "$ref": "#/$defs/TemplateOptions"
+    },
+    "template_channel": {
+      "$ref": "#/$defs/Channel"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "channel",
+    "template_channel",
+    "options"
+  ],
+  "$defs": {
+    "Channel": {
+      "description": "Named physical sample channel. Palette expansion must be an explicit operation.",
+      "type": "string",
+      "enum": [
+        "red",
+        "green",
+        "blue",
+        "alpha",
+        "gray",
+        "index"
+      ]
+    },
+    "Metric": {
+      "type": "string",
+      "enum": [
+        "ssd",
+        "ncc"
+      ]
+    },
+    "TemplateOptions": {
+      "type": "object",
+      "properties": {
+        "best": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "uint",
+              "default": 16,
+              "maximum": 256,
+              "minimum": 1,
+              "x-cube-maximum-decimal": "18446744073709551615",
+              "x-cube-minimum-decimal": "0"
+            },
+            {
+              "type": "string",
+              "maxLength": 40,
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "x-cube-native-integer": {
+                "default": 16,
+                "format": "uint",
+                "maximum": 256,
+                "minimum": 1,
+                "type": "integer",
+                "x-cube-maximum-decimal": "18446744073709551615",
+                "x-cube-minimum-decimal": "0"
+              }
+            }
+          ],
+          "default": 16,
+          "x-cube-integer": {
+            "default": 16,
+            "format": "uint",
+            "maximum": 256,
+            "minimum": 1,
+            "type": "integer",
+            "x-cube-maximum-decimal": "18446744073709551615",
+            "x-cube-minimum-decimal": "0"
+          }
+        },
+        "dense": {
+          "type": "boolean",
+          "default": false
+        },
+        "metric": {
+          "$ref": "#/$defs/Metric"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "metric"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile template --input request.json
+```
+
+## image.traversal.order
+
+List checked coordinates in the selected explicit corner, traversal and reversal order.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Output | `coordinates` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {},
+  "parameters": {
+    "region": {
+      "height": 2,
+      "width": 2,
+      "x": 0,
+      "y": 0
+    },
+    "traversal": "hilbert"
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Order",
+  "type": "object",
+  "properties": {
+    "corner": {
+      "$ref": "#/$defs/Corner",
+      "default": "top_left"
+    },
+    "region": {
+      "$ref": "#/$defs/Rect"
+    },
+    "reverse": {
+      "type": "boolean",
+      "default": false
+    },
+    "traversal": {
+      "$ref": "#/$defs/Traversal"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "region",
+    "traversal"
+  ],
+  "$defs": {
+    "Corner": {
+      "type": "string",
+      "enum": [
+        "top_left",
+        "top_right",
+        "bottom_right",
+        "bottom_left"
+      ]
+    },
+    "Rect": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    },
+    "Traversal": {
+      "type": "string",
+      "enum": [
+        "row",
+        "column",
+        "diagonal",
+        "zigzag",
+        "spiral_cw",
+        "spiral_ccw",
+        "serpentine",
+        "hilbert",
+        "morton"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile traversal --input request.json
+```
+
+## image.traversal.permute
+
+Validate a rectangular destination-to-source bijection and return its exact source coordinates.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `indices` | `json` |
+| Output | `coordinates` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "indices": [
+      1,
+      0
+    ]
+  },
+  "parameters": {
+    "region": {
+      "height": 1,
+      "width": 2,
+      "x": 0,
+      "y": 0
+    }
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Permutation",
+  "type": "object",
+  "properties": {
+    "region": {
+      "$ref": "#/$defs/Rect"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "region"
+  ],
+  "$defs": {
+    "Rect": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        },
+        "y": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile permutation --input request.json
+```
+
+## image.warp
+
+Apply a finite inverse affine or projective matrix with an explicit interpolation and border.
+
+Category: `image`. Contract: 1. Pipeline adapter: none (direct API).
+
+Play execution: check availability and constraints in the installed native runtime's operation catalog. Direct API or pipeline support alone does not authorize a Play call.
+
+| Direction | Port | Semantic type |
+| --- | --- | --- |
+| Input | `input` | `image.samples` |
+| Output | `output` | `image.samples` |
+| Output | `report` | `json` |
+
+Full named schemas, error/limit and privacy policy: [canonical catalog](../../contracts/v1/catalog.json). Real-result example: [synthetic conformance matrix](../../crates/cube-core/src/operations/contracts/conformance.json).
+
+Typed example (validated by the complete conformance matrix):
+
+```json
+{
+  "inputs": {
+    "input": {
+      "color_model": "gray",
+      "height": 1,
+      "palette": [],
+      "samples": {
+        "base64": "AgY="
+      },
+      "transparency": {
+        "base64": ""
+      },
+      "width": 2
+    }
+  },
+  "parameters": {
+    "height": 1,
+    "transform": {
+      "kind": "affine",
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ]
+      ]
+    },
+    "width": 2
+  }
+}
+```
+
+
+Parameters:
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Warp",
+  "type": "object",
+  "properties": {
+    "border": {
+      "$ref": "#/$defs/Border",
+      "default": {
+        "kind": "constant",
+        "samples": []
+      }
+    },
+    "height": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    },
+    "kernel": {
+      "$ref": "#/$defs/WarpKernel",
+      "default": "nearest"
+    },
+    "transform": {
+      "$ref": "#/$defs/Transform"
+    },
+    "width": {
+      "type": "integer",
+      "format": "uint32",
+      "maximum": 4294967295,
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "width",
+    "height",
+    "transform"
+  ],
+  "$defs": {
+    "Border": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "clamp"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "constant"
+            },
+            "samples": {
+              "description": "Omit or supply an empty vector for zero on every physical channel.",
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "integer",
+                "format": "uint8",
+                "maximum": 255,
+                "minimum": 0
+              },
+              "maxItems": 4
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "Transform": {
+      "description": "An inverse transform maps destination integer centers to source coordinates.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "affine"
+            },
+            "matrix": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "maxItems": 3,
+                "minItems": 3
+              },
+              "maxItems": 2,
+              "minItems": 2
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "matrix"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "projective"
+            },
+            "matrix": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "maxItems": 3,
+                "minItems": 3
+              },
+              "maxItems": 3,
+              "minItems": 3
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "matrix"
+          ]
+        }
+      ]
+    },
+    "WarpKernel": {
+      "type": "string",
+      "enum": [
+        "nearest",
+        "bilinear"
+      ]
+    }
+  }
+}
+```
+
+Example:
+
+```sh
+cube image profile warp --input request.json
 ```
 
 ## investigation.profile.plan
@@ -50334,7 +53078,10 @@ Parameters:
         "diagonal",
         "zigzag",
         "spiral_cw",
-        "spiral_ccw"
+        "spiral_ccw",
+        "serpentine",
+        "hilbert",
+        "morton"
       ]
     },
     "width": {

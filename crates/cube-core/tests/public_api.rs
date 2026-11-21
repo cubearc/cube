@@ -120,7 +120,7 @@ fn legacy_errors_keep_stable_categories_and_operation_context() {
 fn file_parameter_descriptors_cover_exact_types_defaults_and_limits() {
     use cube_core::operations::{self, ParameterValue as V};
     assert_eq!(operations::catalog().len(), 635);
-    assert_eq!(operations::filtered(Some("file")).unwrap().len(), 11);
+    assert_eq!(operations::filtered(Some("file")).unwrap().len(), 17);
     assert!(operations::filtered(None).is_ok());
     assert!(operations::filtered(Some("missing")).is_err());
     assert!(operations::require("missing").is_err());

@@ -182,8 +182,8 @@ metadata. Preserved samples do not imply byte-identical source files.
 ## Raster profiles
 
 Image profiles take named ports. The [sample transformation guide](../../guides/images.md#run-an-image-profile)
-shows the shared request shape in the CLI, Python and JavaScript. Each operation's
-[reference](../operations.md#imageresize) lists its parameters and limits.
+shows the shared request shape in the CLI, Python and JavaScript. The
+[operation reference](../operations.md) lists each profile's parameters and limits.
 
 | Operation | Profile |
 | --- | --- |

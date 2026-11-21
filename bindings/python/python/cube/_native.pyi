@@ -605,9 +605,17 @@ def clock_directions(
 ) -> dict[str, Any]: ...
 def semaphore_encode(text: str) -> str: ...
 def semaphore_decode(text: str) -> str: ...
+
 ImageTraversal = Literal[
-    "row", "column", "diagonal", "zigzag", "spiral_cw", "spiral_ccw",
-    "serpentine", "hilbert", "morton",
+    "row",
+    "column",
+    "diagonal",
+    "zigzag",
+    "spiral_cw",
+    "spiral_ccw",
+    "serpentine",
+    "hilbert",
+    "morton",
 ]
 
 ImageProfileId = Literal[

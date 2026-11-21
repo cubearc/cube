@@ -20,11 +20,18 @@ test('all module-owned direct executors retain canonical named inputs, outputs a
     const fixture = fixtures.find(row => row.operation === executor.operation);
     assert.ok(fixture, executor.operation);
     const request = { operation: executor.operation, version: fixture.operation_version, inputs: fixture.inputs, parameters: fixture.parameters };
-    let actual;
     try {
-      actual = JSON.parse(wasm.execute_json(JSON.stringify(request)));
-      await verifyFixtureResult({fixture,actual,contract:contracts.get(fixture.operation),execute});
-      assert.deepEqual(Object.keys(executor.outputs).sort(), Object.keys(actual).sort());
+      const contract = contracts.get(fixture.operation);
+      const actual = execute(request);
+      await verifyFixtureResult({ fixture, actual, contract, execute });
+      for (const direction of ['inputs', 'outputs']) {
+        assert.deepEqual(Object.keys(executor[direction]).sort(), contract[direction].map(port => port.name).sort());
+      }
+      const expectedOutputs = contract.outputs
+        .filter(port => port.required || Object.hasOwn(fixture.outputs, port.name))
+        .map(port => port.name)
+        .sort();
+      assert.deepEqual(Object.keys(actual).sort(), expectedOutputs);
     } catch (error) {
       failures.push(`${executor.operation}: ${String(error.message ?? error).slice(0, 1600)}`);
     }

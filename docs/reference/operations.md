@@ -2102,17 +2102,11 @@ Parameters:
   ],
   "$defs": {
     "Profile": {
-      "oneOf": [
-        {
-          "description": "16-bit inclusive intervals and E1/E2/E3 renormalization.",
-          "type": "string",
-          "const": "arithmetic16"
-        },
-        {
-          "description": "32-bit half-open byte range and a delayed carry.",
-          "type": "string",
-          "const": "range32"
-        }
+      "description": "Select Witten–Neal–Cleary inclusive intervals or byte-renormalized delayed-carry ranges.",
+      "type": "string",
+      "enum": [
+        "arithmetic16",
+        "range32"
       ]
     }
   }
@@ -2185,17 +2179,11 @@ Parameters:
   ],
   "$defs": {
     "Profile": {
-      "oneOf": [
-        {
-          "description": "16-bit inclusive intervals and E1/E2/E3 renormalization.",
-          "type": "string",
-          "const": "arithmetic16"
-        },
-        {
-          "description": "32-bit half-open byte range and a delayed carry.",
-          "type": "string",
-          "const": "range32"
-        }
+      "description": "Select Witten–Neal–Cleary inclusive intervals or byte-renormalized delayed-carry ranges.",
+      "type": "string",
+      "enum": [
+        "arithmetic16",
+        "range32"
       ]
     }
   }

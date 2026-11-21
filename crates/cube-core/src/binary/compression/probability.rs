@@ -11,12 +11,11 @@ pub const MAX_SYMBOLS: usize = 65_536;
 pub const MAX_WIRE_BYTES: usize = 4 * MAX_SYMBOLS + 5;
 const MAX_TOTAL: u64 = 16_383;
 
+/// Select Witten–Neal–Cleary inclusive intervals or byte-renormalized delayed-carry ranges.
 #[derive(Clone, Copy, Debug, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Profile {
-    /// 16-bit inclusive intervals and E1/E2/E3 renormalization.
     Arithmetic16,
-    /// 32-bit half-open byte range and a delayed carry.
     Range32,
 }
 

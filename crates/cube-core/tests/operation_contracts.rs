@@ -215,3 +215,18 @@ fn tagged_compression_parameters_expose_fields_and_enforce_the_selected_variant(
             .is_err()
     );
 }
+
+#[test]
+fn entropy_profiles_are_a_string_selector_for_portable_forms() {
+    for id in ["binary.entropy.encode", "binary.entropy.decode"] {
+        let contract = operations::require(id).unwrap().contract().unwrap();
+        let schema = contract.parameters.as_value();
+        let profile = &schema["properties"]["profile"];
+        let selector = profile["$ref"]
+            .as_str()
+            .and_then(|value| value.strip_prefix("#/$defs/"))
+            .map_or(profile, |name| &schema["$defs"][name]);
+        assert_eq!(selector["type"], "string");
+        assert_eq!(selector["enum"], json!(["arithmetic16", "range32"]));
+    }
+}

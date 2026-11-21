@@ -43,6 +43,10 @@ claiming original encoded bytes or preserved source samples.
 non-PNG inputs; use provenance for the origin. Decoding an exported PNG records
 that immediate source, not its earlier transformation history.
 
+For the warp and stereo profiles, Rust and Python retain provenance from a
+supplied native `Image`. A logical `image.samples` port carries sample data
+and reports constructed-sample provenance.
+
 ## Coordinates, channels and histograms
 
 | Setting | Rule |

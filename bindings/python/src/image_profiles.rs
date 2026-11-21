@@ -3,7 +3,10 @@ use super::{discrete_transport::typed_document, file_error, image::PyImage, stru
 use cube_core::{
     encoding,
     errors::{ErrorCode, OperationError},
-    image::advanced_catalog::{MAX_DOCUMENT, OPERATIONS},
+    image::{
+        advanced_catalog::{MAX_DOCUMENT, OPERATIONS},
+        stereo::Source,
+    },
     operations::{
         contracts::values,
         execution::{self, Budget, InvocationError},
@@ -17,11 +20,6 @@ use serde_json::{Map, Value, json};
 
 fn failure(id: &'static str, code: ErrorCode, message: &'static str) -> PyErr {
     file_error(OperationError::new(code, message).operation(id))
-}
-
-fn logical_image(value: &Bound<'_, PyAny>) -> PyResult<Value> {
-    let native = value.extract::<PyRef<'_, PyImage>>()?;
-    Ok(json!(values::Image::from(&native.inner)))
 }
 
 fn json_value(value: &Bound<'_, PyAny>, limit: usize, id: &'static str) -> PyResult<Value> {
@@ -57,6 +55,7 @@ pub fn execute_image_profile<'py>(
     let bound = |limit: Option<u64>| limit.unwrap_or(u64::MAX).min(MAX_DOCUMENT as u64) as usize;
     let input_limit = bound(contract.limits.max_input_bytes);
     let mut fields = Map::new();
+    let mut provenance = Map::new();
     for (key, value) in inputs.iter() {
         let key = key.extract::<String>()?;
         let port = contract
@@ -71,7 +70,12 @@ pub fn execute_image_profile<'py>(
                 )
             })?;
         let value = match port.semantic_type.as_str() {
-            "image.samples" => logical_image(&value)?,
+            "image.samples" => {
+                let native = value.extract::<PyRef<'_, PyImage>>()?;
+                let image = &native.inner;
+                provenance.insert(key.clone(), json!(Source::from(image)));
+                json!(values::Image::from(image))
+            }
             "bytes" => {
                 let raw = value.cast::<PyBytes>()?.as_bytes();
                 if raw.len() > input_limit {
@@ -119,7 +123,7 @@ pub fn execute_image_profile<'py>(
         ..Budget::default()
     };
     let parameters = json_value(parameters.as_any(), input_limit, id)?;
-    let result = execution::invoke(
+    let mut result = execution::invoke(
         id,
         contract.operation_version,
         &Value::Object(fields),
@@ -134,6 +138,17 @@ pub fn execute_image_profile<'py>(
             "image profile invocation failed",
         ),
     })?;
+    // A logical samples port omits codec history. Native callers supplied the
+    // validated Image itself, so keep that original evidence where reported.
+    match id {
+        "image.warp" | "image.stereo.separate" => {
+            result["report"]["source"] = provenance.remove("input").expect("validated source");
+        }
+        "image.stereo.anaglyph" => {
+            result["report"]["sources"] = json!([provenance["left"], provenance["right"]]);
+        }
+        _ => {}
+    }
     let output = PyDict::new(py);
     for port in &contract.outputs {
         let Some(value) = result.get(&port.name) else {

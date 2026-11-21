@@ -93,3 +93,17 @@ def test_existing_native_exports_share_new_traversals():
     assert raster.lsb(traversal="serpentine", incomplete="pad")["data"] == b"\x90"
     grid = cube.text_grid("ABCD", 2, traversal="hilbert")
     assert grid["rows"] == [["A", "D"], ["B", "C"]]
+
+
+def test_native_source_provenance_survives_profile_invocation(tmp_path):
+    path = tmp_path / "view.png"
+    cube.Image.from_samples(2, 1, "gray", b"\x00\xff").save_png(path)
+    decoded = cube.Image.open(path)
+    result = cube.execute_image_profile(
+        "image.stereo.separate",
+        {"input": decoded},
+        {"mode": "side_by_side"},
+    )
+    assert result["report"]["source"]["representation"] == "native_png8_samples"
+    assert result["left"].samples == b"\x00"
+    assert result["right"].samples == b"\xff"

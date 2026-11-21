@@ -7,6 +7,7 @@ use std::{
 };
 use syn::{
     Expr, Item,
+    parse::{ParseStream, Parser},
     visit::{self, Visit},
 };
 
@@ -71,6 +72,22 @@ impl<'ast> Visit<'ast> for Ids<'_> {
             self.ids.insert(value);
         }
         visit::visit_expr_call(self, expr);
+    }
+    fn visit_expr_macro(&mut self, expr: &'ast syn::ExprMacro) {
+        if expr.mac.path.is_ident("row") {
+            // Bounded-format rows put the ID first, then use non-Rust `=>`
+            // separators. Parse only the leading expression.
+            let first = |input: ParseStream<'_>| {
+                let id = input.parse::<Expr>()?;
+                input.parse::<syn::Token![,]>()?;
+                input.step(|_| Ok((id, syn::buffer::Cursor::empty())))
+            };
+            if let Ok(id) = first.parse2(expr.mac.tokens.clone())
+                && let Some(value) = self.value(&id).filter(|s| operation_id(s))
+            {
+                self.ids.insert(value);
+            }
+        }
     }
 }
 fn sources(path: &Path, root: &Path, result: &mut Vec<(String, syn::File)>) {
@@ -233,6 +250,28 @@ fn static_spec_rows_cannot_evade_registration_auditing() {
     let item: Item = syn::parse_quote! {static UNRELATED:&str="cipher.not_an_operation";};
     assert!(owning_declaration(&item).is_none());
 }
+
+#[test]
+fn macro_rows_audit_literal_and_constant_ids() {
+    let item: Item = syn::parse_quote! {
+        const ROWS: [u8; 3] = [
+            row!(FORMAT, "format-slug", "bytes" => "json"),
+            profile_row(row!("file.literal.inspect", "literal-slug", "bytes" => "json")),
+            row!("file", "file.other_argument", "bytes" => "json"),
+        ];
+    };
+    let constants = BTreeMap::from([("FORMAT".into(), "binary.format.encode".into())]);
+    let mut visitor = Ids {
+        constants: &constants,
+        ids: BTreeSet::new(),
+    };
+    visitor.visit_expr(owning_declaration(&item).unwrap());
+    assert_eq!(
+        visitor.ids,
+        BTreeSet::from(["binary.format.encode".into(), "file.literal.inspect".into()])
+    );
+}
+
 #[test]
 fn every_module_owned_operation_is_registered() {
     let mut declared = BTreeSet::new();
